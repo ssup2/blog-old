@@ -1,0 +1,40 @@
+# ----
+# Site
+
+title: Edition Template
+url: "https://ssup2.github.io"
+baseurl:
+google_analytics_key:
+show_full_navigation: true
+
+# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
+logo: /siteicon.png
+description: Product documentation template for Jekyll.
+author:
+  name: Ssup2
+  email: supsup5642@naver.com
+social:
+  name: Ssup2 Blog
+  links:
+    - https://ssup2.github.io
+
+# -----
+# Build
+
+permalink: pretty
+
+gems:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENCE
+
+collections:
+  category:
+    output: true
+
