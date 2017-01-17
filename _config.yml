@@ -7,8 +7,7 @@ baseurl:
 google_analytics_key:
 show_full_navigation: true
 
-# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
-logo: /siteicon.png
+logo: "/siteicon.png"
 description: Product documentation template for Jekyll.
 author:
   name: Ssup2
@@ -16,17 +15,14 @@ author:
 social:
   name: Ssup2 Blog
   links:
-    - https://ssup2.github.io
-
-# -----
-# Build
+  - https://ssup2.github.io
 
 permalink: pretty
 
 gems:
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-feed
+- jekyll-sitemap
+- jekyll-seo-tag
+- jekyll-feed
 
 exclude:
   - Gemfile
@@ -66,3 +62,4 @@ defaults:
     values:
       _comments:
         type: Marks the impact of this release
+
