@@ -1,45 +1,14 @@
----
+# ----
+# Site
+
 title: Ssup2 Blog
-timezone: UTC
-collections:
-  category:
-    title: Category
-    output: true
-  docs:
-    title: Documentation
-    output: true
-    permalink: "/:path/"
-  posts:
-    title: Posts
-    output: true
-  uploads:
-    title: Uploads
-    output: true
-defaults:
-- scope:
-    path: ''
-  values:
-    layout: default
-- scope:
-    path: ''
-    type: docs
-  values:
-    seo:
-      type: Article
-    _comments:
-      category: Group navigation links with this field
-      order: Used to sort links in the navigation
-- scope:
-    path: ''
-    type: posts
-  values:
-    _comments:
-      type: Marks the impact of this release
-url: https://ssup2.github.io
-baseurl: 
-google_analytics_key: 
+url: "https://ssup2.github.io"
+baseurl:
+google_analytics_key:
 show_full_navigation: true
-logo: "/siteicon.png"
+
+# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
+logo: /siteicon.png
 description: Product documentation template for Jekyll.
 author:
   name: Ssup2
@@ -47,14 +16,53 @@ author:
 social:
   name: Ssup2 Blog
   links:
-  - https://ssup2.github.io
+    - https://ssup2.github.io
+
+# -----
+# Build
+
 permalink: pretty
+
 gems:
-- jekyll-sitemap
-- jekyll-seo-tag
-- jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
+
 exclude:
-- Gemfile
-- Gemfile.lock
-- README.md
-- LICENCE
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENCE
+
+collections:
+    category:
+      output: true
+
+    docs:
+      title: Documentation
+      permalink: /:path/
+      output: true
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: default
+  -
+    scope:
+      path: ""
+      type: "docs"
+    values:
+      seo:
+        type: Article
+      _comments:
+        category: Group navigation links with this field
+        order: Used to sort links in the navigation
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      _comments:
+        type: Marks the impact of this release
