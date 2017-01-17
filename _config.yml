@@ -38,3 +38,11 @@ collections:
   category:
     output: true
 
+defaults:
+  - scope:
+      path: ""
+    values:
+      seo:
+        type: Article
+      layout: default
+
