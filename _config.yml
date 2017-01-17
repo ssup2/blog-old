@@ -1,14 +1,28 @@
-# ----
-# Site
-
+---
 title: Edition Template
-url: "https://ssup2.github.io"
-baseurl:
-google_analytics_key:
+timezone: UTC
+collections:
+  category:
+    title: Category
+    output: true
+  posts:
+    title: Posts
+    output: true
+  uploads:
+    title: Uploads
+    output: true
+defaults:
+- scope:
+    path: ''
+  values:
+    seo:
+      type: Article
+    layout: default
+url: https://ssup2.github.io
+baseurl: 
+google_analytics_key: 
 show_full_navigation: true
-
-# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
-logo: /siteicon.png
+logo: "/siteicon.png"
 description: Product documentation template for Jekyll.
 author:
   name: Ssup2
@@ -16,33 +30,14 @@ author:
 social:
   name: Ssup2 Blog
   links:
-    - https://ssup2.github.io
-
-# -----
-# Build
-
+  - https://ssup2.github.io
 permalink: pretty
-
 gems:
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-feed
-
+- jekyll-sitemap
+- jekyll-seo-tag
+- jekyll-feed
 exclude:
-  - Gemfile
-  - Gemfile.lock
-  - README.md
-  - LICENCE
-
-collections:
-  category:
-    output: true
-
-defaults:
-  - scope:
-      path: ""
-    values:
-      seo:
-        type: Article
-      layout: default
-
+- Gemfile
+- Gemfile.lock
+- README.md
+- LICENCE
