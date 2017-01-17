@@ -2,7 +2,8 @@
 title: Language
 ---
 
-{% for post in site.categories['language'] %}{% if post.title != null %}
-<li><a href="{{ site.baseurl}}{{ post.url }}">{{ post.title }}</a></li>
+{% assign docs = site.docs | where: 'category','language' | sort: 'title' %}
+{% for doc in docs %}{% if doc.title != null %}
+<li><a href="{{ site.baseurl}}{{ doc.url }}">{{ doc.title }}</a></li>
 {% endif %}{% endfor %}
 

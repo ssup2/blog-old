@@ -1,7 +1,7 @@
 # ----
 # Site
 
-title: Edition Template
+title: Ssup2 Blog
 url: "https://ssup2.github.io"
 baseurl:
 google_analytics_key:
@@ -35,14 +35,34 @@ exclude:
   - LICENCE
 
 collections:
-  category:
-    output: true
+    category:
+      output: true
+
+    docs:
+      title: Documentation
+      permalink: /:path/
+      output: true
 
 defaults:
-  - scope:
+  -
+    scope:
       path: ""
+    values:
+      layout: default
+  -
+    scope:
+      path: ""
+      type: "docs"
     values:
       seo:
         type: Article
-      layout: default
-
+      _comments:
+        category: Group navigation links with this field
+        order: Used to sort links in the navigation
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      _comments:
+        type: Marks the impact of this release
