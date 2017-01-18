@@ -30,18 +30,21 @@
 
 	<body>
 		<header>
+			<!-- Title -->
 			<h1>
 				<a href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/images/emblem.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
 				{{ site.title }}
-				<button type="button" class="open-nav" id="open-nav"></button>
 			</h1>
 
+			<!-- Search -->
 			<form action="{{ site.baseurl }}/search/" method="get">
 				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
 				<input type="submit" value="Search" style="display: none;">
 			</form>
 
+			<!-- Navigation -->
 			<nav>
+				<!-- Home -->
 				<ul>
 					<li class="nav-item top-level">
 						{% assign home = site.html_pages | where: 'url', '/' | first %}
@@ -49,8 +52,10 @@
 					</li>
 				</ul>
 				
+				<!-- Category -->
 				<ul>
-					<li class="nav-item top-level {% if page.url == '/' %}current{% endif %}">
+					<!-- Computer -->
+					<li class="nav-item top-level">
 						<a> Computer </a>
 					</li>
 					<ul>
@@ -60,29 +65,55 @@
 						<li class="nav-item"><a href="{{ site.baseurl }}/category/paper_patent">Paper, Patent</a></li>
 						<li class="nav-item"><a href="{{ site.baseurl }}/category/record">Record</a></li>
 					</ul>
-				</ul>
+					<!-- E.T.C -->
 					<li class="nav-item top-level">
-					<a> E.T.C </a>
+						<a> E.T.C </a>
 					</li>
+					<ul>
 						<li class="nav-item"><a href="{{ site.baseurl }}/category/math">Math</a></li>
 						<li class="nav-item"><a href="{{ site.baseurl }}/category/english">English</a></li>
+					</ul>
+				</ul>
 			</nav>
 		</header>
 
 		<section class="main">
+			<!-- Page Header -->
 			<div class="page-header">
 				<h2>{% if page.category %}{{ page.category }}{% else %}{{ site.title }}{% endif %}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
+
+			<!-- Article -->
 			<article class="content">
+				<!-- Content -->
 				{{ content }}
+				<!-- Google Adsense -->
+				{% if page.adsense %}
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<ins class="adsbygoogle"
+						 style="display:block"
+						 data-ad-client="ca-pub-2913607840371995"
+						 data-ad-slot="7197718666"
+						 data-ad-format="auto"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				{% endif %}
+				<!-- Disqus -->
+				{% if page.comment %}
+					<div id="disqus_thread"></div>
+					<script>
+					(function() { // DON'T EDIT BELOW THIS LINE
+						var d = document, s = d.createElement('script');
+						s.src = '//ssup2-blog.disqus.com/embed.js';
+						s.setAttribute('data-timestamp', +new Date());
+						(d.head || d.body).appendChild(s);
+					})();
+					</script>
+					<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+				{% endif %}
 			</article>
 		</section>
-
-		<script>
-			document.getElementById("open-nav").addEventListener("click", function () {
-				document.body.classList.toggle("nav-open");
-			});
-		</script>
 	</body>
 </html>

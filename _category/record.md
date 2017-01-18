@@ -1,5 +1,6 @@
 ---
 title: Record
+category: Computer
 ---
 
 {% assign docs = site.docs | where: 'category','record' | sort: 'title' %}

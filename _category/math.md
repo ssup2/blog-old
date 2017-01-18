@@ -1,5 +1,6 @@
 ---
 title: Math
+category: E.T.C
 ---
 
 {% assign docs = site.docs | where: 'category','math' | sort: 'title' %}

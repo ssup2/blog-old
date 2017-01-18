@@ -1,5 +1,6 @@
 ---
 title: Command, Tool
+category: Computer
 ---
 
 {% assign docs = site.docs | where: 'category','command_tool' | sort: 'title' %}

@@ -1,5 +1,6 @@
 ---
 title: English
+category: E.T.C
 ---
 
 {% assign docs = site.docs | where: 'category','english' | sort: 'title' %}

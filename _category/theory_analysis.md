@@ -1,5 +1,6 @@
 ---
 title: Theory, Analysis
+category: Computer
 ---
 
 {% assign docs = site.docs | where: 'category','theory_analysis' | sort: 'title' %}
