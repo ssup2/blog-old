@@ -78,7 +78,7 @@ h6 {
 }
 
 a {
-	color: #4A4A4A;
+	color: #555555;
 	transition: color 0.2s ease;
 }
 
@@ -187,15 +187,15 @@ kbd {
 	}
 
 	h3 {
-		font-size: 3.1rem;
+		font-size: 2.7rem;
 	}
 
 	h4 {
-		font-size: 2.5rem;
+		font-size: 2.4rem;
 	}
 
 	h5 {
-		font-size: 2.2rem;
+		font-size: 2.1rem;
 	}
 
 	h6 {
@@ -208,7 +208,11 @@ kbd {
 		margin: 1.75em 0;
 	}
 
-	p,
+	p{
+		font-size: 0.85em;
+		margin: 0 0 2.5rem 0;
+	}
+
 	ul,
 	ol,
 	dl {

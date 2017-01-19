@@ -11,8 +11,6 @@
 		<link rel="apple-touch-icon" href="{{ site.baseurl }}/apple-touch-icon.png">
 		<link rel="icon" type="image/png" href="{{ site.baseurl }}/touch-icon.png" sizes="192x192">
 		<link rel="icon" type="image/png" href="{{ site.baseurl }}/images/favicon.png">
-
-		{% feed_meta %}
 		{% seo %}
 
 		{% if jekyll.environment == 'production' and site.google_analytics_key != '' %}
@@ -34,6 +32,7 @@
 			<h1>
 				<a href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/images/emblem.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
 				{{ site.title }}
+				<button type="button" class="open-nav" id="open-nav"></button>
 			</h1>
 
 			<!-- Search -->
@@ -115,5 +114,12 @@
 				{% endif %}
 			</article>
 		</section>
+
+		<!-- Navigation for small windows -->
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
 	</body>
 </html>
