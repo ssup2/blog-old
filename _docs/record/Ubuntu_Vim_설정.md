@@ -1,10 +1,11 @@
 ---
 title: Ubuntu Vim 설정
 category: Record
-date: 2017-01-22T16:41:00.000Z
-lastmod: 2016-01-22T16:41:00.000Z
+date: {}
+lastmod: {}
 comment: true
 adsense: true
+published: true
 ---
 
 * TOC
@@ -36,6 +37,7 @@ adsense: true
 > \# apt-get install vim-gnome
 
 * ctags, cscope 설치
+
 > \# apt-get install ctags <br>
 > \# apt-get install cscope
 
@@ -163,6 +165,3 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 * Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
 * Colorscheme - [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
 * YouCompleteMe Install - [http://neverapple88.tistory.com/26](http://neverapple88.tistory.com/26)
-
-
-
