@@ -157,8 +157,9 @@ header {
 }
 
 #markdown-toc {
-	a {
-		font-size: 1.05em;
+	li {
+		list-style-type: none;
+		text-indent: -1em;
 	}
 }
 
@@ -177,6 +178,10 @@ header {
 	max-width: $content-max-width;
 	padding: 0 ($space + 5) $space;
 	margin: $space auto 0 auto;
+}
+
+.adsbygoogle {
+	margin: 10px 0 10px;
 }
 
 .page-header {
