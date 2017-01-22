@@ -1,8 +1,8 @@
 ---
 title: 'KVM, QEMU'
 category: 'Theory, Analysis'
-date: 2017-01-22T15:31:00.000Z
-lastmod: 2016-01-22T15:31:00.000Z
+date: 2017-01-22T17:31:00.000Z
+lastmod: 2017-01-22T17:31:00.000Z
 comment: true
 adsense: true
 published: true
@@ -46,4 +46,3 @@ published: true
 ### 3. 참조
 
 * QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
-
