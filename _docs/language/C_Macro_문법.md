@@ -15,7 +15,8 @@ category: Language
 #### 1.2. 예제
 
 ##### 1.2.1. Code
-{% highlight c %}
+
+{% highlight C %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
  
