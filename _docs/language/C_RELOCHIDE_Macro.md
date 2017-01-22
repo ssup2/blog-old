@@ -1,8 +1,8 @@
 ---
 title: C RELOCHIDE Macro
 category: Language
-date: 2017-01-22T14:10:00.000Z
-lastmod: 2017-01-22T14:10:00.000Z
+date: {}
+lastmod: {}
 comment: true
 adsense: true
 published: true
@@ -24,4 +24,4 @@ published: true
 * **__asm__ ("" : "=r"(__ptr) : "0"(ptr))**는 **__ptr = ptr**와 동일하다. 이 Inline asm에 의해서 Compiler는 최적화를 하지 못한다.
 
 ### 3. 참조
-[http://studyfoss.egloos.com/viewer/5374731](http://studyfoss.egloos.com/viewer/5374731)
+* [http://studyfoss.egloos.com/viewer/5374731](http://studyfoss.egloos.com/viewer/5374731)
