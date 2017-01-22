@@ -1,5 +1,5 @@
 ---
-title: C RELOCHIDE Macro
+title: Ubuntu Auto root Login
 category: Record
 date: 2017-01-22T16:10:00.000Z
 lastmod: 2017-01-22T16:10:00.000Z
