@@ -14,8 +14,6 @@ category: Language
 
 #### 1.2. 예제
 
-##### 1.2.1. Code
-
 {% highlight C %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
@@ -26,5 +24,7 @@ int main()
     return 0;
 }
 {% endhighlight %}
+
+> THIS IS TEST CODE
 
 
