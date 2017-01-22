@@ -1,10 +1,11 @@
 ---
 title: Ubuntu Auto root Login
 category: Record
-date: 2017-01-22T16:10:00.000Z
-lastmod: 2017-01-22T16:10:00.000Z
+date: {}
+lastmod: {}
 comment: true
 adsense: true
+published: true
 ---
 
 ### 1. Ubuntu 12.04 / Ubuntu 14.04 / Ubuntu 16.04
@@ -12,11 +13,11 @@ adsense: true
 #### 1.1. root 계정의 Password 설정
 
 * passwd tool을 이용한다.
-~~~
+---
 # sudo passwd root
 Enter new UNIX password:
 Retype new UNIX password:
-~~~
+---
 
 #### 1.2. Auto Login 설정
 
@@ -54,4 +55,3 @@ Retype new UNIX password:
 > # vim /root/.profile
 
 > mesg n -> tty -s && mesg n
-
