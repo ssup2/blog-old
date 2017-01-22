@@ -1,6 +1,6 @@
 ---
 title: C RELOCHIDE Macro
-category: Language
+category: Record
 date: 2017-01-22T16:10:00.000Z
 lastmod: 2017-01-22T16:10:00.000Z
 comment: true
