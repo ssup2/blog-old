@@ -31,17 +31,17 @@ published: true
 ##### 2.1.1. QEMU with non-iothread
 
 ![]({{site.baseurl}}/images/theory_analysis/KVM%2C%20QEMU/QEMU_non-iothread.PNG)
-- non-iothread 방식은 Main Loop에서 vCPU 처리와 이벤트를 같이 처리하는 방식이다. TCG는 vCPU를 Emulating하는 QEMU의 모듈이다. 위의 그림처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 한개의 Thread인 Main Loop에서 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 초기 QEMU의 Architecture이다.
+* non-iothread 방식은 Main Loop에서 vCPU 처리와 이벤트를 같이 처리하는 방식이다. TCG는 vCPU를 Emulating하는 QEMU의 모듈이다. 위의 그림처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 한개의 Thread인 Main Loop에서 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 초기 QEMU의 Architecture이다.
 
 ##### 2.1.2. QEMU with iothread
 
 ![]({{site.baseurl}}/images/theory_analysis/KVM%2C%20QEMU/QEMU_iothread.PNG)
-- iothread 방식은 Main Loop에서는 이벤트만 처리하고 각 vCPU마다 Thread를 할당하여 처리하는 방식이다. 그리고 Main Loop와 vCPU 사이의 Sync를 맞추기 위해서 Global Mutex를 이용한다. vCPU는 대부분의 시간을 가상 머신이 수행하는 연산을 처리할뿐 Global Mutex를 이용하지는 않는다. 따라서 vCPU들이 병렬적으로 처리된는 것처럼 보이지만 실제로 vCPU를 Emulating하는 TCG의 Achitecture 때문에 vCPU의 병렬 처리율이 매우 낮다고 한다. 
+* iothread 방식은 Main Loop에서는 이벤트만 처리하고 각 vCPU마다 Thread를 할당하여 처리하는 방식이다. 그리고 Main Loop와 vCPU 사이의 Sync를 맞추기 위해서 Global Mutex를 이용한다. vCPU는 대부분의 시간을 가상 머신이 수행하는 연산을 처리할뿐 Global Mutex를 이용하지는 않는다. 따라서 vCPU들이 병렬적으로 처리된는 것처럼 보이지만 실제로 vCPU를 Emulating하는 TCG의 Achitecture 때문에 vCPU의 병렬 처리율이 매우 낮다고 한다. 
 
 ##### 2.1.3. QEMU + KVM
 
 ![]({{site.baseurl}}/images/theory_analysis/KVM%2C%20QEMU/QEMU_KVM.PNG)
-- iothread 방식에서 TCG대신 KVM을 이용하여 vCPU를 구동하는 방법이다. 각 vCPU는 병렬로 처리된다. SMP 가상 머신을 제대로 지원하기 위해서는 QEMU + KVM을 이용해야 한다. 
+* iothread 방식에서 TCG대신 KVM을 이용하여 vCPU를 구동하는 방법이다. 각 vCPU는 병렬로 처리된다. SMP 가상 머신을 제대로 지원하기 위해서는 QEMU + KVM을 이용해야 한다. 
 
 ### 3. 참조
 
