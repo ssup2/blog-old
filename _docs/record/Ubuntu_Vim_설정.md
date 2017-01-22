@@ -1,13 +1,13 @@
 ---
 title: Ubuntu Vim 설정
 category: Record
-date: 2017-01-22T16:41:00.000Z
-lastmod: 2017-01-22T16:41:00.000Z
+date: 2017-01-20T16:41:00Z
+lastmod: 2017-01-22T16:41:00Z
 comment: true
 adsense: true
-published: true
 ---
 
+### 목 차
 * TOC
 {:toc}
 

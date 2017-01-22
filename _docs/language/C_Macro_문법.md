@@ -1,11 +1,10 @@
 ---
-date: 2017-01-22T13:10:00.000Z
-lastmod: 2016-01-22T13:10:00.000Z
+title: C Macro 문법
+category: Language
+date: 2017-01-20T13:10:00Z
+lastmod: 2016-01-22T13:10:00Z
 comment: true
 adsense: true
-published: true
-category: Language
-title: C Macro 문법
 ---
 ### 1. # - 문자열화 연산자
 

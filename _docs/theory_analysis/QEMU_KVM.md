@@ -1,11 +1,10 @@
 ---
 title: 'KVM, QEMU'
 category: 'Theory, Analysis'
-date: 2017-01-22T15:49:00.000Z
-lastmod: 2017-01-22T15:49:00.000Z
+date: 2017-01-20T15:49:00Z
+lastmod: 2017-01-22T15:49:00Z
 comment: true
 adsense: true
-published: true
 ---
 
 리눅스에서 하이퍼바이저로 이용되고 있는 KVM, QEMU에 관하여 분석한다.
