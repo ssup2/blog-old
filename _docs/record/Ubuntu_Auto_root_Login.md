@@ -14,11 +14,9 @@ published: true
 
 * passwd tool을 이용한다.
 
-~~~
-# sudo passwd root
-Enter new UNIX password:
-Retype new UNIX password:
-~~~
+> \# sudo passwd root
+> Enter new UNIX password:
+> Retype new UNIX password:
 
 #### 1.2. Auto Login 설정
 
