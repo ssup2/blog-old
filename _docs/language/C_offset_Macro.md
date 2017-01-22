@@ -1,8 +1,8 @@
 ---
 title: C offsetof Macro
 category: Language
-date: {}
-lastmod: {}
+date: 2017-01-22T14:10:00.000Z
+lastmod: 2016-01-22T14:10:00.000Z
 comment: true
 adsense: true
 published: true
