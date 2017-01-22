@@ -1,6 +1,6 @@
 ---
-date: 2016-03-14T12:00:00.000Z
-lastmod: 2016-03-15T12:00:00.000Z
+date: {}
+lastmod: {}
 comment: true
 adsense: true
 published: true
@@ -15,7 +15,7 @@ category: Language
 #### 1.2. 예제
 
 ##### 1.2.1. Code
-{% highlight bash linenos %}
+{% highlight c %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
  
