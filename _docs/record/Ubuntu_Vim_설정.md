@@ -44,6 +44,7 @@ adsense: true
 * ~/.bashrc 파일 설정
 
 > \# vi ~/.bashrc
+
 > export TERM=xterm-256color <br>
 > export GOPATH=$HOME/Desktop/golang <br>
 > export PATH=$PATH:$GOPATH/bin
