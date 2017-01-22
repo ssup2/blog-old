@@ -63,7 +63,7 @@ adsense: true
 
 * ~/.vimrc 파일 설정
 
-{% highlight % VimL}
+{% highlight VimL %}
 "
 " supsup's .vimrc
 "
