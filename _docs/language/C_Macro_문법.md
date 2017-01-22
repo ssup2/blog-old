@@ -4,7 +4,7 @@ lastmod: 2016-03-15T12:00:00.000Z
 comment: true
 adsense: true
 published: true
-category: language
+category: Language
 ---
 ### 1. # - 문자열화 연산자
 
