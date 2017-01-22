@@ -27,6 +27,4 @@ int main()
 }
 {% endhighlight %}
 
-##### 1.2.2. Result
-
 
