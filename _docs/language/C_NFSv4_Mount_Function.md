@@ -1,10 +1,11 @@
 ---
 title: C NFSv4 Mount Function
 category: Language
-date: 2017-01-22T14:21:00.000Z
-lastmod: 2016-01-22T14:21:00.000Z
+date: 2017-01-22T14:28:00.000Z
+lastmod: 2016-01-22T14:28:00.000Z
 comment: true
 adsense: true
+published: true
 ---
 
 ### 1. Linux
