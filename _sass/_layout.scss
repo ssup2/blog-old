@@ -167,6 +167,10 @@ header {
 	background-color: $content-background-color;
 	color: $content-color;
 
+	h3::before {
+		margin: 30px 0;
+	}
+
 	a {
 		text-decoration: none;
 	}
