@@ -1,6 +1,6 @@
 ---
 title: KVM, QEMU
-category: Language
+category: Theory, Analysis
 date: 2017-01-22T15:31:00.000Z
 lastmod: 2016-01-22T15:31:00.000Z
 comment: true
