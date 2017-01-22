@@ -159,7 +159,7 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 > \# ./install.py --clang-completer --gocode-completer <br>
 
 * .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
-* * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
+  * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
 
 ### 9. 참조
 * Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
