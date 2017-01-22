@@ -13,11 +13,12 @@ published: true
 #### 1.1. root 계정의 Password 설정
 
 * passwd tool을 이용한다.
----
+
+~~~
 # sudo passwd root
 Enter new UNIX password:
 Retype new UNIX password:
----
+~~~
 
 #### 1.2. Auto Login 설정
 
