@@ -39,25 +39,31 @@ adsense: true
 > \# apt-get install ctags <br>
 > \# apt-get install cscope
 
-4. Bash Shell 설정
-- ~/.bashrc 파일 설정
-# vi ~/.bashrc
-export TERM=xterm-256color
-export GOPATH=$HOME/Desktop/golang
-export PATH=$PATH:$GOPATH/bin
+### 4. Bash Shell 설정
 
-5. Vim Color Theme 다운로드
-# mkdir -p ~/.vim/colors
-# git clone https://github.com/junegunn/seoul256.vim.git
-# cp seoul256.vim/colors/seoul256.vim ~/.vim/colors/seoul256.vim
-# rm -r seoul256.vim
+* ~/.bashrc 파일 설정
 
-6. Vundle Plugin 설치
-# git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+> \# vi ~/.bashrc
+> export TERM=xterm-256color <br>
+> export GOPATH=$HOME/Desktop/golang <br>
+> export PATH=$PATH:$GOPATH/bin
 
-7. Vim 설정
-- ~/.vimrc 파일 설정
-# vi ~/.vimrc
+### 5. Vim Color Theme 다운로드
+
+> \# mkdir -p ~/.vim/colors  <br>
+> \# git clone https://github.com/junegunn/seoul256.vim.git <br>
+> \# cp seoul256.vim/colors/seoul256.vim ~/.vim/colors/seoul256.vim <br>
+> \# rm -r seoul256.vim
+
+### 6. Vundle Plugin 설치
+
+> \# git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+### 7. Vim 설정
+
+* ~/.vimrc 파일 설정
+
+{% highlight % VimL}
 "
 " supsup's .vimrc
 "
@@ -133,23 +139,29 @@ let g:gutentags_project_root=['.tag_root']
  
 "" YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-- Vim 명령어 모드에서 다음 명령어 수행
-: PluginInstall
-: GoInstallBinaries
+{% endhighlight %}
 
-8. YouCompleteMe 설치
-- YouComplete Compile 및 설치
-# apt-get install build-essential cmake
-# apt-get install python-dev python3-dev
-# cd ~/.vim/bundle/YouCompleteMe
-# ./install.py --clang-completer --gocode-completer
-- .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
-* https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
+* Vim 명령어 모드에서 다음 명령어 수행
 
-9. 참조
-- Vundle : https://github.com/gmarik/Vundle.vim
-- Colorscheme : https://github.com/junegunn/seoul256.vim
-- YouCompleteMe Install : http://neverapple88.tistory.com/26
+> : PluginInstall
+> : GoInstallBinaries
+
+### 8. YouCompleteMe 설치
+
+* YouComplete Compile 및 설치
+
+> \# apt-get install build-essential cmake <br>
+> \# apt-get install python-dev python3-dev <br>
+> \# cd ~/.vim/bundle/YouCompleteMe <br>
+> \# ./install.py --clang-completer --gocode-completer <br>
+
+* .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
+** https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
+
+### 9. 참조
+* Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
+* Colorscheme - [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
+* YouCompleteMe Install - [http://neverapple88.tistory.com/26](http://neverapple88.tistory.com/26)
 
 
 
