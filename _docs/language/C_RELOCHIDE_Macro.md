@@ -1,10 +1,11 @@
 ---
 title: C RELOCHIDE Macro
 category: Language
-date: 2017-01-22T14:10:00.000Z
-lastmod: 2016-01-22T14:10:00.000Z
+date: {}
+lastmod: {}
 comment: true
 adsense: true
+published: true
 ---
 
 ### 1. Macro
@@ -17,7 +18,7 @@ adsense: true
 {% endhighlight %}
 
 ###.2 설명
+
 * **ptr + off**을 Return한다.
 * Compiler의 최적화 기법에 의해서 발생할 수 있는 Error를 제거한다.
 * **__asm__ ("" : "=r"(__ptr) : "0"(ptr))**는 **__ptr = ptr**와 동일하다. 이 Inline asm에 의해서 Compiler는 최적화를 하지 못한다.
-
