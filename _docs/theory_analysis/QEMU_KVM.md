@@ -1,8 +1,8 @@
 ---
 title: 'KVM, QEMU'
 category: 'Theory, Analysis'
-date: {}
-lastmod: {}
+date: 2017-01-22T15:31:00.000Z
+lastmod: 2016-01-22T15:31:00.000Z
 comment: true
 adsense: true
 published: true
