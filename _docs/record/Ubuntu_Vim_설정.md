@@ -1,8 +1,8 @@
 ---
 title: Ubuntu Vim 설정
 category: Record
-date: {}
-lastmod: {}
+date: 2017-01-22T16:41:00.000Z
+lastmod: 2016-01-22T16:41:00.000Z
 comment: true
 adsense: true
 published: true
