@@ -24,8 +24,8 @@ published: true
 
 * /etc/lightdm/lightdm.conf 파일을 만들고 아래 내용을 작성한다. (이미 파일이 있으면 수정한다.)
 
-> # sudo su <br>
-> # vim /etc/lightdm/lightdm.conf 
+> \# sudo su <br>
+> \# vim /etc/lightdm/lightdm.conf 
 
 > [SeatDefaults] <br>
 > autologin-user=root <br>
@@ -37,12 +37,12 @@ published: true
 
 * /etc/lightdm/lightdm.conf 파일을 만들고 아래 내용을 작성한다. (이미 파일이 있으면 수정한다.)
 
-> # sudo su <br>
-> # vim /etc/lightdm/lightdm.conf
+> \# sudo su <br>
+> \# vim /etc/lightdm/lightdm.conf
 
-> [Seat:*]
-> autologin-guest=false
-> autologin-user=root
+> [Seat:*] <br>
+> autologin-guest=false <br>
+> autologin-user=root <br>
 > autologin-user-timeout=0
 
 #### 1.3 Error 제거
@@ -51,6 +51,6 @@ published: true
 
 * /root/.profile 파일에 내용을 아래처럼 변경 한다.
 
-> # vim /root/.profile
+> \# vim /root/.profile
 
 > mesg n -> tty -s && mesg n
