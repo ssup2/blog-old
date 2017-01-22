@@ -146,8 +146,8 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 * Vim 명령어 모드에서 다음 명령어 수행
 
-> : PluginInstall <br>
-> : GoInstallBinaries
+> \: PluginInstall <br>
+> \: GoInstallBinaries
 
 ### 8. YouCompleteMe 설치
 
