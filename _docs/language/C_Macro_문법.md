@@ -5,6 +5,7 @@ comment: true
 adsense: true
 published: true
 category: Language
+title: C Macro 문법
 ---
 ### 1. # - 문자열화 연산자
 
