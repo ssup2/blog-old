@@ -19,7 +19,7 @@ adsense: true
 
 ### 2. Linux Container
 
-![]({{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Virtual_Machine.PNG =500x)
+<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG" width="500px">
 
 * Linux Container는 Linux Kernel에서 제공하는 가상화 기술이다. Linux에서 제공하는 Namespace와 Cgroup이라는 2가지 기능을 이용하여 Container를 생성한다. Container는 엄밀히 말하면 가상화 기술이기 보다는 Isolation 기술이라고 할 수 있다. 각 Container들은 격리된 공간에서 Application을 실행한다. Container들과 Host는 같은 Kernel을 공유한다. 따라서 각 Container는 오직 Host Kernel이 이용하는 물리 CPU, 물리 Memory, 물리 Device만을 이용할 수 있다. 또한 Container는 Ubuntu, CentOS 같은 Linux 기반 운영체제만을 이용 할 수 있다.
 
