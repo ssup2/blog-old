@@ -20,7 +20,6 @@ adsense: true
 * Korean 선택 -> Apply
 * **Ubuntu 재부팅**
 
-
 ### 3. Text Entry 설정
 
 ![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean/Ubuntu_Hangul_Setting.PNG)
