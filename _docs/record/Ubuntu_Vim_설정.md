@@ -75,16 +75,16 @@ adsense: true
 "
 " Version 1.20 for Ubuntu
 "
- 
+
 "" vundle Setting
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
- 
+
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
- 
+
 " Plugins
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
@@ -93,38 +93,38 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'bling/vim-airline'
 Plugin 'fatih/vim-go'
- 
+
 " All of your Plugins must be added before the following line
-call vundle#end()						" required
+call vundle#end()               " required
 filetype plugin indent on				" required
- 
+
 "" Vim Setting
-set encoding=utf-8						" Encoding Type utf-8
-set nu									" Line Number
-set ai									" Auto Indent
-set ts=4								" Tab Size
-set sw=4								" Shift Width
-set hlsearch							" highlight all search matches
+set encoding=utf-8						  " Encoding Type utf-8
+set nu						              " Line Number
+set ai						              " Auto Indent
+set ts=4			                  " Tab Size
+set sw=4						            " Shift Width
+set hlsearch							      " highlight all search matches
 syntax on
 colorscheme seoul256
- 
+
 "" cscope Setting
-set csprg=/usr/bin/cscope				" cscope Which
-set csto=1								" tags Search First 
-set cst									" 'Ctrl + ]' use ':cstag' instead of the default ':tag' behavior
-set nocsverb							" verbose Off
-if filereadable("./cscope.out")			" add cscope.out
+set csprg=/usr/bin/cscope				  " cscope Which
+set csto=1								        " tags Search First
+set cst									          " 'Ctrl + ]' use ':cstag' instead of the default ':tag' behavior
+set nocsverb							        " verbose Off
+if filereadable("./cscope.out")	  " add cscope.out
     cs add cscope.out
 endif
-set csverb								" verbose On
- 
+set csverb								        " verbose On
+
 "" NERD Tree Setting
 nmap <F7> :NERDTreeToggle<CR>			" F7 Key = NERD Tree Toggling
 let NERDTreeWinPos = "left"
  
 "" Source Explorer Setting
 nmap <F8> :SrcExplToggle<CR>			" F8 Key = SrcExpl Toggling
- 
+
 let g:SrcExpl_winHeight = 8
 let g:SrcExpl_isUpdateTags = 0
 let g:SrcExpl_refreshTime = 100
@@ -133,16 +133,16 @@ let g:SrcExpl_pluginList = [
         \ "NERD_tree_1",
         \ "Source_Explorer"
         \ ]
- 
+
 "" Tag Bar Setting
 nmap <F9> :TagbarToggle<CR>				" F9 Key = Tagbar Toggling
- 
+
 filetype on
 let g:tagbar_width = 35
- 
+
 "" vim-gutentags
 let g:gutentags_project_root=['.tag_root']
- 
+
 "" YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 {% endhighlight %}
