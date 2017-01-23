@@ -2,7 +2,7 @@
 title: Ubuntu 한글 입력 설정
 category: Record
 date: 2017-01-23T13:13:00Z
-lastmod : 2017-01-23T13:13:00Z
+lastmod: 2017-01-23T13:13:00Z
 comment: true
 adsense: true
 ---
