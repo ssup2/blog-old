@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Virtual Machine(가상 머신)
 
-![]({{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Virtual_Machine.PNG =500x)
+<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Virtual_Machine.PNG" width="500px">
 
 * 가상 머신은 실제 물리 자원이 아닌 가상 자원을 이용하는 머신을 의미한다. 가상 머신이 동작 할 수 있도록 가상 머신에게 가상 자원을 제공하고, 가상 머신을 관리하는 프로그램을 Hypervisor(Supervisor를 뛰어넘는) 또는 VMM(Virtual Machine Monitor)라고 부른다. 하이퍼바이저는 가상 머신에게 가상 CPU, 가상 Memory, 가상 Device라는 3가지의 종류의 가상 자원을 제공한다. 이렇게 가상 자원 위에서 동작하는 가상 머신은 특정 물리 머신에게 종속되지 않기 때문에 유연성을 갖는다. 이러한 유연성을 바탕으로 가상 머신은 IaaS의 기반 기술로 자리잡고 있다.
 
