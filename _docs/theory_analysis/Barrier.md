@@ -20,7 +20,8 @@ adsense: true
 
 > A -> [Barrier] -> B -> C -> D -> E
 
-* 위와 같이 A 명령어와 C 명령어 사이에 Barrier를 넣으면 Compier는 A 명령어와 C 명령어의 수행 순서를 바꿀 수 없게 된다.
+* 위와 같이 A 명령어와 B 명령어 사이에 Barrier를 넣으면 특정 Process/Thread 그룹안에 있는 모든 Process/Thread들이 A 명령어를 실행한 뒤 B 명령어를 수행하게 된다.
+* A 명령어와 C 명령어 사이에 Barrier가 있기 때문에  Compier는 A 명령어와 C 명령어의 수행 순서를 바꿀 수 없게 된다.
 
 ### 3. 참조
 

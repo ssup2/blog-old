@@ -5,6 +5,6 @@ category: Computer
 
 {% assign docs = site.docs | where: 'category','Paper, Patent' | sort: 'title' %}
 {% for doc in docs %}{% if doc.title != null %}
-<li><a href="{{ site.baseurl}}{{ doc.url }}">{{ doc.title }}</a></li>
+* [{{ doc.title }}]({{ site.baseurl }}{{ doc.url }})
 {% endif %}{% endfor %}
 
