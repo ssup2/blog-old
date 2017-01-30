@@ -130,11 +130,6 @@ header {
 		right: $emblem-horizontal-padding;
 		border-radius: 2px;
 
-		&:focus {
-			outline: none;
-			background-color: rgba(0, 0, 0, 0.05);
-		}
-
 		&:hover {
 			background-color: rgba(0, 0, 0, 0.1);
 		}
