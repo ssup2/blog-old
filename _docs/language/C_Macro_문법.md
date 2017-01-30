@@ -17,7 +17,7 @@ adsense: true
 {% highlight C %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
- 
+
 int main()
 {
     PRINT(THIS IS TEST CODE);                          
@@ -37,15 +37,15 @@ int main()
 
 {% highlight C %}
 #include <stdio.h>
- 
+
 #define INT_i(n)        int i##n = n;
 #define PRINT(n)        printf("i%d = %d\n", n, i##n)
- 
+
 int main()
 {
     INT_i(0);
     PRINT(0);
- 
+
     return 0;
 }
 {% endhighlight %}
@@ -79,4 +79,3 @@ int main()
 * [http://msdn.microsoft.com/en-us/library/7e3a913x.aspx](http://msdn.microsoft.com/en-us/library/7e3a913x.aspx)
 * [https://www.google.co.kr/?gfe_rd=cr&ei=HzoMVIOrEYTN8ge3oYGgDw&gws_rd=ssl#newwindow=1&q=c+macro+%EB%AC%B8%EB%B2%95](https://www.google.co.kr/?gfe_rd=cr&ei=HzoMVIOrEYTN8ge3oYGgDw&gws_rd=ssl#newwindow=1&q=c+macro+%EB%AC%B8%EB%B2%95)
 * [https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html](https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html)
-
