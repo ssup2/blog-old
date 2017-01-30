@@ -40,6 +40,3 @@ Unix System의 System Call중 하나인 flock System Call을 이해하고, Linux
 ### 참조
 
 * inode Check File Lock - [http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition](http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition)
-
-
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
