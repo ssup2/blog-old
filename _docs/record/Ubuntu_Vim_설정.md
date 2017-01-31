@@ -88,7 +88,6 @@ Plugin 'gmarik/Vundle.vim'
 " Plugins
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
-Plugin 'wesleyche/SrcExpl'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'bling/vim-airline'
@@ -121,21 +120,9 @@ set csverb								        " verbose On
 "" NERD Tree Setting
 nmap <F7> :NERDTreeToggle<CR>			" F7 Key = NERD Tree Toggling
 let NERDTreeWinPos = "left"
- 
-"" Source Explorer Setting
-nmap <F8> :SrcExplToggle<CR>			" F8 Key = SrcExpl Toggling
-
-let g:SrcExpl_winHeight = 8
-let g:SrcExpl_isUpdateTags = 0
-let g:SrcExpl_refreshTime = 100
-let g:SrcExpl_pluginList = [
-        \ "__Tagbar__",
-        \ "NERD_tree_1",
-        \ "Source_Explorer"
-        \ ]
 
 "" Tag Bar Setting
-nmap <F9> :TagbarToggle<CR>				" F9 Key = Tagbar Toggling
+nmap <F8> :TagbarToggle<CR>				" F9 Key = Tagbar Toggling
 
 filetype on
 let g:tagbar_width = 35
@@ -159,7 +146,7 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 > \# apt-get install build-essential cmake <br>
 > \# apt-get install python-dev python3-dev <br>
 > \# cd ~/.vim/bundle/YouCompleteMe <br>
-> \# ./install.py --clang-completer --gocode-completer <br>
+> \# ./install.py --clang-completer --gocode-completer
 
 * .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
   * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
