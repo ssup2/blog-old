@@ -13,8 +13,8 @@ adsense: true
 
 * passwd tool을 이용한다.
 
-> \# sudo passwd root
-> Enter new UNIX password:
+> \# sudo passwd root <br>
+> Enter new UNIX password: <br>
 > Retype new UNIX password:
 
 #### 1.2. Auto Login 설정
@@ -24,7 +24,7 @@ adsense: true
 * /etc/lightdm/lightdm.conf 파일을 만들고 아래 내용을 작성한다. (이미 파일이 있으면 수정한다.)
 
 > \# sudo su <br>
-> \# vim /etc/lightdm/lightdm.conf 
+> \# vim /etc/lightdm/lightdm.conf
 
 > [SeatDefaults] <br>
 > autologin-user=root <br>
