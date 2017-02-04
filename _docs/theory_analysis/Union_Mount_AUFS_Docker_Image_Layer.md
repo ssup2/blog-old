@@ -54,11 +54,3 @@ Union Mount를 간략하게 설명하고 리눅스에서 이용할 수 있는 Un
 * Container가 동작하면서 변경하거나 추가한 파일들은 모두 /container_rw 폴더에 남게 된다. RO Branch들인 Ubuntu Branch들에게는 전혀 영향을 주지 않는다. 따라서 Docker Container Snapshot은 /container_rw를 복사하는 동작만 수행하게 된다. 결국 Docker Image Layer는 AUFS의 Branch 폴더라는 것을 알 수 있다.
 
 * Docker Daemon은 현재 AUFS뿐만 아니라 ZFS, OverlayFS 등 다양한 파일시스템을 Backend 파일시스템으로 이용하고 있다. 위 설명은 AUFS를 이용할 경우에만 해당한다. 하지만 Docker Daemon이 AUFS를 Backend 파일시스템으로 이용하고 있지 않더라도 Docker Image를 Upload/Download 할때에는 Image Layer를 AUFS의 Branch 폴더를 tar.gz 형태로 주고 받는다. AUFS는 파일로만 구성되기 때문에 다양한 파일시스템 위에서 이용될 수 있기 때문이다.
-
-### 4. 참조
-
-<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG" width="500px">
-
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
-
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
