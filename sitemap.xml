@@ -4,11 +4,11 @@ layout: null
 
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	{% for doc in site.docs %}
+	{% for page in site.pages %}
 	<url>
-		<loc>{{ site.url }}{{ doc.url }}</loc>{% if doc.lastmod %}
-		<lastmod>{{ doc.lastmod | date_to_xmlschema }}</lastmod>{% elsif doc.date %}
-		<lastmod>{{ doc.date | date_to_xmlschema }}</lastmod>{% else %}
+		<loc>{{ site.url }}{{ page.url }}</loc>{% if page.lastmod %}
+		<lastmod>{{ page.lastmod | date_to_xmlschema }}</lastmod>{% elsif page.date %}
+		<lastmod>{{ page.date | date_to_xmlschema }}</lastmod>{% else %}
 		<lastmod>{{ site.time | date_to_xmlschema }}</lastmod>{% endif %}
 		<changefreq>weekly</changefreq>
 		<priority>0.5</priority>
