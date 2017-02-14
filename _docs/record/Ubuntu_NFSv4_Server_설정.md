@@ -20,19 +20,16 @@ adsense: true
 
 > \# sudo apt-get install nfs-kernel-server nfs-common rpcbind
 
-#### 2.2. 공유 폴더 생성 및 설정
+#### 2.2. 공유 폴더 생성 및 Bind Mount 설정
 
-* 공유 폴더 생성
+* 공유 폴더 생성 및 Bind Mount 수행
 
 > \# mkdir -p /export/[NFS root] <br>
 > \# chmod 777 /export <br>
-> \# chmod 777 /export/[NFS root]
+> \# chmod 777 /export/[NFS root] <br>
+> \# mount --bind [NFS share] /export/[NFS root]
 
-* Bind Mount 설정
-
-> \# mount --bind [NFS share] /export/[NFS dir] <br>
-
-* /etc/fstab에 다음 내용 추가
+*  /etc/fstab에 다음 내용을 추가하여 Bind Mount 설정
 
 ~~~
 [NFS share] /export/[NFS root] none bind  0  0
@@ -40,7 +37,7 @@ adsense: true
 
 #### 2.3. 설정
 
-* /etc/exports 파일에 다음의 내용을 추가 한다.
+* /etc/exports 파일에 다음의 내용을 추가한다.
 
 ~~~
 /export               *(rw,fsid=0,insecure,no_subtree_check,async)
