@@ -1,0 +1,50 @@
+---
+title: Ubuntu Consolas Font 설치
+category: Record
+date: 2017-02-14T15:27:00Z
+lastmod: 2017-02-14T15:27:00Z
+comment: true
+adsense: true
+---
+
+### 설치 환경
+
+* Ubuntu 16.04 LTS 64bit, root user
+
+### Ubuntu Package 설치
+
+> # apt-get install font-manager <br>
+> # apt-get install cabextract
+
+### Consolas Download Script 생성 및 설치
+
+> # vim consolas.sh
+
+* 아래의 내용을 vim consolas.sh에 복사
+
+{% highlight shell %}
+#!/bin/sh
+set -e
+set -x
+mkdir temp
+cd temp
+wget http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8C8F696/PowerPointViewer.exe
+cabextract -L -F ppviewer.cab PowerPointViewer.exe
+cabextract ppviewer.cab
+{% endhighlight %}
+
+> # chmod +x consolas.sh <br>
+> # ./consolas.sh
+
+### Consolas Font 설치
+
+> # font-manager
+
+![]({{site.baseurl}}/images/record/Ubuntu_Consolas/Ubuntu_Font_Manager.PNG)
+
+* Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
+
+### 파일 삭제
+
+> # rm -R temp <br>
+> # rm consolas
