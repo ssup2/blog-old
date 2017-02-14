@@ -13,21 +13,30 @@ adsense: true
 
 ### 2. NFSv4 Server 설정
 
-* [NFS root] - NFSv4 Server의 Root 폴더를 의미한다.
-* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더를 의미한다.
+* [NFS root] - NFSv4 Server Root 폴더의 상대 경로를 의미한다. (ex nfs_root)
+* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다. (ex /root/share)
 
 #### 2.1. Ubuntu Package 설치
 
 > \# sudo apt-get install nfs-kernel-server nfs-common rpcbind
 
-#### 2.2. 공유 폴더 생성
+#### 2.2. 공유 폴더 생성 및 설정
 
-> \# mkdir -p /export/[NFS dir] <br>
+* 공유 폴더 생성
+
+> \# mkdir -p /export/[NFS root] <br>
 > \# chmod 777 /export <br>
-> \# chmod 777 /export/[NFS dir] <br>
-> \# mount --bind /[share dir] /export/[NFS dir] <br>
-> \# vim /etc/fstab <br>
->   add -> /[share dir] /export/[NFS dir] none bind  0  0
+> \# chmod 777 /export/[NFS root]
+
+* Bind Mount 설정
+
+> \# mount --bind [NFS share] /export/[NFS dir] <br>
+
+* /etc/fstab에 다음 내용 추가
+
+~~~
+[NFS share] /export/[NFS root] none bind  0  0
+~~~
 
 #### 2.3. 설정
 
