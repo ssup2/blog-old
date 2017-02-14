@@ -1,0 +1,46 @@
+---
+title: Ubuntu NFSv4 Server/Client 설정
+category: Record
+date: 2017-02-14T17:27:00Z
+lastmod: 2017-02-14T17:27:00Z
+comment: true
+adsense: true
+---
+
+### 1. 설치 환경
+
+* Ubuntu 16.04 LTS 64bit, root user
+
+### 2. NFSv4 Server 설정
+
+* [NFS root] - NFSv4 Server의 Root 폴더
+* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더
+
+#### 2.1. Ubuntu Package 설치
+
+> \# sudo apt-get install nfs-kernel-server nfs-common rpcbind
+
+#### 2.2. 공유 폴더 생성
+
+> \# mkdir -p /export/[NFS dir] <br>
+> \# chmod 777 /export <br>
+> \# chmod 777 /export/[NFS dir] <br>
+> \# mount --bind /[share dir] /export/[NFS dir] <br>
+> \# vim /etc/fstab <br>
+>   add -> /[share dir] /export/[NFS dir] none bind  0  0
+
+#### 2.3. 설정
+
+* /etc/exports 파일에 다음의 내용을 추가 한다.
+
+~~~
+/export               *(rw,fsid=0,insecure,no_subtree_check,async)
+/export/[NFS dir]     *(rw,nohide,insecure,no_subtree_check,async)
+~~~
+
+#### 2.4. Restart
+
+> \# /etc/init.d/nfs-kernel-server restart
+
+### 3. NFSv4 Client 설정
+#### 3.1. Ubuntu Client 설치
