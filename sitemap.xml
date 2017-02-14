@@ -4,7 +4,15 @@ layout: null
 
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	{% for doc in site.docs %}
+  {% for category in site.categories %}
+  <url>
+    <loc>{{ site.url }}{{ category.url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  {% endfor %}
+  {% for doc in site.docs %}
 	<url>
 		<loc>{{ site.url }}{{ doc.url }}</loc>{% if doc.lastmod %}
 		<lastmod>{{ doc.lastmod | date_to_xmlschema }}</lastmod>{% elsif doc.date %}
