@@ -47,13 +47,13 @@ cabextract ppviewer.cab
 
 > \# font-manager
 
-![]({{site.baseurl}}/images/record/Ubuntu_Consolas/Ubuntu_Font_Manager.PNG)
-
 * Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
+
+![]({{site.baseurl}}/images/record/Ubuntu_Consolas/Ubuntu_Font_Manager.PNG)
 
 ### 5. 파일 삭제
 
-> \# rm -R temp <br>
+> \# rm -r temp <br>
 > \# rm consolas
 
 ### 6. 참조
