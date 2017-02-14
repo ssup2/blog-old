@@ -7,18 +7,18 @@ comment: true
 adsense: true
 ---
 
-### 설치 환경
+### 1. 설치 환경
 
 * Ubuntu 16.04 LTS 64bit, root user
 
-### Ubuntu Package 설치
+### 2. Ubuntu Package 설치
 
 * font-manager 설치
 
 > \# apt-get install font-manager <br>
 > \# apt-get install cabextract
 
-### Consolas Download Script 생성 및 설치
+### 3. Consolas Download Script 생성 및 설치
 
 * consolas.sh 파일 생성 및 편집
 
@@ -41,7 +41,7 @@ cabextract ppviewer.cab
 > \# chmod +x consolas.sh <br>
 > \# ./consolas.sh
 
-### Consolas Font 설치
+### 4. Consolas Font 설치
 
 * font-manager 실행
 
@@ -51,7 +51,11 @@ cabextract ppviewer.cab
 
 * Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
 
-### 파일 삭제
+### 5. 파일 삭제
 
 > \# rm -R temp <br>
 > \# rm consolas
+
+### 6. 참조
+* [http://www.rushis.com/2013/03/consolas-font-on-ubuntu/](http://www.rushis.com/2013/03/consolas-font-on-ubuntu/)
+* [http://askubuntu.com/questions/191778/how-to-install-fonts-fast-and-easy](http://askubuntu.com/questions/191778/how-to-install-fonts-fast-and-easy)
