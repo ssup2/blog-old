@@ -53,8 +53,10 @@ cabextract ppviewer.cab
 
 ### 5. 파일 삭제
 
+* Font 파일들과 consolas.sh 파일을 지운다.
+
 > \# rm -r temp <br>
-> \# rm consolas
+> \# rm consolas.sh
 
 ### 6. 참조
 * [http://www.rushis.com/2013/03/consolas-font-on-ubuntu/](http://www.rushis.com/2013/03/consolas-font-on-ubuntu/)

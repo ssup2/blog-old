@@ -13,8 +13,8 @@ adsense: true
 
 ### 2. NFSv4 Server 설정
 
-* [NFS root] - NFSv4 Server의 Root 폴더
-* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더
+* [NFS root] - NFSv4 Server의 Root 폴더를 의미한다.
+* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더를 의미한다.
 
 #### 2.1. Ubuntu Package 설치
 
@@ -43,4 +43,11 @@ adsense: true
 > \# /etc/init.d/nfs-kernel-server restart
 
 ### 3. NFSv4 Client 설정
-#### 3.1. Ubuntu Client 설치
+
+#### 3.1. Ubuntu Package 설치
+
+> \# apt-get install nfs-common
+
+#### 3.2. NFSv4 Mount
+
+> \# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir]
