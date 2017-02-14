@@ -13,12 +13,12 @@ adsense: true
 
 ### Ubuntu Package 설치
 
-> # apt-get install font-manager <br>
-> # apt-get install cabextract
+> \# apt-get install font-manager <br>
+> \# apt-get install cabextract
 
 ### Consolas Download Script 생성 및 설치
 
-> # vim consolas.sh
+> \# vim consolas.sh
 
 * 아래의 내용을 vim consolas.sh에 복사
 
@@ -33,12 +33,12 @@ cabextract -L -F ppviewer.cab PowerPointViewer.exe
 cabextract ppviewer.cab
 {% endhighlight %}
 
-> # chmod +x consolas.sh <br>
-> # ./consolas.sh
+> \# chmod +x consolas.sh <br>
+> \# ./consolas.sh
 
 ### Consolas Font 설치
 
-> # font-manager
+> \# font-manager
 
 ![]({{site.baseurl}}/images/record/Ubuntu_Consolas/Ubuntu_Font_Manager.PNG)
 
@@ -46,5 +46,5 @@ cabextract ppviewer.cab
 
 ### 파일 삭제
 
-> # rm -R temp <br>
-> # rm consolas
+> \# rm -R temp <br>
+> \# rm consolas
