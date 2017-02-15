@@ -27,7 +27,7 @@ adsense: true
 > \# mkdir -p /export/[NFS root] <br>
 > \# chmod 777 /export <br>
 > \# chmod 777 /export/[NFS root] <br>
-> \# mount --bind [NFS share] /export/[NFS root]
+> \# mount \-\-bind [NFS share] /export/[NFS root]
 
 *  /etc/fstab에 다음 내용을 추가하여 Bind Mount 설정
 
