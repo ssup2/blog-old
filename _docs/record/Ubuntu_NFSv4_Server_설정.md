@@ -14,7 +14,7 @@ adsense: true
 ### 2. NFSv4 Server 설정
 
 * [NFS root] - NFSv4 Server Root 폴더의 상대 경로를 의미한다. (ex nfs_root)
-* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다. (ex /root/share)
+* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다. (ex /root/nfs_share)
 
 #### 2.1. Ubuntu Package 설치
 
