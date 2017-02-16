@@ -56,4 +56,5 @@ adsense: true
 
 #### 3.2. NFSv4 Mount
 
-> \# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir]
+> \# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir] <br>
+> ex) \# mount -t nfs4 localhost:/nfs_root /mnt
