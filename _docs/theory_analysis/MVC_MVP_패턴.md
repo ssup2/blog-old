@@ -17,11 +17,11 @@ GUI 프로그래밍에 많이 이용되는 프로그래밍 모델인 MVC 패턴�
 
 #### 1.1. JSP, Servlet
 
-<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model1_with_JSP.PNG"  width="650px">
+<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model1_with_JSP.PNG" width="700px">
 
 * 위 그림은 JSP를 이용한 MVC Model 1을 나타내고 있다. JSP는 View와 Controller의 역활을 수행한다. 간단한 WebPage를 제작할때 이용하는 Model이다.
 
-<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model2_with_JSP_Servlet.PNG"  width="650px">
+<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model2_with_JSP_Servlet.PNG" width="700px">
 
 * 위 그림은 Servlet과 JSP를 이용한 MVC Model 2를 나타내고 있다. JSP는 View의 역활을 수행하고 Servlet은 Controller의 역활을 수행한다. JSP MVC Model 2는 Model이 직접 View를 Update하지 않고 Conroller를 통해 Update한다.
 
