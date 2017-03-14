@@ -1,5 +1,5 @@
 ---
-title: MVC, MVP Pattern
+title: MVC, MVP 패턴
 category: Theory, Analysis
 date: 2017-03-14T11:00:00Z
 lastmod: 2017-03-14T11:00:00Z
@@ -17,7 +17,14 @@ GUI 프로그래밍에 많이 이용되는 프로그래밍 모델인 MVC 패턴�
 
 ### 1.1. JSP
 
+
 ### 2. MVP 패턴
+
+<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVP_Pattern.PNG"  width="500px">
+
+* MVP 패턴은 Model, View, Presenter 3가지로 구성된다. MVC 패턴과는 다르게 Presenter가 구성요소로 포함되어 있다. Presentor는 Model과  User의 요청은 View로
+
+
 
 ### 3. 참조
 
