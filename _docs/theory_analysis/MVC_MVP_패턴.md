@@ -17,6 +17,10 @@ GUI 프로그래밍에 많이 이용되는 프로그래밍 모델인 MVC 패턴�
 
 ### 1.1. JSP
 
+<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model1_with_JSP.PNG"  width="500px">
+
+<img src="{{site.baseurl}}/images/theory_analysis/MVC_MVP_Pattern/MVC_Pattern_Model2_with_JSP_Servlet.PNG"  width="500px">
+
 
 ### 2. MVP 패턴
 
