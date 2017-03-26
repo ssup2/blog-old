@@ -25,14 +25,14 @@ Unix System의 System Call중 하나인 flock System Call을 이해하고, Linux
 
 #### 2.1. Flow
 
-![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_tool_flow.PNG)
+![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_Flow.PNG)
 
 * 위의 그림은 flock Tool의 실행 순서를 나타내고 있다. Open시 O_CREAT Option을 이용하기 때문에 Lock 파일이 없으면 Lock 파일이 생성된다. -x 옵션은 LOCK_EX 수행을 한다는 의미이고, Lock 파일은 file.lock 파일을 이용한다. /bin/bash가 Exclusive하게 수행된다.
 * -o 옵션을 주면 flock Tool이 fork한 후 fd를 닫고 난뒤 Exclusive하게 Command를 수행한다. -o 옵션을 주지 않으면 fork 후 fd를 닫지 않기 때문에, flock Tool이 종료되어도 Command가 종료되지 않으면 fd는 Close되지 않는다. 따라서 파일 Lock이 풀리지 않을 수 있다. 반면 -o 옵션을 주면 Coomand에 관계 없이 flock Tool이 종료되는 순간 fd가 Close 되기 때문에 파일 Lock도 자연스럽게 풀린다. 하지만 Command 수행이 끝나지 않는 상태에서 파일 Lock이 풀릴 수 있기 때문에 Command가 Exclusive하게 수행되지 않을 수 있다.
 
 #### 2.2. Lock File 삭제
 
-![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_tool_file_delete.PNG)
+![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/Flock_Tool_File_Delete.PNG)
 
 * flock Tool을 이용하면 Lock 파일이 생기게 되는데 이러한 Lock 파일을 외부에서 임의로 지우면 안된다. 위의 그림은 Lock 파일을 임의로 지우는 경우 Command가 Exclusive하게 동작하지 않을 수 있는 경우를 나타내고 있다. 첫번째 flock Tool이 수행되고 있을 때 2번째 flock Tool이 수행되면 같은 file.lock 파일을 Lock 파일로 이용하기 때문에 두번째 flock Tool은 Blocking된다. (빨간구간) 그 후 첫번째 flock Tool이 수행을 마치면서 두번째 flock Tool이 수행된다. 이때 세번째 flock Tool이 수행되기 전 file.lock이 지워지면, 두번째 flock Tool이 이용한 file.lock을 세번째 flock Tool이 볼 수 없기 때문에 Command가 동시에 실행될 수 있다.
 * 이러한 Lock 파일 문제를 가장 쉽게 해결할 수 있는 첫번째 방법은 Lock 파일을 tmpfs같은 메모리 파일시스템에 만드는 방법이다. PC 재부팅 시 자연스럽게 Lock 파일은 지워진다. 두번째는 Lock 파일의 inode 번호까지 확인하는 별도의 Tool을 만드는 방법이 있다.
