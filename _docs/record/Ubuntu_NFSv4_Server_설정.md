@@ -25,7 +25,7 @@ adsense: true
 * 공유 폴더 생성 및 Bind Mount 수행
 
 > \# mkdir -p /export/[NFS root] <br>
-> \# chmod 777 [NFS share]
+> \# chmod 777 [NFS share] <br>
 > \# mount \-\-bind [NFS share] /export/[NFS root]
 
 *  /etc/fstab에 다음 내용을 추가하여 Bind Mount 설정
