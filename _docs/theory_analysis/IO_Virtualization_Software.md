@@ -26,7 +26,7 @@ adsense: true
 * 물리 머신에서 I/O 처리는 Application -> Device Driver -> Device -> 요청 완료 IRQ 발생 -> Device Driver -> Application의 순으로 진행된다. 가상 머신에서의 I/O 처리는 Device Drvier와 요청 완료 IRQ 사이에서 KVM+QEMU가 관여하여 Device Emulation을 수행하게 된다. 따라서 가상 머신은
 자신이 이용하는 Device가 가상 Device인지 인식하지 못한다.
 
-<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_Device.PNG" width="700px">
+<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_Device.PNG" width="800px">
 
 * 위의 그림은 QEMU+KVM의 x86 가상 머신안에서 보이는 PCI 장치들을 나타내고 있다. QEMU는 NIC이나 HDD와 같은 장치 뿐만 아니라 PCI Bridge나 IDE Controller같은 x86 가상 머신 구동에 필수적인 모든 Device들을 Emulation한다.
 
