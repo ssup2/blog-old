@@ -62,7 +62,7 @@ adsense: true
 
 <img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_virtIO_vhostscsi_Progress.PNG" width="700px">
 
-* 위의 그림들은 KVM+QEMU+VirtIO+vhost에서 I/O Para-virtualization 처리 과정을 나타내고 있다. QEMU대신 vhost가 VirtIO Device Emulation 역활을 수행하는 것을 알 수 있다. 나머지 과정은 virio만을 이용 할 때와 동일하다. vhost-net은 virtio-net의 Emulation 역활을 수행하고, vhost-scsi+LIO가 virtio-scsi의 Emulation 역활을 수행한다.
+* 위의 그림들은 KVM+QEMU+VirtIO+vhost에서 I/O Para-virtualization 처리 과정을 나타내고 있다. QEMU대신 vhost가 VirtIO Device Emulation 역활을 수행하는 것을 알 수 있다. 나머지 과정은 VirtIO만을 이용 할 때와 동일하다. vhost-net은 virtio-net의 Emulation 역활을 수행하고, vhost-scsi+LIO가 virtio-scsi의 Emulation 역활을 수행한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_virtIO_vhost_Device.PNG)
 
