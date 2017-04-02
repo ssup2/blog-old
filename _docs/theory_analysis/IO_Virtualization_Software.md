@@ -52,7 +52,7 @@ adsense: true
 
 * 위의 그림들은 QEMU+KVM+Virtio의 x86 가상 머신 안에서 보이는 PCI 장치들과 SCSI 장치들을 나타내고 있다. PCI 장치에 VirtIO 장치들이 있는걸 확인 할 수 있다. virtio-scsi의 경우 SCSI 장치로도 인식되는걸 확인 할 수 있다.
 
-#### 4.1 vhost
+#### 3.2. vhost
 
 * vhost는 QEMU의 Virtio Device Emulation 역활을 수행하는 **Kernel Module**이다. 지금까지 설명한 가상 머신의 I/O 처리 과정을 보면, 가상 머신의 Exception 뿐만 아니라 KVM <-> QEMU, QEMU <-> Host Device Driver 사이의 많은 CPU Mode Switch가 발생하는 것을 알 수 있다. 이러한 Mode Switch Overhead를 줄이기 위해서 vhost는 Virtio Device Emulation을 Kernel Module에서 수행한다.
 
