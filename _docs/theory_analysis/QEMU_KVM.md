@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-리눅스에서 하이퍼바이저로 이용되고 있는 KVM, QEMU에 관하여 분석한다.
+리눅스에서 Hypervisor로 이용되고 있는 KVM, QEMU에 관하여 분석한다.
 
 ### 1. KVM (Kernel-based Virtual Machine)
 
-* Linux에서 제공하는 Type 1 하이퍼바이저이다. Linux가 설치되어 있고 Host PC(물리 PC)의 CPU가 하드웨어 가상화 기능을 지원하면 이용할 수 있다. 개인용 PC나 서버에서 이용되는 대부분의 x86 CPU들은 VT-x, VT-d같은 하드웨어 가상화 기능을 지원하기 때문에 리눅스만 설치되어 있다면 쉽게 KVM 설치 및 이용할 수 있다. 하지만 KVM만으로는 가상 머신을 구동 할 수 없다. KVM은 오직 가상 머신이 이용하는 **vCPU(Virtual CPU)**와 **Memory**만을 제공하기 때문이다. 가상 머신이 구동되기 위해서는 vCPU, Memory 뿐만 아니라 HDD, Monitor 같은 주변 장치 뿐만 아니라 주변 장치와 CPU를 연결해주는 PCI BUS도 필요하기 때문이다. 이러한 주변 장치와 PCI BUS 기능을 제공해주는 것이 QEMU이다.
+* Linux에서 제공하는 Type 1 Hypervisor이다. Linux가 설치되어 있고 Host PC(물리 PC)의 CPU가 하드웨어 가상화 기능을 지원하면 이용할 수 있다. 개인용 PC나 서버에서 이용되는 대부분의 x86 CPU들은 VT-x, VT-d같은 하드웨어 가상화 기능을 지원하기 때문에 리눅스만 설치되어 있다면 쉽게 KVM 설치 및 이용할 수 있다. 하지만 KVM만으로는 가상 머신을 구동 할 수 없다. KVM은 오직 가상 머신이 이용하는 **vCPU(Virtual CPU)**와 **Memory**만을 제공하기 때문이다. 가상 머신이 구동되기 위해서는 vCPU, Memory 뿐만 아니라 HDD, Monitor 같은 주변 장치 뿐만 아니라 주변 장치와 CPU를 연결해주는 PCI BUS도 필요하기 때문이다. 이러한 주변 장치와 PCI BUS 기능을 제공해주는 것이 QEMU이다.
 
 ### 2. QEMU
 
