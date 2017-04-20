@@ -35,8 +35,9 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 ### 2. iptables
 
-* iptables는 Netfilter Framework를 이용하여 Packet을 제어하고 변경하는 Tool이다.
+![]({{site.baseurl}}images\theory_analysis\Linux_netfilter_iptables\Netfilter_Packet_Traversal.PNG)
 
+* iptables는 Netfilter Framework를 이용하여 Packet을 제어하고 변경하는 Tool이다. 위의 그림은 iptables이 Netfilter를 이용한 Packet 처리 과정을 나타내고 있다. 그림에서 PREROUTING, FOWRARD, INPUT, OUTPUT, POSTROUTING은 각각 Netfilter의 NF_IP_PRE_ROUTING, NF_IP_LOCAL_IN, NF_IP_FORWARD, NF_IP_LOCAL_OUT, NF_IP_POST_ROUTING Hook을 의미한다.
 
 #### 2.1. tables
 
@@ -46,9 +47,4 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 * iptables, Netfilter - [https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture](https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture)
 
-
-<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG" width="500px">
-
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
-
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+* Netfilter Packet Traversal - [http://linux-ip.net/](http://linux-ip.net/)
