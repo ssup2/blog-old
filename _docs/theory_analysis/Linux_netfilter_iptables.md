@@ -55,6 +55,14 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 #### 2.2. packet flow
 
+* 위 그림과 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다.
+
+* Connection Tracking은 Netfilter Framework가 Packet의 정보를 바탕으로 Connection 추적을 시작하는 부분을 의미한다. Routing (Forwarding)은 전달받은 Packet이 자신이 받아야하는 Packet인지 아니면 다른 Host가 받아야하는 Packet인지 구분하여 Routing하는 과정을 나타낸다. Routing (Interface)는 Packet을 어느 Network Interface에 전달해야할지 결정하는 과정을 나타낸다.
+
+#### 2.3. Chain
+
+* 각 Table은 Chain의 조합으로 이루어져 있다. 위의 그림에서 NAT Table은 PREROUTING, INPUT, OUTPUT, POSTROUTING 4개의 hook에 포함되어있는걸 알 수 있는데, 다시 말하면 NAT Table은 4개의 Chain으로 이루어졌다고 할 수 있다.
+
 ### 3. 참조
 
 * iptables, Netfilter - [https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture](https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture)
