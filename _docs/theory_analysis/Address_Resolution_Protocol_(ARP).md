@@ -13,15 +13,15 @@ adsense: true
 
 ### 2. ARP Flow
 
-![]({{site.baseurl}}/images/theory_analysis/ARP/ARP_Packet.PNG)
-
 ![]({{site.baseurl}}/images/theory_analysis/ARP/ARP_Flow.PNG)
 
-* 위 그림들은 각각 Ethernet환경에서의 ARP Packet과 ARP Packet의 흐름을 나타내고 있다. **ARP Request**시 자신의 물리적 주소와 논리적 주소를 각각 Source Hardware Address, Source Protocol Address에 채운다. 그리고 물리적 주소를 알아내기 위한 Target의 논리적 주소를 Target Protocol Address에 채운다. 그 후 ARP Packet를 Broadcasting한다.
+* 위 그림은 ARP Packet의 흐름을 나타내고 있다. **ARP Request**시 자신의 물리적 주소와 논리적 주소를 각각 Source Hardware Address, Source Protocol Address에 채운다. 그리고 물리적 주소를 알아내기 위한 Target의 논리적 주소를 Target Protocol Address에 채운다. 그 후 ARP Packet를 Broadcasting한다.
 
 * ARP Packet을 받은 Host는 자신의 논리적 주소가 Target protocol address와 동일한 경우 **ARP Replay**를 전송한다. 자신의 물리적 주소와 논리적 주소를 각각 Source Hardware Address, Source Protocol Address에 채운다. 그리고 ARP Request Packet의 Source Hardware Address, Source Protocol Address를 각각 Target Hardware Address, Target Protocol Address에 채워 Unicast한다.
 
-* Operation Code는 ARP Request시 1이 되고 ARP Reply의 경우 2가 된다.
+![]({{site.baseurl}}/images/theory_analysis/ARP/ARP_Packet.PNG)
+
+* 위의 그림은 Ethernet 환경에서의 ARP Packet을 나타내고 있다. Operation Code는 ARP Request시 1이 되고 ARP Reply의 경우 2가 된다.
 
 ### 3. ARP Caching, Table
 
