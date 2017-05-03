@@ -19,11 +19,13 @@ adsense: true
 
 * ARP Packet을 받은 Host는 자신의 논리적 주소가 Target protocol address와 동일한 경우 **ARP Replay**를 전송한다. 자신의 물리적 주소와 논리적 주소를 각각 Source Hardware Address, Source Protocol Address에 채운다. 그리고 ARP Request Packet의 Source Hardware Address, Source Protocol Address를 각각 Target Hardware Address, Target Protocol Address에 채워 Unicast한다.
 
+### 3. ARP Packet
+
 ![]({{site.baseurl}}/images/theory_analysis/ARP/ARP_Packet.PNG)
 
 * 위의 그림은 Ethernet 환경에서의 ARP Packet을 나타내고 있다. Operation Code는 ARP Request시 1이 되고 ARP Reply의 경우 2가 된다.
 
-### 3. ARP Caching, Table
+### 4. ARP Caching, Table
 
 ~~~~
 # arp
@@ -34,6 +36,6 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 
 * Data를 전송할때마다 ARP를 이용하여 주소를 알아낸다면 네트워크에는 수많은 ARP Packet이 발생하고 많은 전송 Overhead도 발생하게 된다. 따라서 각 Host는 ARP로 알아낸 MAC 주소를 Caching하여 관리한다. 리눅스에서는 arp 명령어를 통해서 리눅스가 관리하는 ARP Table을 볼 수 있다. 192.168.0.1은 90:9f:33:b2:ef:08에 Mapping되어 있고, 192.168.0.4는 1c:23:2c:8c:6c:99에 Mapping되어 있다.
 
-### 4. 참조
+### 5. 참조
 
 * [https://www.slideshare.net/naveenarvinth/arp-36193303](https://www.slideshare.net/naveenarvinth/arp-36193303)
