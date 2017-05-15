@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-<img src="{{site.baseurl}}/images/theory_analysis/Multicast/Multicast_Address.PNG" width="500px">
+<img src="{{site.baseurl}}/images/theory_analysis/Multicast/Multicast_Address.PNG" width="600px">
 
 ![]({{site.baseurl}}/images/theory_analysis/Multicast/IGMP_Report.PNG)
 
