@@ -45,5 +45,7 @@ Network Multicast를 분석한다.
 
 * Switch는 Packet의 Ethernet Address를 보고 해당 Packet이 Multicast Packet인지 알 수 있다. Switch가 Multicast Ethernet Address를 가진 Packet을 받으면 해당 Packet이 Switch의 어느 Port에서 왔는지 기록한다. 기록을 바탕으로 Multicast Packet을 적절한 Port로 Routing한다. 만약 Switch에서 IGMP Snooping 기능을 지원하지 않으면 Multicast Packet을 Broadcast하여 모든 Port에게 전달한다.
 
+### 4. 참고
+
 * [https://osrg.github.io/ryu-book/ko/html/igmp_snooping.html](https://osrg.github.io/ryu-book/ko/html/igmp_snooping.html)
 *  [http://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/ip_multicast/White_papers/mcst_ovr.html](http://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/ip_multicast/White_papers/mcst_ovr.html)
