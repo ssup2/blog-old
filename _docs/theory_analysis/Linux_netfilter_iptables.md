@@ -39,7 +39,7 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 * iptables는 Netfilter Framework를 이용하는 대표 Tool이다. iptables를 이용하여 Packet을 제어하거나 조작 할 수 있다. 위의 그림은 Netfilter를 이용한 iptables의 Packet 처리 과정을 나타내고 있다. 그림에서 PREROUTING, FOWRARD, INPUT, OUTPUT, POSTROUTING은 각각 Netfilter의 NF_IP_PRE_ROUTING, NF_IP_LOCAL_IN, NF_IP_FORWARD, NF_IP_LOCAL_OUT, NF_IP_POST_ROUTING Hook을 의미한다.
 
-#### 2.1. tables
+#### 2.1. Tables
 
 * iptables는 Filter Table, NAT Table, Mangle Table, Raw Table, Security Table 총 5가지의 Table을 제공한다.
 
@@ -53,7 +53,7 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 1. Security Table - SELinux에서 Packet을 어떻게 처리할지 결정하기 위한 Table이다.
 
-#### 2.2. packet flow
+#### 2.2. Packet flow
 
 * 위 그림과 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다.
 
