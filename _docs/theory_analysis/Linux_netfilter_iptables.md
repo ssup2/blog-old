@@ -11,11 +11,11 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 ### 1. Netfilter
 
-* Netfilter는 Linux를 위한 Network Packet Filtering Framework이다. Linux Application은 Netfilter를 통해서 Linux Kenel로 전달되는 Packet을 Hooking하고 조작할 수 있다.
+Netfilter는 Linux를 위한 Network Packet Filtering Framework이다. Linux Application은 Netfilter를 통해서 Linux Kenel로 전달되는 Packet을 Hooking하고 조작할 수 있다.
 
 #### 1.1. Hooks
 
-* Netfilter는 5개의 Hook Point를 제공한다.
+Netfilter는 5개의 Hook Point를 제공한다.
 
 1. NF_IP_PRE_ROUTING - 외부에서 온 Packet이 Linux Kernel의 Network Stack을 통과하기 전 발생하는 Hook이다. Packet을 Routing하기 전에 발생한다.
 
@@ -29,19 +29,19 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 #### 1.2. Packet Process
 
-* 외부에서 온 Packet의 목적지가 자신인 경우 NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING Hook을 거친다.
+외부에서 온 Packet의 목적지가 자신인 경우 NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING Hook을 거친다.
 
-* 외부에서 온 Packet의 목적지가 자신이 아닌경우 NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING Hook을 거친다.
+외부에서 온 Packet의 목적지가 자신이 아닌경우 NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING Hook을 거친다.
 
 ### 2. iptables
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_netfilter_iptables/Netfilter_Packet_Traversal.PNG)
 
-* iptables는 Netfilter Framework를 이용하는 대표 Tool이다. iptables를 이용하여 Packet을 제어하거나 조작 할 수 있다. 위의 그림은 Netfilter를 이용한 iptables의 Packet 처리 과정을 나타내고 있다. 그림에서 PREROUTING, FOWRARD, INPUT, OUTPUT, POSTROUTING은 각각 Netfilter의 NF_IP_PRE_ROUTING, NF_IP_LOCAL_IN, NF_IP_FORWARD, NF_IP_LOCAL_OUT, NF_IP_POST_ROUTING Hook을 의미한다.
+iptables는 Netfilter Framework를 이용하는 대표 Tool이다. iptables를 이용하여 Packet을 제어하거나 조작 할 수 있다. 위의 그림은 Netfilter를 이용한 iptables의 Packet 처리 과정을 나타내고 있다. 그림에서 PREROUTING, FOWRARD, INPUT, OUTPUT, POSTROUTING은 각각 Netfilter의 NF_IP_PRE_ROUTING, NF_IP_LOCAL_IN, NF_IP_FORWARD, NF_IP_LOCAL_OUT, NF_IP_POST_ROUTING Hook을 의미한다.
 
 #### 2.1. Tables
 
-* iptables는 Filter Table, NAT Table, Mangle Table, Raw Table, Security Table 총 5가지의 Table을 제공한다.
+iptables는 Filter Table, NAT Table, Mangle Table, Raw Table, Security Table 총 5가지의 Table을 제공한다.
 
 1. Filter Table - Packet Filtering을 위한 Table이다. Packet을 Packet의 목적지까지 전달할지 아니면 Packet을 Drop할지 결정한다. Firewall 기능은 Filter Table을 통해 구축 가능하다.
 
@@ -55,13 +55,13 @@ Linux안에 있는 Netfilter Framework를 분석하고 Netfilter를 이용하는
 
 #### 2.2. Packet flow
 
-* 위 그림과 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다.
+위 그림과 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다.
 
-* Connection Tracking은 Netfilter Framework가 Packet의 정보를 바탕으로 Connection 추적을 시작하는 부분을 의미한다. Routing (Forwarding)은 전달받은 Packet이 자신이 받아야하는 Packet인지 아니면 다른 Host가 받아야하는 Packet인지 구분하여 Routing하는 과정을 나타낸다. Routing (Interface)는 Packet을 어느 Network Interface에 전달해야할지 결정하는 과정을 나타낸다.
+Connection Tracking은 Netfilter Framework가 Packet의 정보를 바탕으로 Connection 추적을 시작하는 부분을 의미한다. Routing (Forwarding)은 전달받은 Packet이 자신이 받아야하는 Packet인지 아니면 다른 Host가 받아야하는 Packet인지 구분하여 Routing하는 과정을 나타낸다. Routing (Interface)는 Packet을 어느 Network Interface에 전달해야할지 결정하는 과정을 나타낸다.
 
 #### 2.3. Chain, Rule
 
-* 각 Table은 Chain의 조합으로 이루어져 있다. 위의 그림에서 NAT Table은 PREROUTING, INPUT, OUTPUT, POSTROUTING 4개의 hook에 포함되어있는걸 알 수 있는데, 다시 말하면 NAT Table은 4개 이상의 Chain으로 이루어졌다고 할 수 있다. 또한 각 Chain은 여러 Rule들의 조합으로 이루어져 있다.
+각 Table은 Chain의 조합으로 이루어져 있다. 위의 그림에서 NAT Table은 PREROUTING, INPUT, OUTPUT, POSTROUTING 4개의 hook에 포함되어있는걸 알 수 있는데, 다시 말하면 NAT Table은 4개 이상의 Chain으로 이루어졌다고 할 수 있다. 또한 각 Chain은 여러 Rule들의 조합으로 이루어져 있다.
 
 ~~~
 # iptables -t nat -vL
@@ -93,9 +93,9 @@ Chain DOCKER (2 references)
     0     0 DNAT       tcp  --  !docker0 any     anywhere             anywhere             tcp dpt:6776 to:172.17.0.2:6776
 ~~~
 
-* 위에는 Docker Host의 Nat Table을 보여주고 있다. 4개의 Default Chain인 PREROUTING, INPUT, OUTPUT, POSTROUTING가 있고, Docker가 이용중인 DOCKER Chain을 확인 할 수 있다. Docker Container가 Port Forarding을 설정하였다면 Docker Daemon은 DOCKER Chain에 Port Forwarding Rule을 등록한다.
+위에는 Docker Host의 Nat Table을 보여주고 있다. 4개의 Default Chain인 PREROUTING, INPUT, OUTPUT, POSTROUTING가 있고, Docker가 이용중인 DOCKER Chain을 확인 할 수 있다. Docker Container가 Port Forarding을 설정하였다면 Docker Daemon은 DOCKER Chain에 Port Forwarding Rule을 등록한다.
 
-* Docker Host에 들어온 모든 Packet은 PREROUTING CHAIN에서 DOCKER CHAIN으로 이동한다. Chain에 여러 Rule이 등록되어 있는 경우, 위의 Rule부터 차례대로 비교하면서 아래로 나아간다. 따라서  DOCKER CHAIN으로 넘어온 Packet은 TCP Header에 있는 Destination Port 번호가 9736, 9008, 8080, 6776인지 순서대로 확인하고, 만약 일치하면 Destination IP를 172.17.0.2로 바꾼다. Destination IP가 바뀐 Packet은 Routing(Interface) 과정에서 Docker Container로 Routing된다.
+Docker Host에 들어온 모든 Packet은 PREROUTING CHAIN에서 DOCKER CHAIN으로 이동한다. Chain에 여러 Rule이 등록되어 있는 경우, 위의 Rule부터 차례대로 비교하면서 아래로 나아간다. 따라서  DOCKER CHAIN으로 넘어온 Packet은 TCP Header에 있는 Destination Port 번호가 9736, 9008, 8080, 6776인지 순서대로 확인하고, 만약 일치하면 Destination IP를 172.17.0.2로 바꾼다. Destination IP가 바뀐 Packet은 Routing(Interface) 과정에서 Docker Container로 Routing된다.
 
 ### 3. 참조
 
