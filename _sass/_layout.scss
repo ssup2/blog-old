@@ -308,7 +308,7 @@ nav > ul {
 }
 
 .highlight {
-	margin: 0 0 1rem 0;
+	margin: 0.8rem 0 0.8rem 0;
 }
 
 h3 + .warning {
@@ -420,11 +420,12 @@ h4 svg {
 
 blockquote {
 	padding: 10px 15px;
-	margin: 0.5rem 0 0.5rem 0;
+	margin: 0.8rem 0 0.8rem 0;
 	background-color: $brand-colour-light;
 	border-color: $brand-colour;
 
 	p:last-child {
+		margin-top: 0;
 		margin-bottom: 0;
 	}
 

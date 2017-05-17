@@ -50,9 +50,11 @@ adsense: true
 
 > \# vi ~/.bashrc
 
-> export TERM=xterm-256color <br>
-> export GOPATH=$HOME/Desktop/golang <br>
-> export PATH=$PATH:$GOPATH/bin
+~~~
+export TERM=xterm-256color
+export GOPATH=$HOME/Desktop/golang
+export PATH=$PATH:$GOPATH/bin
+~~~
 
 ### 5. Vim Color Theme 다운로드
 
