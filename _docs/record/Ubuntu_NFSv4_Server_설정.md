@@ -49,11 +49,11 @@ adsense: true
 
 ### 3. NFSv4 Client 설정
 
-#### 3.1. Ubuntu Package 설치
+* 3.1. Ubuntu Package 설치
 
 > \# apt-get install nfs-common
 
-#### 3.2. NFSv4 Mount
+* 3.2. NFSv4 Mount
 
 > \# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir] <br>
 > ex) \# mount -t nfs4 localhost:/nfs_root /mnt
