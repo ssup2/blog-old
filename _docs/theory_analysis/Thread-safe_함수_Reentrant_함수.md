@@ -30,9 +30,7 @@ int thread_safe_function()
 
 ### 2. Reentrant 함수
 
-Thread-safe 함수와 마찬가지로 여러 Thread에서 동시에 실행이 가능하지만 Thread간 공유 자원를 이용하지 않는 함수를 의미한다. 공유 변수를 이용하지 않기 때문에 각 Thread는 언제나 같은 호출 결과를 얻을 수 있다. 이러한 성질을 Reentrancy(재진입 가능한) 하다라고 표현하기 때문에 Reentrant 함수라고 한다.
-
-Reentrant 함수는 Thread-safe 함수이지만 Thread-safe 함수는 Reentrant 함수라고 말할 수 없다.
+Thread-safe 함수와 마찬가지로 여러 Thread에서 동시에 실행이 가능하지만 Thread간 공유 자원를 이용하지 않는 함수를 의미한다. 공유 변수를 이용하지 않기 때문에 각 Thread는 언제나 같은 호출 결과를 얻을 수 있다. 이러한 성질을 Reentrancy(재진입 가능한) 하다라고 표현하기 때문에 Reentrant 함수라고 한다. Reentrant 함수는 Thread-safe 함수이지만 Thread-safe 함수는 Reentrant 함수라고 말할 수 없다.
 
 아래 Code는 Reentrant 함수를 나타내고 있다. 지역변수인 local_var만을 이용하고 있다. 따라서 여러 Thread들이 동시에 reentrant_function() 함수를 호출해도 각 Thread는 언제나 1을 반환 받는다.
 

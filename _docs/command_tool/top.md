@@ -40,8 +40,9 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
 
 ### 2. CPU 사용률
 
-* top을 통해서 CPU 사용률을 알 수 있다. **%Cpu(s)** 부분은 모든 CPU Core의 평균 CPU 사용률을 타나내고 있다. 1번 키보드를 누르면 각 CPU Core의 사용률을 볼 수 있다.
-* CPU의 사용률은 us, sy, ni, id, wa, hi, si, st 7개의 부분으로 나타낸다. 7개 부분의 사용률을 모두 더하면 100%가 된다.
+top을 통해서 CPU 사용률을 알 수 있다. **%Cpu(s)** 부분은 모든 CPU Core의 평균 CPU 사용률을 타나내고 있다. 1번 키보드를 누르면 각 CPU Core의 사용률을 볼 수 있다.
+
+CPU의 사용률은 us, sy, ni, id, wa, hi, si, st 7개의 부분으로 나타낸다. 7개 부분의 사용률을 모두 더하면 100%가 된다.
   * us (user) - nice값이 적용되지 않은 (un-niced, nice = 0) User Process들의 사용률을 나타낸다. 대부분의 User Process들의 사용률을 의미한다.
   * sy (system) - Kernel의 사용률 중 id, wa, hi, si의 사용률 제외한 사용률을 의미한다.
   * ni (nice) - nice값이 적용된 (niced) User Process들의 사용률을 나타낸다.
