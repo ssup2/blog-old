@@ -15,7 +15,7 @@ Cloud 환경에서 Network 가상화를 위해 이용하는 Overlay Network를 �
 
 ### 2. VXLAN
 
-<img src="{{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Overview.PNG" width="500px">
+<img src="{{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Overview.PNG" width="650px">
 
 #### 2.2. VXLAN Packet
 
