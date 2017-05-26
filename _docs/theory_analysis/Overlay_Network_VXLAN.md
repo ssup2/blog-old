@@ -11,19 +11,25 @@ Cloud 환경에서 Network 가상화를 위해 이용하는 Overlay Network를 �
 
 ### 1. Overlay Network
 
-
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/Overlay.PNG)
 
 ### 2. VXLAN
 
-#### 2.1. VTEP
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Overview.PNG)
 
-#### 2.2. ARP example
+#### 2.2. VXLAN Packet
 
-#### 2.3. Packet Flow
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Packet.PNG)
 
-<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG" width="500px">
+#### 2.3. VXLAN Address Learning
 
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Address_Learning.PNG)
+
+#### 2.4. VXLAN Unicast
+
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Unicast.PNG)
+
+### 3. 참조
 
 * [http://youngmind.tistory.com/entry/Network-Overlay-VXLAN-%EB%B6%84%EC%84%9D-1](http://youngmind.tistory.com/entry/Network-Overlay-VXLAN-%EB%B6%84%EC%84%9D-1)
 
