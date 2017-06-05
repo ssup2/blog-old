@@ -59,7 +59,7 @@ VTEP은 가상 Network Packet이 Encapsulation되는 지점이기 때문에 Enca
 
 1. VTEP 1은 Decapsulation을 통해 ARP Response Packet을 Machine A에게 전달한다.
 
-ARP Packet 처리 과정을 통해 VXLAN이 얼마나 효율적으로 Broadcast와 Unicast를 처리하는지 파악 할 수 있다.
+ARP Packet 처리 과정을 통해 VXLAN이 얼마나 효율적으로 Broadcast와 Unicast를 처리하는지 파악 할 수 있다. 
 
 #### 2.3. VXLAN Unicast
 
