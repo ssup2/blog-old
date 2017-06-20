@@ -21,7 +21,7 @@ seccomp은 prctl() System Call 호출을 통해 설정할 수 있으며, Linux K
 
 seccomp은 Strict, Filter 2가지 Mode를 지원한다.
 
-#### 2.1. Strict
+#### 2.1. Strict Mode
 
 exit(), sigreturn(), read(), write() 4가지의 System Call만을 이용 할 수 있다. 만약 4가지 이외의 System Call을 호출하는 경우 해당 Process는 SIGKILL Signal을 받고 바로 종료된다.
 
@@ -47,7 +47,7 @@ int main() {
 
 위의 코드는 seccomp strick mode를 적용하고, dup2() System Call을 호출하는 코드이다. strick mode에서 dup2() System call은 허용되지 않기 때문에 위의 코드는 STRICT 문자열을 출력하지 못하고 종료된다.
 
-#### 2.2. Filter
+#### 2.2. Filter Mode
 
 각 System Call별로 수행 동작을 설정할 수 있다. 다음과 같이 5개의 동작을 System Call별로 설정 할 수 있다.
 
