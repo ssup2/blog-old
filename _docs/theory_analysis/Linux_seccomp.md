@@ -15,7 +15,7 @@ Linux의 Process Sandboxing 기법인 seccomp을 분석한다.
 
 seccomp은 Linux kernel 2.6.12부터 적용된 process sandboxing 기법이다. 하지만 실제로 seccomp을 분석하면 단순한 **System Call Filtering** 기법이란걸 알 수 있다. 위의 그림은 System Call 수행시 seccomp이 적용되는 시점을 나타내고 있다. seccomp은 실제 각 system call function이 수행되기 전 Software Interrupt Handler에서 System Call을 filtering한다.
 
-seccomp은 prctl(2) System Call 호출을 통해 설정할 수 있으며, Linux Kernel 3.17 버전 이후에는 seccomp(2) System Call을 이용해서도 설정 할 수 있다.
+seccomp은 prctl() System Call 호출을 통해 설정할 수 있으며, Linux Kernel 3.17 버전 이후에는 seccomp() System Call을 이용해서도 설정 할 수 있다.
 
 ### 2. seccomp Mode
 
@@ -23,7 +23,7 @@ seccomp은 Strict, Filter 2가지 Mode를 지원한다.
 
 #### 2.1. Strict
 
-exit(2), sigreturn(2), read(2), write(2) 4가지의 System Call만을 이용 할 수 있다. 만약 4가지 이외의 System Call을 호출하는 경우 해당 Process는 SIGKILL Signal을 받고 바로 종료된다.
+exit(), sigreturn(), read(), write() 4가지의 System Call만을 이용 할 수 있다. 만약 4가지 이외의 System Call을 호출하는 경우 해당 Process는 SIGKILL Signal을 받고 바로 종료된다.
 
 {% highlight C %}
 #include <stdio.h>
@@ -45,7 +45,7 @@ int main() {
 }
 {% endhighlight %}
 
-위의 코드는 seccomp strick mode를 적용하고, dup2(2) System Call을 호출하는 코드이다. strick mode에서 dup2(2) System call은 허용되지 않기 때문에 위의 코드는 STRICT 문자열을 출력하지 못하고 종료된다.
+위의 코드는 seccomp strick mode를 적용하고, dup2() System Call을 호출하는 코드이다. strick mode에서 dup2() System call은 허용되지 않기 때문에 위의 코드는 STRICT 문자열을 출력하지 못하고 종료된다.
 
 #### 2.2. Filter
 
@@ -97,7 +97,7 @@ int main() {
 }
 {% endhighlight %}
 
-위의 코드는 libseccomp을 이용하여 seccomp을 Filter Mode로 동작시키는 Code이다. dup2(2) System Call도 허용한 것을 확인 할 수 있다. open(2) System Call은 허용되지 않기 때문에 위의 코드는 open(2) System Call에서 종료된다.
+위의 코드는 libseccomp을 이용하여 seccomp을 Filter Mode로 동작시키는 Code이다. dup2() System Call도 허용한 것을 확인 할 수 있다. open() System Call은 허용되지 않기 때문에 위의 코드는 open() System Call에서 종료된다.
 
 ### 3. 참조
 
