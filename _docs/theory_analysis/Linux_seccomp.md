@@ -9,7 +9,7 @@ adsense: true
 
 Linux의 Process Sandboxing 기법인 seccomp을 분석한다.
 
-### 1. seccomp (short for secure process sandboxing)
+### 1. seccomp (secure computing)
 
 <img src="{{site.baseurl}}/images/theory_analysis/Linux_seccomp/seccomp_Hook.PNG" width="600px">
 
