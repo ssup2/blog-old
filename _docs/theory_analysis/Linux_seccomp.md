@@ -1,6 +1,6 @@
 ---
-title:
-category:
+title: Linux seccomp
+category: Theory, Analysis
 date: 2017-06-20T12:00:00Z
 lastmod: 2017-06-20T12:00:00Z
 comment: true
