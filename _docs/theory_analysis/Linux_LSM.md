@@ -11,7 +11,7 @@ Linux의 Security Framework인 LSM(Linux Security Module)을 분석한다.
 
 ### 1. LSM(Linux Security Module)
 
-<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG" width="400px">
+<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG" width="300px">
 
 LSM은 Linux안에서 다양한 Security Module들의 구동 환경을 제공해주는 Security Framework이다. 현재 Linux의 Capability, SELinux, AppArmor, smack들의 기법들은 모두 LSM을 이용하고 있다.
 
@@ -31,17 +31,17 @@ LSM의 Hook은 System Call을 처리하면서 가장 많이 만나게 된다. �
 
 #### 1.2. LSM Module Stack, Hook Head
 
-<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Stack.PNG" width="400px">
+<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Stack.PNG" width="300px">
 
 LSM 위에 다양한 Security Module들을 동시에 올릴 수 있다. 이러한 기법을 Module Stacking이라고 명칭한다. 위의 그림은 Capability Module, Yama Module, AppArmor Module이 순서대로 LSM 위에 올라간 그림을 나타내고 있다.
 
-<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Function_Pointer.PNG" width="700px">
+![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Function_Pointer.PNG)
 
 위의 그림은 여러개의 Security Module들이 실제로 LSM 위에 어떤 방법으로 올라가는지를 나타내고 있다. LSM은 **security_hook_heads**라는 Struct를 가지고 있다. security_hook_heads는 각 Security Module의 Hook Function으로 연결되는 Linked List의 Head(Hook Head)들을 가지고 있다. 그림에서는 task_ptr, task_free, ptrace_access_check같은 몇개의 Hook Head만을 나타냈지만 실제로 security_hook_heads는 LSM의 Hook 개수만큼의 Hook Head를 가지고 있다.
 
 LSM에 올라온 Security Module의 순서대로 Security Module의 Hook Function들이 Hook Head에 연결된다. Capability Module, Yama Module, AppArmor Module 순으로 LSM에 올라갔기 때문에 ptrace_access_check Hook Head에 Capabilty, Yama, AppArmor의 ptrace_access_check Hook Function이 순서대로 연결된다. task_ptr Hook Head에는 Capability와 Yama의 Hook Function만 연결되어 있는데 AppArmor는 task_ptr Hook Function을 구현하지 않았기 때문이다.
 
-먼져 LSM에 올라온 Security Module의 Hook Function이 먼져 수행되고 중간 Hook Function의 결과가 No라면 그 즉시 다음 Hook Function을 수행하지 않고 중단한다. 위의 그림처럼 Security Module이 설정되어 있는 상태에서 ptrace_access_check hook이 발생하면 가장 먼져 Capability의 ptrace_access_check Hook Function이 실행된다. Capability의 ptrace_access_check Hook Function의 결과가 Yes라면 Yama의 ptrace_access_check Hook Function이 수행된다. 만약 결과가 No라면 다음 Yama의 Hook Function을 수행하지 않고 바로 LSM을 빠져 나온다.
+먼저 LSM에 올라온 Security Module의 Hook Function이 먼져 수행되고 중간 Hook Function의 결과가 No라면 그 즉시 다음 Hook Function을 수행하지 않고 중단한다. 위의 그림처럼 Security Module이 설정되어 있는 상태에서 ptrace_access_check hook이 발생하면 가장 먼져 Capability의 ptrace_access_check Hook Function이 실행된다. Capability의 ptrace_access_check Hook Function의 결과가 Yes라면 Yama의 ptrace_access_check Hook Function이 수행된다. 만약 결과가 No라면 다음 Yama의 Hook Function을 수행하지 않고 바로 LSM을 빠져 나온다.
 
 {% highlight C %}
 /**
