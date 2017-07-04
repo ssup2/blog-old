@@ -38,6 +38,10 @@ adsense: true
 [NFS share] /export/[NFS root] none bind  0  0
 ~~~
 
+~~~
+/root/nfs_share /export/nfs_root none bind  0  0
+~~~
+
 #### 2.3. 설정
 
 * /etc/exports 파일에 다음의 내용을 추가한다.
