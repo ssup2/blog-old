@@ -26,11 +26,13 @@ adsense: true
 > \# sudo su <br>
 > \# vim /etc/lightdm/lightdm.conf
 
-> [SeatDefaults] <br>
-> autologin-user=root <br>
-> autologin-user-timeout=0 <br>
-> user-session=ubuntu <br>
-> greeter-session=unity-greeter
+~~~
+[SeatDefaults] <br>
+autologin-user=root <br>
+autologin-user-timeout=0 <br>
+user-session=ubuntu <br>
+greeter-session=unity-greeter
+~~~
 
 ##### 1.2.2. Ubuntu 16.04
 
@@ -39,10 +41,12 @@ adsense: true
 > \# sudo su <br>
 > \# vim /etc/lightdm/lightdm.conf
 
-> [Seat:*] <br>
-> autologin-guest=false <br>
-> autologin-user=root <br>
-> autologin-user-timeout=0
+~~~
+[Seat:*] <br>
+autologin-guest=false <br>
+autologin-user=root <br>
+autologin-user-timeout=0
+~~~
 
 #### 1.3 Error 제거
 
@@ -52,4 +56,6 @@ adsense: true
 
 > \# vim /root/.profile
 
-> mesg n -> tty -s && mesg n
+~~~
+mesg n -> tty -s && mesg n
+~~~

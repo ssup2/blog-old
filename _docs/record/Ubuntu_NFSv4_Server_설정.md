@@ -13,8 +13,8 @@ adsense: true
 
 ### 2. NFSv4 Server 설정
 
-* [NFS root] - NFSv4 Server Root 폴더의 상대 경로를 의미한다. (ex nfs_root)
-* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다. (ex /root/nfs_share)
+* [NFS root] - NFSv4 Server의 Root 폴더 이름을 의미한다.
+* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다.
 
 #### 2.1. Ubuntu Package 설치
 
@@ -28,7 +28,11 @@ adsense: true
 > \# chmod 777 [NFS share] <br>
 > \# mount \-\-bind [NFS share] /export/[NFS root]
 
-*  /etc/fstab에 다음 내용을 추가하여 Bind Mount 설정
+> \# mkdir -p /export/nfs_root <br>
+> \# chmod 777 /root/nfs_share <br>
+> \# mount \-\-bind /root/nfs_share /export/root/nfs_share
+
+*  /etc/fstab에 다음 내용을 추가하여 재부팅 후에도 Bind Mount 되도록 설정
 
 ~~~
 [NFS share] /export/[NFS root] none bind  0  0
@@ -41,6 +45,11 @@ adsense: true
 ~~~
 /export               *(rw,fsid=0,insecure,no_subtree_check,async)
 /export/[NFS dir]     *(rw,nohide,insecure,no_subtree_check,async)
+~~~
+
+~~~
+/export               *(rw,fsid=0,insecure,no_subtree_check,async)
+/export/nfs_root      *(rw,nohide,insecure,no_subtree_check,async)
 ~~~
 
 #### 2.4. Restart
@@ -56,4 +65,5 @@ adsense: true
 * 3.2. NFSv4 Mount
 
 > \# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir] <br>
-> ex) \# mount -t nfs4 localhost:/nfs_root /mnt
+
+> \# mount -t nfs4 localhost:/nfs_root /mnt
