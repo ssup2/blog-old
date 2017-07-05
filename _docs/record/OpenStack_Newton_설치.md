@@ -16,7 +16,7 @@ adsense: true
 
 ### 1. 설치 환경
 
-* Ubuntu Server 16.04.2 (VM)
+* Ubuntu Server 16.04.2 64bit (VM)
 * OpenStack Newton Version
   * Controller Node - 1대
   * Compute Node - 1대
@@ -242,13 +242,43 @@ server controller iburst
 
 > \# service chrony restart
 
-### 3. KeyStone 설치
+### 3. Keystone 설치
 
 ### 3.1. Controller Node
 
-* Ubuntu Package 설치
+* Keystone DB 초기화
 
-> \#
+> \# mysql -u root -p
+
+> mysql> CREATE DATABASE keystone; <br>
+> mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'root';
+> mysql> exit;
+
+* Keystone Package 설치
+
+> \# apt install keystone
+
+* /etc/keystone/keystone.conf에 다음의 내용을 추가
+
+~~~
+[database]
+connection = mysql+pymysql://keystone:root@controller/keystone
+
+[token]
+provider = fernet
+~~~
+
+* Keystone 설정
+
+> \# su -s /bin/sh -c "keystone-manage db_sync" keystone <br>
+> \# keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone <br>
+> \# keystone-manage credential_setup --keystone-user keystone --keystone-group keystone <br>
+> \# keystone-manage bootstrap --bootstrap-password root<br>
+  --bootstrap-admin-url http://controller:35357/v3/ \<br>
+  --bootstrap-internal-url http://controller:35357/v3/ \<br>
+  --bootstrap-public-url http://controller:5000/v3/ \<br>
+  --bootstrap-region-id RegionOne
 
 ### 4. Glance 설치
 
