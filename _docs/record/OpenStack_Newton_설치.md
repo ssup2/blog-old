@@ -16,8 +16,12 @@ adsense: true
 
 ### 1. 설치 환경
 
-* OpenStack Newton Version
 * Ubuntu Server 16.04.2 (VM)
+* OpenStack Newton Version
+  * Controller Node - 1대
+  * Compute Node - 1대
+  * Block Storage Node - 1대
+  * Network - Self-service
 
 ### 2. Node 설정
 
@@ -25,6 +29,21 @@ adsense: true
 
 * Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node를 생성한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용한다.
+
+#### 2.1. 모든 Node
+
+* /etc/hosts에 아래 내용 추가
+
+~~~
+# controller
+10.0.0.11       controller
+
+# compute1
+10.0.0.31       compute1
+
+# block1
+10.0.0.41       block1
+~~~
 
 #### 2.1. Controller Node
 
@@ -51,6 +70,13 @@ netmask 255.255.255.0
 gateway 192.168.77.1
 dns-nameservers 8.8.8.8
 ~~~
+
+
+* chrony Package 설치
+
+> # apt install chrony
+
+  * Test
 
 #### 2.2. Compute Node
 
