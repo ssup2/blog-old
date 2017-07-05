@@ -274,11 +274,18 @@ provider = fernet
 > \# su -s /bin/sh -c "keystone-manage db_sync" keystone <br>
 > \# keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone <br>
 > \# keystone-manage credential_setup --keystone-user keystone --keystone-group keystone <br>
-> \# keystone-manage bootstrap --bootstrap-password root<br>
-  --bootstrap-admin-url http://controller:35357/v3/ \<br>
-  --bootstrap-internal-url http://controller:35357/v3/ \<br>
-  --bootstrap-public-url http://controller:5000/v3/ \<br>
-  --bootstrap-region-id RegionOne
+> \# keystone-manage bootstrap --bootstrap-password root --bootstrap-admin-url http://controller:35357/v3/ --bootstrap-internal-url http://controller:35357/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
+
+* /etc/apache2/apache2.conf에 다음의 내용 추가
+
+~~~
+ServerName controller
+~~~
+
+* Apache HTTP Server 재시작 및 DB 제거
+
+> \# service apache2 restart <br>
+> \# rm -f /var/lib/keystone/keystone.db
 
 ### 4. Glance 설치
 
