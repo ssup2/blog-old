@@ -31,7 +31,7 @@ LSM의 Hook은 System Call을 처리하면서 가장 많이 만나게 된다. �
 
 #### 1.2. LSM Module Stack, Hook Head
 
-<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Stack.PNG" width="300px">
+<img src="{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Stack.PNG" width="250px">
 
 LSM 위에 다양한 Security Module들을 동시에 올릴 수 있다. 이러한 기법을 Module Stacking이라고 명칭한다. 위의 그림은 Capability Module, Yama Module, AppArmor Module이 순서대로 LSM 위에 올라간 그림을 나타내고 있다.
 
