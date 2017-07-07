@@ -16,19 +16,21 @@ adsense: true
 
 ### 1. 설치 환경
 
-* Ubuntu Server 16.04.2 64bit (VM)
+* Virtual Box 5.0.14r
+  * Controller Node - Ubuntu Server 16.04.2 64bit - 1대
+  * Compute Node - Ubuntu Server 16.04.2 64bit - 1대
+  * Block Storage Node - Ubuntu Server 16.04.2 64bit - 1대
 * OpenStack Newton Version
-  * Controller Node - 1대
-  * Compute Node - 1대
-  * Block Storage Node - 1대
   * Network - Self-service
+* Password
+  * OpenStack 설치에 필요한 Password는 간편한 설치를 위해 **root** 로 통일한다.
 
 ### 2. Node 설정
 
 ![]({{site.baseurl}}/images/record/OpenStack_Newton_Install/Node_Setting.PNG)
 
-* Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node를 생성한다.
-* NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용한다.
+* Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
+* NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.
 
 #### 2.1. 모든 Node
 
@@ -275,7 +277,7 @@ server controller iburst
 
 ### 3. Keystone 설치
 
-### 3.1. Controller Node
+#### 3.1. Controller Node
 
 * Keystone DB 초기화
 
@@ -336,7 +338,9 @@ ServerName controller
 > \# openstack role create user <br>
 > \# openstack role add --project demo --user demo user
 
-* Keystone 동작 확인
+#### 3.2. 검증
+
+* Controller Node에서 Keystone 동작 확인
 
 > \# openstack --os-auth-url http://controller:35357/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin token issue
 
@@ -376,16 +380,17 @@ ServerName controller
 
 > \# mysql -u root -p
 
-> \# mysql> CREATE DATABASE glance; <br>
-> \# mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'root'; <br>
-> \# mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'root';
+> mysql> CREATE DATABASE glance; <br>
+> mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'root'; <br>
+> mysql> exit;
 
 * Glance User 생성 및 설정
 
 > \# . /root/admin-openrc <br>
 > \# openstack user create --domain default --password-prompt glance <br>
 > \# openstack role add --project service --user glance admin <br>
-> \# openstack service create --name glance --description "OpenStack Image" image
+> \# openstack service create --name glance --description "OpenStack Image" image <br>
 
 * Glance Service API Endpoint 생성
 
@@ -397,7 +402,7 @@ ServerName controller
 
 > \# apt install glance
 
-* /etc/glance/glance-api.conf에 다음의 내용을 추가한다.
+* /etc/glance/glance-api.conf에 다음의 내용을 추가
 
 ~~~
 [database]
@@ -450,7 +455,9 @@ flavor = keystone
 > \# service glance-registry restart <br>
 > \# service glance-api restart
 
-* Glance 동작 확인
+#### 4.2. 검증
+
+* Controller Node에서 Glance 동작 확인
 
 > \# . admin-openrc <br>
 > \# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img <br>
@@ -458,16 +465,162 @@ flavor = keystone
 > \# openstack image list
 
 ~~~
-
++--------------------------------------+--------+--------+
+| ID                                   | Name   | Status |
++--------------------------------------+--------+--------+
+| 38047887-61a7-41ea-9b49-27987d5e8bb9 | cirros | active |
++--------------------------------------+--------+--------+
 ~~~
 
-### 5. Neutron 설치
+### 5. Nova 설치
 
-### 6. Horizon 설치
+#### 5.1. Controller Node
 
-### 7. Cinder 설치
+* Nova DB 초기화
 
-### 8. 참조
+> \# mysql -u root -p
+
+> mysql> CREATE DATABASE nova_api; <br>
+> mysql> CREATE DATABASE nova; <br>
+> mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'root'; <br>
+> mysql> exit;
+
+* Nova User 생성 및 설정
+
+> \# . admin-openrc <br>
+> \# openstack user create --domain default --password-prompt nova <br>
+> \# openstack role add --project service --user nova admin <br>
+> \# openstack service create --name nova --description "OpenStack Compute" compute
+
+* Nova Service API Endpoint 생성
+
+> \# openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
+
+* Nova Package 설치
+
+> \# apt install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler <br>
+> \# mkdir /usr/lib/python2.7/dist-packages/keys
+
+* /etc/nova/nova.conf에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+transport_url = rabbit://openstack:root@controller
+auth_strategy = keystone
+my_ip = 10.0.0.11
+use_neutron = True
+firewall_driver = nova.virt.firewall.NoopFirewallDriver
+
+[api_database]
+connection = mysql+pymysql://nova:root@controller/nova_api
+
+[database]
+connection = mysql+pymysql://nova:root@controller/nova
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = nova
+password = root
+
+[vnc]
+vncserver_listen = $my_ip
+vncserver_proxyclient_address = $my_ip
+
+[glance]
+api_servers = http://controller:9292
+
+[oslo_concurrency]
+lock_path = /var/lib/nova/tmp
+~~~
+
+* Nova 설정 및 시작
+
+> \# service nova-api restart <br>
+> \# service nova-consoleauth restart <br>
+> \# service nova-scheduler restart <br>
+> \# service nova-conductor restart <br>
+> \# service nova-novncproxy restart
+
+#### 5.2. Compute Node
+
+* Nova Package 설치
+
+> \# apt install nova-compute
+
+* /etc/nova/nova.conf에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+transport_url = rabbit://openstack:root@controller
+auth_strategy = keystone
+my_ip = 10.0.0.31
+use_neutron = True
+firewall_driver = nova.virt.firewall.NoopFirewallDriver
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = nova
+password = root
+
+[vnc]
+enabled = True
+vncserver_listen = 0.0.0.0
+vncserver_proxyclient_address = $my_ip
+novncproxy_base_url = http://controller:6080/vnc_auto.html
+
+[glance]
+api_servers = http://controller:9292
+
+[oslo_concurrency]
+lock_path = /var/lib/nova/tmp
+~~~
+
+* 현재 VirtualBox의 VM은 CPU의 Intel의 VT-X같은 Virtualization Extension을 이용하지 못한다. 따라서 Compute Node는 KVM+QEMU 조합의 가상 머신을 이용하지 못하고 QEMU만을 이용하여 가상 머신을 구동한다.
+
+* /etc/nova/nova-compute.conf을 다음과 같이 수정
+
+~~~
+[DEFAULT]
+compute_driver=libvirt.LibvirtDriver
+[libvirt]
+virt_type=qemu
+~~~
+
+* Nova 시작
+
+> \# service nova-compute restart
+
+#### 5.3. 검증
+
+* Controller Node에서 Nova 동작 확인
+
+> \# . admin-openrc <br>
+> \# openstack compute service list
+
+### 6. Neutron 설치
+
+### 7. Horizon 설치
+
+### 8. Cinder 설치
+
+### 9. 참조
 
 * [https://docs.openstack.org/ocata/install-guide-ubuntu/](https://docs.openstack.org/ocata/install-guide-ubuntu/)
 * [https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/](https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/)
