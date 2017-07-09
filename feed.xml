@@ -18,9 +18,6 @@ layout: null
       <description>
         <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
       </description>
-      <content:encoded>
-        <![CDATA[{{ doc.content | expand_urls: site.url | cdata_escape }}]]>
-      </content:encoded>
 		</item>
 		{% endfor %}
 	</channel>
