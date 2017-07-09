@@ -11,7 +11,7 @@ Union Mount를 간략하게 설명하고 리눅스에서 이용할 수 있는 Un
 
 ### 1. Union Mount
 
-<img src="{{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Union_Mount.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Union_Mount.PNG){: width="600px"}
 
 Union이란 이름에서도 알 수 있듯이, 여러개의 폴더를 동시에 특정 폴더에 Mount하는 동작을 Union Mount라고 한다. 리눅스 환경에서 Union Mount를 이용하기 위해서는 AUFS를 이용하면 된다.
 
@@ -27,7 +27,7 @@ AUFS (Advanced Multi Layered Unification Filesystem)은 리눅스 환경에서 U
 
 #### 2.1. Read, Write
 
-<img src="{{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Read_Write.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Read_Write.PNG){: width="600px"}
 
 Read - Branch 폴더들이 서로 다른 파일들을 갖고있는 경우 AUFS Mount를 통해 특정 폴더에 Brach 폴더의 파일들이 모여도 문제가 없다는걸 예측 할 수 있다. 동일한 경로에 동일한 파일 이름이 있는 경우, 위의 그림처럼 AUFS Mount가 된 폴더내에서는 오직 Branch의 가장 마지막에 있는 폴더의 파일만 볼 수 있다. 위 그림에서 file_01 파일은 /layer_03 폴더와 /layer_01 폴더에 있지만 /mnt 폴더 내에서는 /layer_01의 file_01만 보이게 된다.
 
@@ -35,11 +35,11 @@ Write - AUFS는 COW(Copy on Write)방식을 이용한다. /mnt 폴더에서 파�
 
 #### 2.2. Remove
 
-<img src="{{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove.PNG){: width="600px"}
 
 Remove - 파일이나 폴더를 지우는 경우 RW Branch 폴더에 .wh.<file_or_dir_name> Writeout 파일을 생성하여 AUFS Mount가 된 폴더 내에서는 파일이 안보이지만, 원본은 유지된다. 위 그림에서는 file_01 파일을 삭제할 경우를 나타내고 있다. 또한 RO Branch 폴더안에 있는 Whiteout 파일의 역활도 나타내고 있다. Mount시 RO Branch에 +wh 옵션을 주었기 때문에 RO Branch의 Whiteout 파일이 하위 Branch의 파일을 안보이게 만든다.
 
-<img src="{{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove_opq.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove_opq.PNG){: width="600px"}
 
 Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있다. Branch의 특정 폴더내에 .wh..wh..opq 파일이 있으면 하위 Branch들의 해당 폴더내의 모든 파일들은 AUFS Mount가 된 폴더내에서 볼 수 없다. 위 그림은 .wh..wh..opq 파일의 역활을 나타내고 있다. /layer_rw Branch의 /dir 폴더에 .wh..wh..opq 파일이 있기 때문에 하위 /layer_02 Branch의 /dir폴더 안에 있는 모든 파일들은 /mnt 폴더에서 보이지 않는다. /mnt 폴더에서 dir 폴더 자체를 삭제했다가 다시 dir 폴더를 생성하는 경우, 위 그림처럼 AUFS에서는 /layer_rw Branch의 /dir 폴더안에 .wh..wh..opq 파일 생성을 통해 처리한다.
 
@@ -47,7 +47,7 @@ Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 
 
 > \# mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
 
-<img src="{{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Docker_Image_Layer.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Docker_Image_Layer.PNG){: width="600px"}
 
 AUFS를 이해했다면 Docker Daemon이 어떻게 Image Layer를 이용하는지 예측 할 수 있다. 위 명령어와 그림은 Docker Daemon이 Docker Container 생성시 AUFS를 어떻게 이용하는지를 나타내고 있다. Docker Container 생성시 Container를 위한 Root 폴더와 RW 폴더를 생성한 뒤, AUFS Mount를 /container_root 폴더에 수행한다. Container는 /container_root 폴더가 실제 Root 폴더라고 생각하고 동작한다.
 

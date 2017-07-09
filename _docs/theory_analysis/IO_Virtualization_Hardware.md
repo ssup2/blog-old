@@ -17,11 +17,11 @@ I/O Data 전달은 CPU의 **IOMMU** 기능을 통해 수행한다. Device Emulat
 
 ### 2. IOMMU
 
-<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU.PNG" width="650px">
+![]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU.PNG){: width="650px"}
 
 CPU의 IOMMU를 통해 Hypervisor의 간섭 없이 가상 머신은 I/O Device와 I/O Data를 직접 주고 받을 수 있다. 위의 그림은 IOMMU의 역활을 간략하게 나타내고 있다. Intel의 Vt-d이 IOMMU를 기반으로한 기법이다.
 
-<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU_MMU_Flow.PNG" width="650px">
+![]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU_MMU_Flow.PNG){: width="650px"}
 
 IOMMU는 MMU와 다른 역활을 수행한다. MMU는 CPU에서 보는 Memory 주소를 변환하는 장치이다. IOMMU는 I/O Device가 보는 Memory 주소를 변환하는 장치이다. 위의 그림은 MMU와 IOMMU를 통해 CPU와 I/O Device가 보는 Memory 주소가 변환되는 과정을 나타내고 있다. MMU는 CPU Core에 위치하여 Memory 주소를 변환한다. 반면 IOMMU는 CPU의 North-Bridge에 위차하여 I/O Device가 보는 Memory 주소를 변환한다.
 
@@ -39,13 +39,13 @@ IOMMU릍 이용하여 가상 머신과 I/O Device간의 I/O Data 전달을 Hyper
 
 ### 3. SR-IOV (Single Root IO Virtualization)
 
-<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/SR-IOV.PNG" width="450px">
+![]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/SR-IOV.PNG){: width="450px"}
 
 하나의 I/O Device를 Host에게 **여러개의 I/O Device**처럼 보이게 하는 가상화 기법이다. 위의 그림은 SR-IOV Device의 구성도를 간략하게 나타내고 있다. SR-IOV Device는 하나의 PF(Physical Function)와 여러개의 VF(Virtual Function)로 구성되어 있다. 일반적인 Device의 경우 PF만 존재하고 VF는 존재하지 않는다. 각 VF를 Hypervisor 입장에서는 여러개의 I/O Device처럼 이용할 수 있다.
 
 ### 4. IOMMU + SR-IOV Device
 
-<img src="{{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/SR-IOV+IOMMU.PNG" width="650px">
+![]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/SR-IOV+IOMMU.PNG){: width="650px"}
 
 위의 그림은 IOMMU + SR-IOV를 이용하여 Hardware I/O 가상화 기법을 나타내고 있다. Hypervisor는 SR-IOV를 통해서 하나의 I/O Device를 여러개의 I/O Device처럼 이용 할 수 있게 된다. SR-IOV를 통해 가상화된 I/O Device(VF)는 IOMMU를 통해서 각 VM에게 할당된다. 가상 머신이 I/O 수행시 Hyperivsor는 I/O Device의 Interrupt만 가상 머신에게 전달해 주면 된다.
 

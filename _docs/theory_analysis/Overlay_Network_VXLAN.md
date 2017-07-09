@@ -11,13 +11,13 @@ Cloud 환경에서 Network 가상화를 위해 이용하는 Overlay Network를 �
 
 ### 1. Overlay Network
 
-<img src="{{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/Overlay.PNG" width="500px">
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/Overlay.PNG){: width="500px"}
 
 Overlay Network는 실제 물리 Network위에서 가상 Network를 구축하는 기법을 의미한다. 각 가상 Network는 서로 완전히 격리되어 관리 된다. 위의 그림은 물리 Network 위에 구축되어 있는 가상 Network를 나타내고 있다. 일반적으로 Cloud 환경에서는 Overlay Network를 이용하여 각 Tenant의 Network를 구축한다.
 
 ### 2. VXLAN (Virtual Extensible LAN)
 
-<img src="{{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Overview.PNG" width="650px">
+![]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Overview.PNG){: width="650px"}
 
 VXLAN (Virtual Extensible LAN)은 Overlay Netowrk 구축을 위한 Network Protocol 중 하나이다. 위의 그림은 VXLAN의 개요를 간략하게 나타내고 있다.
 
@@ -59,7 +59,7 @@ VTEP은 가상 Network Packet이 Encapsulation되는 지점이기 때문에 Enca
 
 1. VTEP 1은 Decapsulation을 통해 ARP Response Packet을 Machine A에게 전달한다.
 
-ARP Packet 처리 과정을 통해 VXLAN이 얼마나 효율적으로 Broadcast와 Unicast를 처리하는지 파악 할 수 있다. 
+ARP Packet 처리 과정을 통해 VXLAN이 얼마나 효율적으로 Broadcast와 Unicast를 처리하는지 파악 할 수 있다.
 
 #### 2.3. VXLAN Unicast
 

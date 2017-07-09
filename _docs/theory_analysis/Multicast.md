@@ -15,7 +15,7 @@ Network Packet 전송 방법은 크게 Unicast, Broadcast, Multicast 3가지 방
 
 ### 2. Multicast Address
 
-<img src="{{site.baseurl}}/images/theory_analysis/Multicast/Multicast_Address.PNG" width="600px">
+![]({{site.baseurl}}/images/theory_analysis/Multicast/Multicast_Address.PNG){: width="600px"}
 
 Multicast는 일반적으로 L3는 IP를 이용하고 L4는 UDP를 이용한다. 위의 그림은 Multicast Packet의 IP Address와 Ethernet Address를 나타내고 있다. Multicast는 IP Address로 **Class D**를 이용한다. Class D는 앞의 4비트가 **1110**으로 시작하는 주소를 의미한다. Multicast IP는 하나의 **Multicast Group**을 나타낸다. Packet의 Dest IP가 Multicast IP인 255.0.0.1이라면 255.0.0.1 Group에 소속되어 있는 Node들만 해당 Packet을 받게 된다.
 

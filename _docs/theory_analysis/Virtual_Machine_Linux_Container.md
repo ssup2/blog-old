@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Virtual Machine(가상 머신)
 
-<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Virtual_Machine.PNG" width="500px">
+![]({{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Virtual_Machine.PNG){: width="500px"}
 
 가상 머신은 실제 물리 자원이 아닌 **가상 자원**을 이용하는 머신을 의미한다. 가상 머신이 동작 할 수 있도록 가상 머신에게 가상 자원을 제공하고, 가상 머신을 관리하는 프로그램을 Hypervisor(Supervisor를 뛰어넘는) 또는 VMM(Virtual Machine Monitor)라고 부른다. 하이퍼바이저는 가상 머신에게 가상 CPU, 가상 Memory, 가상 Device라는 3가지의 종류의 가상 자원을 제공한다. 이렇게 가상 자원 위에서 동작하는 가상 머신은 특정 물리 머신에게 종속되지 않기 때문에 유연성을 갖는다. 이러한 유연성을 바탕으로 가상 머신은 IaaS의 기반 기술로 자리잡고 있다.
 
@@ -19,7 +19,7 @@ adsense: true
 
 ### 2. Linux Container
 
-<img src="{{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG" width="500px">
+![]({{site.baseurl}}/images/theory_analysis/Virtual_Machine_Linux_Container/Linux_Container.PNG){: width="500px"}
 
 Linux Container는 Linux Kernel에서 제공하는 가상화 기술이다. Linux에서 제공하는 Namespace와 Cgroup이라는 2가지 기능을 이용하여 Container를 생성한다. Container는 엄밀히 말하면 가상화 기술이기 보다는 **Isolation 기술**이라고 할 수 있다. 각 Container들은 격리된 공간에서 Application을 실행한다. Container들과 Host는 같은 Kernel을 공유한다. 따라서 각 Container는 오직 Host Kernel이 이용하는 물리 CPU, 물리 Memory, 물리 Device만을 이용할 수 있다. 또한 Container는 Ubuntu, CentOS 같은 Linux 기반 운영체제만을 이용 할 수 있다.
 
