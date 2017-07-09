@@ -13,20 +13,20 @@ layout: null
 >
 	<channel>
 		<title><![CDATA[{{ site.title }}]]></title>
-		<description><![CDATA[{{ site.subtitle }}]]></description>
+		<description><![CDATA[{{ site.description }}]]></description>
 		<link href="{{ site.url }}/" />
 		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
 		{% for doc in site.docs limit:15 %}
 		<item>
       <title><![CDATA[{{ doc.title | cdata_escape }}]]></title>
-      <link>{{ doc.url | prepend: site.baseurl | prepend: site.url }}</link>
+      <link>{{ site.url }}{{ doc.url }}</link>
       <pubDate>{{ doc.date | date: "%a, %d %b %Y %T %z" }}</pubDate>
       <category><![CDATA[{{ doc.category | cdata_escape }}]]></category>
       <description>
         <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
       </description>
       <content:encoded>
-        <![CDATA[{{ doc.content | expand_urls: site.url | cdata_escape }}]]>
+        <![CDATA[{{ doc.content | strip_html | expand_urls: site.url | cdata_escape }}]]>
       </content:encoded>
 		</item>
 		{% endfor %}
