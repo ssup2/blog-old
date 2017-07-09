@@ -16,7 +16,7 @@ layout: null
 		<description><![CDATA[{{ site.description }}]]></description>
 		<link href="{{ site.url }}/" />
 		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-		{% for doc in site.docs | sort: 'date' | reverse %}
+		{% for doc in site.docs limit:15 | sort: 'date' | reverse %}
 		<item>
       <title><![CDATA[{{ doc.title | cdata_escape }}]]></title>
       <link>{{ site.url }}{{ doc.url }}</link>
