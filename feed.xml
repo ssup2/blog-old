@@ -26,7 +26,7 @@ layout: null
         <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
       </description>
       <content:encoded>
-        <![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]>
+        <![CDATA[{{ doc.content | expand_urls: site.url | cdata_escape }}]]>
       </content:encoded>
 		</item>
 		{% endfor %}
