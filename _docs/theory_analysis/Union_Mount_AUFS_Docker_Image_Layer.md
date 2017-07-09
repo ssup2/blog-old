@@ -45,7 +45,7 @@ Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 
 
 ### 3. Docker Image Layer
 
-> \# mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
+> \# mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
 
 ![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Docker_Image_Layer.PNG){: width="600px"}
 
