@@ -25,7 +25,7 @@ LSM 위에 올라가는 Security Module은 lsmod 명령으로 조회가능한 Lo
 
 #### 1.1. LSM with System Call
 
-![{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_System_Call.PNG]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_System_Call.PNG){: width="250px"}
+![{{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_System_Call.PNG]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_System_Call.PNG){:class="img-responsive" width="250px"}
 
 LSM의 Hook은 System Call을 처리하면서 가장 많이 만나게 된다. 위의 그림은 Linux Kernel의 System Call을 처리 과정중 LSM의 Hook의 처리 위치를 나타내고 있다. LSM의 Hook은 System Call 함수안에 위치한다. 또한 open(), read(), write() System Call 처럼 파일의 Owner, Group을 따지는 DAC(Discretionary Access Control)은 LSM의 Hook전에 수행한다.
 
