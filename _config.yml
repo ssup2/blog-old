@@ -16,6 +16,7 @@ permalink: pretty
 
 gems:
   - jekyll-seo-tag
+  - jekyll-srcset
 
 exclude:
   - Gemfile
