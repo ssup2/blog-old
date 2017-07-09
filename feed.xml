@@ -3,13 +3,20 @@ layout: null
 ---
 
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+>
 	<channel>
 		<title><![CDATA[{{ site.title }}]]></title>
 		<description><![CDATA[{{ site.subtitle }}]]></description>
 		<link href="{{ site.url }}/" />
 		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-		{% for doc in site.docs limit:30 %}
+		{% for doc in site.docs limit:15 %}
 		<item>
       <title><![CDATA[{{ doc.title | cdata_escape }}]]></title>
       <link>{{ doc.url | prepend: site.baseurl | prepend: site.url }}</link>
@@ -18,6 +25,9 @@ layout: null
       <description>
         <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
       </description>
+      <content:encoded>
+        <![CDATA[{{ post.content | expand_urls: site.url | cdata_escape }}]]>
+      </content:encoded>
 		</item>
 		{% endfor %}
 	</channel>
