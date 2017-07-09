@@ -17,10 +17,10 @@ layout: null
       <dc:creator><![CDATA[{{ site.author | strip_html }}]]></dc:creator>
       <category><![CDATA[{{ doc.category | cdata_escape }}]]></category>
       <description>
-          <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
+        <![CDATA[{{ doc.content | strip_html | truncatewords: 50 | expand_urls: site.url | cdata_escape }}]]>
       </description>
       <content:encoded>
-                <![CDATA[{{ doc.content | expand_urls: site.url | cdata_escape }}]]>
+        <![CDATA[{{ doc.content | expand_urls: site.url | cdata_escape }}]]>
       </content:encoded>
 		</item>
 		{% endfor %}
