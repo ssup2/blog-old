@@ -428,7 +428,7 @@ default_store = file
 filesystem_store_datadir = /var/lib/glance/images/
 ~~~
 
-* /etc/glance/glance-registry.conf에 다음의 내용을 추가한다.
+* /etc/glance/glance-registry.conf에 다음의 내용을 추가
 
 ~~~
 [database]
@@ -459,7 +459,7 @@ flavor = keystone
 
 * Controller Node에서 Glance 동작 확인
 
-> \# . admin-openrc <br>
+> \# . /root/admin-openrc <br>
 > \# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img <br>
 > \# openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public <br>
 > \# openstack image list
@@ -490,7 +490,7 @@ flavor = keystone
 
 * Nova User 생성 및 설정
 
-> \# . admin-openrc <br>
+> \# . /root/admin-openrc <br>
 > \# openstack user create --domain default --password-prompt nova <br>
 > \# openstack role add --project service --user nova admin <br>
 > \# openstack service create --name nova --description "OpenStack Compute" compute
@@ -545,7 +545,8 @@ lock_path = /var/lib/nova/tmp
 ~~~
 
 * Nova 설정 및 시작
-
+> \# su -s /bin/sh -c "nova-manage api_db sync" nova <br>
+> \# su -s /bin/sh -c "nova-manage db sync" nova <br>
 > \# service nova-api restart <br>
 > \# service nova-consoleauth restart <br>
 > \# service nova-scheduler restart <br>
@@ -611,12 +612,332 @@ virt_type=qemu
 
 * Controller Node에서 Nova 동작 확인
 
-> \# . admin-openrc <br>
+> \# . /root/admin-openrc <br>
 > \# openstack compute service list
 
 ### 6. Neutron 설치
 
+#### 6.1. Controller Node
+
+* Neutron DB 초기화
+
+> \# mysql -u root -p
+> mysql> CREATE DATABASE neutron; <br>
+> mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'root'; <br>
+> mysql> exit;
+
+* Neutron User 생성 및 설정
+
+> \# . /root/admin-openrc <br>
+> \# openstack user create --domain default --password-prompt neutron <br>
+> \# openstack role add --project service --user neutron admin <br>
+> \# openstack service create --name neutron --description "OpenStack Networking" network
+
+* Neutron Service API Endpoint 생성
+
+> \# openstack endpoint create --region RegionOne network public http://controller:9696 <br>
+> \# openstack endpoint create --region RegionOne network internal http://controller:9696 <br>
+> \# openstack endpoint create --region RegionOne network admin http://controller:9696
+
+* Neutron Package 설치
+
+> \# apt install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent <br>
+
+* /etc/neutron/neutron.conf에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+core_plugin = ml2
+service_plugins = router
+allow_overlapping_ips = True
+transport_url = rabbit://openstack:root@controller
+auth_strategy = keystone
+notify_nova_on_port_status_changes = True
+notify_nova_on_port_data_changes = True
+
+[database]
+connection = mysql+pymysql://neutron:root@controller/neutron
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = neutron
+password = root
+
+[nova]
+auth_url = http://controller:35357
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+region_name = RegionOne
+project_name = service
+username = nova
+password = root
+~~~
+
+* /etc/neutron/plugins/ml2/ml2_conf.ini에 다음의 내용을 추가
+
+~~~
+[ml2]
+type_drivers = flat,vlan,vxlan
+tenant_network_types = vxlan
+mechanism_drivers = linuxbridge,l2population
+extension_drivers = port_security
+
+[ml2_type_flat]
+flat_networks = provider
+
+[ml2_type_vxlan]
+vni_ranges = 1:1000
+
+[securitygroup]
+enable_ipset = True
+~~~
+
+* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가
+
+~~~
+[linux_bridge]
+physical_interface_mappings = provider:enp0s8
+
+[vxlan]
+enable_vxlan = True
+local_ip = 10.0.0.11
+l2_population = True
+
+[securitygroup]
+enable_security_group = True
+firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+~~~
+
+* /etc/neutron/l3_agent.ini에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+~~~
+
+* /etc/neutron/dhcp_agent.ini에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
+enable_isolated_metadata = True
+~~~
+
+* /etc/neutron/metadata_agent.ini에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+nova_metadata_ip = controller
+metadata_proxy_shared_secret = root
+~~~
+
+* /etc/nova/nova.conf에 다음의 내용을 추가
+
+~~~
+[neutron]
+url = http://controller:9696
+auth_url = http://controller:35357
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+region_name = RegionOne
+project_name = service
+username = neutron
+password = root
+service_metadata_proxy = True
+metadata_proxy_shared_secret = root
+~~~
+
+* Neutron 시작
+
+> \# su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron <br>
+> \# service nova-api restart <br>
+> \# service neutron-server restart <br>
+> \# service neutron-linuxbridge-agent restart <br>
+> \# service neutron-dhcp-agent restart <br>
+> \# service neutron-metadata-agent restart <br>
+> \# service neutron-l3-agent restart
+
+#### 6.2. Compute Node
+
+* Neutron Package 설치
+
+> \# apt install neutron-linuxbridge-agent
+
+* /etc/neutron/neutron.conf에 다음의 내용 추가
+
+~~~
+[DEFAULT]
+transport_url = rabbit://openstack:RABBIT_PASS@controller
+auth_strategy = keystone
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = neutron
+password = root
+~~~
+
+* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가
+
+~~~
+[linux_bridge]
+physical_interface_mappings = provider:enp0s8
+
+[vxlan]
+enable_vxlan = True
+local_ip = 10.0.0.31
+l2_population = True
+
+[securitygroup]
+enable_security_group = True
+firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+~~~
+
+* /etc/nova/nova.conf에 다음의 내용을 추가
+
+~~~
+[neutron]
+url = http://controller:9696
+auth_url = http://controller:35357
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+region_name = RegionOne
+project_name = service
+username = neutron
+password = root
+~~~
+
+* Neutron 시작
+
+> \# service nova-compute restart <br>
+> \# service neutron-linuxbridge-agent restart
+
+#### 6.3. 검증
+
+* Compute Node에서 Neutron 동작 확인
+
+> \# . /root/admin-openrc <br>
+> \# neutron ext-list
+
+~~~
++---------------------------+-----------------------------------------------+
+| alias                     | name                                          |
++---------------------------+-----------------------------------------------+
+| default-subnetpools       | Default Subnetpools                           |
+| network-ip-availability   | Network IP Availability                       |
+| network_availability_zone | Network Availability Zone                     |
+| auto-allocated-topology   | Auto Allocated Topology Services              |
+| ext-gw-mode               | Neutron L3 Configurable external gateway mode |
+| binding                   | Port Binding                                  |
+| agent                     | agent                                         |
+| subnet_allocation         | Subnet Allocation                             |
+| l3_agent_scheduler        | L3 Agent Scheduler                            |
+| tag                       | Tag support                                   |
+| external-net              | Neutron external network                      |
+| net-mtu                   | Network MTU                                   |
+| availability_zone         | Availability Zone                             |
+| quotas                    | Quota management support                      |
+| l3-ha                     | HA Router extension                           |
+| flavors                   | Neutron Service Flavors                       |
+| provider                  | Provider Network                              |
+| multi-provider            | Multi Provider Network                        |
+| address-scope             | Address scope                                 |
+| extraroute                | Neutron Extra Route                           |
+| timestamp_core            | Time Stamp Fields addition for core resources |
+| router                    | Neutron L3 Router                             |
+| extra_dhcp_opt            | Neutron Extra DHCP opts                       |
+| dns-integration           | DNS Integration                               |
+| security-group            | security-group                                |
+| dhcp_agent_scheduler      | DHCP Agent Scheduler                          |
+| router_availability_zone  | Router Availability Zone                      |
+| rbac-policies             | RBAC Policies                                 |
+| standard-attr-description | standard-attr-description                     |
+| port-security             | Port Security                                 |
+| allowed-address-pairs     | Allowed Address Pairs                         |
+| dvr                       | Distributed Virtual Router                    |
++---------------------------+-----------------------------------------------+
+~~~
+
 ### 7. Horizon 설치
+
+#### 7.1. Controller Node
+
+* Horizon Package 설치
+
+> \# apt install openstack-dashboard
+
+* /etc/openstack-dashboard/local_settings.py에 다음과 같이 수정
+
+~~~
+OPENSTACK_HOST = "127.0.0.1"
+OPENSTACK_KEYSTONE_URL = "http://%s:5000/v2.0" % OPENSTACK_HOST
+OPENSTACK_KEYSTONE_DEFAULT_ROLE = "_member_"
+-->
+OPENSTACK_HOST = "controller"
+OPENSTACK_KEYSTONE_URL = "http://%s:5000/v3" % OPENSTACK_HOST
+OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
+
+ALLOWED_HOSTS = '*'
+-->
+ALLOWED_HOSTS = ['*', ]
+
+CACHES = {
+   'default': {
+       'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    },
+}
+-->
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+CACHES = {
+    'default': {
+         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+         'LOCATION': 'controller:11211',
+    }
+}
+
+TIME_ZONE = "UTC"
+-->
+TIME_ZONE = "Asia/Seoul"
+~~~
+
+* /etc/openstack-dashboard/local_settings.py에 다음의 내용 추가
+
+~~~
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
+OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = "default"
+OPENSTACK_API_VERSIONS = {
+    "identity": 3,
+    "image": 2,
+    "volume": 2,
+}
+~~~
+
+* Horizon 시작
+
+> \# service apache2 reload
+
+#### 7.2. 검증
+
+* Web Brower를 통해 http://192.168.77.170/horizon/auth/login/ 접속
+* Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 8. Cinder 설치
 
