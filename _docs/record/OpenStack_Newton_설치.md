@@ -545,6 +545,7 @@ lock_path = /var/lib/nova/tmp
 ~~~
 
 * Nova 설정 및 시작
+
 > \# su -s /bin/sh -c "nova-manage api_db sync" nova <br>
 > \# su -s /bin/sh -c "nova-manage db sync" nova <br>
 > \# service nova-api restart <br>
@@ -564,6 +565,7 @@ lock_path = /var/lib/nova/tmp
 ~~~
 [DEFAULT]
 transport_url = rabbit://openstack:root@controller
+instances_path = /var/lib/nova/instances
 auth_strategy = keystone
 my_ip = 10.0.0.31
 use_neutron = True
@@ -777,7 +779,7 @@ metadata_proxy_shared_secret = root
 
 ~~~
 [DEFAULT]
-transport_url = rabbit://openstack:RABBIT_PASS@controller
+transport_url = rabbit://openstack:root@controller
 auth_strategy = keystone
 
 [keystone_authtoken]
