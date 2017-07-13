@@ -934,7 +934,7 @@ OPENSTACK_API_VERSIONS = {
 #### 7.2. 검증
 
 * Web Brower를 통해 http://192.168.77.170/horizon/auth/login/ 접속
-* Login - Domain : default, 사용자 이름 - admin, 암호 - root
+  * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 8. Cinder 설치
 
@@ -1087,7 +1087,18 @@ lock_path = /var/lib/cinder/tmp
 +------------------+------------+------+---------+-------+----------------------------+
 ~~~
 
-### 9. 참조
+### 9. OpenStack Newton 구동
+
+* Web Brower PC의 /etc/hosts파일에 아래 내용 추가
+
+~~~
+192.168.77.170    controller
+~~~
+
+* Web Brower를 통해 http://192.168.77.170/horizon/auth/login/ 접속
+  * Login - Domain : default, 사용자 이름 - admin, 암호 - root  
+
+### 10. 참조
 
 * [https://docs.openstack.org/ocata/install-guide-ubuntu/](https://docs.openstack.org/ocata/install-guide-ubuntu/)
 * [https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/](https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/)
