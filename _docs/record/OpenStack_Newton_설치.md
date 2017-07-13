@@ -933,7 +933,7 @@ OPENSTACK_API_VERSIONS = {
 
 #### 7.2. 검증
 
-* Web Brower를 통해 http://192.168.77.170/horizon/auth/login/ 접속
+* Web Brower를 통해 http://192.168.77.170/horizon 접속
   * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 8. Cinder 설치
@@ -1095,8 +1095,8 @@ lock_path = /var/lib/cinder/tmp
 192.168.77.170    controller
 ~~~
 
-* Web Brower를 통해 http://192.168.77.170/horizon/auth/login/ 접속
-  * Login - Domain : default, 사용자 이름 - admin, 암호 - root  
+* Web Brower를 통해 http://controller/horizon 접속
+  * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 10. 참조
 
