@@ -31,6 +31,8 @@ adsense: true
 
 * Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.
+* Router - 공유기를 이용하여 192.168.77.0/25 Network를 구축한다. (NAT)
+* Horizon 설치 후 PC Web Browser를 이용하여 192.168.77.170/horizon에 접속하면 Horizon을 이용할 수 있다.
 
 #### 2.1. 모든 Node
 
@@ -249,13 +251,6 @@ iface enp0s3 inet static
 address 10.0.0.41
 netmask 255.255.255.0
 gateway 10.0.0.1
-dns-nameservers 8.8.8.8
-
-auto enp0s8
-iface enp0s8 inet static
-address 192.168.77.190
-netmask 255.255.255.0
-gateway 192.168.77.1
 dns-nameservers 8.8.8.8
 ~~~
 
@@ -942,6 +937,155 @@ OPENSTACK_API_VERSIONS = {
 * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 8. Cinder 설치
+
+#### 8.1. Compute Node
+
+* /etc/nova.nova.conf에 다음의 내용을 추가
+
+~~~
+[cinder]
+os_region_name = RegionOne
+~~~
+
+#### 8.2. Controller Node
+
+* Cinder DB 초기화
+
+> \# mysql -u root -p <br>
+> mysql> CREATE DATABASE cinder; <br>
+> mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' IDENTIFIED BY 'root'; <br>
+> mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root'; <br>
+> exit;
+
+* Cinder User 생성 및 설정
+
+> \# . admin-openrc <br>
+> \# openstack user create --domain default --password-prompt cinder <br>
+> \# openstack role add --project service --user cinder admin <br>
+> \# openstack service create --name cinder --description "OpenStack Block Storage" volume <br>
+> \# openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+
+* Cinder Service API Endpoint 생성
+
+> \# openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s <br>
+> \# openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+
+* Cinder Package 설치
+
+> \# su -s /bin/sh -c "cinder-manage db sync" cinder <br>
+> \# apt install cinder-api cinder-scheduler
+
+* /etc/cinder/cinder.conf에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+transport_url = rabbit://openstack:root@controller
+auth_strategy = keystone
+my_ip = 10.0.0.11
+
+[database]
+connection = mysql+pymysql://cinder:root@controller/cinder
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = cinder
+password = root
+
+[oslo_concurrency]
+lock_path = /var/lib/cinder/tmp
+~~~
+
+* Cinder 시작
+
+> \# service nova-api restart <br>
+> \# service cinder-scheduler restart <br>
+> \# service cinder-api restart
+
+#### 8.3. Storage Node
+
+* LVM 설치 및 설정
+
+> \# apt install lvm2 <br>
+> \# pvcreate /dev/sdb <br>
+> \# vgcreate cinder-volumes /dev/sdb
+
+* /etc/lvm/lvm.conf에 아래의 내용 추가
+
+~~~
+devices {
+...
+filter = [ "a/sdb/", "r/.*/"]
+}
+~~~
+
+* Cinder Package 설치
+
+> \# apt install cinder-volume
+
+* /etc/cinder/cinder.conf에 다음의 내용을 추가
+
+~~~
+[DEFAULT]
+transport_url = rabbit://openstack:root@controller
+auth_strategy = keystone
+my_ip = 10.0.0.41
+enabled_backends = lvm
+glance_api_servers = http://controller:9292
+
+[database]
+connection = mysql+pymysql://cinder:root@controller/cinder
+
+[keystone_authtoken]
+auth_uri = http://controller:5000
+auth_url = http://controller:35357
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = cinder
+password = root
+
+[lvm]
+volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+volume_group = cinder-volumes
+iscsi_protocol = iscsi
+iscsi_helper = tgtadm
+
+[oslo_concurrency]
+lock_path = /var/lib/cinder/tmp
+~~~
+
+* Cinder 시작
+
+> \# service tgt restart <br>
+> \# service cinder-volume restart
+
+#### 8.4. 검증
+
+* Controller Node에서 Cinder 동작 확인
+
+> \# . admin-openrc <br>
+> \# openstack volume service list
+
+~~~
++------------------+------------+------+---------+-------+----------------------------+
+| Binary           | Host       | Zone | Status  | State | Updated_at                 |
++------------------+------------+------+---------+-------+----------------------------+
+| cinder-scheduler | controller | nova | enabled | up    | 2016-09-30T02:27:41.000000 |
+| cinder-volume    | block@lvm  | nova | enabled | up    | 2016-09-30T02:27:46.000000 |
++------------------+------------+------+---------+-------+----------------------------+
+~~~
 
 ### 9. 참조
 
