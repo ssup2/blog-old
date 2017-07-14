@@ -158,7 +158,5 @@ ps -efZ 명령을 통해 test.sh관련 Process들에 appArmor-example Profile이
 
 ### 4. 참조
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
-
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+* [http://wiki.apparmor.net](http://wiki.apparmor.net)
+* [https://wiki.ubuntu.com/AppArmor](https://wiki.ubuntu.com/AppArmor)
