@@ -23,7 +23,7 @@ adsense: true
 * OpenStack Newton Version
   * Network - Self-service
 * Password
-  * OpenStack 설치에 필요한 Password는 간편한 설치를 위해 **root** 로 통일한다.
+  * OpenStack 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
 
 ### 2. Node 설정
 

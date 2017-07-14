@@ -45,7 +45,7 @@ VTEP은 가상 Network Packet이 Encapsulation되는 지점이기 때문에 Enca
 
 1. Machine A에서 IP B의 Mac Address를 알기 위해 ARP Request Packet을 VLAN ID 1과 함께 전송한다.
 
-1. VTEP 1은 가상 Network Packet의 VLAN ID가 1인것을 확인한다. VTEP에 VLAN 1과 VNI 10이 Mapping 되어 있고, VNI 10은 Multicast 239.1.1.1에 Mapping되어 있기 때문에, 가상 Network Packet은 VNI 10으로 Encapsulation 된 후 239.1.1.1에 전송한다.
+1. VTEP 1은 가상 Network Packet의 VLAN ID가 1인것을 확인한다. VTEP에 VLAN 1과 VNI 10이 Mapping 되어 있고, VNI 10은 Multicast 239.1.1.1에 Mapping되어 있기 때문에, 가상 Network Packet은 VNI 10으로 Encapsulation 된 후 239.1.1.1 Multicast Group에 전송된다.
 
 1. Encapsulation된 Packet은 239.1.1.1 Multicast Group에 참여한 VTEP 2, VTEP 3에 전송된다. VTEP 2, VTEP 3은 Encapsulation된 Packet의 정보를 바탕으로 **Src MAC/VNI/Outer Src IP** Mapping Table을 생성한다.
 
