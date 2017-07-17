@@ -31,7 +31,7 @@ adsense: true
 
 * Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.
-* Router - 공유기를 이용하여 192.168.77.0/25 Network를 구축한다. (NAT)
+* Router - 공유기를 이용하여 192.168.77.0/24 Network를 구축한다. (NAT)
 * Horizon 설치 후 PC Web Browser를 이용하여 192.168.77.170/horizon에 접속하면 Horizon을 이용할 수 있다.
 
 #### 2.1. 모든 Node
