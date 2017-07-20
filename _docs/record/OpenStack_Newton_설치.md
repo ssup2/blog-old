@@ -16,7 +16,7 @@ adsense: true
 
 ### 1. 설치 환경
 
-* Virtual Box 5.0.14r
+* VirtualBox 5.0.14r
   * Controller Node - Ubuntu Server 16.04.2 64bit - 1대
   * Compute Node - Ubuntu Server 16.04.2 64bit - 1대
   * Block Storage Node - Ubuntu Server 16.04.2 64bit - 1대
@@ -24,12 +24,13 @@ adsense: true
   * Network - Self-service
 * Password
   * OpenStack 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
+* 모든 Node에서 root User로 설치를 진행한다.
 
 ### 2. Node 설정
 
 ![]({{site.baseurl}}/images/record/OpenStack_Newton_Install/Node_Setting.PNG)
 
-* Virtual Box를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
+* VirtualBox를 이용하여 위의 그림과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.
 * Router - 공유기를 이용하여 192.168.77.0/24 Network를 구축한다. (NAT)
 * Horizon 설치 후 PC Web Browser를 이용하여 192.168.77.170/horizon에 접속하면 Horizon을 이용할 수 있다.
@@ -60,7 +61,7 @@ adsense: true
 
 * OpenStack Package 설치
 
-> \# apt update && apt dist-upgrade
+> \# apt update && apt dist-upgrade <br>
 > \# apt install python-openstackclient
 
 #### 2.2. Controller Node
@@ -1100,5 +1101,5 @@ lock_path = /var/lib/cinder/tmp
 
 ### 10. 참조
 
-* [https://docs.openstack.org/ocata/install-guide-ubuntu/](https://docs.openstack.org/ocata/install-guide-ubuntu/)
+* [https://docs.openstack.org/newton/install-guide-ubuntu/](https://docs.openstack.org/newton/install-guide-ubuntu/)
 * [https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/](https://docs.openstack.org/newton/ko_KR/install-guide-ubuntu/)

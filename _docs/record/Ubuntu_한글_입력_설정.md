@@ -10,7 +10,7 @@ adsense: true
 ### 1. 설정 환경
 
 * Date : 2016.12.14
-* Ubuntu : 16.04
+* Ubuntu 16.04 LTS 64bit, root user
 
 ### 2. 한글 설치 (IBus)
 
