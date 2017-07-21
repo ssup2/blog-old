@@ -192,7 +192,7 @@ ubuntu02   Ready      49s       v1.7.1
 ubuntu03   Ready      55s       v1.7.1
 ~~~
 
-* Dashboard 접속
+* Master Node에서 Dashboard 접속
   * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
 
 > \# kubectl proxy
