@@ -20,7 +20,7 @@ adsense: true
   * Master Node - Ubuntu Desktop 16.04.2 64bit - 1대
   * Worker Node - Ubuntu Server 16.04.2 64bit - 2대
 * Kubernetes
-  * Network Addon - Calico 이용
+  * Network Addon - flannel 이용
   * Dashboard Addon - Dashboard 이용
 * kubeadm
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
@@ -135,9 +135,11 @@ dns-nameservers 8.8.8.8
 
 #### 4.1. Master Node
 
-* kubeadm 초기화 (Cluster 생성). 실행 후 Key 값을 얻을 수 있다.
+* kubeadm 초기화 (Cluster 생성)
+  * 실행 후 Key 값을 얻을 수 있다.
+  * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
-> \# kubeadm init --apiserver-advertise-address=10.0.0.11
+> \# kubeadm init --apiserver-advertise-address=10.0.0.11 --pod-network-cidr=10.244.0.0/16
 
 ~~~
 ...
@@ -148,9 +150,10 @@ dns-nameservers 8.8.8.8
 
 > \# mkdir -p $HOME/.kube <br>
 > \# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config <br>
-> \# sudo chown $(id -u):$(id -g) $HOME/.kube/config <br>
+> \# sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-* kubectl autocomplete 설정. /root/.bashrc에 다음의 내용 추가
+* kubectl autocomplete 설정
+  * /root/.bashrc에 다음의 내용 추가
 
 ~~~
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
@@ -160,10 +163,10 @@ fi
 source <(kubectl completion bash)
 ~~~
 
-* Network Addon (Calico) 설치
+* Network Addon (flannel) 설치
 
-> \# wget http://docs.projectcalico.org/v2.3/getting-started/kubernetes/installation/hosted/calico.yaml <br>
-> \# kubectl apply -f calico.yaml
+> \# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml <br>
+> \# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 * Dashboard Addon (Dashboard) 설치
 
@@ -171,7 +174,8 @@ source <(kubectl completion bash)
 
 #### 4.2. Worker Node
 
-* Cluster 참여. kubeadm init 결과로 나온 명령어를 수행한다.
+* Cluster 참여
+  * kubeadm init 결과로 나온 명령어 각 Worker Node에서 수행한다.
 
 > \# kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 
@@ -183,14 +187,18 @@ source <(kubectl completion bash)
 
 ~~~
 NAME       STATUS     AGE       VERSION
-ubuntu01   NotReady   41m       v1.7.1
-ubuntu02   NotReady   49s       v1.7.1
-ubuntu03   NotReady   55s       v1.7.1
+ubuntu01   Ready      41m       v1.7.1
+ubuntu02   Ready      49s       v1.7.1
+ubuntu03   Ready      55s       v1.7.1
 ~~~
 
-* Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
+* Dashboard 접속
+  * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
+
+> \# kubectl proxy
 
 ### 5. 참조
 
-* [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
-* [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
+* Kubernetes 설치 [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
+* Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
+* flannel Issue -  [https://github.com/coreos/flannel/issues/671](https://github.com/coreos/flannel/issues/671)
