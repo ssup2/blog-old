@@ -199,6 +199,6 @@ ubuntu03   Ready      55s       v1.7.1
 
 ### 5. 참조
 
-* Kubernetes 설치 [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
+* Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 * flannel Issue -  [https://github.com/coreos/flannel/issues/671](https://github.com/coreos/flannel/issues/671)
