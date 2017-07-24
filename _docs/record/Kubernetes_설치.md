@@ -143,7 +143,7 @@ dns-nameservers 8.8.8.8
 
 ~~~
 ...
-  kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
+kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
 * kubectl config 설정

@@ -47,6 +47,10 @@ defaults:
       seo:
         type: Article
 
+markdown:    redcarpet
+redcarpet:
+  extensions: [smart]
+
 # -----
 # seo-tag
 # -----
