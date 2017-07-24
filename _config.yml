@@ -47,9 +47,8 @@ defaults:
       seo:
         type: Article
 
-markdown:    redcarpet
-redcarpet:
-  extensions: ['smart']
+kramdown:
+    smart_quotes: apos, apos, quot, quot
 
 # -----
 # seo-tag
