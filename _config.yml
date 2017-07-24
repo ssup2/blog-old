@@ -49,7 +49,7 @@ defaults:
 
 markdown:    redcarpet
 redcarpet:
-  extensions: [smart]
+  extensions: ['smart']
 
 # -----
 # seo-tag
