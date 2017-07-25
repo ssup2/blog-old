@@ -110,26 +110,32 @@ dns-nameservers 8.8.8.8
 
 * Docker 설치
 
-> \# sudo apt-get update <br>
-> \# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common <br>
-> \# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - <br>
-> \# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" <br>
-> \# sudo apt-get update <br>
-> \# sudo apt-get install docker.io=1.12.6-0ubuntu1~16.04.1
+~~~
+# sudo apt-get update
+# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+# sudo apt-get update
+# sudo apt-get install docker.io=1.12.6-0ubuntu1~16.04.1
+~~~
 
 * kubelet, kubeadm 설치
 
-> \# apt-get update && apt-get install -y apt-transport-https <br>
-> \# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - <br>
-> \# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list <br>
-> \# apt-get update <br>
-> \# apt-get install -y kubelet kubeadm
+~~~
+# apt-get update && apt-get install -y apt-transport-https
+# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
+# apt-get update
+# apt-get install -y kubelet kubeadm
+~~~
 
 #### 3.2. Master Node
 
 * kubectl 설치
 
-> \# sudo snap install kubectl \-\-classic
+~~~
+# sudo snap install kubectl \-\-classic
+~~~
 
 ### 4. Cluster 구축
 
@@ -139,7 +145,9 @@ dns-nameservers 8.8.8.8
   * 실행 후 Key 값을 얻을 수 있다.
   * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
-> \# kubeadm init \-\-apiserver-advertise-address=10.0.0.11 \-\-pod-network-cidr=10.244.0.0/16
+~~~
+# kubeadm init \-\-apiserver-advertise-address=10.0.0.11 \-\-pod-network-cidr=10.244.0.0/16
+~~~
 
 ~~~
 ...
@@ -148,9 +156,11 @@ kubeadm join \-\-token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 
 * kubectl config 설정
 
-> \# mkdir -p $HOME/.kube <br>
-> \# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config <br>
-> \# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+~~~
+# mkdir -p $HOME/.kube
+# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+~~~
 
 * kubectl autocomplete 설정
   * /root/.bashrc에 다음의 내용 추가
@@ -164,26 +174,29 @@ source <(kubectl completion bash)
 ~~~
 
 * Network Addon (flannel) 설치
-
-> \# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml <br>
-> \# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+~~~
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+~~~
 
 * Dashboard Addon (Dashboard) 설치
 
-> \# kubectl create -f https://git.io/kube-dashboard
+~~~
+# kubectl create -f https://git.io/kube-dashboard
+~~~
 
 #### 4.2. Worker Node
 
 * Cluster 참여
   * kubeadm init 결과로 나온 명령어 각 Worker Node에서 수행한다.
 
-> \# kubeadm join \-\-token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
+# kubeadm join \-\-token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 
 #### 4.3. 검증
 
 * Master Node에서 Cluster 확인
 
-> \# kubectl get nodes
+# kubectl get nodes
 
 ~~~
 NAME       STATUS     AGE       VERSION
@@ -195,7 +208,9 @@ ubuntu03   Ready      55s       v1.7.1
 * Master Node에서 Dashboard 접속
   * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
 
-> \# kubectl proxy
+~~~
+# kubectl proxy
+~~~
 
 ### 5. 참조
 
