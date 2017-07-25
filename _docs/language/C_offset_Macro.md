@@ -24,7 +24,7 @@ adsense: true
 {% highlight C %}
 #include <stdio.h>
 #define  offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
- 
+
 struct offset{
     int a;
     int b;
@@ -32,7 +32,7 @@ struct offset{
     double d;
     int e;
 };
- 
+
 int main(void)
 {
     printf("a - %d\n", offsetof(struct offset, a));
@@ -40,11 +40,12 @@ int main(void)
     printf("c - %d\n", offsetof(struct offset, c));
     printf("d - %d\n", offsetof(struct offset, d));
     printf("e - %d\n", offsetof(struct offset, e));
- 
+
     return 0;
 }
 {% endhighlight %}
 
+{: .newline }
 > a - 0 <br>
 > b - 4 <br>
 > c - 8 <br>
