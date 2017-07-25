@@ -429,14 +429,14 @@ blockquote {
 		margin-bottom: 0;
 	}
 
+	&.newline > p {
+		white-space: pre;
+	}
+
 	@media (max-width: $full-width-break) {
 		margin-left: 0;
 		margin-right: 0;
 	}
-}
-
-newline > p {
-  white-space: pre;
 }
 
 img {
