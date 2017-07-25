@@ -418,10 +418,6 @@ h4 svg {
 	}
 }
 
-blockquote .newline > p {
-  white-space: pre;
-}
-
 blockquote {
 	padding: 10px 15px;
 	margin: 1rem 0 1rem 0;
@@ -437,6 +433,10 @@ blockquote {
 		margin-left: 0;
 		margin-right: 0;
 	}
+}
+
+newline > p {
+  white-space: pre;
 }
 
 img {
