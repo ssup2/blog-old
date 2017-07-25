@@ -301,9 +301,9 @@ provider = fernet
 * Keystone 설정
 
 > \# su -s /bin/sh -c "keystone-manage db_sync" keystone <br>
-> \# keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone <br>
-> \# keystone-manage credential_setup --keystone-user keystone --keystone-group keystone <br>
-> \# keystone-manage bootstrap --bootstrap-password root --bootstrap-admin-url http://controller:35357/v3/ --bootstrap-internal-url http://controller:35357/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
+> \# keystone-manage fernet_setup \-\-keystone-user keystone \-\-keystone-group keystone <br>
+> \# keystone-manage credential_setup \-\-keystone-user keystone \-\-keystone-group keystone <br>
+> \# keystone-manage bootstrap \-\-bootstrap-password root \-\-bootstrap-admin-url http://controller:35357/v3/ \-\-bootstrap-internal-url http://controller:35357/v3/ \-\-bootstrap-public-url http://controller:5000/v3/ \-\-bootstrap-region-id RegionOne
 
 * /etc/apache2/apache2.conf에 다음의 내용 추가
 
@@ -328,17 +328,17 @@ ServerName controller
 
 * Project, User, Role 생성 및 설정
 
-> \# openstack project create --domain default --description "Service Project" service <br>
-> \# openstack project create --domain default --description "Demo Project" demo <br>
-> \# openstack user create --domain default --password-prompt demo <br>
+> \# openstack project create \-\-domain default \-\-description "Service Project" service <br>
+> \# openstack project create \-\-domain default \-\-description "Demo Project" demo <br>
+> \# openstack user create \-\-domain default \-\-password-prompt demo <br>
 > \# openstack role create user <br>
-> \# openstack role add --project demo --user demo user
+> \# openstack role add \-\-project demo \-\-user demo user
 
 #### 3.2. 검증
 
 * Controller Node에서 Keystone 동작 확인
 
-> \# openstack --os-auth-url http://controller:35357/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin token issue
+> \# openstack \-\-os-auth-url http://controller:35357/v3 \-\-os-project-domain-name Default \-\-os-user-domain-name Default \-\-os-project-name admin \-\-os-username admin token issue
 
 ~~~
 +------------+-----------------------------------------------------------------+
@@ -353,7 +353,7 @@ ServerName controller
 +------------+-----------------------------------------------------------------+
 ~~~
 
-> \# openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name demo --os-username demo token issue
+> \# openstack \-\-os-auth-url http://controller:5000/v3 \-\-os-project-domain-name Default \-\-os-user-domain-name Default \-\-os-project-name demo \-\-os-username demo token issue
 
 ~~~
 +------------+-----------------------------------------------------------------+
@@ -384,15 +384,15 @@ ServerName controller
 * Glance User 생성 및 설정
 
 > \# . /root/admin-openrc <br>
-> \# openstack user create --domain default --password-prompt glance <br>
-> \# openstack role add --project service --user glance admin <br>
-> \# openstack service create --name glance --description "OpenStack Image" image <br>
+> \# openstack user create \-\-domain default \-\-password-prompt glance <br>
+> \# openstack role add \-\-project service \-\-user glance admin <br>
+> \# openstack service create \-\-name glance \-\-description "OpenStack Image" image <br>
 
 * Glance Service API Endpoint 생성
 
-> \# openstack endpoint create --region RegionOne image public http://controller:9292 <br>
-> \# openstack endpoint create --region RegionOne image internal http://controller:9292 <br>
-> \# openstack endpoint create --region RegionOne image admin http://controller:9292
+> \# openstack endpoint create \-\-region RegionOne image public http://controller:9292 <br>
+> \# openstack endpoint create \-\-region RegionOne image internal http://controller:9292 <br>
+> \# openstack endpoint create \-\-region RegionOne image admin http://controller:9292
 
 * Glance Package 설치
 
@@ -457,7 +457,7 @@ flavor = keystone
 
 > \# . /root/admin-openrc <br>
 > \# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img <br>
-> \# openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public <br>
+> \# openstack image create "cirros" \-\-file cirros-0.3.4-x86_64-disk.img \-\-disk-format qcow2 \-\-container-format bare \-\-public <br>
 > \# openstack image list
 
 ~~~
@@ -487,15 +487,15 @@ flavor = keystone
 * Nova User 생성 및 설정
 
 > \# . /root/admin-openrc <br>
-> \# openstack user create --domain default --password-prompt nova <br>
-> \# openstack role add --project service --user nova admin <br>
-> \# openstack service create --name nova --description "OpenStack Compute" compute
+> \# openstack user create \-\-domain default \-\-password-prompt nova <br>
+> \# openstack role add \-\-project service \-\-user nova admin <br>
+> \# openstack service create \-\-name nova \-\-description "OpenStack Compute" compute
 
 * Nova Service API Endpoint 생성
 
-> \# openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
+> \# openstack endpoint create \-\-region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
 
 * Nova Package 설치
 
@@ -628,15 +628,15 @@ virt_type=qemu
 * Neutron User 생성 및 설정
 
 > \# . /root/admin-openrc <br>
-> \# openstack user create --domain default --password-prompt neutron <br>
-> \# openstack role add --project service --user neutron admin <br>
-> \# openstack service create --name neutron --description "OpenStack Networking" network
+> \# openstack user create \-\-domain default \-\-password-prompt neutron <br>
+> \# openstack role add \-\-project service \-\-user neutron admin <br>
+> \# openstack service create \-\-name neutron \-\-description "OpenStack Networking" network
 
 * Neutron Service API Endpoint 생성
 
-> \# openstack endpoint create --region RegionOne network public http://controller:9696 <br>
-> \# openstack endpoint create --region RegionOne network internal http://controller:9696 <br>
-> \# openstack endpoint create --region RegionOne network admin http://controller:9696
+> \# openstack endpoint create \-\-region RegionOne network public http://controller:9696 <br>
+> \# openstack endpoint create \-\-region RegionOne network internal http://controller:9696 <br>
+> \# openstack endpoint create \-\-region RegionOne network admin http://controller:9696
 
 * Neutron Package 설치
 
@@ -757,7 +757,7 @@ metadata_proxy_shared_secret = root
 
 * Neutron 시작
 
-> \# su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron <br>
+> \# su -s /bin/sh -c "neutron-db-manage \-\-config-file /etc/neutron/neutron.conf \-\-config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron <br>
 > \# service nova-api restart <br>
 > \# service neutron-server restart <br>
 > \# service neutron-linuxbridge-agent restart <br>
@@ -961,19 +961,19 @@ os_region_name = RegionOne
 * Cinder User 생성 및 설정
 
 > \# . admin-openrc <br>
-> \# openstack user create --domain default --password-prompt cinder <br>
-> \# openstack role add --project service --user cinder admin <br>
-> \# openstack service create --name cinder --description "OpenStack Block Storage" volume <br>
-> \# openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+> \# openstack user create \-\-domain default \-\-password-prompt cinder <br>
+> \# openstack role add \-\-project service \-\-user cinder admin <br>
+> \# openstack service create \-\-name cinder \-\-description "OpenStack Block Storage" volume <br>
+> \# openstack service create \-\-name cinderv2 \-\-description "OpenStack Block Storage" volumev2
 
 * Cinder Service API Endpoint 생성
 
-> \# openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s <br>
-> \# openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+> \# openstack endpoint create \-\-region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s <br>
+> \# openstack endpoint create \-\-region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
 
 * Cinder Package 설치
 

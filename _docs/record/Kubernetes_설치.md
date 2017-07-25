@@ -129,7 +129,7 @@ dns-nameservers 8.8.8.8
 
 * kubectl 설치
 
-> \# sudo snap install kubectl --classic
+> \# sudo snap install kubectl \-\-classic
 
 ### 4. Cluster 구축
 
@@ -139,11 +139,11 @@ dns-nameservers 8.8.8.8
   * 실행 후 Key 값을 얻을 수 있다.
   * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
-> \# kubeadm init --apiserver-advertise-address=10.0.0.11 --pod-network-cidr=10.244.0.0/16
+> \# kubeadm init \-\-apiserver-advertise-address=10.0.0.11 \-\-pod-network-cidr=10.244.0.0/16
 
 ~~~
 ...
-kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
+kubeadm join \-\-token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
 * kubectl config 설정
@@ -177,7 +177,7 @@ source <(kubectl completion bash)
 * Cluster 참여
   * kubeadm init 결과로 나온 명령어 각 Worker Node에서 수행한다.
 
-> \# kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
+> \# kubeadm join \-\-token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 
 #### 4.3. 검증
 
