@@ -308,7 +308,9 @@ nav > ul {
 }
 
 .highlight {
-	margin: 1rem 0 2rem 0;
+	overflow-y:hidden;
+	overflow-x:scroll;
+	margin: 1rem 0 1rem 0;
 }
 
 h3 + .warning {
@@ -423,8 +425,6 @@ blockquote {
 	margin: 1rem 0 1rem 0;
 	background-color: $brand-colour-light;
 	border-color: $brand-colour;
-	overflow-y:hidden;
-	overflow-x:scroll ;
 
 	p:last-child {
 		margin-top: 0;
