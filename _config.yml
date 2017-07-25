@@ -48,7 +48,7 @@ defaults:
         type: Article
 
 kramdown:
-    smart_quotes: apos, apos, quot, quot
+    smart_quotes: ["apos", "apos", "quot", "quot"]
 
 # -----
 # seo-tag
