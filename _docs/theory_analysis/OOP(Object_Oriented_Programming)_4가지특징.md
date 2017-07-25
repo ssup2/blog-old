@@ -49,5 +49,7 @@ public class BlogMain {
 }
 {% endhighlight %}
 
-> Parent <br>
-> Child
+~~~
+Parent
+Child
+~~~
