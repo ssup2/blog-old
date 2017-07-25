@@ -1,4 +1,4 @@
-\-\----
+---
 title: OpenStack Newton 설치
 category: Record
 date: 2017-07-04T12:00:00Z
