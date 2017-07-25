@@ -1,4 +1,4 @@
----
+\-\----
 title: OpenStack Newton 설치
 category: Record
 date: 2017-07-04T12:00:00Z
@@ -56,13 +56,17 @@ adsense: true
 
 * OpenStack Package 저장소 추가
 
-> \# apt install software-properties-common <br>
-> \# add-apt-repository cloud-archive:newton
+~~~
+# apt install software-properties-common
+# add-apt-repository cloud-archive:newton
+~~~
 
 * OpenStack Package 설치
 
-> \# apt update && apt dist-upgrade <br>
-> \# apt install python-openstackclient
+~~~
+# apt update && apt dist-upgrade
+# apt install python-openstackclient
+~~~
 
 #### 2.2. Controller Node
 
@@ -97,7 +101,9 @@ dns-nameservers 8.8.8.8
 
 * chrony Package 설치
 
-> \# apt install chrony
+~~~
+# apt install chrony
+~~~
 
 * /etc/chrony/chrony.conf에 다음의 내용 추가
 
@@ -112,13 +118,17 @@ allow 10.0.0.0/24
 
 * chrony 재시작
 
-> \# service chrony restart
+~~~
+# service chrony restart
+~~~
 
 ##### 2.2.3. SQL Database 설치
 
 * MariaDB Package 설치
 
-> \# apt install mariadb-server python-pymysql
+~~~
+# apt install mariadb-server python-pymysql
+~~~
 
 * /etc/mysql/mariadb.conf.d/99-openstack.cnf 생성 및 다음과 같이 수정
 
@@ -135,24 +145,32 @@ character-set-server = utf8
 
 * MariaDB 재시작
 
-> \# service mysql restart
+~~~
+# service mysql restart
+~~~
 
 ##### 2.2.4. Message Queue 설치
 
 * RabbitMQ Package 설치
 
-> \# apt install rabbitmq-server
+~~~
+# apt install rabbitmq-server
+~~~
 
 * RabbitMQ 설정
 
-> \# rabbitmqctl add_user openstack root <br>
-> \# rabbitmqctl set_permissions openstack ".\*" ".\*" ".\*"
+~~~
+# rabbitmqctl add_user openstack root
+# rabbitmqctl set_permissions openstack ".\*" ".\*" ".\*"
+~~~
 
 ##### 2.2.5. Memcached 설치
 
 * Memcached Package 설치
 
-> \# apt install memcached python-memcache
+~~~
+# apt install memcached python-memcache
+~~~
 
 * /etc/memcached.conf에 다음의 내용 추가
 
@@ -221,7 +239,9 @@ dns-nameservers 8.8.8.8
 
 * chrony Package 설치
 
-> \# apt install chrony
+~~~
+# apt install chrony
+~~~
 
 * /etc/chrony/chrony.conf에 다음의 내용 추가
 
@@ -231,7 +251,9 @@ server controller iburst
 
 * chrony 재시작
 
-> \# service chrony restart
+~~~
+# service chrony restart
+~~~
 
 #### 2.4. Storage Node
 
@@ -259,7 +281,9 @@ dns-nameservers 8.8.8.8
 
 * chrony Package 설치
 
-> \# apt install chrony
+~~~
+# apt install chrony
+~~~
 
 * /etc/chrony/chrony.conf에 다음의 내용 추가
 
@@ -269,7 +293,9 @@ server controller iburst
 
 * chrony 재시작
 
-> \# service chrony restart
+~~~
+# service chrony restart
+~~~
 
 ### 3. Keystone 설치
 
@@ -277,16 +303,20 @@ server controller iburst
 
 * Keystone DB 초기화
 
-> \# mysql -u root -p
+~~~
+# mysql -u root -p
+~~~
 
-> mysql> CREATE DATABASE keystone; <br>
-> mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'root';
-> mysql> exit;
+mysql> CREATE DATABASE keystone;
+mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'root';
+mysql> exit;
 
 * Keystone Package 설치
 
-> \# apt install keystone
+~~~
+# apt install keystone
+~~~
 
 * /etc/keystone/keystone.conf에 다음의 내용을 추가
 
@@ -300,10 +330,12 @@ provider = fernet
 
 * Keystone 설정
 
-> \# su -s /bin/sh -c "keystone-manage db_sync" keystone <br>
-> \# keystone-manage fernet_setup \-\-keystone-user keystone \-\-keystone-group keystone <br>
-> \# keystone-manage credential_setup \-\-keystone-user keystone \-\-keystone-group keystone <br>
-> \# keystone-manage bootstrap \-\-bootstrap-password root \-\-bootstrap-admin-url http://controller:35357/v3/ \-\-bootstrap-internal-url http://controller:35357/v3/ \-\-bootstrap-public-url http://controller:5000/v3/ \-\-bootstrap-region-id RegionOne
+~~~
+# su -s /bin/sh -c "keystone-manage db_sync" keystone
+# keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+# keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+# keystone-manage bootstrap --bootstrap-password root --bootstrap-admin-url http://controller:35357/v3/ --bootstrap-internal-url http://controller:35357/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
+~~~
 
 * /etc/apache2/apache2.conf에 다음의 내용 추가
 
@@ -313,34 +345,39 @@ ServerName controller
 
 * Apache HTTP Server 재시작 및 DB 제거
 
-> \# service apache2 restart <br>
-> \# rm -f /var/lib/keystone/keystone.db <br>
+~~~
+# service apache2 restart
+# rm -f /var/lib/keystone/keystone.db
+~~~
 
 * 환경 변수 설정
 
-> \# export OS_USERNAME=admin <br>
-> \# export OS_PASSWORD=root <br>
-> \# export OS_PROJECT_NAME=admin <br>
-> \# export OS_USER_DOMAIN_NAME=Default <br>
-> \# export OS_PROJECT_DOMAIN_NAME=Default <br>
-> \# export OS_AUTH_URL=http://controller:35357/v3 <br>
-> \# export OS_IDENTITY_API_VERSION=3
+~~~
+# export OS_USERNAME=admin
+# export OS_PASSWORD=root
+# export OS_PROJECT_NAME=admin
+# export OS_USER_DOMAIN_NAME=Default
+# export OS_PROJECT_DOMAIN_NAME=Default
+# export OS_AUTH_URL=http://controller:35357/v3
+# export OS_IDENTITY_API_VERSION=3
+~~~
 
 * Project, User, Role 생성 및 설정
 
-> \# openstack project create \-\-domain default \-\-description "Service Project" service <br>
-> \# openstack project create \-\-domain default \-\-description "Demo Project" demo <br>
-> \# openstack user create \-\-domain default \-\-password-prompt demo <br>
-> \# openstack role create user <br>
-> \# openstack role add \-\-project demo \-\-user demo user
+~~~
+# openstack project create --domain default --description "Service Project" service
+# openstack project create --domain default --description "Demo Project" demo
+# openstack user create --domain default --password-prompt demo
+# openstack role create user
+# openstack role add --project demo --user demo user
+~~~
 
 #### 3.2. 검증
 
 * Controller Node에서 Keystone 동작 확인
 
-> \# openstack \-\-os-auth-url http://controller:35357/v3 \-\-os-project-domain-name Default \-\-os-user-domain-name Default \-\-os-project-name admin \-\-os-username admin token issue
-
 ~~~
+# openstack --os-auth-url http://controller:35357/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin token issue
 +------------+-----------------------------------------------------------------+
 | Field      | Value                                                           |
 +------------+-----------------------------------------------------------------+
@@ -353,9 +390,8 @@ ServerName controller
 +------------+-----------------------------------------------------------------+
 ~~~
 
-> \# openstack \-\-os-auth-url http://controller:5000/v3 \-\-os-project-domain-name Default \-\-os-user-domain-name Default \-\-os-project-name demo \-\-os-username demo token issue
-
 ~~~
+# openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name demo --os-username demo token issue
 +------------+-----------------------------------------------------------------+
 | Field      | Value                                                           |
 +------------+-----------------------------------------------------------------+
@@ -374,29 +410,36 @@ ServerName controller
 
 * Glance DB 초기화
 
-> \# mysql -u root -p
-
-> mysql> CREATE DATABASE glance; <br>
-> mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'root'; <br>
-> mysql> exit;
+~~~
+# mysql -u root -p
+mysql> CREATE DATABASE glance;
+mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'root';
+mysql> exit;
+~~~
 
 * Glance User 생성 및 설정
 
-> \# . /root/admin-openrc <br>
-> \# openstack user create \-\-domain default \-\-password-prompt glance <br>
-> \# openstack role add \-\-project service \-\-user glance admin <br>
-> \# openstack service create \-\-name glance \-\-description "OpenStack Image" image <br>
+~~~
+# . /root/admin-openrc
+# openstack user create --domain default --password-prompt glance
+# openstack role add --project service --user glance admin
+# openstack service create --name glance --description "OpenStack Image" image
+~~~
 
 * Glance Service API Endpoint 생성
 
-> \# openstack endpoint create \-\-region RegionOne image public http://controller:9292 <br>
-> \# openstack endpoint create \-\-region RegionOne image internal http://controller:9292 <br>
-> \# openstack endpoint create \-\-region RegionOne image admin http://controller:9292
+~~~
+# openstack endpoint create --region RegionOne image public http://controller:9292
+# openstack endpoint create --region RegionOne image internal http://controller:9292
+# openstack endpoint create --region RegionOne image admin http://controller:9292
+~~~
 
 * Glance Package 설치
 
-> \# apt install glance
+~~~
+# apt install glance
+~~~
 
 * /etc/glance/glance-api.conf에 다음의 내용을 추가
 
@@ -447,20 +490,21 @@ flavor = keystone
 
 * Glance 설정 및 시작
 
-> \# su -s /bin/sh -c "glance-manage db_sync" glance <br>
-> \# service glance-registry restart <br>
-> \# service glance-api restart
+~~~
+# su -s /bin/sh -c "glance-manage db_sync" glance
+# service glance-registry restart
+# service glance-api restart
+~~~
 
 #### 4.2. 검증
 
 * Controller Node에서 Glance 동작 확인
 
-> \# . /root/admin-openrc <br>
-> \# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img <br>
-> \# openstack image create "cirros" \-\-file cirros-0.3.4-x86_64-disk.img \-\-disk-format qcow2 \-\-container-format bare \-\-public <br>
-> \# openstack image list
-
 ~~~
+# . /root/admin-openrc
+# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+# openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public
+# openstack image list
 +--------------------------------------+--------+--------+
 | ID                                   | Name   | Status |
 +--------------------------------------+--------+--------+
@@ -474,33 +518,40 @@ flavor = keystone
 
 * Nova DB 초기화
 
-> \# mysql -u root -p
-
-> mysql> CREATE DATABASE nova_api; <br>
-> mysql> CREATE DATABASE nova; <br>
-> mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'root'; <br>
-> mysql> exit;
+~~~
+# mysql -u root -p
+mysql> CREATE DATABASE nova_api;
+mysql> CREATE DATABASE nova;
+mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'root';
+mysql> exit;
+~~~
 
 * Nova User 생성 및 설정
 
-> \# . /root/admin-openrc <br>
-> \# openstack user create \-\-domain default \-\-password-prompt nova <br>
-> \# openstack role add \-\-project service \-\-user nova admin <br>
-> \# openstack service create \-\-name nova \-\-description "OpenStack Compute" compute
+~~~
+# . /root/admin-openrc
+# openstack user create --domain default --password-prompt nova
+# openstack role add --project service --user nova admin
+# openstack service create --name nova --description "OpenStack Compute" compute
+~~~
 
 * Nova Service API Endpoint 생성
 
-> \# openstack endpoint create \-\-region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
+~~~
+# openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
+~~~
 
 * Nova Package 설치
 
-> \# apt install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler <br>
-> \# mkdir /usr/lib/python2.7/dist-packages/keys
+~~~
+# apt install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
+# mkdir /usr/lib/python2.7/dist-packages/keys
+~~~
 
 * /etc/nova/nova.conf에 다음의 내용을 추가
 
@@ -542,19 +593,23 @@ lock_path = /var/lib/nova/tmp
 
 * Nova 설정 및 시작
 
-> \# su -s /bin/sh -c "nova-manage api_db sync" nova <br>
-> \# su -s /bin/sh -c "nova-manage db sync" nova <br>
-> \# service nova-api restart <br>
-> \# service nova-consoleauth restart <br>
-> \# service nova-scheduler restart <br>
-> \# service nova-conductor restart <br>
-> \# service nova-novncproxy restart
+~~~
+# su -s /bin/sh -c "nova-manage api_db sync" nova
+# su -s /bin/sh -c "nova-manage db sync" nova
+# service nova-api restart
+# service nova-consoleauth restart
+# service nova-scheduler restart
+# service nova-conductor restart
+# service nova-novncproxy restart
+~~~
 
 #### 5.2. Compute Node
 
 * Nova Package 설치
 
-> \# apt install nova-compute
+~~~
+# apt install nova-compute
+~~~
 
 * /etc/nova/nova.conf에 다음의 내용을 추가
 
@@ -604,14 +659,18 @@ virt_type=qemu
 
 * Nova 시작
 
-> \# service nova-compute restart
+~~~
+# service nova-compute restart
+~~~
 
 #### 5.3. 검증
 
 * Controller Node에서 Nova 동작 확인
 
-> \# . /root/admin-openrc <br>
-> \# openstack compute service list
+~~~
+# . /root/admin-openrc
+# openstack compute service list
+~~~
 
 ### 6. Neutron 설치
 
@@ -619,28 +678,36 @@ virt_type=qemu
 
 * Neutron DB 초기화
 
-> \# mysql -u root -p
-> mysql> CREATE DATABASE neutron; <br>
-> mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'root'; <br>
-> mysql> exit;
+~~~
+# mysql -u root -p
+mysql> CREATE DATABASE neutron;
+mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'root';
+mysql> exit;
+~~~
 
 * Neutron User 생성 및 설정
 
-> \# . /root/admin-openrc <br>
-> \# openstack user create \-\-domain default \-\-password-prompt neutron <br>
-> \# openstack role add \-\-project service \-\-user neutron admin <br>
-> \# openstack service create \-\-name neutron \-\-description "OpenStack Networking" network
+~~~
+# . /root/admin-openrc
+# openstack user create --domain default --password-prompt neutron
+# openstack role add --project service --user neutron admin
+# openstack service create --name neutron --description "OpenStack Networking" network
+~~~
 
 * Neutron Service API Endpoint 생성
 
-> \# openstack endpoint create \-\-region RegionOne network public http://controller:9696 <br>
-> \# openstack endpoint create \-\-region RegionOne network internal http://controller:9696 <br>
-> \# openstack endpoint create \-\-region RegionOne network admin http://controller:9696
+~~~
+# openstack endpoint create --region RegionOne network public http://controller:9696
+# openstack endpoint create --region RegionOne network internal http://controller:9696
+# openstack endpoint create --region RegionOne network admin http://controller:9696
+~~~
 
 * Neutron Package 설치
 
-> \# apt install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent <br>
+~~~
+# apt install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
+~~~
 
 * /etc/neutron/neutron.conf에 다음의 내용을 추가
 
@@ -757,19 +824,23 @@ metadata_proxy_shared_secret = root
 
 * Neutron 시작
 
-> \# su -s /bin/sh -c "neutron-db-manage \-\-config-file /etc/neutron/neutron.conf \-\-config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron <br>
-> \# service nova-api restart <br>
-> \# service neutron-server restart <br>
-> \# service neutron-linuxbridge-agent restart <br>
-> \# service neutron-dhcp-agent restart <br>
-> \# service neutron-metadata-agent restart <br>
-> \# service neutron-l3-agent restart
+~~~
+# su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+# service nova-api restart
+# service neutron-server restart
+# service neutron-linuxbridge-agent restart
+# service neutron-dhcp-agent restart
+# service neutron-metadata-agent restart
+# service neutron-l3-agent restart
+~~~
 
 #### 6.2. Compute Node
 
 * Neutron Package 설치
 
-> \# apt install neutron-linuxbridge-agent
+~~~
+# apt install neutron-linuxbridge-agent
+~~~
 
 * /etc/neutron/neutron.conf에 다음의 내용 추가
 
@@ -823,17 +894,18 @@ password = root
 
 * Neutron 시작
 
-> \# service nova-compute restart <br>
-> \# service neutron-linuxbridge-agent restart
+~~~
+# service nova-compute restart
+# service neutron-linuxbridge-agent restart
+~~~
 
 #### 6.3. 검증
 
 * Compute Node에서 Neutron 동작 확인
 
-> \# . /root/admin-openrc <br>
-> \# neutron ext-list
-
 ~~~
+# . /root/admin-openrc
+# neutron ext-list
 +---------------------------+-----------------------------------------------+
 | alias                     | name                                          |
 +---------------------------+-----------------------------------------------+
@@ -878,7 +950,9 @@ password = root
 
 * Horizon Package 설치
 
-> \# apt install openstack-dashboard
+~~~
+# apt install openstack-dashboard
+~~~
 
 * /etc/openstack-dashboard/local_settings.py에 다음과 같이 수정
 
@@ -930,7 +1004,9 @@ OPENSTACK_API_VERSIONS = {
 
 * Horizon 시작
 
-> \# service apache2 reload
+~~~
+# service apache2 reload
+~~~
 
 #### 7.2. 검증
 
@@ -952,33 +1028,41 @@ os_region_name = RegionOne
 
 * Cinder DB 초기화
 
-> \# mysql -u root -p <br>
-> mysql> CREATE DATABASE cinder; <br>
-> mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' IDENTIFIED BY 'root'; <br>
-> mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root'; <br>
+~~~
+# mysql -u root -p
+mysql> CREATE DATABASE cinder;
+mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' IDENTIFIED BY 'root';
+mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root';
 > exit;
+~~~
 
 * Cinder User 생성 및 설정
 
-> \# . admin-openrc <br>
-> \# openstack user create \-\-domain default \-\-password-prompt cinder <br>
-> \# openstack role add \-\-project service \-\-user cinder admin <br>
-> \# openstack service create \-\-name cinder \-\-description "OpenStack Block Storage" volume <br>
-> \# openstack service create \-\-name cinderv2 \-\-description "OpenStack Block Storage" volumev2
+~~~
+# . admin-openrc
+# openstack user create --domain default --password-prompt cinder
+# openstack role add --project service --user cinder admin
+# openstack service create --name cinder --description "OpenStack Block Storage" volume
+# openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+~~~
 
 * Cinder Service API Endpoint 생성
 
-> \# openstack endpoint create \-\-region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s <br>
-> \# openstack endpoint create \-\-region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+~~~
+# openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne volumev2 public http://controller:8776/v2/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne volumev2 internal http://controller:8776/v2/%\(tenant_id\)s
+# openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
+~~~
 
 * Cinder Package 설치
 
-> \# su -s /bin/sh -c "cinder-manage db sync" cinder <br>
-> \# apt install cinder-api cinder-scheduler
+~~~
+# su -s /bin/sh -c "cinder-manage db sync" cinder
+# apt install cinder-api cinder-scheduler
+~~~
 
 * /etc/cinder/cinder.conf에 다음의 내용을 추가
 
@@ -1008,17 +1092,21 @@ lock_path = /var/lib/cinder/tmp
 
 * Cinder 시작
 
-> \# service nova-api restart <br>
-> \# service cinder-scheduler restart <br>
-> \# service cinder-api restart
+~~~
+# service nova-api restart
+# service cinder-scheduler restart
+# service cinder-api restart
+~~~
 
 #### 8.3. Storage Node
 
 * LVM 설치 및 설정
 
-> \# apt install lvm2 <br>
-> \# pvcreate /dev/sdb <br>
-> \# vgcreate cinder-volumes /dev/sdb
+~~~
+# apt install lvm2
+# pvcreate /dev/sdb
+# vgcreate cinder-volumes /dev/sdb
+~~~
 
 * /etc/lvm/lvm.conf에 아래의 내용 추가
 
@@ -1031,7 +1119,9 @@ filter = [ "a/sdb/", "r/.*/"]
 
 * Cinder Package 설치
 
-> \# apt install cinder-volume
+~~~
+# apt install cinder-volume
+~~~
 
 * /etc/cinder/cinder.conf에 다음의 내용을 추가
 
@@ -1069,15 +1159,19 @@ lock_path = /var/lib/cinder/tmp
 
 * Cinder 시작
 
-> \# service tgt restart <br>
-> \# service cinder-volume restart
+~~~
+# service tgt restart
+# service cinder-volume restart
+~~~
 
 #### 8.4. 검증
 
 * Controller Node에서 Cinder 동작 확인
 
-> \# . admin-openrc <br>
+~~~
+# . admin-openrc
 > \# openstack volume service list
+~~~
 
 ~~~
 +------------------+------------+------+---------+-------+----------------------------+

@@ -15,14 +15,18 @@ adsense: true
 
 * font-manager 설치
 
-> \# apt-get install font-manager <br>
-> \# apt-get install cabextract
+~~~
+# apt-get install font-manager
+# apt-get install cabextract
+~~~
 
 ### 3. Consolas Download Script 생성 및 설치
 
 * consolas.sh 파일 생성 및 편집
 
-> \# vim consolas.sh
+~~~
+# vim consolas.sh
+~~~
 
 * 아래의 내용을 vim consolas.sh에 복사
 {% highlight shell %}
@@ -38,14 +42,18 @@ cabextract ppviewer.cab
 
 * consolas.sh 실행
 
-> \# chmod +x consolas.sh <br>
-> \# ./consolas.sh
+~~~
+# chmod +x consolas.sh
+# ./consolas.sh
+~~~
 
 ### 4. Consolas Font 설치
 
 * font-manager 실행
 
-> \# font-manager
+~~~
+# font-manager
+~~~
 
 * Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
 
@@ -55,8 +63,10 @@ cabextract ppviewer.cab
 
 * Font 파일들과 consolas.sh 파일을 지운다.
 
-> \# rm -r temp <br>
-> \# rm consolas.sh
+~~~
+# rm -r temp
+# rm consolas.sh
+~~~
 
 ### 6. 참조
 * [http://www.rushis.com/2013/03/consolas-font-on-ubuntu/](http://www.rushis.com/2013/03/consolas-font-on-ubuntu/)

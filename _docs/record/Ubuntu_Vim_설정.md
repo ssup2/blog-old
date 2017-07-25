@@ -35,20 +35,22 @@ adsense: true
 
 * Vim 설치
 
-> \# add-apt-repository ppa:jonathonf/vim <br>
-> \# apt-get update <br>
-> \# apt-get install vim-gnome
+~~~
+# add-apt-repository ppa:jonathonf/vim
+# apt-get update
+# apt-get install vim-gnome
+~~~
 
 * ctags, cscope 설치
 
-> \# apt-get install ctags <br>
-> \# apt-get install cscope
+~~~
+# apt-get install ctags
+# apt-get install cscope
+~~~
 
 ### 4. Bash Shell 설정
 
 * ~/.bashrc 파일 설정
-
-> \# vi ~/.bashrc
 
 ~~~
 export TERM=xterm-256color
@@ -58,14 +60,18 @@ export PATH=$PATH:$GOPATH/bin
 
 ### 5. Vim Color Theme 다운로드
 
-> \# mkdir -p ~/.vim/colors  <br>
-> \# git clone https://github.com/junegunn/seoul256.vim.git <br>
-> \# cp seoul256.vim/colors/seoul256.vim ~/.vim/colors/seoul256.vim <br>
-> \# rm -r seoul256.vim
+~~~
+# mkdir -p ~/.vim/colors
+# git clone https://github.com/junegunn/seoul256.vim.git
+# cp seoul256.vim/colors/seoul256.vim ~/.vim/colors/seoul256.vim
+# rm -r seoul256.vim
+~~~
 
 ### 6. Vundle Plugin 설치
 
-> \# git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+~~~
+# git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+~~~
 
 ### 7. Vim 설정
 
@@ -138,17 +144,21 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 * Vim 명령어 모드에서 다음 명령어 수행
 
-> \: PluginInstall <br>
-> \: GoInstallBinaries
+~~~
+: PluginInstall
+: GoInstallBinaries
+~~~
 
 ### 8. YouCompleteMe 설치
 
 * YouComplete Compile 및 설치
 
-> \# apt-get install build-essential cmake <br>
-> \# apt-get install python-dev python3-dev <br>
-> \# cd ~/.vim/bundle/YouCompleteMe <br>
-> \# ./install.py \-\-clang-completer \-\-gocode-completer
+~~~
+# apt-get install build-essential cmake
+# apt-get install python-dev python3-dev
+# cd ~/.vim/bundle/YouCompleteMe
+# ./install.py --clang-completer --gocode-completer
+~~~
 
 * .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
   * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
