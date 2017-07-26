@@ -45,9 +45,10 @@ int main(void)
 }
 {% endhighlight %}
 
-{: .newline }
-> a - 0
-> b - 4
-> c - 8
-> d - 12
-> e - 20
+~~~
+a - 0
+b - 4
+c - 8
+d - 12
+e - 20
+~~~

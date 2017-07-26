@@ -25,7 +25,9 @@ int main()
 }
 {% endhighlight %}
 
-> THIS IS TEST CODE
+~~~
+THIS IS TEST CODE
+~~~
 
 ### 2. ## - 토큰 붙여넣기 연산자
 
@@ -50,7 +52,9 @@ int main()
 }
 {% endhighlight %}
 
-> i0 = 0
+~~~
+i0 = 0
+~~~
 
 ### 3. 가변 인자 Macro
 
