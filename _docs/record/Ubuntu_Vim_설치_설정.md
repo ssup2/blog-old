@@ -132,7 +132,7 @@ nmap <F7> :NERDTreeToggle<CR>     " F7 Key = NERD Tree Toggling
 let NERDTreeWinPos = "left"
 
 "" Tag Bar Setting
-nmap <F8> :TagbarToggle<CR>       " F9 Key = Tagbar Toggling
+nmap <F8> :TagbarToggle<CR>       " F8 Key = Tagbar Toggling
 
 filetype on
 let g:tagbar_width = 35
