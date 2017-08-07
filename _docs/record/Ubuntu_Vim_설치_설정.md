@@ -152,7 +152,7 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 : PluginInstall
 ~~~
 
-### 3.6. YouCompleteMe 설치
+#### 3.6. YouCompleteMe 설치
 
 * YouComplete Compile 및 설치
 
