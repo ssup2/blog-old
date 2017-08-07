@@ -1,5 +1,5 @@
 ---
-title: Ubuntu Vim 설정
+title: Ubuntu Vim 설치, 설정
 category: Record
 date: 2017-01-20T16:41:00Z
 lastmod: 2017-01-22T16:41:00Z
@@ -16,7 +16,6 @@ adsense: true
 
 ### 1. 설정 환경
 
-* Date : 2016.12.13
 * Ubuntu 14.04 / Ubuntu 16.04
 * Vim 8
 
@@ -31,7 +30,9 @@ adsense: true
 * vim-airline : Vim의 Status Line을 Update하는 Plugin.
 * vim-go : golang을 위한 Plugin.
 
-### 3. Ubuntu Package 설치
+### 3. Vim 기본 설치, 설정
+
+#### 3.1. Ubuntu Package 설치
 
 * Vim 설치
 
@@ -48,17 +49,17 @@ adsense: true
 # apt-get install cscope
 ~~~
 
-### 4. Bash Shell 설정
+#### 3.2. Bash Shell 설정
 
-* ~/.bashrc 파일 설정
+* ~/.bashrc 파일에 다음의 내용 추가
 
 ~~~
 export TERM=xterm-256color
-export GOPATH=$HOME/Desktop/golang
-export PATH=$PATH:$GOPATH/bin
 ~~~
 
-### 5. Vim Color Theme 다운로드
+#### 3.3. Vim Color Theme 다운로드
+
+* git을 이용하여 seoul256 Theme 설치
 
 ~~~
 # mkdir -p ~/.vim/colors
@@ -67,15 +68,17 @@ export PATH=$PATH:$GOPATH/bin
 # rm -r seoul256.vim
 ~~~
 
-### 6. Vundle Plugin 설치
+#### 3.4. Vundle Plugin 설치
+
+* git을 이용하여 Vundle 설치
 
 ~~~
 # git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ~~~
 
-### 7. Vim 설정
+#### 3.4. .vimrc 파일 설정
 
-* ~/.vimrc 파일 설정
+* ~/.vimrc 파일을 다음과 같이 수정
 
 {% highlight VimL %}
 "
@@ -99,7 +102,6 @@ Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'bling/vim-airline'
-Plugin 'fatih/vim-go'
 
 " All of your Plugins must be added before the following line
 call vundle#end()               " required
@@ -142,14 +144,15 @@ let g:gutentags_project_root=['.tag_root']
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 {% endhighlight %}
 
+#### 3.5. Vundle을 이용하여 Vim Plugin 설치
+
 * Vim 명령어 모드에서 다음 명령어 수행
 
 ~~~
 : PluginInstall
-: GoInstallBinaries
 ~~~
 
-### 8. YouCompleteMe 설치
+### 3.6. YouCompleteMe 설치
 
 * YouComplete Compile 및 설치
 
@@ -157,13 +160,60 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 # apt-get install build-essential cmake
 # apt-get install python-dev python3-dev
 # cd ~/.vim/bundle/YouCompleteMe
-# ./install.py --clang-completer --gocode-completer
+# ./install.py --clang-completer
 ~~~
 
 * .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
   * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
 
-### 9. 참조
+### 4. golang 환경 설치, 설정
+
+#### 4.1. Ubuntu Package 설치
+
+* golang 설치
+
+~~~
+# add-apt-repository ppa:longsleep/golang-backports
+# apt-get update
+# apt-get install golang-go
+~~~
+
+#### 4.2. Bash Shell 설정
+
+* ~/.bashrc 파일에 다음의 내용 추가
+
+~~~
+export GOPATH=$HOME/Desktop/golang
+export PATH=$PATH:$GOPATH/bin
+~~~
+
+#### 4.3. .vimrc 파일 설정
+
+* ~/.vimrc 파일에 다음의 내용 추가
+
+~~~
+Plugin 'fatih/vim-go'
+~~~
+
+#### 4.4. YouCompleteMe 재설치
+
+* YouComplete Compile 및 설치
+
+~~~
+# cd ~/.vim/bundle/YouCompleteMe
+# ./install.py --clang-completer --gocode-completer
+~~~
+
+#### 4.5. golang Binary 설치
+
+* Vim 명령어 모드에서 다음 명령어 수행
+
+~~~
+: GoInstallBinaries
+~~~
+
+### 5. 참조
+
 * Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
 * Colorscheme - [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
 * YouCompleteMe Install - [http://neverapple88.tistory.com/26](http://neverapple88.tistory.com/26)

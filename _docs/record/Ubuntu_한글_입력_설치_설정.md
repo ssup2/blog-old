@@ -1,5 +1,5 @@
 ---
-title: Ubuntu 한글 입력 설정
+title: Ubuntu 16.04 한글 입력 설치, 설정
 category: Record
 date: 2017-01-23T13:13:00Z
 lastmod: 2017-01-23T13:13:00Z
@@ -9,7 +9,6 @@ adsense: true
 
 ### 1. 설정 환경
 
-* Date : 2016.12.14
 * Ubuntu 16.04 LTS 64bit, root user
 
 ### 2. 한글 설치 (IBus)
