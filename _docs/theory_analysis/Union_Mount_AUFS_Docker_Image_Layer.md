@@ -19,7 +19,9 @@ Union이란 이름에서도 알 수 있듯이, 여러개의 폴더를 동시에 
 
 AUFS (Advanced Multi Layered Unification Filesystem)은 리눅스 환경에서 Union Mount를 제공하는 기법이다. AUFS는 현재 Linux Kernel의 Main Stream에 포함되어 있지 않다. 하지만 Docker Image Layer의 기본 Filesystem으로 이용되고 있기 때문에 현재 많은 곳에서 AUFS를 이용하고 있다. 대부분의 리눅스 배포판에서는 별도의 Package 설치를 통해 AUFS를 쉽게 설치 할 수 있다.
 
-> \# mount -t aufs -o br=/layer_rw=rw:/layer_01=ro+wh:/layer_02=ro+wh:/layer_03=ro+wh none /mnt
+~~~
+\# mount -t aufs -o br=/layer_rw=rw:/layer_01=ro+wh:/layer_02=ro+wh:/layer_03=ro+wh none /mnt
+~~~
 
 아래의 AUFS 설명들은 위와 같은 명령어와 Option을 통해 AUFS Mount를 했다고 가정하에 진행한다. AUFS는 **br(Branch)**에 Union Mount를 위한 폴더들을 나열한다. /layer_rw 폴더는 RW Branch가 되고 나머지 폴더들은 RO Branch가 되는것을 확인 할 수 있다. 또한 /layer_rw가 br 옵션의 가장 앞에 있기 때문에 /layer_rw는 Root Branch가 된다. /mnt 폴더에 Branch 폴더들이 Union Mount 된다.
 
@@ -45,7 +47,9 @@ Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 
 
 ### 3. Docker Image Layer
 
-> \# mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
+~~~
+\# mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
+~~~
 
 ![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Docker_Image_Layer.PNG){: width="600px"}
 

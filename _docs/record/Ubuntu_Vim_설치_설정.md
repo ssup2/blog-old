@@ -105,34 +105,34 @@ Plugin 'bling/vim-airline'
 
 " All of your Plugins must be added before the following line
 call vundle#end()               " required
-filetype plugin indent on				" required
+filetype plugin indent on       " required
 
 "" Vim Setting
-set encoding=utf-8						  " Encoding Type utf-8
-set nu						              " Line Number
-set ai						              " Auto Indent
-set ts=4			                  " Tab Size
-set sw=4						            " Shift Width
-set hlsearch							      " highlight all search matches
+set encoding=utf-8              " Encoding Type utf-8
+set nu                          " Line Number
+set ai                          " Auto Indent
+set ts=4                        " Tab Size
+set sw=4                        " Shift Width
+set hlsearch                    " highlight all search matches
 syntax on
 colorscheme seoul256
 
 "" cscope Setting
-set csprg=/usr/bin/cscope				  " cscope Which
-set csto=1								        " tags Search First
-set cst									          " 'Ctrl + ]' use ':cstag' instead of the default ':tag' behavior
-set nocsverb							        " verbose Off
-if filereadable("./cscope.out")	  " add cscope.out
+set csprg=/usr/bin/cscope         " cscope Which
+set csto=1                        " tags Search First
+set cst                           " 'Ctrl + ]' use ':cstag' instead of the default ':tag' behavior
+set nocsverb                      " verbose Off
+if filereadable("./cscope.out")   " add cscope.out
     cs add cscope.out
 endif
-set csverb								        " verbose On
+set csverb                        " verbose On
 
 "" NERD Tree Setting
-nmap <F7> :NERDTreeToggle<CR>			" F7 Key = NERD Tree Toggling
+nmap <F7> :NERDTreeToggle<CR>     " F7 Key = NERD Tree Toggling
 let NERDTreeWinPos = "left"
 
 "" Tag Bar Setting
-nmap <F8> :TagbarToggle<CR>				" F9 Key = Tagbar Toggling
+nmap <F8> :TagbarToggle<CR>       " F9 Key = Tagbar Toggling
 
 filetype on
 let g:tagbar_width = 35
