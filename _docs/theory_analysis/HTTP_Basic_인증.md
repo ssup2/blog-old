@@ -25,7 +25,7 @@ HTTP Basic 인증 기법은 ID, Password를 이용하여 HTTP 표준에 정의�
 
 Client가 ID, Password를 알고 있고, HTTP를 이용하여 단순한 인증이 필요할때 HTTP Basic 인증이 이용된다. ID, Password가 Base64로 Encoding되어 있어 ID, Password가 쉽게 노출되는 구조이다. 따라서 SSL이나 TLS를 이용하여 ID, Password의 노출을 막을 수 있다.
 
-### 2. 참고
+### 2. 참조
 
 * HTTP Basic Authentication Scheme - [https://tools.ietf.org/html/rfc7617](https://tools.ietf.org/html/rfc7617)
 * [http://iloveulhj.github.io/posts/http/http-basic-auth.html](http://iloveulhj.github.io/posts/http/http-basic-auth.html)
