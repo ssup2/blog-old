@@ -21,12 +21,12 @@ HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개
 * 인증 요청을 받은 Client는 Server로부터 받은 nonce, qop, realm 속성값을 Authorization Header에 그대로 추가하고 그 외의 필요한 속성값들을 추가한다.
   * nc는 nonce count의 약자로 Client가 Server로부터 받은 nonce를 이용하여 Server에게 몇번 요청했는지를 나타낸다.
   * cnonce는 Client에서 생성하는 임의의 값이다. nonce와 유사하게 Client Replay Attach 방지를 한다.
-  * response는 인증에 필요한 정보가 포함된 Digest이다. 아래의 식과 같이 계산된다.
+  * response는 인증에 필요한 정보가 포함된 Digest이다. 아래와 같이 계산된다.
 
-{: .newline }
-> HA1 = MD5(username:realm:password)
-> HA2 = MD5(method:uri)
-> response = MD5(HA1:nonce:nc:cnonce:qop:HA2)
+  {: .newline }
+  > HA1 = MD5(username:realm:password)
+  > HA2 = MD5(method:uri)
+  > response = MD5(HA1:nonce:nc:cnonce:qop:HA2)
 
 * Server는 nonce와 response의 일치를 확인하면 Client가 요청한 Resource와 함께 Authorization-Info Header를 통해 인증 정보도 같이 전송한다.
   * qop는 Server에서 이용한 Protection 등급을 나타낸다.
@@ -36,7 +36,7 @@ HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개
 
 ### 2. 분석
 
-Password를 MD5로 Encoding하여 Basic 인증의 약점인 보안 부분을 보완하였다. 또한 임의로 발급되는 값이 nonce를 Data뿐만 아니라 이용하여 Server나 Client 자체를 보호 할 수 있게 되었다. 
+Password를 MD5로 Encoding하여 Basic 인증의 약점인 보안 부분을 보완하였다. 또한 임의로 발급되는 값이 nonce를 Data뿐만 아니라 이용하여 Server나 Client 자체를 보호 할 수 있게 되었다.
 
 ### 3. 참조
 
