@@ -1,5 +1,5 @@
 ---
-title: Linux Fuse
+title: Linux Fuse (Filesystem in Userspace)
 category: Theory, Analysis
 date: 2017-08-24T12:00:00Z
 lastmod: 2017-08-24T12:00:00Z
@@ -17,7 +17,7 @@ Application이 FUSE가 Mount된 폴더를 대상으로 read(2), write(2) 같은 
 
 Application에서 한번의 System Call이 발생 할 때 마다 2번의 IPC가 발생하기 때문에, FUSE의 성능은 일반 Filesystem에 비해서 많이 느릴 수 밖에 없다.
 
-![]({{site.baseurl}}/images/theory_analysis/KVM_FUSE/Linux_FUSE_Communication.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_FUSE/Linux_FUSE_Communication.PNG){: width="700px"}
 
 위의 그림은 Application Process와 FUSE Daemon Process의 통신 과정을 간략하게 나타낸 그림이다. FUSE Daemon은 초기화 과정을 거친후 /dev/fuse Device 파일을 대상으로 read(2) System Call을 호출 한 뒤 Blocking 된다. 그 후 Application Process가 System Call을 호출하여 System Call이 FUSE Module로 전달 되면, FUSE Module은 Blocking된 FUSE Daemon Process를 깨우고, System Call 정보를 FUSE Daemon Process에게 전달한다.
 
