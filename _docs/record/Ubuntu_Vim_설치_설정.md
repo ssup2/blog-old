@@ -142,6 +142,8 @@ let g:gutentags_project_root=['.tag_root']
 
 "" YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_autoclose_preview_window_after_completion = 1
+nnoremap <C-p> :YcmCompleter GoTo<CR>
 {% endhighlight %}
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치

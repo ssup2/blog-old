@@ -13,7 +13,7 @@ Linux의 FUSE를 분석한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_FUSE/Linux_FUSE_Architecture.PNG){: width="700px"}
 
-Linux FUSE는 Filesystem in Userspace의 약자로 Kernel의 변경 없이 User Level에서 쉽게 Filesystem을 제작 할 수 있도록 도와주는 Linux 기법이다. 위의 그림은 Linux FUSE의 전체 Architecture를 나타내고 있다.
+Linux FUSE는 Filesystem in Userspace의 약자로, Kernel의 변경 없이 User Level에서 쉽게 Filesystem을 제작 할 수 있도록 도와주는 Linux 기법이다. 위의 그림은 Linux FUSE의 전체 Architecture를 나타내고 있다.
 
 Application이 FUSE가 Mount된 폴더를 대상으로 read(2), write(2) 같은 System Call을 호출하면, System Call은 Linux의 VFS(Virutal File System)을 지나서 Linux Kernel에 있는 **FUSE Module**에 전달된다. Fuse Module은 전달 받은 System Call의 대상 폴더와 FUSE Mount 정보를 바탕으로 해당 FUSE Daemon Process에게 System Call을 전달한다. Fuse Daemon Process는 전달 받은 System Call을 처리 한 후 처리 결과를 Application Process에게 전달한다.
 
