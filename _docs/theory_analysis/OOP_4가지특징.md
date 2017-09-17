@@ -1,5 +1,5 @@
 ---
-title: OOP(Object Oriented Programming) 4가지 특징
+title: OOP (Object Oriented Programming) 4가지 특징
 category: Theory, Analysis
 date: 2017-01-23T14:08:00Z
 lastmod: 2017-01-23T14:08:00Z

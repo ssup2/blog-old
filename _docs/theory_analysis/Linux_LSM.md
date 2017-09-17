@@ -1,5 +1,5 @@
 ---
-title: Linux LSM(Linux Security Module)
+title: Linux LSM (Linux Security Module)
 category: Theory, Analysis
 date: 2017-01-14T12:00:00Z
 lastmod: 2017-01-15T12:00:00Z
