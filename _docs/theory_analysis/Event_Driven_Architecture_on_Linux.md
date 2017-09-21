@@ -76,3 +76,9 @@ eventfd()는 pipe()의 개량형으로 fd를 통해서 Data를 주고 받을 수
 ![]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture_on_Linux.PNG){: width="500px"}
 
 epoll()과 fd Helper Function들을 이용하면 위의 그림과 같은 Architecture 설계가 가능하다. Handler 간의 통신의 경우 전달해야 할 Data의 크기가 64Byte보다 크다면, Share Memory를 필요없고 전역 공간에 Queue를 만들어 이용하면 된다.
+
+### 3. 참조
+* timerfd_create man page - [http://man7.org/linux/man-pages/man2/timerfd_create.2.html](http://man7.org/linux/man-pages/man2/timerfd_create.2.html)
+* signalfd man page - [http://man7.org/linux/man-pages/man2/signalfd.2.html](http://man7.org/linux/man-pages/man2/signalfd.2.html)
+* eventfd man page - [http://man7.org/linux/man-pages/man2/eventfd.2.html](http://man7.org/linux/man-pages/man2/eventfd.2.html)
+* eventfd - [http://lethean.github.io/2011/07/07/eventfd/](http://man7.org/linux/man-pages/man2/signalfd.2.html)
