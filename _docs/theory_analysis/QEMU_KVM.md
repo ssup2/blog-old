@@ -1,5 +1,5 @@
 ---
-title: 'KVM, QEMU'
+title: KVM, QEMU
 category: 'Theory, Analysis'
 date: 2017-01-20T15:49:00Z
 lastmod: 2017-01-22T15:49:00Z
