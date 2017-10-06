@@ -27,7 +27,7 @@ SLB의 핵심은 LB의 역활이다. LB는 어떻게 Load Balancing을 수행할
 
 ![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Inline.PNG)
 
-
+Inline 기법은 SLB 구성시 가장 많이 이용되는 기법이다. Server에 전달되는 Packet과 Server가 전송하는 Packet 모두 LB를 거친다. Packet은 LB에서 총 2번의 NAT 과정을 거친다. 모든 Packet은 LB를 거치기 때문에 Packet Monitoring 및 Filtering에 유리하지만, 그만큼 LB에 큰 부하가 발생한다는 단점이 존재한다.
 
 #### 1.2. DSR
 
