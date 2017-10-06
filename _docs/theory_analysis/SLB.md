@@ -53,6 +53,18 @@ Packet을 Tunneling 하는 기법도 DSCP 기법과 유사하다. LB와 Server�
 
 ![]({{site.baseurl}}/images/theory_analysis/SLB/GSLB.PNG)
 
+GSLB는 SLB와 이름은 유사하지만 VIP기반이 아닌 **DNS**기반의 Load Balancing 기법이다. Service를 제공하는 Server들이 여러 지역에 분리되어 완전히 다른 네트워크에서 운용 될 때 이용하는 기법이다. 따라서 GSLB + SLB 형태로 Load Balancing을 수행 할 수 있다.
+
+일반적인 DNS는 Server나 Network의 상태를 전혀 고려하지 않지만 GSLB는 아래와 같은 순으로 Server를 선택하기 때문에 지능형 DNS라고 이해하면 쉽다.
+* Server Health
+* SLB Session / Network Capacity Threashold
+* Network Proximity
+* Geographic Proximity
+* SLB Connection Load
+* Site Preference
+* Least Selected
+* Static Load Balancing
+
 ### 3. 참조
 
 * SLB - [https://www.slideshare.net/ryuichitakashima3/ss-72343772](https://www.slideshare.net/ryuichitakashima3/ss-72343772)
