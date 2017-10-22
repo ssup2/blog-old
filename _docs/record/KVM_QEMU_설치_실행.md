@@ -1,5 +1,5 @@
 ---
-title: KVM, QEMU 설치,실행
+title: KVM, QEMU 설치, 실행
 category: Record
 date: 2017-10-22T12:00:00Z
 lastmod: 2017-10-22T12:00:00Z
@@ -93,12 +93,14 @@ respawn
 exec /sbin/getty -8 115200 ttyS0
 ~~~
 
+* Network 설정
 
-{: .newline }
-> a = G * x, b = G * y
-> ---> L = G * x * y = (a * b) / G
+* LIO 설정
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+![]({{site.baseurl}}/images/record/KVM_QEMU_Install/LIO_targetcli.PNG)
 
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+### 9. 참조
+* Kernel Compile - [https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768]( https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768)
+* QEMU Option - [https://wiki.gentoo.org/wiki/QEMU/Options]( https://wiki.gentoo.org/wiki/QEMU/Options)
+* fstab Problem - [ http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove]( http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove)
+* LIO Targetcli - [http://linux-iscsi.org/wiki/Targetcli](http://linux-iscsi.org/wiki/Targetcli)
