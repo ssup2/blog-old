@@ -11,11 +11,11 @@ SLB(Server Load Balancing) 기법을 분석한다.
 
 ### 1. SLB (Server Load Balancing)
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB.PNG){: width="400px"}
+![]({{site.baseurl}}/images/theory_analysis/SLB/SLB.PNG){: width="450px"}
 
 SLB는 의미 그대로 Server의 부하를 조절하는 기법을 의미한다. SLB는 **LB(Load Balancer)**와 **VIP(Virtual IP)**로 구성된다. LB는 Server에 전달되야 하는 Client의 요청을 대신 받아 적절한 Server에게 전달하는 역활을 수행한다. VIP(Virtual IP)는 Load Balancing의 대상이 되는 여러 Server들을 대표하는 하나의 가상 IP이다. Client는 각 Server의 IP가 아닌 LB가 갖고 있는 VIP(Virtual IP)를 대상으로 요청한다. 따라서 Client는 여러 Server들의 존재를 알지 못하고 하나의 Server와 통신한다고 생각한다.
 
-SLB의 핵심은 LB의 역활이다. LB는 어떻게 Load Balancing을 수행할지 결정해야한다. Load Balancing 기법은 다음과 같은 기법들이 존재한다. 
+SLB의 핵심은 LB의 역활이다. LB는 어떻게 Load Balancing을 수행할지 결정해야한다. Load Balancing 기법은 다음과 같은 기법들이 존재한다.
 * Round Robin - Round Robin 알고리즘을 바탕으로 Server를 선택한다.
 * Least Connection - 현재 Connection의 개수가 가장 적은 Server를 선택한다.
 * RTT - RTT(Round Trip Time)이 가장 작은 Server를 선택한다.
@@ -51,7 +51,7 @@ Packet을 Tunneling 하는 기법도 DSCP 기법과 유사하다. LB와 Server�
 
 ### 2. GSLB (Global Server Load Balancing)
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/GSLB.PNG)
+![]({{site.baseurl}}/images/theory_analysis/SLB/GSLB.PNG){: width="650px"}
 
 GSLB는 SLB와 이름은 유사하지만 VIP기반이 아닌 **DNS**기반의 Load Balancing 기법이다. Service를 제공하는 Server들이 여러 지역에 분리되어 완전히 다른 네트워크에서 운용 될 때 이용하는 기법이다. 따라서 GSLB + SLB 형태로 Load Balancing을 수행 할 수 있다.
 
