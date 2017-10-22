@@ -13,12 +13,12 @@ adsense: true
   * OS - Ubuntu 14.04.03 LTS 64bit, root user
 
 ### 2. Ubuntu Package 설치
+* 설치
 ~~~
 # apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils uml-utilities qemu-system qemu-user-static virt-manager libncurses-dev targetcli
 ~~~
 
 ### 3. VM Kernel Build
-
 * Kernel Directory 생성
 ~~~
 # mkdir kernel
@@ -53,6 +53,44 @@ adsense: true
 ~~~
 
 ### 4. VM Rootfs 생성
+* Rootfs Directory 생성
+~~~
+# mkdir rootfs
+# cd rootfs
+~~~
+
+* rootfs.img 파일 생성
+~~~
+# dd if=/dev/zero bs=1M count=8092 of=rootfs.img
+# /sbin/mkfs.ext4 rootfs.img (Proceed anyway? (y,n) y)
+~~~
+
+* Ubuntu 설치
+~~~
+# mount -o loop rootfs.img /mnt
+# cd /mnt
+# qemu-debootstrap --arch=amd64 trusty .
+~~~
+
+* tty 설정
+~~~
+# vim /mnt/etc/init/ttyS0.conf
+~~~
+~~~
+# ttyS0 - getty
+#
+# This service maintains a getty on ttyS0 from the point the system is
+# started until it is shut down again.
+
+start on stopped rc RUNLEVEL=[2345] and (
+            not-container or
+            container CONTAINER=lxc or
+            container CONTAINER=lxc-libvirt)
+
+stop on runlevel [!2345]
+
+respawn
+exec /sbin/getty -8 115200 ttyS0
 ~~~
 
 
