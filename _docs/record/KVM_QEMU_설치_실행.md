@@ -137,7 +137,8 @@ iface eth0 inet dhcp
 * Kernel module 설치
 
 ~~~
-# make $ARCH=x86_64 $INSTALL_MOD_PATH=/mnt modules_install
+# cd kernel/linux-lts-vivid-3.19.0
+# make ARCH=x86_64 INSTALL_MOD_PATH=/mnt modules_install
 ~~~
 
 * Unmount /mnt
