@@ -11,19 +11,19 @@ Linux의 Virtual Network Device인 macvlan과 macvtap에 대해서 분석한다.
 
 ### 1. macvlan
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Component.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Component.PNG){: width="400px"}
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Example.PNG){: width="600px"}
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Address_Manage.PNG){: width="700px"}
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Private_Mode.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Private_Mode.PNG){: width="400px"}
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Vepa_Mode.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Vepa_Mode.PNG){: width="400px"}
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Bridge_Mode.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Bridge_Mode.PNG){: width="400px"}
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Passthru_Mode.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Passthru_Mode.PNG){: width="200px"}
 
 ### 2. macvtap
 
