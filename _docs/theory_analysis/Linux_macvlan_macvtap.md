@@ -81,6 +81,8 @@ link/ether ee:38:97:8c:5d:5c brd ff:ff:ff:ff:ff:ff
 
 macvtap은 macvlan과 유사한 위의 명령어를 통해서 생성 할 수 있다. /dev/tap* 파일 생성도 확인 할 수 있다.
 
+### 3. 참조
+
 * macvlan code - [https://github.com/torvalds/linux/blob/80cee03bf1d626db0278271b505d7f5febb37bba/drivers/net/macvlan.c](https://github.com/torvalds/linux/blob/80cee03bf1d626db0278271b505d7f5febb37bba/drivers/net/macvlan.c)
 * macvtap code - [https://github.com/torvalds/linux/blob/80cee03bf1d626db0278271b505d7f5febb37bba/drivers/net/macvtap.c](https://github.com/torvalds/linux/blob/80cee03bf1d626db0278271b505d7f5febb37bba/drivers/net/macvtap.c)
 * macvlan - [https://hicu.be/bridge-vs-macvlan](https://hicu.be/bridge-vs-macvlan)
