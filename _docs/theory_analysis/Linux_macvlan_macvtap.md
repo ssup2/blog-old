@@ -42,17 +42,25 @@ macvlan은 위와 같은 ip 명령어를 통해 생성하고 확인 할 수 있�
 
 macvlan은 Child 생성시 각 Child에게 각각 다른 macvlan Mode를 설정 할 수 있다. Mode에 따라서 Packet 전송 정책이 달라진다. macvlan Mode는 Private Mode, VEPA Mode, Bridge Mode, Passthru Mode 4가지 Mode가 존재한다.
 
+##### 1.2.1. Private Mode
+
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Private_Mode.PNG){: width="400px"}
 
 위의 그림은 모든 Child가 Private Mode일때를 나타내고 있다. Packet이 Child에서 Parent로 나가는 경우 Child가 Private Mode라면, Packet은 무조건 Parent에게 전달된다. Packet이 Parent에서 Child로 들어오는 경우 Child의 Mode가 Private Mode라면, Packet의 Src Mac Address가 macvlan Hash Table에 있는지 검사한다. 만약 Src Mac Address가 Hash Table에 없다면 해당 Packet은 Child에게 전달되지만, 있다면 해당 Packet은 Drop된다. 이처럼 Private Mode는 동일 macvlan의 Child로 부터온 Packet을 받고 싶지 않을때 이용하는 Mode이다.
 
+##### 1.2.2. VEPA (Virtual Ethernet Port Aggregator) Mode
+
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_VEPA_Mode.PNG){: width="400px"}
 
-위의 그림은 모든 Child가 VEPA (Virtual Ethernet Port Aggregator) Mode일때를 나타내고 있다. Packet이 Child에서 Parent로 나가는 경우 Child가 VEPA Mode라면, Packet은 무조건 Parent에게 전달된다. Packet이 Parent에서 Child로 들어오는 경우 Child의 Mode가 VEPA Mode라면, Packet은 Child에게 무조건 전달한다. 이처럼 VEPA Mode는 Child간의 통신을 허용하지만 Child에서 보낸 Packet이 무조건 Parent를 통해서 밖으로 전달되는 특징을 갖는다. Child로 부터온 전달된 Packet이 외부 스위치에 무조건 전달되야 할 경우 이용한다.
+위의 그림은 모든 Child가 VEPA Mode일때를 나타내고 있다. Packet이 Child에서 Parent로 나가는 경우 Child가 VEPA Mode라면, Packet은 무조건 Parent에게 전달된다. Packet이 Parent에서 Child로 들어오는 경우 Child의 Mode가 VEPA Mode라면, Packet은 Child에게 무조건 전달한다. 이처럼 VEPA Mode는 Child간의 통신을 허용하지만 Child에서 보낸 Packet이 무조건 Parent를 통해서 밖으로 전달되는 특징을 갖는다. Child로 부터온 전달된 Packet이 외부 스위치에 무조건 전달되야 할 경우 이용한다.
+
+##### 1.2.3. Bridge Mode
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Bridge_Mode.PNG){: width="400px"}
 
 위의 그림은 모든 Child가 Bridge Mode일때를 나타내고 있다. Packet이 Child에서 나가는 경우 Packet의 Dst Mac Address가 Hash Table에 존재한다면 macvlan은 해당 Packet을 Parent가 아닌 Child에게 바로 전달한다. Packet이 Parent에서 Child로 들어오는 경우 Child의 Mode가 Bridge Mode라면, Packet은 Child에게 무조건 전달한다. Linux Bridge와 동일한 동작을 수행하는 Mode이기 때문에 Linux Bridge를 대체하는 용도로 많이 이용된다.
+
+##### 1.2.4. Passthru Mode
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_macvlan_macvtap/macvlan_Passthru_Mode.PNG){: width="200px"}
 
