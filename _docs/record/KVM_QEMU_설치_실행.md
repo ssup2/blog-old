@@ -286,7 +286,7 @@ keys:Continue to wait, or Press S to skip mounting or M for manual recovery (Pus
 ~~~
 (VM) # mount -o remount,rw /
 (VM) # blkid
-(VM) ~~~
+(VM) /dev/sda: UUID="(UUID of blk)" TYPE="ext4"
 (VM) # vi /etc/fstab
 ~~~
 
