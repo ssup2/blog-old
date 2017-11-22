@@ -40,17 +40,25 @@ Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 �
 
 ![]({{site.baseurl}}/images/theory_analysis/JVM/Runtime_Memory.PNG)
 
+Runtime Memory는 JVM이 관리하는 Memory 영역이다. Method Area, Heap, Stack, PC Register, Native Method Stack으로 구성되어 있다.
+
+* Method Area - Method의 Bytecode가 올라가는 영역이다. 또한 static 변수도 Method Area에서 관리된다.
+* Heap - new 문법으로 생성하는 Instance들이 올라가는 영역이다. 좀더 정확히 표현하면 Instance의 변수들이 Heap에서 관리 된다.
+* Stack - 지역 변수들이 올라가는 영역이다. Thread가 Method를 Call하면 그에 따른 새로운 Stack Frame을 생성하고, 지역 변수를 할당한다. 해당 Method의 동작이 종료되면 할당했던 Stack Frame을 해제하고 이전의 Stack Frame을 이용한다. 각 Thread 별로 전용 Stack 공간을 갖는다. Stack을 이용하여 각 Thread의 Context를 유지한다고 할 수 있다.
+* PC Register - PC (Program Counter) Register 영역은 각 Thread가 실행할 다음 Bytecode의 주소를 관리하는 영역이다. 따라서 Stack 처럼 각 Thread는 전용 PC Register를 갖고 있다.
+* Native Method Stack - Native Method, 즉 CPP 처럼 Native 언어로 작성된 Method를 의미한다. Native Method를 실행 할때는 별도의 Native Method Stack을 이용하여 Native Method의 지역 변수를 관리한다. Stack과 유사하게 각 Thread 전용 PC Register를 갖고 있다.
+
 #### 1.3. Execution Engine
 
 Runtime Memory를 이용하여 실제 Bytecode를 수행한다. Execution Engine은 Interpreter, JIT Compiler, Garbage Collector로 구성되어 있다.
 
-* Interpreter -
-* JIT (Just-In-Time) -
-* Garbage Collector -
+* Interpreter - Bytecode를 해석하여 수행한다.
+* JIT (Just-In-Time) Compiler - Bytecode는 Interpreter에서 해석되어 실행되야 하기 때문에 성능 Overhead가 발생한다. JIT Compiler는 Rumtime 중에 자주 실행되는 Bytecode를 파악하여 Assembly 언어로 Compile한다. Assembly 언어로 Compile된 Bytecode는 CPU가 Interpreter 없이 실행 할 수 있기 때문에 Interpreter의 성능 Ovehread를 제거할 수 있다.
+* Garbage Collector - Java는 Instance들이 올라가는 Heap 영역을 자동으로 관리하는 Garbage Collector를 가지고 있다. 따라서 Java는 CPP처럼 Delete 명령으로 할당된 Instance를 해지하지 않는다.
 
 #### 1.4. Native Method Interface (JNI)
 
-
+Execution Engine이 Native Method Library안의 Native Method를 실행 할 수 있도록 도와주는 Interface 역활을 수행한다.
 
 ### 2. 참조
 * [https://dzone.com/articles/jvm-architecture-explained](https://dzone.com/articles/jvm-architecture-explained)
