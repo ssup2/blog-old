@@ -30,7 +30,7 @@ Class Loader는 Byte Code로 Compile된 Class File을 Memory에 올리는 역활
 Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 형성하게 된다. 위의 그림은 Class Loader간의 계층을 나타내고 있다. Bootstrap Class를 제외한 모든 Class Loader는 반드시 Parent Class Loader를 갖는다. Class Loader는 다음과 같은 3단계의 동작을 수행한다.
 
 * Loading - Bytecode로 구성된 Class를 Memory에 올린다.
-* Linking
+* Linking - static 변수들을 초기화 하고, Symbol을 Resolve한다.
   * Verify - Bytecode가 올바른지 확인한다.
   * Prepare - static 변수들이 변수 Type에 따른 Default Value로 초기화 된다. ex) int -> 0
   * Resolve - Class Compile시 Class가 외부 Class를 이용하는 경우 외부 Class의 Memory 주소를 Compile 시점에서는 알지 못한다. 따라서 외부 Class를 Symbol로 나타내어 Bytecode에 삽입해 놓는다. 이전 Loading 단계에서 Class가 Memory에 올라오면서 각 Class의 Memory 주소가 정해진 상태이기 때문에 Bytecode에 삽입된 Symbol을 실제 Class Memory 주소로 바꾼다.
