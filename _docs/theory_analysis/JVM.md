@@ -23,7 +23,7 @@ Class Loader는 Byte Code로 Compile된 Class File을 Memory에 올리는 역활
 * Extension Class Loader - $JAVA_HOME/lib/ext아래의 Class들을 올린다.
 * System Class Loader - $CLASSPATH에 있는 Class들을 올린다. 일반적을 App의 Class가 이에 속한다.
 
-위의 3개의 Class Loader 말고도 Java App 개발자가 Class Loading을 관리하고 싶을때에는 직접 Class Loader Class를 상속하여 User Class Loader를 생성할 수 있다. Claas Loader는 **Parent Delegation Model**을 이용한다. Class Loader가 올릴 Class가 Memory에 없는걸 확인한 뒤 Class를 직접 올리기전에 무조건 Parent Class Loader를 호출하는 방식을 의미한다. 호출된 Parent Class Loader 또한 자신이 직접 Class를 올리기전 자신의 Parent Class Loader를 호출한다.
+위의 3개의 Class Loader 말고도 Java App 개발자가 Class Loading을 관리하고 싶을때에는 직접 Class Loader Class를 상속하여 User Class Loader를 생성할 수 있다. Claas Loader는 **Parent Delegation Model**을 이용한다. Class Loader가 올릴 Class가 Memory에 없는걸 확인한 뒤 Class를 직접 올리기전에 무조건 Parent Class Loader를 호출하는 방식을 의미한다. Parent Class Loader 호출뒤에도 Class가 올라가있지 않으면, 직접 Class를 올린다. 호출된 Parent Class Loader 또한 자신이 직접 Class를 올리기전 자신의 Parent Class Loader를 호출한다. Parent Delegation Model을 통해서 Java App 개발자가 User Class Loader 개발시 Class 중복 Loading을 고민할 필요 없이 Class Loader를 쉽게 제작할 수 있다.
 
 ![]({{site.baseurl}}/images/theory_analysis/JVM/Class_Loader_Hierarchy.PNG){: width="500px"}
 
