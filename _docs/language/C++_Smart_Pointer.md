@@ -81,6 +81,14 @@ int main()
 }
 {% endhighlight %}
 
+~~~
+A::show()
+0x1b42c20
+A::show()
+0          
+0x1b42c20
+~~~
+
 ### 1.2. unique_ptr
 
 {% highlight CPP %}
@@ -117,6 +125,18 @@ int main()
     return 0;
 }
 {% endhighlight %}
+
+~~~
+A::show()
+0x1c4ac20
+A::show()
+0          // NULL
+0x1c4ac20
+A::show()
+0          // NULL
+0          // NULL
+0x1c4ac20
+~~~
 
 ### 1.3. shared_ptr
 
@@ -155,6 +175,19 @@ int main()
     return 0;
 }
 {% endhighlight %}
+
+~~~
+0x1c41c20
+A::show()
+A::show()
+0x1c41c20
+0x1c41c20
+2
+2
+0          // NULL
+1
+0x1c41c20
+~~~
 
 ### 1.4. weak_ptr
 
