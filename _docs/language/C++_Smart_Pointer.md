@@ -221,14 +221,53 @@ A::show()
 
 #### 1.4. weak_ptr
 
-weak_ptr은 shared_ptr처럼 하나의 Instance를 여러개의 weak_ptr이
+weak_ptr은 **shared_ptr이 가리키는 Instance를 참조**만 하는 참조자 역활을 수행한다. weak_ptr은 Reference Count를 관리하지 않는다. Instace의 생명주기에 영향을 주지 않는다. 따라서 weak_ptr이 가리키는 Instance는 실제 존재하지 않을 수 있다.
+
+{% highlight CPP %}
+#include <iostream>
+#include <memory>
+using namespace std;
+
+class A
+{
+};
+
+int main()
+{
+    // weak_ptr initialize with shared_ptr
+    shared_ptr<A> sp1(new A);
+    weak_ptr<A> wp1 = sp1;
+
+    // weak_ptr convert to shared_ptr
+    shared_ptr<A> sp2 = wp1.lock();
+    cout << sp2.get() << endl;
+
+    // Reset sp1, sp2
+    sp1.reset();
+    sp2.reset();
+
+    // weak_ptr convert to shared_ptr
+    shared_ptr<A> sp3 = wp1.lock();
+    cout << sp3.get() << endl;
+
+    return 0;
+}
+{% endhighlight %}
+
+~~~
+0x746c20
+0         // NULL
+~~~
+
+위의 예제는 weak_ptr의 사용법을 나타내고 있다. weak_ptr은 shared_ptr을 통해 shared_ptr이 가리키는 Instance를 가리키게 된다. 위의 예제에서 wp1은 sp1을 통해서 초기화 되기 때문에 wp1은 sp1이 가리키는 Instance A를 가리키게 된다.
+
+weak_ptr은 반드시 lock() 함수를 통해서 shared_ptr로 변환 뒤에 Instance를 접근 할 수 있다. lock() 함수 호출시 weak_ptr이 가리키는 Instance가 존재하면 변환된 shared_ptr은 동일한 Instance를 가리키고 있게 된다. weak_ptr이 가리키는 Instance가 존재하지 않으면 변환된 shared_ptr은 NULL값을 갖게 된다. 위의 예제에서 첫번째 lock() 함수를 호출 하였을때는 sp1이 Instance A를 가리고 있기 때문에 Instance A가 존재하고 있는 상태이다. 따라서 sp2는 NULL이 아니이다. 두번째 lock() 함수를 호출 하였을때는 sp1, sp2가 reset() 함수를 호출하여 모두 Instance A를 가리키지 않는 상태이기 때문에 Instance A는 존재하지 않는 상태이다. 따라서 sp3은 NULL값을 갖게 된다.
 
 ![]({{site.baseurl}}/images/language/C++_Smart_Pointer/Circular_Reference.PNG){: width="700px"}
 
-weak_ptr를 이용하여 shared_ptr의 **Circular Reference**를 문제를 제거할 수 있다. 위의 그림은 Circular Reference 문제를 나타내고 있다. shared_ptr는 Reference Count 기반으로 Instance를 관리하기 때문에, 위의 그림처럼 shared_ptr을 이용하여 서로의 Instance를 참조하면 Reference Count값이 줄어들지 않아 Instance가 해지되지 않는 문제가 발생한다.
-
-weak_ptr를 이용하여 
+weak_ptr를 이용하여 shared_ptr의 **Circular Reference**를 문제를 제거할 수 있다. 위의 그림은 Circular Reference 문제를 나타내고 있다. shared_ptr는 Reference Count 기반으로 Instance를 관리하기 때문에, 위의 그림처럼 shared_ptr을 이용하여 서로의 Instance를 참조하면 Reference Count값이 줄어들지 않아 Instance가 해지되지 않는 문제가 발생한다. shared_ptr중 하나를 weak_ptr로 교체하면 weak_ptr은 Instance의 생명 주기에 영향을 주지 않기 때문에 Circular Reference 문제를 해결 할 수 있다.
 
 ### 2. 참조
 * [http://www.geeksforgeeks.org/smart-pointers-cpp](http://www.geeksforgeeks.org/smart-pointers-cpp)
 * [http://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/](http://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/)
+*[http://egloos.zum.com/sweeper/v/3059940](http://egloos.zum.com/sweeper/v/3059940)
