@@ -270,4 +270,4 @@ weak_ptr를 이용하여 shared_ptr의 **Circular Reference**를 문제를 제�
 ### 2. 참조
 * [http://www.geeksforgeeks.org/smart-pointers-cpp](http://www.geeksforgeeks.org/smart-pointers-cpp)
 * [http://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/](http://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/)
-*[http://egloos.zum.com/sweeper/v/3059940](http://egloos.zum.com/sweeper/v/3059940)
+* [http://egloos.zum.com/sweeper/v/3059940](http://egloos.zum.com/sweeper/v/3059940)
