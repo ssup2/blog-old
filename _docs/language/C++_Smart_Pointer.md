@@ -29,7 +29,7 @@ public:
    ~SmartPtr() { delete(ptr); }
 
    // Overloading dereferncing operator
-   T& operator*() {  return *ptr; }
+   T& operator*() { return *ptr; }
 
    // Overloding arrow operator
    T* operator->() { return ptr; }
