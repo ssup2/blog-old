@@ -50,7 +50,7 @@ pb = dynamic_cast<CBase*>(&d);      // OK
 pd = dynamic_cast<CDerived*>(&b);   // Wrong
 {% endhighlight %}
 
-dynamic_cast는 **상속관계**에 있는 Class간의 **안전한** Type Casting시 이용한다. Type Casting 실패시 Casting 하려던 Pointer를 NULL로 만든다. 위의 예제에서 첫번째 dynamic_cast는 Upcasting이기 때문에 성공한다. 하지만 두번째 dynamic_cast는 Downcasting이기 때문에 실패한다. 하지만 다형성을 이용하면 dynamic_cast를 이용하여 Downcasting을 수행 할 수 있다.
+dynamic_cast는 **상속관계**에 있는 Class간의 **안전한** Type Casting시 이용한다. Type Casting 실패시 Type Casting의 대상 Pointer를 NULL로 만든다. 위의 예제에서 첫번째 dynamic_cast는 Upcasting이기 때문에 성공하지만, 두번째 dynamic_cast는 Downcasting이기 때문에 실패한다. 하지만 다형성을 이용하면 dynamic_cast를 이용하여 안전한 Downcasting을 수행 할 수 있다.
 
 {% highlight CPP %}
 class CBase { virtual void dummy() {} };
@@ -64,7 +64,7 @@ pd = dynamic_cast<CDerived*>(pba); // Success
 pd = dynamic_cast<CDerived*>(pbb); // Runtime Error - Null return
 {% endhighlight %}
 
-위의 예제에서 pba에는 다형성을 이용하여 CDerived Instance를 가리키도록 설정하였기 때문에 첫번째 dynamic_cast는 경우 성공하지만, pbb에는 Base Instance를 가리키도록 설정되어있기 때문에 두번째 dynamic_cast는 실패하게 된다. dynamic_cast은 runtime시 각 Instance에 대한 추가적인 정보가 필요하기 때문에, dynamic_cast를 이용하려면 Compiler가 **Run-Time Type Information (RTTI)** 옵션을 이용해야 한다.
+위의 예제에서 pba에는 다형성을 이용하여 CDerived Instance를 가리키도록 설정하였기 때문에 첫번째 dynamic_cast는 경우 성공하지만, pbb에는 Base Instance를 가리키도록 설정되어있기 때문에 두번째 dynamic_cast는 실패하게 된다. dynamic_cast은 runtime시 각 Instance에 대한 추가적인 정보가 필요하기 때문에, dynamic_cast를 이용하려면 Compiler가 **Run-Time Type Information (RTTI)** 옵션을 이용하여 프로그램을 Compile해야 한다.
 
 #### 1.2. static_cast
 
