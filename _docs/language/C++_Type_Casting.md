@@ -89,6 +89,8 @@ B * b = reinterpret_cast<B*>(a);
 reinterpret_cast는 **상속 관계에 있지 않은** Class간의 자유로운 Type Casting시 이용한다.
 
 #### 1.4. const_cast
+
+{% highlight CPP %}
 void print (char * str)
 {
   cout << str << endl;
