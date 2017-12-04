@@ -64,7 +64,7 @@ pd = dynamic_cast<CDerived*>(pba); // Success
 pd = dynamic_cast<CDerived*>(pbb); // Error - NULL
 {% endhighlight %}
 
-하지만 다형성이 적용된 포인터에 dynamic_cast를 이용하여 안전한 Downcasting을 수행 할 수 있다. 위의 예제에서 pba에는 다형성을 이용하여 CDerived Instance를 가리키도록 설정하였기 때문에 첫번째 dynamic_cast는 경우 성공하지만, pbb에는 Base Instance를 가리키도록 설정되어있기 때문에 두번째 dynamic_cast는 실패하게 된다.
+하지만 다형성이 적용된 포인터에는 dynamic_cast를 이용하여 안전한 Downcasting을 수행 할 수 있다. 위의 예제에서 pba에는 다형성을 이용하여 CDerived Instance를 가리키도록 설정하였기 때문에 첫번째 dynamic_cast는 경우 성공하지만, pbb에는 Base Instance를 가리키도록 설정되어있기 때문에 두번째 dynamic_cast는 실패하게 된다.
 
 dynamic_cast은 runtime시 각 Instance에 대한 추가적인 정보가 필요하기 때문에, dynamic_cast를 이용하려면 Compiler가 **Run-Time Type Information (RTTI)** 옵션을 이용하여 프로그램을 Compile해야 한다. 또한 부모 Class는 반드시 Virtual 함수를 가지고 있어야한다. 부모 Class가 Virtual 함수를 갖고있지 않으면 Compile Error가 발생한다.
 
