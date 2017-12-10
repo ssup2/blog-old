@@ -11,7 +11,7 @@ Servlet과 Servlet Container를 분석한다.
 
 ### 1. Servlet
 
-Servlet은 **javax.servlet Package**를 기반으로, Server에서 동작하는 Class들을 의미한다. 각 Servlet은 init(), service(), destory() 3개의 method를 반드시 정의해야 한다.
+Servlet은 Java EE의 표준중 하나로 **javax.servlet Package**를 기반으로 Server에서 동작하는 Class들을 의미한다. 각 Servlet은 init(), service(), destory() 3개의 method를 반드시 정의해야 한다.
 
 * init() - init()은 Servlet 생성시 호출된다. Parameter로 javax.servlet.ServletConfig Interface 기반의 Instance가 넘어오는데, Servlet을 초기화 하고 Servlet이 이용하는 자원을 할당하는 동작을 수행한다.
 * service() - Servlet으로 요청이 전달 될때마다 호출된다. 실제 Service Logic을 수행한다.
