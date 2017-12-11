@@ -18,5 +18,5 @@ WebSocket은 Web에서 이용가능한 **Full-duplex** Communication 기술이�
 위의 그림은 WebSocket의 Handshaking 과정을 나타내고 있다.
 
 ### 2. 참조
-* [https://tools.ietf.org/html/rfc6455] (https://tools.ietf.org/html/rfc6455)
+* [https://tools.ietf.org/html/rfc6455](https://tools.ietf.org/html/rfc6455)
 * [https://en.wikipedia.org/wiki/WebSocket](https://en.wikipedia.org/wiki/WebSocket)
