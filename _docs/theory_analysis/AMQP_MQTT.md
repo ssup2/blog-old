@@ -1,6 +1,6 @@
 ---
 title: AMQP, MQTT
-category: theory, analysis
+category: Theory, Analysis
 date: 2017-12-13T12:00:00Z
 lastmod: 2017-12-13T12:00:00Z
 comment: true
