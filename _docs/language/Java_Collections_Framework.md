@@ -13,6 +13,8 @@ Java Collections Framework에서 제공하는 Interface와 Class들을 분석한
 
 ![]({{site.baseurl}}/images/language/Java_Collections_Framework/Collection_Interface.PNG){: width="700px"}
 
+Collection
+
 #### 1.1. Interface
 
 ##### 1.1.1. Collection
