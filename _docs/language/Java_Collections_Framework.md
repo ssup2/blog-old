@@ -45,7 +45,7 @@ Dequeue Interface는 **Dequeue 자료구조 동작을 수행하는** Object Grou
 
 ##### 1.2.1. HashSet
 
-**Hashtable + Chaining 기법**을 이용하여 Set Interface를 구현한 Class이다. 빠른 Object 삽입/삭제 속도를 보인다. HashSet은 순회시 Object의 삽입 순서순으로 순회를 보장하지 않는다.
+**Hashtable + Chaining**을 이용하여 Set Interface를 구현한 Class이다. 빠른 Object 삽입/삭제 속도를 보인다. HashSet은 순회시 Object의 삽입 순서순으로 순회를 보장하지 않는다.
 
 ##### 1.2.2. LinkedHashSet
 
@@ -94,7 +94,7 @@ SortedMap, NavigableMap Interface는 **동일한 Key를 갖지 않으면서 Key�
 
 ##### 2.2.1. HashMap
 
-Key를 기준으로 **Hashtable + Chaining 기법**을 이용하여 Map Interface를 구현한 Class이다. Key에 한개의 Null이 들어 갈 수 있고, Value에도 Null이 들어 갈 수 있다. 또한 HashMap은 순회시 Object의 삽입 순서순으로 순회를 보장하지 않는다.
+Key를 기준으로 **Hashtable + Chaining**을 이용하여 Map Interface를 구현한 Class이다. Key에 한개의 Null이 들어 갈 수 있고, Value에도 Null이 들어 갈 수 있다. 또한 HashMap은 순회시 Object의 삽입 순서순으로 순회를 보장하지 않는다.
 
 HashMap의 Method은 synchronized 하지 않는다. 따라서 Multi-Thread 환경에서 이용시 문제가 발생한다. Multi-Thread 환경에서는 ConcurrentHashMap Class를 이용하면 된다.
 
