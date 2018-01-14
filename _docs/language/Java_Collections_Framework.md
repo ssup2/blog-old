@@ -27,7 +27,7 @@ Set Interface는 **동일한 Object를 갖지 않는** Object Group 관리에 �
 
 ##### 1.1.3. SortedSet, NavigableSet
 
-SortedSet Interface는 **동일한 Object를 갖지 않으면서 정렬된** Object Group 관리에 필요한 Interface를 제공한다. 상속받은 Set Interface의 Method와 더불어 정렬의 이점을 살린 추가 Method를 포함하고 있다. 가장 큰 Object[head()], 가장 작은 Object[tail()], 범위[subSet(), headSet(), tailSet()]등의 추가 Method를 가지고 있다.
+SortedSet, NavigableSet Interface는 **동일한 Object를 갖지 않으면서 정렬된** Object Group 관리에 필요한 Interface를 제공한다. 상속받은 Set Interface의 Method와 더불어 정렬의 이점을 살린 추가 Method를 포함하고 있다. 가장 큰 Object[head()], 가장 작은 Object[tail()], 범위[subSet(), headSet(), tailSet()]등의 추가 Method를 가지고 있다.
 
 ##### 1.1.4. List
 
@@ -53,26 +53,26 @@ LinkedHashSet은 HashSet과 달리 순회시 Object의 삽입 순서대로 순�
 
 ##### 1.2.3. TreeSet
 
-Red-Black Tree를 이용하여 SortedSet Interface를 구현한 Class이다. Red-Black Tree에 따른 Object 삽입/제거시 많은 Overhead가 발생하지만 빠른 Object 검색 속도를 보인다.
+**Red-Black Tree**를 이용하여 SortedSet Interface를 구현한 Class이다. Red-Black Tree에 따른 Object 삽입/제거시 많은 Overhead가 발생하지만 빠른 Object 검색 속도를 보인다.
 
 ##### 1.2.4. ArrayList
 
-*Array*를 이용하여 List Interface를 구현한 Class이다. Array 기반이기 때문에 Index 기반의 Object 접근이 매우 빠르지만, Object 삽입/삭제시 Object Shift 연산으로 인해 느리다는 단점이 존재한다. 또한 Array의 크기 변경시에도 Object Copy 연산으로 인해 느리다.
+**Array**를 이용하여 List Interface를 구현한 Class이다. Array 기반이기 때문에 Index 기반의 Object 접근이 매우 빠르지만, Object 삽입/삭제시 Object Shift 연산으로 인해 느리다는 단점이 존재한다. 또한 Array의 크기 변경시에도 Object Copy 연산으로 인해 느리다.
 
 ##### 1.2.5. Vector
-*Vector*는 ArrayList와 유사하지만 모든 Method에 동기화를 위한 synchronized keyword가 붙어 있기 때문에 Single Thread 환경에서 비효율적이다. ArrayList가 나오기 전에 등장한 Class로 현재는 잘 이용되지 않고 있고 하위 호환을 위해 존재한다.
+Vector는 ArrayList와 유사하지만 모든 Method에 동기화를 위한 **synchronized** keyword가 붙어 있기 때문에 Single Thread 환경에서 비효율적이다. ArrayList가 나오기 전에 등장한 Class로 현재는 잘 이용되지 않고 있고 하위 호환을 위해 존재한다.
 
 ##### 1.2.6. LinkedList
 
-*LinkedList*를 이용하여 List Inteface, Queue Interface, Dequeue Interface를 구현한 Class이다. LinkedList 기반이기 때문에 ArrayList와 비교하여 Object 삽입/삭제가 빠르다. 하지만 Index 기반의 Object 접근이나 Object 검색시 순회 동작으로 인해 느리다.
+**LinkedList**를 이용하여 List Inteface, Queue Interface, Dequeue Interface를 구현한 Class이다. LinkedList 기반이기 때문에 ArrayList와 비교하여 Object 삽입/삭제가 빠르다. 하지만 Index 기반의 Object 접근이나 Object 검색시 순회 동작으로 인해 느리다.
 
 ##### 1.2.7. PriorityQueue
 
-*Heap*을 이용하여 Queue Interface를 구현한 Class이다. Heap의 정렬 기능을 이용하여 Priority가 가장 높은 Object를 빠르게 얻을 수 있다.
+**Heap**을 이용하여 Queue Interface를 구현한 Class이다. Heap의 정렬 기능을 이용하여 Priority가 가장 높은 Object를 빠르게 얻을 수 있다.
 
 ##### 1.2.8. ArrayDequeue
 
-*Array*를 이용하여 Dequeue Interface를 구현한 Class이다. Array 기반인 ArrayList와 동일한 특징을 갖는다.
+**Array**를 이용하여 Dequeue Interface를 구현한 Class이다. Array 기반인 ArrayList와 동일한 특징을 갖는다.
 
 ### 2. Map Interface
 
@@ -86,22 +86,29 @@ Map Interface는 Key-Value Group을 관리하는 Interface를 제공하는 뼈�
 
 Map Interface는 **key-Value Group** 관리에 필요한 **기본적**인 Interface를 제공한다. Group의 크기[size()], Key-Value 추가[put()], Value 얻기[get()], Key-Value 삭제[remove()], Set Interface 얻기[entrySet(), keySet()]등의 Method를 제공한다. Map Interface에서는 Iterator를 제공하지 않는다. entrySet(), ketSet() Method를 통해 얻은 Set Interface의 Iterator를 이용한다.
 
-##### 2.1.1. Sorted Map
+##### 2.1.1. SortedMap, NavigableMap
 
-SortedSet Interface는 **동일한 Key를 갖지 않으면서 Key를 기준으로 정렬된** Key-Value Group 관리에 필요한 Interface를 제공한다. 상속받은 Map Interface의 Method와 더불어 정렬의 이점을 살린 추가 Method를 포함하고 있다. 가장 큰 Key[firstKey()], 가장 작은 Key[lastKey()], 범위[subMap(), headMap(), tailMap()]등의 추가 Method를 가지고 있다.
+SortedMap, NavigableMap Interface는 **동일한 Key를 갖지 않으면서 Key를 기준으로 정렬된** Key-Value Group 관리에 필요한 Interface를 제공한다. 상속받은 Map Interface의 Method와 더불어 정렬의 이점을 살린 추가 Method를 포함하고 있다. 가장 큰 Key[firstKey()], 가장 작은 Key[lastKey()], 범위[subMap(), headMap(), tailMap()]등의 추가 Method를 가지고 있다.
 
 #### 2.2. Class
 
 ##### 2.2.1. HashMap
 
+Key를 기준으로 **Hashtable + Chaining 기법**을 이용하여 Map Interface를 구현한 Class이다. Key에 한개의 Null이 들어 갈 수 있고, Value에도 Null이 들어 갈 수 있다. 또한 HashMap은 순회시 Object의 삽입 순서순으로 순회를 보장하지 않는다.
+
+HashMap의 Method은 synchronized 하지 않는다. 따라서 Multi-Thread 환경에서 이용시 문제가 발생한다. Multi-Thread 환경에서는 ConcurrentHashMap Class를 이용하면 된다.
+
 ##### 2.2.2. LinkedHashMap
+
+LinkedHashMap은 HashMap과 달리 순회시 Key-Value의 삽입 순서대로 순회를 수행한다. **Double Linked List**를 추가적으로 이용하여 Key-Value의 삽입 순서를 관리한다. 하지만 Double Linked List에 따른 Overhead로 인하여 HashMap에 비교하여 상대적으로 느린 Key-Value 삽입/삭제 속도를 보인다.
 
 ##### 2.2.3. HashTable
 
+HashTable는 HashMap와 유사하지만 모든 Method에 동기화를 위한 synchronized keyword가 붙어 있기 때문에 Single Thread 환경에서 비효율적이다. ConcurrentHashMap보다도 Lock Granularity가 크기 때문에 성능이 느리다. HashMap과 ConcurrentHashMap이 나오기 전에 등장한 Class로 현재는 잘 이용되지 않고 있고 하위 호환을 위해 존재한다.
+
 ##### 2.2.4. TreeMap
 
-
-
+Key를 기준으로 **Red-Black Tree**를 이용하여 SortedMap Interface를 구현한 Class이다. Red-Black Tree에 따른 Key-Value 삽입/제거시 많은 Overhead가 발생하지만 빠른 Key 검색 속도를 보인다.
 
 ### 3. 참조
 
@@ -110,3 +117,4 @@ SortedSet Interface는 **동일한 Key를 갖지 않으면서 Key를 기준으�
 * [http://java-latte.blogspot.kr/2013/09/java-collection-arraylistvectorlinkedli.html](http://java-latte.blogspot.kr/2013/09/java-collection-arraylistvectorlinkedli.html)
 * [https://docs.oracle.com/javase/tutorial/collections/interfaces/index.html](https://docs.oracle.com/javase/tutorial/collections/interfaces/index.html)
 * [https://stackoverflow.com/questions/12646404/concurrenthashmap-and-hashtable-in-java](https://stackoverflow.com/questions/12646404/concurrenthashmap-and-hashtable-in-java)
+* [http://www.programering.com/a/MDMyMzMwATQ.html](http://www.programering.com/a/MDMyMzMwATQ.html)
