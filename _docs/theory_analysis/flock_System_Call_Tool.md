@@ -37,9 +37,11 @@ Linux에서는 flock System Call을 이용하여 Shell에서 File Lock을 이용
 
 ![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_File_Delete.PNG)
 
-flock Tool을 이용하면 Lock 파일이 생기게 되는데 이러한 Lock 파일을 외부에서 임의로 지우면 안된다. 위의 그림은 Lock 파일을 임의로 지우는 경우 Command가 Exclusive하게 동작하지 않을 수 있는 경우를 나타내고 있다. 첫번째 flock Tool이 수행되고 있을 때 2번째 flock Tool이 수행되면 같은 file.lock 파일을 Lock 파일로 이용하기 때문에 두번째 flock Tool은 Blocking된다. (빨간구간) 그 후 첫번째 flock Tool이 수행을 마치면서 두번째 flock Tool이 수행된다. 이때 세번째 flock Tool이 수행되기 전 file.lock이 지워지면, 두번째 flock Tool이 이용한 file.lock을 세번째 flock Tool이 볼 수 없기 때문에 Command가 동시에 실행될 수 있다.
+flock Tool을 이용하면 Lock 파일이 생기기만 하고 삭제되지 않아, Lock 파일이 쌓이는 문제가 발생한다. 하지만 Lock 파일을 외부에서 임의로 지우면 안된다. 위의 그림은 Lock 파일을 임의로 지우는 경우 Command가 Exclusive하게 동작하지 않을 수 있는 경우를 나타내고 있다.
 
-이러한 Lock 파일 문제를 가장 쉽게 해결할 수 있는 첫번째 방법은 Lock 파일을 tmpfs같은 메모리 파일시스템에 만드는 방법이다. PC 재부팅 시 자연스럽게 Lock 파일은 지워진다. 두번째는 Lock 파일의 inode 번호까지 확인하는 별도의 Tool을 만드는 방법이 있다.
+첫번째 flock Tool이 수행되고 있을 때 2번째 flock Tool이 수행되면 같은 file.lock 파일을 Lock 파일로 이용하기 때문에 두번째 flock Tool은 Blocking된다. (빨간구간) 그 후 첫번째 flock Tool이 수행을 마치면서 두번째 flock Tool이 수행된다. 이때 세번째 flock Tool이 수행되기 전 file.lock이 지워지면, 두번째 flock Tool이 이용한 file.lock을 세번째 flock Tool이 볼 수 없기 때문에 Command가 동시에 실행될 수 있다.
+
+Lock 파일을 안전하게 지우는 방법은 Lock 파일을 tmpfs같은 메모리 파일시스템에 만들면 된다. PC 재부팅 시 자연스럽게 Lock 파일이 지워진다.
 
 ### 3. 참조
 
