@@ -11,7 +11,7 @@ Cloud 환경에서 이용하는 Storage를 Block Storage, Object Storage, File S
 
 ### 1. Block Storage
 
-![]({{site.baseurl}}/images/theory_analysis/Cloud_Storage/Block_Storage.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Cloud_Storage/Block_Storage.PNG){: width="350px"}
 
 Block Storage는 Hard Disk 같은 **Block Device**를 제공하는 Storage이다. Block Storage의 Block들은 모두 **동일한 크기**를 가지고 있고, 각 Block들은 **Block Address**를 할당받는다. Block Storage는 Block Address를 기반으로 Block Read/Write 동작을 지원한다. Block Storage는 전체 Block 개수 같은 Block 관련 Meta 정보만 가지고 있다. Block Storage는 Block 관련 간단한 기능만 수행하기 때문에 가장 빠른 I/O 성능을 보여준다.
 
