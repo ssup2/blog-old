@@ -9,7 +9,7 @@ adsense: true
 
 Unix System의 System Call중 하나인 flock System Call을 이해하고, Linux에서 flock System Call을 이용하여 제작된 File Lock Tool인 flock Tool을 분석한다.
 
-### 1. flock System Call
+### 1. flock() System Call
 
 > int flock(int fd, int operation)
 
@@ -17,9 +17,9 @@ Unix System의 System Call중 하나인 flock System Call을 이해하고, Linux
 * fd - Open한 파일의 File Descriptor를 넣는다.
 * operation - fd에 대한 수행 동작 및 옵션을 명시한다. LOCK_SH, LOCK_EX, LOCK_UN 3가지 Operation을 넣을 수 있다. LOCK_SH은 Read Lock, LOCK_EX은 Write Lock, LOCK_UN은 Unlock 동작을 수행한다. 또한 LOCK_NB 옵션을 통해 Non-blocking System Call로 이용이 가능하다.
 
-Unlock은 LOCK_UN Operation을 이용하거나, fd가 **Close**되면 자동으로 Unlock된다. fd는 Application에서 명시적으로 Close함수를 통해서 fd를 호출하지 않더라도, Application이 종료되면 Kernel에서 fd를 Close한다. (fork 되지 않았다면) 따라서 flock System Call을 호출한 Application이 비정상적으로 종료되어도 파일에 걸린 Lock은 대부분의 경우 자연스럽게 Unlock 된다.
+Unlock은 LOCK_UN Operation을 이용하거나, fd가 **Close**되면 자동으로 Unlock된다. fd는 close() System Call을 통해서 Close 되거나, fd를 Open한 Process가 종료되면 Kernel에서 fd를 Close한다. 따라서 대부분의 경우 따라서 대부분의 경우 open(), flock() System Call을 호출한 Process가 비정상적으로 종료되어도 Lock은 자연스럽게 Unlock 된다.
 
-하지만 flock System Call을 호출한 Application이 fork System Call을 통해 다른 Application을 실행하는 경우, fork와 동시에 fd정보도 복사되기 때문에 flock System Call을 호출한 Application만 종료되면 fd는 Close 되지 않는다. 따라서 파일에 걸린 Lock이 풀리지 않게 되어 주의해야한다.
+하지만 fd를 Open한 Process가 Fork하여 Child Process를 생성하는 경우, Fork와 동시에 fd 정보도 복사되기 때문에, flock() System Call을 호출한 Process가 종료되어도 Child Process가 종료되지 않으면 fd가 Close되지 않는다. 따라서 Process가 Fork를 통해 Child Process를 생성하는 경우 flock() System Call 사용에 주의해야 한다.
 
 ### 2. flock Tool
 
@@ -31,7 +31,7 @@ Linux에서는 flock System Call을 이용하여 Shell에서 File Lock을 이용
 
 위의 그림은 flock Tool의 실행 순서를 나타내고 있다. Open시 O_CREAT Option을 이용하기 때문에 Lock 파일이 없으면 Lock 파일이 생성된다. -x 옵션은 LOCK_EX 수행을 한다는 의미이고, Lock 파일은 file.lock 파일을 이용한다. /bin/bash가 Exclusive하게 수행된다.
 
--o 옵션을 주면 flock Tool이 fork한 후 fd를 닫고 난뒤 Exclusive하게 Command를 수행한다. -o 옵션을 주지 않으면 fork 후 fd를 닫지 않기 때문에, flock Tool이 종료되어도 Command가 종료되지 않으면 fd는 Close되지 않는다. 따라서 파일 Lock이 풀리지 않을 수 있다. 반면 -o 옵션을 주면 Coomand에 관계 없이 flock Tool이 종료되는 순간 fd가 Close 되기 때문에 파일 Lock도 자연스럽게 풀린다. 하지만 Command 수행이 끝나지 않는 상태에서 파일 Lock이 풀릴 수 있기 때문에 Command가 Exclusive하게 수행되지 않을 수 있다.
+-o 옵션을 주면 flock Tool이 Fork 후 Child Process에서 Command 수행전 fd를 Close한다. Lock은 Command에 관계 없이 flock Tool이 wait 동작을 수행하고 종료되면 반드시 Unlock된다. 반면에 -o 옵션을 주지 않으면 Fork 후 fd를 Close 하지 않는다. Child Process에서 동작하는 Command가 Fork를 수행하여 또 다른 Child Process를 생성하는 경우, flock Tool이 종료되어도 Child의 Child Process가 fd를 Close하지 않으면 Unlock이 수행되지 않는다. 따라서 Command가 Fork를 수행한다면 -o 옵션을 이용 해야한다.
 
 #### 2.2. Lock File 삭제
 
