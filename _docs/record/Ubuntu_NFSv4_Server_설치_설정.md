@@ -29,13 +29,14 @@ adsense: true
 ~~~
 # mkdir -p /export/[NFS root]
 # chmod 777 [NFS share]
-# mount \-\-bind [NFS share] /export/[NFS root]
+# mount --bind [NFS share] /export/[NFS root]
 ~~~
 
 ~~~
 # mkdir -p /export/nfs_root
+# mkdir -p /root/nfs_share
 # chmod 777 /root/nfs_share
-# mount \-\-bind /root/nfs_share /export/root/nfs_share
+# mount --bind /root/nfs_share /export/nfs_root
 ~~~
 
 *  /etc/fstab에 다음 내용을 추가하여 재부팅 후에도 Bind Mount 되도록 설정
