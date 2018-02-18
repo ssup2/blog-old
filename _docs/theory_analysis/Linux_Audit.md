@@ -57,7 +57,7 @@ Audit 관련 여러개의 User Level Tool/Process가 존재한다. auditd는 kau
 
 이 밖의 다양한 User Level Tool/Process들과 audisp plugin들이 존재한다.
 
-#### 1.3. Audit Example
+#### 1.3. Example
 
 Linux User의 Password를 변경하는 passwd Binary와 Password를 기록하는 /etc/shadow 파일에 Audit Rule을 내리는 예제이다. passwd Binary가 실행될때와 /etc/shadow 파일이 Read될때 Audit Event가 발생하도록 Rule을 설정하고, auditd가 남긴 Log를 확인하는 예제이다.
 
