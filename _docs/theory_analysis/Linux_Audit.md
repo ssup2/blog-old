@@ -64,6 +64,7 @@ Linux User의 Password를 변경하는 passwd Binary와 Password를 기록하는
 ~~~
 # auditctl -w /usr/bin/passwd -p x
 # auditctl -w /etc/shadow -p r
+# passwd root
 # ausearch -i -f /usr/bin/passwd
 type=PROCTITLE msg=audit(2018년 02월 14일 15:00:53.542:312) : proctitle=passwd
 type=PATH msg=audit(2018년 02월 14일 15:00:53.542:312) : item=1 name=/lib64/ld-linux-x86-64.so.2 inode=3967622 dev=08:01 mode=file,755 ouid=root ogid=root rdev=00:00 nametype=NORMAL
@@ -71,7 +72,8 @@ type=PATH msg=audit(2018년 02월 14일 15:00:53.542:312) : item=0 name=/usr/bin
 type=CWD msg=audit(2018년 02월 14일 15:00:53.542:312) :  cwd=/root/linux
 type=EXECVE msg=audit(2018년 02월 14일 15:00:53.542:312) : argc=1 a0=passwd
 type=SYSCALL msg=audit(2018년 02월 14일 15:00:53.542:312) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x94e1e8 a1=0x94d4a8 a2=0x8fe008 a3=0x598 items=2 ppid=12206 pid=12403 auid=unset uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts13 ses=unset comm=passwd exe=/usr/bin/passwd key=(null)
-# ausearch -i -f /etc/shadowtype=PROCTITLE msg=audit(2018년 02월 14일 15:33:57.911:363) : proctitle=passwd
+# ausearch -i -f /etc/shadow
+type=PROCTITLE msg=audit(2018년 02월 14일 15:33:57.911:363) : proctitle=passwd
 type=PATH msg=audit(2018년 02월 14일 15:33:57.911:363) : item=0 name=/etc/shadow inode=1594340 dev=08:01 mode=file,640 ouid=root ogid=shadow rdev=00:00 nametype=NORMAL
 type=CWD msg=audit(2018년 02월 14일 15:33:57.911:363) :  cwd=/root/linux
 type=SYSCALL msg=audit(2018년 02월 14일 15:33:57.911:363) : arch=x86_64 syscall=open success=yes exit=3 a0=0x7f995dee6c9d a1=O_RDONLY|O_CLOEXEC a2=0x1b6 a3=0x80000 items=1 ppid=12206 pid=14541 auid=unset uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts13 ses=unset comm=passwd exe=/usr/bin/passwd key=(null)
