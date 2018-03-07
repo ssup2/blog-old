@@ -7,23 +7,35 @@ comment: true
 adsense: true
 ---
 
-App에 Authorization(권한 부여,인가) 수행 시 이용되는 OAuth 2.0를 분석한다.
+인가(Authorization) 수행 시 이용되는 OAuth 2.0를 분석한다.
 
-### 1. OAuth 2.0
+### 1. OAuth
+
+![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="500px"}
+
+OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. 위의 그림은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다.
+
+먼저 App이 User의 ID, Password를 이용하여 악의적 동작을 수행하더라도 User나 Server에서 App의 악의적 동작을 감지하기 어렵다. Server에서는 ID, Password를 가지고 Resource 요청이 오기 때문에 어떤 요청이 악의적 동작을 위한 요청인지 판별하기 어렵다. 또한 ID, Password만 있으면 User의 모든 Resource를 자유롭게 접근할 수 있기 때문에 App의 Resource 요청을 제한하는 방법도 존재하지 않는다.
+
+OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발행한 **Access Token**을 이용한다. Access Token에는 **인가 범위, 인가 허용 시간** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있다.
 
 #### 1.1. Component
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="600px"}
 
-#### 1.2. Access Token
+위의 그림은 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역활을 수행한다.
+
+App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Auth Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
+
+#### 1.2. Access Token 발급
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Access_Token_Flow.PNG)
 
-#### 1.3. Resource access
+#### 1.3. Resource 접근
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Resource_Access_Flow.PNG)
 
-#### 1.4. Refresh Token
+#### 1.4. Refresh Token 이용
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Refresh_Token_Flow.PNG)
 
