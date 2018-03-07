@@ -17,7 +17,7 @@ OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 P
 
 먼저 App이 User의 ID, Password를 이용하여 악의적 동작을 수행하더라도 User나 Server에서 App의 악의적 동작을 감지하기 어렵다. Server에서는 ID, Password를 가지고 Resource 요청이 오기 때문에 어떤 요청이 악의적 동작을 위한 요청인지 판별하기 어렵다. 또한 ID, Password만 있으면 User의 모든 Resource를 자유롭게 접근할 수 있기 때문에 App의 Resource 요청을 제한하는 방법도 존재하지 않는다.
 
-OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발행한 **Access Token**을 이용한다. Access Token에는 **인가 범위, 인가 허용 시간** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있다.
+OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발행한 **Access Token**을 이용한다. Access Token에는 **Scope(인가 범위), Timeout(인가 허용 시간)** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있다.
 
 #### 1.1. Component
 
@@ -31,9 +31,19 @@ App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이�
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Access_Token_Flow.PNG)
 
+* 1,2,3 - App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
+* 4,5,6 - User Agent는 인가 URL로 이동하면서 인가 Scope 정보 및 App URL도 같이 전달한다. Auth Server는 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
+* 7 - User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID, Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
+* 8, 9 - User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
+* 10,11,12 - User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
+
+![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
+
 #### 1.3. Resource 접근
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Resource_Access_Flow.PNG)
+
+*
 
 #### 1.4. Refresh Token 이용
 
