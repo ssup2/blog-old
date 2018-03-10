@@ -39,17 +39,31 @@ App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이�
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 
+위의 그림은 Google의 Authorization UI를 이용하여 User 인증 및 Resource 인가를 수행하는 과정을 나타내고 있다. Login을 수행하고 App이 요청한 인가 Scope 정보를 User에게 물어봐 동의를 구한다.
+
 #### 1.3. Resource 접근
 
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Resource_Access_Flow.PNG)
 
-*
+* 1,2 - User는 User Agent를 통해서 Resource를 요청한다.
+* 3,4 - App은 발급받은 Access Token을 이용하여 Resource 요청과 함께 Access Token도 같이 전달한다.
+* 5,6 - Resource Server는 Access Token이 유효한지 확인한 후 App에게 Resource를 전달한다.
+* 7,8 - App은 User Agent를 통해서 User에게 Resource를 전달한다.
 
 #### 1.4. Refresh Token 이용
 
+Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상태가 되었을경우 **새로운 Access Token**을 발급받기 위해 이용되는 Token이다. Auth Server는 App에게 Access Token을 **처음** 발급 할 때만 Refresh Token을 같이 전달한다. 따라서 App은 Refresh Token을 저장하고 이용해야 한다.
+
+Auth Server는 Access Token을 반드시 전송할 필요 없다. Refresh Token이 없는 App은 Access Token이 Invaild한 상태가 되면 User에게 요청하여 다시 Access Token을 발급 받아야 한다. Refresh Token은 **Bearer Token**이라고도 불린다. 아래의 그림은 App이 Refresh Token을 이용하는 과정을 나타낸다.
+
 ![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Refresh_Token_Flow.PNG)
 
-#### 2. 참조
+* 1,2,3 - App은 User의 요청을 받아 Access Token을 이용하여 Resource Server에게 Resource를 요청한다.
+* 4,5 - Resource Server는 Auth Server에게 Access Token이 유요한지 물어본다.
+* 6,7,8 - App이 Access Token이 Invaild 하다는 결과를 받으면 Auth Server에게 Refresh Token을 이용하여 새로운 Access Token을 받는다.
+* 9 ~ 14 - App은 새로 받은 Access Token을 이용하여 다시 Resource를 요청하고, 받은 Resource를 User Agent를 통해서 Agent에게 전달한다.
+
+### 2. 참조
 
 * [http://jlabusch.github.io/oauth2-server/index.html](http://jlabusch.github.io/oauth2-server/index.html)
 * [https://opentutorials.org/course/2473/16571](https://opentutorials.org/course/2473/16571)
