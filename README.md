@@ -1,1 +1,1 @@
-Ssup2's Blog
+Ssup2 Blog
