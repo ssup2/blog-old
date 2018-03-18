@@ -11,7 +11,7 @@ adsense: true
 
 ### 1. OAuth
 
-![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="600px"}
 
 OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. 위의 그림은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다.
 
