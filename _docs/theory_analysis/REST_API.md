@@ -35,7 +35,7 @@ REST API의 핵심 요소는 Resource를 나타내는 URI와, Resource를 대상
 
 ![]({{site.baseurl}}/images/theory_analysis/REST_API/Resource_Model.PNG){: width="600px"}
 
-위의 그림은 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다.
+위의 그림은 REST API의 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다. 각각의 Resource는 JSON, YAML, XML등 다양한 형태로 표현될 수 있다. 일반적으로는 **JSON** 형태를 가장 많이 이용하고 있다.
 
 #### 1.2.2. URI
 
@@ -46,15 +46,17 @@ REST API의 URI는 Resource Model에 맞게 Directory 구조의 형태를 갖는
 
 #### 1.2.3. HTTP Method
 
-REST API에서는 다음과 같은 HTTP Method들이 이용된다.
+REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method라고 해도 대상이 Resource인지 Collection인지에 따라서 동작이 약간씩 달라진다.
 
-* GET - Resource를 가져 온다.
-* POST -
-* PUT
-* DELETE
-* HEAD
-* PATCH
-* OPTION
+* GET Resource - Resource Data를 가져 온다.
+* GET Collection - Collection 하위의 모든 Resource Data를 가지고 온다.
+* HEAD Resource - Resource의 Meta Data(HTTP Header)만 가져온다.
+* HEAD Collection - Collection 하위의 모든 Resource의 Meta Data(HTTP Header)만 가져온다.
+* POST Collection - 새로운 Resource를 생성한다.
+* PUT Resource - Resource 전체를 Update한다.
+* PATCH Resource - Resource 일부를 Update한다.
+* DELETE Resource - Resource를 삭제한다.
+* OPTION Resource, Collection - 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
 
 ### 3. 참조
 
@@ -62,4 +64,5 @@ REST API에서는 다음과 같은 HTTP Method들이 이용된다.
 * [http://meetup.toast.com/posts/92](http://meetup.toast.com/posts/92)
 * [https://spring.io/understanding/REST](https://spring.io/understanding/REST)
 * [http://restful-api-design.readthedocs.io/en/latest/methods.html](http://restful-api-design.readthedocs.io/en/latest/methods.html)
-*[https://restfulapi.net/resource-naming/](https://restfulapi.net/resource-naming/)
+* [https://restfulapi.net/resource-naming/](https://restfulapi.net/resource-naming/)
+* [https://lornajane.net/posts/2013/are-subqueries-restful](https://lornajane.net/posts/2013/are-subqueries-restful)
