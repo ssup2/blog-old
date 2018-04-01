@@ -58,7 +58,7 @@ REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method
 * DELETE Resource - Resource를 삭제한다.
 * OPTION Resource, Collection - 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
 
-### 3. 참조
+### 2. 참조
 
 * [https://www.redhat.com/archives/rest-practices/2011-August/pdfa1nfEjPMmT.pdf](https://www.redhat.com/archives/rest-practices/2011-August/pdfa1nfEjPMmT.pdf)
 * [http://meetup.toast.com/posts/92](http://meetup.toast.com/posts/92)
