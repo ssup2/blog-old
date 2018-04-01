@@ -31,20 +31,20 @@ REST API는 **URI**를 통해서 **Resource**를 나타내고, **HTTP Method**�
 
 REST API의 핵심 요소는 Resource를 나타내는 URI와, Resource를 대상으로 어떤 동작을 할지를 나타내는 HTTP Method이다.
 
-#### 1.2.1. Resource Model
+##### 1.2.1. Resource Model
 
 ![]({{site.baseurl}}/images/theory_analysis/REST_API/Resource_Model.PNG){: width="600px"}
 
 위의 그림은 REST API의 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다. 각각의 Resource는 JSON, YAML, XML등 다양한 형태로 표현될 수 있다. 일반적으로는 **JSON** 형태를 가장 많이 이용하고 있다.
 
-#### 1.2.2. URI
+##### 1.2.2. URI
 
 {: .newline }
 > http://restapi.example.com/house/apartments/101
 
 REST API의 URI는 Resource Model에 맞게 Directory 구조의 형태를 갖는다. 하나의 URI는 하나의 Resource를 나타내거나 Resource의 모음을 나타내는 하나의 Collection을 나타낸다. Resource는 **단수**로 표현하고 Collection은 **복수**로 표현한다. 위의 URI는 house Resource가 있고 그 아래 apartments라는 Collection이 존재하고 있고 다시 그 아래 101이란 Resource를 나타내고 있다.
 
-#### 1.2.3. HTTP Method
+##### 1.2.3. HTTP Method
 
 REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method라고 해도 대상이 Resource인지 Collection인지에 따라서 동작이 약간씩 달라진다.
 
