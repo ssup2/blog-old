@@ -1,5 +1,5 @@
 ---
-title: SOLID Design
+title: SOLID Class Design
 category: Theory, Analysis
 date: 2017-04-01T12:00:00Z
 lastmod: 2017-04-01T12:00:00Z
