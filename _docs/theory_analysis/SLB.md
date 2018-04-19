@@ -23,23 +23,33 @@ SLB의 핵심은 LB의 역활이다. LB는 어떻게 Load Balancing을 수행할
 
 또한 Load Balancing시에 고려할 중요 요소 중 하나는 Session이다. 같은 Session아래 발생한 여러 Connection들이 서로 다른 Server에 전달된다면 Session은 유지되지 못한다. LB가 Session을 파악하기 위해서는 전달받은 Packet들이 동일한 Client로부터 전송됬다는 사실을 파악 할 수 있어야 한다. 일반적으로 Packet의 Source IP Address와 Source Port 번호가 같다면 동일한 Client의 Packet이라고 간주한다. 따라서 LB는 최소 L4 Layer Stack을 인지하고 있어야 한다. 마지막으로 LB는 주기적으로 Server들의 상태를 파악하여 Load Balancing시 비정상 상태의 Server에게 Client의 요청이 전달되지 않도록 해야한다.
 
-#### 1.1. Inline
+#### 1.1. Proxy
+
+![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Proxy.PNG)
+
+Server가 Client로부터 받는 Inbound Packet과 Server가 Client에게 전달하는 Outbound Packet 모두 LB를 거친다. LB에서 Inbound Packet의 Source IP는 SNAT(Src NAT)를 통해 LB의 VIP로 바뀌고, Destination IP는 DNAT(Dst NAT)를 통해 실제 Server의 IP로 바뀐다. 그 후 Inbound Packet은 실제 Server에게 전달된다. 실제 Server는 LB가 Client라고 생각하고 받은 Packet의 Src IP와 Dst IP를 바꾸어 LB에게 응답 Packet을 전송한다. LB는 다시 SNAT,DNAT를 수행하여 원래의 IP로 바꾸어 Client에게 응답을 전달한다.
+
+모든 Inbound, Outbound Packet은 Proxy를 지나기 때문에 LB 수행뿐 아니라 Packet Filtering 수행에도 유리한 기법이다. 또한 Proxy기법은 별도의 Network 설정없이 구현 가능한 기법이다. 따라서 Software LB는 Proxy 기법을 이용하여 구현된다. Proxy 기법은 실제 Client의 IP가 Server에 전달되지 않기 때문에 Server가 실제 Client의 IP를 이용해야 할 경우 부적합한 기법이다.
+
+#### 1.2. Inline (Transparent)
 
 ![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Inline.PNG)
 
-Inline 기법은 SLB 구성시 가장 많이 이용되는 기법이다. Server가 Client로부터 받는 Inbound Packet과 Server가 Client에게 전달하는 Outbound Packet 모두 LB를 거친다. LB에서 Inbound Packet은 실제 Server에 전달하기 위해 DNAT(Dst NAT)를 수행한다. 그 후 LB에서 Outbound Packet은 다시 SNAT(Src NAT)를 통해서 Src IP를 VIP로 변환한다. 모든 Packet은 LB를 거치기 때문에 Packet Monitoring 및 Filtering에 유리하지만, 그만큼 LB에 큰 부하가 발생한다는 단점이 존재한다.
+Proxy 기법처럼 Inbound Packet과 Outbound Packet 모두 LB를 거친다. LB에서 Inbound Packet은 실제 Server에 전달하기 위해 DNAT(Dst NAT)만을 수행한뒤 실제 Server에게 전달된다. Server의 Default Gateway는 LB로 설정되어 있기 때문에 Outbound Packet은 LB로 전달된다. Outbound Packet은 LB에서 다시 SNAT(Src NAT)를 통해서 Src IP를 LB의 VIP로 변환한다.
 
-#### 1.2. DSR (Direct Server Routing)
+Proxy 기법과 다르게 Client의 IP가 Server에게 전달된다. 하지만 실제 Server의 Gateway로 LB가 이용되기 때문에 LB와 Server가 같은 Network에 있어야한다.
 
-DSR 기법은 Inline 기법의 LB 부하를 줄일 수 있는 기법이다. 대부분의 Service들은 Inbound Packet보다 Outbound Packet의 양이 더 많다. DSR 기법은 Outbound Packet이 LB를 거치지 않고 바로 Client에게 전달하게 만들어 LB 부하를 줄인다.
+#### 1.3. DSR (Direct Server Routing)
 
-##### 1.2.1. L2DSR
+Proxy, Inline 기법은 모든 Inbound, Outbound Packet을 처리해야하기 때문에 LB에 많은 부하가 발생한다. DSR 기법은 이러한 LB 부하를 줄일 수 있는 기법이다. 대부분의 Service들은 Inbound Packet보다 Outbound Packet의 양이 더 많다. DSR 기법은 Outbound Packet이 LB를 거치지 않고 바로 Client에게 전달하게 만들어 LB 부하를 줄인다.
+
+##### 1.3.1. L2DSR
 
 ![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L2DSR.PNG)
 
 L2DSR은 Inbound의 Packet의 Dst Mac을 바꾸는 기법이다. LB는 Inbound Packet의 Mac Address를 Server의 Mac Address로 변환한 후 실제 Server에게 전달한다. 그 후 실제 Server는 VIP 주소를 갖고 있는 Loopback Interface를 통해 Src IP를 변환하여 Client에게 바로 Outbound Packet을 전달한다. Inbound Packet의 Mac Address만 바꾸기 때문에 LB와 Server들은 반드시 같은 Network에 속해야 한다.
 
-##### 1.2.2. L3DSR
+##### 1.3.2. L3DSR
 
 ![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L3DSR_DSCP.PNG)
 
@@ -68,5 +78,5 @@ GSLB는 SLB와 이름은 유사하지만 VIP기반이 아닌 **DNS**기반의 Lo
 ### 3. 참조
 
 * SLB - [https://www.slideshare.net/ryuichitakashima3/ss-72343772](https://www.slideshare.net/ryuichitakashima3/ss-72343772)
-
+* SLB - [https://vzealand.com/2016/10/04/vcap6-nv-3v0-643-study-guide-part-8/](https://vzealand.com/2016/10/04/vcap6-nv-3v0-643-study-guide-part-8/)
 * GSLB - [https://www.netmanias.com/ko/post/blog/5620/dns-data-center-gslb-network-protocol/global-server-load-balancing-for-enterprise-part-1-concept-workflow](https://www.netmanias.com/ko/post/blog/5620/dns-data-center-gslb-network-protocol/global-server-load-balancing-for-enterprise-part-1-concept-workflow)
