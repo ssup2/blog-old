@@ -16,11 +16,11 @@ HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개
 * Client는 Server에게 Resource를 요청한다.
 * Client가 요청한 Resource를 이용하기 위해서는 인증이 필요하다. 따라서 Server는 Client에게 **WWW-Authenticate Header**를 통해 인증 필요성을 Client에게 전달한다. Digest 문자열을 통해 Digest 인증 과정이 필요한걸 Client에게 알린다.
   * realm은 요청한 Resource의 Protection Space를 나타내는 속성이다. Resource가 속해 있는 Protection Space마다 Client는 각기 다른 ID, Password를 이용할 수 도 있다.
-  * nonce는 Client가 Server에게 Resource를 요청 할 때마다 Server에서 생성하는 임의의 값이다. Client는 Server로 부터 받은 nonce를 그대로 Server에게 전달 해야한다. Server에서는 nonce가 다르면 Resource 요청을 거부한다. 따라서 nonce를 통해 Server Replay Attach을 방지 할 수 있다.
+  * nonce는 Client가 Server에게 Resource를 요청 할 때마다 Server에서 생성하는 임의의 값이다. Client는 Server로 부터 받은 nonce를 그대로 Server에게 전달 해야한다. Server에서는 nonce가 다르면 Resource 요청을 거부한다. 따라서 nonce를 통해 Server Replay Attack을 방지 할 수 있다.
   * qop는 Quality of protection의 약자로 의미 그대로 Protection 등급을 나타낸다.
 * 인증 요청을 받은 Client는 Server로부터 받은 nonce, qop, realm 속성값을 Authorization Header에 그대로 추가하고 그 외의 필요한 속성값들을 추가한다.
   * nc는 nonce count의 약자로 Client가 Server로부터 받은 nonce를 이용하여 Server에게 몇번 요청했는지를 나타낸다.
-  * cnonce는 Client에서 생성하는 임의의 값이다. nonce와 유사하게 Client Replay Attach 방지를 한다.
+  * cnonce는 Client에서 생성하는 임의의 값이다. nonce와 유사하게 Client Replay Attack 방지를 한다.
   * response는 인증에 필요한 정보가 포함된 Digest이다. 아래와 같이 계산된다.
 
   {: .newline }
