@@ -1,5 +1,5 @@
 ---
-title: Ubuntu 14.04 Auto root Login 설정
+title: Auto root Login 설정 Ubuntu 14.04
 category: Record
 date: 2017-01-20T16:10:00Z
 lastmod: 2017-01-22T16:10:00Z
