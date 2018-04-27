@@ -23,7 +23,7 @@ Collection Interface는 **Object Group** 관리에 필요한 **기본적**인 In
 
 ##### 1.1.2. Set
 
-Set Interface는 **동일한 Object를 갖지 않는** Object Group 관리에 필요한 Interface를 제공한다. 현재 Collection Interface에서 상속받은 Interface만 제공하고 있기 때문에 Collection Interface와 동일한 Method를 가지고 있다.
+Set Interface는 **동일한 Object를 갖지 않는** Object Group 관리에 필요한 Interface를 제공한다. 현재 Collection Interface에서 상속받은 Method만 제공하고 있기 때문에 Collection Interface와 동일한 Method를 가지고 있다.
 
 ##### 1.1.3. SortedSet, NavigableSet
 

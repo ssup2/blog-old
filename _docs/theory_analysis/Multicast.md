@@ -23,13 +23,13 @@ Ethernet Address는 IP Address를 기반으로 생성한다. Ethernet Address는
 
 ### 3. IGMP (Internet Group Management Protocol)
 
-Multicast Packet의 Routing은 Router나 Switch에서 발생한다. 따라서 Router(L3)나 Switch(L2)는 Multicast IP Address나 Ethernet Address를 인지할 수 있어야 한다. 또한 특정 Node가 어느 Multicast Group에 소속되어 있는지도 반드시 알아야 한다. 따라서 Router나 Switch에서 Multicast를 지원하지 않으면 Multicast Packet을 제대로 전달하지 못하게 된다.
+IGMP는 Router와 Subnet사이에서 Multicast Group 정보를 주고 받기 위한 Protocol이다. Router는 IGMP Protocol을 통해 Multicast Packet을 어느 Subnet에 보내야할지 판단하게 된다.
 
 #### 3.1. IGMP Report
 
 ![]({{site.baseurl}}/images/theory_analysis/Multicast/IGMP_Report.PNG)
 
-IGMP는 Router와 Node사이에서 Multicast Group 정보를 주고 받기 위한 Protocol이다. 위의 그림은 IGMP Protocol의 Report를 나타내고 있다. Subnet에 속해 있는 특정 Node가 255.0.0.1 Multicast Group에 소속되고 싶으면 Node는 Router에게 IGMP Report Packet을 전송한다. Router는 Dest IP가 255.0.0.1인 Multicast Packet을 받으면 IGMP Report Packet을 전송한 Node가 있는 Subnet으로 Multicast Packet을 전송한다.
+위의 그림은 IGMP Protocol의 Report를 나타내고 있다. Subnet에 속해 있는 특정 Node가 255.0.0.1 Multicast Group에 소속되고 싶으면 Node는 Router에게 IGMP Report Packet을 전송한다. Router는 Dest IP가 255.0.0.1인 Multicast Packet을 받으면 IGMP Report Packet을 전송한 Node가 있는 Subnet으로 Multicast Packet을 전송한다.
 
 #### 3.2. IGMP Query, Leave
 
@@ -43,7 +43,7 @@ IGMP는 Router와 Node사이에서 Multicast Group 정보를 주고 받기 위�
 
 Multicast가 효율적으로 동작하기 위해서는 Router의 Multicast Routing 뿐만 아니라 Subnet을 구성하는 Switch의 Multicast Routing도 중요하다. IGMP Snooping은 Switch에서 Multicast Routing을 위해 동작하는 기법이다. 위의 그림은 IGMP Snooping을 나타내고 있다.
 
-Switch는 Packet의 Ethernet Address를 보고 해당 Packet이 Multicast Packet인지 알 수 있다. Switch가 Multicast Ethernet Address를 가진 Packet을 받으면 해당 Packet이 Switch의 어느 Port에서 왔는지 기록한다. 기록을 바탕으로 Multicast Packet을 적절한 Port로 Routing한다. 만약 Switch에서 IGMP Snooping 기능을 지원하지 않으면 Multicast Packet을 Broadcast하여 모든 Port에게 전달한다.
+Switch는 Packet의 Ethernet Address를 보고 해당 Packet이 Multicast Packet인지 알 수 있다. Switch가 Multicast Ethernet Address를 가진 Packet을 받으면 해당 Packet이 Switch의 어느 Port에서 왔는지 기록한다. 기록을 바탕으로 Multicast Packet을 적절한 Port로 Routing한다. 만약 Switch에서 IGMP Snooping 기능을 지원하지 않으면, Switch는 Multicast Packet을 Broadcast하여 모든 Port에게 전달해야 한다.
 
 ### 4. 참고
 
