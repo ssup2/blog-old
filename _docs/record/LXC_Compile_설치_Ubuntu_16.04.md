@@ -1,6 +1,6 @@
 ---
 title: LXC Compile, 설치 (Ubuntu 16.04)
-category:
+category: Record
 date: 2017-01-14T12:00:00Z
 lastmod: 2017-01-15T12:00:00Z
 comment: true
