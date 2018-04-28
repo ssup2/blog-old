@@ -1,8 +1,8 @@
 ---
 title: Auto root Login 설정 - Ubuntu 18.04
 category: Record
-date: 2017-01-20T16:10:00Z
-lastmod: 2017-01-22T16:10:00Z
+date: 2018-04-28T16:10:00Z
+lastmod: 2018-04-28T16:10:00Z
 comment: true
 adsense: true
 ---
