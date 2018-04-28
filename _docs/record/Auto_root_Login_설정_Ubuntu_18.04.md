@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. 설정 환경
 
-* Ubuntu 16.04 LTS 64bit, root user
+* Ubuntu 18.04 LTS 64bit, root user
 
 ### 2. root Password 설정
 
@@ -23,13 +23,33 @@ Retype new UNIX password:
 
 ### 3. Auto Login 설정
 
-* /etc/lightdm/lightdm.conf 파일을 만들고 아래 내용을 작성한다. (이미 파일이 있으면 수정한다.)
+* /etc/pam.d/gdm-password 파일을 아래와 같이 변경한다.
 
 ~~~
-[Seat:*]
-autologin-guest=false
-autologin-user=root
-autologin-user-timeout=0
+#%PAM-1.0
+auth    requisite       pam_nologin.so
+#auth   required        pam_succeed_if.so user != root quiet_success
+...
+~~~
+
+* /etc/pam.d/gdm-autologin 파일을 아래와 같이 변경한다.
+
+~~~
+#%PAM-1.0
+auth    requisite       pam_nologin.so
+#auth   required        pam_succeed_if.so user != root quiet_success
+...
+~~~
+
+* /etc/gdm3/custom.conf 파일을 아래와 같이 변경한다.
+
+~~~
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=root
+...
+[security]
+AllowRoot=true
 ~~~
 
 ### 4. /root/.profile Error 제거
