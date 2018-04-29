@@ -11,9 +11,13 @@ Shared Lock, Exclusive Lock 기법을 분석한다.
 
 ### 1. Shared Lock, Exclusive Lock
 
-* Shared Lock - Read Lock이라고도 불리며 Critical Section 진입 후 Read 동작만 수행하는 경우 이용한다. Critical Section 진입 시 Shared Lock이 걸려 있어도, Shared Lock을 들고 Critical Section에 진입하여 Data를 Read 할 수 있다. 즉 여러개의 Thread가 동시에 Critical Section에 진입하여 Read 동작을 수행 할 수 있다. Critical Section 진입 시 Exclusive Lock이 걸려있는 경우, Exclusive Lock이 풀릴때 까지 대기한다.
+#### 1.1. Shared Lock
 
-* Exclusive Lock - Write Lock이라고도 불리며 Critical Section 진입 후 Write 동작을 수행하는 경우 이용한다. Critical Section 진입 시 Shared Lock, Exclusive Lock이 걸려있지 않은 경우에만 Exclusive Lock을 들고 Critical Section에 진입 할 수 있다. 즉 Write 수행시 동시에 오직 하나의 Thread만 Critical Section에 진입하여 Write를 수행 할 수 있다.
+Read Lock이라고도 불리며 Critical Section 진입 후 Read 동작만 수행하는 경우 이용한다. Critical Section 진입 시 Shared Lock이 걸려 있어도, Shared Lock을 들고 Critical Section에 진입하여 Data를 Read 할 수 있다. 즉 여러개의 Thread가 동시에 Critical Section에 진입하여 Read 동작을 수행 할 수 있다. Critical Section 진입 시 Exclusive Lock이 걸려있는 경우, Exclusive Lock이 풀릴때 까지 대기한다.
+
+#### 1.2. Exclusive Lock
+
+Write Lock이라고도 불리며 Critical Section 진입 후 Write 동작을 수행하는 경우 이용한다. Critical Section 진입 시 Shared Lock, Exclusive Lock이 걸려있지 않은 경우에만 Exclusive Lock을 들고 Critical Section에 진입 할 수 있다. 즉 Write 수행시 동시에 오직 하나의 Thread만 Critical Section에 진입하여 Write를 수행 할 수 있다.
 
 ### 2. 장점
 
