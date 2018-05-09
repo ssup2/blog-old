@@ -11,7 +11,7 @@ HTTP Cookie와 Session을 분석한다.
 
 ### 1. Cookie
 
-![]({{site.baseurl}}/images/theory_analysis/HTTP_Cookie_Session/HTTP_Cookie.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/HTTP_Cookie_Session/HTTP_Cookie.PNG){: width="600px"}
 
 HTTP Cookie는 Client(Web Browser)가 저장하고 있는 Key-Value 값을 의미한다. HTTP Protocol은 Stateless이기 때문에 Client와 Server 사이의 **상태 정보**를 저장하는데 많이 이용되고 있다. 위의 그림은 Cookie 발급 과정을 나타내고 있다.
 
@@ -21,7 +21,7 @@ HTTP Cookie는 Client(Web Browser)가 저장하고 있는 Key-Value 값을 의�
 
 ### 2. Session
 
-![]({{site.baseurl}}/images/theory_analysis/HTTP_Cookie_Session/HTTP_Session.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/HTTP_Cookie_Session/HTTP_Session.PNG){: width="600px"}
 
 HTTP Cookie는 HTTP Session을 구현하기 위해 이용된다. Client는 Server의 요청에 따라서 JSESSION Cookie에 Session ID를 저장한다. 그 후 Server에게 Web Page를 요청할때 마다 JSESSION Cookie를 전송한다. Server에서는 JSESSION Cookie의 Session ID 값을 보고 Web Page 요청이 어느 Client에서 왔는지 구분하여 Session을 구현한다.
 
