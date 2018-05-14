@@ -111,7 +111,7 @@ UseTab:          Always
 ### 2. Style 적용
 
 * Project Root 폴더에 **.clang-format** 이름으로 위의 Style File 생성
-* 아래의 명령어로 Style 적용
+* 아래의 명령어를 Project Root 폴더에서 실행
 
 ~~~
 # find -name '*.c' -o -name '*.cc' -o -name '*.h' | xargs clang-format

@@ -50,6 +50,12 @@ adsense: true
 # apt-get install cscope
 ~~~
 
+* ClangFormat 설치
+
+~~~
+# apt-get install clang-format
+~~~
+
 #### 3.2. Bash Shell 설정
 
 * ~/.bashrc 파일에 다음의 내용 추가
