@@ -108,7 +108,7 @@ UseTab:          Always
 ...
 ~~~
 
-### 2. 적용 방법
+### 2. Style 적용
 
 * Project Root 폴더에 **.clang-format** 이름으로 위의 Style File 생성
 * 아래의 명령어로 Style 적용
