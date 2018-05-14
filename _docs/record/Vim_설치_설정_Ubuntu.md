@@ -28,6 +28,7 @@ adsense: true
 * YouCompleteMe : Code 자동완성 Plugin.
 * vim-gutentags : Ctag 파일을 관리하는 Plugin.
 * vim-airline : Vim의 Status Line을 Update하는 Plugin.
+* vim-clang-format : clang-format을 이용하여 Code Align을 수행하는 Plugin.
 * vim-go : golang을 위한 Plugin.
 
 ### 3. Vim 기본 설치, 설정
@@ -101,6 +102,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'rhysd/vim-clang-format'
 Plugin 'bling/vim-airline'
 
 " All of your Plugins must be added before the following line
@@ -144,6 +146,11 @@ let g:gutentags_project_root=['.tag_root']
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 nnoremap <C-p> :YcmCompleter GoTo<CR>
+
+"" vim-clang-format
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+nmap <Leader>C :ClangFormatAutoToggle<CR>
 {% endhighlight %}
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치
