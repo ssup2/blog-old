@@ -1,8 +1,8 @@
 ---
 title: Ceph
 category: Theory, Analysis
-date: 2018-15-14T12:00:00Z
-lastmod: 2018-15-15T12:00:00Z
+date: 2018-05-14T12:00:00Z
+lastmod: 2018-05-15T12:00:00Z
 comment: true
 adsense: true
 ---
