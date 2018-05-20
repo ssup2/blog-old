@@ -33,4 +33,4 @@ adsense: true
 
 Resource를 설정하거나, Resource에 의존적인 Sensitive Instruction들은 모두 Privileged Instruction에 포함되어 있어야 한다. 몇몇의 Sensitive 명령어들이 Priviliged Instruction이 아니라면, 가상 머신이 해당 Priviliged Instruction을 통해서 Resource를 수정하거나 Resource에 의존적인 명령어를 수행할때 하이퍼바이저로 점프하는 Hardware Trap이 발생하지 않게 된다. Hardware Trap이 발생하지 않으면 하이퍼바이저는 실행되지 않기 때문에 가상 머신을 위한 적절한 Emulation을 수행하지 못한다.
 
-x86, ARM Architecture의 몇몇 Sensitive Instruction이 Priviliged Instruction이 아니기 때문에 x86, ARM Architecture는 하이퍼바이저를 구동하기에 적합하지 않다. 이러한 문제를 해결하기 위해 Intel은 Intel-VTx라는 Extension을 추가하였고, ARM은 Hypervisor Extension을 추가하였다. 두 Extension 모두 Supervisor Mode 보다 아래 Level인 Hypervisor를 위한 Mode를 추가하였고, 가상 머신이 문제가 되던  Sensitive Instruction을 수행할 경우 Hypervisor가 구동되는 Mode로 Trap이 발생하도록 제작되었다.
+x86, ARM Architecture의 몇몇 Sensitive Instruction이 Priviliged Instruction이 아니기 때문에 x86, ARM Architecture는 하이퍼바이저를 구동하기에 적합하지 않다. 이러한 문제를 해결하기 위해 Intel은 Intel-VTx라는 Extension을 추가하였고, ARM은 Hypervisor Extension을 추가하였다. 두 Extension 모두 Supervisor Mode 보다 아래 Level인 Hypervisor를 위한 Hypervisor Mode를 추가하였고, 가상 머신이 문제가 되던 Sensitive Instruction을 수행할 경우 Hypervisor가 구동되는 Hypervisor Mode로 Trap이 발생하도록 제작되었다.
