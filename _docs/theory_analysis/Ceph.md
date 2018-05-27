@@ -29,7 +29,7 @@ RADOS Gateway는 동시에 여러대가 운영될 수 있으며 Single Point of 
 
 Ceph가 Block Storage로 동작할때는 Linux Kernel의 RDB Module이나, Librados 기반의 Librbd이 RADOS Cluster의 Client가 된다. Kernel은 RBD Module을 통해 RADOS Cluster로부터 Block Storage를 할당받고 이용 할 수 있다. QEMU는 Librbd를 통해서 VM에게 줄 Block Storage를 할당 받을 수 있다.
 
-##### 1.1.3. File Storage 
+##### 1.1.3. File Storage
 
 Ceph가 File Storage로 동작할때는 Linux Kernel의 Ceph File System이나 Ceph Fuse Daemon이 RADOS Cluster의 Client가 된다. Ceph Filesystem이나 Ceph Fuse를 통해서 Linux Kernel은 Ceph File Storage를 Mount 할 수 있다.
 
@@ -49,17 +49,19 @@ Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failur
 
 ##### 1.2.3. MDS (Meta Data Server)
 
-MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 저장하는 Daemon으로, Ceph가 File Storage로 동작할때만 필요하다. Directory 계층 구조, Owner, Timestamp같은 File의 Meta 정보들을 저장하고 있다. 
+![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_MDS_Namespace.PNG){: width="600px"}
 
-#### 1.3. Read/Write
+MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 저장하는 Daemon으로, Ceph가 File Storage로 동작할때만 필요하다. Directory 계층 구조, Owner, Timestamp같은 File의 Meta 정보들을 저장하고 있다.
 
-##### 1.3.1. Read
+#### 1.3. CRUSH MAP
 
-##### 1.3.2. Write
+![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_PG_CRUSH.PNG){: width="600px"}
 
-#### 1.4. CRUSH MAP
+![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
 
-#### 1.5. Security
+#### 1.4. Read/Write
+
+![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Read_Write.PNG){: width="600px"}
 
 ### 2. 참조
 
@@ -68,3 +70,5 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 * [https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec](https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec)
 * [http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html](http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html)
 * [https://ceph.com/wp-content/uploads/2016/08/weil-crush-sc06.pdf](https://ceph.com/wp-content/uploads/2016/08/weil-crush-sc06.pdf)
+
+* [https://www.slideshare.net/LarryCover/ceph-open-source-storage-software-optimizations-on-intel-architecture-for-cloud-workloads](https://www.slideshare.net/LarryCover/ceph-open-source-storage-software-optimizations-on-intel-architecture-for-cloud-workloads)
