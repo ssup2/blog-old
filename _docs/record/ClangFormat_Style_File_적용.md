@@ -1,5 +1,5 @@
 ---
-title: ClangFormat Sytle
+title: ClangFormat Sytle File, 적용
 category: Record
 date: 2018-05-14T00:00:00Z
 lastmod: 2018-05-14T00:00:00Z
