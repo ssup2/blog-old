@@ -18,12 +18,12 @@ adsense: true
 # sudo apt-get install mutt
 ~~~
 
-### 2. Gmail Access 권한 설정
+### 3. Gmail Access 권한 설정
 
 * Guide - [https://support.google.com/accounts/answer/6010255?hl=en](https://support.google.com/accounts/answer/6010255?hl=en)
 * Secure Apps - [https://myaccount.google.com/lesssecureapps](https://myaccount.google.com/lesssecureapps)
 
-### 3. mutt 설정
+### 4. mutt 설정
 
 * mutt 관련 폴더, 파일 생성
 
@@ -57,7 +57,7 @@ set charset = "utf-8"
 set record = ''
 ~~~
 
-### 3. 사용법
+### 5. 사용법
 
 * mutt 실행
 
@@ -69,5 +69,5 @@ set record = ''
   * m - Compose a new mail message.
   * G - Fetch new messages.
 
-### 4. 참조
+### 6. 참조
 * [http://nickdesaulniers.github.io/blog/2016/06/18/mutt-gmail-ubuntu/](http://nickdesaulniers.github.io/blog/2016/06/18/mutt-gmail-ubuntu/)
