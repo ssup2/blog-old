@@ -26,6 +26,7 @@ adsense: true
 ### 3. mutt 설정
 
 * mutt 관련 폴더, 파일 생성
+
 ~~~
 # mkdir -p ~/Mail
 # touch /var/mail/root
@@ -34,6 +35,7 @@ adsense: true
 ~~~
 
 * ~/.muttrc 파일 설정
+
 ~~~
 set realname = "<first and last name>"
 set from = "<gmail username>@gmail.com"
