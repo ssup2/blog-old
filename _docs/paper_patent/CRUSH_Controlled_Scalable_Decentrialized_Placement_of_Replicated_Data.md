@@ -55,7 +55,7 @@ Tree에 Item 추가,제거 또는 Item의 Weight 변경이 발생하는 경우 W
 
 ##### 2.2.4. Straw
 
-Straw Bucket은 하위 Item별로 Straw를 뽑아 **Straw의 길이가 가장 긴 Item을 선택**하는 방식이다. Straw의 길이는 **각 Item의 Weight에 영향을 받는 Hashing**을 이용한다. Item의 Weight가 클수록 긴 길이의 Straw를 할당 받을 확률이 높아진다. 모든 하위 Item을 대상으로 Hashing을 수행해야 하기 때문에 하위 Item을 선택에 O(n)의 시간이 걸린다.
+Straw Bucket은 하위 Item별로 Straw를 뽑아 **Straw의 길이가 가장 긴 Item을 선택**하는 방식이다. Straw의 길이는 **각 Item의 Weight에 영향을 받는 Hashing**을 이용한다. Item의 Weight가 클수록 긴 길이의 Straw를 할당 받을 확률이 높아진다. 모든 하위 Item을 대상으로 Hashing을 수행해야 하기 때문에 하위 Item 선택에 O(n)의 시간이 걸린다.
 
 Straw에 Item 추가,제거 또는 Item의 Weight가 변경되더라도 각 Item별로 수행한 Hashing을 이용하는 방식이기 때문에 영향받은 Item에 속한 하위 Item들만 Rebalancing을 수행하면 된다. 따라서 빠른 Rebalancing이 가능하다.
 
