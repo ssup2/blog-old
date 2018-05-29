@@ -43,21 +43,25 @@ OSD는 Disk에 Object의 형태로 Data를 저장하는 Daemon이다. brctl, xfs
 
 ##### 1.2.2. Monitor
 
-Monitor는 OSD의 상태를 관리하는 Daemon이다. Monitor는 OSD 상태를 주기적으로 감시하면서 **Cluster Map**을 생성하고 관리한다. OSD Client는 Monitor가 가지고 있는 Cluster Map 정보를 바탕으로 CRUSH MAP 알고리즘을 이용하여 원하는 Object가 어느 OSD에 있는지 파악하게 된다.
-
-Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 **Paxos** 알고리즘을 이용하여 다수의 Monitor가 운영될 시 Monitor간의 Consensus를 맞춘다.
+Monitor는 OSD Map, MDS Map, CRUSH Map, Monitor Map 등과 같은 RADOS Cluster 상태 정보를 관리하고 유지하는 Daemon이다. 또한 Ceph의 보안을 관리하거나 Log를 남기는 기능도 담당한다. Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 **Paxos** 알고리즘을 이용하여 다수의 Monitor가 운영될 시 Monitor간의 Consensus를 맞춘다.
 
 ##### 1.2.3. MDS (Meta Data Server)
 
+MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 관리하는 Daemon으로, Ceph가 File Storage로 동작할때만 필요하다. Directory 계층 구조, Owner, Timestamp같은 File의 Meta 정보들을 Object 형태로 RADOS Cluster에 저장하고 관리한다.
+
 ![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_MDS_Namespace.PNG){: width="600px"}
 
-MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 저장하는 Daemon으로, Ceph가 File Storage로 동작할때만 필요하다. Directory 계층 구조, Owner, Timestamp같은 File의 Meta 정보들을 저장하고 있다.
+위의 그림은 Ceph File System의 Namespace를 나타내고 있다. Tree 모양은 File System의 Directory 구조를 나타낸다. Ceph에서는 전체 Tree 또는 Sub Tree를 Namespace라고 표현한다. 각 MDS는 하나의 Namespace만 관리하고, 관리하는 Namespace와 연관된 Meta Data만 관리한다. Namespace는 Tree의 부하상태 및 Replica 상태에 따라 동적으로 바뀐다.
 
-#### 1.3. CRUSH MAP
+#### 1.3. CRUSH, CRUSH Map
 
 ![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_PG_CRUSH.PNG){: width="600px"}
 
+**CRUSH**는 Object를 어느 OSD에 배치할지 결정하는 알고리즘이다. Replica 설정시 Replica의 위치까지 CRUSH를 통해 결정된다. 위의 그림은 Object가 OSD에 할당되는 과정을 나타내고 있다. Object는 Hashing을 통해 특정 PG(Placement Group)에 할당된다. 그리고 PG는 다시 CRUSH를 통해서 특정 OSD에 할당된다. 위의 그림은 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH은 3개의 OSD를 할당한다.
+
 ![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
+
+CRUSH는 **CRUSH Map**이라는 Storage Topology를 이용한다.
 
 #### 1.4. Read/Write
 
@@ -66,6 +70,7 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 ### 2. 참조
 
 * [http://docs.ceph.com/docs/master/architecture/](http://docs.ceph.com/docs/master/architecture/)
+* [http://yauuu.me/ride-around-ceph-crush-map.html](http://yauuu.me/ride-around-ceph-crush-map.html)
 * [http://docs.ceph.com/docs/jewel/rados/configuration/mon-config-ref/](http://docs.ceph.com/docs/jewel/rados/configuration/mon-config-ref/)
 * [https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec](https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec)
 * [http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html](http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html)
