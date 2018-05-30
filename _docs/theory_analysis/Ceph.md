@@ -63,7 +63,7 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 
 CRUSH는 **CRUSH Map**이라는 Storage Topology를 용한다. 위의 그림은 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. Bucket은 **Weight**값을 가지고 있는데 일반적으로 osd Bucket의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket type의 weight는 모든 하위 Bucket의 Weight의 합이다.
 
-CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Ceph의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. 만약 Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 3개의 선택된 Rack마다 하나씩 존재하게 된다.
+CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Ceph의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 CRUSH에 의해 선택된 3개의 Rack에 하나씩 존재하게 된다.
 
 각 Bucket은 자신의 하위 Bucket을 어떤 알고리즘을 이용하여 관리할지 설정 할 수 있다. 알고리즘은 Uniform, List, Tree, Straw 방식을 지원한다. 알고리즘 성능은 하위 Bucket을 찾는 속도와, CRUSH MAP이 변경에 따른 Object Rebalancing 소요 시간을 비교하여 분석한다.
 
@@ -73,7 +73,7 @@ Uniform 알고리즘은 하위 Bucket들을 **Consistency Hashing**을 이용하
 
 ##### 1.3.2. List
 
-List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. 하위 Bucket을 찾는 경우 Linked List를 순회 해야하기 때문에 O(n) 시간이 걸린다. 따라서 하위 Bucket의 개수가 많아질 경우 탐색시간이 느린 단점을 갖고 있다. 
+List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. 하위 Bucket을 찾는 경우 Linked List를 순회 해야하기 때문에 O(n) 시간이 걸린다. 따라서 하위 Bucket의 개수가 많아질 경우 탐색시간이 느린 단점을 갖고 있다.
 
 Linked List에 Bucket이 추가되는 경우 Linked List의 가장 앞에 추가된다. Bucket이 추가되는 경우, 기존 Bucket들의 하위 Bucket 중 일부만 추가된 Bucket의 하위 Bucket으로 옮기기만 하면 되기 때문에 비교적 빠른 Rebalancing이 가능하다. 하지만 Linked List의 중간이나 마지막 Bucket 제거 또는 Bucket의 Weight 변경이 발생하는 경우 하위 Bucket들을 전반적으로 옮겨야 하기 때문에 Rebalancing에 많은 시간이 소요된다.
 
@@ -105,5 +105,5 @@ CRUSH를 통해 결정된 OSD 중에서 첫번째 OSD를 **Primary OSD**라고 �
 * [https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec](https://www.slideshare.net/sageweil1/20150222-scale-sdc-tiering-and-ec)
 * [http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html](http://140.120.7.21/LinuxRef/CephAndVirtualStorage/VirtualStorageAndUsbHdd.html)
 * [https://ceph.com/wp-content/uploads/2016/08/weil-crush-sc06.pdf](https://ceph.com/wp-content/uploads/2016/08/weil-crush-sc06.pdf)
-
 * [https://www.slideshare.net/LarryCover/ceph-open-source-storage-software-optimizations-on-intel-architecture-for-cloud-workloads](https://www.slideshare.net/LarryCover/ceph-open-source-storage-software-optimizations-on-intel-architecture-for-cloud-workloads)
+* [http://www.lamsade.dauphine.fr/~litwin/cours98/Doc-cours-clouds/ceph-2009-02%5B1%5D.pdf](http://www.lamsade.dauphine.fr/~litwin/cours98/Doc-cours-clouds/ceph-2009-02%5B1%5D.pdf)
