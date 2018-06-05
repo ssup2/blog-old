@@ -27,7 +27,7 @@ adsense: true
 * Docker 1.12.6
   * Kubernetes에서 1.12.x Version을 권장하고 있다.
 * Password
-  * OpenStack 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
+  * Kubernetes 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
 * 모든 Node에서 root User로 설치를 진행한다.
 
 ### 2. Node 설정
