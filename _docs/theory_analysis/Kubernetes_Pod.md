@@ -69,11 +69,11 @@ spec:
         cpu: "500m"
 {% endhighlight %}
 
-위의 YAML 파일은 Pod의 설정 파일이다. Pod의 Resource 설정은 Pod 단위로 설정하는 기능은 없고, Pod에 속한 App Container 단위로 CPU, Memory 설정이 가능하다. CPU, Memory 설정값에는 **Request**와 **Limit** 두가지가 존재한다. Request는 Container의 이용이 보장된 값을 의미하고, Limit는 Container가 이용할 수 있는 최대값을 나타낸다.
+위의 YAML 파일은 Pod의 설정 파일이다. Pod의 Resource 설정은 Pod 단위로 설정하는 기능은 없고, Pod에 속한 App Container 단위로 CPU, Memory 설정이 가능하다. CPU, Memory 설정값에는 **Request**와 **Limit** 두가지가 존재한다. Request는 Container가 언제나 이용할 수 있는 보장된 값을 의미하고, Limit는 Container가 이용할 수 있는 최대값을 나타낸다.
 
 ##### 1.2.1. CPU
 
-CPU Resource 값은 milicpu라는 독특한 단위를 이용한다. 1cpu는 1000mcpu와 동일하다. 여기서 1cpu의 값은 Container가 보는 CPU Core 1개의 Bandwidth를 의미한다. Container가 물리 머신에서 동작하면 1cpu는 물리 CPU Core 1개의 Bandwith를 쓴다는 의미이고, Container가 VM에 올라가 동작하면 1cpu는 가상의 vCPU Core 1개의 Bandwidth를 쓴다는 의미이다.
+CPU Resource 값은 **milicpu**라는 독특한 단위를 이용한다. 1cpu는 1000mcpu와 동일하다. 여기서 1cpu는  Container가 보는 CPU Core 1개의 Bandwidth를 의미한다. Container가 물리 머신에서 동작하면 1cpu는 물리 CPU Core 1개의 Bandwith를 의미하고, container가 VM에 올라가 동작하면 1cpu는 가상 CPU인 vCPU Core 1개의 Bandwidth를 의미한다.
 
 CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용되는 Cgroup의 CPU Quota를 설정하는데 이용된다. CPU Quota는 cfs_period_us와 cfs_quota_us라는 두개의 값으로 조작된다. cfs_period_us은 Quota의 주기를 의미하고 Default값은 100000이다. cfs_quota_us값은 Quota 주기 중에 얼만큼나 이용할지 설정하는 값이다. cfs_quota_us값도 100000으로 설정하면 아래와 같은 공식에 의해서 1cpu으로 CPU 사용량이 제한된다.
 
