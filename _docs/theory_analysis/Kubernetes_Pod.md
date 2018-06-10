@@ -11,7 +11,7 @@ Kubernetes Pod을 분석한다.
 
 ### 1. Pod
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Component.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Component.PNG){: width="500px"}
 
 Pod은 Kubernetes에서 이용하는 **Container 관리 단위**이다. Kubernetes는 Pod 단위로 Scheduling을 및 Load Balancing을 수행한다. 대부분의 Pod은 하나의 Container로 구성되어 있지만 다수의 Container로도 구성 될 수 있다. 이러한 Pod을 Multi-container Pod이라고 표현한다. Multi-container Pod의 Container들은 같은 Network Namespace와 IPC Namespace를 공유한다. 또한 같은 Volume(Storage)를 공유한다.
 
@@ -21,7 +21,7 @@ Multi-container Pod의 경우 서로 Tightly Coupling되어 주로 하나의 Mai
 
 #### 1.1. (Linux) Namespace
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Namespace.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Namespace.PNG){: width="650px"}
 
 위에서 언급한 것 처럼 Multi-container Pod의 Container들은 같은 Network Namespace와 IPC Namespace를 공유하는 특징을 갖는다. 이때 공유되는 Namespace는 사용자가 지정한 App이 동작하는 Container의 Namespace가 아니라, Kubernetes가 각 Pod마다 하나씩 생성하는 Pause Container의 Namespace이다. App Container의 Namespace가 아닌 Pause Container의 Namespace를 공유하는 이유에는 Namespace이 갖고 있는 특징 때문이다.
 
@@ -29,19 +29,78 @@ Namespace는 Clone() System Call을 통해 Process가 Fork되면서 같이 생�
 
 Init Process가 죽어 Namespace가 사라지면 Kernel은 Namespace에 속해있던 다른 Process들도 SIGKILL을 통해 죽인다. 따라서 Container의 Init Process가 죽으면 Namespace가 사라지고 Container의 모든 Process가 죽게된다. App Container의 Namepsace를 다른 App Container들이 공유해서 이용 할 경우, Namespace를 제공하는 App Container의 Init Process가 죽으면 같은 Pod에 속한 모든 Container(Process)도 죽게 된다.
 
-Pause Container는 pause라는 binary를 Init Process로 이용하여 **pause()** System Call을 호출하고 Signal을 받을때까지 Blocking 상태가 된다. Pause Container는 Signal을 받기전 까지 죽지 않기 때문에 다른 App Container에게 안전하게 Namespace를 제공할 수 있다.
+Pause Container는 pause라는 binary를 Init Process로 이용하여 **pause()** System Call을 호출하고 Signal을 받을때까지 Blocking 상태가 된다. Pause Container는 Signal을 받기전 까지 죽지 않기 때문에 Pause Container를 통해 다른 App Container에게 안전하게 Namespace를 제공할 수 있다.
 
 #### 1.2. Resource Manage (Cgroup)
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Cgroup.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Cgroup.PNG){: width="650px"}
+
+Pod의 Resource에는 **CPU**와 **Memory**가 있다. CPU와 Memory 둘다 Linux Kernel의 Cgroup을 이용하여 제어한다. 위의 그림은 Kubernetes가 Cgroup을 어떻게 구성하는지를 나타내고 있다. Pod A, Pod B, Pod C 처럼 Pod 단위의 Cgroup이 존재한다. 그리고 Pod Cgroup 아래에는 Pod에 속한 App Container의 Cgroup과 Pause Container의 Cgroup이 각각 존재한다.
+
+Kubernetes는 Guaranteed, Burstable, BestEffort라는 3개의 QoS Class를 제공한다. Pod의 Resource 설정에 따라서 Pod의 QoS는 3개의 Class중 하나의 Class에 속하게 된다. Burstable, BestEffort Class에 속한 Pod은 해당 Cgroup 아래 속하게 된다. 그리고 Guaranteed Cgroup에 속한 Pod은 Kubernetes가 생성한 최상위 Cgroup인 kubepods Cgroup아래 속하게 된다. kubepods Cgroup은 cpu, memory, freezer 같은 모든 Cgroup 아래 각각 생성된다.
+
+{% highlight YAML %}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: db
+    image: mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "password"
+      resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  - name: wp
+    image: wordpress
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+{% endhighlight %}
+
+위의 YAML 파일은 Pod의 설정 파일이다. Pod의 Resource 설정은 Pod 단위로 설정하는 기능은 없고, Pod에 속한 App Container 단위로 CPU, Memory 설정이 가능하다. CPU, Memory 설정값에는 **Request**와 **Limit** 두가지가 존재한다. Request는 Container의 이용이 보장된 값을 의미하고, Limit는 Container가 이용할 수 있는 최대값을 나타낸다.
 
 ##### 1.2.1. CPU
 
+CPU Resource 값은 milicpu라는 독특한 단위를 이용한다. 1cpu는 1000mcpu와 동일하다. 여기서 1cpu의 값은 Container가 보는 CPU Core 1개의 Bandwidth를 의미한다. Container가 물리 머신에서 동작하면 1cpu는 물리 CPU Core 1개의 Bandwith를 쓴다는 의미이고, Container가 VM에 올라가 동작하면 1cpu는 가상의 vCPU Core 1개의 Bandwidth를 쓴다는 의미이다.
+
+CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용되는 Cgroup의 CPU Quota를 설정하는데 이용된다. CPU Quota는 cfs_period_us와 cfs_quota_us라는 두개의 값으로 조작된다. cfs_period_us은 Quota의 주기를 의미하고 Default값은 100000이다. cfs_quota_us값은 Quota 주기 중에 얼만큼나 이용할지 설정하는 값이다. cfs_quota_us값도 100000으로 설정하면 아래와 같은 공식에 의해서 1cpu으로 CPU 사용량이 제한된다.
+
+> cfs_quota_us / cfs_period_us = 100000 / 100000 = 1
+
+2cpu만 이용하도록 제한한다면 cfs_quota_us 값을 200000으로 설정하면 된다. cpu할당은 Container가 동작하는 (v)CPU의 개수에 의해 제한된다. 예를 들어 Container가 동작하는 Node에 4 (v)CPU만 있는데 Container에게 8cpu를 할당 할 수는 없다. 최대 4cpu까지만 할당 할 수 있다. 
+
+위와 같은 방식을 이해한다면 Kubernetes에서 CPU limit에 따라서 cfs_quota_us 값 어떻게 계산하여 넣는지 이해 할 수 있다. 만약 CPU limit를 500 milicpu를 설정하였다면 아래와 같이 cfs_quota_us값이 계산된다.
+
+> cfs_quota_us = (500 / 1000) * cfs_period_us = 0.5 * 100000 = 50000
+
+CPU Request 값은 Linux에서 Process의 Scheduling 가중치를 주는데 이용되는 Cgroup의 CPU Weight를 설정하는데 이용된다. Process A는 1024 Weight를 갖고 있고, Process B는 512 Weight를 갖고 있다면 Process A는 Process B보다 2배 많이 CPU Bandwith를 이용할 수 있게 된다. CPU weight를 활용하면 Container가 필요한 최소의 CPU Bandwith를 확보 할 수 있다.
+
+Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 750 milicpu로 설정하였다면 Kubernetes는 아래와 식을 이용하여 Weight값을 설정한다.
+
+> shares(weight) = (750 / 1000) * 1024 = 768
+
+1000 milicpu를 갖고있는 Node에 750 milicpu를 Container를 할당한다고 가정하자. shares는 위의 계산처럼 768이 된다. 이 Node에는 250 milicpu만 남아있기 때문에 최대 250 milicpu Container만 이 Node에 생성이 가능하다. 250 milicpu Container의 share값은 256이다. share 값에 따라서 250 milicpu Container가 이 Node에 생성되더라도 처음 생성된 Container는 750 milicpu를 보장받는다는 걸 알 수 있다. 이처럼 CPU Request 값은 CPU Weight와 Kubernets의 Pod Scheduling을 통해서 보장된다.
+
 ##### 1.2.2. Memory
 
-#### 1.3. Life Cycle
+#### 1.3. QoS
+
+#### 1.4. Life Cycle
 
 ### 2. 참조
 
 * [https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/)
 * [https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/](https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/)
+* [https://medium.com/google-cloud/quality-of-service-class-qos-in-kubernetes-bb76a89eb2c6](https://medium.com/google-cloud/quality-of-service-class-qos-in-kubernetes-bb76a89eb2c6)
