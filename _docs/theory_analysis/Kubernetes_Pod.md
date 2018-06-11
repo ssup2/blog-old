@@ -101,7 +101,7 @@ Memory Request 값은 Cgroup 설정에 이용되지 않고 오직 Kubernetes의 
 
 ##### 1.2.3. QoS
 
-위에서 언급한것 처럼 Kubernetes는 Guaranteed, Burstable, BestEffort 3개의 QoS Class를 제공한다. Pod에 속해있는 Container의 Resource 설정에 따라서 하나의 QoS Class로 분류되고, 관리된다.
+위에서 언급한것 처럼 Kubernetes는 **Guaranteed, Burstable, BestEffort** 3개의 QoS Class를 제공한다. Pod에 속해있는 Container의 Resource 설정에 따라서 하나의 QoS Class로 분류되고, 관리된다.
 
 * Guaranteed - 가장 우선순위가 높은 QoS Class로써 Pod이 사용할 Resource 보장에 초점을 두고 있다. Kubernetes는 Guaranteed Pod의 사용 Resource가 Limit 값 이상으로 커지지 경우에만 해당 Guaranteed Pod을 강제로 죽인다. Pod에 속한 모든 Container들의 CPU Limit, CPU Request 값이 같고 Memory Limit, Memory Request 값이 같으면 해당 Pod은 Guaranteed Class로 설정된다.
 
@@ -111,11 +111,50 @@ Memory Request 값은 Cgroup 설정에 이용되지 않고 오직 Kubernetes의 
 
 #### 1.3. Manage
 
-##### 1.3.1. Status
+Kubernetes는 Pod 관리 및 제어를 위한 여러가지 기법을 제공하고 있다.
 
-##### 1.3.2. Probe
+##### 1.3.1. Probe
 
-##### 1.3.3. Init Container
+Probe는 Kubernetes에서 Container의 정상 동작을 감시하기 위한 기법이다. 각 Node에 뜨는 kubelet Daemon은 주기적으로 Container마다 정의된 Handler를 호출하여 Container의 정상 동작을 감시한다. Handler는 Exec, TCP Socket, HTTP Get 크게 3가지의 Type이 존재한다.
+
+* Exec - Container안에서 특정 명령어를 실행한다. 실행한 명령어의 Exit Code가 0이면 Container가 정상 상태라고 간주하고, 0이 아니면 정상 상태가 아니라고 간주한다.
+* TCP Socket - Container가 특정 Port 번호를 열고 있으면 Container가 정상 상태라고 간주한다.
+* HTTP Get - Container에게 HTTP Get Request를 날려 정상응답이 오면 Containe가 정상 상태라고 간주한다.
+
+Probe에는 livenessProbe, readinessProbe 2가지 종류의 Probe가 존재한다. 각 Container마다 livenessProbe와 readinessProbe를 정의 할 수 있다.
+
+* livenessProbe - Container가 Running 상태라는걸 감지하기 위한 Probe이다. livenessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 삭제하고 Container의 Restart Policy에 따라서 해당 Container를 재시작하거나 그대로 놔둔다.
+* readinessProbe - Container가 Service 요청을 받을 수 있는 상태인지를 감지하기 위한 Probe이다. readinessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 갖고 있는 Pod의 IP 설정을 제거한다.
+
+{% highlight YAML %}
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-exec
+spec:
+  containers:
+  - name: liveness
+    image: k8s.gcr.io/busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+{% endhighlight %}
+
+위의 예제는 Exec Type의 livenessProbe를 이용한 Pod의 예제를 나타내고 있다. 위의 Pod은 /tmp/healthy 파일을 생성하고 30초 동안 대기하고 있다가 /tmp/healty 파일을 삭제하고 600초 동안 대기후 사라지는 Pod이다. livenessProbe는 cat 명령어를 통해 /tmp/healty 파일을 읽는 명령을 5초 주기로 수행한다. 30초동안은 /tmp/healty파일이 존재하기 때문에 Probe 결과는 성공으로 나오겠지만, 30초 이후에는 /tmp/healty 파일이 사라지기 때문에 Probe 결과는 실패가 된다.
+
+##### 1.3.2. Init Container
+
+Init Container는
 
 ### 2. 참조
 
