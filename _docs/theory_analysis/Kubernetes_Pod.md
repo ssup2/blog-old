@@ -79,7 +79,7 @@ CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용�
 
 > cfs_quota_us / cfs_period_us = 100000 / 100000 = 1
 
-2cpu만 이용하도록 제한한다면 cfs_quota_us 값을 200000으로 설정하면 된다. cpu할당은 Container가 동작하는 (v)CPU의 개수에 의해 제한된다. 예를 들어 Container가 동작하는 Node에 4 (v)CPU만 있는데 Container에게 8cpu를 할당 할 수는 없다. 최대 4cpu까지만 할당 할 수 있다.
+2cpu만 이용하도록 제한한다면 cfs_quota_us 값을 200000으로 설정하면 된다. CPU 할당은 Container가 동작하는 (v)CPU의 개수에 의해 제한된다. 예를 들어 Container가 동작하는 Node에 4 (v)CPU만 있는데 Container에게 8cpu를 할당 할 수는 없다. 최대 4cpu까지만 할당 할 수 있다.
 
 위와 같은 방식을 이해한다면 Kubernetes에서 CPU limit에 따라서 cfs_quota_us 값 어떻게 계산하여 넣는지 이해 할 수 있다. 만약 CPU limit를 500milicpu를 설정하였다면 아래와 같이 cfs_quota_us값이 계산된다.
 
@@ -87,7 +87,7 @@ CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용�
 
 CPU Request 값은 Linux에서 Process의 Scheduling 가중치를 주는데 이용되는 Cgroup의 CPU Weight를 설정하는데 이용된다. Process A는 1024 Weight를 갖고 있고, Process B는 512 Weight를 갖고 있다면 Process A는 Process B보다 2배 많이 CPU Bandwith를 이용할 수 있게 된다. CPU weight를 활용하면 Container가 필요한 최소의 CPU Bandwith를 확보 할 수 있다.
 
-Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 750milicpu로 설정하였다면 Kubernetes는 아래와 식을 이용하여 Weight값을 설정한다.
+Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 750milicpu로 설정하였다면 Kubernetes는 아래와 식을 이용하여 shares 값을 설정한다. 만약 CPU Request를 설정하지 않아 shares가 0이 나왔다면 최소 shares 값인 2로 설정한다.
 
 > shares(weight) = (750 / 1000) * 1024 = 768
 
@@ -95,11 +95,27 @@ Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 7
 
 ##### 1.2.2. Memory
 
-Memory Resource는 Memory 용량을 이용한다.
+Memory Resource 값은 일반적인 용량단위(Byte, MB, GB)를 이용한다. Memory Limit 값은 Linux에서 Process의 Memory 사용량을 제한하는데 이용되는 Cgroup의 Memory Limit 값을 설정하는데 이용된다. Container에 설정한 용량값 그대로 Memory Limit 값으로 이용된다. Memory Limit 값은 Container가 동작하는 Node의 Memory 값보다 클 수 없다. Memory Limit 값은 Cgroup의 limit_in_bytes라는 값으로 조작된다.
 
-#### 1.3. QoS
+Memory Request 값은 Cgroup 설정에 이용되지 않고 오직 Kubernetes의 Pod Scheduling시에만 이용된다.
 
-#### 1.4. Life Cycle
+##### 1.2.3. QoS
+
+위에서 언급한것 처럼 Kubernetes는 Guaranteed, Burstable, BestEffort 3개의 QoS Class를 제공한다. Pod에 속해있는 Container의 Resource 설정에 따라서 하나의 QoS Class로 분류되고, 관리된다.
+
+* Guaranteed - Guaranteed Class는 가장 우선순위가 높은 QoS Class로써 Pod이 사용할 Resource 보장에 초점을 두고 있다. Kubernetes는 Guaranteed Pod의 사용 Resource가 Limit 값 이상으로 커지지 경우에만 해당 Guaranteed Pod을 강제로 죽인다. Pod에 속한 모든 Container들의 CPU Limit, CPU Request 값이 같고 Memory Limit, Memory Request 값이 같으면 해당 Pod은 Guaranteed Class로 설정된다.
+
+* Burstable - Burstable Class는 중간 우선순위 QoS Class로써 Pod이 사용할 최소한의 Resource 제공에 초점을 두고 있다. Kubernetes는 Node에 Resource가 부족하고, BestEffort Pod이 없는 상태에서 Burstable Pod의 사용 Resource가 Request 값보다 큰 경우 해당 Burstable Pod을 강제로 죽일 수 있다. Resource Limit Guaranteed Class 조건을 만족시키지 않으면서 Pod에 속한 Container중 하나 이상의 Container의 Resource에 Request 값이 존재하면 Burstable 해당 Pod은 Burstable Class로 설정된다.
+
+* BestEffort - 가장 우선순위가 낮은 QoS Class이다. Kubernetes는 Node에 Resource가 부족한 경우 BestEffort Pod부터 강제로 죽이기 시작한다. Pod에 속한 모든 Container들의 모든 Resource가 설정되어있지 않으면 해당 Pod은 BestEffort Class로 설정된다.
+
+#### 1.3. Manage
+
+##### 1.3.1. Status
+
+##### 1.3.2. Probe
+
+##### 1.3.3. Init Container
 
 ### 2. 참조
 
