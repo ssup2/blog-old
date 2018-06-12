@@ -154,7 +154,32 @@ spec:
 
 ##### 1.3.2. Init Container
 
-Init Container는
+Init Container는 Pod의 App Container가 동작하기 전에 Pod의 초기화, 외부 Service 대기 등을 위해 생성하는 Container이다. Init Container는 App Container와 동일하게 Pause Container의 Network Namespace와 IPC Namespace를 이용한다. 또한 Pod이 제공하는 Volume에도 똑같이 접근할 수 있다. 따라서 Init Container를 통해서 App Container가 이용하는 Network Routing Table을 변경하거나, Volume을 초기화 할 수 있다.
+
+{% highlight YAML %}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+  - name: init-mydb
+    image: busybox
+    command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
+{% endhighlight %}
+
+위의 예제는 2개의 Init Container를 이용하는 예제이다. 다수의 Init Container가 존재하는 경우 먼져 정의된 Init Container 부터 차례대로 실행한다. 앞의 Init Container가 정상 종료해야 다음 Init Container가 수행된다. 마지막 Init Container가 정상 종료된 뒤에야 App Container가 수행된다. 따라서 Init Container들은 반드시 초기화 진행 후 종료되는 Container야 한다. 위의 예제에서는 init-myservice -> init-mydb -> myapp-container 순으로 Container가 생성된다.
+
+만약 Init Container가 정상 종료되지 않으면 Pod의 Restart 정책에 따라 해당 Pod을 재시작하여 Init Container를 다시 수행하거나, 그대로 놔둔다.
 
 ### 2. 참조
 
