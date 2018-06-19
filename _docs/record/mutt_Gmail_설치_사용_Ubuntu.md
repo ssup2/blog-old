@@ -7,10 +7,9 @@ comment: true
 adsense: true
 ---
 
-### 1. 설정 환경
+### 1. 설치 환경
 
-* Ubuntu 18.04
-* root user
+* Ubuntu 18.04 LTS 64bit, root user
 
 ### 2. mutt 설치
 
