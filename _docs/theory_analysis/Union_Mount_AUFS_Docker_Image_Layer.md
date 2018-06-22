@@ -55,7 +55,7 @@ Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 
 
 AUFS를 이해했다면 Docker가 어떻게 Image Layer를 이용하는지 예측 할 수 있다. 위 명령어와 그림은 Docker가 Container 생성시 AUFS를 어떻게 이용하는지를 나타내고 있다. Docker는 Container 생성시 Container를 위한 Root 폴더와 RW 폴더를 생성한다. 그 후 Docker는 Base Image의 Layer(폴더)들을 RO Branch로 설정하고, Container RW 폴더를 RW Branch로 설정하여 Container의 Root 폴더에 AUFS Mount를 수행한다.  
 
-Container가 동작하면서 변경하거나 추가한 파일들은 모두 Container의 RW 폴더에 남게되고 RO Branch들인 Base Image Layer들에게는 전혀 영향을 주지 않는다. Base Image Layer들은 변경되지 않으므로 다른 Container들과 공유해서 사용 가능하다. Container의 파일 변경 내용은 RW 폴더에만 남기 때문에 Docker는 Snapshot 수행시 Container RW 폴더만 복사하여 관리한다. Snapshot으로 생성한 이미지를 이용하는 Container를 생성 할 경우 Docker는 복사해둔 RW 폴더를 새로운 Container의 RO Branch로 설정하여 이용한다. **이와 같이 하나의 AUFS Branch가 하나의 Docker Image Layer가 된다.**
+Container가 동작하면서 변경하거나 추가한 파일들은 모두 Container의 RW 폴더에 남게되고 RO Branch들인 Base Image Layer들에게는 전혀 영향을 주지 않는다. Base Image Layer들은 변경되지 않으므로 다른 Container들과 공유해서 사용 가능하다. Container의 파일 변경 내용은 RW 폴더에만 남기 때문에 Docker는 Snapshot 수행시 Container RW 폴더만 복사하여 관리한다. Snapshot으로 생성한 이미지를 이용하는 Container를 생성 할 경우 Docker는 복사해둔 RW 폴더를 새로운 Container의 RO Branch로 설정하여 이용한다. 이와 같이 **하나의 AUFS Branch가 하나의 Docker Image Layer**가 된다.
 
 Docker Daemon은 현재 AUFS뿐만 아니라 ZFS, OverlayFS 등 다양한 파일시스템을 Backend 파일시스템으로 이용하고 있다. 위 설명은 AUFS를 이용할 경우에만 해당한다. 하지만 Docker Daemon이 AUFS를 Backend 파일시스템으로 이용하고 있지 않더라도 Docker Image를 Upload/Download 할때에는 Docker Image Layer는 AUFS Branch 규격으로 변환 후 Upload/Download를 수행한다. OCI(Open Container Initiative)에서 선언한 Image Spec이 AUFS Branch를 선택했기 때문이다. 실제로 Docker Registry에서 직접 Layer를 받아 압축을 풀어보면 AUFS의 Whiteout 파일을 확인 할 수 있다.
 
