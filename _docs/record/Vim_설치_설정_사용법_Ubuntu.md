@@ -1,5 +1,5 @@
 ---
-title: Vim 설치, 설정 - Ubuntu
+title: Vim 설치, 설정, 사용법 - Ubuntu
 category: Record
 date: 2017-01-20T16:41:00Z
 lastmod: 2017-01-22T16:41:00Z
@@ -21,15 +21,14 @@ adsense: true
 
 ### 2. 설정 Plugin 목록
 
-* vundle : Vim Plugin Manager역활을 수행하는 Plugin.
-* nerdtree : Vim용 파일 탐색기.
-* tagbar : Code의 Tag 목록을 보여주는 Plugin.
-* SrcExpl : Vim의 커서가 위치한 변수의 선언 위치나 함수의 정의 부분을 보여주는 Plugin.
-* YouCompleteMe : Code 자동완성 Plugin.
-* vim-gutentags : Ctag 파일을 관리하는 Plugin.
-* vim-airline : Vim의 Status Line을 Update하는 Plugin.
-* vim-clang-format : clang-format을 이용하여 Code Align을 수행하는 Plugin.
-* vim-go : golang을 위한 Plugin.
+* vundle : Vim Plugin Manager역활을 수행하는 Plugin
+* nerdtree : Vim용 파일 탐색기
+* tagbar : Code의 Tag 목록을 보여주는 Plugin
+* YouCompleteMe : Code 자동완성 Plugin
+* vim-gutentags : Ctag 파일을 관리하는 Plugin
+* vim-airline : Vim의 Status Line을 Update하는 Plugin
+* vim-clang-format : clang-format을 이용하여 Code Align을 수행하는 Plugin
+* vim-go : golang을 위한 Plugin
 
 ### 3. Vim 기본 설치, 설정
 
@@ -179,7 +178,10 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 ~~~
 
 * .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
-  * https://github.com/Valloric/ycmd/blob/master/cpp/ycm/.ycm_extra_conf.py
+
+~~~
+# wget https://raw.githubusercontent.com/Valloric/ycmd/3ad0300e94edc13799e8bf7b831de8b57153c5aa/cpp/ycm/.ycm_extra_conf.py -O ~/.vim/.ycm_extra_conf.py
+~~~
 
 ### 4. golang 환경 설치, 설정
 
@@ -212,7 +214,7 @@ Plugin 'fatih/vim-go'
 
 #### 4.4. YouCompleteMe 재설치
 
-* YouComplete Compile 및 설치
+* YouCompleteMe Compile 및 설치
 
 ~~~
 # cd ~/.vim/bundle/YouCompleteMe
@@ -227,7 +229,28 @@ Plugin 'fatih/vim-go'
 : GoInstallBinaries
 ~~~
 
-### 5. 참조
+### 5. 사용법
+
+#### 5.1. YouCompleteMe
+
+* C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사하여 YouCompleteMe 구동
+
+| 단축키 | 동작 |
+|-------|------|
+| ctrl + p | YouCompleteMe Tag Jump |
+| ctrl + o | 이전 Jump Point로 이동 (VIM 단축키) |
+| ctrl + i | 다음 Jump Point로 이동 (VIM 단축키) |
+
+#### 5.2. vim-clang-format
+
+* c, cpp 저장 시 자동으로 clang-format 적용
+
+| 단축키 | 동작 |
+|-------|------|
+| \cf | clang-format 적용 |
+| \C | Auto clang-format 적용 Toggle |
+
+### 6. 참조
 
 * Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
 * Colorscheme - [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
