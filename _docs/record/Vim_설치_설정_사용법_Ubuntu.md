@@ -201,8 +201,9 @@ let g:clang_format#auto_format=1
 * ~/.bashrc 파일에 다음의 내용 추가
 
 ~~~
-export GOPATH=$HOME/Desktop/golang
-export PATH=$PATH:$GOPATH/bin
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
 ~~~
 
 #### 4.3. .vimrc 파일 설정
