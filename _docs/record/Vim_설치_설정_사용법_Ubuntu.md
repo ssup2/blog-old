@@ -233,7 +233,7 @@ Plugin 'fatih/vim-go'
 
 #### 5.1. YouCompleteMe
 
-* C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사하여 YouCompleteMe 구동
+* C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사
 
 | 단축키 | 동작 |
 |-------|------|
