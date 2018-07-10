@@ -11,13 +11,13 @@ Network Tunneling 기법인 IP-in-Ip 기법과 GRE 기법을 분석한다.
 
 ### 1. IP-in-IP
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Header.PNG){: width="300px"}
+![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Header.PNG){: width="450px"}
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Process.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Process.PNG)
 
 ### 2. GRE
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/GRE_Header.PNG){: width="400px"}
+![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/GRE_Header.PNG){: width="600px"}
 
 ### 3. 참조
 
