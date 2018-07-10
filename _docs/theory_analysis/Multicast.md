@@ -17,7 +17,7 @@ Network Packet 전송 방법은 크게 Unicast, Broadcast, Multicast 3가지 방
 
 ![]({{site.baseurl}}/images/theory_analysis/Multicast/Multicast_Address.PNG){: width="600px"}
 
-Multicast는 일반적으로 L3는 IP를 이용하고 L4는 UDP를 이용한다. 위의 그림은 Multicast Packet의 IP Address와 Ethernet Address를 나타내고 있다. Multicast는 IP Address로 **Class D**를 이용한다. Class D는 앞의 4비트가 **1110**으로 시작하는 주소를 의미한다. Multicast IP는 하나의 **Multicast Group**을 나타낸다. Packet의 Dest IP가 Multicast IP인 255.0.0.1이라면 255.0.0.1 Group에 소속되어 있는 Node들만 해당 Packet을 받게 된다.
+Multicast는 일반적으로 L3는 IP를 이용하고 L4는 UDP를 이용한다. 위의 그림은 Multicast Packet의 IP Address와 Ethernet Address를 나타내고 있다. Multicast는 IP Address로 **Class D**를 이용한다. Class D는 앞의 4비트가 **1110**으로 시작하는 주소를 의미한다. Multicast IP는 하나의 **Multicast Group**을 나타낸다. Packet의 Dest IP가 Multicast IP인 224.0.0.1이라면 224.0.0.1 Group에 소속되어 있는 Node들만 해당 Packet을 받게 된다.
 
 Ethernet Address는 IP Address를 기반으로 생성한다. Ethernet Address는 **0000 0001 0000 0000 0101 1110 0**으로 시작하며 나머지 23bit는 IP Address의 뒷부분 23bit으로 채워 생성한다. 위 그림의 빨간 부분 처럼 5bit가 Ethernet Address를 만드는데 이용되지 않기 때문에 하나의 Ethernet Address가 여러개의 IP Address를 나타낼 수 있다.
 
@@ -29,7 +29,7 @@ IGMP는 Router와 Subnet사이에서 Multicast Group 정보를 주고 받기 위
 
 ![]({{site.baseurl}}/images/theory_analysis/Multicast/IGMP_Report.PNG)
 
-위의 그림은 IGMP Protocol의 Report를 나타내고 있다. Subnet에 속해 있는 특정 Node가 255.0.0.1 Multicast Group에 소속되고 싶으면 Node는 Router에게 IGMP Report Packet을 전송한다. Router는 Dest IP가 255.0.0.1인 Multicast Packet을 받으면 IGMP Report Packet을 전송한 Node가 있는 Subnet으로 Multicast Packet을 전송한다.
+위의 그림은 IGMP Protocol의 Report를 나타내고 있다. Subnet에 속해 있는 특정 Node가 224.0.0.1 Multicast Group에 소속되고 싶으면 Node는 Router에게 IGMP Report Packet을 전송한다. Router는 Dest IP가 224.0.0.1인 Multicast Packet을 받으면 IGMP Report Packet을 전송한 Node가 있는 Subnet으로 Multicast Packet을 전송한다.
 
 #### 3.2. IGMP Query, Leave
 
