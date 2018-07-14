@@ -60,21 +60,10 @@ adsense: true
 * ~/.bashrc 파일에 다음의 내용 추가
 
 ~~~
-export TERM=xterm-256color
+source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 ~~~
 
-#### 3.3. Vim Color Theme 다운로드
-
-* git을 이용하여 seoul256 Theme 설치
-
-~~~
-# mkdir -p ~/.vim/colors
-# git clone https://github.com/junegunn/seoul256.vim.git
-# cp seoul256.vim/colors/seoul256.vim ~/.vim/colors/seoul256.vim
-# rm -r seoul256.vim
-~~~
-
-#### 3.4. Vundle Plugin 설치
+#### 3.3. Vundle Plugin 설치
 
 * git을 이용하여 Vundle 설치
 
@@ -90,7 +79,7 @@ export TERM=xterm-256color
 "
 " supsup's .vimrc
 "
-" Version 1.20 for Ubuntu
+" Version 1.21 for Ubuntu
 "
 
 "" vundle Setting
@@ -103,12 +92,13 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
+Plugin 'morhetz/gruvbox'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'ludovicchabant/vim-gutentags'
-Plugin 'rhysd/vim-clang-format'
 Plugin 'bling/vim-airline'
+Plugin 'fatih/vim-go'
 
 " All of your Plugins must be added before the following line
 call vundle#end()               " required
@@ -121,8 +111,11 @@ set ai                          " Auto Indent
 set ts=4                        " Tab Size
 set sw=4                        " Shift Width
 set hlsearch                    " highlight all search matches
+colorscheme gruvbox
 syntax on
-colorscheme seoul256
+
+"" gruvbox
+set background=dark
 
 "" cscope Setting
 set csprg=/usr/bin/cscope         " cscope Which
@@ -145,7 +138,10 @@ filetype on
 let g:tagbar_width = 35
 
 "" vim-gutentags
-let g:gutentags_project_root=['.tag_root']
+let g:gutentags_project_root = ['.tag_root']
+let g:gutentags_project_info = []
+call add(g:gutentags_project_info, {"type": "go", "glob": "*.go"})
+let g:gutentags_ctags_executable_go = 'gotags'
 
 "" YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
@@ -208,7 +204,7 @@ export PATH=$PATH:$GOBIN
 
 #### 4.3. .vimrc 파일 설정
 
-* ~/.vimrc 파일에 다음의 내용 추가
+* ~/.vimrc 파일의 Vundle Plugins에 다음의 내용 추가
 
 ~~~
 Plugin 'fatih/vim-go'
