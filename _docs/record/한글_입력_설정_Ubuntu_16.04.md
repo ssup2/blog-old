@@ -13,7 +13,7 @@ adsense: true
 
 ### 2. 한글 설치 (IBus)
 
-![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean/Ubuntu_Hangul_Install.PNG)
+![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean_Ubuntu_16.04/Ubuntu_Hangul_Install.PNG)
 
 * System Settings -> Language Support -> Install / Remove Languages...
 * Korean 선택 -> Apply
@@ -21,13 +21,13 @@ adsense: true
 
 ### 3. Text Entry 설정
 
-![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean/Ubuntu_Hangul_Setting.PNG)
+![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean_Ubuntu16.04/Ubuntu_Hangul_Setting.PNG)
 
 * System Settings -> Text Entry- '+' 버튼을 눌러 위의 그림같이 Korean (Hangul) (IBus)를 추가한다.
 
 ### 4. 한글 설정
 
-![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean/Ubuntu_Hangul_Mark.PNG)
+![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean_Ubuntu16.04/Ubuntu_Hangul_Mark.PNG)
 
 * 오른쪽 상단의 아이콘을 위의 그림과 같이 태극 모양으로 바꾼다.
 * 한영키를 누르면 한글 입력을 확인 할 수 있다.

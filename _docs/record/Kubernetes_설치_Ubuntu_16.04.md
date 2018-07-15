@@ -32,11 +32,11 @@ adsense: true
 
 ### 2. Node 설정
 
-![]({{site.baseurl}}/images/record/Kubernetes_Install/Node_Setting.PNG)
+![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu16.04/Node_Setting.PNG)
 
 * VirtualBox를 이용하여 위의 그림과 같이 가상의 Master, Worker Node (VM)을 생성한다.
-* Kubernetes의 Dashboard는 기본적으로 Master의 Web Browser에서만 이용할 수 있다. 따라서 Master Node에는 Ubuntu Desktop Version을 설치한다.
-* NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.
+* Kubernetes의 Dashboard는 기본적으로 Master의 Web Browser에서만 이용할 수 있다. 따라서 Master Node에는 Ubuntu Desktop Version 또는 X Server를 이용한다.
+* NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * Router - 공유기를 이용하여 192.168.77.0/24 Network를 구축한다. (NAT)
 
 #### 2.1. Master Node
