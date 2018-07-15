@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 - Ubuntu 16.04
+title: Android 설치 - Arndale Broad
 category: Record
 date: 2014-10-02T12:00:00Z
 lastmod: 2014-10-02T12:00:00Z

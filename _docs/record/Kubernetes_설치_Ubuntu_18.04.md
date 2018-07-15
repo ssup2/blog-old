@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 - Ubuntu 16.04
+title: Kubernetes 설치 - Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
 lastmod: 2018-07-15T12:00:00Z
