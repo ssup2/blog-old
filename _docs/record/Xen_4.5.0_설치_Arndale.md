@@ -1,5 +1,5 @@
 ---
-title: Android 설치 - Arndale Broad
+title: Xen 4.5.0 설치 - Arndale Board
 category: Record
 date: 2015-07-16T12:00:00Z
 lastmod: 2015-07-16T12:00:00Z
