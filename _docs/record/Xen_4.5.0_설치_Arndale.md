@@ -345,6 +345,7 @@ service tftp
 ~~~
 
 * fstab 설정
+
 ~~~
 (chroot)# vi /etc/fstab
   -> xenfs   /proc/xen    xenfs    defaults   0   0
