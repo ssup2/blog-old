@@ -17,7 +17,7 @@ adsense: true
 ### 1. 설치 환경
 
 * PC - Windows 7 64bit
-* VM - Ubuntu 12.04LTS 64bit
+* VM in PC - Ubuntu 12.04LTS 64bit
 * Android JB mr1 provided from Insignal
 
 ### 2. Windows에 USB Driver 설치
@@ -45,7 +45,7 @@ adsense: true
 
 * Windows의 Device Manager를 통해 ADB USB Driver 설치
 
-### 3. Ubuntu Package 설치 - VM
+### 3. Ubuntu Package 설치
 
 * Ubuntu Package 설치
 
