@@ -1,8 +1,8 @@
 ---
-title: Android 설치, 실행 - Arndale Broad
+title: KVM, QEMU 설치, 실행 - Arndale Broad
 category: Record
-date: 2014-10-02T12:00:00Z
-lastmod: 2014-10-02T12:00:00Z
+date: 2015-07-22T12:00:00Z
+lastmod: 2015-07-22T12:00:00Z
 comment: true
 adsense: true
 ---
