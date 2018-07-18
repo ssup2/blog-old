@@ -1,5 +1,5 @@
 ---
-title: Android 설치 - ODROID XU Broad with ODROID-VU
+title: Android 설치,실행 - ODROID XU Broad with ODROID-VU
 category: Record
 date: 2014-10-24T12:00:00Z
 lastmod: 2014-10-24T12:00:00Z
@@ -17,7 +17,7 @@ adsense: true
 ### 1. 설치 환경
 
 * PC - Windows 7 64bit
-* VM in PC - Ubuntu 12.04LTS 64bit
+* VM on PC - Ubuntu 12.04LTS 64bit
 * ODROID-XU, 16GB emmc
 * Android 4.2.2 Alpha 2.5 Release
 

@@ -1,5 +1,5 @@
 ---
-title: Xen 4.5.0 설치 - Arndale Board
+title: Xen 4.5.0 설치,실행 - Arndale Board
 category: Record
 date: 2015-07-16T12:00:00Z
 lastmod: 2015-07-16T12:00:00Z
@@ -17,7 +17,7 @@ adsense: true
 ### 1. 설치 환경
 
 * PC - Ubuntu 14.04LTS 64bit, root user
-* VM - Xen 4.5.0, Dom0 & DomU kernel 3.18.3 in linux upstream, Ubuntu 14.04LTS 32bit
+* VM on Xen - Xen 4.5.0, Dom0 & DomU kernel 3.18.3 in linux upstream, Ubuntu 14.04LTS 32bit
 * Network
   * Gateway : 192.168.0.1
   * HostOS(xenbr0) : 192.168.0.150

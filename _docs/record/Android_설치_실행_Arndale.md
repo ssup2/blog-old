@@ -1,5 +1,5 @@
 ---
-title: Android 설치 - Arndale Broad
+title: Android 설치, 실행 - Arndale Broad
 category: Record
 date: 2014-10-02T12:00:00Z
 lastmod: 2014-10-02T12:00:00Z
@@ -17,7 +17,7 @@ adsense: true
 ### 1. 설치 환경
 
 * PC - Windows 7 64bit
-* VM in PC - Ubuntu 12.04LTS 64bit
+* VM on PC - Ubuntu 12.04LTS 64bit
 * Android JB mr1 provided from Insignal
 
 ### 2. Windows에 USB Driver 설치
