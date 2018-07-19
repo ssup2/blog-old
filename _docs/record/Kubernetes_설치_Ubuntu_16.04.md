@@ -19,7 +19,7 @@ adsense: true
 * VirtualBox 5.0.14r
   * Master Node - Ubuntu Desktop 16.04.2 64bit - 1대
   * Worker Node - Ubuntu Server 16.04.2 64bit - 2대
-* Kubernetes
+* Kubernetes 1.7.1
   * Network Addon - flannel 이용
   * Dashboard Addon - Dashboard 이용
 * kubeadm
@@ -122,7 +122,7 @@ dns-nameservers 8.8.8.8
 * kubelet, kubeadm 설치
 
 ~~~
-# apt-get update && apt-get install -y apt-transport-https
+# apt-get update && apt-get install -y apt-transport-https curl
 # curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 # echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
 # apt-get update
