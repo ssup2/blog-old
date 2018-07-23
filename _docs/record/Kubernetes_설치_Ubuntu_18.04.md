@@ -32,7 +32,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu18.04/Node_Setting.PNG){: width="500px"}
+![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu18.04/Node_Setting.PNG)
 
 * VirtualBox를 이용하여 위의 그림과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * Kubernetes의 Dashboard는 기본적으로 Master의 Web Browser에서만 이용할 수 있다. 따라서 Master Node에는 Ubuntu Desktop Version 또는 X Server를 이용한다.
@@ -63,7 +63,7 @@ network:
 
 #### 2.2. Worker Node
 
-* /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Worker Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
 
 ~~~
 network:
@@ -72,6 +72,20 @@ network:
         enp0s3:
             dhcp4: no
             addresses: [10.0.0.20/24]
+            gateway4: 10.0.0.1
+            nameservers:
+                addresses: [8.8.8.8]
+~~~
+
+* Worker Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+
+~~~
+network:
+    version: 2
+    ethernets:
+        enp0s3:
+            dhcp4: no
+            addresses: [10.0.0.30/24]
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
@@ -178,6 +192,7 @@ source <(kubectl completion bash)
 NAME                STATUS    ROLES     AGE       VERSION
 supsup-virtualbox   Ready     master    21m       v1.11.1
 ubuntu01            Ready     <none>    1m        v1.11.1
+ubuntu02            Ready     <none>    1m        v1.11.1
 ~~~
 
 * Master Node에서 Dashboard 접속
