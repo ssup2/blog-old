@@ -4,7 +4,7 @@ title: Ssup2
 
 ![]({{site.baseurl}}/images/logo.png){: width="300px"}
 
-<img align="left" width="200" src="/images/logo.png">
+<img align="left" width="200" src="{{site.baseurl}}/images/logo.png"><br>
 
 * 가치있는 아키텍트가 되고 싶습니다.
 * 블로그에 공개된 모든 글과 그림의 저작권은 저에게 있습니다. 참조 시 반드시 출처를 남겨주세요.
