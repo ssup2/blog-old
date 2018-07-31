@@ -15,3 +15,5 @@ Kubernetes Network Plugin인 Calico를 분석한다.
 
 * [https://platform9.com/blog/kubernetes-networking-achieving-high-performance-with-calico/](https://platform9.com/blog/kubernetes-networking-achieving-high-performance-with-calico/)
 * [http://leebriggs.co.uk/blog/2017/02/18/kubernetes-networking-calico.html](http://leebriggs.co.uk/blog/2017/02/18/kubernetes-networking-calico.html)
+* [https://kubernetes.feisky.xyz/zh/network/calico/](https://kubernetes.feisky.xyz/zh/network/calico/)
+* [https://jvns.ca/blog/2016/07/16/calico/](https://jvns.ca/blog/2016/07/16/calico/)
