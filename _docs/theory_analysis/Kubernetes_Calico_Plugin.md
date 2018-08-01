@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Calico 분석
+title: Kubernetes Calico Plugin
 category: Theory, Analysis
 date: 2018-07-25T12:00:00Z
 lastmod: 2018-07-25T12:00:00Z
@@ -13,6 +13,7 @@ Kubernetes Network Plugin인 Calico를 분석한다.
 
 ### 2. 참조
 
+* [https://docs.projectcalico.org/master/reference/architecture/](https://docs.projectcalico.org/master/reference/architecture/)
 * [https://platform9.com/blog/kubernetes-networking-achieving-high-performance-with-calico/](https://platform9.com/blog/kubernetes-networking-achieving-high-performance-with-calico/)
 * [http://leebriggs.co.uk/blog/2017/02/18/kubernetes-networking-calico.html](http://leebriggs.co.uk/blog/2017/02/18/kubernetes-networking-calico.html)
 * [https://kubernetes.feisky.xyz/zh/network/calico/](https://kubernetes.feisky.xyz/zh/network/calico/)
