@@ -23,13 +23,17 @@ Calico는 Container, VM 환경에서 **L3기반** Virtual Network를 구축하�
 
 * bird - bird는 **BGP (Border Gateway Protocol)** Client 역활을 수행한다. BGP는 Router간의 Routing Protocol로 Packet을 어느 Router로 Routing할지 결정하는 Protocol이다. 따라서 각 Router는 자신이 전달할 수 있는 IP List를 알고 있어야 한다. bird는 Node에서 동작하는 모든 container의 IP들을 Route Reflector로 전달한다. 그 후 Router는 Route Reflector에게 container들의 IP를 받게되고 Routing Table을 변경하여 Container로 Packet이 Routing 되도록 한다. bird는 BGP Client 뿐만아니라 BGP Route Reflector의 역활을 수행 할 수도 있다.
 
-* confd - confd는 etcd의 Key-Value 변경 내용을 감지하여 동적으로 bird Conf 파일을 생성하는 역활을 수행한다.
- 
+* confd - confd는 etcd의 Key-Value 변경 내용을 감지하여 동적으로 bird Conf 파일을 생성하고 bird를 깨우는 역활을 수행한다.
+
 #### 1.1 Network with IP-in-IP
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Calico_Plugin/Calico_Network_IPIP.PNG)
 
-위의 그림은 IP-in-IP Tunneling 기법을 이용하여 Calico가 설정한 Network를 나타내고 있다.
+위의 그림은 IP-in-IP Tunneling 기법을 이용하여 Calico가 설정한 Network를 나타내고 있다. Node의 Network는 10.0.0.0/24이고, Container Network는 192.168.0.0/24이다. felix는 etcd에 저장된 정보를 바탕으로 각 Node에 Container Network를 할당한다. 그림에서 Node1에는 192.168.2.192/26 Network가 할당되었다. 따라서 Node1에 생긴 Container A의 IP는 192.168.2.192/26 Network에 속한 IP인 192.168.2.195를 이용한다. Node2에는 192.168.3.192/26 Network가 할당 되었기 때문에 Node2에 생긴 Container B의 IP는 192.168.3.192/26 Network에 속한 192.168.3.195를 이용한다.
+
+felix는 각 Node에 Container Network를 할당한 후 다른 Node에 할당된 Container Network로 Packet이 전달되도록 IP-in-IP Tunnel Interface를 생성하고 Routing Table을 추가한다. 그림에서 각 Node의 tunl0 Interface는 서로의 Container Network를 가리키도록 설정되어 있다. felix는 또한 Container에 할당된 IP를 Routing Table에 추가하여 Packet이 Container로 전달되도록 한다.
+
+IP-in-IP를 이용하여 가상의 Container Network를 만드는 방식이지만, Node의 Routing Table에 Container IP 정보도 있기 때문에 Host에서도 Container에게 Packet을 전달할 수 있다. brid도 Node의 Routing Table을 바탕으로 Container IP를 파악하고 Route Reflector로 전달한다.
 
 ### 2. 참조
 
