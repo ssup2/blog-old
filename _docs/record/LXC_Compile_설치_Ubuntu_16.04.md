@@ -7,7 +7,12 @@ comment: true
 adsense: true
 ---
 
-### 1. Package 설치
+### 1. Compile, 설치 환경
+
+* Ubuntu 16.04 LTS 64bit, root user
+* Install Path - /root/lxc_install
+
+### 2. Package 설치
 ~~~
 # apt-get install libtool m4 automake
 # apt-get install libcap-dev
@@ -15,12 +20,12 @@ adsense: true
 # apt-get install docbook
 ~~~
 
-### 2. Compile, 설치
+### 3. Compile, 설치
 ~~~
 # git clone https://github.com/lxc/lxc.git
 # cd lxc
 # ./autogen.sh
-# ./configure
+# ./configure --prefix /root/lxc_install
 # make
 # make install
 # ldconfig
