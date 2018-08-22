@@ -20,7 +20,7 @@ adsense: true
   * Master Node - Ubuntu Desktop 18.04 64bit - 1대
   * Worker Node - Ubuntu Server 18.04 64bit - 1대
 * Kubernetes 1.11
-  * Network Addon - calico 이용
+  * Network Addon - calico or flannel 이용
   * Dashboard Addon - Dashboard 이용
 * kubeadm
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
@@ -126,9 +126,11 @@ network:
 # sudo snap install kubectl --classic
 ~~~
 
-### 4. Cluster 구축
+### 4. Cluster 구축 Calico
 
 #### 4.1. Master Node
+
+#### 4.1.1. Calico 설치
 
 * kubeadm 초기화 (Cluster 생성)
   * 실행 후 Key 값을 얻을 수 있다.
@@ -160,11 +162,54 @@ fi
 source <(kubectl completion bash)
 ~~~
 
-* Network Addon (flannel) 설치
+* Calico 설치
 
 ~~~
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+~~~
+
+* Dashboard Addon (Dashboard) 설치
+
+~~~
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+~~~
+
+#### 4.1.2. Flannel 설치
+
+* kubeadm 초기화 (Cluster 생성)
+  * 실행 후 Key 값을 얻을 수 있다.
+  * 10.0.0.11는 Master NAT 네트워크 IP이다.
+
+~~~
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.11.0
+...
+kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:7faf874316231b4455882f400064a9861c2d446bdf6512802a4b633a04ec44f2
+~~~
+
+* kubectl config 설정
+
+~~~
+# mkdir -p $HOME/.kube
+# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+~~~
+
+* kubectl autocomplete 설정
+  * /root/.bashrc에 다음의 내용 추가
+
+~~~
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+source <(kubectl completion bash)
+~~~
+
+* Flannel 설치
+
+~~~
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
 * Dashboard Addon (Dashboard) 설치
@@ -180,7 +225,7 @@ source <(kubectl completion bash)
 
 ~~~
 # swapoff -a
-# kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:7faf874316231b4455882f400064a9861c2d446bdf6512802a4b633a04ec44f2
 ~~~
 
 #### 4.3. 검증
@@ -207,3 +252,4 @@ ubuntu02            Ready     <none>    1m        v1.11.1
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 * Calio 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
+* Flannel 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/)
