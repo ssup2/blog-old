@@ -15,7 +15,7 @@ Calico는 Container, VM 환경에서 **L3기반** Virtual Network를 구축하�
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Calico_Plugin/Calico_Components.PNG){: width="700px"}
 
-위의 그림은 Calico의 구성요소를 나타낸다. 크게 **etcd, felix, bird, confd** 4가지의 구성요소로 이루어져 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. felix, confd, bird는 모든 Kubernetes Node에서 동작하는 calico-node container에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
+위의 그림은 Calico의 구성요소를 나타낸다. 크게 **etcd, felix, bird, confd** 4가지의 구성요소로 이루어져 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. felix, confd, bird는 모든 Kubernetes Node 위에서 동작하는 calico-node container안에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
 
 * etcd - etcd는 분산 Key-Value store이다. Calico 구동에 필요한 Network 구성/설정 정보, Calico 설정 정보 등 다양한 정보를 저장한다. 또한 저장한 key-value값이 변경될 경우 felix나 bird에게 변경 정보를 전달하는 Communication Bus 역활도 수행한다.
 
@@ -29,9 +29,11 @@ Calico는 Container, VM 환경에서 **L3기반** Virtual Network를 구축하�
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Calico_Plugin/Calico_Network_IPIP.PNG)
 
-위의 그림은 IP-in-IP Tunneling 기법을 이용하여 Calico가 설정한 Network를 나타내고 있다. Node의 Network는 10.0.0.0/24이고, Container Network는 192.168.0.0/24이다. felix는 etcd에 저장된 정보를 바탕으로 각 Node에 Container Network를 할당한다. 그림에서 Node1에는 192.168.2.0/24 Network가 할당되었다. 따라서 Node1에 생긴 Container A의 IP는 192.168.2.0/24 Network에 속한 IP인 192.168.2.10을 이용한다. Node2에는 192.168.3.0/24 Network가 할당 되었기 때문에 Node2에 생긴 Container B의 IP는 192.168.3.0/24 Network에 속한 192.168.3.10를 이용한다.
+위의 그림은 IP-in-IP Tunneling 기법을 이용하여 Calico가 설정한 Network를 나타내고 있다. Node의 Network는 10.0.0.0/24이고, Container Network는 192.168.0.0/24이다. felix는 etcd에 저장된 정보를 바탕으로 각 Node에 Container Network를 할당한다. 그림에서 Node 1에는 192.168.2.0/24 Network가 할당되었다. 따라서 Node 1에 생긴 Container A의 IP는 192.168.2.0/24 Network에 속한 IP인 192.168.2.10을 이용한다. Node 2에는 192.168.3.0/24 Network가 할당 되었기 때문에 Node 2에 생긴 Container B의 IP는 192.168.3.0/24 Network에 속한 192.168.3.10를 이용한다.
 
 felix는 각 Node에 Container Network를 할당한 후 다른 Node에 할당된 Container Network로 Packet이 전달되도록 IP-in-IP Tunnel Interface를 생성하고 Routing Table을 추가한다. 그림에서 각 Node의 tunl0 Interface는 서로의 Container Network를 가리키도록 설정되어 있다. felix는 또한 Container에 할당된 IP를 Routing Table에 추가하여 Packet이 Container로 전달되도록 한다.
+
+Container A에서 Dest IP가 192.168.3.10인 Packet을 보내면, Packet은 calixxx Interface로 나와 Node 1의 Routing Table 규칙에 따라 다시 Routing된다. Packet의 Dest IP가 192.168.3.0/24 Network에 속하기 때문에 Packet은 tunl0 Interface로 전달되고 다시 Node 2로 전달된다. 그 후 Packet은 Node 2의 Routing Table에 따라서 caliyyy Interface에 전달되어 Container B에게 전달된다.
 
 IP-in-IP를 이용하여 가상의 Container Network를 만드는 방식이지만, Node의 Routing Table에 Container IP 정보도 있기 때문에 Host에서도 Container에게 Packet을 전달할 수 있다. brid도 Node의 Routing Table을 바탕으로 Container IP를 파악하고 Route Reflector로 전달한다.
 
