@@ -13,7 +13,7 @@ Kubernetes Network Plugin인 Calico를 분석한다.
 
 Calico는 Container, VM 환경에서 **L3기반** Virtual Network를 구축하게 도와주는 Tool이다. Calico는 **CNI (Container Network Inteface)**를 지원하기 때문에 Kubernetes나 Meos에서 Network Plugin으로 동작 할 수 있다.
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Calico_Plugin/Calico_Components.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Calico_Plugin/Calico_Components.PNG){: width="500px"}
 
 위의 그림은 Calico의 구성요소를 나타낸다. 크게 **etcd, felix, bird, confd** 4가지의 구성요소로 이루어져 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. felix, confd, bird는 모든 Kubernetes Node 위에서 동작하는 calico-node container안에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
 
