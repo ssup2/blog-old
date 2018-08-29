@@ -11,11 +11,9 @@ Kubernetes Network Plugin인 flannel를 분석한다.
 
 ### 1. flannel
 
-flannel은 Kubernetes를 위해서 L3 Network를 구축해주는 Plugin이다.
-
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_flannel_Plugin/flannel_Components.PNG){: width="400px"}
 
-위의 그림은 flannel의 구성요소를 나타낸다. 크게 **etcd, flanneld** 2가지로 구성되어 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. flanneld는 모든 Kubernetes Node 위에서 동작하는 flanneld Container d안에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
+flannel은 Kubernetes를 위해서 L3 Network를 구축해주는 Plugin이다. 위의 그림은 flannel의 구성요소를 나타낸다. 크게 **etcd, flanneld** 2가지로 구성되어 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. flanneld는 모든 Kubernetes Node 위에서 동작하는 flanneld Container d안에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
 
 * etcd - etcd는 분산 Key-Value store이다. Calico 구동에 필요한 Network 구성/설정 정보, Calico 설정 정보 등 다양한 정보를 저장한다. 또한 저장한 key-value값이 변경될 경우 flanneld에게 변경 정보를 전달하는 Communication Bus 역활도 수행한다.
 
