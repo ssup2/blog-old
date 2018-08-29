@@ -31,7 +31,7 @@ flanneld는 etcd에 저장된 정보를 바탕으로 각 Node에 Container Netwo
 
 Container A에서 Dest IP가 10.244.2.2인 Packet을 전송하면 Packet은 vethxxx와 cni Bridge를 지난뒤 Host의 Routing Table에 따라서 다시 Routing된다. Packet의 Dest IP는 10.244.2.0/24 Network에 속하기 때문에 Packet은 Node 2로 Forwarding된다. 즉 Packet의 Dest MAC만 Node 2의 Mac Address로 바꾸어 Packet이 Node 2에게 전달한다. 그 후 Packet은 Node 2의 Routing Table에 따라서 cni0에게 전달되고 다시 Container B에게 전달된다.
 
-host-gw 기법은 Packet의 Dest MAC만 교체하는 기법이기 때문에 VXLAN 기법보다 빠른다. 하지만 host-gw 기법은 모든 Node(Host)들이 같은 Network에 있어야 동작하는 기법이다. Container가 전송한 Packet은 Dest MAC만 Node의 Routing Table에 의해서 변경될 뿐, Packet의 Dest IP는 Container Network IP는 그대로 유지된다. 위의 예제에서 Packet의 Dest IP 10.244.2.2는 변경되지 Container에게 전달 된다. 만약 Node들이 서로 다른 Network에 있어 Node Network들을 연결하는 Router에 Packet이 전달되어도, Router에는 Container Network에 대한 Routing Rule이 없기 때문에 Packet은 Drop된다. host-gw 기법을 서로 다른 Network에 있는 Node들에게 적용하기 위해서는 직접 Router에 Container Network에 대한 Routing Rule을 추가하고 관리해야 한다.
+host-gw 기법은 Packet의 Dest MAC만 교체하는 기법이기 때문에 VXLAN 기법보다 높은 성능을 보여준다. 하지만 host-gw 기법은 모든 Node(Host)들이 같은 Network에 있어야 동작하는 기법이다. Container가 전송한 Packet은 Dest MAC만 Node의 Routing Table에 의해서 변경될 뿐, Packet의 Dest IP는 Container Network IP는 그대로 유지된다. 위의 예제에서 Packet의 Dest IP 10.244.2.2는 변경되지 Container에게 전달 된다. 만약 Node들이 서로 다른 Network에 있어 Node Network들을 연결하는 Router에 Packet이 전달되어도, Router에는 Container Network에 대한 Routing Rule이 없기 때문에 Packet은 Drop된다. host-gw 기법을 서로 다른 Network에 있는 Node들에게 적용하기 위해서는 직접 Router에 Container Network에 대한 Routing Rule을 추가하고 관리해야 한다.
 
 #### 1.2. VXLAN
 
@@ -41,7 +41,7 @@ flannel은 Container Network를 구축하는 하나의 기법으로 VXLAN 기법
 
 host-gw 기법과 차이점은 각 Node에 flannel.1이라는 VXLAN Interface가 있다. Node 1에는 Node 2의 Container Network의 Default GW로 Node 2의 flannel.1 Interface가 설정되어 있다. 반대로 Node 2에는 Node 1의 Container Network의 Default GW로 Node 1의 flannel.1 Interface가 설정되어 있다. Packet은 Node를 나갈때 flannel.1 Inteface의 설정에 따라서 VXLAN으로 Encapsulation되고, Node에 들어갈때 Decapsulation이 된다. flannel.1은 VNI로 1번을 이용하도록 설정되어 있고, Kernel의 VXLAN Default UDP Port인 8472를 이용한다.
 
-VXLAN 기법은 Encapsulation 기법이기 때문에 Packet이 Node를 나갈때는 Packet의 Dest IP가 Node Network의 IP로 설정된다. 따라서 각 Node가 서로 다른 Network에 있더라도, Node사이 통신이 된다면 VXLAN 기법을 적용 할 수 있다. 하지만 성능은 Encapsulation/Decapsulation Overhead 때문에 host-gw 기법보다 떨어진다.
+VXLAN 기법은 Encapsulation 기법이기 때문에 Packet이 Node를 나갈때는 Packet의 Dest IP가 Node Network의 IP로 설정된다. 따라서 각 Node가 서로 다른 Network에 있더라도, Node사이 통신이 된다면 VXLAN 기법을 적용 할 수 있다. 하지만 성능은 Encapsulation/Decapsulation Overhead 때문에 host-gw 기법보다 성능이 떨어진다.
 
 ### 2. 참조
 
