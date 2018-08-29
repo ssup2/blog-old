@@ -13,7 +13,7 @@ Kubernetes Network Plugin인 flannel를 분석한다.
 
 flannel은 Kubernetes를 위해서 L3 Network를 구축해주는 Plugin이다.
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Flannel_Plugin/Flannel_Components.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Flannel_Plugin/flannel_Components.PNG){: width="500px"}
 
 위의 그림은 flannel의 구성요소를 나타낸다. 크게 **etcd, flanneld** 2가지로 구성되어 있다. etcd는 Kubernete Master Node에서 Container로 동작한다. flanneld는 모든 Kubernetes Node 위에서 동작하는 flanneld Container d안에서 동작한다. calico-node container는 Node(Host)의 Network Namespace를 이용하기 때문에 calico-node container안에서 동작하는 App은 Node의 Network 설정을 조회하거나 제어 할 수 있다.
 
@@ -23,7 +23,7 @@ flannel은 Kubernetes를 위해서 L3 Network를 구축해주는 Plugin이다.
 
 #### 1.1. host-gw
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_flannel_Plugin/Flannel_Network_Host_GW.PNG)
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_flannel_Plugin/flannel_Network_Host_GW.PNG)
 
 flannel은 Container Network를 구축하는 하나의 기법으로 host-gw 기법을 제공한다. host-gw 기법은 의미 그대로 host를 gateway로 이용하는 기법이다. 위의 그림은 flannel이 host-gw 기법을 이용하여 설정한 Network를 나타내고 있다. Node의 Network는 10.0.0.0/24이고, Container Network는 10.244.0.0/16이다.
 
@@ -35,7 +35,7 @@ host-gw 기법은 Packet의 Dest MAC만 교체하는 기법이기 때문에 VXLA
 
 #### 1.2. VXLAN
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_flannel_Plugin/Flannel_Network_VXLAN.PNG)
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_flannel_Plugin/flannel_Network_VXLAN.PNG)
 
 flannel은 Container Network를 구축하는 하나의 기법으로 VXLAN 기법을 제공한다. VXLAN 기법은 의미 그대로 VXLAN을 이용하는 기법이다. 위의 그림은 flannel이 VXLAN 기법을 이용하여 설정한 Network를 나타내고 있다. Node Network와 Container Network, 각 Node에 할당된 Container Network, Node IP, Container IP는 host-gw 기법의 예제와 동일하다.
 
