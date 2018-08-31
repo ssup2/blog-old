@@ -17,7 +17,7 @@ Key-value 의미 그대로 Key/Value 관계를 갖는 Data를 저장하는 DB이
 
 Value 값은 기본적으로 정수나 문자열같은 Primitive Type을 지원하지만 DB에 따라서 List, Hash같은 자료구조 Type을 제공하기도 한다. Memcached는 String Type의 Value만을 제공하지만 Redis는 String Type뿐만 아니라 List, Set, Hash같은 자료구조 Type을 제공한다.
 
-Key-value DB는 Key를 Unique한 Key를 기준으로 Key/Value Data의 CRUD 기능만 제공 할 뿐, Key 사이의 관계(Relation) 정보는 저장하지 않는다. 이러한 단순한 기능 때문에 Key-value DB는 가장 빠른 CRUD 성능을 보여준다. 또한 Key의 Unique 특징을 제외한 Key 사이의 Dependency가 없기 때문에 대부분의 Key-value DB는 높은 확장성을 갖고 있다.
+Key-value DB는 Key를 Unique한 Key를 기준으로 Key/Value Data의 CRUD 기능만 제공 할 뿐, Key 사이의 관계(Relation) 정보는 저장하지 않는다. 이러한 단순한 기능 때문에 Key-value DB는 가장 빠른 CRUD 성능을 보여준다. 또한 Key-value DB는 Schema를 정의할 필요없이 Key/Value Data를 넣기만 하면 되기 때문에 높은 유연성(Flexibility)과 Key의 Unique 특징을 제외한 Key 사이의 Dependency가 없기 때문에 높은 확장성(Scalability)을 갖고 있다.
 
 ### 2. 참조
 
