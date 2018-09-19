@@ -21,7 +21,7 @@ CAP 이론은 분산 시스템이 Consistency, Availability, Partition-tolerance
 
 Consistency와 Partition-tolerance를 고려하여 설계된 분산 시스템을 **CP 시스템**이라고 한다. CP 시스템에서는 Node의 장애로 인하여 Node 사이의 Consistency가 맞지 않으면, Consistency가 맞을때까지 동작이 멈추게 된다. 따라서 Availability 속성을 충족시키지 못하게 된다. Availability와 Partition-tolerance를 고려하여 설계된 분산 시스템을 **AP 시스템**이라고 한다. AP 시스템에서는 Node의 장애로 인하여 Node 사이의 Consistency가 맞지 않아도 동작한다. 따라서 Consistency 속성을 충족시키지 못한다.
 
-Consistency와 Availability를 고려하여 설계된 분산 시스템을 CP 시스템이라고 한다. Network 장애를 고려하지 않은 분산 시스템을 의미하지만, 실제로 Network 장애가 발생하지 않는 분산 시스템은 없기 때문에 실제 존재하는 CP 시스템은 없다라고 보는것이 맞다. 단일 Node에서 동작하는 시스템은 Network 장애가 발생하지 않기 때문에 일반적으로 CP 시스템으로 분류한다.
+Consistency와 Availability를 고려하여 설계된 분산 시스템을 CA 시스템이라고 한다. Network 장애를 고려하지 않은 분산 시스템을 의미하지만, 실제로 Network 장애가 발생하지 않는 분산 시스템은 없기 때문에 실제 존재하는 CA 시스템은 없다라고 보는것이 맞다. 단일 Node에서 동작하는 시스템은 Network 장애가 발생하지 않기 때문에 일반적으로 CA 시스템으로 분류한다.
 
 ### 2. ACID
 
