@@ -11,7 +11,7 @@ adsense: true
 
 ### 1. OAuth
 
-![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="700px"}
 
 OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. 위의 그림은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다.
 
@@ -21,7 +21,7 @@ OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발�
 
 #### 1.1. Component
 
-![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="700px"}
 
 위의 그림은 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역활을 수행한다.
 

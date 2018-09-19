@@ -1,6 +1,6 @@
 ---
 title: Hadoop
-category: 
+category: Theory, Analysis
 date: 2018-10-01T12:00:00Z
 lastmod: 2018-10-01T12:00:00Z
 comment: true
@@ -19,4 +19,3 @@ Hadoop을 구성하는 HDFS, YARN, MapReduce를 분석한다.
 
 * HDFS - [https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
 * YARN - [https://www.popit.kr/what-is-hadoop-yarn/](https://www.popit.kr/what-is-hadoop-yarn/)
-

@@ -1,5 +1,5 @@
 ---
-title: Android 설치,실행 - ODROID XU Broad with ODROID-VU
+title: Android 설치, 실행 - ODROID XU Broad with ODROID-VU
 category: Record
 date: 2014-10-24T12:00:00Z
 lastmod: 2014-10-24T12:00:00Z
@@ -98,7 +98,7 @@ PATH=~/bin:$PATH
   * http://dn.odroid.com/ODROID-XU/Firmware/01-10-2014/emmc_self_installer.img.zip
 * Android, Kernel
   * http://dn.odroid.com/ODROID-XU/Android_bsp/01-25-2014/android.tgz
-* Kernel Patch 
+* Kernel Patch
   * http://dn.odroid.com/ODROID-XU/Android_bsp/04-07-2014/kernel_Apr_07_2014.patch
 * Android Patch
   * http://dn.odroid.com/ODROID-XU/Android_bsp/04-07-2014/android_patch.zip
@@ -164,7 +164,7 @@ PATH=~/bin:$PATH
 ### 12. Flash Image
 
 * ODROID-XU의 OTG USB와 PC를 연결
-* u-boot에서 아래의 명령어 수행 
+* u-boot에서 아래의 명령어 수행
 
 ~~~
 Exynos5410 # fastboot

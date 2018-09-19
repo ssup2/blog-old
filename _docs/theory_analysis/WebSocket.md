@@ -19,7 +19,7 @@ WebSocket은 Web에서 이용가능한 **Full-duplex** Communication 기술이�
 
 Sec-WebSocket-Accept값은 "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" 문자열을 CONCATENATE 한 값과 Sec-WebSocket-Accept값을 더한 다음 SHA-1 Hashing과 Base64 Encoding을 통해 구할 수 있다. Sec-WebSocket-Protocol은 Application이 이용할 SubProtocol을 나타낸다.
 
-WebSocket Handshaking이 완료된뒤 Clinet, Service는 자유롭게 Message를 주고 받는다. Message는 **Data Frame**라는 작은 단위로 쪼개져서 전송된다. Data Frame은 작은 크기의 Header와 Payload로 구성되어 있다.
+WebSocket Handshaking이 완료된후 Client와 Server는 서로 자유롭게 Message를 주고 받을 수 있다. Message는 **Data Frame**라는 작은 단위로 쪼개져서 전송된다. Data Frame은 작은 크기의 Header와 Payload로 구성되어 있다.
 
 ### 2. 참조
 * [https://tools.ietf.org/html/rfc6455](https://tools.ietf.org/html/rfc6455)
