@@ -25,15 +25,15 @@ HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이
 
 Meta Data에는 Namespace 정보, File-Block Mapping 정보등을 저장하고 있다. Name Node는 Meta Data를 Memory에 유지하고 이용한다. 또한 Name Node는 Meta Data 내용 보존을 위해서 Name Node안에 fsimage File 및 EditLog File에 Meta Data 내용을 저장한다. NameNode는 주기적으로 Checkpoint 동작을 통해 Memory의 Meta Data를 fsimage File로 저장한다. 그리고 Checkpoint 동작 수행 후 Meta Data 변경 내역을 EditLog File에 저장한다. 따라서 fsimage File과 EditLog File을 통해서 Meta Data를 복구할 수 있게 된다. fsimage File과 EditLog File은 Name Node를 재시작하거나 Name Node 장애시 Meta Data 복구를 위해 이용된다.
 
-#### 2.1. Replication
+Block은 HDFS의 Replication 설정에 따라 여러 Node에 복제되어 저장된다. 만약 Replication을 3으로 설정하였다면, Block은 3개로 복사되어 Data Node에 저장된다.
 
-Block은 HDFS의 Replication 개수 설정에 따라 여러 Node에 복제되어 저장된다. 만약 Replication을 3으로 설정하였다면, Block은 3개로 복사되어 Data Node에 저장된다.
+#### 2.1. Read, Write
 
-#### 2.2. Read, Write
+Client에서 File을 Read할 경우 Client는 Name Node로 부터 읽을 파일의 Block 정보와 Block이 위치한 Data Node 정보를 얻어온다. 그 후 Client는 Data Node들에게 읽을 Block을 직접 요청하여 Block을 Read한다. Client가 Data Node에 직접 요청을 전달 하고 동시에 여러개의 Data Node에서 Block을 읽기 때문에, HDFS는 높은 Read 성능을 얻을 수 있다.
 
-Client에서 File을 Read할 경우 Client는 Name Node로 부터 읽을 파일의 Block 정보와 Block이 위치한 Data Node 정보를 얻어온다. 그 후 Client는 Data Node들에게 동시에 직접 접근하여 Block을 읽어온다. Client가 직접 Data Node에 접근하여 Block을 읽어오고, 동시에 여러개의 Data Node에서 Block을 읽기 때문에 높은 Read 성능을 얻을 수 있다.
+Client에서 File을 Write할 경우 Client는 Name Node로부터 File의 Block 정보와 Block이 저장될 Data Node의 정보를 얻는다. 이때 Replication 설정에 따라서 Block 복제본이 저장될 Data Node 정보도 Client에게 전달된다. Client는 전달 받은 Data Node중 임의의 Node에 직접 접근 하여 Block 정보를 전달하고 Block을 Write한다. 또한  해당 Block이 복제될 다른 Data Node 정보도 Data Node에게 전달한다.
 
-Client에서 File을 Write할 경우 Client는 Name Node로부터 File의 Block 정보와 Block이 저장될 Data Node의 정보를 얻는다.
+Data Node는 Block Write가 완료된 후, Client에게 전달 받은 Block 복제본이 저장될 Data Node 정보를 바탕으로 해당 Data Node에 직접 접근하여 Block 복제를 수행한다. Data Node사이의 Block 복제는 Replication 설정 만큼 반복된다. 이러한 Block 복제 기법을 **Replication Pipelining**이라고 한다.
 
 #### 2.3. Namespace
 
