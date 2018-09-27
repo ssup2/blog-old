@@ -11,7 +11,7 @@ Hadoop과 Hadoop을 구성하는 HDFS, YARN, MapReduce를 분석한다.
 
 ### 1. Hadoop (High-Available Distribute Object-Oriented Platform)
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/Hadoop.PNG){: width="300px"}
+![]({{site.baseurl}}/images/theory_analysis/Hadoop/Hadoop.PNG){: width="400px"}
 
 Hadoop은 Compute Cluster에 분포된 대용량 Data를 동시에 쉽게 처리 할 수 있도록 도와주는 Framework이다. Hadoop V2에서는 위의 그림과 같이 HDFS, YARN, MapReduce 3개의 Layer로 분리되어 있다.
 
@@ -55,7 +55,7 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 ### 3. YARN
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
 
 ### 4. MapReduce
 
