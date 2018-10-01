@@ -57,6 +57,24 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 ![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
 
+
+RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역활을 수행한다.
+
+NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Node들의 상태를 RM에게 주기적으로 보고한다. 또한 RM이나 AM의 요청에 의해서 Node에 Container를 생성하거나 삭제한다.
+
+Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이용 할 수 있었지만, Hadoop 2.0에서 YARN이 추가되면서 MapReduce뿐만 아니라 다양한 Spark, Hive같은 다양한 App이 Hadoop Cluster의 Compute Resource를 동시에 이용 할 수 있게 되었다. YARN을 HDFS과 같은 Cluster에 구축시 YARN의 Resource Manager를 HDFS의 Name Node에 구동하고, YARN의 Node Manager를 HDFS의 Data Node에 구동한다.
+
+#### 3.1. App Submission (제출)
+
+위의 그림의 숫자와 화살표는 Client로부터 App이 제출되고 실행되는 과정을 나타낸다.
+
+* 1 - Client는 App을 Resource Manager에게 제출한다.
+* 2,3 - Resource Manager는 Application Manager로부터 App 수락을 받은뒤 Scheduler를 통해서 어느 Node에 AM Container를 띄울지 결정한다. 그 후 Resource Manager는 선택된 Node의 Node Manager를 통해서 AM Container를 구동한다.
+* 4,5 - AM은 Resource Manager에게 필요한 Resource, 필요한 Data가 위치한 Node 정보 등을 Resource Manager의 Scheduler에게 전달하여 Container를 구동할 Node 정보를 얻는다.
+* 6,7 - App Master는
+
+#### 3.2. Data Locality
+
 ### 4. MapReduce
 
 ### 5. 참조
@@ -66,4 +84,6 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 * HDFS - [https://www.quora.com/How-is-replication-done-in-Hadoop](https://www.quora.com/How-is-replication-done-in-Hadoop)
 * YARN - [https://www.popit.kr/what-is-hadoop-yarn/](https://www.popit.kr/what-is-hadoop-yarn/)
 * YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
+* YARN - [http://backtobazics.com/big-data/yarn-architecture-and-components/](http://backtobazics.com/big-data/yarn-architecture-and-components/)
+* YARN - [https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce](https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce)
 * HDFS + YARN - [https://stackoverflow.com/questions/36215672/spark-yarn-architecture](https://stackoverflow.com/questions/36215672/spark-yarn-architecture)
