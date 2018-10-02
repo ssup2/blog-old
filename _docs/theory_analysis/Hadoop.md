@@ -57,6 +57,7 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 ![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
 
+YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. YARN도 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **RM (Resource Manager)**과 Slave 역활을 수행하는 **NM (Node Manager)**로 이루어져 있다. RM은 NM를 통해서 **Container**라고 명칭된 Compute Resource (JVM)을 각 Node에 할당한다. Container중 일부 Container는 MapReduce같은 App을 전반적으로 관리하는 **AM (Application Master)**를 수행한다.
 
 RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역활을 수행한다.
 
@@ -64,14 +65,21 @@ NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Nod
 
 Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이용 할 수 있었지만, Hadoop 2.0에서 YARN이 추가되면서 MapReduce뿐만 아니라 다양한 Spark, Hive같은 다양한 App이 Hadoop Cluster의 Compute Resource를 동시에 이용 할 수 있게 되었다. YARN을 HDFS과 같은 Cluster에 구축시 YARN의 Resource Manager를 HDFS의 Name Node에 구동하고, YARN의 Node Manager를 HDFS의 Data Node에 구동한다.
 
-#### 3.1. App Submission (제출)
+#### 3.1. App Submission
 
-위의 그림의 숫자와 화살표는 Client로부터 App이 제출되고 실행되는 과정을 나타낸다.
+![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_App_Submission.PNG){: width="600px"}
 
-* 1 - Client는 App을 Resource Manager에게 제출한다.
-* 2,3 - Resource Manager는 Application Manager로부터 App 수락을 받은뒤 Scheduler를 통해서 어느 Node에 AM Container를 띄울지 결정한다. 그 후 Resource Manager는 선택된 Node의 Node Manager를 통해서 AM Container를 구동한다.
-* 4,5 - AM은 Resource Manager에게 필요한 Resource, 필요한 Data가 위치한 Node 정보 등을 Resource Manager의 Scheduler에게 전달하여 Container를 구동할 Node 정보를 얻는다.
-* 6,7 - App Master는
+위의 그림의 Client로부터 App이 제출되고 실행되는 과정을 나타낸다.
+
+* 1,2,3 - Client는 App은 Job Object를 통해서 RM으로부터 App ID를 얻는다.
+* 4 - Job Object는 분산되어 실행될 Task Code가 담긴 Task Jar파일과 App을 수행하기 위한 관련 정보를 HDFS같은 Shared Filesystem에 저장한다.
+* 5 - Job Object는 얻은 App ID를 이용하여 App을 RM에게 제출한다.
+* 6,7 - RM은 전달받은 App을 담당할 AM Container를 Scheduler를 통해서 어느 Node에 구동할지 결정한다. 그 후 RM은 선택된 Node의 NM을 통해서 AM Container를 구동한다.
+* 8,9 - AM은 Task 수행을 위한 File들이 어느 Node에 위치하고 있는지 조사한다.
+* 10,11 - AM은 RM에게 File의 위치, Task 구동을 위한 Resource 정보를 전달하여 Task Container를 구동할 Node의 정보를 얻어온다.
+* 12 - AM은 Task Container를 구동할 Node의 NM에게 Task 관련 정보를 전달한다.
+* 13 - NM은 전달받은 Task 정보를 바탕으로 Task Container를 구동한다.
+* 14,15,16 - Task Container에서 YARN Child Object는 Shared Filesystem에서 Task 관련 정보를 얻어온뒤 Task를 수행한다.
 
 #### 3.2. Data Locality
 
@@ -86,4 +94,5 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 * YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
 * YARN - [http://backtobazics.com/big-data/yarn-architecture-and-components/](http://backtobazics.com/big-data/yarn-architecture-and-components/)
 * YARN - [https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce](https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce)
+* YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
 * HDFS + YARN - [https://stackoverflow.com/questions/36215672/spark-yarn-architecture](https://stackoverflow.com/questions/36215672/spark-yarn-architecture)
