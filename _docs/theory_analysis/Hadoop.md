@@ -83,6 +83,10 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 
 #### 3.2. Data Locality
 
+Hadoop은 Data를 처리할때 Data를 특정 Node로 옮겨 Data를 처리하는 방식이 아닌, Data가 있는 Node로 처리 Task를 전송하여 Data를 처리하는 방식이다. 대용량 Data를 옮기며 Data를 처리하는것 보다 처리 Task를 옯기는 방식이 더욱 빠르기 때문이다. 이러한 처리 방식을 Data Locality라고 한다.
+
+AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 File(Input Split)의 Node 위치를 알 수 있다. AM은 File이 위치한 Node 정보를 RM에게 전달하여 Task가 가능하면 해당 File이 있는 Node에서 구동되도록, Data Locality를 고려하여 Scheuling을 수행한다.
+
 ### 4. MapReduce
 
 ### 5. 참조
@@ -96,3 +100,4 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 * YARN - [https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce](https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce)
 * YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
 * HDFS + YARN - [https://stackoverflow.com/questions/36215672/spark-yarn-architecture](https://stackoverflow.com/questions/36215672/spark-yarn-architecture)
+* MapReduce - [https://data-flair.training/blogs/hadoop-inputformat/](https://data-flair.training/blogs/hadoop-inputformat/)
