@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Hadoop과 Hadoop을 구성하는 HDFS, YARN, MapReduce를 분석한다.
+Hadoop과 Hadoop을 구성하는 HDFS, YARN, MapReduce Framework를 분석한다.
 
 ### 1. Hadoop (High-Available Distribute Object-Oriented Platform)
 
@@ -87,7 +87,19 @@ Hadoop은 Data를 처리할때 Data를 특정 Node로 옮겨 Data를 처리하�
 
 AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 File(Input Split)의 Node 위치를 알 수 있다. AM은 File이 위치한 Node 정보를 RM에게 전달하여 Task가 가능하면 해당 File이 있는 Node에서 구동되도록, Data Locality를 고려하여 Scheuling을 수행한다.
 
-### 4. MapReduce
+### 4. MapReduce Framework
+
+![]({{site.baseurl}}/images/theory_analysis/Hadoop/MapReduce.PNG){: width="700px"}
+
+MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다. 위의 그림은 MapReduce 과정을 나타내고 있다. MapReduce는 크게 Splitting, Mapping, Shuffling, Reducing 4가지 과정으로 진행된다. 
+
+* Spliiting - Splitting은 Input File을 분리한 뒤 분리된 Input File을 각 Node에게 전달하는 과정이다. Splitting 과정을 통해 Input File은 K1, V1 Key-Value 관계로 분리된다. 위의 예제에서 Key는 File의 Line이고 Value은 Line의 String이 된다. MapReduce Framework에서 Input File 분리를 담당하는 Class가 InputFormat Class이다. 개발자는 기본 InputFormat Class인 TextInputFormat, KeyValueInputFormat Class를 이용하거나 직접 InputFormat Class를 개발하여 Input File을 어떻게 분리할지 결정 할 수 있다.
+
+* Mapping - Mapping은 분리된 Input File을 필요에 따라 List(K2, V2) Key-Value로 Mapping하는 과정이다. MapReduce Framework는 분리된 Input File의 개수만큼 YARN의 Container를 생성하고, 각 Container안에서 Mapping 작업을 병렬적으로 수행한다. 따라서 YARN Cluster를 구성하는 Node가 많아 질 수록 대용량 Data를 빠르게 처리 할 수 있다. MapReduce Framework는 Mapping을 담당하는 Mapper Class를 개발자에게 제공하여 개발자가 쉽게 Mapping을 수행 할 수 있도록 도와준다.
+
+* Shuffling - Shuffling은 Mapping 결과물을 Reducing 수행하는 Node에게 전달하는 과정이다. Shuffling 과정을 통해 Mapping 과정에서 이용했던 Key(K2)를 기준으로 Value들이 특정 Node로 모이게 된다.
+
+* Reducing - Reducing은 Mapping 결과물들을 합치는 과정이다. MapReduce Framework는 Reducing을 담당하는 Reducer Class를 개발자에게 제공하여 개발자가 쉽게 Reducing을 수행 할 수 있도록 한다.
 
 ### 5. 참조
 * Hadoop - [https://noobergeek.wordpress.com/2012/11/12/why-is-hadoop-so-fast/](https://noobergeek.wordpress.com/2012/11/12/why-is-hadoop-so-fast/)
@@ -101,3 +113,4 @@ AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 Fil
 * YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
 * HDFS + YARN - [https://stackoverflow.com/questions/36215672/spark-yarn-architecture](https://stackoverflow.com/questions/36215672/spark-yarn-architecture)
 * MapReduce - [https://data-flair.training/blogs/hadoop-inputformat/](https://data-flair.training/blogs/hadoop-inputformat/)
+* MapReduce - [http://icecello.tistory.com/35](http://icecello.tistory.com/35)
