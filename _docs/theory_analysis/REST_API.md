@@ -37,26 +37,37 @@ REST API의 핵심 요소는 Resource를 나타내는 URI와, Resource를 대상
 
 위의 그림은 REST API의 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다. 각각의 Resource는 JSON, YAML, XML등 다양한 형태로 표현될 수 있다. 일반적으로는 **JSON** 형태를 가장 많이 이용하고 있다.
 
-##### 1.2.2. URI
+##### 1.2.2. HTTP Method
+
+REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method라고 해도 대상이 Resource인지 Collection인지에 따라서 동작이 약간씩 달라진다.
+
+* GET Resource - Resource Data를 가져 온다.
+* GET Collection - Collection 하위의 모든 Resource Data를 가지고 온다. Query String을 통해서 가지고 올 Resource를 Filtering 할 수 있다.
+* HEAD Resource - Resource의 Meta Data(HTTP Header)만 가져온다.
+* HEAD Collection - Collection 하위의 모든 Resource의 Meta Data(HTTP Header)만 가져온다.
+* POST Collection - 새로운 Resource를 생성한다. Idempotence 특징을 갖지 않는다.
+* PUT Resource - Resource 전체를 Update한다. Idempotence 특징을 갖는다.
+* PATCH Resource - Resource 일부를 Update한다. idempotence 특징을 갖는다.
+* DELETE Resource - Resource를 삭제한다.
+* OPTION Resource, Collection - 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
+
+##### 1.2.3. URI
 
 {: .newline }
 > http://restapi.example.com/house/apartments/101
 
 REST API의 URI는 Resource Model에 맞게 Directory 구조의 형태를 갖는다. 하나의 URI는 하나의 Resource를 나타내거나 Resource의 모음을 나타내는 하나의 Collection을 나타낸다. Resource는 **단수**로 표현하고 Collection은 **복수**로 표현한다. 위의 URI는 house Resource가 있고 그 아래 apartments라는 Collection이 존재하고 있고 다시 그 아래 101이란 Resource를 나타내고 있다.
 
-##### 1.2.3. HTTP Method
+{: .newline }
+> http://restapi.example.com/house/apartments?color=white&floor=20
 
-REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method라고 해도 대상이 Resource인지 Collection인지에 따라서 동작이 약간씩 달라진다.
+Collection을 대상으로 GET Method를 수행하여 가지고 오는 Resource를 Filtering 해야하는 경우, Query String을 이용한다. 위의 예제에서는 하얀색이고 20층인 Apartment들의 Resource만 얻을때 이용하는 URI를 나타내고 있다.
 
-* GET Resource - Resource Data를 가져 온다.
-* GET Collection - Collection 하위의 모든 Resource Data를 가지고 온다.
-* HEAD Resource - Resource의 Meta Data(HTTP Header)만 가져온다.
-* HEAD Collection - Collection 하위의 모든 Resource의 Meta Data(HTTP Header)만 가져온다.
-* POST Collection - 새로운 Resource를 생성한다.
-* PUT Resource - Resource 전체를 Update한다.
-* PATCH Resource - Resource 일부를 Update한다.
-* DELETE Resource - Resource를 삭제한다.
-* OPTION Resource, Collection - 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
+##### 1.2.4. PUT vs PATCH
+
+PUT은 Resource 전체를 Update하는 Method이고 PATCH는 Resource의 일부만 Upate하는 Method이다. PUT은 Resource 전체를 Update하기 때문에 해당 Resource의 모든 Data를 같이 전달해야한다. 즉 실제 Update하지 않을 Data도 같이 전달해야한다. 반면 PATCH Method는 실제 Update할 Data만 전달하면된다.
+
+Apartment Resource에 color=while, floor=20 Data가 저장되어 있다고 가정하자. Apartment의 색깔이 파랑색으로 바뀌어 color만 blue로 바꾸고 싶을때, PUT Method를 통해서는 color=blue, floor=20 처럼 Apartment의 전체 Data를 전달 해야한다. 하지만 PATCh Method를 통해서는 color=blue Data만 전달 하면된다.
 
 ### 2. 참조
 
@@ -66,3 +77,4 @@ REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method
 * [http://restful-api-design.readthedocs.io/en/latest/methods.html](http://restful-api-design.readthedocs.io/en/latest/methods.html)
 * [https://restfulapi.net/resource-naming/](https://restfulapi.net/resource-naming/)
 * [https://lornajane.net/posts/2013/are-subqueries-restful](https://lornajane.net/posts/2013/are-subqueries-restful)
+* [https://medium.com/backticks-tildes/restful-api-design-put-vs-patch-4a061aa3ed0b](https://medium.com/backticks-tildes/restful-api-design-put-vs-patch-4a061aa3ed0b)
