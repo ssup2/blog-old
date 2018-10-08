@@ -11,29 +11,24 @@ Linux Log 관련 구성 요소와 역활을 분석한다.
 
 ### 1. Linux Log
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_Log/Linux_Log_Component.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_Log/Linux_Log_Component.PNG)
 
-위의 그림은 Linux Log 관련 구성요소를 나타내고 있다. Log의 내용을 Kernel Log와 User Log로 분류 할 수 있다.
+위의 그림은 Linux Log 관련 구성요소를 나타내고 있다. Log는 Kernel Log와 User Log로 분류 할 수 있다.
 
 ### 2. Kernel Log
 
-Linux Kernel이 남기는 Log를 의미한다. Kernel Log 관련 구성요소는 Kernel Level과 User Level로 분류 할 수 있다.
+Kernel Log는 의미 그대로 Kernel이 남기는 Log를 의미한다. Ring Buffer는 Kernel Log를 임시로 저장하는 Kernel Memory 공간이다. Memory이기 때문에 재부팅을 하면 이전의 Kernel Log 내용은 사라진다. 또한 Ring Buffer이기 때문에 Kernel Log가 Ring Buffer 용량을 초과하는 경우 오래된 Kernel Log부터 덮어 씌우는 방식이다.
 
-#### 2.1. Kernel Level
+Ring Buffer는 Kernel의 do_syslog() 함수를 통해 접근 및 제어를 할 수 있다. Kernel에서 Kernel Log를 남기기 위해서 이용되는 printk() 함수는 실제로 do_syslog() 함수를 통해서 Kernel Log를 Ring Buffer에 Write하는 동작을 수행한다. User Level에서 Kernel Log를 얻기위해 이용되는 syslog(2) 함수(System Call)나 /proc/kmsg 파일은 do_syslog() 함수를 통해 Ring Buffer에 접근하여 Kernel Log를 얻는다.
 
-Kernel에는 Kernel Log를 저장하는 Log Ring Buffer가 있다. Log Ring Buffer를 접근하는 함수는 do_syslog()와 printk() 함수가 있다. do_syslog() 함수는 요청에 따라 Log Ring Buffer를 읽거나 Clear하는 동작을 수행한다. do_syslog() 함수는 User Level에서 syslog(2) System Call이나 /proc/kmsg를 통해 호출 된다. printk()는 Kernel Level에서 Log 기록을 위한 Kernel Level 전용 함수이다. User Level에서는 이용하지 못한다.
-
-#### 2.2. User Level
-
-glibc는 App 개발자가 Kernel Log를 쉽게 이용 할수 있도록 syslog(2) System Call을 Wrapping한 syslog(3) 함수를 제공한다. Application은 syslog(3) 함수나 /proc/kmsg를 통해 Kernel의 Log Ring Buffer에 접근 할 수 있다. dmesg는 glibc의 syslog(3)를 이용하여 Log Ring Buffer를 읽거나 제어하는 App이다. rsyslog는 Daemon으로 dmesg와 유사하게 syslog(3)를 이용하여 Kernel Log를 읽어와 /var/log 폴더 아래 저장한다.
-
-시간이 지나 Kernel의 Log Ring Buffer에 없는 내용은 rsyslog가 저장한 /var/log 폴더 아래의 Log 파일에서 확인 가능하다. rsyslog가 동작하기 이전의 Kernel Booting Log는 dmesg를 통해 볼 수 있다.
+dmesg는 syslog(2) 함수를 통해 Kernel Log를 User가 볼 수 있도록 한다. 또한 rsyslogd나 systemd-journald는 syslog(2)나 /proc/kmsg를 통해서 Kernel Log를 /var/log 폴더에 파일로 기록하여 보관되도록 한다.
 
 ### 3. User Log
 
-Application이 남기는 Log를 의미한다. rsyslog는 Kernel Log 뿐만 아니라 Application의 Log도 기록한다. User Log도 Kernel Log와 동일하게 /var/log 폴더 아래 저장된다.
+User Log는 App이 남기는 Log를 의미한다. App은 syslog(3) 함수를 이용하여 App Log를 남길 수 있다. syslog(3) 함수는 /dev/log Domain Socket을 통해서 App Log를 rsyslogd나 systemd-journald에게 전달한다. rsyslogd나 systemd-journald는 전달받은 App Log를 /var/log 폴더에 파일로 남긴다.
 
 ### 4. 참조
 
 * [https://www.ibm.com/developerworks/library/l-kernel-logging-apis/](https://www.ibm.com/developerworks/library/l-kernel-logging-apis/)
+* [https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/294206#294206](https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/294206#294206)
 * [https://unix.stackexchange.com/questions/35851/whats-the-difference-of-dmesg-output-and-var-log-messages](https://unix.stackexchange.com/questions/35851/whats-the-difference-of-dmesg-output-and-var-log-messages)
