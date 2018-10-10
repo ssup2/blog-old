@@ -31,9 +31,7 @@ MSA의 Service는 독립된 Server와 DB에서 동작하고, Message Queue를 �
 
 운영중 특정 Service에 부하가 몰려 Scale Out이 필요한 경우 해당 Service만 Scale Out을 수행하면 된다. Service 변경시에도 변경된 Service만 Deploy를 수행하면 되기 때문에 DevOps시에도 유리하다. 이러한 MSA의 유연성은 유연한 Resource Scale Out이 가능한 Cloud 환경에서 더욱 빛난다. 하지만 Monolithic Architecture에 비해 단점도 분명 존재한다.
 
-Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Queue를 두었지만, 성능 측면에서 Message Queue는 분명히 Overhead로 작용한다. 또한 Service 단위로 Deploy를 수행하면 되기 때문에 높은 유연성을 갖고 있지만, 반대로 많은 Service들의 Deploy를 관리해야 한다는 단점을 갖고 있다. MSA의 Service Deploy 부분은 반드시 자동화가 병행되어 개발자가 Service Deploy에 너무 많은 시간을 투자하지 않도록 해야한다.
-
-Service들을 조합하여 Service를 구성하는 경우 Debugging이 쉽지 않다는 단점도 갖고 있다. 마지막으로 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 활용한 Service 개발에 제한적인 단점을 갖고 있다.
+Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Queue를 두었지만, 성능 측면에서 Message Queue는 분명히 Overhead로 작용한다. 또한 Service 단위로 Deploy를 수행하면 되기 때문에 높은 유연성을 갖고 있지만, 반대로 많은 Service들의 Deploy를 관리해야 한다는 단점을 갖고 있다. MSA의 Service Deploy 부분은 반드시 자동화가 병행되어 개발자가 Service Deploy에 너무 많은 시간을 투자하지 않도록 해야한다. Service들을 조합하여 Service를 구성하는 경우 Debugging이 쉽지 않다는 단점도 갖고 있다. 마지막으로 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 활용한 Service 개발에 제한적인 단점을 갖고 있다.
 
 #### 1.2. API Gateway
 
