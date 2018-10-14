@@ -13,11 +13,11 @@ SSL (Secure Socket Layer)를 분석한다.
 
 #### 1.1. Handshake
 
-![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_No_Session_ID.PNG){: width="650px"}
+![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_No_Session_ID.PNG){: width="600px"}
 
 #### 1.2. Resumed Session
 
-![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_Session_ID.PNG){: width="650px"}
+![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_Session_ID.PNG){: width="600px"}
 
 #### 1.3. Certificate, CA (Certificate Authority)
 
