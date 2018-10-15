@@ -38,8 +38,8 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 위의 그림은 Client가 이전에 Handshake가 완료된 Session에 연결하면서 수행하는 간소화된 Handshake 과정을 나타내고 있다. Client는 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다. Server 또한 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다.
 
-* 1. Client는 Server에게 Client Hello Message를 전달한다. Client는 첫 Handshake 과정에서 보냈던 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random 값, Client에서 지원가능한 Cipher Suite List 등과 함께 이전의 Handshake 과정에서 받은 Session ID를 그대로 Server에게 전달한다.
-* 2. Server는 Session ID를 확인한다. Session ID가 유효하다면 Client에게 동일 Session ID를 전송하여 Client에게 Session이 유효한 것을 알린다. Session ID가 유효하지 않다면 다른 Session ID를 보내고 첫 Handshake와 동일한 과정으로 Handshake가 진행된다.
+* 1 - Client는 Server에게 Client Hello Message를 전달한다. Client는 첫 Handshake 과정에서 보냈던 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random 값, Client에서 지원가능한 Cipher Suite List 등과 함께 이전의 Handshake 과정에서 받은 Session ID를 그대로 Server에게 전달한다.
+* 2 - Server는 Session ID를 확인한다. Session ID가 유효하다면 Client에게 동일 Session ID를 전송하여 Client에게 Session이 유효한 것을 알린다. Session ID가 유효하지 않다면 다른 Session ID를 보내고 첫 Handshake와 동일한 과정으로 Handshake가 진행된다.
 * 3,4,5,6 - Client와 Server에서 Change Cipher Spec 및 Finish를 전송하여 Handshake를 마친다.
 * 14 - Server와 Client는 Master Secret을 기반으로 **Session Key**을 만들고 Session Key를 대칭키로 이용하여 Packet을 암호화 한다.
 
