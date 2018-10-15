@@ -15,7 +15,7 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 #### 1.1. Handshake
 
-![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_No_Session_ID.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/SSL,TLS/SSL,TLS_Handshake_No_Session_ID.PNG){: width="600px"}
 
 위의 그림은 SSL/TLS의 첫 Handshake 과정을 나타낸다.
 
@@ -34,7 +34,7 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 #### 1.2. Resumed Session
 
-![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_Session_ID.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/SSL,TLS/SSL,TLS_Handshake_Session_ID.PNG){: width="600px"}
 
 위의 그림은 Client가 이전에 Handshake가 완료된 Session에 연결하면서 수행하는 간소화된 Handshake 과정을 나타내고 있다. Client는 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다. Server 또한 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다.
 
