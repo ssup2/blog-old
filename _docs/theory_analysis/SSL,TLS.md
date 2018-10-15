@@ -19,19 +19,28 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 위의 그림은 SSL/TLS의 첫 Handshake 과정을 나타낸다.
 
-* 1 - Client는 Server에게 Client Hello Message를 전달한다. 이 Client Hello Message에는 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random값, Client에서 지원가능한 Cipher Suite List 등을 포함하고 있다. Cipher Suite는 SSL/TLS 통신에 이용하는 Protocol, Key 교환방식, 암호화 방식 등의 정보를 포함한다.
-* 2 - Server는 Client Hello에 대한 응답으로 Server와 Client에서 지원가능한 가장 높은 SSL/TLS Version, Server에서 생성하는 Random 값, Client의 Cipher Suite List 중에서 Server가 선택한 Cipher Suite를 전달한다.
+* 1 - Client는 Server에게 Client Hello Message를 전달한다. 이 Client Hello Message에는 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random 값, Client에서 지원가능한 Cipher Suite List 등을 포함하고 있다. Cipher Suite는 SSL/TLS 통신에 이용하는 Protocol, Key 교환방식, 암호화 방식 등의 정보를 포함한다.
+* 2 - Server는 Client Hello에 대한 응답으로 Server와 Client에서 지원가능한 가장 높은 SSL/TLS Version, Server에서 생성하는 Random 값, Server에서 발급하는 **Session ID**, Client의 Cipher Suite List 중에서 Server가 선택한 Cipher Suite를 전달한다.
 * 3,6 - Server는 Client에게 Server Certificate를 전달하고 Server hello done Message를 전달한다.
-* 8 - Client는 Protocol Version과 Random 값으로 구성된 **Pre-master Secret**를 Server Certificate에 포함된 Server Public Key를 이용하여 암호화 한뒤 Server에게 전달한다. Server와 Client는 각각 Client가 생성한 Random값, Server가 생성한 Random값, Pre-master Secret을 이용하여 **Master Secret**를 얻는다.
+* 8 - Client는 Protocol Version과 Random 값으로 구성된 **Pre-master Secret**를 Server Certificate에 포함된 Server Public Key를 이용하여 암호화 한뒤 Server에게 전달한다. Server와 Client는 각각 Client가 생성한 Random 값, Server가 생성한 Random 값, Pre-master Secret을 이용하여 **Master Secret**를 얻는다.
 * 10, 11 - Client는 Handshake 종료를 위해서 Change Cipher Spec을 1로 전송하고 Finish를 전송한다.
 * 12, 13 - Server는 Handshake 종료를 위해서 Change Cipher Spec을 1로 전송하고 Finish를 전송한다.
 * 14 - Server와 Client는 Master Secret을 기반으로 **Session Key**을 만들고 Session Key를 대칭키로 이용하여 Packet을 암호화 한다.
+
+
 * 4 - 만약 Server Certificate에 Server Public Key가 포함되어 있지 않으면 Server는 Server Public Key를 대체할 임시키를 전송한다.
-* 5,7,9 - Server는 Handshake 수행 중 Client Certificate를 요청 할 수 있다. Certificate를 요청받은 Client는 Server에게 Client Certificate를 전송한다. 또한 지금까지의 Handshake Message들의 Hash값을 Client Public Key로 서명한뒤 그 결과를 Client Certificate Verify Message에 포함하여 Server에게 전송한다. Server는 Client Certificate로부터 Client Public Key를 얻을 수 있기 때문에 Client로부터 온 서명 결과와 Server에서 Client Public Key를 통해 직접 서명한 결과를 비교하여 Client를 인증 할 수 있다.
+* 5,7,9 - Server는 Handshake 수행 중 Client Certificate를 요청 할 수 있다. Certificate를 요청받은 Client는 Server에게 Client Certificate를 전송한다. 또한 지금까지의 Handshake Message들의 Hash 값을 Client Public Key로 서명한뒤 그 결과를 Client Certificate Verify Message에 포함하여 Server에게 전송한다. Server는 Client Certificate로부터 Client Public Key를 얻을 수 있기 때문에 Client로부터 온 서명 결과와 Server에서 Client Public Key를 통해 직접 서명한 결과를 비교하여 Client를 인증 할 수 있다.
 
 #### 1.2. Resumed Session
 
 ![]({{site.baseurl}}/images/theory_analysis/SSL/SSL_Handshake_Session_ID.PNG){: width="600px"}
+
+위의 그림은 Client가 이전에 Handshake가 완료된 Session에 연결하면서 수행하는 간소화된 Handshake 과정을 나타내고 있다. Client는 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다. Server 또한 이전 Session ID와 이전 Session에서 이용하는 Master Secret을 저장하고 있어야 한다.
+
+* 1. Client는 Server에게 Client Hello Message를 전달한다. Client는 첫 Handshake 과정에서 보냈던 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random 값, Client에서 지원가능한 Cipher Suite List 등과 함께 이전의 Handshake 과정에서 받은 Session ID를 그대로 Server에게 전달한다.
+* 2. Server는 Session ID를 확인한다. Session ID가 유효하다면 Client에게 동일 Session ID를 전송하여 Client에게 Session이 유효한 것을 알린다. Session ID가 유효하지 않다면 다른 Session ID를 보내고 첫 Handshake와 동일한 과정으로 Handshake가 진행된다.
+* 3,4,5,6 - Client와 Server에서 Change Cipher Spec 및 Finish를 전송하여 Handshake를 마친다.
+* 14 - Server와 Client는 Master Secret을 기반으로 **Session Key**을 만들고 Session Key를 대칭키로 이용하여 Packet을 암호화 한다.
 
 #### 1.3. Certificate, CA (Certificate Authority)
 
