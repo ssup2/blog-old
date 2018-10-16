@@ -22,7 +22,7 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 * 1 - Client는 Server에게 Client Hello Message를 전달한다. 이 Client Hello Message에는 Client가 지원하는 SSL/TLS Version, Client가 생성하는 Random 값, Client에서 지원가능한 Cipher Suite List 등을 포함하고 있다. Cipher Suite는 SSL/TLS 통신에 이용하는 Protocol, Key 교환방식, 암호화 방식 등의 정보를 포함한다.
 * 2 - Server는 Client Hello에 대한 응답으로 Server와 Client에서 지원가능한 가장 높은 SSL/TLS Version, Server에서 생성하는 Random 값, Server에서 발급하는 **Session ID**, Client의 Cipher Suite List 중에서 Server가 선택한 Cipher Suite를 전달한다.
 * 3,6 - Server는 Client에게 Server Certificate를 전달하고 Server hello done Message를 전달한다.
-* 8 - Client는 Protocol Version과 Random 값으로 구성된 **Pre-master Secret**를 Server Certificate에 포함된 Server Public Key를 이용하여 암호화 한뒤 Server에게 전달한다. Server와 Client는 각각 Client가 생성한 Random 값, Server가 생성한 Random 값, Pre-master Secret을 이용하여 **Master Secret**를 얻는다.
+* 8 - Client는 Server Certificate의 서명이 유효한지 확인한다. 서명이 유효하다면 Client는 Protocol Version과 Random 값으로 구성된 **Pre-master Secret**를 Server Certificate에 포함된 Server Public Key를 이용하여 암호화 한뒤 Server에게 전달한다. Server와 Client는 각각 Client가 생성한 Random 값, Server가 생성한 Random 값, Pre-master Secret을 이용하여 **Master Secret**를 얻는다.
 * 10, 11 - Client는 Handshake 종료를 위해서 Change Cipher Spec을 1로 전송하고 Finish를 전송한다.
 * 12, 13 - Server는 Handshake 종료를 위해서 Change Cipher Spec을 1로 전송하고 Finish를 전송한다.
 * 14 - Server와 Client는 Master Secret을 기반으로 **Session Key**을 만들고 Session Key를 대칭키로 이용하여 Packet을 암호화 한다.
@@ -47,7 +47,7 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 CA(Certificate Authority)는 Certificate를 발행하고 인증하는 기관이다. CA중에서 최상위 Certificate를 발급하는 CA는 **Root CA**라고 하며 Root CA에 발급하는 Certificate를 **Root Certificate**라고 한다. Root Certificate는 자기 자신이 서명하기 때문에 **Self Signed Certificate**이기도 하다. Root Certificate는 웹브라우저에 기본적으로 설치된다.
 
-Root Certificate를 이용하여 하위 CA가 발행한 Certificate에 서명을 하면, Root Certificate의 신뢰도 때문에 하위 CA의 Certificate에게도 신뢰도가 부여된다. 또한 신뢰도를 얻은 하위 Certificate를 이용하여 또다른 하위 CA가 발행한 Certificate에게 신뢰도를 부여 할 수 있다. 이처럼 Certificate의 관계는 Root Certificate가 Root가 되어 **Tree 구조**의 관계를 갖는다.
+Root Certificate를 이용하여 하위 CA가 발행한 Certificate에 서명을 하면, Root Certificate의 신뢰도 때문에 하위 CA의 Certificate에게도 신뢰도가 부여된다. 또한 신뢰도를 얻은 하위 Certificate를 이용하여 또다른 하위 CA가 발행한 Certificate에게 신뢰도를 부여 할 수 있다. 이처럼 Certificate의 관계는 Root Certificate가 Root가 되어 **Tree 구조**의 관계를 갖는다. 따라서 Tree의 Leaf에 가까운 Certificate일수록 다수의 상위 Certificate가 필요하게 된다.
 
 ### 2. 참조
 * [https://en.wikipedia.org/wiki/Transport_Layer_Security](https://en.wikipedia.org/wiki/Transport_Layer_Security)
