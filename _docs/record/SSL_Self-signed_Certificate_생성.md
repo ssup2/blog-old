@@ -1,5 +1,5 @@
 ---
-title: SSL Self Signed Certificate 생성
+title: SSL Self-signed Certificate 생성
 category: Record
 date: 2018-10-18T12:00:00Z
 lastmod: 2018-10-18T12:00:00Z
@@ -16,6 +16,7 @@ adsense: true
 
 * Key - RSA기반 2048 Byte
 * CN - ssup2 (임의 변경 가능)
+* rootca.key, rootca.crt 파일 생성
 
 ~~~
 # openssl genrsa -out rootca.key 2048
@@ -30,6 +31,7 @@ adsense: true
 
 #### 3.1. v3.ext 파일 생성
 
+* v3.ext 파일 생성 및 아래의 내용으로 작성
 * CN (Common Name) - 192.168.0.100
 
 ~~~
@@ -45,6 +47,7 @@ IP.1 = 192.168.0.100
 #### 3.2. Server Key, Server Certificate, Server pem 파일 생성
 
 * CN (Common Name) - 192.168.0.100
+* server.key, server.crt, server.pem 파일 생성
 
 ~~~
 # openssl req -new -newkey rsa:2048 -sha256 -nodes -keyout server.key -subj /C=KO/ST=None/L=None/O=None/CN=192.168.0.100 -out server.csr
