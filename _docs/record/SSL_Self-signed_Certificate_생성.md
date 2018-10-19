@@ -20,7 +20,7 @@ adsense: true
 
 ~~~
 # openssl genrsa -out rootca.key 2048
-# openssl req -x509 -new -nodes -key rootca.key -sha256 -days 356 -subj /C=KO/ST=None/L=None/O=None/CN=192.168.77.201 -out rootca.crt
+# openssl req -x509 -new -nodes -key rootca.key -sha256 -days 356 -subj /C=KO/ST=None/L=None/O=None/CN=192.168.0.100 -out rootca.crt
 ~~~
 
 ### 3. Server Certificate 생성
