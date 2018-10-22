@@ -30,7 +30,7 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 아래는 Optional 과정에 대한 설명이다.
 
 * 4 - 만약 Server Certificate에 Server Public Key가 포함되어 있지 않으면 Server는 Server Public Key를 대체할 임시키를 전송한다.
-* 5,7,9 - Server는 Handshake 수행 중 Client Certificate를 요청 할 수 있다. Certificate를 요청받은 Client는 Server에게 Client Certificate를 전송한다. 또한 지금까지의 Handshake Message들의 Hash 값을 Client Private Key로 서명한뒤 그 결과를 Client Certificate Verify Message에 포함하여 Server에게 전송한다. Server는 Client Certificate로부터 얻을 수 있는 Client Public Key, Client로부터 받은 Handshake Message들의 서명, Handshake Message들을 통해서 올바른 Client인지 확인 할 수 있다.
+* 5,7,9 - Server는 Handshake 수행 중 Client Certificate를 요청 할 수 있다. Certificate를 요청받은 Client는 Server에게 Client Certificate를 전송한다. 또한 지금까지의 Handshake Message들의 Hash 값을 Client Certificate의 Private Key로 서명한뒤 그 결과를 Client Certificate Verify Message에 포함하여 Server에게 전송한다. Server는 Client Certificate로부터 얻을 수 있는 Client Public Key, Client로부터 받은 Handshake Message들의 서명, Handshake Message들을 통해서 올바른 Client인지 확인 할 수 있다.
 
 #### 1.2. Resumed Session
 
