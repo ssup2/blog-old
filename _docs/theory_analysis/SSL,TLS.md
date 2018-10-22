@@ -45,6 +45,8 @@ SSL (Secure Socket Layer) / TLS (Transport Layer Security)는 TCP위에서 동�
 
 #### 1.3. CA (Certificate Authority), Certificate
 
+![]({{site.baseurl}}/images/theory_analysis/SSL,TLS/Certificate_Tree.PNG){: width="700px"}
+
 CA(Certificate Authority)는 Certificate를 발행하고 인증하는 기관이다. CA중에서 최상위 Certificate를 발급하는 CA는 **Root CA**라고 하며 Root CA에 발급하는 Certificate를 **Root Certificate**라고 한다. Root Certificate는 자기 자신이 서명하기 때문에 **Self-signed Certificate**이기도 하다. Root Certificate는 웹브라우저에 기본적으로 설치된다.
 
 Root CA의 Private Key를 이용하여 하위 CA가 발행한 Certificate에 서명을 하면, Root Certificate의 신뢰 때문에 하위 CA의 Certificate에게도 신뢰가 부여된다. 또한 신뢰도를 얻은 하위 CA의 Private Key를 이용하여 또다른 하위 CA가 발행한 Certificate에게 신뢰를 부여 할 수 있다. 이처럼 Certificate의 관계는 Root Certificate가 Root가 되어 **Tree 구조**의 관계를 갖는다. 따라서 Tree의 Leaf에 가까운 Certificate일수록 다수의 상위 Certificate가 필요하게 된다.
