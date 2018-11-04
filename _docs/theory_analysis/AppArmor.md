@@ -74,13 +74,11 @@ apparmor module is loaded.
 
 위의 결과는 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역활을 수행한다.
 
-### 2. AppArmor Profile
+#### 1.1. AppArmor Profile
 
 AppArmor Profile의 이름은 /로 시작하는 이름과 /로 시작하지 않는 이름으로 구분할 수 있다. /으로 시작하는 Profile인 경우 Profile이 이름이 해당 Profile이 적용될 프로그램을 나타내고 있다. 위의 Profile 목록 중에서 /usr/sbin/tcpdump Profile을 확인할 수 있는데, /usr/sbin/tcpdump 프로그램이 실행되면 /usr/sbin/tcpdump Profile이 자동으로 적용되어 동작하게 된다.
 
 /으로 시작하지 않는 Profile은 특정 Program을 동작시킬때 aa-exec 명령을 통해 수동으로 Profile을 적용시켜야 한다. 물론 /으로 시작하는 Profile도 aa-exec 명령을 통해 특정 Program에 Profile을 적용시킬 수 있다. Profile들은 **/etc/AppArmor.d**에 위치하고 있다.
-
-### 3. Example
 
 ~~~
 #include <tunables/global>
@@ -156,7 +154,7 @@ unconfined                      root     20641 20611  0 13:38 pts/29   00:00:00 
 
 ps -efZ 명령을 통해 test.sh관련 Process들에 appArmor-example Profile이 적용된 것을 확인 할 수 있다.
 
-### 4. 참조
+### 2. 참조
 
 * [http://wiki.apparmor.net](http://wiki.apparmor.net)
 * [https://wiki.ubuntu.com/AppArmor](https://wiki.ubuntu.com/AppArmor)

@@ -34,11 +34,9 @@ HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개
   * rspauth는 response auth를 의미하며 Server와 Client사이의 상호 인증시 이용된다.
   * nextnonce는 Client가 Server에게 다음 요청시 사용되길 원하는 nonce값을 나타낸다.
 
-### 2. 분석
-
 Password를 MD5로 Encoding하여 Basic 인증의 약점인 보안 부분을 보완하였다. 또한 임의로 발급되는 값이 nonce를 Data뿐만 아니라 이용하여 Server나 Client 자체를 보호 할 수 있게 되었다.
 
-### 3. 참조
+### 2. 참조
 
 * HTTP Digest Authentication Scheme - [https://tools.ietf.org/html/rfc2069](https://tools.ietf.org/html/rfc2069)
 * [https://msdn.microsoft.com/en-us/library/aa479391.aspx](https://msdn.microsoft.com/en-us/library/aa479391.aspx)
