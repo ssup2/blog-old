@@ -15,7 +15,7 @@ Spring Cloud는 Cloud같은 분산 환경에서 **Cloud-native App 구축 및 �
 
 ### 2. Hystrix
 
-### 3. Eureka 
+### 3. Eureka
 
 ### 4. Ribbon
 
@@ -23,4 +23,5 @@ Spring Cloud는 Cloud같은 분산 환경에서 **Cloud-native App 구축 및 �
 
 ### 6. 참조
 * Spring Cloud - [https://readme.skplanet.com/?p=13782](https://readme.skplanet.com/?p=13782)
+* Hystrix - [https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki)
 * Hystrix - [http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html](http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html)
