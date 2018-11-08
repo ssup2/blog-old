@@ -21,7 +21,7 @@ Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Servi
 
 #### 2.1. Flow
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Hystrix_Flow.PNG}
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Hystrix_Flow.PNG)
 
 위의 그림은 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
 
