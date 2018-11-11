@@ -1,5 +1,5 @@
 ---
-title: Spring Cloud
+title: Spring Cloud Hystrix,Ribbon,Eureka
 category: Theory, Analysis
 date: 2018-11-10T12:00:00Z
 lastmod: 2018-11-10T12:00:00Z
@@ -15,13 +15,13 @@ Spring Cloud는 Cloud같은 분산 환경에서 **Cloud-native App 구축 및 �
 
 ### 2. Hystrix
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Circuit_Breaker.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Circuit_Breaker.PNG){: width="500px"}
 
 Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Service 호출을 제어하고, Service 사이의 Isolation Point를 제공하는 Library이다. 위의 그림은 Hystrix를 이용하여 생성 및 삽입한 Circuit Breaker를 나타내고 있다. Service D가 이용불가능인 상태이거나 Service D의 응답이 늦어 Circuit이 Open되어 있는 경우, Circuit Breaker는 Service A 또는 Service B에서 수행하는 Service D 호출을 차단하여 불필요한 Resource 사용을 방지한다. 또한 등록된 Fallback Service인 Service E를 수행하여 유연한 장애대처가 가능하도록 만든다. Circuit Breaker의 Open/Close 기준은 개발자의 설정을 통해 정해진다.
 
 #### 2.1. Flow
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Hystrix_Flow.PNG)
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Flow.PNG)
 
 위의 그림은 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
 
@@ -50,21 +50,48 @@ Thread Pool 정책에서 최대로 Service를 동시 호출할 수 있는 개수
 
 ### 3. Ribbon
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Ribbon.PNG){: width="450px"}
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Ribbon.PNG){: width="450px"}
+
+Ribbon은 **Client-side Load Balancer**로써 의미그대로 Client에서 Server Load Balancing을 수행하는 Library이다. 위의 그림은 Ribbon을 나타내고 있다. Ribbon은 Rule, Ping, ServerList 3가지의 구성요소로 이루어져 있다.
+
+#### 3.1. Rule
+
+Rule은 Ribbon에서 이용하는 Load Balancing 알고리즘을 의미한다. Rule은 Ribbon에서 제공하는 Rule을 이용하거나, 개발자가 직접 정의한 Rule을 이용 할 수 있다. 다음의 3가지 Rule은 Ribbon에서 제공해주는 Rule이다. 
+
+* RoundRobinRule - Round Robin 알고리즘을 이용하는 방식이다.
+* AvailabilityFilteringRule - 동작하지 않는 Server를 건너뛰는 방식이다. Error가 특정횟수 이상 연속으로 발생한 Server는 일정 시간동안 Load Balancing 대상 Server에서 제외시킨다. Error 발생 횟수, Load Balancing 제외 시간은 개발자가 자유롭게 설정이 가능하다.
+* WeightedResponseTimeRule - Server의 평균응답시간에 반비례하계 Weight를 부여하는 방식이다. 
+
+#### 3.2. Ping
+
+Ping은 Server의 생존 유뮤를 판단하는 구성요소이다. Ping은 Ribbon에서 제공하는 DummyPing Class를 이용하거나, 개발자가 정의한 Ping Class를 이용 할 수 있다.
+
+#### 3.3. ServerList
+
+Load Balancing이 수행가능한 Server List를 의미한다. Server List를 얻는 방식은 Ribbon에서 제공하는 이용하거나, 개발자가 직접 정의한 방식을 이용 할 수 있다. 다음의 3가지 방식은 Ribbon에서 제공해주는 방식이다.
+
+* Adhoc static server list - Ribbon을 설정하는 Code에 Server List를 직접넣는 방식이다.
+* ConfigurationBasedServerList - Ribbon을 설정하는 Config 파일에 Server List를 직접넣는 방식이다.
+* DiscoveryEnabledNIWSServerList - Eureka Client로 부터 Server List를 얻는 방식이다. 일반적으로 가장 많이 이용되는 방식이다.
+
+또한 Ribbon은 Server List를 Filtering 할 수 있는 기능도 제공한다. Server List Filtering 방식도 Ribbon에서 제공하는 방식을 이용하거나, 개발자가 정의한 방식을 이용 할 수 있다. 다음의 2가지 방식은 Ribbon에서 제공해주는 방식이다.
+
+* ZoneAffinityServerListFilter - Ribbon과 같은 Zone에 있는 Server List만 제공한다.
+* ServerListSubsetFilter - 개발자가 설정한 조건에 맞는 Server List만 제공한다.
 
 ### 4. Eureka
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Eureka.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Eureka.PNG){: width="600px"}
 
 ### 5. Hystrix + Ribbon + Eureka
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
 
-### 6. Zuul
-
-### 7. 참조
+### 6. 참조
 
 * Spring Cloud - [https://readme.skplanet.com/?p=13782](https://readme.skplanet.com/?p=13782)
 * Hystrix - [https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki)
 * Hystrix - [http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html](http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html)
+* Ribbon - [https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers)
+* Ribbon - [https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon](https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon)
 * Eureka - [https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka](https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka)
