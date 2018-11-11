@@ -48,13 +48,23 @@ Semaphore 정책은 HystrixCommand Instance에 별도의 전용 Thread를 이용
 
 Thread Pool 정책에서 최대로 Service를 동시 호출할 수 있는 개수는 Semaphore 개수에 따라 정해진다. 따라서 Service가 얼마나 동시에 많이 호출될지 예측한 뒤 적절한 Semaphore 개수를 설정 해야한다. Netflix에서는 엄청난 부하가 발생하는 Non-network 호출, 즉 Network를 거치지 않는 Service 호출이나 함수를 호출할 경우 이용하라고 가이드하고 있다.
 
-### 3. Eureka
+### 3. Ribbon
 
-### 4. Ribbon
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Ribbon.PNG){: width="450px"}
 
-### 5. Zuul
+### 4. Eureka
 
-### 6. 참조
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Eureka.PNG){: width="600px"}
+
+### 5. Hystrix + Ribbon + Eureka
+
+![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
+
+### 6. Zuul
+
+### 7. 참조
+
 * Spring Cloud - [https://readme.skplanet.com/?p=13782](https://readme.skplanet.com/?p=13782)
 * Hystrix - [https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki)
 * Hystrix - [http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html](http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html)
+* Eureka - [https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka](https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka)
