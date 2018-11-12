@@ -25,7 +25,7 @@ Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Servi
 
 위의 그림은 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
 
-* 1 - Circuit이 Open되어 있는지 확인한다. 만약 Circuit이 열려있다면 Service 호출은 중단되고 Fallback Service를 호출한다.
+* 1 - Circuit이 Open되어 있는지 확인한다. 만약 Circuit이 Open되어 있다면 Service 호출은 중단되고 Fallback Service를 호출한다.
 * 2 - Circuit이 Open되어 있더라도, Service 호출에 필요한 Thread Pool의 Thread나 남은 Semaphore가 없는 경우 Service 호출은 중단되고 Fallback Service를 호출한다.
 * 3 - Service 호출뒤 제대로 Service가 호출되었는지 확인한다. 만약 Service 호출이 성공하지 못했다면 Fallback Service를 호출한다.
 * 4 - Service 호출은 완료되었지만 Timeout이 발생하였는지 확인한다. 만약 Timeout이 발생하였다면 Fallback Service를 호출한다. 만약 Timeout이 발생하지 않았다면 Service 호출 결과를 Return한다.
@@ -36,13 +36,13 @@ Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Servi
 
 Hystrix는 **Thread Pool**, **Semaphore** 2가지 Thread 정책을 이용하고 있다.
 
-##### 2.1.1. Thread Pool
+##### 2.2.1. Thread Pool
 
 Thread Pool 정책은 의미그대로 HystrixCommand Instance가 이용가능한 Thread Pool을 이용하여 Service를 호출하는 방식이다. 각 HystrixCommand Instance에 할당된 Thread Pool의 Thread를 이용하는 방식이기 때문에 **높은 Isolation**이 특징이다. HystrixCommand Instance 내에서 할당된 Thread를 낭비하더라도 WAS가 관리하는 User Request Thread나 다른 HytrixCommand Instance가 이용하는 Thread Pool에게는 영향을 주지 않기 때문이다. 반면 Thread Pool 관리 Overhead 및 Service 호출시 발생하는 Thread Context Switching Overhead 때문에, Semaphore 정책에 비해서 낮은 성능은 단점이라고 할 수 있다.
 
 Thread Pool 정책에서 최대로 Service를 동시 호출할 수 있는 개수는 Thread Pool의 Thread 개수에 따라 정해진다. 따라서 Service가 얼마나 동시에 많이 호출될지 예측한 뒤 적절한 Thread 개수를 Thread Pool에 할당해야 한다. 다수의 HystrixCommand Instance가 하나의 Thread Pool를 공유하여 이용하도록 설정 할 수도 있다. Netflix에서는 Service Isolation을 위해서 Thread Pool 정책을 권하고 있다.
 
-##### 2.1.2. Semaphore
+##### 2.2.2. Semaphore
 
 Semaphore 정책은 HystrixCommand Instance에 별도의 전용 Thread를 이용하는 방식이 아닌 HystrixCommand Instance를 통해서 Service 호출을 요청하는 Thread를 그대로 이용하는 방식이다. 따라서 Service 호출시 Thread Context Switching이 발생하지 않아 Thread Pool 정책에 비해서 빠른 성능이 장점이다. 하지만 Thread를 공유하기 때문에 낮은 Isolation이 단점이다.
 
@@ -97,7 +97,9 @@ Eureka는 모든 Service 정보를 관리하는 중요한 Service이기 때문�
 
 ![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
 
+지금까지 분석한 Spring Cloud의 Hystrix, Ribbon, Eureka를 이용하여 Service를 구성하면 위의 그림과 같은 구조가 된다. Service A의 Hystrix는 Service B가 제대로 동작하지 않는것을 파악한뒤, Service B의 Circuit을 Open하고 Fallback Service인 Service C를 호출하고 있다. Service A의 Eureka는 Eureka Server로 부터 Service 정보를 얻은뒤 Ribbon에게 전달한다. Eureka Server는 2개의 Instance가 구동하고 있고 첫번째 Eureka Server의 Eureka Client는 두번째 Eureka Server로부터 Service 정보를 얻고있다. Service A의 Ribbon은 Eureka로부터 얻은 Service D의 Instance 정보를 바탕으로 Load Balancing을 수행한다. Service D의 첫번째 Instance가 동작하지 않아 두번째 Instance로 Service D를 호출하고 있다.
 
+Zuul은 API Gateway로써 Service End-point 역활을 수행한다. Zuul에서도 Hystrix, Ribbon, Eureka를 이용하여 안정적인 Service-end point를 제공한다.
 
 ### 6. 참조
 
