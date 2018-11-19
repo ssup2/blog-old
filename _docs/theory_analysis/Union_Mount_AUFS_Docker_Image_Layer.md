@@ -43,7 +43,7 @@ Remove - 파일이나 폴더를 지우는 경우 RW Branch 폴더에 .wh.<file_o
 
 ![]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove_opq.PNG){: width="600px"}
 
-Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있다. Branch의 특정 폴더내에 .wh..wh..opq 파일이 있으면 하위 Branch들의 해당 폴더내의 모든 파일들은 AUFS Mount가 된 폴더내에서 볼 수 없다. 위 그림은 .wh..wh..opq 파일의 역활을 나타내고 있다. /layer_rw Branch의 /dir 폴더에 .wh..wh..opq 파일이 있기 때문에 하위 /layer_02 Branch의 /dir폴더 안에 있는 모든 파일들은 /mnt 폴더에서 보이지 않는다. /mnt 폴더에서 dir 폴더 자체를 삭제했다가 다시 dir 폴더를 생성하는 경우, 위 그림처럼 /layer_rw Branch의 /dir 폴더안에 .wh..wh..opq 파일 생성을 통해 처리한다.
+Remove and Create Dir - AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있다. Branch의 특정 폴더내에 .wh..wh..opq 파일이 있으면 하위 Branch들의 해당 폴더내의 모든 파일들은 AUFS Mount가 된 폴더내에서 볼 수 없다. 위 그림은 .wh..wh..opq 파일의 역활을 나타내고 있다. /layer_rw Branch의 /dir 폴더에 .wh..wh..opq 파일이 있기 때문에 하위 /layer_02 Branch의 /dir폴더 안에 있는 모든 파일들은 /mnt 폴더에서 보이지 않는다. /mnt 폴더에서 dir 폴더 자체를 삭제했다가 다시 dir 폴더를 생성하는 경우, AUFS는 위 그림처럼 /layer_rw Branch의 /dir 폴더안에 .wh..wh..opq 파일 생성을 통해 처리한다.
 
 ### 3. Docker Image Layer
 
