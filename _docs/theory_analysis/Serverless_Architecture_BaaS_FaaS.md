@@ -23,6 +23,8 @@ BaaS는 의미 그대로 DB, Storage, 인증 등의 Backend 기능을 Service로
 
 ### 3. FaaS (Function as a Service)
 
+
+
 ### 4. 참조
 
 * [https://martinfowler.com/articles/serverless.html](https://martinfowler.com/articles/serverless.html)
