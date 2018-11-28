@@ -33,7 +33,7 @@ User 관점에서의 Network는 Provider Network, Self-service Network 2가지�
 
 ![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Neutron_Architecture.PNG){: width="600px"}
 
-OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. 위의 그림은 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다
+OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. 위의 그림은 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다.
 
 * Neutron Server - Neutron Server는 Controller Node에서 동작하며 Provider 또는 User에게 Network API 제공하고 요청에 따라 전반적인 OpenStack Network를 제어하는 Master 역활을 수행한다. Neutron Server는 Plugin으로 구성되어 있는데 Core Plugin, Service Plugin으로 구분된다. Core Plugin은 Network, Subnet과 연관된 기능을 수행한다. Service Plugin은 Router, LB, Firewall 같은 Network L3와 연관된 기능을 수행한다.
 
@@ -45,13 +45,15 @@ OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, S
 
 * DHCP Agent - VM에게 IP를 부여하기 위한 DHCP Server를 제어한다. 또한 Router의 Meta Proxy를 대신하는 별도의 Meta Proxy를 관리하는 역활도 수행한다. DHCP Agent의 Meta Proxy는 VM이 Router와 연결되어 있지 않는 고립된 네트워크에 연결되어 있는 경우, 고립된 Network ID와 VM Metadata 요청 Packet에 있는 VM IP 정보를 Meta Agent에게 전달하여 Meta Agent가 VM Metadata를 얻도록 도와준다.
 
-#### 2.1. Management Network, Self-service Network, Router, DHCP
+#### 2.1. Management/Provider/Self-service Network, Router, DHCP
 
-##### 2.1.1. VXLAN without SDN
+OpenStack 구성에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP가 실제 어떻게 구성되는지 분석한다.
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_VXLAN_No_SDN.PNG){: width="500px"}
+##### 2.1.1. Without SDN
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_VXLAN_No_SDN.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="500px"}
+
+![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="600px"}
 
 ### 3. 참조
 
