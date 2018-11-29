@@ -31,7 +31,7 @@ User 관점에서의 Network는 Provider Network, Self-service Network 2가지�
 
 ### 2. Neutron
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Neutron_Architecture.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Neutron_Architecture.PNG){: width="700px"}
 
 OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. 위의 그림은 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다.
 
