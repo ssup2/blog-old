@@ -35,6 +35,8 @@ User 관점에서의 Network는 Provider Network, Self-service Network 2가지�
 
 OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. 위의 그림은 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다.
 
+Neutron Server와 Agent들은 사이의 통신은 Message Queue를 이용한다. Neutron Server, Agent들은 Message Queue와 통신할때 RPC (Remote Procedure Call)를 이용한다. 별도의 SDN Service가 Neutron과 협력하여 Network를 제어하는 경우 Neutron과 SDN Service는 REST API 방식으로 통신한다.
+
 * Neutron Server - Neutron Server는 Controller Node에서 동작하며 Provider 또는 User에게 Network API 제공하고 요청에 따라 전반적인 OpenStack Network를 제어하는 Master 역활을 수행한다. Neutron Server는 Plugin으로 구성되어 있는데 Core Plugin, Service Plugin으로 구분된다. Core Plugin은 Network, Subnet과 연관된 기능을 수행한다. Service Plugin은 Router, LB, Firewall 같은 Network L3와 연관된 기능을 수행한다.
 
 * ML2 Plugin Agent - Network Node 또는 Compute Node에서 동작하며 Neutron Server의 명령에 따라 VLAN, Bridge, OVS(Open V Switch)와 같은 Network L2를 제어한다.
@@ -47,13 +49,17 @@ OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, S
 
 #### 2.1. Management/Provider/Self-service Network, Router, DHCP
 
-OpenStack 구성에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP가 실제 어떻게 구성되는지 분석한다.
+OpenStack 구성에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP Server가 실제 어떻게 구성되는지 분석한다. Management Network는 VLAN을 이용하지 않으면서 Node의 Network를 그대로 이용하는 Flat Network로 구성되어 있고, Provider Network는 VLAN 10번 Network로 구성되어 있다고 가정하였다. 또한 Self-service Network는 VXLAN 20번 Network로 구성되어 있다고 가정하였다.
 
-##### 2.1.1. Without SDN
+##### 2.1.1. Without SD
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="600px"}
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="600px"}
+위의 그림은 Compute Node의 Network 설정을 나타내고 있다. Management Network는 Flat Network를 이용하기 때문에 eth0 Interface를 그대로 이용하면 된다. Provider Network는 VLAN 10번을 이용하기 때문에, eth0 Interface에 VLAN 10번 Interface와 VLAN 10에 VM을 붙이기 위한 Bridge를 설정한다. 이와 유사하게 Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙이기 위한 Bridge를 설정한다.
+
+VM A는 Provider Network에만 연결되어 있기 때문에 VM A의 TAP Interface는 VLAN 10번 Interface와  연결되어 있는 Bridge에만 연결되어 있다. VM C는 Self-serviced Network에만 연결되어 있기 때문에 VM C의 TAP Interface는 VLAN 20번 Interface와 연결되어 있는 Bridge에만 연결되어 있다. VM B는 양쪽 Network 모두와 연결되어 있기 때문에 VM B의 2개의 TAP Interface를 이용하여 모든 Bridge에 연결되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent에 의해서 관리된다.
+
+![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="700px"}
 
 ### 3. 참조
 
