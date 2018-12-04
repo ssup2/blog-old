@@ -81,12 +81,13 @@ layout:
 		}
 	}
 
-	window.index = new lunr.index;
-	index.field("id");
-	index.field("title", {boost: 10});
-	index.field("category");
-	index.field("url");
-	index.field("content");
+	window.index = lunr(function () {
+		this.field("id");
+		this.field("title", {boost: 10});
+		this.field("category");
+		this.field("url");
+		this.field("content");
+	});
 
 	var query = decodeURIComponent((getQueryVariable("q") || "").replace(/\+/g, "%20")),
 		searchQueryContainerEl = document.getElementById("search-query-container"),
