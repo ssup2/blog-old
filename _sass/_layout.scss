@@ -103,7 +103,7 @@ header {
 		font-size: 2rem;
 		line-height: 0.8;
 		letter-spacing: 0;
-		font-weight: 600;
+		font-weight: 700;
 		text-indent: 0;
 		@include display-flex();
 		@include flex-direction(row);
@@ -207,11 +207,11 @@ header {
 
 	@media (min-width: $mobile-break) {
 		h2 {
-			font-size: 2.5rem;
+			font-size: 2rem;
 		}
 
 		h3 {
-			font-size: 4rem;
+			font-size: 3.5rem;
 		}
 	}
 
