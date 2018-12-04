@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '3.3.1'
+gem 'jekyll', '>= 3.6.3'
 gem 'jekyll-sitemap'
+gem 'jekyll-seo-tag'
 
-group :jekyll_plugins do
-  gem 'jekyll-seo-tag', '2.0.0'
-end
+gem 'ffi', '>= 1.9.24'
