@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Address Resolution Protocol(ARP)
 
-ARP는 뜻 그대로 주소를 알아내기 위한 Protocol이다. 네트워크 프로그래밍시 대부분의 경우 Data를 보내려는 목적지의 IP 주소만을 이용할뿐 MAC 주소를 이용하지 않는다. IP는 네트워크 주소 체계를 유연하게 관리하기 위한 논리적 주소이고, MAC 주소는 실제 NIC 카드가 인지하는 물리적 주소이다. 따라서 IP 주소만 가지고는 네트워크 통신을 할 수 없다. **ARP는 IP같은 논리 주소를 가지고 MAC같은 물리적 주소를 알아내기 위한 Protocol이다.**
+ARP는 뜻 그대로 주소를 알아내기 위한 Protocol이다. 네트워크 프로그래밍시 대부분의 경우 Data를 보내려는 목적지의 IP 주소만을 이용할뿐 MAC 주소를 이용하지 않는다. IP는 네트워크 주소 체계를 유연하게 관리하기 위한 논리적 주소이고, MAC 주소는 실제 NIC 카드가 인지하는 물리적 주소이다. 따라서 IP 주소만 가지고는 네트워크 통신을 할 수 없다. **ARP는 IP같은 논리 주소를 가지고 MAC같은 물리 주소를 알아내기 위한 Protocol이다.**
 
 #### 1.1. Flow
 
@@ -23,7 +23,7 @@ ARP Packet을 받은 Host는 자신의 논리적 주소가 Target protocol addre
 
 ![]({{site.baseurl}}/images/theory_analysis/ARP/ARP_Packet.PNG)
 
-위의 그림은 Ethernet 환경에서의 ARP Packet을 나타내고 있다. Operation Code는 ARP Request시 1이 되고 ARP Reply의 경우 2가 된다. ARP Packet은 Broadcast되야 하기 때문에 Ethernet Header의 Destination Address는 FF:FF:FF:FF:FF:FF가 된다.
+위의 그림은 Ethernet 환경에서의 ARP Packet을 나타내고 있다. Operation Code는 ARP Request시 1이 되고 ARP Reply의 경우 2가 된다. ARP Request Packet은 Broadcast되야 하기 때문에 Ethernet Header의 **Destination Address는 FF:FF:FF:FF:FF:FF**가 된다.
 
 #### 1.3. ARP Caching, Table
 
