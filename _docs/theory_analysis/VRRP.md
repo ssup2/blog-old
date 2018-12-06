@@ -27,4 +27,3 @@ VRRP(Virtual Router Redundancy Protocol)는 Gateway Router의 Single Point of Fa
 
 * [https://www.slideshare.net/netmanias-ko/netmanias20080324-vrrp-protocoloverview](https://www.slideshare.net/netmanias-ko/netmanias20080324-vrrp-protocoloverview)
 * [http://www.rfwireless-world.com/Terminology/Virtual-MAC-Address-vs-Physical-MAC-Address.html](http://www.rfwireless-world.com/Terminology/Virtual-MAC-Address-vs-Physical-MAC-Address.html)
-* [http://www.h3c.com.hk/Technical_Support___Documents/Technical_Documents/Routers/H3C_SR8800_Series_Routers/Configuration/Operation_Manual/H3C_SR8800_CG-Release3347-6W103/11/201211/761953_1285_0.htm](http://www.h3c.com.hk/Technical_Support___Documents/Technical_Documents/Routers/H3C_SR8800_Series_Routers/Configuration/Operation_Manual/H3C_SR8800_CG-Release3347-6W103/11/201211/761953_1285_0.htm)
