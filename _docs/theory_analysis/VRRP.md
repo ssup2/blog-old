@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. VRRP (Virtual Router Redundancy Protocol)
 
-![]({{site.baseurl}}/images/theory_analysis/VRRP/Problem.PNG){: width="500px"}
+![]({{site.baseurl}}/images/theory_analysis/VRRP/Problem.PNG){: width="700px"}
 
 VRRP(Virtual Router Redundancy Protocol)는 Gateway Router의 Single Point of Failure를 방지하기 위한 기법이다. 위의 왼쪽 그림은 Gateway Router가 하나일때를 나타내고 있다. Router의 동작이 멈춘다면 Host A, Host B는 External Network와 단절된다. 직관적으로 떠오르는 해결 방법은 여분의 Router를 추가하는 것이다. 하지만 Router 추가만으로는 Single Point of Failure 문제를 해결 할 수 없다.
 
