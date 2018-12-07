@@ -126,7 +126,7 @@ network:
 # sudo snap install kubectl --classic
 ~~~
 
-### 4. Cluster 구축 Calico
+### 4. Cluster 구축
 
 #### 4.1. Master Node
 
