@@ -237,7 +237,7 @@ ubuntu02            Ready     <none>    1m        v1.11.1
 # kubectl proxy
 ~~~
 
-### 5. Web UI (Dashboard) 설정
+### 5. Web UI (Dashboard) 설치
 
 #### 5.1 Master Node
 
@@ -269,6 +269,7 @@ spec:
 
 * Web UI Privilege 권한을 위한 config 파일 생성
   * 아래의 내용으로 ~/dashboard-admin.yaml 파일 생성 
+
 ~~~
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
