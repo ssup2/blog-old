@@ -171,12 +171,6 @@ source <(kubectl completion bash)
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
-* Dashboard Addon (Dashboard) 설치
-
-~~~
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-~~~
-
 #### 4.1.2. Flannel 설치
 
 * kubeadm 초기화 (Cluster 생성)
@@ -184,7 +178,7 @@ source <(kubectl completion bash)
   * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
 ~~~
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.11.0
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.13.0
 ...
 kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:7faf874316231b4455882f400064a9861c2d446bdf6512802a4b633a04ec44f2
 ~~~
@@ -212,12 +206,6 @@ source <(kubectl completion bash)
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
-~~~
-
-* Dashboard Addon (Dashboard) 설치
-
-~~~
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ~~~
 
 #### 4.2. Worker Node
@@ -249,9 +237,70 @@ ubuntu02            Ready     <none>    1m        v1.11.1
 # kubectl proxy
 ~~~
 
-### 5. 참조
+### 5. Web UI (Dashboard) 설정
+
+#### 5.1 Master Node
+
+* Web UI 설치
+
+~~~
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+~~~
+
+* kube-apiserver Insecure 설정
+  * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용 수정 & 추가
+
+~~~
+...
+spec:
+  containers:
+  - command:
+...
+    - --insecure-bind-address=0.0.0.0
+    - --insecure-port=8080
+...
+~~~
+
+* kubelet Service 재시작
+
+~~~
+# service kubelet restart
+~~~
+
+* Web UI Privilege 권한을 위한 config 파일 생성
+  * 아래의 내용으로 ~/dashboard-admin.yaml 파일 생성 
+~~~
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard
+  labels:
+    k8s-app: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+~~~
+
+* Web UI에 Privilege 권한 적용
+
+~~~
+# kubectl create -f ~/dashboard-admin.yaml
+# rm ~/dashboard-admin.yaml
+~~~
+
+* Web UI 접속
+  * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
+  * 접속 후 Skip Click
+
+### 6. 참조
 
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 * Calio 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
 * Flannel 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/)
+* Web UI 설치 - https://github.com/kubernetes/dashboard/wiki/Access-control#basic
