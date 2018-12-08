@@ -2,7 +2,7 @@
 title: Kubernetes 설치 - Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
-lastmod: 2018-07-15T12:00:00Z
+lastmod: 2018-12-18T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -56,7 +56,6 @@ network:
         enp0s8:
             dhcp4: no
             addresses: [192.168.0.150/24]
-            gateway4: 192.168.0.1
             nameservers:
                 addresses: [8.8.8.8]
 ~~~
@@ -95,17 +94,18 @@ network:
 
 #### 3.1. 모든 Node
 
+* Swap Off
+  * /etc/fstab 파일에서 아래와 같이 swap.img 주석 처리
+
+~~~
+# /swap.img       none    swap    sw      0       0
+~~~
+
 * Docker 설치
 
 ~~~
 # apt-get update
 # apt-get install -y docker.io
-
-# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-# sudo apt-get update
-# sudo apt-get install docker.io=1.12.6-0ubuntu1~16.04.1
 ~~~
 
 * kubelet, kubeadm 설치
@@ -136,11 +136,11 @@ network:
 
 * kubeadm 초기화 (Cluster 생성)
   * 실행 후 Key 값을 얻을 수 있다.
-  * 10.0.0.10는 Master NAT 네트워크 IP이다.
+  * 10.0.0.10는 Master의 NAT 네트워크 IP이다.
 
 ~~~
 # swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.11.0
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.13.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
