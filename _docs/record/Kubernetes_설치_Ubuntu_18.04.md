@@ -19,13 +19,11 @@ adsense: true
 * VirtualBox 5.0.14r
   * Master Node - Ubuntu Desktop 18.04 64bit - 1대
   * Worker Node - Ubuntu Server 18.04 64bit - 1대
-* Kubernetes 1.11
-  * Network Addon - calico or flannel 이용
+* Kubernetes 1.12
+  * Network Addon - calico or flannel or cilium 이용
   * Dashboard Addon - Dashboard 이용
-* kubeadm
+* kubeadm 1.12
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
-* Docker 1.12.6
-  * Kubernetes에서 1.12.x Version을 권장하고 있다.
 * Password
   * Kubernetes 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
 * 모든 Node에서 root User로 설치를 진행한다.
@@ -114,7 +112,7 @@ network:
 # curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 # echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
 # apt-get update
-# apt-get install -y kubelet kubeadm
+# apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
 ~~~
 
 ### 4. Cluster 구축
@@ -129,7 +127,7 @@ network:
 
 ~~~
 # swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.13.0
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -166,7 +164,7 @@ source <(kubectl completion bash)
 
 ~~~
 # swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.13.0
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -202,7 +200,7 @@ source <(kubectl completion bash)
 
 ~~~
 # swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -226,18 +224,19 @@ fi
 source <(kubectl completion bash)
 ~~~
 
+* bpffs mount 및 설정
+
+~~~
+# mount bpffs /sys/fs/bpf -t bpf
+# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
+~~~
+
 * Cilium 설치
 
 ~~~
 # cd ~
-# wget https://github.com/cilium/cilium/archive/v1.2.0.zip
-# unzip v1.2.0.zip
-# cd cilium-1.2.0/examples/kubernetes/addons/etcd-operator
-# export CLUSTER_DOMAIN=$(kubectl get ConfigMap --namespace kube-system coredns -o yaml | awk '/kubernetes/ {print $2}')
-# tls/certs/gen-cert.sh $CLUSTER_DOMAIN
-# tls/deploy-certs.sh
-# kubectl label -n kube-system pod $(kubectl -n kube-system get pods -l k8s-app=kube-dns -o jsonpath='{range .items[]}{.metadata.name}{" "}{end}') io.cilium.fixed-identity=kube-dns
-# kubectl create -f ./
+# wget https://raw.githubusercontent.com/cilium/cilium/v1.2/examples/kubernetes/1.12/cilium.yaml
+# kubectl create -f ./cilium.yaml
 ~~~
 
 #### 4.2. Worker Node
@@ -248,6 +247,15 @@ source <(kubectl completion bash)
 ~~~
 # swapoff -a
 # kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+~~~
+
+##### 4.2.1. Cilium
+
+* bpffs mount 및 설정
+
+~~~
+# mount bpffs /sys/fs/bpf -t bpf
+# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
 #### 4.3. 검증
