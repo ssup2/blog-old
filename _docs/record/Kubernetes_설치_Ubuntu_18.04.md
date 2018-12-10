@@ -261,6 +261,7 @@ source <(kubectl completion bash)
 #### 4.3. 검증
 
 * Master Node에서 Cluster 확인
+  * 모든 Node가 Ready 상태가 되야한다.
 
 ~~~
 # kubectl get nodes
@@ -268,13 +269,6 @@ NAME                STATUS    ROLES     AGE       VERSION
 supsup-virtualbox   Ready     master    21m       v1.11.1
 ubuntu01            Ready     <none>    1m        v1.11.1
 ubuntu02            Ready     <none>    1m        v1.11.1
-~~~
-
-* Master Node에서 Dashboard 접속
-  * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
-
-~~~
-# kubectl proxy
 ~~~
 
 ### 5. Web UI (Dashboard) 설치
