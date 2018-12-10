@@ -249,7 +249,7 @@ source <(kubectl completion bash)
 # kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-##### 4.2.1. Cilium
+##### 4.2.1. Cilium 설치
 
 * bpffs mount 및 설정
 
