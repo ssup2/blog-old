@@ -35,7 +35,6 @@ adsense: true
 ![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu18.04/Node_Setting.PNG)
 
 * VirtualBox를 이용하여 위의 그림과 같이 가상의 Master, Worker Node (VM)을 생성한다.
-* Kubernetes의 Dashboard는 기본적으로 Master의 Web Browser에서만 이용할 수 있다. 따라서 Master Node에는 Ubuntu Desktop Version 또는 X Server를 이용한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * Router - 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
 
@@ -118,23 +117,11 @@ network:
 # apt-get install -y kubelet kubeadm
 ~~~
 
-#### 3.2. Master Node
-
-* kubectl 설치
-
-~~~
-# sudo snap install kubectl --classic
-~~~
-
 ### 4. Cluster 구축
 
 #### 4.1. Master Node
 
-* Calio, Flannel 둘중 하나를 선택하여 설치
-
-#### 4.1.1. Calico 설치
-
-* kubeadm 초기화 (Cluster 생성)
+* kubeadm 초기화
   * 실행 후 Key 값을 얻을 수 있다.
   * 10.0.0.10는 Master의 NAT 네트워크 IP이다.
 
@@ -163,49 +150,34 @@ fi
 
 source <(kubectl completion bash)
 ~~~
+ku      
 
-* Calico 설치
+* Calio, Flannel, Cilium 셋중 하나를 선택하여 설치
+  * Calico 설치
 
 ~~~
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
-#### 4.1.2. Flannel 설치
-
-* kubeadm 초기화 (Cluster 생성)
-  * 실행 후 Key 값을 얻을 수 있다.
-  * 10.0.0.11는 Master NAT 네트워크 IP이다.
-
-~~~
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.13.0
-...
-kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:7faf874316231b4455882f400064a9861c2d446bdf6512802a4b633a04ec44f2
-~~~
-
-* kubectl config 설정
-
-~~~
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
-~~~
-
-* kubectl autocomplete 설정
-  * /root/.bashrc에 다음의 내용 추가
-
-~~~
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-source <(kubectl completion bash)
-~~~
-
-* Flannel 설치
+  * Flannel 설치
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+~~~
+
+  * Cilium 설치
+
+~~~
+# cd ~
+# wget https://github.com/cilium/cilium/archive/v1.2.0.zip
+# unzip v1.2.0.zip
+# cd cilium-1.2.0/examples/kubernetes/addons/etcd-operator
+# export CLUSTER_DOMAIN=$(kubectl get ConfigMap --namespace kube-system coredns -o yaml | awk '/kubernetes/ {print $2}')
+# tls/certs/gen-cert.sh $CLUSTER_DOMAIN
+# tls/deploy-certs.sh
+# kubectl label -n kube-system pod $(kubectl -n kube-system get pods -l k8s-app=kube-dns -o jsonpath='{range .items[]}{.metadata.name}{" "}{end}') io.cilium.fixed-identity=kube-dns
+# kubectl create -f ./
 ~~~
 
 #### 4.2. Worker Node
@@ -215,7 +187,7 @@ source <(kubectl completion bash)
 
 ~~~
 # swapoff -a
-# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:7faf874316231b4455882f400064a9861c2d446bdf6512802a4b633a04ec44f2
+# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
 #### 4.3. 검증
@@ -302,6 +274,5 @@ subjects:
 
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
-* Calio 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
-* Flannel 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/)
+* Calio, Flannel, Cilium 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
 * Web UI 설치 - https://github.com/kubernetes/dashboard/wiki/Access-control#basic
