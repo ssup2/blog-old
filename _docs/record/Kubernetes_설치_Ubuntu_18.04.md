@@ -121,7 +121,7 @@ network:
 
 * Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
 
-##### 4.1.1. Calico
+##### 4.1.1. Calico 설치
 
 * kubeadm 초기화
 
