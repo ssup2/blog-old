@@ -190,13 +190,6 @@ fi
 source <(kubectl completion bash)
 ~~~
 
-* Calico 설치
-
-~~~
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
-~~~
-
 * Flannel 설치
 
 ~~~
