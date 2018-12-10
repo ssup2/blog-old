@@ -150,23 +150,25 @@ fi
 
 source <(kubectl completion bash)
 ~~~
-ku      
+
+##### 4.1.1. Network Plugin 설치    
 
 * Calio, Flannel, Cilium 셋중 하나를 선택하여 설치
-  * Calico 설치
+
+* Calico 설치
 
 ~~~
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
-  * Flannel 설치
+* Flannel 설치
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
-  * Cilium 설치
+* Cilium 설치
 
 ~~~
 # cd ~
