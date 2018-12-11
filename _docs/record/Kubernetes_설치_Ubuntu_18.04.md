@@ -87,6 +87,20 @@ network:
                 addresses: [8.8.8.8]
 ~~~
 
+* Worker Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+
+~~~
+network:
+    version: 2
+    ethernets:
+        enp0s3:
+            dhcp4: no
+            addresses: [10.0.0.40/24]
+            gateway4: 10.0.0.1
+            nameservers:
+                addresses: [8.8.8.8]
+~~~
+
 ### 3. Package 설치
 
 #### 3.1. 모든 Node
@@ -119,10 +133,6 @@ network:
 
 #### 4.1. Master Node
 
-* Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
-
-##### 4.1.1. Calico 설치
-
 * kubeadm 초기화
 
 ~~~
@@ -149,94 +159,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 source <(kubectl completion bash)
-~~~
-
-* Calico 설치
-
-~~~
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
-~~~
-
-##### 4.1.2. Flannel 설치
-
-* kubeadm 초기화
-
-~~~
-# swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
-...
-kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
-~~~
-
-* kubectl config 설정
-
-~~~
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
-~~~
-
-* kubectl autocomplete 설정
-  * /root/.bashrc에 다음의 내용 추가
-
-~~~
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-source <(kubectl completion bash)
-~~~
-
-* Flannel 설치
-
-~~~
-# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
-~~~
-
-##### 4.1.3. Cilium 설치
-
-* kubeadm 초기화
-
-~~~
-# swapoff -a
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
-...
-kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
-~~~
-
-* kubectl config 설정
-
-~~~
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
-~~~
-
-* kubectl autocomplete 설정
-  * /root/.bashrc에 다음의 내용 추가
-
-~~~
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-source <(kubectl completion bash)
-~~~
-
-* bpffs mount 및 설정
-
-~~~
-# mount bpffs /sys/fs/bpf -t bpf
-# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
-~~~
-
-* Cilium 설치
-
-~~~
-# cd ~
-# wget https://raw.githubusercontent.com/cilium/cilium/v1.2/examples/kubernetes/1.12/cilium.yaml
-# kubectl create -f ./cilium.yaml
 ~~~
 
 #### 4.2. Worker Node
@@ -249,7 +171,42 @@ source <(kubectl completion bash)
 # kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-##### 4.2.1. Cilium 설치
+#### 4.3. 검증
+
+* Master Node에서 Cluster 확인
+  * 모든 Node가 Ready 상태가 되야한다.
+
+~~~
+# kubectl get nodes
+NAME       STATUS   ROLES    AGE     VERSION
+master     Ready    master   9m1s    v1.12.3
+worker01   Ready    <none>   8m37s   v1.12.3
+worker02   Ready    <none>   8m40s   v1.12.3
+worker03   Ready    <none>   8m37s   v1.12.3
+~~~
+
+### 5. Network Plugin 설치
+
+* Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
+
+#### 5.1. Calico 설치
+
+* Calico 설치
+
+~~~
+# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+~~~
+
+##### 5.2. Flannel 설치
+
+* Flannel 설치
+
+~~~
+# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+~~~
+
+##### 5.3. Cilium 설치
 
 * bpffs mount 및 설정
 
@@ -258,22 +215,35 @@ source <(kubectl completion bash)
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
-#### 4.3. 검증
-
-* Master Node에서 Cluster 확인
-  * 모든 Node가 Ready 상태가 되야한다.
+* Cilium 설치를 위한 Binary 설치
 
 ~~~
-# kubectl get nodes
-NAME                STATUS    ROLES     AGE       VERSION
-supsup-virtualbox   Ready     master    21m       v1.11.1
-ubuntu01            Ready     <none>    1m        v1.11.1
-ubuntu02            Ready     <none>    1m        v1.11.1
+# go get -u github.com/cloudflare/cfssl/cmd/cfssl
+# go get -u github.com/cloudflare/cfssl/cmd/cfssljson
 ~~~
 
-### 5. Web UI (Dashboard) 설치
+* Cilium 설치
 
-#### 5.1 Master Node
+~~~
+# wget https://github.com/cilium/cilium/archive/v1.3.0.zip
+# unzip v1.3.0.zip
+# cd cilium-1.3.0/examples/kubernetes/addons/etcd-operator
+# export CLUSTER_DOMAIN=$(kubectl get ConfigMap --namespace kube-system coredns -o yaml | awk '/kubernetes/ {print $2}')
+# tls/certs/gen-cert.sh $CLUSTER_DOMAIN
+# tls/deploy-certs.sh
+# kubectl -n kube-system delete pod -l k8s-app=kube-dns
+# kubectl create -f ./
+~~~
+
+~~~
+# cd ~
+# wget https://raw.githubusercontent.com/cilium/cilium/v1.2/examples/kubernetes/1.12/cilium.yaml
+# kubectl create -f ./cilium.yaml
+~~~
+
+### 6. Web UI (Dashboard) 설치
+
+#### 6.1 Master Node
 
 * Web UI 설치
 
@@ -332,7 +302,7 @@ subjects:
   * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
   * 접속 후 Skip Click
 
-### 6. 참조
+### 7. 참조
 
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
