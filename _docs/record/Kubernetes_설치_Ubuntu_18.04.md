@@ -103,8 +103,7 @@ network:
 
 ### 3. Package 설치
 
-#### 3.1. 모든 Node
-
+* 모든 Node에서 수행
 * Swap Off
   * /etc/fstab 파일에서 아래와 같이 swap.img 주석 처리
 
@@ -187,6 +186,7 @@ worker03   Ready    <none>   8m37s   v1.12.3
 
 ### 5. Network Plugin 설치
 
+* Master Node에서만 실행
 * Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
 
 #### 5.1. Calico 설치
@@ -215,30 +215,13 @@ worker03   Ready    <none>   8m37s   v1.12.3
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
-* Cilium 설치를 위한 Binary 설치
-
-~~~
-# go get -u github.com/cloudflare/cfssl/cmd/cfssl
-# go get -u github.com/cloudflare/cfssl/cmd/cfssljson
-~~~
-
-* Cilium 설치
+* Cilium을 위한 etcd 구동 및 Cilium 설치
 
 ~~~
 # wget https://github.com/cilium/cilium/archive/v1.3.0.zip
 # unzip v1.3.0.zip
-# cd cilium-1.3.0/examples/kubernetes/addons/etcd-operator
-# export CLUSTER_DOMAIN=$(kubectl get ConfigMap --namespace kube-system coredns -o yaml | awk '/kubernetes/ {print $2}')
-# tls/certs/gen-cert.sh $CLUSTER_DOMAIN
-# tls/deploy-certs.sh
-# kubectl -n kube-system delete pod -l k8s-app=kube-dns
-# kubectl create -f ./
-~~~
-
-~~~
-# cd ~
-# wget https://raw.githubusercontent.com/cilium/cilium/v1.2/examples/kubernetes/1.12/cilium.yaml
-# kubectl create -f ./cilium.yaml
+# kubectl create -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
+# kubectl create -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ~~~
 
 ### 6. Web UI (Dashboard) 설치
