@@ -17,8 +17,8 @@ adsense: true
 ### 1. 설치 환경
 
 * VirtualBox 5.0.14r
-  * Master Node - Ubuntu Desktop 18.04 64bit - 1대
-  * Worker Node - Ubuntu Server 18.04 64bit - 1대
+  * Master Node - Ubuntu Desktop 18.04.1 64bit - 1대
+  * Worker Node - Ubuntu Server 18.04.1 64bit - 2대
 * Kubernetes 1.12
   * Network Addon - calico or flannel or cilium 이용
   * Dashboard Addon - Dashboard 이용
@@ -82,20 +82,6 @@ network:
         enp0s3:
             dhcp4: no
             addresses: [10.0.0.30/24]
-            gateway4: 10.0.0.1
-            nameservers:
-                addresses: [8.8.8.8]
-~~~
-
-* Worker Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
-
-~~~
-network:
-    version: 2
-    ethernets:
-        enp0s3:
-            dhcp4: no
-            addresses: [10.0.0.40/24]
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
@@ -181,7 +167,6 @@ NAME       STATUS   ROLES    AGE     VERSION
 master     Ready    master   9m1s    v1.12.3
 worker01   Ready    <none>   8m37s   v1.12.3
 worker02   Ready    <none>   8m40s   v1.12.3
-worker03   Ready    <none>   8m37s   v1.12.3
 ~~~
 
 ### 5. Network Plugin 설치
