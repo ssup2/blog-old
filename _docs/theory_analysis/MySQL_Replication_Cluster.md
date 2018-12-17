@@ -17,7 +17,7 @@ Master-Slave Replication은 하나의 Master DB와 다수의 Slave DB들을 통�
 
 Master는 Client로부터 받은 DB 변경요청에 따라 DB를 변경하고, 변경 내용을 Slave DB에게 전달하여 Replication을 수행한다. Replication 방식에는 Async, Semi-sync 2가지 방식을 지원한다. 두 방식 모두 완전히 동기화가 되는 Sync 방식은 아니기 때문에 Slave DB는 짧은 순간 Master DB와 동기화되지 않는 상태일 수 있다. Slave DB의 개수가 늘어날수록 동시에 Read를 수행할 수 있는 DB도 증가하기 때문에 Read 성능을 높일 수 있다. 하지만 Slave DB의 개수가 늘어나도 DB 변경 Query는 Master DB에서부터 전파되는 방식이기 때문에 Write 성능은 개선되지 않는다.
 
-Master DB에 장애가 발생한다면 DB 관리자는 Slave DB를 Master DB로 승격시키고, LB 설정을 변경하여 DB 변경 Query가 새로운 Master DB로 전달되도록 설정해야한다. 새로운 Master DB 설정을 완료하였어도, Master DB와 Slave DB가 완전한 동기방식의 Replication을 이용하지 않기 때문에 Data 손실이 발생 할 수 있다. 만약 Slave DB에 장애가 발생할 경우에는 어떠한 Replication 방식을 적용했는지에 따라서 대응이 달라진다.
+Master DB에 장애가 발생한다면 DB 관리자는 Slave DB를 Master DB로 승격시키고, LB 설정을 변경하여 DB 변경 Query가 새로운 Master DB로 전달되도록 **수동**으로 설정하여 Failover를 수행해야한다. 새로운 Master DB 설정을 완료하였어도, Master DB와 Slave DB가 완전한 동기방식의 Replication을 이용하지 않기 때문에 Data 손실이 발생 할 수 있다. 만약 Slave DB에 장애가 발생할 경우에는 어떠한 Replication 방식을 적용했는지에 따라서 대응이 달라진다.
  
 #### 1.1. Async Replication
 
@@ -37,9 +37,19 @@ Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay L
 
 ### 2. Group Replication
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication.PNG){: width="650px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Single-primary.PNG){: width="650px"}
 
-### 3. 참조
+Group Replication은 다수의 DB Instance를 Cluster로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역활을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
+
+위의 그림은 Single-primary Mode를 나타내고 있다. Master-slave Replication과 유사하게 동작하는 Mode이다. 하나의 DB만 Primary DB로 동작하며 MySQL Router로부터 유일하게 Read/Write 요청을 받아 처리하는 DB이다. 나머지 DB는 Secondary DB로 동작하며 MySQL Router로부터 Read 요청만을 받아 처리한다. Primary-Secondary DB 사이의 Replication은 Master-Slave Replication와 유사하게 Async, Semi-Sync 2가지 방식을 지원한다. Master-Slave Replication과 다른 점은 DB 장애가 발생해도 Primary/Secondary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
+
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Multi-primary.PNG){: width="650px"}
+
+위의 그림은 Multi-primary Mode를 나타내고 있다. Multi-primary Mode는 모든 DB가 Primary Node로 동작한다. 따라서 App의 Read/Write 요청은 모든 DB에게 전달이 가능하다. MySQL Router는 DB의 부하에 따라서 적절한 DB에게 요청을 전달한다. 만약 서로다른 Primary DB에서 같은 Row을 동시에 변경하였다면, 먼져 Commit한 Primary DB는 변경 내용이 반영되고 나중에 Commit한 Primary DB는 Abort된다. Single-primary Mode와 동일하게 DB 장애가 발생해도 Primary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
+
+### 3. Galera Cluster
+
+### 4. 참조
 
 * [http://skillachie.com/2014/07/25/mysql-high-availability-architectures/](http://skillachie.com/2014/07/25/mysql-high-availability-architectures/)
 * [https://www.percona.com/blog/2017/02/07/overview-of-different-mysql-replication-solutions/](https://www.percona.com/blog/2017/02/07/overview-of-different-mysql-replication-solutions/)
