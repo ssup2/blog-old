@@ -39,7 +39,7 @@ Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay L
 
 ![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Single-primary.PNG){: width="650px"}
 
-Group Replication은 다수의 DB Instance를 Cluster로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역활을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
+Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역활을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
 
 위의 그림은 Single-primary Mode를 나타내고 있다. Master-slave Replication과 유사하게 동작하는 Mode이다. 하나의 DB만 Primary DB로 동작하며 MySQL Router로부터 유일하게 Read/Write 요청을 받아 처리하는 DB이다. 나머지 DB는 Secondary DB로 동작하며 MySQL Router로부터 Read 요청만을 받아 처리한다. Primary-Secondary DB 사이의 Replication은 Master-Slave Replication와 유사하게 Async, Semi-Sync 2가지 방식을 지원한다. Master-Slave Replication과 다른 점은 DB 장애가 발생해도 Primary/Secondary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
 
