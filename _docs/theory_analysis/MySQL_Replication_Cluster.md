@@ -47,7 +47,7 @@ Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replicati
 
 위의 그림은 Multi-primary Mode를 나타내고 있다. Multi-primary Mode는 모든 DB가 Primary Node로 동작한다. 따라서 App의 Read/Write 요청은 모든 DB에게 전달이 가능하다. MySQL Router는 DB의 부하에 따라서 적절한 DB에게 요청을 전달한다. 만약 서로다른 Primary DB에서 같은 Row을 동시에 변경하여 Commit 충돌이 발생하였다면, **먼져 Commit**한 Primary DB는 변경 내용이 반영되고 나중에 Commit한 Primary DB는 Abort된다. Single-primary Mode와 동일하게 DB 장애가 발생해도 Primary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Multi-primary_Certify_Replication.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Multi-primary_Certify_Replication.PNG){: width="550px"}
 
 위의 그림은 Multi-primary Mode의 Certify 및 Replication 과정을 나타내고 있다. Certify는 Commit 충돌 검사 과정을 의미한다. App에게 Commit 요청을 받은 첫번째 Primary DB는 자신의 DB를 변경하고, Replication를 수행할 두번째 Primary DB에게 Certify 요청 및 DB 변경 내용을 전달한다. 두번째 Primary DB는 Certify 진행 및 Certify 결과를 첫번째 Primary DB에게 전달한 뒤 자신의 DB를 변경한다. 첫번째 Primary는 두번째 Primary로부터 Certify 완료를 전달받은 뒤에나 App에게 Commit 결과를 전달한다. 이러한 Certify 과정은 Commit Overhead의 주요 원인이 된다. Certify 및 Replication 과정은 완전한 Sync 방식이 아닌 Semi-sync 또는 2 Phase-Commit 방식과 유사하다.
 
