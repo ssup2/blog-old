@@ -1,5 +1,5 @@
 ---
-title: MySQL Replication, Cluster
+title: MySQL Replication
 category: Theory, Analysis
 date: 2018-12-14T12:00:00Z
 lastmod: 2018-12-14T12:00:00Z
@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-MySQL의 HA(High Availabilty)를 위한 Replicaiton, Cluster 기법을 분석한다.
+MySQL의 HA(High Availabilty)를 위한 Replicaiton 기법들을 분석한다.
 
 ### 1. Master-Slave Replication
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Master_Slave_Replication.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Master_Slave_Replication.PNG){: width="600px"}
 
 Master-Slave Replication은 하나의 Master DB와 다수의 Slave DB들을 통해 Replication을 수행하는 방식이다. 위의 그림은 Master-Slave Replication을 나타내고 있다. Client는 LB의 VIP (Virtual IP)를 통해서 DB에 접근한다. Master는 Read/Write Mode로 동작하고 Slave들은 Read Mode로 동작한다. 따라서 LB는 Client로부터 오는 DB 변경 Query는 Master에게만 전달하도록 설정되어 있어야 한다. 또한 LB는 Client로부터 오는 DB 조회 Query를 적절한 Master/Slave DB로 Load Balancing하여 Read 성능을 높일 수 있다.
 
@@ -21,7 +21,7 @@ Master DB에 장애가 발생한다면 DB 관리자는 Slave DB를 Master DB로 
  
 #### 1.1. Async Replication
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Master_Slave_Async_Replication.PNG){: width="550px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Master_Slave_Async_Replication.PNG){: width="550px"}
 
 Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay Log**를 이해해야한다. Binary Log는 DB 변경 내용을 기록하는 Log이다. Relay Log는 Slave DB에 위치하며, Master DB는 Master DB의 변경된 Binary Log를 Slave의 Relay Log에 기록한다. Slave DB는 Relay Log 내용을 바탕으로 비동기적으로 DB를 변경한다.
 
@@ -29,7 +29,7 @@ Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay L
 
 #### 1.2. Semi-sync Replication
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Master_Slave_Semi-sync_Replication.PNG)
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Master_Slave_Semi-sync_Replication.PNG)
 
 위의 그림은 Semi-sync Replication을 나타내고 있다. Semi-sync Replication은 Master DB가 Slave DB로부터 Relay Log 기록이 완료되었다는 ACK를 받고 Transaction을 진행하는 방식이다. 따라서 Async Replication 방식에 비해서 좀더 많은 DB 성능저하가 발생하지만, Master-Slave DB 사이의 동기화를 좀더 보장해준다. Semi-sync Replicaiton 방식에는 Master DB가 Slave DB에게 DB 변경 내용을 언제 전달하냐에 따라서 AFTER_COMMIT, AFTER_SYNC 2가지 방식으로 구분된다.
 
@@ -37,23 +37,23 @@ Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay L
 
 ### 2. Group Replication
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Single-primary.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Group_Replication_Single-primary.PNG){: width="600px"}
 
 Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역활을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
 
 위의 그림은 Single-primary Mode를 나타내고 있다. Master-slave Replication과 유사하게 동작하는 Mode이다. 하나의 DB만 Primary DB로 동작하며 MySQL Router로부터 유일하게 Read/Write 요청을 받아 처리하는 DB이다. 나머지 DB는 Secondary DB로 동작하며 MySQL Router로부터 Read 요청만을 받아 처리한다. Primary-Secondary DB 사이의 Replication은 Master-Slave Replication와 유사하게 Async, Semi-Sync 2가지 방식을 지원한다. Master-Slave Replication과 다른 점은 DB 장애가 발생해도 Primary/Secondary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Multi-primary.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Group_Replication_Multi-primary.PNG){: width="600px"}
 
 위의 그림은 Multi-primary Mode를 나타내고 있다. Multi-primary Mode는 모든 DB가 Primary Node로 동작한다. 따라서 App의 Read/Write 요청은 모든 DB에게 전달이 가능하다. MySQL Router는 DB의 부하에 따라서 적절한 DB에게 요청을 전달한다. 만약 서로다른 Primary DB에서 같은 Row을 동시에 변경하여 Commit 충돌이 발생하였다면, **먼져 Commit**한 Primary DB는 변경 내용이 반영되고 나중에 Commit한 Primary DB는 Abort된다. Single-primary Mode와 동일하게 DB 장애가 발생해도 Primary DB 및 MySQL Router를 **자동**으로 Failover하여 DB 관리자의 개입없이 계속 DB 사용이 가능하다는 점이다.
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Group_Replication_Multi-primary_Certify_Replication.PNG){: width="550px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Group_Replication_Multi-primary_Certify_Replication.PNG){: width="550px"}
 
 위의 그림은 Multi-primary Mode의 Certify 및 Replication 과정을 나타내고 있다. Certify는 Commit 충돌 검사 과정을 의미한다. App에게 Commit 요청을 받은 첫번째 Primary DB는 자신의 DB를 변경하고, Replication를 수행할 두번째 Primary DB에게 Certify 요청 및 DB 변경 내용을 전달한다. 두번째 Primary DB는 Certify 진행 및 Certify 결과를 첫번째 Primary DB에게 전달한 뒤 자신의 DB를 변경한다. 첫번째 Primary는 두번째 Primary로부터 Certify 완료를 전달받은 뒤에나 App에게 Commit 결과를 전달한다. 이러한 Certify 과정은 Commit Overhead의 주요 원인이 된다. Certify 및 Replication 과정은 완전한 Sync 방식이 아닌 Semi-sync 또는 2 Phase-Commit 방식과 유사하다.
 
 ### 3. Galera Cluster
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication_Cluster/Galera_Cluster.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Galera_Cluster.PNG){: width="600px"}
 
 Galera Cluster는 Group Replication의 Multi-primary Mode와 매우 유사한 Multi-master Replication 기법이다. Galera Cluster 설명에는 Replication 과정이 Sync 또는 Virtual Sync 방식이라고 설명되어 있지만, 실제로는 Group Replication의 Multi-primary Mode처럼 Semi-sync 또는 2 Phase-Commit 방식과 유사하게 구현되어 있다. 위의 그림은 Galera Cluster를 의미한다. Client는 LB의 VIP (Virtual IP)를 통해서 DB에 접근한다. 각 DB는 wsrep(Write Set Replication) Plugin을 통하여 서로 wsrep API로 통신하며 Replication을 진행한다.
 
