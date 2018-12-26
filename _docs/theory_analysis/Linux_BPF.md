@@ -21,7 +21,9 @@ cBPF에서는 2개의 32bit Register와 메모리 역활을 수행하는 16개�
 
 Linux에서는 eBPF만을 제공할 뿐 cBPF를 제공하지 않는다. 그 대신 Linux에서는 cBPF Bytecode로 Compile된 cBPF Program을 eBPF에 삽입시 eBPF Bytecode로 변환하여 cBPF Program을 구동한다.
 
-#### 1.2. Compile, bfp() System Call
+#### 1.2. Compile, bfp()
+
+![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/Compile_bpf_Syscall.PNG){: width="650px"}
 
 #### 1.3. Hooks
 
