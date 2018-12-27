@@ -25,7 +25,11 @@ Linux에서는 eBPF만을 제공할 뿐 cBPF를 제공하지 않는다. 그 대�
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/Compile_bpf_Syscall.PNG){: width="650px"}
 
-위의 그림은 eBPF Program의 Compile 과정과 bpf() System Call의 동작을 나타내고 있다. LLVM/clang은 Backend로 eBPF를 지원한다. 개발자가 작성한 eBPF Program은 LLVM/clang을 통해서 eBPF Bytecode로 Compile된다. 그후 Compile된 eBPF Program은 tc나 iproute2같은 App(명령어)를 이용해 Kernel의 eBPF에 적재된다.  eBPF Program의 적재는 bpf() System Call을 통해 이루어진다.
+위의 그림은 eBPF Program의 Compile 과정과 bpf() System Call의 동작을 나타내고 있다. LLVM/clang은 Backend로 eBPF를 지원한다. 개발자가 작성한 eBPF Source Code는 LLVM/clang을 통해서 eBPF Bytecode로 Compile된다. 그 후 eBPF Bytecode는 tc나 iproute2같은 App(명령어)를 이용해 Kernel의 eBPF에 적재된다. eBPF Bytecode의 적재는 bpf() System Call을 통해 이루어진다.
+
+eBPF Bytecode는 Kernel Level에서 동작하기 때문에 잘못 작성된 eBPF Bytecode은 System 전체에 큰영향을 줄 수 있다. 따라서 Kernel은 eBPF Bytecode를 삽입전에 Verifier로 eBPF Bytecode가 정상인지 검사한다. Verifier는 eBPF Bytecode가 허용되지 않은 Memory 영역을 참조하는지 검사하고, 무한 Loop가 발생하는지도 검사한다. 검사가 완료된 eBPF Bytecode의 일부는 필요에 따라 JIT (Just-in-time) Compiler를 통해서 Native Code로 변환되어 Kernel에서 동작한다.
+
+bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용하는 Map에 접근할 수 있게 만들어준다. 따라서 App과 eBPF는 Map을 이용하여 통신을 할 수 있다. eBPF와 App사이의 통신은 eBPF가 더욱 다양한 기능을 수행 할 수 있도록 만든다.
 
 #### 1.3. Hooks
 
@@ -39,3 +43,4 @@ Linux에서는 eBPF만을 제공할 뿐 cBPF를 제공하지 않는다. 그 대�
 
 * [https://www.netronome.com/blog/bpf-ebpf-xdp-and-bpfilter-what-are-these-things-and-what-do-they-mean-enterprise/](https://www.netronome.com/blog/bpf-ebpf-xdp-and-bpfilter-what-are-these-things-and-what-do-they-mean-enterprise/)
 * [http://media.frnog.org/FRnOG_28/FRnOG_28-3.pdf](http://media.frnog.org/FRnOG_28/FRnOG_28-3.pdf)
+* [http://man7.org/linux/man-pages/man2/bpf.2.html](http://man7.org/linux/man-pages/man2/bpf.2.html)
