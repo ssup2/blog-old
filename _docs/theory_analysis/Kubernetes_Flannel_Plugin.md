@@ -31,7 +31,7 @@ Container A에서 Dest IP가 10.244.2.2인 Packet을 전송하면 Packet은 veth
 
 host-gw 기법은 Packet의 Dest MAC만 교체하는 기법이기 때문에 VXLAN 기법보다 높은 성능을 보여준다. 하지만 host-gw 기법은 모든 Node(Host)들이 같은 Network에 있어야 동작하는 기법이다. Container가 전송한 Packet은 Dest MAC만 Node의 Routing Table에 의해서 변경될 뿐, Packet의 Dest IP는 Container Network IP는 그대로 유지되기 때문이다.
 
-위의 예제에서 Packet의 Dest IP 10.244.2.2는 변경되지 Container에게 전달 된다. 만약 Node들이 서로 다른 Network에 있어 Node Network들을 연결하는 Router에 Packet이 전달되어도, Router에는 Container Network에 대한 Routing Rule이 없기 때문에 Packet은 Drop된다. host-gw 기법을 서로 다른 Network에 있는 Node들에게 적용하기 위해서는 직접 Router에 Container Network에 대한 Routing Rule을 추가하고 관리해야 한다.
+위의 예제에서 Packet의 Dest IP 10.244.2.2는 변경되지 않고 Container에게 전달 된다. 만약 Node들이 서로 다른 Network에 있어 Node Network들을 연결하는 Router에 Packet이 전달되어도, Router에는 Container Network에 대한 Routing Rule이 없기 때문에 Packet은 Drop된다. host-gw 기법을 서로 다른 Network에 있는 Node들에게 적용하기 위해서는 직접 Router에 Container Network에 대한 Routing Rule을 추가하고 관리해야 한다.
 
 #### 1.2. VXLAN
 
