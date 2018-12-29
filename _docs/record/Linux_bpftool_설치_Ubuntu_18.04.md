@@ -26,7 +26,7 @@ adsense: true
 * bfptool의 net, perf Opiton 이용을 위해서 최신 Version의 Kernel을 받아 Build 수행.
 
 ~~~
-git clone https://github.com/torvalds/linux.git
+# git clone https://github.com/torvalds/linux.git
 # cd ubuntu-bionic
 ~~~
 
