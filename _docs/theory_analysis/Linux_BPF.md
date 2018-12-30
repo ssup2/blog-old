@@ -25,9 +25,9 @@ cBPF에서는 2개의 32bit Register와 메모리 역활을 수행하는 16개�
 
 현재 Linux Kernel에서 Socket() System Call의 경우 eBPF를 이용하는 SO_ATTACH_BPF Option이 추가되었다. 물론 하위 호환성을 위해서 SO_ATTACH_FILTER Option도 여전히 제공한다. 하지만 SO_ATTACH_FILTER Option을 이용하더라도 내부적으로는 bpf() System Call을 이용하여 cBPF Bytecode를 eBPF Bytecode를 변경한뒤 eBPF에 적재한다. Seccomp() System Call의 경우에는 cBPF만을 지원하지만, 현재 eBPF 지원을 위한 개발이 진행중이다.
 
-bpf() System Call이 추가된 Linux 3.18 Version 이후에 추가된 BPF는 모두 eBPF라고 보면된다. 이러한 대부분의 eBPF는 eBPF Bytecode로 Compile된 eBPF Program 동작만을 지원한다.
+bpf() System Call이 추가된 Linux 3.18 Version 이후에 추가된 BPF는 모두 eBPF라고 보면된다. 이러한 대부분의 eBPF는 eBPF Bytecode로 Compile된 eBPF Program만을 지원한다.
 
-#### 1.2. Compile, bpf() System Call
+#### 1.2. BPF Compile, bpf() System Call
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/Compile_bpf_Syscall.PNG){: width="650px"}
 
@@ -37,23 +37,40 @@ eBPF Bytecode는 Kernel Level에서 동작하기 때문에 잘못 작성된 eBPF
 
 bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용하는 Map에 접근할 수 있게 만들어준다. 따라서 App과 eBPF는 Map을 이용하여 통신을 할 수 있다. eBPF와 App사이의 통신은 eBPF가 더욱 다양한 기능을 수행 할 수 있도록 만든다.
 
-#### 1.3. Type (Hook)
+#### 1.3. BPF Type
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/BPF_Hook.PNG){: width="600px"}
 
 BPF Hook은 Kernel에서 BPF가 실행되는 지점을 의미한다. Linux에서는 Hook에 따라서 eBPF를 **eBPF Type**으로 구분한다. 위의 그림은 eBPF Type들을 분류해서 나타낸 그림이다. Network 부분에는 Socket, tc(traffic control), XDP (eXpress Data Path) 관련 Type을 지원하고 있다. Tracing, Monitoring 부분에서는 Perf event, Tracepoint, Kprobe/Uprobe 관련 Type을 지원하고 있다. 또한 Cgroup 관련 Type도 지원하고 있다. 앞으로 더욱 많은 eBPF Type(Hook)이 추가될 예정이다.
 
-eBPF Type은 Hook에 따라 정의되기 때문에 eBPF Type에 따라서 eBPF으로 들어오는 Input 값이 정해지게 된다. 또한 BPF Type은 eBPF가 호출 할 수 있는 Kernel Helper Function을 제한한다. 따라서 eBPF는 eBPF Type에 따라서 수행할 수 있는 기능이 제한된다. Linux Kernel의 Verifier는 eBPF Bytecode를 적재시 eBPF Type을 검사하고 해당 eBPF Bytecode가 허용된 Kernel Helper Function만을 호출하는지 검사한다. 만약 허용되지 않는 Kernel Helper Function을 호출할 경우 해당 eBPF Bytecode의 적재는 실패한다.
+eBPF Type은 Hook에 따라 정의되기 때문에 eBPF Type에 따라서 eBPF으로 들어오는 Input Type이 정해지게 된다. 또한 BPF Type은 eBPF가 호출 할 수 있는 Kernel Helper Function을 제한한다. 따라서 eBPF는 eBPF Type에 따라서 수행할 수 있는 기능이 제한된다. Linux Kernel의 Verifier는 eBPF Bytecode를 적재시 eBPF Type을 검사하고 해당 eBPF Bytecode가 허용된 Kernel Helper Function만을 호출하는지 검사한다. 만약 허용되지 않는 Kernel Helper Function을 호출할 경우 해당 eBPF Bytecode의 적재는 실패한다.
 
 ### 2. Network Type
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/BPF_Net_Type.PNG){: width="400px"}
 
-위의 그림은 Linux에서 제공하는 eBPF의 주요 Network Type을 Network Stack과 함께 나타내고 있다. eBPF Network Hook은 Socket, TC (Traffic Control), Device Driver 3개의 Layer에서 제공하고 있다.
+위의 그림은 Linux에서 제공하는 eBPF의 주요 Network Type을 Network Stack과 함께 나타내고 있다.
 
-* SOCKET_FILTER -
-* SCHED_CLS, SCHED_ACT -
-* XDP -
+#### 2.1. XDP (eXpress Data Path)
+
+XDP Type BPF는 Network Device Driver에서 동작하는 eBPF이다. Network Device가 Packet을 수신한뒤, 수신한 Packet을 저장하는 Socket Buffer (sk_buff)를 할당하기전에 실행되는 BPF이다. 따라서 시간당 가장 많은양의 Packet을 처리 할 수 있는 eBPF이다. Socket Buffer를 할당하기 전에 수행되는 eBPF이기 때문에 Input Type은 들어온 Packet의 값만을 알 수 있는 xdp_md 구조체를 이용한다. 사용할 수 있는 Kernel Helper Function도 제한적이다. XDP Type BPF의 실행결과는 다음과 같은 4가지 결과만을 지원한다. XDP Type BPF는 Packet을 가공하거나 하는 동작보다는 Packet Drop, Routing이 주요 목적인 eBPF이다.
+
+* XDP_DROP - 해당 Packet을 버린다.
+* XDP_PASS - 해당 Packet을 상위 Network Stack으로 넘긴다.
+* XDP_TX - 해당 Packet을 들어온 Network Device로 반사한다.
+* XDP_REDIRECT - 해당 Packet을 다른 Network Device로 넘긴다.
+
+#### 2.2. SCHED_CLS, SCHED_ACT
+
+SCHED_CLS, SCHED_ACT Type의 BPF는 tc로 Packet이 들어오는 Ingress 또는 tc로 Packet이 나가는 Egress 경로에서 실행되는 BPF이다. cBFP, eBPF 둘다 지원한다. XDP Type보다는 상위 Layer의 BPF이기 때문에 시간당 Packet 처리량은 XDP Type의 BPF보다는 적지만 좀더 다양한 Packet 처리가 가능하다. SCHED_CLS, SCHED_ACT Type의 Input Type은 Socket Buffer (__sk_buff)이다. Socket Buffer를 바탕으로 XDP Type보다 좀더 다양한 Kernel Helper Function을 이용 할 수 있다. SCHED_CLS Type BPF의 실행결과는 classid 반환하고, SCHED_ACT Type BPF의 실행결과는 'TC_ACT_'으로 시작하는 Linux Kernel에 정의된 값을 반환한다.
+
+* TC_ACT_SHOT - 해당 Packet을 버린다.
+* TC_ACT_OK - 해당 Packet을 상위 Network Stack으로 넘긴다.
+* TC_ACT_REDIRECT - 해당 Packet을 특정 Network Device로 넘긴다.
+
+#### 2.3. SOCKET_FILTER
+
+Socket Layer에 붙어서 Socket으로 들어오는 Packet을 필터링, 분류, 파싱하는 역활을 수행하는 BPF이다. 위에서 언급했던것 처럼 cBPF (SO_ATTACH_FILTER), eBPF (SO_ATTACH_BPF) 둘다 지원한다. SOCKET_FILTER Type의 Input Type은 Socket Buffer (__sk_buff)이다. SOCKET_FILTER Type의 실행결과는 기존의 cBPF의 반환값을 그대로 이용한다.
 
 ### 3. 참조
 
