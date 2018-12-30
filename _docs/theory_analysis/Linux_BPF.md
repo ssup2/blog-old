@@ -39,7 +39,7 @@ bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용
 
 #### 1.3. BPF Type
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/BPF_Hook.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/BPF_Type.PNG){: width="600px"}
 
 BPF Hook은 Kernel에서 BPF가 실행되는 지점을 의미한다. Linux에서는 Hook에 따라서 eBPF를 **eBPF Type**으로 구분한다. 위의 그림은 eBPF Type들을 분류해서 나타낸 그림이다. Network 부분에는 Socket, tc(traffic control), XDP (eXpress Data Path) 관련 Type을 지원하고 있다. Tracing, Monitoring 부분에서는 Perf event, Tracepoint, Kprobe/Uprobe 관련 Type을 지원하고 있다. 또한 Cgroup 관련 Type도 지원하고 있다. 앞으로 더욱 많은 eBPF Type(Hook)이 추가될 예정이다.
 
