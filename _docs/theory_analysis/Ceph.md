@@ -39,7 +39,11 @@ RADOS Cluster는 OSD(Object Storage Daemon), Monitor, MDS(Meta Data Server) 3가
 
 ##### 1.2.1. OSD (Object Storage Daemon)
 
-OSD는 Disk에 Object의 형태로 Data를 저장하는 Daemon이다. brctl, xfs, ext4 Filesystem으로 Format된 Disk마다 별도의 OSD가 동작한다. 최신 버전 Ceph의 OSD는 별도의 Filesystem을 이용하지 않고 Disk를 직접 제어하는 형태로도 동작이 가능하다.
+![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Object.PNG){: width="700px"}
+
+OSD는 Disk에 **Object 형태**로 Data를 저장하는 Daemon이다. Object 형태로 저장한다는 의미는 Data를 **Key/Value/Metadata**로 저장한다는 의미이다. 위의 그림은 OSD가 Data를 저장하는 모습을 나타내고 있다. Data는 File System의 폴더역활을 수행하는 Namespace라는 곳에 저장된다. 위의 Object Stroage 설명에서 나오는 Bucket이 OSD의 Namespace와 동일한 개념이다. Namespace는 Files System의 폴더처럼 Tree 계층을 구성하지는 않는다. Metadata는 다시 Key/Value로 구성되어 있다.
+
+Node의 각 Disk마다 별도의 OSD Daemon이 동작한다. Disk는 주로 XFS Filesystem으로 Format된 Disk를 이용한다. 하지만 ZFS, EXT4 Filesystem도 이용이 가능하고, 최신 버전 Ceph의 OSD는 BlueStore Backend를 이용해 별도의 Filesystem을 이용하지 않고 Disk를 직접 이용하기도 한다.
 
 ##### 1.2.2. Monitor
 
