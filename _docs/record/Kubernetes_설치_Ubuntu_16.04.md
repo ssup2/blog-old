@@ -32,7 +32,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu16.04/Node_Setting.PNG)
+![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu_16.04/Node_Setting.PNG)
 
 * VirtualBox를 이용하여 위의 그림과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.

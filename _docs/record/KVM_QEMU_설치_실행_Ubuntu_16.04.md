@@ -214,7 +214,7 @@ configfs_group = vhost
 
 * LIO 설정 결과
 
-![]({{site.baseurl}}/images/record/KVM_QEMU_Install_Ubuntu16.04/LIO_targetcli.PNG)
+![]({{site.baseurl}}/images/record/KVM_QEMU_Install_Ubuntu_16.04/LIO_targetcli.PNG)
 
 ### 7. VM 실행
 

@@ -57,7 +57,7 @@ cabextract ppviewer.cab
 
 * Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
 
-![]({{site.baseurl}}/images/record/Ubuntu_Consolas_Ubuntu16.04/Ubuntu_Font_Manager.PNG)
+![]({{site.baseurl}}/images/record/Ubuntu_Consolas_Install_Ubuntu_16.04/Ubuntu_Font_Manager.PNG)
 
 ### 5. 파일 삭제
 
