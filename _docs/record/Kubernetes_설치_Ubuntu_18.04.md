@@ -171,10 +171,12 @@ worker02   Ready    <none>   8m40s   v1.12.3
 
 ### 5. Network Plugin 설치
 
-* Master Node에서만 실행
 * Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
+* 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화 진행
 
-#### 5.1. Calico 설치
+#### 5.1. Master Node
+
+##### 5.1.1. Calico 설치
 
 * Calico 설치
 
@@ -183,7 +185,7 @@ worker02   Ready    <none>   8m40s   v1.12.3
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
-##### 5.2. Flannel 설치
+##### 5.1.2. Flannel 설치
 
 * Flannel 설치
 
@@ -191,7 +193,7 @@ worker02   Ready    <none>   8m40s   v1.12.3
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
-##### 5.3. Cilium 설치
+##### 5.1.3. Cilium 설치
 
 * bpffs mount 및 설정
 
@@ -207,6 +209,17 @@ worker02   Ready    <none>   8m40s   v1.12.3
 # unzip v1.3.0.zip
 # kubectl create -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
 # kubectl create -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
+~~~
+
+#### 5.2. Worker Node
+
+##### 5.2.1. Cilium 설치
+
+* bpffs mount 및 설정
+
+~~~
+# mount bpffs /sys/fs/bpf -t bpf
+# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
 ### 6. Web UI (Dashboard) 설치
