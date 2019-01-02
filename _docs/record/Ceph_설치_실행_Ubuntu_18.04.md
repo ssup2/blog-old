@@ -219,6 +219,7 @@ $ sudo ceph -s
 
 * MDS (Meta Data Server) 설치
   * MDS은 Ceph Node 01에 설치
+
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
@@ -242,6 +243,7 @@ $ sudo ceph -s
 
 * RGW (Rados Gateway) 설치
   * RGW는 Ceph Node 01에 설치
+
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
@@ -292,6 +294,7 @@ $ sudo ceph -s
 ~~~
 
 * admin Key 확인 및 admin.secret 파일 생성
+
 ~~~
 # cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
 [client.admin]
