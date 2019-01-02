@@ -33,8 +33,9 @@ adsense: true
 ![]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu_18.04/Node_Setting.PNG)
 
 * VirtualBox를 이용하여 위의 그림과 같이 가상의 Master, Worker Node (VM)을 생성한다.
-* NAT - Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
-* Router - 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
+* Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
+* NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
+* Router : 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
 
 #### 2.1. Master Node
 
@@ -163,10 +164,10 @@ source <(kubectl completion bash)
 
 ~~~
 # kubectl get nodes
-NAME       STATUS   ROLES    AGE     VERSION
-master     Ready    master   9m1s    v1.12.3
-worker01   Ready    <none>   8m37s   v1.12.3
-worker02   Ready    <none>   8m40s   v1.12.3
+NAME      STATUS   ROLES    AGE     VERSION
+node1     Ready    master   9m1s    v1.12.3
+node2     Ready    <none>   8m37s   v1.12.3
+node3     Ready    <none>   8m40s   v1.12.3
 ~~~
 
 ### 5. Network Plugin 설치
