@@ -324,6 +324,7 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 
 ~~~
 # curl 127.0.0.1:7480
+<?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
 ~~~
 
 ### 8. 참조
