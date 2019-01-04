@@ -99,7 +99,7 @@ Straw에 Bucket 추가,제거 또는 Bucket의 Weight가 변경되더라도 각 
 
 Ceph의 특징 중 하나는 Ceph Client가 OSD에 바로 접근하여 Object를 관리한다는 점이다. 위의 그림은 Ceph의 Read/Write 과정을 나타내고 있다. Ceph Client는 RADOS Cluster의 Monitor로부터 CRUSH Map 정보를 받는다. 그 후 Client는 별도의 외부 통신 없이 CRUSH Map과 CRUSH를 통해서 접근하려는 Object가 있는 OSD의 위치를 파악 할 수 있다.
 
-CRUSH를 통해 결정된 OSD 중에서 첫번째 OSD를 **Primary OSD**라고 표현한다. Read 과정의 경우 Primary OSD만을 이용하여 Read 동작을 수행한다. Write 과정의 경우 Client는 Primary OSD에게 Object와 같이 Object의 Replica가 저장될 추가 OSD 정보도 같이 보낸다. Primary OSD는 Client로 부터 Object는 다 받으면 받은 Object를 모든 추가 OSD에게 전송한다. 모든 전송이 완료된뒤 Primary OSD는 Client에게 Write Ack를 전송한다.
+CRUSH를 통해 결정된 OSD 중에서 첫번째 OSD를 **Primary OSD**라고 표현한다. Read 과정의 경우 Primary OSD만을 이용하여 Read 동작을 수행한다. Write 과정의 경우 Client는 Primary OSD에게 Object와 같이 Object의 Replica가 저장될 추가 OSD 정보도 같이 보낸다. Primary OSD는 Client로부터 Object를 다 받으면, 받은 Object를 나머지 OSD들에게 전송한다. 모든 전송이 완료된뒤 Primary OSD는 Client에게 Write Ack를 전송한다.
 
 ### 2. 참조
 
