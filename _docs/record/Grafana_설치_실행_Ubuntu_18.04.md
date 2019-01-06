@@ -1,5 +1,5 @@
 ---
-title: Grafana 설치,실행 - Ubuntu 18.04
+title: Grafana 설치, 실행 - Ubuntu 18.04
 category: Record
 date: 2019-01-03T12:00:00Z
 lastmod: 2019-01-03T12:00:00Z
