@@ -1,5 +1,5 @@
 ---
-title: Linux BPF
+title: Linux BPF (Berkeley Packet Filter)
 category: Theory, Analysis
 date: 2018-12-30T12:00:00Z
 lastmod: 2018-12-30T12:00:00Z
