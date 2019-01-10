@@ -1,5 +1,5 @@
 ---
-title: Ceph 설치,실행 - Ubuntu 18.04
+title: Ceph 설치, 실행 - Ubuntu 18.04
 category: Record
 date: 2019-01-10T12:00:00Z
 lastmod: 2019-01-10T12:00:00Z
@@ -167,7 +167,8 @@ Host node3
 
 ### 4. Storage Cluster 구성
 
-* Deploy Node에서 수행
+#### 4.1. Depoly Node
+
 * Storage Cluster Config 폴더 생성
 
 ~~~
@@ -268,6 +269,8 @@ $ sudo ceph -s
 
 ### 5. Block Storage Test
 
+#### 5.1. Ceph Node
+
 * Pool 생성 및 초기화
 
 ~~~
@@ -283,7 +286,9 @@ $ sudo ceph -s
 /dev/rbd0
 ~~~
 
-### 6. File Storage Test 
+### 6. File Storage Test
+
+#### 6.1. Ceph Node
 
 * Pool 생성 및 File Storage 생성
 
@@ -320,6 +325,8 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 
 ### 7. Object Storage Test
 
+#### 7.1. Ceph Node
+
 * RGW 동작 확인
 
 ~~~
@@ -330,3 +337,5 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 ### 8. 참조
 
 * [http://docs.ceph.com/docs/master/start/](http://docs.ceph.com/docs/master/start/)
+* [https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd](https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd)
+* [https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd](https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd)

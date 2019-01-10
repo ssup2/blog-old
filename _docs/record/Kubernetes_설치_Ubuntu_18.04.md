@@ -284,9 +284,90 @@ subjects:
   * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
   * 접속 후 Skip Click
 
-### 7. 참조
+### 8. Ceph RDB 연동
+
+#### 8.1 Master Node
+
+* Ceph 정보
+  * Monitor IP - 10.0.0.10:6789
+  * Pool Name - kube
+
+* Ceph Admin secret 생성
+
+~~~
+# ceph auth get client.admin 2>&1 |grep "key = " |awk '{print  $3'} |xargs echo -n > /tmp/secret
+# kubectl create secret generic ceph-admin-secret --from-file=/tmp/secret --namespace=kube-system
+~~~
+
+* Ceph Pool 및 User secret 생성
+
+~~~
+# ceph osd pool create kube 8 8
+# ceph auth add client.kube mon 'allow r' osd 'allow rwx pool=kube'
+# ceph auth get-key client.kube > /tmp/secret
+# kubectl create secret generic ceph-secret --from-file=/tmp/secret --namespace=kube-system
+~~~
+
+* rbd-provisioner, role, cluster role yaml 다운
+
+~~~
+# git clone https://github.com/kubernetes-incubator/external-storage.git
+# cd external-storage/ceph/rbd/deploy
+~~~
+
+* rbac/clusterrole.yaml 파일에 아래의 내용 추가 (Secret Role)
+
+~~~
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "delete"]
+~~~
+
+* rbd-provisioner, role, cluster role 설정
+
+~~~
+# NAMESPACE=default
+# sed -r -i "s/namespace: [^ ]+/namespace: $NAMESPACE/g" ./rbac/clusterrolebinding.yaml ./rbac/rolebinding.yaml
+# kubectl -n $NAMESPACE apply -f ./rbac 
+~~~
+
+* storage_class.yaml 파일 생성 및 아래의 내용으로 저장
+
+~~~
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: kube
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: ceph.com/rbd
+parameters:
+  monitors: 10.0.0.10:6789
+  pool: kube
+  adminId: admin
+  adminSecretNamespace: kube-system
+  adminSecretName: ceph-admin-secret
+  userId: kube
+  userSecretNamespace: kube-system
+  userSecretName: ceph-secret
+  imageFormat: "2"
+  imageFeatures: layering
+~~~
+
+* Storage Class 생성 및 확인
+
+~~~
+# kubectl create -f ./storage_class.yaml
+# kubectl get storageclasses.storage.k8s.io
+NAME            PROVISIONER    AGE
+rbd (default)   ceph.com/rbd   19m
+~~~
+
+### 9. 참조
 
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 * Calio, Flannel, Cilium 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
-* Web UI 설치 - https://github.com/kubernetes/dashboard/wiki/Access-control#basic
+* Web UI 설치 - [https://github.com/kubernetes/dashboard/wiki/Access-control#basic](https://github.com/kubernetes/dashboard/wiki/Access-control#basic)
+* Ceph RDB 연동 - [https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd](https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd)
+* Ceph RDB 연동 - [http://blog.51cto.com/ygqygq2/2163656](http://blog.51cto.com/ygqygq2/2163656)
