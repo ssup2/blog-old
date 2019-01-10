@@ -51,7 +51,7 @@ Neutron Server와 Agent들은 사이의 통신은 Message Queue를 이용한다.
 
 OpenStack 구성에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP Server가 실제 어떻게 구성되는지 분석한다. Management Network는 VLAN을 이용하지 않으면서 Node의 Network를 직접 이용하는 Flat Network로 구성되어 있다고 가정하였다. 또한 Guest/Provider Network는 VLAN 10번 Network로 구성되어 있고 Guest/Self-service Network는 VXLAN 20번 Network로 구성되어 있다고 가정하였다.
 
-##### 2.1.1. Without SD
+##### 2.1.1. Without SDN
 
 ![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="700px"}
 
