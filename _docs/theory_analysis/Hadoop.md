@@ -67,7 +67,7 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 
 #### 3.1. App Submission
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_App_Submission.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_App_Submission.PNG){: width="700px"}
 
 위의 그림의 Client로부터 App이 제출되고 실행되는 과정을 나타낸다.
 
