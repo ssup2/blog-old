@@ -11,7 +11,7 @@ MySQL의 Buffer Pool, Redo Log 및 Log Buffer를 분석한다.
 
 ### 1. Buffer Pool, Redo Log, Log Buffer
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Buffer_Pool_Redo_Log_Log_Buffer.PNG){: width="600px"}
+![]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Buffer_Pool_Redo_Log_Log_Buffer.PNG){: width="500px"}
 
 위의 그림은 Transaction을 처리하는 Buffer Pool, Redo Log, Log Buffer을 나타내고 있다. **Buffer Pool**은 MySQL의 DB Engined인 InnoDB가 Table Caching 및 Index Data Caching을 위해 이용하는 Memory 공간이다. Buffer Pool 크기가 클수록 상대적으로 Disk에 접근하는 횟수가 줄어들기 때문에 DB의 성능이 향상된다. Buffer Pool은 Memory 공간이기 때문에 MySQL에 장애가 발생하면 Buffer Pool 내용은 사라지고 Transaction의 유실로 이어질 수 있다. 이러한 유실을 방지하기 위해서 사용되는 File이 **Redo Log**이다. Redo Log는 Transaction 내용을 기록하고 있다가 MySQL 장애발생시 Redo Log에 기록된 Transaction 내용을 바탕으로 MySQL을 장애가 발생하기 이전 시점으로 **Recovery**한다.
 
