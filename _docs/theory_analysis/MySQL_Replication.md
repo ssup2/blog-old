@@ -23,9 +23,11 @@ Master DB에 장애가 발생한다면 DB 관리자는 Slave DB를 Master DB로 
 
 ![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Master_Slave_Async_Replication.PNG){: width="550px"}
 
-Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay Log**를 이해해야한다. Binary Log는 DB 변경 내용을 기록하는 Log이다. Relay Log는 Slave DB에 위치하며, Master DB는 Master DB의 변경된 Binary Log를 Slave의 Relay Log에 기록한다. Slave DB는 Relay Log 내용을 바탕으로 비동기적으로 DB를 변경한다.
+Replication 동작 과정을 이해하기 위해서는 **Binary Log**, **Relay Log**를 이해해야한다. Binary Log는 모든 MySQL DB에서 이용되며 DB 변경 내용을 기록하는데 이용하는 Log이다. Relay Log는 Slave DB에만 위치하며, Master DB의 Binary Log 내용을 기록하는데 이용하는 Log이다.
 
-위의 그림은 Async Replication을 나타내고 있다. Async Replicaiton은 Master DB가 Slave DB에게 DB 변경 내용을 전달만하고 Slave DB의 상태를 확인하지 않는다. 따라서 Master DB가 Async Replication 동작을 수행해도 DB 성능저하가 거의 발생하지 않는다. 또한 Slave DB에 장애가 발생하여도 Transaction은 중단되지 않고 진행된다.
+위의 그림은 Async Replication을 나타내고 있다. Master DB는 Slave DB에 관계없이 DB를 변경하고 DB 변경 내용을 Binary Log에 기록한다. Slave DB는 Master DB에 연결하여 주기적으로 변경된 Master의 Binary Log를 얻어 자신의 Relay Log에 기록하고, Relay Log 내용을 바탕으로 자신의 DB 변경 및 Binary Log를 갱신한다.
+
+Master DB는 Transaction 수행 중 Slave DB로 인한 추가적인 동작을 수행하지 않는다. 따라서 Master DB는 Slave DB로 인한 성능 저하가 거의 발생하지 않는다. Async 방식이기 때문에 Master DB에서 Transaction이 완료된 DB 변경 내용이더라도 Slave에는 바로 반영되지 않는다. 이는 Master DB의 갑작스러운 장애가 Data 손실로 이어질 수 있다는 의미이다. Slave DB의 장애는 Master DB의 Transaction에 아무런 영향을 주지 않는다. 장애가 발생했던 Slave DB는 복구 된 후 자신의 Relay Log, Binary Log 및 Master DB의 Binary Log를 바탕으로 중단되었던 Replication을 이어서 진행한다.
 
 #### 1.2. Semi-sync Replication
 
