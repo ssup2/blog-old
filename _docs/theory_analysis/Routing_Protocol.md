@@ -17,4 +17,6 @@ Routing Protocol을 분류하고 분석한다.
 
 ### 4. 참조
 
+* [https://www.slideshare.net/ayyakathir/it6601-mobile-computing-55359646](https://www.slideshare.net/ayyakathir/it6601-mobile-computing-55359646)
+* [https://www.quora.com/Why-is-Dijkstra-used-for-link-state-routing-and-Bellman-Ford-for-distance-vector-routing-Why-not-use-the-same](https://www.quora.com/Why-is-Dijkstra-used-for-link-state-routing-and-Bellman-Ford-for-distance-vector-routing-Why-not-use-the-same)
 * [https://courses.cs.washington.edu/courses/cse461/18sp/slides/sections/section-6.pdf](https://courses.cs.washington.edu/courses/cse461/18sp/slides/sections/section-6.pdf)
