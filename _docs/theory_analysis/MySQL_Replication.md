@@ -66,6 +66,7 @@ Galera Cluster와 Group Replication의 Multi-primary Mode은 유사하지만 몇
 * [http://skillachie.com/2014/07/25/mysql-high-availability-architectures/](http://skillachie.com/2014/07/25/mysql-high-availability-architectures/)
 * [https://www.percona.com/blog/2017/02/07/overview-of-different-mysql-replication-solutions/](https://www.percona.com/blog/2017/02/07/overview-of-different-mysql-replication-solutions/)
 * Master-Slave Replication - [https://blurblah.net/1505](https://blurblah.net/1505)
+* Master-Slave Replication - [https://www.percona.com/blog/2013/01/09/how-does-mysql-replication-really-work/](https://www.percona.com/blog/2013/01/09/how-does-mysql-replication-really-work/)
 * Semi-sync - [http://www.mysqlkorea.com/gnuboard4/bbs/board.php?bo_table=develop_03&wr_id=73](http://www.mysqlkorea.com/gnuboard4/bbs/board.php?bo_table=develop_03&wr_id=73)
 * Semi-sync - [http://gywn.net/tag/semi-sync-replication/](http://gywn.net/tag/semi-sync-replication/)
 * Replication, Master - [https://stackoverflow.com/questions/38036955/when-to-prefer-master-slave-and-when-to-cluster](https://stackoverflow.com/questions/38036955/when-to-prefer-master-slave-and-when-to-cluster)
