@@ -1,5 +1,5 @@
 ---
-title: Linux Netfilter / iptables
+title: Linux Netfilter, iptables
 category: Theory, Analysis
 date: 2017-04-19T12:00:00Z
 lastmod: 2017-04-19T12:00:00Z
