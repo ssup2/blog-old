@@ -35,7 +35,7 @@ Netfilter는 5개의 Hook Point를 제공한다.
 
 ### 2. iptables
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_netfilter_iptables/Netfilter_Packet_Traversal.PNG)
+![]({{site.baseurl}}/images/theory_analysis/Linux_Netfilter_iptables/Netfilter_Packet_Traversal.PNG)
 
 iptables는 Netfilter Framework를 이용하는 대표 Tool이다. iptables를 이용하여 Packet을 제어하거나 조작 할 수 있다. 위의 그림은 Netfilter를 이용한 iptables의 Packet 처리 과정을 나타내고 있다. 그림에서 PREROUTING, FOWRARD, INPUT, OUTPUT, POSTROUTING은 각각 Netfilter의 NF_IP_PRE_ROUTING, NF_IP_LOCAL_IN, NF_IP_FORWARD, NF_IP_LOCAL_OUT, NF_IP_POST_ROUTING Hook을 의미한다.
 
