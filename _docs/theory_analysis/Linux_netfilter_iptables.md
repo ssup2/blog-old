@@ -29,9 +29,7 @@ Netfilter는 5개의 Hook Point를 제공한다.
 
 #### 1.2. Packet Process
 
-외부에서 온 Packet의 목적지가 자신인 경우 NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING Hook을 거친다.
-
-외부에서 온 Packet의 목적지가 자신이 아닌경우 NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING Hook을 거친다.
+외부에서 온 Packet의 목적지가 자신인 경우 NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> Application (Local Process)으로 전달된다. Application에서 전송하는 Packet은 NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING Hook을 거쳐 Network로 전달된다. 외부에서 온 Packet의 목적지가 자신이 아닌경우 NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING Hook을 거쳐 Network로 전달된다.
 
 ### 2. iptables
 
