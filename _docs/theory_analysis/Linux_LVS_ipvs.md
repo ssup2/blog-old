@@ -17,7 +17,7 @@ LVS는 Linux에서 제공하는 L4 Load Balancer 솔루션이다. 위의 그림�
 
 ### 2. IPVS (IP Virtual Server)
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/IPVS.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/IPVS.PNG)
 
 IPVS는 Linux의 Netfilter 위에서 동작하는 L4 Load Balancer이다. Linux Kernel Level에서 동작하기 때문에 Haproxy같은 User Level Load Balancer보다 빠른 성능으로 동작한다. IPVS는 ipvsadm 명령어를 통해 제어가 가능하다. 위의 그림은 Netfilter에서 동작하는 IPVS의 Hook Function들을 나타내고 있다. IPVS는 6개의 Hook Function을 이용한다.
 
