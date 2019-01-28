@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Calico Plugin
+title: Kubernetes Cilium Plugin
 category: Theory, Analysis
 date: 2019-02-06T12:00:00Z
 lastmod: 2019-02-06T12:00:00Z
