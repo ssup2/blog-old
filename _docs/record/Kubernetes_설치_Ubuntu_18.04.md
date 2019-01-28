@@ -284,9 +284,9 @@ subjects:
   * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
   * 접속 후 Skip Click
 
-### 8. Ceph RDB 연동
+### 7. Ceph RDB 연동
 
-#### 8.1 Master Node
+#### 7.1 Master Node
 
 * Ceph 정보
   * Monitor IP - 10.0.0.10:6789
@@ -363,7 +363,7 @@ NAME            PROVISIONER    AGE
 rbd (default)   ceph.com/rbd   19m
 ~~~
 
-### 9. 참조
+### 8. 참조
 
 * Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
