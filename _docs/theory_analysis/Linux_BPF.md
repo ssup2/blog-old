@@ -65,8 +65,8 @@ XDP Type BPF는 Network Device Driver에서 동작하는 eBPF이다. Network Dev
 
 SCHED_CLS, SCHED_ACT Type의 BPF는 Packet이 Network Device에서 tc로 전달되는 Ingress 또는 Packet이 tc에서 Network Device로 전달되는 Egress 경로에서 실행되는 BPF이다. cBFP, eBPF 둘다 지원한다. XDP Type보다는 상위 Layer의 BPF이기 때문에 시간당 Packet 처리량은 XDP Type의 BPF보다는 적지만 좀더 다양한 Packet 처리가 가능하다. SCHED_CLS, SCHED_ACT Type의 Input Type은 Socket Buffer (\_\_sk_buff)이다. Socket Buffer를 바탕으로 XDP Type보다 좀더 다양한 Kernel Helper Function을 이용 할 수 있다. SCHED_CLS Type BPF의 실행결과는 classid 반환하고, SCHED_ACT Type BPF의 실행결과는 'TC_ACT_'으로 시작하는 Linux Kernel에 정의된 값을 반환한다.
 
-* TC_ACT_SHOT - Ingress를 통해오는 Packet을 버리고 Socket Buffer를 해지하여 Packet이 상위 Network Stack으로 전달되지 못한다.
-* TC_ACT_STOLEN - Ingress를 통해오는 Packet을 소모하거나 Queuing하여 상위 Network Stack으로는 전달되지 못한다.
+* TC_ACT_SHOT - Ingress를 통해오는 Packet을 버리고 Socket Buffer를 해지한다. 따라서 Packet은 상위 Network Stack으로 전달되지 못한다.
+* TC_ACT_STOLEN - Ingress를 통해오는 Packet을 소모하거나 Queuing한다. 따라서 Packet은 상위 Network Stack으로는 전달되지 못한다.
 * TC_ACT_OK - Ingress에서는 해당 Packet을 통과시켜 Network Stack으로 넘기고, Egress에서는 해당 Packet을 Network Device에게 넘긴다.
 * TC_ACT_REDIRECT - 해당 Packet을 동일 또는 다른 Network Device의 Ingress나 Engress로 전달한다.
 
