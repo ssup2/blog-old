@@ -27,7 +27,7 @@ adsense: true
 
 ~~~
 # git clone https://github.com/torvalds/linux.git
-# cd ubuntu-bionic
+# cd linux
 ~~~
 
 * bpftool Build
