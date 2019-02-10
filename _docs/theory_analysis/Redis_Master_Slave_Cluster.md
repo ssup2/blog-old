@@ -13,7 +13,7 @@ Redis Master-slave 및 Redis Cluster를 분석한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/Redis_Master_Slave_Cluster/Redis_Master-slave.PNG){: width="600px"}
 
-Redis Master-slave는 Redis에서 제공하는 가장 기본적인 Replication 및 HA (High Availabilty) 기법이다. 위의 그림은 Redis Master-slave로 구성시 Architecture를 나타내고 있다. Redis의 Master-slave 기법은 MySQL의 Master-slave Replication 기법과 유사한점이 많다. 하나의 Master에 다수의 Slave가 붙을 수 있다. Master는 Read-Write Mode로 동작하고 Slave는 Read-Only Mode로 동작한다. Redis Client는 필요에 따라서 Master에 붙어 Write 동작을 수행하거나, 적절한 Master 또는 Slave에 붙어 Read 동작을 수행 할 수 있다.
+Redis Master-slave는 Redis에서 제공하는 가장 기본적인 Replication 기법이다. 위의 그림은 Redis Master-slave 구성시 Architecture를 나타내고 있다. Redis의 Master-slave 기법은 MySQL의 Master-slave Replication 기법과 유사한점이 많다. 하나의 Master에 다수의 Slave가 붙을 수 있다. Master는 Read-Write Mode로 동작하고 Slave는 Read-Only Mode로 동작한다. Redis Client는 필요에 따라서 Master에 붙어 Write 동작을 수행하거나, 적절한 Master 또는 Slave에 붙어 Read 동작을 수행 할 수 있다.
 
 **Master-slave 사이의 Replication은 Async 방식**을 이용한다. Master는 Data 변경시 변경 내용을 backlog에 기록한다. Slave는 Master에 접속하여 backlog의 내용을 바탕으로 Replication을 수행한다. Async 방식이기 때문에 Master에 저장된 Data가 Slave에는 잠깐동안 저장되지 않을 수 있다. 따라서 Redis Client (App)는 Slave에서 Data를 Read 할때 Async 특징을 반드시 고려해야한다.
 
@@ -21,7 +21,7 @@ Master가 죽을경우 Slave는 Master에게 주기적으로 Connection을 요�
 
 #### 1.1. Sentinel
 
-Master의 동작이 멈출경우 Redis Client는 Slave를 통해서 Read 동작을 수행 할 수 있지만, Write 동작을 수행 할 수 없다. 따라서 Master의 Downtime은 Redis Cluster의 가용성을 떨어트린다. 이러한 가용성 문제를 해결을 도와주는 App이 Sentinel이다. **Sentinel은 Master가 죽는지 감지하고 Master가 죽었을경우 Slave 중 하나를 Master로 승격시키고, 기존의 Master는 Slave로 강등시킨다.** Redis 관리자의 간섭없이 자동으로 이루어지기 때문에 Master의 Downtime을 최소화하여 HA를 가능하게 만든다.
+Master의 동작이 멈출경우 Redis Client는 Slave를 통해서 Read 동작을 수행 할 수 있지만, Write 동작을 수행 할 수 없다. 따라서 Master의 Downtime은 Redis Cluster의 가용성을 떨어트린다. 이러한 가용성 문제를 해결을 도와주는 App이 Sentinel이다. **Sentinel은 Master가 죽는지 감지하고 Master가 죽었을경우 Slave 중 하나를 Master로 승격시키고, 기존의 Master는 Slave로 강등시킨다.** Redis 관리자의 간섭없이 자동으로 이루어지기 때문에 Master의 Downtime을 최소화하여 HA (High Availabilty)를 가능하게 만든다.
 
 Sentinel은 일반적으로 홀수개로 구성하여 Split-brain을 방지한다. 위의 그림에서는 Sentinal을 Redis와 별도의 Node에 구성하여 이용하는 모습을 나타내고 있지만, Sentinel을 Redis와 동일한 Node에 구성하여 이용하여도 문제없다. Sentinel 설정에는 Quorum이란 설정값이 존재한다. Quorum은 특정 Redis에 장애 발생시 몇개의 Sentinel이 특정 Redis의 장애 발생을 감지해야 장애라고 판별하는지를 결정하는 기준값이다. 예를들어 Quorum 값을 2로 설정하였을 경우, 2개 이상의 Sentienl이 특정 Redis에 장애가 발생하였다고 판별해야 Sentinel은 해당 Redis에 대한 장애 대응을 수행한다.
 
@@ -34,6 +34,12 @@ Redis Master-slave 구성시 Master는 RW Mode로 동작하고 Slave는 RO Mode�
 ### 2. Redis Cluster
 
 ![]({{site.baseurl}}/images/theory_analysis/Redis_Master_Slave_Cluster/Redis_Cluster.PNG){: width="600px"}
+
+Redis Cluster는 Redis에서 제공하는 Replication 및 Sharding 기법이다. 위의 그림은 Redis Cluster 구성시 Architecture를 나타내고 있다. Cluster를 구성하는 각 Redis는 다른 모든 Redis들과 직접 연결하여 gossip Protocol을 통해 통신한다. gossip Protocol을 통해서 각 Redis는 Redis 상태 정보를 교환한다. gossip Protocl은 Redis Client가 이용하는 Port번호보다 10000이 높은 번호를 Port로 이용한다. Redis Client 가 이용하는 기본 Port 번호는 6379를 이용하기 때문에 gossip Protocol이 이용하는 기본 Port번호는 16379가 된다. Client 또한 Cluster를 구성하는 모든 Redis와 직접 연결하여 Data를 주고 받는다. 
+
+Redis Cluster는 Multi-master, Multi-slave 구조를 갖으며 각 Redis는 Master 또는 Slave로 동작한다. 각 Master는 **Hash Slot**이라는 Data 저장구역을 다른 Master와 나누어 소유한다. Hash Slot은 0부터 16384까지의 주소를 가지고 있다. 위의 그림은 각 Master가 Hash Slot을 3개로 균등하게 분활해서 구성한 모습을 나타내고 있다. Key-value Data가 이용할 Hash Slot은 Data의 Key를 Hashing한 결과값을 이용한다. Hashing은 CRC16 및 Moduler 연산자를 이용하여 Data가 각 Hash Slot에 균등하게 배분되도록 한다. 따라서 Data는 각 Master의 Hash Slot의 크기에 비례하여 Data를 저장하게 된다.
+
+각 Master에 할당한 Hash Slot은 Redis 관리자에 의해서 동적으로 변경이 가능하다. 따라서 동적으로 Master를 추가하거나 제거하는것도 가능하다. 각 Master는 다수의 Slave를 갖을 수 있다. 위의 그림에서는 각 Master가 하나의 Slave를 갖고 있는 모습을 나타내고 있다. **Master와 Slave사이의 Replication은 Redis Master-slave 구성과 동일하게 Async 방식으로 이루어진다.** 따라서 Slave도 동적으로 자유롭게 추가하거나 제거하는것이 가능하다.
 
 ### 3. 참조
 
