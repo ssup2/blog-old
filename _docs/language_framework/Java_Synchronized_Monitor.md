@@ -1,6 +1,6 @@
 ---
 title: Java Synchronized, Monitor
-category: Language
+category: Language, Framework
 date: 2018-05-06T12:00:00Z
 lastmod: 2018-05-06T12:00:00Z
 comment: true
