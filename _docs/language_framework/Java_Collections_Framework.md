@@ -1,6 +1,6 @@
 ---
 title: Java Collections Framework (JCF)
-category: Language
+category: Language, Framework
 date: 2018-01-10T12:00:00Z
 lastmod: 2018-01-10T12:00:00Z
 comment: true
