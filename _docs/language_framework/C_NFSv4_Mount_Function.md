@@ -11,7 +11,7 @@ adsense: true
 
 리눅스 Man Page에도 mount() 함수를 이용한 NFSv4 Mount 수행 방법이 나와있지 않다.
 
-{% highlight C %}
+{% highlight C linenos %}
 int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
 {
     int result;

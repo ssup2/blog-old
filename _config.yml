@@ -34,13 +34,11 @@ collections:
       output: true
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
     values:
       layout: default
-  -
-    scope:
+  - scope:
       path: ""
       type: "docs"
     values:
@@ -55,7 +53,7 @@ kramdown:
 # -----
 
 title: Ssup2 Blog
-description: Ssup2의 개인 블로그입니다.
+description: Ssup2's Personal Blog
 url: https://ssup2.github.io
 logo: /siteicon.png
 author: Ssup2

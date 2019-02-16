@@ -14,7 +14,7 @@ adsense: true
 
 #### 1.2. 예제
 
-{% highlight C %}
+{% highlight C linenos %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
 

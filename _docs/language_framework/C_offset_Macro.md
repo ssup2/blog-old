@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Macro
 
-{% highlight C %}
+{% highlight C linenos  %}
 #define‬ offsetof(TYPE, MEMBER) ((sizet) &((TYPE *)0)->MEMBER)
 {% endhighlight %}
 
@@ -21,7 +21,7 @@ adsense: true
 
 ### 3. 예제
 
-{% highlight C %}
+{% highlight C linenos  %}
 #include <stdio.h>
 #define  offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 

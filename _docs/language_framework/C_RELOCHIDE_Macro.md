@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Macro
 
-{% highlight C %}
+{% highlight C linenos %}
 #define RELOC_HIDE(ptr, off)                    \
   ({ unsigned long __ptr;                       \
     __asm__ ("" : "=r"(__ptr) : "0"(ptr));      \
