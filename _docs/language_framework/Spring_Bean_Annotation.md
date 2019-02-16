@@ -9,18 +9,20 @@ adsense: true
 
 Spring의 Bean과 연관된 Annotation을 분석한다.
 
-### 1. @ComponentScan 
+### 1. @Component
 
-### 2. @Component
+### 2. @Configuration
 
-### 3. @Repository
+#### 2.1. @ComponentScan
 
-### 4. @Service
+#### 2.2. @Bean
 
-### 5. @Controller
+### 3. @Service
 
-### 6. @Configuration
+### 4. @Controller
 
-### 7. 참조
+### 5. @Repository
+
+### 6. 참조
 * [https://www.baeldung.com/spring-bean-annotations](https://www.baeldung.com/spring-bean-annotations)
 
