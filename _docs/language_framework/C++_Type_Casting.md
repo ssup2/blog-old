@@ -11,7 +11,7 @@ C++ Type Casting을 분석한다.
 
 ### 1. C++ Type Casting
 
-{% highlight CPP linenos  %}
+{% highlight CPP linenos %}
 #include <iostream>
 using namespace std;
 
@@ -52,7 +52,7 @@ pd = dynamic_cast<CDerived*>(&b);   // Error - NULL
 
 dynamic_cast는 **상속관계**에 있는 Class간의 **안전한** Type Casting을 위해 이용된다. Type Casting 실패시 Type Casting의 대상 Pointer를 NULL로 만든다. 위의 예제에서 첫번째 dynamic_cast는 Upcasting이기 때문에 성공하지만, 두번째 dynamic_cast는 Downcasting이기 때문에 실패하고, pd는 NULL로 초기화 된다.
 
-{% highlight CPP linenos  %}
+{% highlight CPP linenos %}
 class CBase { virtual void dummy() {} };
 class CDerived: public CBase {};
 

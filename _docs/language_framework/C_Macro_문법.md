@@ -37,7 +37,7 @@ THIS IS TEST CODE
 
 #### 2.2. 예제
 
-{% highlight linenos C %}
+{% highlight C linenos %}
 #include <stdio.h>
 
 #define INT_i(n)        int i##n = n;

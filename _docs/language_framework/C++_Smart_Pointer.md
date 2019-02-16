@@ -53,7 +53,7 @@ main함수 안에서 ptr Smart Pointer는 new int()을 통해 할당된 Instance
 
 auto_ptr는 **Exclusive Ownership Model**을 이용하는 Smart Pointer이다. 즉 하나의 auto_ptr이 가리키는 Instance는 다른 auto_ptr이 가리키지 못하는 특징을 갖고있다.
 
-{% highlight CPP linenos  %}
+{% highlight CPP linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -164,7 +164,7 @@ unique_ptr은 위의 예제처럼 함수의 return 인자로도 넘길 수 있�
 
 shared_ptr은 **Reference Counting Ownership Model**을 이용한다. 따라서 auto_ptr, unique_ptr과는 다르게 여러개의 shared_ptr가 하나의 Instance를 가리킬 수 있다. Instance를 가리키는 shared_ptr의 개수는 각 shared_ptr에 저장되어 관리된다. Instance를 가리키는 shared_ptr의 개수가 감소하다가 0이 되면 Instance를 해제한다.
 
-{% highlight CPP linenos  %}
+{% highlight CPP linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -223,7 +223,7 @@ A::show()
 
 weak_ptr은 **shared_ptr이 가리키는 Instance를 참조**만 하는 참조자 역활을 수행한다. weak_ptr은 Reference Count를 관리하지 않는다. Instace의 생명주기에 영향을 주지 않는다. 따라서 weak_ptr이 가리키는 Instance는 실제 존재하지 않을 수 있다.
 
-{% highlight CPP linenos  %}
+{% highlight CPP linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
