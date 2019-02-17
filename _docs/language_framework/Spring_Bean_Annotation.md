@@ -70,13 +70,22 @@ public class MyConfig {
 
 @Bean은 Bean Method에 붙여 해당 Method가 Bean Method인 것을 Spring에게 알리는 역활을 수행한다. Bean Method는 반드시 Instance를 반환한다. Bean Method를 통해 생성되는 Bean의 Default 이름은 Method 이름이 된다. 따라서 위의 myBeanA() Method를 통해 생성되는 Bean의 이름은 myBeanA가 된다. 또한 @Bean의 Value를 통해서 Bean Method를 통해 생성되는 Bean의 이름을 지정할 수 있다. 위의 myBeanB() Method를 통해 생성되는 Bean의 이름은 @Bean의 Value인 myBeanC가 된다.
 
-### 3. @Service
+### 3. @Service, @Controller, @Repository
 
-### 4. @Controller
+{% highlight JAVA linenos %}
+public class MyService {
+}
 
-### 5. @Repository
+public class MyController {
+}
 
-### 6. 참조
+public class MyRepository {
+}
+{% endhighlight %}
+
+@Service는 Business Logic을 담고있는 Class에 붙인다. @Controller는 MVC Pattern의 Controller를 담당하는 Class에 붙인다. @Repository는 Data Access를 담당하는 Class에 붙인다. @Service, @Controller, @Repository 모두 @Component를 상속하고 있다. 따라서 앞의 3개의 Annotation이 붙은 Class의 Instance는 Spring의 Bean으로 관리된다.
+
+### 4. 참조
 
 * [https://www.baeldung.com/spring-bean-annotations](https://www.baeldung.com/spring-bean-annotations)
 * [http://wonwoo.ml/index.php/post/2000](http://wonwoo.ml/index.php/post/2000)
