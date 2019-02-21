@@ -21,7 +21,9 @@ Kafka Cluster는 **Topic**이라는 단위로 Message를 관리한다. Producer�
 
 ![]({{site.baseurl}}/images/theory_analysis/Kafka/Kafka_Partition_Consumer_Group.PNG){: width="750px"}
 
-Kafka는 대용량의 Message 분산 처리를 위한 기법으로 Partiton 및 Consumer Group 기능을 제공한다.  **Partition은 Topic을 Kafka Cluster를 구성하는 각 Broker에게 분산하기 위한 단위 및 Queue**를 의미한다. Topic 마다 Partition의 개수를 다르게 설정할 수 있다. 위의 그림에서 Topic C는 3개의 Partiton으로 이루어져 있기 때문에 각 Partiton은 서로 다른 3개의 Broker에 분산된다. Topic C는 3개의 Broker를 이용하기 때문에 하나의 Topic을 이용하는 Topic B에 비해서 최대 3배 빠르게 Message를 처리 할 수 있다. 하지만 3개의 Partiton을 이용한다는 의미는 3개의 Queue에 Message를 나누어 저장한다는 의미이기 때문에 Producer 전송한 Message의 순서와 Consumer가 수신하는 Message의 순서는 달라질 수 있다. Topic B는 하나의 Partition만을 이용하기 때문에 Message 순서는 그대로 유지된다.
+Kafka는 대용량의 Message 분산 처리를 위한 기법으로 Partiton 및 Consumer Group 기능을 제공한다. **Partition은 Topic을 Kafka Cluster를 구성하는 각 Broker에게 분산하기 위한 단위 및 Message를 순차적으로 저장하는 Queue**를 의미한다. Partition은 Message 보존을 위해서 Memory가 아닌 **Disk**에 존재한다. 일반적으로 Disk는 Memory에 비해서 Read/Write 성능이 떨어진다. 특히 Random Read/Write의 성능은 Disk가 Memory에 비해서 많이 떨어진다. 하지만 Sequential Read/Write의 경우 Disk의 성능이 Memory의 성능에 비해서 크게 떨어지지 않기 때문에, Kafka는 Partition 이용시 최대한 Sequential Read/Write를 많이 이용하도록 설계되어 있다. 또한 Kafka는 Kernel의 Disk Cache (Page Cache)에 있는 Message가 Kafka를 거치지 않고 Kernel의 Socket Buffer로 바로 복사되도록 만들어, Message를 Network를 통해 Consumer로 전달시 발생하는 Copy Overhead를 최소한으로 줄였다. 이처럼 Kafka는 Disk 사용에의한 성능 저하를 다양한 기법을 통해 최소하하고 있다.
+
+Topic마다 Partition의 개수를 다르게 설정할 수 있다. 위의 그림에서 Topic C는 3개의 Partiton으로 이루어져 있기 때문에 각 Partiton은 서로 다른 3개의 Broker에 분산된다. Topic C는 3개의 Broker를 이용하기 때문에 하나의 Topic을 이용하는 Topic B에 비해서 최대 3배 빠르게 Message를 처리 할 수 있다. 하지만 3개의 Partiton을 이용한다는 의미는 3개의 Queue에 Message를 나누어 저장한다는 의미이기 때문에 Producer 전송한 Message의 순서와 Consumer가 수신하는 Message의 순서는 달라질 수 있다. Topic B는 하나의 Partition만을 이용하기 때문에 Message 순서는 그대로 유지된다. 
 
 #### 1.2. Cluster
 
@@ -33,4 +35,5 @@ Kafka는 대용량의 Message 분산 처리를 위한 기법으로 Partiton 및 
 * [https://www.quora.com/What-is-Apache-Kafka](https://www.quora.com/What-is-Apache-Kafka)
 * [https://sookocheff.com/post/kafka/kafka-in-a-nutshell/](https://sookocheff.com/post/kafka/kafka-in-a-nutshell/)
 * [https://epicdevs.com/17](https://epicdevs.com/17)
+* [https://medium.freecodecamp.org/what-makes-apache-kafka-so-fast-a8d4f94ab145]
 
