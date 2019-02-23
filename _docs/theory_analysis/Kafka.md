@@ -21,7 +21,7 @@ Kafka Broker는 **Topic**이라는 단위로 Message를 관리한다. Topic은 �
 
 #### 1.1. Partition
 
-![]({{site.baseurl}}/images/theory_analysis/Kafka/Kafka_Partiton.PNG){: width="750px"}
+![]({{site.baseurl}}/images/theory_analysis/Kafka/Kafka_Partition.PNG){: width="750px"}
 
 Partition은 Topic을 Kafka Cluster를 구성하는 각 Broker에게 분산하기 위한 단위 및 Message를 순차적으로 저장하는 Queue 역활을 수행한다. Partition은 Message 보존을 위해서 Memory가 아닌 **Disk**에 존재한다. 위의 그림은 Producer 및 Consumer와 상호작용을 하는 Partition을 자세히 나타내고 있다. Producer가 전송한 Message는 Partition의 끝에 차례대로 저장된다. 이때 Message의 ID는 Array의 Index처럼 순차적으로 증가한다. 이러한 Message의 ID를 Kafka에서는 **Offset**이라고 한다.
 
@@ -37,7 +37,7 @@ Partition은 실제로 하나의 파일로 Disk에 저장되지 않고 **Segment
 
 Consumer Group은 다수의 Consumer를 묶어 하나의 Topic을 다수의 Consumer가 동시에 처리할 수 있도록 만들어준다. 첫 그림에서 Consumer Group C는 Topic C를 구독하고 있다. Consumer Group C는 2개의 Consumer를 갖고 있기 때문에 Topic C의 Message는 2개의 Consumer가 나누어 병렬처리가 가능하다. 다만 Consumer Group의 효율을 높이기 위해서는 Consumer Group이 구독하는 Topic의 Partiton의 개수가 중요하다.
 
-![]({{site.baseurl}}/images/theory_analysis/Kafka/Kafka_Consumer_Group.PNG){: width="750px"}
+![]({{site.baseurl}}/images/theory_analysis/Kafka/Kafka_Partition_Consumer.PNG){: width="750px"}
 
 위의 그림은 같은 Topic에 있는 Partiton의 개수와 같은 Consumer Group에 있는 Consumer의 개수에 따른 관계도를 나타내고 있다. Partition과 Consumer는 N:1의 관계이다. 같은 Consumer Group에 있는 Consumer들은 하나의 Partition을 동시에 같이 이용 할 수 없다. 즉 Partition 보다 Consumer의 개수가 많으면 Message를 처리하지 않는 Consume각 생기게 된다. 따라서 Consumer Group을 이용할 경우 Topic의 Partiton 개수도 반드시 같이 고려되야 한다.
 
