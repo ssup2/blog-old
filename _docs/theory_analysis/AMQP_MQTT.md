@@ -15,7 +15,7 @@ AMQP는 **표준 MQ Protocol**으로써 App사이의 Message를 전달할 때 Me
 
 ![]({{site.baseurl}}/images/theory_analysis/AMQP_MQTT/AMQP_Architecture.PNG){: width="700px"}
 
-위의 그림은 AMQP의 Architecture를 나타내고 있다. AMQP는 Message를 Routing하고 Queuing하는 Broker의 역활이 매우 중요하다. Broker는 Exchange와 Queue로 구성되어 있다.
+위의 그림은 AMQP의 Architecture를 나타내고 있다. AMQP는 Message를 Routing하고 Queuing하는 Broker의 역활이 매우 중요하다. Broker는 Exchange와 Queue로 구성되어 있다. Exchange와 Queue를 연결을 통해 Message 전달 규칙이 정해지는데 이러한 연결 과정을 AMQP에서는 Binding이라고 한다.
 
 #### 1.1 Exchange
 
