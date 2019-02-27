@@ -1,5 +1,5 @@
 ---
-title: Linux bpftool 설치 - Ubuntu 18.04
+title: Linux bpftool 설치 - Ubuntu 18.04, CentOS 7
 category: Record
 date: 2018-12-29T12:00:00Z
 lastmod: 2018-12-29T12:00:00Z
