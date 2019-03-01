@@ -27,7 +27,7 @@ QEMU는 하나의 Main Loop Thread에서 대부분의 Event 및 관련 연산를
 
 ![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
 
-non-iothread 방식은 Main Loop Thread에서 vCPU 처리와 Event를 같이 처리한다. 즉 하나의 Thread에서 vCPU 처리와 대부분의 주변 장치 Emulation을 같이하는 구조이다. TCG는 vCPU를 Emulation하는 QEMU의 모듈이다. 위의 그림처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 Main Loop Thread에서만 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 따라서 non-iothread 구조는 매우 느릴 수 밖에 없는 구조를 갖는다. 초기 QEMU의 Architecture이다.
+non-iothread 방식은 Main Loop Thread에서 vCPU 처리와 Event를 같이 처리한다. 즉 하나의 Thread에서 vCPU 처리와 대부분의 주변 장치 Emulation을 같이하는 구조이다. TCG는 vCPU를 Emulation하는 QEMU의 모듈이다. 위의 그림처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 Main Loop Thread에서만 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 따라서 non-iothread 구조의 가상 머신은 매우 느릴수 밖에 없다. 초기 QEMU의 Architecture이다.
 
 ##### 2.1.2. QEMU with iothread
 
