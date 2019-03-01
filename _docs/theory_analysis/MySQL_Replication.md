@@ -13,7 +13,7 @@ MySQL의 HA(High Availabilty)를 위한 Replicaiton 기법들을 분석한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Master_Slave_Replication.PNG){: width="600px"}
 
-Master-Slave Replication은 하나의 Master DB와 다수의 Slave DB들을 통해 Replication을 수행하는 방식이다. 위의 그림은 Master-Slave Replication을 나타내고 있다. Client는 LB의 VIP (Virtual IP)를 통해서 DB에 접근한다. Master는 Read/Write Mode로 동작하고 Slave들은 Read Mode로 동작한다. 따라서 LB는 Client로부터 오는 DB 변경 Query는 Master에게만 전달하도록 설정되어 있어야 한다. 또한 LB는 Client로부터 오는 DB 조회 Query를 적절한 Master/Slave DB로 Load Balancing하여 Read 성능을 높일 수 있다.
+Master-Slave Replication은 하나의 Master DB와 다수의 Slave DB들을 통해 Replication을 수행하는 방식이다. 위의 그림은 Master-Slave Replication을 나타내고 있다. Master는 Read/Write Mode로 동작하고 Slave들은 Read Mode로 동작한다. 따라서 Client는 Write 요청을 반드시 Master에게 전달해야 하지만, Read 요청은 적절한 Master 또는 적절한 Slave에 전달하면 된다. 일반적으로 Slave앞에는 LB(Load Balancer)를 두어 Slave로 오는 Read 요청을 분산시키고, Read 성능을 높인다.
 
 Master는 Client로부터 받은 DB 변경 Query에 따라 DB를 변경하고, 변경 내용을 Slave DB에게 전달하여 Replication을 수행한다. Replication 방식에는 Async, Semi-sync 2가지 방식을 지원한다. 두 방식 모두 완전히 동기화가 되는 Sync 방식은 아니기 때문에 Slave DB는 짧은 순간 Master DB와 동기화되지 않는 상태일 수 있다. Slave DB의 개수가 늘어날수록 동시에 Read를 수행할 수 있는 DB도 증가하기 때문에 Read 성능을 높일 수 있다. 하지만 Slave DB의 개수가 늘어나도 DB 변경 Query는 Master DB에서부터 전파되는 방식이기 때문에 Write 성능은 개선되지 않는다.
 
@@ -57,7 +57,7 @@ Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replicati
 
 ![]({{site.baseurl}}/images/theory_analysis/MySQL_Replication/Galera_Cluster.PNG){: width="600px"}
 
-Galera Cluster는 Group Replication의 Multi-primary Mode와 매우 유사한 Multi-master Replication 기법이다. Galera Cluster 설명에는 Replication 과정이 Sync 또는 Virtual Sync 방식이라고 설명되어 있지만, 실제로는 Group Replication의 Multi-primary Mode처럼 Semi-sync 또는 2 Phase-Commit 방식과 유사하게 구현되어 있다. 위의 그림은 Galera Cluster를 의미한다. Client는 LB의 VIP (Virtual IP)를 통해서 DB에 접근한다. 각 DB는 wsrep(Write Set Replication) Plugin을 통하여 서로 wsrep API로 통신하며 Replication을 진행한다.
+Galera Cluster는 Group Replication의 Multi-primary Mode와 매우 유사한 Multi-master Replication 기법이다. Galera Cluster 설명에는 Replication 과정이 Sync 또는 Virtual Sync 방식이라고 설명되어 있지만, 실제로는 Group Replication의 Multi-primary Mode처럼 Semi-sync 또는 2 Phase-Commit 방식과 유사하게 구현되어 있다. 위의 그림은 Galera Cluster를 의미한다. Client는 LB를 통해서 DB에 접근한다. 각 DB는 wsrep(Write Set Replication) Plugin을 통하여 서로 wsrep API로 통신하며 Replication을 진행한다.
 
 Galera Cluster와 Group Replication의 Multi-primary Mode은 유사하지만 몇가지 차이점을 가진다. Galera Cluster에서는 DB가 변경될 경우 모든 DB에 변경내용이 반영되어야 Commit을 성공한다. 만약 Galera Cluster가 3개의 DB로 이루어져 있다면 3개의 DB 모두 변경내용이 적용되어야 Commit에 성공한다는 의미이다. 반대로 Group Replication의 Multi-primary Mode의 경우 과반수 이상의 DB에만 변경내용이 반영되면 Commit을 성공한다. 만약 Group Replication의 Multi-primary Mode로 3개의 DB로 이루어져 있다면 3개의 DB 중에서 2개의 DB에만 변경내용이 반영되면 Commit을 성공한다. Galera Cluster는 MySQL기반인 MariaDB 및 Percona에서도 적용할 수 있지만 Group Replication은 현재 MySQL에서만 적용 할 수 있다.
 
