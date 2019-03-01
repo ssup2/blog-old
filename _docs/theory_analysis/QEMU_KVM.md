@@ -35,7 +35,7 @@ non-iothread 방식은 Main Loop Thread에서 vCPU 처리와 Event를 같이 처
 
 iothread 방식은 Main Loop Thread에서는 Event만 처리하고 각 vCPU마다 Thread를 할당하여 처리하는 방식이다. Main Loop Thread뿐만 아니라 모든 vCPU Thread에서도 주변 장치 Emulation을 수행한다. 다수의 Thread를 이용하기 때문에 iothread 방식에서는 주변 장치 Emulation 과정이 병렬로 처리되는것 처럼 보인다. 하지만 QEMU의 주변 장치 Emulation Code는 대부분 Thread Safe하게 작성되어 있지 않기 때문에 Global Mutex를 이용하여 Serialization 되어 있고, 이에 따라 병렬로 처리되지 않는다. 이러한 주변 장치 Emulation의 Serialization은 가상 머신의 I/O 성능을 떨어트리는 주요 원인중 하나이다.
 
-vCPU도 상황은 비슷하다. vCPU들이 별도의 Thread를 이용하기 때문에 병렬적으로 처리된는 것처럼 보이지만 실제로 vCPU를 Emulating하는 TCG의 Achitecture 때문에 vCPU의 병렬 처리율이 매우 낮다고 한다.
+vCPU도 상황은 비슷하다. vCPU들이 별도의 Thread를 이용하기 때문에 병렬적으로 처리된는 것처럼 보이지만 실제로 vCPU를 Emulating하는 TCG의 Achitecture 때문에 vCPU의 병렬 처리율이 매우 낮다고 한다. 따라서 iothread만 이용하는 방식 또한 가상 머신의 빠른 성능을 얻기에는 힘든 구조이다.
 
 ##### 2.1.3. QEMU with iothread and KVM
 
