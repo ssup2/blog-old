@@ -15,7 +15,7 @@ Linux에서 제공하는 Type 1 Hypervisor이다. Linux가 설치되어 있고 H
 
 ### 2. QEMU
 
-QEMU는 **Emulator**이다. QEMU는 vCPU부터 주변 장치까지 다양한 가상의 장치들을 Emulation하여 생성한다. KVM은 QEMU가 생성한 PCI Bus, 주변 장치등을 가상 머신에게 할당하여 가상 머신을 구동한다. Xen에서도 KVM과 동일하게 QEMU가 생성한 PCI Bus, 주변 장치등을 가상 머신에게 할당한다. QEMU는 vCPU도 Emulating 할 수 있기 때문에 KVM이나 XEN 없이도 가상 머신을 구동 할 수 있다. 하지만 vCPU Emulating Overhead와 QEMU Architecture의 특징 때문에, QEMU만을 이용하여 가상 머신을 구동하면 가상 머신의 성능이 매우 낮아진다. 따라서 KVM + QEMU의 조합으로 가상 머신을 구동하는것이 좋다.
+QEMU는 **Emulator**이다. QEMU는 vCPU부터 주변 장치까지 다양한 가상의 장치들을 Emulation하여 생성한다. KVM은 QEMU가 생성한 PCI Bus, 주변 장치등을 가상 머신에게 할당하여 가상 머신을 구동한다. Xen에서도 KVM과 동일하게 QEMU가 생성한 PCI Bus, 주변 장치등을 가상 머신에게 할당하여 가상 머신을 구동한다. QEMU는 vCPU도 Emulation 할 수 있기 때문에 KVM이나 XEN 없이도 가상 머신을 구동 할 수 있다. 하지만 vCPU Emulation Overhead와 QEMU Architecture의 특징 때문에, QEMU만을 이용하여 가상 머신을 구동하면 가상 머신의 성능이 매우 낮아진다. 따라서 KVM + QEMU의 조합으로 가상 머신을 구동하는것이 좋다.
 
 #### 2.1. QEMU Architecture
 
