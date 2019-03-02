@@ -95,9 +95,7 @@ Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 7
 
 ##### 1.2.2. Memory
 
-Memory Resource 값은 일반적인 용량단위(Byte, MB, GB)를 이용한다. Memory Limit 값은 Linux에서 Process의 Memory 사용량을 제한하는데 이용되는 Cgroup의 Memory Limit 값을 설정하는데 이용된다. Container에 설정한 용량값 그대로 Memory Limit 값으로 이용된다. Memory Limit 값은 Container가 동작하는 Node의 Memory 값보다 클 수 없다. Memory Limit 값은 Cgroup의 limit_in_bytes라는 값으로 조작된다.
-
-Memory Request 값은 Cgroup 설정에 이용되지 않고 오직 Kubernetes의 Pod Scheduling시에만 이용된다.
+Memory Resource 값은 일반적인 용량단위(Byte, MB, GB)를 이용한다. Memory Limit 값은 Linux에서 Process의 Memory 사용량을 제한하는데 이용되는 Cgroup의 Memory Limit 값을 설정하는데 이용된다. Container에 설정한 용량값 그대로 Memory Limit 값으로 이용된다. Memory Limit 값은 Container가 동작하는 Node의 Memory 값보다 클 수 없다. Memory Limit 값은 Cgroup의 limit_in_bytes라는 값으로 조작된다. Memory Request 값은 Cgroup 설정에 이용되지 않고 오직 Kubernetes의 Pod Scheduling시에만 이용된다.
 
 ##### 1.2.3. QoS
 

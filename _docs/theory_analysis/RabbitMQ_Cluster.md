@@ -7,7 +7,9 @@ comment: true
 adsense: true
 ---
 
-### 1. RabbitMQ
+### 1. RabbitMQ Cluster
+
+![]({{site.baseurl}}/images/theory_analysis/RabbitMQ_Cluster/Cluster.PNG){: width="700px"}
 
 ### 2. 참조
 

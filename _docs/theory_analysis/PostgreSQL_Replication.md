@@ -19,7 +19,7 @@ PostgreSQL의 HA(High Availabilty)를 위한 Replicaiton 기법을 분석한다.
 
 #### 1.2. Streaming Replication
 
-![]({{site.baseurl}}/images/theory_analysis/PostgreSQL_Replication/Streaming_Replication.PNG){: width="450px"}
+![]({{site.baseurl}}/images/theory_analysis/PostgreSQL_Replication/Streaming_Replication.PNG){: width="400px"}
 
 #### 1.3. Pgpool-II
 
