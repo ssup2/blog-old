@@ -1,5 +1,5 @@
 ---
-title: RabbitMQ_Cluster
+title: RabbitMQ Cluster
 category: Theory, Analysis
 date: 2019-02-28T12:00:00Z
 lastmod: 2019-02-28T12:00:00Z
@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. RabbitMQ Cluster
 
-![]({{site.baseurl}}/images/theory_analysis/RabbitMQ_Cluster/Cluster.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/RabbitMQ_Cluster/Cluster.PNG)
 
 ### 2. 참조
 
