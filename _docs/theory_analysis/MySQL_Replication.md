@@ -81,8 +81,8 @@ Galera Cluster와 Group Replication의 Multi-primary Mode은 유사하지만 몇
 * Group Replication - [https://www.percona.com/live/17/sessions/everything-you-need-know-about-mysql-group-replication](https://www.percona.com/live/17/sessions/everything-you-need-know-about-mysql-group-replication)
 * Group Replication - [https://lefred.be/content/mysql-group-replication-synchronous-or-asynchronous-replication/](https://lefred.be/content/mysql-group-replication-synchronous-or-asynchronous-replication/)
 * Group Replicaiton - [https://scriptingmysql.wordpress.com/category/mysql-replication/](https://scriptingmysql.wordpress.com/category/mysql-replication/)
-* Group Replication - [https://blog.dshimizu.jp/article/475](https://blog.dshimizu.jp/article/475)
+* Group Replication - [https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-innodb-cluster.html](https://dev.mysql.com/doc/mysql-router/8.0/en/mysql-router-innodb-cluster.html)
 * Galera Cluster - [https://www.slideshare.net/MyDBOPS/galera-cluster-for-high-availability](https://www.slideshare.net/MyDBOPS/galera-cluster-for-high-availability)
-* Group Replication, Galera Cluster -  [https://www.percona.com/blog/2017/02/24/battle-for-synchronous-replication-in-mysql-galera-vs-group-replication/](https://www.percona.com/blog/2017/02/24/battle-for-synchronous-replication-in-mysql-galera-vs-group-replication/)
+* Group Replication, Galera Cluster - [https://www.percona.com/blog/2017/02/24/battle-for-synchronous-replication-in-mysql-galera-vs-group-replication/](https://www.percona.com/blog/2017/02/24/battle-for-synchronous-replication-in-mysql-galera-vs-group-replication/)
 * Group Replicaiton, Galera Cluster - [https://severalnines.com/resources/tutorials/mysql-load-balancing-haproxy-tutorial](https://severalnines.com/resources/tutorials/mysql-load-balancing-haproxy-tutorial)
 
