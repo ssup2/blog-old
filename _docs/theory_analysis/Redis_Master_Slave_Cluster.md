@@ -49,7 +49,7 @@ Cluster Client는 Redis Cluster와 처음 Connection을 맺을시 Redis Cluster�
 
 만약 Hashslot의 배치가 바뀌어 Cluster Client가 Read/Write 요청을 잘못된 Redis에게 전달하면, 요청을 받은 Redis는 요청을 처리할 수 있는 Redis의 접속 정보 및 **MOVED 명령어**를 전달하여 요청을 Redirection 한다. Cluster Client는 MOVED 명령어와 함께온 접속 정보를 바탕으로 요청을 처리할 수 있는 Redis에게 다시 요청을 전달한다. 예를들어 Slave Redis에게 Write 요청을 보내면 Slave Redis는 해당 요청을 처리 할 수 있는 Master Redis의 정보를 Cluster Client에게 넘겨준다. 일반적으로 Cluster Client는 MOVED 명령어를 받으면 Cluster로부터 Cluster 상태 정보를 다시 받아 Hashslot 및 Redis 접속 정보를 갱신한다. 이처럼 Cluster Client는 Redis Cluster로부터 얻은 상태 정보 및 MOVED 명령어를 처리 할 수 있어야하기 때문에, 기존의 Redis Master-slave Library를 그대로 이용하면 안되고 Redis Cluster를 위한 Library를 이용해야한다.
 
-일반적으로 Redis Cluster의 Slave Redis는 자신이 처리 할 수 있는 Read 요청을 받아도 자신의 Master에게 해당 Read 요청을 Redirection 한다. 오직 **READONLY** 명령어를 통해서 전달되는 Read 요청만 Slave Redis에서 처리한다.
+일반적으로 Redis Cluster의 Slave Redis는 자신이 처리 할 수 있는 Read 요청을 받아도 자신의 Master에게 해당 Read 요청을 Redirection 한다. 오직 **READONLY** 명령어를 Read Mode로 진입한 Client으로부터 오는 Read 요청만 Slave Redis에서 처리할 수 있다.
 
 #### 2.2. Cluster Proxy
 
