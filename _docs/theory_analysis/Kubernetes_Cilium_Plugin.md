@@ -51,6 +51,7 @@ Router는 Host Network Routing Rule뿐만 아니라 Container Network 관련 Rou
 
 ### 2. 참조
 
-* [https://docs.cilium.io/en/v1.3/concepts/](https://docs.cilium.io/en/v1.3/concepts/) 
+* [https://docs.cilium.io/en/v1.4/concepts/](https://docs.cilium.io/en/v1.4/concepts/) 
+* [https://docs.cilium.io/en/v1.4/architecture/](https://docs.cilium.io/en/v1.4/architecture/)
 * [https://github.com/cilium/cilium/tree/master/monitor](https://github.com/cilium/cilium/tree/master/monitor)
 * [https://ddiiwoong.github.io/2018/cilium-1/](https://ddiiwoong.github.io/2018/cilium-1/)
