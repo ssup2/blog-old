@@ -21,31 +21,33 @@ Cilium은 **BPF (Berkeley Packet Filter)**를 기반으로 Container Network를 
 
 * BPF - BPF는 Linux Kernel 안에서 Packet Routing 및 Filtering을 수행한다. BPF는 기존의 Linux Netfilter Framework 기반의 iptables에 비해서 낮은 Overhead 및 높은 성능이 가장 큰 장점이다. Cilium은 BPF 이용을 통해서 Netfilter Framework 사용을 최소화하여 Network 성능을 끌어올린다.
 
-#### 1.1. Network with VXLAN
+#### 1.1. Network
+
+Cilium은 Container Network를 구축하는 방법으로 VXLAN 기반의 기법과 Host Network를 그대로 이용하는 기법 2가지를 제공한다.
+
+##### 1.1.1. Network with VXLAN
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_VXLAN.PNG)
 
-Cilium은 Container Network를 구축하는 하나의 기법으로 VXLAN을 이용하는 기법을 제공한다. 위의 그림은 Cilium과 VXLAN을 이용하여 구축한 Container Network를 나타낸다. Host의 Network는 10.0.0.0/24이고, Container Network는 10.244.0.0/16이다.
+위의 그림은 Cilium과 VXLAN을 이용하여 구축한 Container Network를 나타낸다. Host의 Network는 10.0.0.0/24이고, Container Network는 10.244.0.0/16이다. Cilium은 etcd에 저장된 정보를 바탕으로 각 Host에 Container Network를 할당한다. 그림에서 Host 1은 192.167.2.0/24 Network가 할당되었다. 따라서 Host 1에 생긴 Container A의 IP는 192.167.2.0/24 Network에 속한 IP인 192.167.2.10을 이용한다. Host 2에는 192.167.3.0/24 Network가 할당되었기 때문에 Host 2에 생긴 Container B의 IP는 192.167.3.0/24 Network에 속한 IP인 192.167.3.10를 이용한다.
 
-Cilium은 etcd에 저장된 정보를 바탕으로 각 Host에 Container Network를 할당한다. 그림에서 Host 1은 192.167.2.0/24 Network가 할당되었다. 따라서 Host 1에 생긴 Container A의 IP는 192.167.2.0/24 Network에 속한 IP인 192.167.2.10을 이용한다. Host 2에는 192.167.3.0/24 Network가 할당되었기 때문에 Host 2에 생긴 Container B의 IP는 192.167.3.0/24 Network에 속한 IP인 192.167.3.10를 이용한다.
-
-Container Network 구축시 이용하는 BPF는 VXLAN Interface에 붙는 tc action ingress BPF, Container의 veth Interface에 붙는 tc action ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 tc action engress BPF, 3가지 BPF가 이용된다. VXLAN Interface에 붙는 tc action ingress BPF은 cilium-agent가 BPF Map에 저장한 Container의 IP, MAC 주소 정보를 Packet과 함께 L3 Network Stack에 넘겨, L3 Network Stack에서 Packet이 Container로 바로 Routing 되도록 한다.
-
-Container의 veth Interface에 붙는 tc action ingress BPF는 Packet이 Container로 전달되도 되는 Packet인지 확인 및 Packet Filtering을 수행한다. Cilium에서는 Container가 특정 Container로부터온 Packet만을 받을 수 있도록 설정하거나, Container가 특정 URL로 오는 요청만 받도록 설정 할 수 있다. 이러한 Packet Filtering 기능은 veth Interface에 붙는 tc action ingress BPF에서 이루어진다.
+Container Network 구축시 이용하는 BPF는 VXLAN Interface에 붙는 tc action ingress BPF, Container의 veth Interface에 붙는 tc action ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 tc action engress BPF, 3가지 BPF가 이용된다. VXLAN Interface에 붙는 tc action ingress BPF은 cilium-agent가 BPF Map에 저장한 Container의 IP, MAC 주소 정보를 Packet과 함께 L3 Network Stack에 넘겨, L3 Network Stack에서 Packet이 Container로 바로 Routing 되도록 한다. Container의 veth Interface에 붙는 tc action ingress BPF는 Packet이 Container로 전달되도 되는 Packet인지 확인 및 Packet Filtering을 수행한다. Cilium에서는 Container가 특정 Container로부터온 Packet만을 받을 수 있도록 설정하거나, Container가 특정 URL로 오는 요청만 받도록 설정 할 수 있다.
 
 Container에서 전송된 Packet은 Container의 veth Interface에서 나와 Note의 Routing Table로 전달된다. Note Routing Table에서는 모든 Container Network Packet이 cilium_host로 전달되도록 설정되어 있다. 따라서 Container에서 나온 Packet은 모두 cilium_host의 tc action engress BPF에게 Routing 된다. cilium_host의 tc action engress BPF에서는 동일 Host로 다시 전달 되어야하는 Packet은 해당 Contianer의 veth Interface로 Routing하고, 외부 Host로 전달 되어야하는 Packet은 VXLAN Interface로 Redirection되어 Host 밖으로 나간다.
 
-#### 1.2. Network with Host L3 Network
+##### 1.1.2. Network with Host L3 Network
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_Host.PNG)
 
-Cilium은 VXLAN 같은 Overlay Network를 이용하지 않고 Host L3 Network를 그대로 이용하는 기법도 제공한다. 위의 그림은 Host L3 Network를 이용하여 구축한 Container Network를 나타낸다. 각 Host에 할당된 Container Network, Host IP, Container IP는 VXLAN 기법의 예제와 동일하다.
-
-VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 tc action ingress BPF가 존재하지 않는다. Host의 Routing Table에는 각 Host에게 할당된 Container Network 관련 Rule만 있다. Host 1의 Routing Table에는 Host 1에 할당된 Container Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Container Network인 192.167.3.0/24 관련 Rule은 없다. 마지막으로 Host 사이에는 반드시 L3 Router가 존재한다.
+위의 그림은 Host L3 Network를 이용하여 구축한 Container Network를 나타낸다. 각 Host에 할당된 Container Network, Host IP, Container IP는 VXLAN 기법의 예제와 동일하다. VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 tc action ingress BPF가 존재하지 않는다. Host의 Routing Table에는 각 Host에게 할당된 Container Network 관련 Rule만 있다. Host 1의 Routing Table에는 Host 1에 할당된 Container Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Container Network인 192.167.3.0/24 관련 Rule은 없다. 마지막으로 Host 사이에는 반드시 L3 Router가 존재한다.
 
 Container에게 전달되어야 하는 Packet은 Host가 수신한 뒤 Host의 Routing Table에 따라서 cilium_host Interface로 전달된다. cilium_host의 tc action engress BPF에서는 Container의 veth로 Packet을 Routing하여 Container에게 Packet을 전달한다. Container로부터 전송된 Packet은 veth를 통해서 Host의 Routing Table에 전달되고, Packet의 목적지가 같은 Host에 있는 Container라면 cilium_host로 Routing되고 아니라면 eth0으로 Routing되어 Host 밖으로 전달된다. Host에서 나온 Packet은 Router에 의해서 적절한 Node로 Routing된다.
 
 Router는 Host Network Routing Rule뿐만 아니라 Container Network 관련 Routing Rule도 알고 있어야 한다. 위의 그림에서 Router는 192.167.2.0/24 Container Network를 Node 1로 Routing 및 192.167.3.0/24 Container Network를 Node 2로 Routing 하도록 설정되어 있어야 한다. 따라서 Host L3 Network 기법은 Host를 연결하는 Router를 자유롭게 제어가능한 환경에서만 적용이 가능하다.
+
+#### 1.2. Service Load Balancing
+
+#### 1.3. Service Filtering
 
 ### 2. 참조
 

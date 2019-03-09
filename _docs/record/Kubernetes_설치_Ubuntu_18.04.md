@@ -160,14 +160,15 @@ source <(kubectl completion bash)
 #### 4.3. 검증
 
 * Master Node에서 Cluster 확인
-  * 모든 Node가 Ready 상태가 되야한다.
+  * 모든 Node가 List에서 보여야 한다.
+  * Network 설정이 안되어 있기 때문에 NotReady 상태로 유지된다. Network Plugin 설치후 Ready 상태를 확인 가능하다.
 
 ~~~
 # kubectl get nodes
-NAME      STATUS   ROLES    AGE     VERSION
-node1     Ready    master   9m1s    v1.12.3
-node2     Ready    <none>   8m37s   v1.12.3
-node3     Ready    <none>   8m40s   v1.12.3
+NAME    STATUS     ROLES    AGE   VERSION
+node1   NotReady   master   84s   v1.12.3
+node2   NotReady   <none>   31s   v1.12.3
+node3   NotReady   <none>   27s   v1.12.3
 ~~~
 
 ### 5. Network Plugin 설치
