@@ -1,5 +1,5 @@
 ---
-title: Visual Studio Code 설치, 설정
+title: Visual Studio Code 설치, 설정, 사용 - Windows 10
 category: Record
 date: 2019-03-14T12:00:00Z
 lastmod: 2019-03-14T12:00:00Z

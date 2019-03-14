@@ -1,5 +1,5 @@
 ---
-title: Vim 설치, 설정, 사용법 - Ubuntu
+title: Vim 설치, 설정, 사용 - Ubuntu
 category: Record
 date: 2017-01-20T16:41:00Z
 lastmod: 2017-01-22T16:41:00Z
