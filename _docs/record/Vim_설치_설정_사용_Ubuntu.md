@@ -152,7 +152,7 @@ nnoremap <C-p> :YcmCompleter GoTo<CR>
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 nmap <Leader>C :ClangFormatAutoToggle<CR>
-let g:clang_format#auto_format=1
+let g:clang_format#auto_format = 0
 {% endhighlight %}
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치
