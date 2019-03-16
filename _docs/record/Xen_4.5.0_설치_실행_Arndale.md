@@ -29,7 +29,7 @@ adsense: true
 
 * Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 
-* /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용 추가
+* /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용을 추가하여 어떤 Directory에서라도 Compiler를 실행 할 수 있도록 만든다.
 
 ~~~
 PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
@@ -43,8 +43,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 4. U-boot Fusing
 
-* Download bl1 - http://releases.linaro.org/12.12/components/kernel/arndale-bl1/arndale-bl1.bin
-* spl, u-boot Download 및 빌드 Build 
+* spl, u-boot Download 및 Build 한다.
+  *  Download bl1 - http://releases.linaro.org/12.12/components/kernel/arndale-bl1/arndale-bl1.bin
 
 ~~~
 # git clone git://git.linaro.org/people/ronynandy/u-boot-arndale.git
@@ -55,7 +55,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # make arndale5250
 ~~~
 
-* bl1, spl, u-boot Fusing
+* bl1, spl, u-boot를 Fusing 한다.
 
 ~~~
 # dd if=arndale-bl1.bin of=/dev/sdb bs=512 seek=1
@@ -65,7 +65,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 5. Xen Build
 
-* Download
+* Xen을 Download 한다.
 
 ~~~
 # git clone git://xenbits.xen.org/xen.git xen-4.5.0
@@ -73,7 +73,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # git checkout RELEASE-4.5.0
 ~~~
 
-* Compile
+* Xen을 Compile 한다.
 
 ~~~
 # make dist-xen XEN_TARGET_ARCH=arm32 CROSS_COMPILE=arm-linux-gnueabihf-
@@ -82,7 +82,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 6. Dom0 Kernel Build
 
-* Download
+* Dom0용 Kernel을 Download 한다.
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
@@ -90,7 +90,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mv linux-3.18.3_Dom0
 ~~~
 
-* Configure
+* Dom0용 Kernel을 Configuration 한다.
 
 ~~~
 # make ARCH=arm exynos_defconfig
@@ -103,7 +103,7 @@ Device Drivers -> Network device support -> Xen backend network device <*>
 Networking support -> Networking options -> 802.1d Ethernet Bridging <M>
 ~~~
 
-* Compile
+* Dom0용 Kernel을 Compile 한다.
 
 ~~~
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage
@@ -112,7 +112,7 @@ Networking support -> Networking options -> 802.1d Ethernet Bridging <M>
 
 ### 7. DomU Kernel Build
 
-* Download
+* DomU용 Kernel을 Download 한다.
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
@@ -120,7 +120,7 @@ Networking support -> Networking options -> 802.1d Ethernet Bridging <M>
 # mv linux-3.18.3_DomU
 ~~~
 
-* Configure
+* DomU용 Kernel을 Configuration 한다.
 
 ~~~
 # make ARCH=arm exynos_defconfig
@@ -129,23 +129,27 @@ Networking support -> Networking options -> 802.1d Ethernet Bridging <M>
 Kernel Features -> Xen guest support on ARM <*>
 ~~~
 
-* Compile
+* DomU용 Kernel을 Compile 한다.
 
 ~~~
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage
 ~~~
 
-### 8. PXE Boot
+### 8. Boot
 
-#### 8.1. tftp Server 설치
+* PXE Boot 또는 uSD Card Boot 둘중에 하나를 선택하여 수행한다.
 
-* Ubuntu Package 설치
+#### 8.1. PXE Boot
+
+#### 8.1.1. tftp Server 설치
+
+* tftp Ubuntu Package 설치한다.
 
 ~~~
 # apt-get install xinetd tftp tftpd
 ~~~
 
-* /etc/xinetd.d/tftp 파일 설정
+* /etc/xinetd.d/tftp 파일을 설정한다.
 
 ~~~
 service tftp
@@ -163,7 +167,7 @@ service tftp
 }
 ~~~
 
-* tftp server Directory 생성
+* tftp server Directory 생성한다.
 
 ~~~
 # mkdir /tftpboot
@@ -171,7 +175,9 @@ service tftp
 # /etc/init.d/xinetd restart
 ~~~
 
-#### 8.2. tftp Server에 Binary 복사
+#### 8.1.2. tftp Server에 Binary 복사
+
+* 생성한 Binary들을 tfpt Server에 복사한다.
 
 ~~~
 # cd linux_Dom0
@@ -181,7 +187,9 @@ service tftp
 # cp xen-uImage /tftpboot
 ~~~
 
-#### 8.3 img 파일 생성
+#### 8.1.3 tftp Image 파일 생성
+
+* Booting을 위한 tfpt Image 파일을 생성한다.
 
 ~~~
 # cd /tftpboot
@@ -189,14 +197,15 @@ service tftp
 # mkimage -T script -C none -d load-xen-tftp.scr.txt /tftpboot/load-xen-tftp.img
 ~~~
 
-#### 8.4. Kernel Images, dtb, uSD Card Image 파일 복사 
+#### 8.1.4. tfpt Image 파일 복사 
 
-* linux-zImage, exynos5250-arndale.dtb, load-xen-uSD.img 파일을 uSD Card의 ext2 Partition에 복사
+* load-xen-tftp.img 파일을 uSD Card의 ext2 Partition에 복사한다.
 
-#### 8.5. U-boot 설정
+#### 8.1.5. U-boot 설정
 
-* board IP : 192.168.0.200
-* tftp Server (Host PC) : 192.168.0.100
+* U-boot를 설정한다.
+  * board IP : 192.168.0.200
+  * tftp Server (Host PC) : 192.168.0.100
 
 ~~~
 -> setenv ipaddr 192.168.0.200
@@ -214,9 +223,9 @@ service tftp
 -> save
 ~~~
 
-### 9. uSD Card Boot
+### 8.2. uSD Card Boot
 
-#### 9.1. load-xen-uSD.scr.txt 파일 생성 및 img 파일 생성 
+#### 8.2.1. load-xen-uSD.scr.txt 파일 생성 및 img 파일 생성 
 
 ~~~
 # wget http://xenbits.xen.org/people/julieng/load-xen-tftp.scr.txt
@@ -228,11 +237,13 @@ service tftp
 # mkimage -T script -C none -d load-xen-uSD.scr.txt /tftpboot/load-xen-uSD.img
 ~~~
 
-#### 9.2. Kernel Images, dtb, uSD Card Image 파일 복사
+#### 8.2.2. Kernel Images, dtb, uSD Card Image 파일 복사
 
-* linux-zImage, exynos5250-arndale.dtb, load-xen-uSD.img 파일을 uSD Card의 ext2 Partition에 복사
+* linux-zImage, exynos5250-arndale.dtb, load-xen-uSD.img 파일을 uSD Card의 ext2 Partition에 복사한다.
 
-#### 9.3. U-boot 설정 
+#### 8.2.3. U-boot 설정
+
+* U-boot를 설정한다.
 
 ~~~
 -> setenv xen_addr_r 0x50000000
@@ -248,16 +259,16 @@ service tftp
 -> save
 ~~~
 
-### 10. Xen Tool Build
+### 9. Xen Tool Build
 
-* sbuild, schroot 설치
+* sbuild와 schroot를 설치한다.
 
 ~~~
 # apt-get install sbuild
 # sbuild-adduser $USER
 ~~~
 
-* root 구성
+* root를 구성한다.
 
 ~~~
 # sbuild-createchroot --components=main,universe trusty /srv/chroots/trusty-armhf-cross http://archive.ubuntu.com/ubuntu/
@@ -267,7 +278,7 @@ service tftp
   - 수정 : description=Debian trusty/amd64 autobuilder -> description=Debian trusty/armhf crossbuilder
 ~~~
 
-* root 설정
+* root에 Package를 설치한다.
 
 ~~~
 # schroot -c trusty-armhf-cross
@@ -284,7 +295,7 @@ service tftp
 (schroot)# apt-get install libc6-dev:armhf libncurses-dev:armhf uuid-dev:armhf libglib2.0-dev:armhf libssl-dev:armhf libssl-dev:armhf libaio-dev:armhf libyajl-dev:armhf python gettext gcc git libpython2.7-dev:armhf libfdt-dev:armhf libpixman-1-dev:armhf
 ~~~
 
-* Xen Tool Build
+* Xen Tool을 Build한다.
 
 ~~~
 (schroot)# git clone -b RELEASE-4.5.0 git://xenbits.xen.org/xen.git xen-4.5.0
@@ -295,9 +306,9 @@ service tftp
 (schroot)# exit
 ~~~
 
-### 11. Root Filesystem Image 생성
+### 10. Root Filesystem Image 생성
 
-* Image 파일 생성 
+* Image 파일을 생성한다. 
 
 ~~~
 # dd if=/dev/zero bs=1M count=1024 of=rootfs_ori.img
@@ -305,7 +316,7 @@ service tftp
 # mount -o loop rootfs_ori.img /mnt
 ~~~
 
-* Root Filesystem 구성 
+* Root Filesystem을 구성한다. 
 
 ~~~
 # apt-get install debootstrap qemu-user-static binfmt-support
@@ -315,13 +326,13 @@ service tftp
 (chroot)# ./debootstrap/debootstrap --second-stage
 ~~~
 
-* root password 설정 
+* root password를 설정한다. 
 
 ~~~
 (chroot)# passwd
 ~~~
 
-* Network 설정
+* Network를 설정한다.
 
 ~~~
 (chroot)# vi /etc/network/interfaces
@@ -329,14 +340,14 @@ service tftp
      iface eth0 inet dhcp
 ~~~
 
-* Repository 설정 
+* Repository를 설정한다. 
 
 ~~~
 (chroot)# vi /etc/apt/sources.list
   -> deb http://ports.ubuntu.com/ trusty main 
 ~~~
 
-* getty 설정
+* getty를 설정한다.
 
 ~~~
 (chroot)# cp /etc/init/tty1.conf /etc/init/xvc0.conf
@@ -344,7 +355,7 @@ service tftp
   -> change 'exec /sbin/getty -8 38400 tty1' to 'exec /sbin/getty -8 115200 hvc0
 ~~~
 
-* fstab 설정
+* fstab을 설정한다.
 
 ~~~
 (chroot)# vi /etc/fstab
@@ -353,29 +364,29 @@ service tftp
 # umount /mnt
 ~~~
 
-### 12. Dom0 Root Filesystem 설정
+### 11. Dom0 Root Filesystem 설정
 
-* img 파일 복사
+* Root Img 파일을 복사한다.
 
 ~~~
 # cp rootfs_ori.img rootfs_Dom0.img
 # mount -o loop rootfs_Dom0.img /mnt
 ~~~
 
-* Xen Tool 복사 
+* Xen Tool을 복사한다. 
 
 ~~~
 # rsync -avp /srv/chroots/trusty-armhf-cross/root/xen-4.5.0/dist/install/ /mnt/
 ~~~
 
-* Kernel Module Compile 및 복사
+* Kernel Module Compile 및 복사를 수행한다.
 
 ~~~
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/mnt modules_install
 ~~~
 
-* insmod 설정
+* Default Kernel Module을 설정한다.
 
 ~~~
 # sudo chroot /mnt
@@ -385,7 +396,7 @@ service tftp
      bridge
 ~~~
 
-* Hostname 설정 
+* Hostname을 설정한다. 
 
 ~~~
 (chroot)# vi /etc/hostname
@@ -394,9 +405,9 @@ service tftp
 # umount /mnt
 ~~~
 
-### 13. DomU_01 Root Filesystem 설정
+### 12. DomU_01 Root Filesystem 설정
 
-* img 파일 복사
+* img 파일을 복사한다.
 
 ~~~
 # cp rootfs_ori.img rootfs_DomU_01.img
@@ -404,7 +415,7 @@ service tftp
 # cd /mnt/dev
 ~~~
 
-* xvdX Device Node 생성
+* xvdX Device Node를 생성한다.
 
 ~~~
 # mknod xvda b 202 0
@@ -417,14 +428,14 @@ service tftp
 # mknod xvdh b 202 112
 ~~~
 
-* Hostname 설정
+* Hostname을 설정한다.
 
 ~~~
 (chroot)# vi /mnt/etc/hostname
   -> DomU01
 ~~~
 
-* Network 설정
+* Network를 설정한다.
 
 ~~~
 # vim  /mnt/etc/network/interfaces
@@ -437,23 +448,23 @@ service tftp
 # umount /mnt
 ~~~
 
-### 14. DomU_02 Root Filesystem 설정
+### 13. DomU_02 Root Filesystem 설정
 
-* img 파일 복사
+* img 파일을 복사한다.
 
 ~~~
 # cp rootfs_DomU_01.img rootfs_DomU_02.img
 # mount -o loop rootfs_DomU_02.img /mnt
 ~~~
 
-* Hostname 설정
+* Hostname을 설정한다.
 
 ~~~
 (chroot)# vi /mnt/etc/hostname
   -> DomU02
 ~~~
 
-* Network 설정
+* Network를 설정한다.
 
 ~~~
 # vim  /mnt/etc/network/interfaces
@@ -466,7 +477,7 @@ service tftp
 # umount /mnt
 ~~~
 
-### 15. zImage, Root Filesystem 복사
+### 14. zImage, Root Filesystem 복사
 
 ~~~
 # mount -o loop rootfs_Dom0.img /mnt
@@ -477,9 +488,9 @@ service tftp
 # umount /mnt
 ~~~
 
-### 16. Dom0에서 Ubuntu Package 설치
+### 15. Dom0에서 Ubuntu Package 설치
 
-* uSD Card를 Arndale Board에 넣고 Booting하여 Dom0에 진입후 아래의 명령어 수행
+* uSD Card를 Arndale Board에 넣고 Booting하여 Dom0에 진입후 아래의 명령어를 수행한다.
 
 ~~~
 (Dom0)# apt-get install libyajl-dev
@@ -491,9 +502,9 @@ service tftp
 (Dom0)# apt-get install bridge-utils
 ~~~
 
-### 17. DomU Config 파일 생성
+### 16. DomU Config 파일 생성
 
-* DomU_01 Config
+* DomU_01 Config 파일을 생성한다.
 
 ~~~
 (Dom0)# vim DomU_01.cfg
@@ -506,7 +517,7 @@ service tftp
    extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
 ~~~
 
-* DomU_02 Config 
+* DomU_02 Config 파일을 생성한다.
 
 ~~~
 (Dom0)# vim DomU_02.cfg
@@ -519,9 +530,9 @@ service tftp
    extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
 ~~~
 
-### 18. DomU 구동
+### 17. DomU 구동
 
-* Xencommons 구동 및 Bridge 생성 
+* Xencommons 구동 및 Bridge 생성한다.
 
 ~~~
 (Dom0)# /etc/init.d/xencommons start
@@ -532,7 +543,7 @@ service tftp
 (Dom0)# route add default gw 192.168.0.1 xenbr0
 ~~~
 
-* DomU 구동
+* DomU 구동한다.
 
 ~~~
 (Dom0)# losetup /dev/loop0 rootfs_DomU_01.img                                           
@@ -541,7 +552,7 @@ service tftp
 (Dom0)# xl create DomU_02.cfg
 ~~~
 
-### 19. 참조
+### 18. 참조
 
 * [http://wiki.xenproject.org/wiki/Xen_ARMv7_with_Virtualization_Extensions/Arndale](http://wiki.xenproject.org/wiki/Xen_ARMv7_with_Virtualization_Extensions/Arndale)
 * [http://wiki.xenproject.org/wiki/Xen_ARMv7_with_Virtualization_Extensions#Building_Xen_on_ARM](http://wiki.xenproject.org/wiki/Xen_ARMv7_with_Virtualization_Extensions#Building_Xen_on_ARM)

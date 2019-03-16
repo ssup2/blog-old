@@ -23,7 +23,7 @@ adsense: true
 
 #### 2.1. Ubuntu
 
-* bpftool Build시 필요한 Library 설치
+* bpftool Build시 필요한 Library를 설치한다.
 
 ~~~
 # apt-get install binutils-dev
@@ -32,7 +32,7 @@ adsense: true
 
 #### 2.2. CentOS
 
-* bpftool Build시 필요한 Library 설치
+* bpftool Build시 필요한 Library를 설치한다.
 
 ~~~
 # yum install binutils-devel
@@ -41,8 +41,8 @@ adsense: true
 
 ### 3. bpftool Build & 설치
 
-* 현재 Ubuntu Package로 제공되지 않고 있기 때문에 Kernel Code를 받아 직접 bpftool Build 수행.
-* bfptool의 net, perf Opiton 이용을 위해서 **v4.20 이상의 Kernel Version** 필요
+* 현재 Ubuntu Package로 제공되지 않고 있기 때문에 Kernel Code를 받아 직접 bpftool Build 수행한다.
+* bfptool의 net, perf Opiton 이용을 위해서 **v4.20 이상의 Kernel Version**이 필요하다.
 
 ~~~
 # git clone https://github.com/torvalds/linux.git
@@ -50,7 +50,7 @@ adsense: true
 # git checkout v4.20
 ~~~
 
-* bpftool Build
+* bpftool를 Build 한다.
 
 ~~~
 # make -C tools/bpf/bpftool/
@@ -59,7 +59,7 @@ adsense: true
 
 #### 3.1. Compile Error 해결
 
-* linux/if.h와 net/if.h의 충돌로 인한 Compile Error 발생 시
+* linux/if.h와 net/if.h의 충돌로 인한 Compile Error 발생시 아래와 같은 증상이 나타난다.
 
 ~~~
 # make -C tools/bpf/bpftool/
@@ -78,7 +78,7 @@ adsense: true
 ...
 ~~~
 
-* tools/bpf/bpftool/net.c 파일을 아래와 같이 수정
+* tools/bpf/bpftool/net.c 파일을 아래와 같이 수정한다.
 
 ~~~
 ...

@@ -1,5 +1,5 @@
 ---
-title: mutt Gmail 설치, 사용 - Ubuntu
+title: mutt Gmail 설치, 사용법 - Ubuntu
 category: Record
 date: 2018-05-28T00:00:00Z
 lastmod: 2018-05-28T00:00:00Z
@@ -13,6 +13,8 @@ adsense: true
 
 ### 2. mutt 설치
 
+* mutt Package를 설치한다.
+
 ~~~
 # sudo apt-get install mutt
 ~~~
@@ -24,7 +26,7 @@ adsense: true
 
 ### 4. mutt 설정
 
-* mutt 관련 폴더, 파일 생성
+* mutt 관련 폴더, 파일을 생성한다.
 
 ~~~
 # mkdir -p ~/Mail
@@ -33,7 +35,7 @@ adsense: true
 # chown root:mail /var/mail/root
 ~~~
 
-* ~/.muttrc 파일 설정
+* ~/.muttrc 파일을 설정한다.
 
 ~~~
 set realname = "<first and last name>"
@@ -58,7 +60,7 @@ set record = ''
 
 ### 5. 사용법
 
-* mutt 실행
+* mutt을 실행한다.
 
 ~~~
 # mutt
@@ -69,4 +71,5 @@ set record = ''
   * G - Fetch new messages.
 
 ### 6. 참조
+
 * [http://nickdesaulniers.github.io/blog/2016/06/18/mutt-gmail-ubuntu/](http://nickdesaulniers.github.io/blog/2016/06/18/mutt-gmail-ubuntu/)

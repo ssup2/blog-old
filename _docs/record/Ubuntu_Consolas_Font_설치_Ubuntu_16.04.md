@@ -13,7 +13,7 @@ adsense: true
 
 ### 2. Ubuntu Package 설치
 
-* font-manager 설치
+* font-manager를 설치한다.
 
 ~~~
 # apt-get install font-manager
@@ -22,13 +22,14 @@ adsense: true
 
 ### 3. Consolas Download Script 생성 및 설치
 
-* consolas.sh 파일 생성 및 편집
+* consolas.sh 파일을 생성 및 편집한다.
 
 ~~~
 # vim consolas.sh
 ~~~
 
-* 아래의 내용을 vim consolas.sh에 복사
+* 아래의 내용을 vim consolas.sh에 복사한다.
+
 {% highlight shell %}
 #!/bin/sh
 set -e
@@ -40,7 +41,7 @@ cabextract -L -F ppviewer.cab PowerPointViewer.exe
 cabextract ppviewer.cab
 {% endhighlight %}
 
-* consolas.sh 실행
+* consolas.sh을 실행한다.
 
 ~~~
 # chmod +x consolas.sh
@@ -49,7 +50,7 @@ cabextract ppviewer.cab
 
 ### 4. Consolas Font 설치
 
-* font-manager 실행
+* font-manager 실행한다.
 
 ~~~
 # font-manager

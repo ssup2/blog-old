@@ -39,7 +39,7 @@ adsense: true
 
 ##### 2.1.1. Network 설정
 
-* /etc/hosts에 다음의 내용 추가
+* /etc/hosts에 다음의 내용을 추가한다.
 
 ~~~
 # controller
@@ -54,14 +54,14 @@ adsense: true
 
 ##### 2.1.1. OpenStack Package 설치
 
-* OpenStack Package 저장소 추가
+* OpenStack Package 저장소를 추가한다.
 
 ~~~
 # apt install software-properties-common
 # add-apt-repository cloud-archive:newton
 ~~~
 
-* OpenStack Package 설치
+* OpenStack Package를 설치한다.
 
 ~~~
 # apt update && apt dist-upgrade
@@ -72,7 +72,7 @@ adsense: true
 
 ##### 2.2.1. Network 설정
 
-* /etc/network/interfaces을 다음과 같이 수정
+* /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -99,13 +99,13 @@ dns-nameservers 8.8.8.8
 
 ##### 2.2.2. NTP (Network Time Protocol) 설정
 
-* chrony Package 설치
+* chrony Package를 설치한다.
 
 ~~~
 # apt install chrony
 ~~~
 
-* /etc/chrony/chrony.conf에 다음의 내용 추가
+* /etc/chrony/chrony.conf에 다음의 내용 추가한다.
 
 ~~~
 server 0.asia.pool.ntp.org
@@ -116,7 +116,7 @@ server 3.asia.pool.ntp.org
 allow 10.0.0.0/24
 ~~~
 
-* chrony 재시작
+* chrony를 재시작한다.
 
 ~~~
 # service chrony restart
@@ -124,13 +124,13 @@ allow 10.0.0.0/24
 
 ##### 2.2.3. SQL Database 설치
 
-* MariaDB Package 설치
+* MariaDB Package를 설치한다.
 
 ~~~
 # apt install mariadb-server python-pymysql
 ~~~
 
-* /etc/mysql/mariadb.conf.d/99-openstack.cnf 생성 및 다음과 같이 수정
+* /etc/mysql/mariadb.conf.d/99-openstack.cnf 생성 및 다음과 같이 수정한다.
 
 ~~~
 [mysqld]
@@ -143,7 +143,7 @@ collation-server = utf8_general_ci
 character-set-server = utf8
 ~~~
 
-* MariaDB 재시작
+* MariaDB를 재시작한다.
 
 ~~~
 # service mysql restart
@@ -151,13 +151,13 @@ character-set-server = utf8
 
 ##### 2.2.4. Message Queue 설치
 
-* RabbitMQ Package 설치
+* RabbitMQ Package를 설치한다.
 
 ~~~
 # apt install rabbitmq-server
 ~~~
 
-* RabbitMQ 설정
+* RabbitMQ를 설정한다.
 
 ~~~
 # rabbitmqctl add_user openstack root
@@ -166,13 +166,13 @@ character-set-server = utf8
 
 ##### 2.2.5. Memcached 설치
 
-* Memcached Package 설치
+* Memcached Package를 설치한다.
 
 ~~~
 # apt install memcached python-memcache
 ~~~
 
-* /etc/memcached.conf에 다음의 내용 추가
+* /etc/memcached.conf에 다음의 내용을 추가한다.
 
 ~~~
 -l 10.0.0.11
@@ -180,7 +180,7 @@ character-set-server = utf8
 
 ##### 2.2.6. 환경 변수 파일 생성
 
-* /root/admin-openrc 생성 및 다음과 같이 수정
+* /root/admin-openrc 생성 및 다음과 같이 수정한다.
 
 ~~~
 export OS_PROJECT_DOMAIN_NAME=Default
@@ -193,7 +193,7 @@ export OS_IDENTITY_API_VERSION=3
 export OS_IMAGE_API_VERSION=2
 ~~~
 
-* /root/demo-openrc 생성 및 다음과 같이 수정
+* /root/demo-openrc 생성 및 다음과 같이 수정한다.
 
 ~~~
 export OS_PROJECT_DOMAIN_NAME=Default
@@ -210,7 +210,7 @@ export OS_IMAGE_API_VERSION=2
 
 ##### 2.3.1. Network 설정
 
-* /etc/network/interfaces을 다음과 같이 수정
+* /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -237,19 +237,19 @@ dns-nameservers 8.8.8.8
 
 ##### 2.3.2. NTP (Network Time Protocol) 설정
 
-* chrony Package 설치
+* chrony Package를 설치한다.
 
 ~~~
 # apt install chrony
 ~~~
 
-* /etc/chrony/chrony.conf에 다음의 내용 추가
+* /etc/chrony/chrony.conf에 다음의 내용 추가한다.
 
 ~~~
 server controller iburst
 ~~~
 
-* chrony 재시작
+* chrony를 재시작한다.
 
 ~~~
 # service chrony restart
@@ -259,7 +259,7 @@ server controller iburst
 
 ##### 2.4.1, Network 설정
 
-* /etc/network/interfaces을 다음과 같이 수정
+* /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -279,19 +279,19 @@ dns-nameservers 8.8.8.8
 
 ##### 2.4.2. NTP (Network Time Protocol) 설정
 
-* chrony Package 설치
+* chrony Package를 설치한다.
 
 ~~~
 # apt install chrony
 ~~~
 
-* /etc/chrony/chrony.conf에 다음의 내용 추가
+* /etc/chrony/chrony.conf에 다음의 내용 추가한다.
 
 ~~~
 server controller iburst
 ~~~
 
-* chrony 재시작
+* chrony를 재시작한다.
 
 ~~~
 # service chrony restart
@@ -301,7 +301,7 @@ server controller iburst
 
 #### 3.1. Controller Node
 
-* Keystone DB 초기화
+* Keystone DB를 초기화한다.
 
 ~~~
 # mysql -u root -p
@@ -312,13 +312,13 @@ mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED B
 mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'root';
 mysql> exit;
 
-* Keystone Package 설치
+* Keystone Package를 설치한다.
 
 ~~~
 # apt install keystone
 ~~~
 
-* /etc/keystone/keystone.conf에 다음의 내용을 추가
+* /etc/keystone/keystone.conf에 다음의 내용을 추가한다.
 
 ~~~
 [database]
@@ -328,7 +328,7 @@ connection = mysql+pymysql://keystone:root@controller/keystone
 provider = fernet
 ~~~
 
-* Keystone 설정
+* Keystone을 설정한다.
 
 ~~~
 # su -s /bin/sh -c "keystone-manage db_sync" keystone
@@ -337,20 +337,20 @@ provider = fernet
 # keystone-manage bootstrap --bootstrap-password root --bootstrap-admin-url http://controller:35357/v3/ --bootstrap-internal-url http://controller:35357/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne
 ~~~
 
-* /etc/apache2/apache2.conf에 다음의 내용 추가
+* /etc/apache2/apache2.conf에 다음의 내용 추가한다.
 
 ~~~
 ServerName controller
 ~~~
 
-* Apache HTTP Server 재시작 및 DB 제거
+* Apache HTTP Server 재시작 및 DB 제거한다.
 
 ~~~
 # service apache2 restart
 # rm -f /var/lib/keystone/keystone.db
 ~~~
 
-* 환경 변수 설정
+* 환경 변수를 설정한다.
 
 ~~~
 # export OS_USERNAME=admin
@@ -362,7 +362,7 @@ ServerName controller
 # export OS_IDENTITY_API_VERSION=3
 ~~~
 
-* Project, User, Role 생성 및 설정
+* Project, User, Role 생성 및 설정한다.
 
 ~~~
 # openstack project create --domain default --description "Service Project" service
@@ -374,7 +374,7 @@ ServerName controller
 
 #### 3.2. 검증
 
-* Controller Node에서 Keystone 동작 확인
+* Controller Node에서 Keystone의 동작 확인한다.
 
 ~~~
 # openstack --os-auth-url http://controller:35357/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin token issue
@@ -408,7 +408,7 @@ ServerName controller
 
 #### 4.1. Controller Node
 
-* Glance DB 초기화
+* Glance DB를 초기화한다.
 
 ~~~
 # mysql -u root -p
@@ -418,7 +418,7 @@ mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'root';
 mysql> exit;
 ~~~
 
-* Glance User 생성 및 설정
+* Glance User 생성 및 설정한다.
 
 ~~~
 # . /root/admin-openrc
@@ -427,7 +427,7 @@ mysql> exit;
 # openstack service create --name glance --description "OpenStack Image" image
 ~~~
 
-* Glance Service API Endpoint 생성
+* Glance Service API Endpoint를 생성한다.
 
 ~~~
 # openstack endpoint create --region RegionOne image public http://controller:9292
@@ -435,13 +435,13 @@ mysql> exit;
 # openstack endpoint create --region RegionOne image admin http://controller:9292
 ~~~
 
-* Glance Package 설치
+* Glance Package 설치를 설치한다.
 
 ~~~
 # apt install glance
 ~~~
 
-* /etc/glance/glance-api.conf에 다음의 내용을 추가
+* /etc/glance/glance-api.conf에 다음의 내용을 추가한다.
 
 ~~~
 [database]
@@ -467,7 +467,7 @@ default_store = file
 filesystem_store_datadir = /var/lib/glance/images/
 ~~~
 
-* /etc/glance/glance-registry.conf에 다음의 내용을 추가
+* /etc/glance/glance-registry.conf에 다음의 내용을 추가한다.
 
 ~~~
 [database]
@@ -488,7 +488,7 @@ password = root
 flavor = keystone
 ~~~
 
-* Glance 설정 및 시작
+* Glance를 설정 및 시작한다.
 
 ~~~
 # su -s /bin/sh -c "glance-manage db_sync" glance
@@ -498,7 +498,7 @@ flavor = keystone
 
 #### 4.2. 검증
 
-* Controller Node에서 Glance 동작 확인
+* Controller Node에서 Glance의 동작을 확인한다.
 
 ~~~
 # . /root/admin-openrc
@@ -516,7 +516,7 @@ flavor = keystone
 
 #### 5.1. Controller Node
 
-* Nova DB 초기화
+* Nova DB를 초기화 한다.
 
 ~~~
 # mysql -u root -p
@@ -529,7 +529,7 @@ mysql> GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'root';
 mysql> exit;
 ~~~
 
-* Nova User 생성 및 설정
+* Nova User를 생성 및 설정한다.
 
 ~~~
 # . /root/admin-openrc
@@ -538,7 +538,7 @@ mysql> exit;
 # openstack service create --name nova --description "OpenStack Compute" compute
 ~~~
 
-* Nova Service API Endpoint 생성
+* Nova Service API Endpoint를 생성한다.
 
 ~~~
 # openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s
@@ -546,14 +546,14 @@ mysql> exit;
 # openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
 ~~~
 
-* Nova Package 설치
+* Nova Package를 설치한다.
 
 ~~~
 # apt install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 # mkdir /usr/lib/python2.7/dist-packages/keys
 ~~~
 
-* /etc/nova/nova.conf에 다음의 내용을 추가
+* /etc/nova/nova.conf에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -591,7 +591,7 @@ api_servers = http://controller:9292
 lock_path = /var/lib/nova/tmp
 ~~~
 
-* Nova 설정 및 시작
+* Nova를 설정 및 시작한다.
 
 ~~~
 # su -s /bin/sh -c "nova-manage api_db sync" nova
@@ -605,13 +605,13 @@ lock_path = /var/lib/nova/tmp
 
 #### 5.2. Compute Node
 
-* Nova Package 설치
+* Nova Package를 설치한다.
 
 ~~~
 # apt install nova-compute
 ~~~
 
-* /etc/nova/nova.conf에 다음의 내용을 추가
+* /etc/nova/nova.conf에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -648,7 +648,7 @@ lock_path = /var/lib/nova/tmp
 
 * 현재 VirtualBox의 VM은 CPU의 Intel의 VT-X같은 Virtualization Extension을 이용하지 못한다. 따라서 Compute Node는 KVM+QEMU 조합의 가상 머신을 이용하지 못하고 QEMU만을 이용하여 가상 머신을 구동한다.
 
-* /etc/nova/nova-compute.conf을 다음과 같이 수정
+* /etc/nova/nova-compute.conf을 다음과 같이 수정한다.
 
 ~~~
 [DEFAULT]
@@ -657,7 +657,7 @@ compute_driver=libvirt.LibvirtDriver
 virt_type=qemu
 ~~~
 
-* Nova 시작
+* Nova를 시작한다.
 
 ~~~
 # service nova-compute restart
@@ -665,7 +665,7 @@ virt_type=qemu
 
 #### 5.3. 검증
 
-* Controller Node에서 Nova 동작 확인
+* Controller Node에서 Nova의 동작을 확인한다.
 
 ~~~
 # . /root/admin-openrc
@@ -684,7 +684,7 @@ virt_type=qemu
 
 #### 6.1. Controller Node
 
-* Neutron DB 초기화
+* Neutron DB를 초기화 한다.
 
 ~~~
 # mysql -u root -p
@@ -694,7 +694,7 @@ mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'root';
 mysql> exit;
 ~~~
 
-* Neutron User 생성 및 설정
+* Neutron User를 생성 및 설정한다.
 
 ~~~
 # . /root/admin-openrc
@@ -703,7 +703,7 @@ mysql> exit;
 # openstack service create --name neutron --description "OpenStack Networking" network
 ~~~
 
-* Neutron Service API Endpoint 생성
+* Neutron Service API Endpoint를 생성한다.
 
 ~~~
 # openstack endpoint create --region RegionOne network public http://controller:9696
@@ -711,13 +711,13 @@ mysql> exit;
 # openstack endpoint create --region RegionOne network admin http://controller:9696
 ~~~
 
-* Neutron Package 설치
+* Neutron Package를 설치한다.
 
 ~~~
 # apt install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
 ~~~
 
-* /etc/neutron/neutron.conf에 다음의 내용을 추가
+* /etc/neutron/neutron.conf에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -754,7 +754,7 @@ username = nova
 password = root
 ~~~
 
-* /etc/neutron/plugins/ml2/ml2_conf.ini에 다음의 내용을 추가
+* /etc/neutron/plugins/ml2/ml2_conf.ini에 다음의 내용을 추가한다.
 
 ~~~
 [ml2]
@@ -773,7 +773,7 @@ vni_ranges = 1:1000
 enable_ipset = True
 ~~~
 
-* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가
+* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가한다.
 
 ~~~
 [linux_bridge]
@@ -789,14 +789,14 @@ enable_security_group = True
 firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 ~~~
 
-* /etc/neutron/l3_agent.ini에 다음의 내용을 추가
+* /etc/neutron/l3_agent.ini에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
 interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
 ~~~
 
-* /etc/neutron/dhcp_agent.ini에 다음의 내용을 추가
+* /etc/neutron/dhcp_agent.ini에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -805,7 +805,7 @@ dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
 enable_isolated_metadata = True
 ~~~
 
-* /etc/neutron/metadata_agent.ini에 다음의 내용을 추가
+* /etc/neutron/metadata_agent.ini에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -813,7 +813,7 @@ nova_metadata_ip = controller
 metadata_proxy_shared_secret = root
 ~~~
 
-* /etc/nova/nova.conf에 다음의 내용을 추가
+* /etc/nova/nova.conf에 다음의 내용을 추가한다.
 
 ~~~
 [neutron]
@@ -830,7 +830,7 @@ service_metadata_proxy = True
 metadata_proxy_shared_secret = root
 ~~~
 
-* Neutron 시작
+* Neutron를 시작한다.
 
 ~~~
 # su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
@@ -844,13 +844,13 @@ metadata_proxy_shared_secret = root
 
 #### 6.2. Compute Node
 
-* Neutron Package 설치
+* Neutron Package를 설치한다.
 
 ~~~
 # apt install neutron-linuxbridge-agent
 ~~~
 
-* /etc/neutron/neutron.conf에 다음의 내용 추가
+* /etc/neutron/neutron.conf에 다음의 내용 추가한다.
 
 ~~~
 [DEFAULT]
@@ -869,7 +869,7 @@ username = neutron
 password = root
 ~~~
 
-* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가
+* /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 다음의 내용을 추가한다.
 
 ~~~
 [linux_bridge]
@@ -885,7 +885,7 @@ enable_security_group = True
 firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 ~~~
 
-* /etc/nova/nova.conf에 다음의 내용을 추가
+* /etc/nova/nova.conf에 다음의 내용을 추가한다.
 
 ~~~
 [neutron]
@@ -900,7 +900,7 @@ username = neutron
 password = root
 ~~~
 
-* Neutron 시작
+* Neutron를 시작한다.
 
 ~~~
 # service nova-compute restart
@@ -909,7 +909,7 @@ password = root
 
 #### 6.3. 검증
 
-* Compute Node에서 Neutron 동작 확인
+* Compute Node에서 Neutron의 동작을 확인한다.
 
 ~~~
 # . /root/admin-openrc
@@ -956,13 +956,13 @@ password = root
 
 #### 7.1. Controller Node
 
-* Horizon Package 설치
+* Horizon Package를 설치한다.
 
 ~~~
 # apt install openstack-dashboard
 ~~~
 
-* /etc/openstack-dashboard/local_settings.py에 다음과 같이 수정
+* /etc/openstack-dashboard/local_settings.py에 다음과 같이 수정한다.
 
 ~~~
 OPENSTACK_HOST = "127.0.0.1"
@@ -998,7 +998,7 @@ TIME_ZONE = "UTC"
 TIME_ZONE = "Asia/Seoul"
 ~~~
 
-* /etc/openstack-dashboard/local_settings.py에 다음의 내용 추가
+* /etc/openstack-dashboard/local_settings.py에 다음의 내용 추가한다.
 
 ~~~
 OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
@@ -1018,14 +1018,14 @@ OPENSTACK_API_VERSIONS = {
 
 #### 7.2. 검증
 
-* Web Brower를 통해 http://192.168.77.170/horizon 접속
+* Web Brower를 통해 [http://192.168.77.170/horizon](http://192.168.77.170/horizon)에 접속한다.
   * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 8. Cinder 설치
 
 #### 8.1. Compute Node
 
-* /etc/nova.nova.conf에 다음의 내용을 추가
+* /etc/nova.nova.conf에 다음의 내용을 추가한다.
 
 ~~~
 [cinder]
@@ -1034,7 +1034,7 @@ os_region_name = RegionOne
 
 #### 8.2. Controller Node
 
-* Cinder DB 초기화
+* Cinder DB를 초기화한다.
 
 ~~~
 # mysql -u root -p
@@ -1044,7 +1044,7 @@ mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root';
 > exit;
 ~~~
 
-* Cinder User 생성 및 설정
+* Cinder User를 생성 및 설정한다.
 
 ~~~
 # . admin-openrc
@@ -1054,7 +1054,7 @@ mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root';
 # openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
 ~~~
 
-* Cinder Service API Endpoint 생성
+* Cinder Service API Endpoint를 생성한다.
 
 ~~~
 # openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
@@ -1065,14 +1065,14 @@ mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root';
 # openstack endpoint create --region RegionOne volumev2 admin http://controller:8776/v2/%\(tenant_id\)s
 ~~~
 
-* Cinder Package 설치
+* Cinder Package를 설치한다.
 
 ~~~
 # su -s /bin/sh -c "cinder-manage db sync" cinder
 # apt install cinder-api cinder-scheduler
 ~~~
 
-* /etc/cinder/cinder.conf에 다음의 내용을 추가
+* /etc/cinder/cinder.conf에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -1098,7 +1098,7 @@ password = root
 lock_path = /var/lib/cinder/tmp
 ~~~
 
-* Cinder 시작
+* Cinder를 시작한다.
 
 ~~~
 # service nova-api restart
@@ -1108,7 +1108,7 @@ lock_path = /var/lib/cinder/tmp
 
 #### 8.3. Storage Node
 
-* LVM 설치 및 설정
+* LVM를 설치 및 설정한다.
 
 ~~~
 # apt install lvm2
@@ -1116,7 +1116,7 @@ lock_path = /var/lib/cinder/tmp
 # vgcreate cinder-volumes /dev/sdb
 ~~~
 
-* /etc/lvm/lvm.conf에 아래의 내용 추가
+* /etc/lvm/lvm.conf에 아래의 내용을 추가한다.
 
 ~~~
 devices {
@@ -1125,13 +1125,13 @@ filter = [ "a/sdb/", "r/.*/"]
 }
 ~~~
 
-* Cinder Package 설치
+* Cinder Package를 설치한다.
 
 ~~~
 # apt install cinder-volume
 ~~~
 
-* /etc/cinder/cinder.conf에 다음의 내용을 추가
+* /etc/cinder/cinder.conf에 다음의 내용을 추가한다.
 
 ~~~
 [DEFAULT]
@@ -1165,7 +1165,7 @@ iscsi_helper = tgtadm
 lock_path = /var/lib/cinder/tmp
 ~~~
 
-* Cinder 시작
+* Cinder를 시작한다.
 
 ~~~
 # service tgt restart
@@ -1174,7 +1174,7 @@ lock_path = /var/lib/cinder/tmp
 
 #### 8.4. 검증
 
-* Controller Node에서 Cinder 동작 확인
+* Controller Node에서 Cinder의 동작 확인한다.
 
 ~~~
 # . admin-openrc
@@ -1189,13 +1189,13 @@ lock_path = /var/lib/cinder/tmp
 
 ### 9. OpenStack Newton 구동
 
-* Web Brower PC의 /etc/hosts파일에 아래 내용 추가
+* Web Brower PC의 /etc/hosts파일에 아래의 내용을 추가한다.
 
 ~~~
 192.168.77.170    controller
 ~~~
 
-* Web Brower를 통해 http://controller/horizon 접속
+* Web Brower를 통해 [http://controller/horizon](http://controller/horizon)에 접속한다.
   * Login - Domain : default, 사용자 이름 - admin, 암호 - root
 
 ### 10. 참조

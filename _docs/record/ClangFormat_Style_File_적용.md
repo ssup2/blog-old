@@ -8,7 +8,12 @@ adsense: true
 ---
 
 ### 1. Style File
+
+* ClangForamt은 Style 파일을 통해서 Format 형태를 설정할 수 있다.
+
 #### 1.1. Ssup2's Cpp Sytle
+
+* Project Root 폴더에 **.clang-format** 이름으로 아래의 Style File 생성한다.
 
 ~~~
 ---
@@ -110,8 +115,7 @@ UseTab:          Always
 
 ### 2. Style 적용
 
-* Project Root 폴더에 **.clang-format** 이름으로 위의 Style File 생성
-* 아래의 명령어를 Project Root 폴더에서 실행
+* 아래의 명령어를 Project Root 폴더에서 실행한다.
 
 ~~~
 # find -name '*.c' -o -name '*.cc' -o -name '*.h' | xargs clang-format

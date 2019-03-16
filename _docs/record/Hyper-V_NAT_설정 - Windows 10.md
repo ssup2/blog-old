@@ -19,7 +19,7 @@ adsense: true
 
 ### 2. Switch 생성 및 NAT 설정
 
-* Powershell 관리자 권한에서 아래의 명령어 수행
+* Powershell 관리자 권한에서 아래의 명령어 수행한다.
 
 ~~~
 > New-VMSwitch -SwitchName "NAT-Swtich" -SwitchType Internal
@@ -30,10 +30,10 @@ adsense: true
 
 ### 3. VM
 
-* NAT로 구성한 Network 안에는 DHCP Server가 없기 때문에 수동으로 IP 설정 필요.
-  * /etc/netplan/50-cloud-init.yaml 파일에 아래와 같이 설정
+* NAT로 구성한 Network 안에는 DHCP Server가 없기 때문에 수동으로 IP 설정이 필요하다.
+  * /etc/netplan/50-cloud-init.yaml 파일에 아래와 같이 설정한다.
 
-~~~
+{% highlight CPP linenos  %}
 # This file is generated from information provided by
 # the datasource.  Changes to it will not persist across an instance.
 # To disable cloud-init's network configuration capabilities, write a file
@@ -51,9 +51,9 @@ network:
                 - 8.8.8.8
                 search: []
     version: 2
-~~~
+{% endhighlight %}
 
-* Network 적용
+* 변경된 Network를 적용한다.
 
 ~~~
 # netplan apply

@@ -15,9 +15,10 @@ adsense: true
 
 ![]({{site.baseurl}}/images/record/Ubuntu_Input_Korean_Ubuntu_16.04/Ubuntu_Hangul_Install.PNG)
 
-* System Settings -> Language Support -> Install / Remove Languages...
-* Korean 선택 -> Apply
-* **Ubuntu 재부팅**
+* Ubuntu IBus 한글 Package를 설치한다.
+  * System Settings -> Language Support -> Install / Remove Languages... 
+  * Korean 선택 -> Apply
+  * Ubuntu를 재부팅하여 IBus를 적용한다.
 
 ### 3. Text Entry 설정
 

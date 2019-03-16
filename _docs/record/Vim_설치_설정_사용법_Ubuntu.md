@@ -1,5 +1,5 @@
 ---
-title: Vim 설치, 설정, 사용 - Ubuntu
+title: Vim 설치, 설정, 사용법 - Ubuntu
 category: Record
 date: 2017-01-20T16:41:00Z
 lastmod: 2017-01-22T16:41:00Z
@@ -21,20 +21,20 @@ adsense: true
 
 ### 2. 설정 Plugin 목록
 
-* vundle : Vim Plugin Manager역활을 수행하는 Plugin
-* nerdtree : Vim용 파일 탐색기
-* tagbar : Code의 Tag 목록을 보여주는 Plugin
-* YouCompleteMe : Code 자동완성 Plugin
-* vim-gutentags : Ctag 파일을 관리하는 Plugin
-* vim-airline : Vim의 Status Line을 Update하는 Plugin
-* vim-clang-format : clang-format을 이용하여 Code Align을 수행하는 Plugin
-* vim-go : golang을 위한 Plugin
+* vundle : Vim Plugin Manager 역활을 수행한다. .vimrc에 설치할 Vim Plugin을 넣어두면 vundle을 통해서 손쉽게 Vim Plugin을 설치할 수 있다.
+* nerdtree : 파일 탐색기 역활을 수행한다.
+* tagbar : Code의 Tag 목록을 보여준다.
+* YouCompleteMe : Code 자동완성 기능 (Code Autocomplete)을 수행한다.
+* vim-gutentags : Ctag 파일을 자동으로 관리한다.
+* vim-airline : Vim의 Status Line의 가독성을 높여준다.
+* vim-clang-format : clang-format을 이용하여 Code Align을 수행한다.
+* vim-go : golang을 위한 환경을 구성한다.
 
 ### 3. Vim 기본 설치, 설정
 
 #### 3.1. Ubuntu Package 설치
 
-* Vim 설치
+* Vim을 설치한다.
 
 ~~~
 # add-apt-repository ppa:jonathonf/vim
@@ -42,14 +42,14 @@ adsense: true
 # apt-get install vim-gnome
 ~~~
 
-* ctags, cscope 설치
+* ctags와 cscope를 설치한다.
 
 ~~~
 # apt-get install ctags
 # apt-get install cscope
 ~~~
 
-* ClangFormat 설치
+* ClangFormat을 설치한다.
 
 ~~~
 # apt-get install clang-format
@@ -57,7 +57,7 @@ adsense: true
 
 #### 3.2. Bash Shell 설정
 
-* ~/.bashrc 파일에 다음의 내용 추가
+* Vim의 gruvbox Theme를 위해서 ~/.bashrc 파일에 다음의 내용 추가한다.
 
 ~~~
 source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
@@ -65,7 +65,7 @@ source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 
 #### 3.3. Vundle Plugin 설치
 
-* git을 이용하여 Vundle 설치
+* git을 이용하여 Vundle 설치한다.
 
 ~~~
 # git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -73,7 +73,7 @@ source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 
 #### 3.4. .vimrc 파일 설정
 
-* ~/.vimrc 파일을 다음과 같이 수정
+* ~/.vimrc 파일을 다음과 같이 수정하여, Plugin 설치 및 설정 정보를 저장한다.
 
 {% highlight VimL %}
 "
@@ -157,7 +157,8 @@ let g:clang_format#auto_format = 0
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치
 
-* Vim 명령어 모드에서 다음 명령어 수행
+* ~/.vimrc에 저장되어 있는 Vim Plugin을 설치한다.
+  * Vim의 명령어 Mode에서 실행한다.
 
 ~~~
 : PluginInstall
@@ -165,7 +166,7 @@ let g:clang_format#auto_format = 0
 
 #### 3.6. YouCompleteMe 설치
 
-* YouComplete Compile 및 설치
+* YouCompleteMe를 Compile 및 설치한다.
 
 ~~~
 # apt-get install build-essential cmake
@@ -174,7 +175,7 @@ let g:clang_format#auto_format = 0
 # ./install.py --clang-completer
 ~~~
 
-* .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사
+* .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사하여 YouCompleteMe의 Default 설정 값으로 이용한다.
 
 ~~~
 # wget https://raw.githubusercontent.com/Valloric/ycmd/3ad0300e94edc13799e8bf7b831de8b57153c5aa/cpp/ycm/.ycm_extra_conf.py -O ~/.vim/.ycm_extra_conf.py
@@ -184,7 +185,7 @@ let g:clang_format#auto_format = 0
 
 #### 4.1. Ubuntu Package 설치
 
-* golang 설치
+* golang을 설치한다.
 
 ~~~
 # add-apt-repository ppa:longsleep/golang-backports
@@ -194,7 +195,9 @@ let g:clang_format#auto_format = 0
 
 #### 4.2. Bash Shell 설정
 
-* ~/.bashrc 파일에 다음의 내용 추가
+* ~/.bashrc 파일에 golang에 이용하는 환경변수를 설정하고, 어느 Directory에서든 golang을 이용할 수 있도록 한다.
+  * GOPATH : golang의 Home Directory이다.
+  * GOBIN : golang 개발을 도와주는 Binary가 있는 Directory이다.
 
 ~~~
 export GOPATH=$HOME/go
@@ -202,36 +205,44 @@ export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 ~~~
 
-#### 4.3. .vimrc 파일 설정
+#### 4.3. vim-go Vim Plugin 설치
 
-* ~/.vimrc 파일의 Vundle Plugins에 다음의 내용 추가
+* ~/.vimrc 파일의 Vundle Plugins에 다음의 내용 추가하여 Vundle이 vim-go를 설치하도록 만든다.
 
 ~~~
 Plugin 'fatih/vim-go'
 ~~~
 
-#### 4.4. YouCompleteMe 재설치
+* vim-go Vim Plugin을 설치한다.
+  * Vim의 명령어 Mode에서 실행한다.
 
-* YouCompleteMe Compile 및 설치
+~~~
+: PluginInstall
+~~~
+
+#### 4.4. golang Binary 설치
+
+* golang 개발시 필요한 Tool들을 설치한다.
+  * Vim의 명령어 Mode에서 실행한다.
+
+~~~
+: GoInstallBinaries
+~~~
+
+#### 4.5. YouCompleteMe 재설치
+
+* YouCompleteMe에 golang Option을 추가하여 Compile 및 설치를 수행한다.
 
 ~~~
 # cd ~/.vim/bundle/YouCompleteMe
 # ./install.py --clang-completer --gocode-completer
 ~~~
 
-#### 4.5. golang Binary 설치
-
-* Vim 명령어 모드에서 다음 명령어 수행
-
-~~~
-: GoInstallBinaries
-~~~
-
 ### 5. 사용법
 
 #### 5.1. YouCompleteMe
 
-* C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사
+* C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사한다.
 
 | 단축키 | 동작 |
 |-------|------|
@@ -241,7 +252,7 @@ Plugin 'fatih/vim-go'
 
 #### 5.2. vim-clang-format
 
-* c, cpp 저장 시 자동으로 clang-format 적용
+* c, cpp 저장 시 자동으로 clang-format 적용한다.
 
 | 단축키 | 동작 |
 |-------|------|

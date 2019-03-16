@@ -13,6 +13,9 @@ adsense: true
 * Install Path - /root/lxc_install
 
 ### 2. Package 설치
+
+* LXC Build에 필요한 Package를 설치한다.
+
 ~~~
 # apt-get install libtool m4 automake
 # apt-get install libcap-dev
@@ -21,6 +24,9 @@ adsense: true
 ~~~
 
 ### 3. Compile, 설치
+
+* LXC를 Build 및 설치한다.
+
 ~~~
 # git clone https://github.com/lxc/lxc.git
 # cd lxc

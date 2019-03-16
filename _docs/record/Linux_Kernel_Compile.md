@@ -8,6 +8,7 @@ adsense: true
 ---
 
 ### 1. Compile
+
 #### 1.1. Clean
 
 * make clean - .config 파일을 제외한 Build시 생성된 대부분의 파일들을 지운다. .config 파일은 이전 Kernel Compile시 이용한 config 파일이다.
@@ -39,6 +40,7 @@ adsense: true
 * make help - make Target들과 설명을 보여준다.
 
 ### 2. Example
+
 #### 2.1. ARM
 
 ~~~
