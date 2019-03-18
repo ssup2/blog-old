@@ -28,15 +28,18 @@ adsense: true
 
 ### 2. Cross Compiler 설치
 
-* Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+* Kernel Build를 위한 Cross Compiler를 설치한다.
+  * Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 
-* /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용 추가
+* /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
 
 ~~~
 PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 
 ### 3. Ubuntu Package 설치
+
+* Kernel Build에 필요한 Ubuntu Package를 설치한다.
 
 ~~~
 # apt-get install gcc-arm-linux-gnueabi
@@ -45,12 +48,13 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 4. Kernel Config Download
 
-* Login in - http://www.virtualopensystems.com/
-* Guest Kernel Config - http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
+* Kernel Config를 Download 한다.
+  * Login in - http://www.virtualopensystems.com/
+  * Guest Kernel Config - http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
 
 ### 5. Host Kernel, Host dtb Build
 
-* Download
+* Host Kernel을 Download 한다. 
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
@@ -58,7 +62,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mv Kernel_Host
 ~~~ 
 
-* Build
+* Host Kernel을 Build 한다.
 
 ~~~
 # cd Kernel_Host
@@ -88,7 +92,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 6. Guest Kernel, Guest dtb Build
 
-* Download
+* Guest Kernel을 Download 한다.
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
@@ -96,7 +100,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mv Kernel_Guest
 ~~~
 
-* Build
+* Guest Kernel을 Build 한다. 
 
 ~~~
 # cd Kernel_Guest
@@ -110,15 +114,17 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 7. u-boot Build
 
+* u-boot를 Build 한다.
+
 ~~~
 # git clone git://github.com/virtualopensystems/u-boot-arndale.git Arndale_u-boot
 # cd Arndale_u-boot
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- arndale5250
 ~~~
 
-### 8. Root Filesystem Image 생성
+### 8. 기본 Root Filesystem Image 생성
 
-* img 파일 생성 
+* Rootfs Img 파일을 생성한다. 
 
 ~~~
 # mkdir rootfs
@@ -128,14 +134,14 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mount -o loop rootfs.img /mnt
 ~~~
 
-* debootstrap 
+* debootstrap을 이용하여 기본 Rootfs을 구성한다.
 
 ~~~
 # cd /mnt
 # qemu-debootstrap --arch=armhf trusty .
 ~~~
 
-* Config
+* Rootfs Configuration을 진행한다.
 
 ~~~
 # vim etc/apt/sources.list
@@ -155,7 +161,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
       iface eth0 inet dhcp'
 ~~~
 
-* root 설정
+* root의 password를 설정한다.
 
 ~~~
 # chroot .
@@ -165,6 +171,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 
 ### 9. Host Root Filesystem 설정 
+
+* 생성한 기본 Rootfs을 이용하여 Host의 Root Filesystem을 생성한다.
 
 ~~~
 # cp rootfs.img rootfs_host.img
@@ -176,6 +184,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 
 ### 10. Guest_01 Root Filesystem 설정 
+
+* 생성한 기본 Rootfs을 이용하여 Guest 01의 Root Filesystem을 생성한다.
 
 ~~~
 # cp rootfs.img rootfs_guest_01.img
@@ -194,6 +204,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 11. Guest_02 Root Filesystem 설정
 
+* 생성한 기본 Rootfs을 이용하여 Guest 02의 Root Filesystem을 생성한다.
+
 ~~~
 # cp rootfs.img rootfs_guest_02.img
 # mount -o loop rootfs_guest_02.img /mnt
@@ -210,6 +222,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 
 ### 12. QEMU Build
+
+* QEMU를 Build 한다.
 
 ~~~
 # apt-get install xapt
@@ -229,11 +243,14 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 13. uSD Card Partiton 구성 
 
-* 0 ~ 2M, 2M, No Filesystem: Bootloader (bl1, spl, U-boot)
-* 2M ~ 18M, 16M, ext2, boot : uImage, exynos5250-arndale.dtb
-* 18M ~ rest, ext3, root : Root-Filesystem
+* uSD Card의 Partiton을 아래와 같이 구성한다. 
+  * 0 ~ 2M, 2M, No Filesystem: Bootloader (bl1, spl, U-boot)
+  * 2M ~ 18M, 16M, ext2, boot : uImage, exynos5250-arndale.dtb
+  * 18M ~ rest, ext3, root : Root-Filesystem
 
 ### 14. uSD Card에 u-boot Fusing
+
+* uSD Card에 u-boot를 Fusing 한다.
 
 ~~~
 # cd Arndale-u-boot
@@ -245,6 +262,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 15. Host Root Filesystem 복사 
 
+* uSD Card에 Host Root Filesystem을 복사한다.
+
 ~~~
 # mount -o loop rootfs_host.img /mnt
 # cd /mnt
@@ -254,10 +273,12 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 16. binary, image, dtb 복사
 
-* Host Kernel uImage, exynos5250-arndale.dtb 파일을 uSD Card boot Partition에 복사
-* Host Guest zImage, qemu-system-arm, rootfs_host.img, rootfs_guest_01.img, rootfs_guest_02.img, guest-vexpress.dtb 파일을 root Partition에 복사 
+* Host Kernel uImage, exynos5250-arndale.dtb 파일을 uSD Card boot Partition에 복사한다.
+* Host Guest zImage, qemu-system-arm, rootfs_host.img, rootfs_guest_01.img, rootfs_guest_02.img, guest-vexpress.dtb 파일을 root Partition에 복사한다.
 
 ### 17. u-boot 설정
+
+* u-boot를 설정한다.
 
 ~~~
 (u-boot) # setenv kernel_addr_r 0x40007000
@@ -269,13 +290,15 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 18. Host Package 설정
 
-* Arndale Board에서 uSD Card를 넣고 Host Booting 후, Host에서 실행 
+* Arndale Board에서 uSD Card를 넣고 Host Booting 후, Host에서 Guest 구동을 위한 Package를 설치한다. 
 
 ~~~
 (Host) # apt-get update (Host) # apt-get install gcc make ssh xorg fluxbox tightvncserver (Host) # apt-get install libsdl-dev libfdt-dev bridge-utils uml-utilities
 ~~~
 
 ### 19. Host에 Bridge 설정
+
+* Host에 Guest를 위한 Bridge를 설정한다.
 
 ~~~
 (Host) # brctl addbr br0
@@ -287,17 +310,17 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 20. Host에 VNC를 통해 접속
 
-* Host에서 VNC Server 실행
+* Host에서 VNC Server를 실행한다.
 
 ~~~
 (Host) # tightvncserver -nolisten tcp :1
 ~~~
 
-* VNC Client를 통해서 192.168.0.150:1에 접속
+* VNC Client를 통해서 192.168.0.150:1에 접속한다.
 
 ### 21. Guest 실행
 
-* VNC Shell에서 각 Guest 실행
+* VNC Shell에서 각 Guest를 실행한다.
 
 ~~~
 (Host) # tunctl -u root

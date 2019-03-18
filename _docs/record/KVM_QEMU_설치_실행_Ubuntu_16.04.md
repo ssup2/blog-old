@@ -15,7 +15,7 @@ adsense: true
 
 ### 2. Ubuntu Package 설치
 
-* 설치
+* KVM, QEMU 구동 관련 Ubuntu Package를 설치한다.
 
 ~~~
 # apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils uml-utilities qemu-system qemu-user-static virt-manager libncurses-dev targetcli
@@ -23,21 +23,21 @@ adsense: true
 
 ### 3. VM Kernel Build
 
-* Kernel Directory 생성
+* Kernel Directory 생성한다.
 
 ~~~
 # mkdir kernel
 # cd kernel
 ~~~
 
-* Kernel Download, Kernel Build Package 설치
+* Kernel Download 및 Kernel Build 관련 Package를 설치한다.
 
 ~~~
 # apt-get source linux-image-$(uname -r)
 # apt-get build-dep linux-image-$(uname -r)
 ~~~
 
-* Kernel Configuration
+* Kernel Configuration 수정을 통해서 virtio-scsi를 활성화 한다.
 
 ~~~
 # cd linux-lts-vivid-3.19.0
@@ -46,7 +46,7 @@ adsense: true
 [Device Driver -> SCSI device support -> SCSI low-level drivers -> <*> virtio-scsi support]
 ~~~
 
-* Build Kernel
+* Kernel을 Build한다.
 
 ~~~
 # cd linux-lts-vivid-3.19.0/ubuntu/vbox/vboxguest
@@ -62,21 +62,21 @@ adsense: true
 
 ### 4. VM Rootfs 생성
 
-* Rootfs Directory 생성
+* VM의 Rootfs Directory를 생성한다.
 
 ~~~
 # mkdir rootfs
 # cd rootfs
 ~~~
 
-* rootfs.img 파일 생성
+* rootfs.img 파일을 생성한다.
 
 ~~~
 # dd if=/dev/zero bs=1M count=8092 of=rootfs.img
 # /sbin/mkfs.ext4 rootfs.img (Proceed anyway? (y,n) y)
 ~~~
 
-* Ubuntu 설치
+* rootfs.img에 Ubuntu를 설치한다.
 
 ~~~
 # mount -o loop rootfs.img /mnt
@@ -84,7 +84,7 @@ adsense: true
 # qemu-debootstrap --arch=amd64 trusty .
 ~~~
 
-* tty 설정
+* VM이 이용할 기본 tty를 설정한다.
 
 ~~~
 # vim /mnt/etc/init/ttyS0.conf
@@ -107,7 +107,7 @@ respawn
 exec /sbin/getty -8 115200 ttyS0
 ~~~
 
-* Network 설정
+* VM의 Network를 설정한다.
 
 ~~~
 # vim /mnt/etc/network/interfaces
@@ -125,7 +125,7 @@ auto eth0
 iface eth0 inet dhcp
 ~~~
 
-* root Password 설정
+* VM의 root Password를 설정한다.
 
 ~~~
 # /mnt
@@ -134,14 +134,14 @@ iface eth0 inet dhcp
 (chroot) # exit
 ~~~
 
-* Kernel module 설치
+* rootfs.img에 Kernel module을 설치한다.
 
 ~~~
 # cd kernel/linux-lts-vivid-3.19.0
 # make ARCH=x86_64 INSTALL_MOD_PATH=/mnt modules_install
 ~~~
 
-* Unmount /mnt
+* Unmount를 수행하여 rootfs.img 생성을 마무리한다.
 
 ~~~
 # umount /mnt
@@ -149,7 +149,7 @@ iface eth0 inet dhcp
 
 ### 5. Bridge 설정
 
-* Script 파일 작성
+* Bridge 설정을 위한 Script 파일을 작성한다.
 
 ~~~
 # mkdir VM
@@ -171,7 +171,7 @@ route add default gw 192.168.77.1
 
 ### 6. LIO 설정
 
-* LIO Package 설치 설정
+* vhost-scsi를 위한 LIO Package를 설치 및 설정한다.
 
 ~~~
 # apt-get install targetcli
@@ -193,7 +193,7 @@ kernel_module = vhost_scsi
 configfs_group = vhost
 ~~~
 
-* LIO CLI를 이용하여 LIO 설정
+* LIO CLI를 이용하여 LIO를 설정한다.
 
 ~~~
 # reboot now
@@ -212,13 +212,13 @@ configfs_group = vhost
 (targetcli) /> exit
 ~~~
 
-* LIO 설정 결과
+* LIO 설정 결과는 다음과 같다.
 
 ![]({{site.baseurl}}/images/record/KVM_QEMU_Install_Ubuntu_16.04/LIO_targetcli.PNG)
 
 ### 7. VM 실행
 
-* rootfs.img, bzImage 복사
+* VM을 위해서 생성한 rootfs.img, bzImage를 복사한다.
 
 ~~~
 # cd VM
@@ -273,7 +273,7 @@ configfs_group = vhost
 
 ### 8. fstab 설정
 
-* Shell 접근
+* VM Booting 후 Rootfs Mount Issue를 해결하기 위해서 다음과 같은 방법으로 Shell에 접근한다. 
 
 ~~~
 * Stopping log initial device creation                                  [ OK ]
@@ -281,7 +281,7 @@ The disk drive for / is not ready yet or not present.
 keys:Continue to wait, or Press S to skip mounting or M for manual recovery (Push M)
 ~~~
 
-* blkid 확인, fstab 설정
+* Shell에서 blkid 확인 및 fstab 설정을 진행한다.
 
 ~~~
 (VM) # mount -o remount,rw /
