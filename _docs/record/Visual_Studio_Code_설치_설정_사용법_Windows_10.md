@@ -21,7 +21,7 @@ adsense: true
   * Bios에서 Virtualization 기능을 ON해야 한다.
   * WSL (Windosws Subsystem for Linux)를 이용하기 위해서 Windows를 Update한다.
 
-### 2. Docker for Windows 설치, 설정
+### 2. Docker for Windows 설치
 
 * Visual Studio Code의 Terminal에서 Docker 이용을 위한 Docker for Windows를 설치한다.
   * [https://docs.docker.com/docker-for-windows](https://docs.docker.com/docker-for-windows)
@@ -36,6 +36,7 @@ adsense: true
 ![]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_01.PNG){: width="550px"}
 
 * PowerShell을 관리자 권한으로 아래의 명령어를 실행하여, Windows에서 Container의 IP에 바로 접근할 수 있도록 Routing Rule을 추가한다.
+  * Default Docker Network인 172.17.0.0/24 Network 관련 Routing Rule을 추가한다.
 
 ~~~
 > route add  172.17.0.0 MASK 255.255.0.0 10.0.75.2
@@ -69,6 +70,19 @@ adsense: true
   * Store에서 Ubuntu를 검색하여 설치하고 재부팅한다.
 
 ![]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
+
+* Docker, Docker Compose 설치 및 설정
+  * WSL Ubuntu를 실행하여 Docker Package를 설치하여 Docker Client를 설치한다.
+  * Docker for Windows의 Docker와 연결하기 위해서 Bash에 Docker Host를 지정한다.
+
+~~~
+$ sudo apt update
+$ sudo apt install docker.io
+$ sudo apt install docker-compose
+$ echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
+~~~
+
+* WSL Ubuntu를 종료한다.
 
 ### 5. Visual Studio Code 설치, 설정
 
