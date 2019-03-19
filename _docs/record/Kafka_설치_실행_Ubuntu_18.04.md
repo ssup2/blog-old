@@ -13,7 +13,7 @@ adsense: true
 
 ### 2. Java, Zookeeper 설치
 
-* Java, Zookeeper Package 설치
+* Java, Zookeeper Package를 설치한다.
 
 ~~~
 # apt install openjdk-8-jdk -y
@@ -22,7 +22,7 @@ adsense: true
 
 ### 3. Kafka 설치
 
-* kafka 계정 생성
+* kafka 계정을 생성한다.
   * Password : kafka
 
 ~~~
@@ -32,7 +32,7 @@ Enter new UNIX password: kafka
 Retype new UNIX password: kafka
 ~~~
 
-* Kafka Download 및 압축풀기
+* Kafka Download 및 압축을 푼다.
 
 ~~~
 # cd /opt
@@ -42,14 +42,14 @@ Retype new UNIX password: kafka
 # chown -R kafka:kafka /opt/kafka
 ~~~
 
-* /opt/kafka/config/server.properties 파일의 마지막에 아래의 내용을 추가
+* /opt/kafka/config/server.properties 파일의 마지막에 아래의 내용을 추가한다.
 
 ~~~
 ...
 delete.topic.enable = true
 ~~~
 
-* /lib/systemd/system/zookeeper.service에 아래의 내용 저장 
+* /lib/systemd/system/zookeeper.service에 아래의 내용을 저장한다.
 
 ~~~
 [Unit]
@@ -67,7 +67,7 @@ Restart=on-abnormal
 WantedBy=multi-user.target
 ~~~
 
-* /lib/systemd/system/kafka.service에 아래의 내용 저장
+* /lib/systemd/system/kafka.service에 아래의 내용을 저장한다.
 
 ~~~
 [Unit]
@@ -85,7 +85,7 @@ Restart=on-abnormal
 WantedBy=multi-user.target
 ~~~
 
-* Zookeeper, Kafka 시작
+* Zookeeper, Kafka를 시작한다.
 
 ~~~
 # systemctl daemon-reload
@@ -95,7 +95,7 @@ WantedBy=multi-user.target
 # systemctl enable kafka
 ~~~
 
-* Zookeeper, Kafka 구동 확인
+* Zookeeper, Kafka 구동을 확인한다.
   * Zookeeper : 2181 Port 이용
   * Kafka : 9092 Port 이용
 
@@ -108,7 +108,7 @@ tcp6       0      0 :::2181                 :::*                    LISTEN      
 
 ### 4. Kafka Test
 
-* HakaseTesting Topic 생성
+* HakaseTesting Topic을 생성한다.
 
 ~~~
 # su - kafka
@@ -118,7 +118,7 @@ $ ./kafka-topics.sh --create --zookeeper localhost:2181 \
 --topic HakaseTesting
 ~~~
 
-* 새로운 Terminal을 띄워 Producer 실행
+* 새로운 Terminal을 띄워 Producer를 실행한다.
 
 ~~~
 # su - kafka
@@ -128,7 +128,7 @@ $ ./kafka-console-producer.sh --broker-list localhost:9092 \
 > test 123
 ~~~
 
-* 새로운 Terminal을 띄워 Consumer 실행
+* 새로운 Terminal을 띄워 Consumer를 실행한다.
 
 ~~~
 # su - kafka

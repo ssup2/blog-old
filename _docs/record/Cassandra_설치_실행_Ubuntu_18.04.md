@@ -13,7 +13,7 @@ adsense: true
 
 ### 2. Java 설치
 
-* Java 8 설치
+* Java 8를 설치한다.
 
 ~~~
 # add-apt-repository -y ppa:webupd8team/java
@@ -23,7 +23,7 @@ adsense: true
 
 ### 3. Cassandra 설치
 
-* Cassandra Package 설치
+* Cassandra Package를 설치한다.
 
 ~~~
 # echo "deb http://www.apache.org/dist/cassandra/debian 39x main" |  tee /etc/apt/sources.list.d/cassandra.list
@@ -32,7 +32,7 @@ adsense: true
 # apt install cassandra
 ~~~
 
-* Cassandra 구동 및 구동 확인
+* Cassandra 구동 및 구동을 확인한다.
 
 ~~~
 # systemctl enable cassandra

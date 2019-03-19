@@ -47,7 +47,7 @@ Pgpool-II은 PostgreSQL과 App사이에서 다양한 역활을 수행하는 Midd
 
 Pgpool-II의 두번째 주요기능은 Read 요청 (Select Query) Load Balancing이다. Pgpool-II는 Master DB와 Slave DB들 사이에서 적절하게 Read 요청을 Load Balancing 하여 Read 성능을 높일 수 있다. 각 DB마다 Weight를 설정 할 수 있어 Weight에 비례하여 Read 요청을 분배할 수 있다. Replication을 Async 방식을 이용할 경우 Master DB와 Slave DB의 Data 차이가 발생할 수 있는데, Pgpool-II는 Slave DB가 Master DB와 특정 용량 만큼 Data가 차이날 경우 해당 Slave DB에 Read 요청을 보내지 않도록 하는 기능도 갖고 있다. Master DB와 Slave DB의 Data 차이 때문에 만약 Master에게만 Read 요청을 보내는 Endpoint를 App에게 제공하고 싶다면, 별도의 Pgpool-II을 구동하여 App에게 제공해야 한다. Write 요청은 Pgpool-II에 의해서 언제나 Master DB에게만 전달된다.
 
-Pgpool-II은 HA를 위해서 다수의 Pgpool-II을 Active-standby로 묶는 기능을 제공한다. App은 VIP를 통해서 항상 Active Pgpool-II로만 접근한다. Pgpool-II은 Watachdog를 내장하고 있으며, Watchdog를 통해서 외부의 Pgpool-II의 상태를 감시한다. 만약 Active Pgpool-II가 죽는다면 Standby Pgpool-II는 App이 자신에게 접근 할 수 있도록 VIP를 자신에게 설정하고, Active Pgpool-II로 승격하여 동작을 이어나간다.
+Pgpool-II은 HA를 위해서 다수의 Pgpool-II을 Active-standby로 묶는 기능을 제공한다. App은 VIP를 통해서 항상 Active Pgpool-II로만 접근한다. Pgpool-II은 Watchdog를 내장하고 있으며, Watchdog를 통해서 외부의 Pgpool-II의 상태를 감시한다. 만약 Active Pgpool-II가 죽는다면 Standby Pgpool-II는 App이 자신에게 접근 할 수 있도록 VIP를 자신에게 설정하고, Active Pgpool-II로 승격하여 동작을 이어나간다.
 
 ### 2. 참조
 

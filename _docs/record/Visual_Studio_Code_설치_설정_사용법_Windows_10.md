@@ -33,7 +33,7 @@ adsense: true
 
 * WSL Ubuntu에서 Docker에 접근할 수 있도록 Docker Daemon을 2375 Port로 개방한다.
 
-![]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_01.PNG){: width="550px"}
+![]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_02.PNG){: width="550px"}
 
 * PowerShell을 관리자 권한으로 아래의 명령어를 실행하여, Windows에서 Container의 IP에 바로 접근할 수 있도록 Routing Rule을 추가한다.
   * Default Docker Network인 172.17.0.0/24 Network 관련 Routing Rule을 추가한다.

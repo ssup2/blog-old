@@ -31,7 +31,7 @@ adsense: true
 
 #### 2.1. Ceph Node
 
-* Ceph Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Ceph Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -50,7 +50,7 @@ network:
                 addresses: [8.8.8.8]
 ~~~
 
-* Ceph Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Ceph Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -64,7 +64,7 @@ network:
                 addresses: [8.8.8.8]
 ~~~
 
-* Ceph Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Ceph Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -82,14 +82,15 @@ network:
 
 #### 3.1. Ceph Node
 
-* ntp Package 설치
+* ntp Package를 설치한다.
 
 ~~~
 # sudo apt install ntp
 # sudo apt install python
 ~~~
 
-* cephnode User 생성 (Password : cephnode)
+* cephnode User를 생성한다. 
+  * Password : cephnode
 
 ~~~
 # sudo useradd -d /home/cephnode -m cephnode
@@ -104,7 +105,7 @@ passwd: password updated successfully
 
 #### 3.2. Deploy Node
 
-* /etc/host 파일에 아래의 내용 추가
+* /etc/host 파일에 아래의 내용을 추가한다.
 
 ~~~
 10.0.0.10 node1
@@ -112,7 +113,7 @@ passwd: password updated successfully
 10.0.0.30 node3
 ~~~
 
-* ceph-deploy Package 설치
+* ceph-deploy Package를 설치한다.
 
 ~~~
 # wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
@@ -121,7 +122,8 @@ passwd: password updated successfully
 # sudo apt install ceph-deploy
 ~~~
 
-* cephdeploy User 생성 (Password : cephdeploy)
+* cephdeploy User를 생성한다. 
+  * Password : cephdeploy
 
 ~~~
 # sudo useradd -d /home/cephdeploy -m cephdeploy
@@ -134,8 +136,8 @@ passwd: password updated successfully
 # sudo chmod 0440 /etc/sudoers.d/cecephdeployphnode
 ~~~
 
-* SSH Key 생성 및 복사
-  * passphrases는 Empty 상태로 유지
+* SSH Key를 생성 및 복사한다.
+  * passphrases는 Empty 상태로 유지한다.
 
 ~~~
 # login cephdeploy
@@ -151,7 +153,7 @@ $ ssh-copy-id cephnode@node2
 $ ssh-copy-id cephnode@node3
 ~~~
 
-* /home/cephdeploy/.ssh/config 파일에 다음과 같이 수정
+* /home/cephdeploy/.ssh/config 파일을 다음과 같이 수정한다.
 
 ~~~
 Host node1
@@ -169,14 +171,14 @@ Host node3
 
 #### 4.1. Depoly Node
 
-* Storage Cluster Config 폴더 생성
+* Storage Cluster Config 폴더를 생성한다.
 
 ~~~
 # login cephdeploy
 $ mkdir my-cluster
 ~~~
 
-* Storage Cluster 초기화
+* Storage Cluster를 초기화한다.
 
 ~~~
 # login cephdeploy
@@ -187,8 +189,8 @@ $ ceph-deploy forgetkeys
 $ rm ceph.*
 ~~~
 
-* Storage Cluster 구축 및 확인
-  * MON (Monitor Daemon)은 Ceph Node 01에 설치
+* Storage Cluster를 구축 및 확인한다.
+  * MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
 
 ~~~
 # login cephdeploy
@@ -218,8 +220,8 @@ $ sudo ceph -s
     pgs:   
 ~~~
 
-* MDS (Meta Data Server) 설치
-  * MDS은 Ceph Node 01에 설치
+* MDS (Meta Data Server)를 설치한다.
+  * MDS은 Ceph Node 01에 설치한다.
 
 ~~~
 # login cephdeploy
@@ -242,8 +244,8 @@ $ sudo ceph -s
     pgs:  
 ~~~
 
-* RGW (Rados Gateway) 설치
-  * RGW는 Ceph Node 01에 설치
+* RGW (Rados Gateway)를 설치한다.
+  * RGW는 Ceph Node 01에 설치한다.
 
 ~~~
 # login cephdeploy
@@ -271,14 +273,14 @@ $ sudo ceph -s
 
 #### 5.1. Ceph Node
 
-* Pool 생성 및 초기화
+* Pool 생성 및 초기화를 진행한다.
 
 ~~~
 # ceph osd pool create rbd 16
 # rbd pool init rbd
 ~~~
 
-* Block Storage 생성 및 Mapping
+* Block Storage을 생성 및 Mapping 한다.
 
 ~~~
 # rbd create foo --size 4096 --image-feature layering
@@ -290,7 +292,7 @@ $ sudo ceph -s
 
 #### 6.1. Ceph Node
 
-* Pool 생성 및 File Storage 생성
+* Pool 생성 및 File Storage를 생성한다.
 
 ~~~
 # ceph osd pool create cephfs_data 16
@@ -298,7 +300,7 @@ $ sudo ceph -s
 # ceph fs new filesystem cephfs_metadata cephfs_data
 ~~~
 
-* admin Key 확인 및 admin.secret 파일 생성
+* admin Key 확인 및 admin.secret 파일을 생성한다.
 
 ~~~
 # cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
@@ -313,7 +315,7 @@ $ sudo ceph -s
 AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 ~~~
 
-* Mount
+* Ceph File Server를 Mount 한다.
 
 ~~~
 # mkdir mnt
@@ -327,7 +329,7 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 
 #### 7.1. Ceph Node
 
-* RGW 동작 확인
+* RGW 동작을 확인한다.
 
 ~~~
 # curl 127.0.0.1:7480

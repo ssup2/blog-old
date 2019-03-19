@@ -18,13 +18,13 @@ adsense: true
 
 ### 2. Helm 설치
 
-* Helm Package 설치
+* Helm Package를 설치한다.
 
 ~~~
 # snap install helm --classic
 ~~~
 
-* Helm Tiller 설치
+* Helm Tiller를 설치한다.
 
 ~~~
 # kubectl create serviceaccount --namespace kube-system tiller

@@ -39,7 +39,7 @@ adsense: true
 
 #### 2.1. Master Node
 
-* /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -60,7 +60,7 @@ network:
 
 #### 2.2. Worker Node
 
-* Worker Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Worker Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -74,7 +74,7 @@ network:
                 addresses: [8.8.8.8]
 ~~~
 
-* Worker Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일 작성
+* Worker Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
 
 ~~~
 network:
@@ -90,22 +90,23 @@ network:
 
 ### 3. Package 설치
 
-* 모든 Node에서 수행
-* Swap Off
-  * /etc/fstab 파일에서 아래와 같이 swap.img 주석 처리
+* 모든 Node에서 수행 Kubernetes를 위한 Package를 설치한다.
+
+* Swap을 Off한다.
+  * /etc/fstab 파일에서 아래와 같이 swap.img 주석 처리한다.
 
 ~~~
 # /swap.img       none    swap    sw      0       0
 ~~~
 
-* Docker 설치
+* Docker를 설치한다.
 
 ~~~
 # apt-get update
 # apt-get install -y docker.io
 ~~~
 
-* kubelet, kubeadm 설치
+* kubelet, kubeadm를 설치한다.
 
 ~~~
 # apt-get update && apt-get install -y apt-transport-https curl
@@ -119,7 +120,7 @@ network:
 
 #### 4.1. Master Node
 
-* kubeadm 초기화
+* kubeadm를 초기화 한다.
 
 ~~~
 # swapoff -a
@@ -128,7 +129,7 @@ network:
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-* kubectl config 설정
+* kubectl config를 설정한다.
 
 ~~~
 # mkdir -p $HOME/.kube
@@ -136,8 +137,8 @@ kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca
 # sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ~~~
 
-* kubectl autocomplete 설정
-  * /root/.bashrc에 다음의 내용 추가
+* kubectl autocomplete를 설정한다.
+  * /root/.bashrc에 다음의 내용 추가한다.
 
 ~~~
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
@@ -149,8 +150,8 @@ source <(kubectl completion bash)
 
 #### 4.2. Worker Node
 
-* Cluster 참여
-  * kubeadm init 결과로 나온 명령어 Worker Node에서 수행한다.
+* Cluster를 구성한다.
+  * kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
 
 ~~~
 # swapoff -a
@@ -159,7 +160,7 @@ source <(kubectl completion bash)
 
 #### 4.3. 검증
 
-* Master Node에서 Cluster 확인
+* Master Node에서 Cluster를 확인한다.
   * 모든 Node가 List에서 보여야 한다.
   * Network 설정이 안되어 있기 때문에 NotReady 상태로 유지된다. Network Plugin 설치후 Ready 상태를 확인 가능하다.
 
@@ -173,14 +174,14 @@ node3   NotReady   <none>   27s   v1.12.3
 
 ### 5. Network Plugin 설치
 
-* Calico, Flannel, Cilium 셋중 하나를 선택하여 설치
-* 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화 진행
+* Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다.
+* 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화를 진행한다.
 
 #### 5.1. Master Node
 
 ##### 5.1.1. Calico 설치
 
-* Calico 설치
+* Calico를 설치한다.
 
 ~~~
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
@@ -189,7 +190,7 @@ node3   NotReady   <none>   27s   v1.12.3
 
 ##### 5.1.2. Flannel 설치
 
-* Flannel 설치
+* Flannel를 설치한다.
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
@@ -197,14 +198,14 @@ node3   NotReady   <none>   27s   v1.12.3
 
 ##### 5.1.3. Cilium 설치
 
-* bpffs mount 및 설정
+* bpffs mount 및 설정을 진행한다.
 
 ~~~
 # mount bpffs /sys/fs/bpf -t bpf
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
-* Cilium을 위한 etcd 구동 및 Cilium 설치
+* Cilium을 위한 etcd 구동 및 Cilium을 설치한다.
 
 ~~~
 # wget https://github.com/cilium/cilium/archive/v1.3.0.zip
@@ -217,7 +218,7 @@ node3   NotReady   <none>   27s   v1.12.3
 
 ##### 5.2.1. Cilium 설치
 
-* bpffs mount 및 설정
+* bpffs mount 및 설정을 진행한다.
 
 ~~~
 # mount bpffs /sys/fs/bpf -t bpf
@@ -228,14 +229,14 @@ node3   NotReady   <none>   27s   v1.12.3
 
 #### 6.1 Master Node
 
-* Web UI 설치
+* Web UI 설치를 진행한다.
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ~~~
 
 * kube-apiserver Insecure 설정
-  * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용 수정 & 추가
+  * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용을 수정 및 추가한다.
 
 ~~~
 ...
@@ -248,14 +249,14 @@ spec:
 ...
 ~~~
 
-* kubelet Service 재시작
+* kubelet Service를 재시작한다.
 
 ~~~
 # service kubelet restart
 ~~~
 
-* Web UI Privilege 권한을 위한 config 파일 생성
-  * 아래의 내용으로 ~/dashboard-admin.yaml 파일 생성 
+* Web UI Privilege 권한을 위한 config 파일을 생성한다.
+  * 아래의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
 
 ~~~
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -274,7 +275,7 @@ subjects:
   namespace: kube-system
 ~~~
 
-* Web UI에 Privilege 권한 적용
+* Web UI에 Privilege 권한을 적용한다.
 
 ~~~
 # kubectl create -f ~/dashboard-admin.yaml
@@ -293,14 +294,14 @@ subjects:
   * Monitor IP - 10.0.0.10:6789
   * Pool Name - kube
 
-* Ceph Admin secret 생성
+* Ceph Admin secret을 생성한다.
 
 ~~~
 # ceph auth get client.admin 2>&1 |grep "key = " |awk '{print  $3'} |xargs echo -n > /tmp/secret
 # kubectl create secret generic ceph-admin-secret --from-file=/tmp/secret --namespace=kube-system
 ~~~
 
-* Ceph Pool 및 User secret 생성
+* Ceph Pool 및 User secret을 생성한다.
 
 ~~~
 # ceph osd pool create kube 8 8
@@ -309,14 +310,14 @@ subjects:
 # kubectl create secret generic ceph-secret --from-file=/tmp/secret --namespace=kube-system
 ~~~
 
-* rbd-provisioner, role, cluster role yaml 다운
+* rbd-provisioner, role, cluster role yaml을 Download 한다.
 
 ~~~
 # git clone https://github.com/kubernetes-incubator/external-storage.git
 # cd external-storage/ceph/rbd/deploy
 ~~~
 
-* rbac/clusterrole.yaml 파일에 아래의 내용 추가 (Secret Role)
+* rbac/clusterrole.yaml 파일에 아래의 내용 추가한다. (Secret Role)
 
 ~~~
   - apiGroups: [""]
@@ -324,7 +325,7 @@ subjects:
     verbs: ["get", "create", "delete"]
 ~~~
 
-* rbd-provisioner, role, cluster role 설정
+* rbd-provisioner, role, cluster role을 설정한다.
 
 ~~~
 # NAMESPACE=default
@@ -332,7 +333,7 @@ subjects:
 # kubectl -n $NAMESPACE apply -f ./rbac 
 ~~~
 
-* storage_class.yaml 파일 생성 및 아래의 내용으로 저장
+* storage_class.yaml 파일 생성 및 아래의 내용으로 저장한다.
 
 ~~~
 kind: StorageClass
@@ -355,7 +356,7 @@ parameters:
   imageFeatures: layering
 ~~~
 
-* Storage Class 생성 및 확인
+* Storage Class 생성 및 확인한다.
 
 ~~~
 # kubectl create -f ./storage_class.yaml

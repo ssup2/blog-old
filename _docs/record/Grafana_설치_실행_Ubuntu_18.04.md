@@ -14,13 +14,13 @@ adsense: true
 
 ### 2. Grafana 설치
 
-* /etc/apt/sources.list에 다음의 내용 추가
+* /etc/apt/sources.list에 다음의 내용을 추가한다.
 
 ~~~
 deb https://packagecloud.io/grafana/stable/debian/ stretch main
 ~~~
 
-* Grafana 설치
+* Grafana를 설치한다.
 
 ~~~
 # curl https://packagecloud.io/gpg.key | sudo apt-key add -
@@ -28,7 +28,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 # apt-get install grafana
 ~~~
 
-* Grafana 실행
+* Grafana를 실행한다.
 
 ~~~
 # systemctl daemon-reload
@@ -37,7 +37,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 # systemctl enable grafana-server.service
 ~~~
 
-* 접속 확인
+* 접속을 확인한다.
   * http://192.168.0.150:3000/login
   * ID, PW - admin/admin
 

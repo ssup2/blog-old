@@ -15,7 +15,8 @@ adsense: true
 
 ### 2. sshd 설치, 설정
 
-* sshd 설치
+* Haddop 설치모든 Hadoop Node에 root User로 Password 없이 Login 할 수 있도록 설정한다.
+* sshd를 설치한다.
 
 ~~~
 # apt update
@@ -23,7 +24,7 @@ adsense: true
 # apt install -y pdsh
 ~~~
 
-* /etc/ssh/sshd_config 파일에 아래와 같이 수정하여 root Login 허용
+* /etc/ssh/sshd_config 파일에 아래와 같이 수정하여 root Login 허용한다.
 
 ~~~
 ...
@@ -33,7 +34,7 @@ PermitRootLogin yes
 ...
 ~~~
 
-* sshd 재시작 및 ssh 접속시 password가 불필요하도록 설정
+* sshd 재시작 및 ssh 접속시 password가 불필요하도록 설정한다.
 
 ~~~
 # service sshd restart
@@ -49,7 +50,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 
 ### 3. Java 설치 
 
-* Java Package 설치
+* Java Package를 설치한다.
 
 ~~~
 # apt update
@@ -58,7 +59,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 
 ### 4. Hadoop 설치, 설정
 
-* Hadoop Binary Download
+* Hadoop Binary를 Download 한다.
 
 ~~~
 # cd ~
@@ -66,7 +67,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 # tar zxvf hadoop-3.0.3.tar.gz
 ~~~
 
-* ~/hadoop-3.0.3/etc/hadoop/hadoop-env.sh 파일을 아래와 같이 수정
+* ~/hadoop-3.0.3/etc/hadoop/hadoop-env.sh 파일을 아래와 같이 수정한다.
 
 ~~~
 # The java implementation to use. By default, this environment
@@ -74,7 +75,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 ~~~
 
-* ~/hadoop-3.0.3/etc/hadoop/core-site.xml 파일을 아래와 같이 수정
+* ~/hadoop-3.0.3/etc/hadoop/core-site.xml 파일을 아래와 같이 수정한다.
 
 ~~~
 <configuration>
@@ -85,7 +86,7 @@ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 </configuration>
 ~~~
 
-* ~/hadoop-3.0.3/etc/hadoop/hdfs-site.xml 파일을 아래와 같이 수정
+* ~/hadoop-3.0.3/etc/hadoop/hdfs-site.xml 파일을 아래와 같이 수정한다.
 
 ~~~
 <configuration>
@@ -96,7 +97,7 @@ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 </configuration>
 ~~~
 
-* ~/.bashrc 파일에 아래의 환경변수 추가
+* ~/.bashrc 파일에 아래의 환경변수를 추가한다.
 
 ~~~
 export HADOOP_HOME="/root/hadoop-3.0.3"
@@ -114,19 +115,19 @@ export YARN_RESOURCEMANAGER_USER="root"
 export YARN_NODEMANAGER_USER="root"
 ~~~
 
-* HDFS Format 및 HDFS 시작
+* HDFS Format 및 HDFS을 시작한다.
 
 ~~~
 # hdfs namenode -format
 # start-dfs.sh
 ~~~
 
-* HDFS 동작 확인 
-  * Web Browser에서 http://localhost:9870 접속
+* HDFS 동작을 확인한다.
+  * Web Browser에서 http://localhost:9870 접속한다.
 
 ### 5. YARN 설치, 설정
 
-* root user 폴더 생성
+* root user 폴더를 생성한다.
 
 ~~~
 # cd ~/hadoop-3.0.
@@ -134,7 +135,7 @@ export YARN_NODEMANAGER_USER="root"
 # bin/hdfs dfs -mkdir /user/root
 ~~~
 
-* ~/hadoop-3.0.3/etc/hadoop/mapred-site.xml 파일을 아래와 같이 수정
+* ~/hadoop-3.0.3/etc/hadoop/mapred-site.xml 파일을 아래와 같이 수정한다.
 
 ~~~
 <configuration>
@@ -157,7 +158,7 @@ export YARN_NODEMANAGER_USER="root"
 </configuration>
 ~~~
 
-* ~/hadoop-3.0.3/etc/hadoop/yarn-site.xml 파일을 아래와 같이 수정
+* ~/hadoop-3.0.3/etc/hadoop/yarn-site.xml 파일을 아래와 같이 수정한다.
 
 ~~~
 <configuration>
@@ -172,18 +173,18 @@ export YARN_NODEMANAGER_USER="root"
 </configuration>
 ~~~
 
-* YARN 시작 
+* YARN을 시작한다. 
 
 ~~~
 # start-yarn.sh
 ~~~
 
-* YARN 동작 확인 
-  * Web Browser에서 http://localhost:8088 접속
+* YARN 동작을 확인한다. 
+  * Web Browser에서 http://localhost:8088 접속한다.
 
 ### 6. 동작 확인
 
-* 6개의 JVM이 동작 확인
+* 6개의 JVM 동작을 확인한다.
 
 ~~~
 # jps
@@ -195,7 +196,7 @@ export YARN_NODEMANAGER_USER="root"
 5133 ResourceManager
 ~~~
 
-* Example 구동
+* Example을 구동한다.
 
 ~~~
 # cd ~/hadoop-3.0.3
@@ -206,7 +207,7 @@ Estimated value of Pi is 3.14250000000000000000
 
 ### 7. Issue 해결
 
-* There are 0 datanode(s) Error 발생시
+* There are 0 datanode(s) Error 발생시 아래와 같이 수행한다.
 
 ~~~
 # stop-yarn.sh

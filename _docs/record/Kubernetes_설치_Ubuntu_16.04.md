@@ -41,7 +41,7 @@ adsense: true
 
 #### 2.1. Master Node
 
-* /etc/network/interfaces을 다음과 같이 수정
+* /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -68,7 +68,7 @@ dns-nameservers 8.8.8.8
 
 #### 2.2. Worker Node
 
-* Worker Node 01의 /etc/network/interfaces을 다음과 같이 수정
+* Worker Node 01의 /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -86,7 +86,7 @@ gateway 10.0.0.1
 dns-nameservers 8.8.8.8
 ~~~
 
-* Worker Node 02의 /etc/network/interfaces을 다음과 같이 수정
+* Worker Node 02의 /etc/network/interfaces을 다음과 같이 수정한다.
 
 ~~~
 source /etc/network/interfaces.d/*
@@ -108,7 +108,7 @@ dns-nameservers 8.8.8.8
 
 #### 3.1. 모든 Node
 
-* Docker 설치
+* Docker를 설치한다.
 
 ~~~
 # sudo apt-get update
@@ -119,7 +119,7 @@ dns-nameservers 8.8.8.8
 # sudo apt-get install docker.io=1.12.6-0ubuntu1~16.04.1
 ~~~
 
-* kubelet, kubeadm 설치
+* kubelet, kubeadm을 설치한다.
 
 ~~~
 # apt-get update && apt-get install -y apt-transport-https curl
@@ -131,7 +131,7 @@ dns-nameservers 8.8.8.8
 
 #### 3.2. Master Node
 
-* kubectl 설치
+* kubectl를 설치한다.
 
 ~~~
 # sudo snap install kubectl --classic
@@ -141,7 +141,7 @@ dns-nameservers 8.8.8.8
 
 #### 4.1. Master Node
 
-* kubeadm 초기화 (Cluster 생성)
+* kubeadm 초기화를 진행한다. (Cluster 생성)
   * 실행 후 Key 값을 얻을 수 있다.
   * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
@@ -151,7 +151,7 @@ dns-nameservers 8.8.8.8
 kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
-* kubectl config 설정
+* kubectl config 설정을 진행한다.
 
 ~~~
 # mkdir -p $HOME/.kube
@@ -159,7 +159,7 @@ kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 # sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ~~~
 
-* kubectl autocomplete 설정
+* kubectl autocomplete 설정을 진행한다.
   * /root/.bashrc에 다음의 내용 추가
 
 ~~~
@@ -170,14 +170,14 @@ fi
 source <(kubectl completion bash)
 ~~~
 
-* Network Addon (flannel) 설치
+* Network Addon (flannel)을 설치한다.
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ~~~
 
-* Dashboard Addon (Dashboard) 설치
+* Dashboard Addon (Dashboard)을 설치한다.
 
 ~~~
 # kubectl create -f https://git.io/kube-dashboard
@@ -185,8 +185,8 @@ source <(kubectl completion bash)
 
 #### 4.2. Worker Node
 
-* Cluster 참여
-  * kubeadm init 결과로 나온 명령어 각 Worker Node에서 수행한다.
+* Cluster를 구성한다.
+  * kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
 
 ~~~
 # kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
@@ -194,7 +194,7 @@ source <(kubectl completion bash)
 
 #### 4.3. 검증
 
-* Master Node에서 Cluster 확인
+* Master Node에서 Cluster를 확인한다.
 
 ~~~
 # kubectl get nodes
@@ -205,7 +205,7 @@ ubuntu03   Ready      55s       v1.7.1
 ~~~
 
 * Master Node에서 Dashboard 접속
-  * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui** 접속
+  * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui**에 접속한다.
 
 ~~~
 # kubectl proxy

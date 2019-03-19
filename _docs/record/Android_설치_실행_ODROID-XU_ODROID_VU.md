@@ -23,19 +23,20 @@ adsense: true
 
 ### 2. Windows에 ADB Driver 설치
 
-* Download - http://com.odroid.com/sigong/nf_file_board/nfile_board_view.php?bid=22
 * Windows의 Device Manager를 통해 ADB USB Driver 설치
+  * http://com.odroid.com/sigong/nf_file_board/nfile_board_view.php?bid=22
+
 
 ### 3. Ubuntu Package 설치
 
-* Ubuntu Package 설치
+* Android Build를 위한 Ubuntu Package를 설치한다.
 
 ~~~
 # apt-get install git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 # ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
 ~~~
 
-* Java 6 설치
+* Java 6를 설치한다.
 
 ~~~
 # add-apt-repository ppa:webupd8team/java
@@ -45,7 +46,8 @@ adsense: true
 
 ### 5. Ubuntu에 Repo 설치
 
-* Download Repo
+* Repo는 Android Build시 이용된다.
+* Android Build시 이용하는 Repo를 설치한다.
 
 ~~~
 # mkdir ~/bin
@@ -53,7 +55,7 @@ adsense: true
 # chmod a+x ~/bin/repo
 ~~~
 
-* ~/.bashrc 파일에 아래의 내용 추가
+* ~/.bashrc 파일에 아래의 내용을 추가하여 어느 Directory에서든 Repo를 이용할 수 있도록 만든다.
 
 ~~~
 PATH=~/bin:$PATH
@@ -61,8 +63,8 @@ PATH=~/bin:$PATH
 
 ### 6. Ubuntu에 Cross Compiler 설치
 
-* Download - http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
-* 설치
+* Cross Compiler를 설치한다. 
+  * Download : http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
 
 ~~~
 # mv ./arm-eabi-4.6.tar.gz /usr/local
@@ -70,29 +72,13 @@ PATH=~/bin:$PATH
 # tar zxvf arm-eabi-4.6.tar.gz
 ~~~
 
-* ~/.bashrc 파일에 아래의 내용 추가
+* ~/.bashrc 파일에 아래의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
 
 ~~~
 PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 ~~~
 
-### 7. Ubuntu에 Repo 설치
-
-* Download Repo
-
-~~~
-# mkdir ~/bin
-# curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-# chmod a+x ~/bin/repo
-~~~
-
-* ~/.bashrc 파일에 아래의 내용 추가
-
-~~~
-PATH=~/bin:$PATH
-~~~
-
-### 8. Prebuilt Images와 Sources Download
+### 7. Prebuilt Images와 Sources Download
 
 * Prebuilt Image
   * http://dn.odroid.com/ODROID-XU/Firmware/01-10-2014/emmc_self_installer.img.zip
@@ -104,21 +90,23 @@ PATH=~/bin:$PATH
   * http://dn.odroid.com/ODROID-XU/Android_bsp/04-07-2014/android_patch.zip
   * http://dn.odroid.com/ODROID-XU/Android_bsp/04-07-2014/android_patch.sh
 
-### 9. Prebuilt Image를 emmc에 Flash 및 Android Update
+### 8. Prebuilt Image를 emmc에 Flash 및 Android Update
+
+* PreBuild Image를 emmc에 Flash 한다.
 
 ~~~
 # unzip emmc_self_installer.img.zip
 # pv -tpreb emmc_self_installer.img | dd of=/dev/sdb bs=1M
 ~~~
 
-* Android 부팅 후 ODROID-XU Updater 실행 및 아래의 URL 입력
+* Android 부팅 후 ODROID-XU Updater 실행 및 아래의 URL을 입력한다.
   * http://dn.odroid.com/ODROID-XU/Firmware/04-07-2014/update.zip
 
 ### 10. Patch 수행
 
 #### 10.1. kernel
 
-* Kernel Root 폴더에 kernel_Apr_07_2014.patch 파일 복사 및 아래의 명령어 수행
+* Kernel Root 폴더에 kernel_Apr_07_2014.patch 파일 복사 및 아래의 명령어를 수행한다.
 
 ~~~
 # chmod +x kernel_Apr_07_2014.patch
@@ -127,7 +115,7 @@ PATH=~/bin:$PATH
 
 #### 10.2. Android
 
-* Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 아래의 명령어 수행
+* Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 아래의 명령어를 수행한다.
 
 ~~~
 # chmod +x android_patch.sh
@@ -136,7 +124,7 @@ PATH=~/bin:$PATH
 
 ### 11. Build
 
-* Kenrel Build
+* Kenrel을 Build 한다.
 
 ~~~
 # cd [Kernel root]
@@ -147,7 +135,7 @@ PATH=~/bin:$PATH
 # ARCH=arm CROSS_COMPILE=arm-eabi- INSTALL_MOD_PATH=modules make modules_install
 ~~~
 
-* Android Build
+* Android를 Build 한다.
 
 ~~~
 # cd [Android Root]
@@ -163,14 +151,15 @@ PATH=~/bin:$PATH
 
 ### 12. Flash Image
 
-* ODROID-XU의 OTG USB와 PC를 연결
-* u-boot에서 아래의 명령어 수행
+* ODROID-XU의 OTG USB와 PC를 연결한다.
+
+* u-boot에서 아래의 명령어 수행한다.
 
 ~~~
 Exynos5410 # fastboot
 ~~~
 
-* Ubuntu에서 다음의 명령어 수행
+* Ubuntu에서 다음의 명령어를 수행한다.
 
 ~~~
 # fastboot flash kernel kernel/arch/arm/boot/zImage
