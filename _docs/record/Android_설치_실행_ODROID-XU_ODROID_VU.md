@@ -152,7 +152,6 @@ PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 ### 12. Flash Image
 
 * ODROID-XU의 OTG USB와 PC를 연결한다.
-
 * u-boot에서 아래의 명령어 수행한다.
 
 ~~~
