@@ -83,7 +83,7 @@ PATH=~/bin:$PATH
 
 * fastboot와 adb는 Build한 Android를 Device에 Flash할때 이용된다.
 * fastboot와 adb를 설치한다.
-  * Download - http://forum.insignal.co.kr/download/file.php?id=90
+  * Download : http://forum.insignal.co.kr/download/file.php?id=90
 
 ~~~
 # unzip adb_fastboot_for_linux_host.zip
@@ -94,7 +94,7 @@ PATH=~/bin:$PATH
 ### 6. Ubuntu에 Cross Compiler 설치
 
 * Cross Compiler를 설치한다. 
-  * Download - http://www.arndaleboard.org/wiki/downloads/supports/arm-2009q3.tar
+  * Download : http://www.arndaleboard.org/wiki/downloads/supports/arm-2009q3.tar
 
 ~~~
 # mv ./arm-2009q3.tar /usr/local
@@ -120,8 +120,8 @@ PATH=/usr/local/arm-2009q3/bin:$PATH
 ### 8. Download Proprietary
 
 * Booting을 위한 Proprietary를 받고 설치한다.
-  * Download Exynos5250 - http://forum.insignal.co.kr/download/file.php?id=247
-  * Download Arndale - http://forum.insignal.co.kr/download/file.php?id=246
+  * Download Exynos5250 : http://forum.insignal.co.kr/download/file.php?id=247
+  * Download Arndale : http://forum.insignal.co.kr/download/file.php?id=246
 
 ~~~
 # mv vendor_samsung_slsi_exynos5250_jb-mr1_20140526_14b314b.run [root of source tree]
