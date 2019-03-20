@@ -26,6 +26,7 @@ adsense: true
 * bpftool Build시 필요한 Library를 설치한다.
 
 ~~~
+# apt-get install build-essential 
 # apt-get install binutils-dev
 # apt-get install libelf-dev
 ~~~
@@ -35,6 +36,7 @@ adsense: true
 * bpftool Build시 필요한 Library를 설치한다.
 
 ~~~
+# yum groupinstall "Development Tools"
 # yum install binutils-devel
 # yum install elfutils-libelf-devel
 ~~~
