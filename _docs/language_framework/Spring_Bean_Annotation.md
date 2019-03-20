@@ -73,12 +73,15 @@ public class MyConfig {
 ### 3. @Service, @Controller, @Repository
 
 {% highlight JAVA linenos %}
+@Service
 public class MyService {
 }
 
+@Controller
 public class MyController {
 }
 
+@Repository
 public class MyRepository {
 }
 {% endhighlight %}
