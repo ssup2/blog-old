@@ -41,7 +41,7 @@ bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_BPF/BPF_Type.PNG){: width="600px"}
 
-BPF Hook은 Kernel에서 BPF가 실행되는 지점을 의미한다. Linux에서는 Hook에 따라서 eBPF를 **eBPF Type**으로 구분한다. 위의 그림은 eBPF Type들을 분류해서 나타낸 그림이다. Network 부분에는 Socket, tc(traffic control), XDP (eXpress Data Path) 관련 Type을 지원하고 있다. Tracing, Monitoring 부분에서는 Perf event, Tracepoint, Kprobe/Uprobe 관련 Type을 지원하고 있다. 또한 Cgroup 관련 Type도 지원하고 있다. 앞으로 더욱 많은 eBPF Type(Hook)이 추가될 예정이다.
+BPF Hook은 Kernel에서 BPF가 실행되는 지점을 의미한다. Linux에서는 Hook에 따라서 eBPF를 **eBPF Type**으로 구분한다. 위의 그림은 eBPF Type들을 분류해서 나타낸 그림이다. Network 부분에는 Socket, tc (traffic control), XDP (eXpress Data Path) 관련 Type을 지원하고 있다. Tracing, Monitoring 부분에서는 Perf event, Tracepoint, Kprobe/Uprobe 관련 Type을 지원하고 있다. 또한 Cgroup 관련 Type도 지원하고 있다. 앞으로 더욱 많은 eBPF Type(Hook)이 추가될 예정이다.
 
 eBPF Type은 Hook에 따라 정의되기 때문에 eBPF Type에 따라서 eBPF으로 들어오는 Input Type이 정해지게 된다. 또한 BPF Type은 eBPF가 호출 할 수 있는 Kernel Helper Function을 제한한다. 따라서 eBPF는 eBPF Type에 따라서 수행할 수 있는 기능이 제한된다. Linux Kernel의 Verifier는 eBPF Bytecode를 적재시 eBPF Type을 검사하고 해당 eBPF Bytecode가 허용된 Kernel Helper Function만을 호출하는지 검사한다. 만약 허용되지 않는 Kernel Helper Function을 호출할 경우 해당 eBPF Bytecode의 적재는 실패한다.
 

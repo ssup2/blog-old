@@ -50,7 +50,13 @@ Router는 Host Network Routing Rule뿐만 아니라 Container Network 관련 Rou
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Prefilter.PNG)
 
-Cilium은 XDP (eXpress Data Path)를 이용한 Packet Filteirng 기능도 제공한다. Cilium에서는 Prefilter라고 호칭한다. CIDR로 설정한 특정 Network의 Packet만 받도록 설정할 수 있다. Kubernetes Cluster를 구성하는 물리 Interface에 XDP BPF가 삽입되어 동작한다. Generic XDP, Native XDP 2가지 방식 모두 제공한다.
+Cilium은 XDP (eXpress Data Path)를 이용한 Packet Filteirng 기능도 제공한다. Cilium에서는 Prefilter라고 호칭한다. Kubernets Cluster Network를 구성하는 NIC의 Interface에 XDP BPF를 삽입시켜 동작한다. Generic XDP, Native XDP 2가지 방식 모두 제공한다. prefilter를 통해서 CIDR로 설정한 특정 Network의 Packet만 받도록 설정할 수 있다.
+
+#### 1.3. Service Load Balancing
+
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Load_Balancer.PNG){: width="400px"}
+
+Cilium은 tc (traffic control) Ingress BPF를 이용하여 Service Load balancing 기능도 제공한다. Cilium은 Kubernetes가 관리하는 Service의 IP와 Service와, 해당 Service를 통해서 실제 Packet이 전달되는 Pod들의 IP 정보를 갖고 있다. Cilium은 이러한 정보를 바탕으로 tc Ingress BPF를 통해서 Service Load Balancing을 수행한다. 현재는 Container Network를 Host L3 Network로 구성할 경우에만 이용할 수 있다.
 
 ### 2. 참조
 

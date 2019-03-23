@@ -216,7 +216,8 @@ node3   NotReady   <none>   27s   v1.12.3
 ~~~
 
 * Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다.
-  * prefilter Interface는 Kubernets Cluster Network의 Interface를 지정해야한다.
+  * prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다.
+  * Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다.
 
 ~~~
 # vim cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
@@ -232,6 +233,7 @@ node3   NotReady   <none>   27s   v1.12.3
             - "--kvstore-opt=etcd.config=/var/lib/etcd-config/etcd.config"
             - "--disable-ipv4=$(DISABLE_IPV4)"
             - "--prefilter-device=enp0s3"
+            - "--prefilter-mode=generic"
 ...
 ~~~
 
