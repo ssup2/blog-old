@@ -121,6 +121,7 @@ network:
 #### 4.1. Master Node
 
 * kubeadm를 초기화 한다.
+  * Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
 
 ~~~
 # swapoff -a
@@ -152,6 +153,7 @@ source <(kubectl completion bash)
 
 * Cluster를 구성한다.
   * kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
+  * Docker Version으로 인한 Error가 발생하면 kubeadm join 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
 
 ~~~
 # swapoff -a
@@ -205,13 +207,38 @@ node3   NotReady   <none>   27s   v1.12.3
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
-* Cilium을 위한 etcd 구동 및 Cilium을 설치한다.
+* Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
 
 ~~~
 # wget https://github.com/cilium/cilium/archive/v1.3.0.zip
 # unzip v1.3.0.zip
-# kubectl create -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
-# kubectl create -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
+# kubectl apply -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
+~~~
+
+* Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다.
+  * prefilter Interface는 Kubernets Cluster Network의 Interface를 지정해야한다.
+
+~~~
+# vim cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
+...
+      containers:
+        - image: docker.io/cilium/cilium:v1.3.0
+          imagePullPolicy: IfNotPresent
+          name: cilium-agent
+          command: ["cilium-agent"]
+          args:
+            - "--debug=$(CILIUM_DEBUG)"
+            - "--kvstore=etcd"
+            - "--kvstore-opt=etcd.config=/var/lib/etcd-config/etcd.config"
+            - "--disable-ipv4=$(DISABLE_IPV4)"
+            - "--prefilter-device=enp0s3"
+...
+~~~
+
+* Cilium을 설치한다.
+
+~~~
+# kubectl apply -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ~~~
 
 #### 5.2. Worker Node

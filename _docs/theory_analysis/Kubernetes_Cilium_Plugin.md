@@ -21,7 +21,7 @@ Cilium은 **BPF (Berkeley Packet Filter)**를 기반으로 Container Network를 
 
 * BPF - BPF는 Linux Kernel 안에서 Packet Routing 및 Filtering을 수행한다. BPF는 기존의 Linux Netfilter Framework 기반의 iptables에 비해서 낮은 Overhead 및 높은 성능이 가장 큰 장점이다. Cilium은 BPF 이용을 통해서 Netfilter Framework 사용을 최소화하여 Network 성능을 끌어올린다.
 
-#### 1.1. Network
+#### 1.1. Container Network
 
 Cilium은 Container Network를 구축하는 방법으로 VXLAN 기반의 기법과 Host Network를 그대로 이용하는 기법 2가지를 제공한다.
 
@@ -31,7 +31,8 @@ Cilium은 Container Network를 구축하는 방법으로 VXLAN 기반의 기법�
 
 위의 그림은 Cilium과 VXLAN을 이용하여 구축한 Container Network를 나타낸다. Host의 Network는 10.0.0.0/24이고, Container Network는 10.244.0.0/16이다. Cilium은 etcd에 저장된 정보를 바탕으로 각 Host에 Container Network를 할당한다. 그림에서 Host 1은 192.167.2.0/24 Network가 할당되었다. 따라서 Host 1에 생긴 Container A의 IP는 192.167.2.0/24 Network에 속한 IP인 192.167.2.10을 이용한다. Host 2에는 192.167.3.0/24 Network가 할당되었기 때문에 Host 2에 생긴 Container B의 IP는 192.167.3.0/24 Network에 속한 IP인 192.167.3.10를 이용한다.
 
-Container Network 구축시 이용하는 BPF는 VXLAN Interface에 붙는 tc action ingress BPF, Container의 veth Interface에 붙는 tc action ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 tc action engress BPF, 3가지 BPF가 이용된다. VXLAN Interface에 붙는 tc action ingress BPF은 cilium-agent가 BPF Map에 저장한 Container의 IP, MAC 주소 정보를 Packet과 함께 L3 Network Stack에 넘겨, L3 Network Stack에서 Packet이 Container로 바로 Routing 되도록 한다. Container의 veth Interface에 붙는 tc action ingress BPF는 Packet이 Container로 전달되도 되는 Packet인지 확인 및 Packet Filtering을 수행한다. Cilium에서는 Container가 특정 Container로부터온 Packet만을 받을 수 있도록 설정하거나, Container가 특정 URL로 오는 요청만 받도록 설정 할 수 있다.
+Container Network 구축시 이용하는 BPF는 VXLAN Interface에 붙는 tc action ingress BPF, Container의 veth Interface에 붙는 tc action ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 tc action engress BPF, 3가지 BPF가 이용된다. VXLAN Interface에 붙는 tc action ingress BPF은 cilium-agent가 BPF Map에 저장한 Container의 IP, MAC 주소 정보를 Packet과 함께 L3 Network Stack에 넘겨, L3 Network Stack에서 Packet이 Container로 바로 Routing 되도록 한다. Container의 veth Interface에 붙는 tc action ingress BPF는
+Container로 전달되는 Packet을 Filtering한다. L3, L4, L7 Filtering을 지원한다. Cilium에서는 Container가 특정 Container로부터온 Packet만을 받을 수 있도록 설정하거나, Container가 특정 URL로 오는 요청만 받도록 설정 할 수 있다.
 
 Container에서 전송된 Packet은 Container의 veth Interface에서 나와 Note의 Routing Table로 전달된다. Note Routing Table에서는 모든 Container Network Packet이 cilium_host로 전달되도록 설정되어 있다. 따라서 Container에서 나온 Packet은 모두 cilium_host의 tc action engress BPF에게 Routing 된다. cilium_host의 tc action engress BPF에서는 동일 Host로 다시 전달 되어야하는 Packet은 해당 Contianer의 veth Interface로 Routing하고, 외부 Host로 전달 되어야하는 Packet은 VXLAN Interface로 Redirection되어 Host 밖으로 나간다.
 
@@ -45,13 +46,16 @@ Container에게 전달되어야 하는 Packet은 Host가 수신한 뒤 Host의 R
 
 Router는 Host Network Routing Rule뿐만 아니라 Container Network 관련 Routing Rule도 알고 있어야 한다. 위의 그림에서 Router는 192.167.2.0/24 Container Network를 Node 1로 Routing 및 192.167.3.0/24 Container Network를 Node 2로 Routing 하도록 설정되어 있어야 한다. 따라서 Host L3 Network 기법은 Host를 연결하는 Router를 자유롭게 제어가능한 환경에서만 적용이 가능하다.
 
-#### 1.2. Service Load Balancing
+#### 1.2. Prefilter
 
-#### 1.3. Service Filtering
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Prefilter.PNG)
+
+Cilium은 XDP (eXpress Data Path)를 이용한 Packet Filteirng 기능도 제공한다. Cilium에서는 Prefilter라고 호칭한다. CIDR로 설정한 특정 Network의 Packet만 받도록 설정할 수 있다. Kubernetes Cluster를 구성하는 물리 Interface에 XDP BPF가 삽입되어 동작한다. Generic XDP, Native XDP (drv, native XDP) 2가지 방식 모두 제공한다.
 
 ### 2. 참조
 
 * [https://docs.cilium.io/en/v1.4/concepts/](https://docs.cilium.io/en/v1.4/concepts/) 
 * [https://docs.cilium.io/en/v1.4/architecture/](https://docs.cilium.io/en/v1.4/architecture/)
+* [https://github.com/cilium/cilium/commit/5e3e420f7927647b780c01d986ecaeff1bf32846#diff-9c45a228401ffc83c5c6ad50c7cc825b](https://github.com/cilium/cilium/commit/5e3e420f7927647b780c01d986ecaeff1bf32846#diff-9c45a228401ffc83c5c6ad50c7cc825b)
 * [https://github.com/cilium/cilium/tree/master/monitor](https://github.com/cilium/cilium/tree/master/monitor)
 * [https://ddiiwoong.github.io/2018/cilium-1/](https://ddiiwoong.github.io/2018/cilium-1/)

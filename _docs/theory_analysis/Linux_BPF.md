@@ -61,6 +61,10 @@ XDP Type BPF는 Network Device Driver에서 동작하는 eBPF이다. Network Dev
 * XDP_TX - 해당 Packet을 들어온 Network Device로 반사한다.
 * XDP_REDIRECT - 해당 Packet을 다른 Network Device로 넘긴다.
 
+XDP Type BPF는 Network Device Driver에서 동작하는 eBPF이기 때문에 XDP를 지원하지 않는 Network Device Driver에서는 구동할 수 없다. 이러한 제한적인 XDP의 구동환경은 XDP의 개발 및 Debugging을 힘들게 한다. 이러한 문제를 해결하기 위해 나온 XDP Type이 **Generic XDP**이다. XDP Generic의 BPF는 Network Device Driver에서 구동되지 않고 Network Device Driver와 tc 사이에서 구동된다. 따라서 가상 Network Device를 포함한 어떠한 Network Device에서도 XDP를 구동 할 수 있다. XDP Gene XDP Generic Type이 나오면서 Network Device Driver안에서 구동되는 XDP Type은 **Native XDP**라고 불린다.
+
+Generic XDP는 위에서 언급한 것 처럼 XDP 개발 및 Debugging을 위한 XDP Type이다. Generic XDP은 Native XDP에 비해서 높은 Network Stack에서 실행되는 만큼, Native XDP에 비해서 낮은 Packet 처리량을 갖는다. 또한 더 많은 Helper Function을 이용 할 수 있는 것도 아니다. 하지만 tc의 BPF보다는 먼저 실행되기 때문에, Packet Drop같은 간단한 동작을 수행하는 경우 tc의 BPF보다는 Generic XDP를 이용하는 것이 좀더 유리하다.
+
 #### 2.2. SCHED_CLS, SCHED_ACT
 
 SCHED_CLS, SCHED_ACT Type의 BPF는 Packet이 Network Device에서 tc로 전달되는 Ingress 또는 Packet이 tc에서 Network Device로 전달되는 Egress 경로에서 실행되는 BPF이다. cBFP, eBPF 둘다 지원한다. XDP Type보다는 상위 Layer의 BPF이기 때문에 시간당 Packet 처리량은 XDP Type의 BPF보다는 적지만 좀더 다양한 Packet 처리가 가능하다. SCHED_CLS, SCHED_ACT Type의 Input Type은 Socket Buffer (\_\_sk_buff)이다. Socket Buffer를 바탕으로 XDP Type보다 좀더 다양한 Kernel Helper Function을 이용 할 수 있다. SCHED_CLS Type BPF의 실행결과는 classid 반환하고, SCHED_ACT Type BPF의 실행결과는 'TC_ACT_'으로 시작하는 Linux Kernel에 정의된 값을 반환한다.
@@ -81,5 +85,8 @@ Socket Layer에 붙어서 Socket으로 들어오는 Packet을 필터링, 분류,
 * [https://cilium.readthedocs.io/en/v1.0/bpf/?fbclid=IwAR38RyvJXSsuzWk1jaTOGR7OhlgvQezoIHRLuiUA4rG2fc-AA70yyQTvxOg#bpf-guide](https://cilium.readthedocs.io/en/v1.0/bpf/?fbclid=IwAR38RyvJXSsuzWk1jaTOGR7OhlgvQezoIHRLuiUA4rG2fc-AA70yyQTvxOg#bpf-guide)
 * [https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md](https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md)
 * [https://www.slideshare.net/lcplcp1/xdp-and-ebpfmaps](https://www.slideshare.net/lcplcp1/xdp-and-ebpfmaps)
+* [https://www.slideshare.net/lcplcp1/introduction-to-ebpf-and-xdp](https://www.slideshare.net/lcplcp1/introduction-to-ebpf-and-xdp)
+* [https://prototype-kernel.readthedocs.io/en/latest/blogposts/xdp25_eval_generic_xdp_tx.html](https://prototype-kernel.readthedocs.io/en/latest/blogposts/xdp25_eval_generic_xdp_tx.html)
+* [https://www.slideshare.net/TaeungSong/bpf-xdp-8-kosslab](https://www.slideshare.net/TaeungSong/bpf-xdp-8-kosslab)
 * [http://media.frnog.org/FRnOG_28/FRnOG_28-3.pdf](http://media.frnog.org/FRnOG_28/FRnOG_28-3.pdf)
 * [http://man7.org/linux/man-pages/man2/bpf.2.html](http://man7.org/linux/man-pages/man2/bpf.2.html)
