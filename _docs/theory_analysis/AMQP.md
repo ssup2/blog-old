@@ -27,21 +27,29 @@ Exchange는 Routing 규칙에 따라서 Fanout, Direct, Topic, Header 4가지 Ty
 
 ##### 1.1.1. Direct
 
+![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Direct.PNG){: width="500px"}
+
 Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하는 Exchange이다. Unicast의 기준은 Message와 함께 전달되는 Routing Key이다. Direct Exchange와 Binding하기 위해서는 Direct Exchange에게 Routing Key를 넘겨주어야 한다. Direct Exchange는 Message와 함께온 Routing Key와 동일한 Routing Key로 자신과 Binding된 Queue 또는 Exchange에게 해당 Message를 전달한다.
 
 ##### 1.1.2. Fanout
+
+![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Fanout.PNG){: width="500px"}
 
 Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. Fanout Exchange와 Binding하기 위해서 Fanout Exchange에게 추가적으로 넘겨주어야할 정보는 없다.
 
 ##### 1.1.3. Topic
 
+![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Topic.PNG){: width="500px"}
+
 Topic Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message와 함께 전달되는 Routing Key이다. Topic Exchange와 Binding하기 위해서는 Topic Exchange에게 패턴이 포함된 Routing Key를 넘겨주어야 한다. 이용하는 패턴은 '\*'과 '#'이다. '\*'은 하나의 문자로 치환이 가능하다는 의미이다. '#'은 아무것도 없는 문자부터 문자열까지 어떠한 문자들과도 치환이 가능하다는 의미이다. Topic Exchange는 Message와 함께온 Routing Key에 부합하는 패턴 Routing Key로 자신과 Binding한 모든 Queue 또는 Exchange에게 Message를 전달한다.
 
-##### 1.1.4. Header
+##### 1.1.4. Headers
 
-Header Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message Header에 포함되어 있는 Key, Value 값이다. Header Exchange와 Binding하기 위해서는 Message Header에 포함될 Key, Value 값을 넘겨주어야 한다. Header Exchange는 Message Header의 Key, Value 값과 동일한 Key, Value로 자신과 Binding한 모든 Queue 또는 Exchange에게 Message를 전달한다.
+![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Headers.PNG){: width="600px"}
 
-Header Exchange는 **x-match**라는 Option을 제공하는데 x-match는 'all'과 'any' 2가지 값이 존재한다. 'all'은 Message Header에 있는 모든 Key, Value 값이 Binding시에 전달 받은 Key, Value 값과 일치하는 경우에만 해당 Queue 또는 Exchange에게 Messsage를 전달한다. 'any'는 Message Header에 있는 Key, Value값의 일부만 Binding시에 전달 받은 Key, Value과 일치하더라도 해당 Queue 또는 Exchange에게 Message를 전달한다.
+Headers Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message Header에 포함되어 있는 Key, Value 값이다. Headers Exchange와 Binding하기 위해서는 Message Header에 포함될 Key, Value 값을 넘겨주어야 한다. Headers Exchange는 Message Header의 Key, Value 값과 동일한 Key, Value로 자신과 Binding한 모든 Queue 또는 Exchange에게 Message를 전달한다.
+
+Headers Exchange는 **x-match**라는 Option을 제공하는데 x-match는 'all'과 'any' 2가지 값이 존재한다. 'all'은 Message Header에 있는 모든 Key, Value 값이 Binding시에 전달 받은 Key, Value 값과 일치하는 경우에만 해당 Queue 또는 Exchange에게 Messsage를 전달한다. 'any'는 Message Header에 있는 Key, Value값의 일부만 Binding시에 전달 받은 Key, Value과 일치하더라도 해당 Queue 또는 Exchange에게 Message를 전달한다.
 
 ### 2. 참조
 
