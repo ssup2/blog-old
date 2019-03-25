@@ -35,7 +35,7 @@ felix는 각 Host에 Container Network를 할당한 후 다른 Host에 할당된
 
 Container A에서 Dest IP가 192.168.3.10인 Packet을 보내면, Packet은 calixxx Interface로 나와 Host 1의 Routing Table 규칙에 따라 다시 Routing된다. Packet의 Dest IP가 192.168.3.0/24 Network에 속하기 때문에 Packet은 tunl0 Interface로 전달되고 다시 Host 2로 전달된다. 그 후 Packet은 Host 2의 Routing Table에 따라서 caliyyy Interface에 전달되어 Container B에게 전달된다.
 
-IP-in-IP를 이용하여 가상의 Container Network를 만드는 방식이지만, Host의 Routing Table에 Container IP 정보도 있기 때문에 Host에서도 Container에게 Packet을 전달할 수 있다. brid도 Host의 Routing Table을 바탕으로 Container IP를 파악하고 Route Reflector로 전달한다.
+IP-in-IP를 이용하여 가상의 Container Network를 만드는 방식이지만, Host의 Routing Table에 Container IP 정보도 있기 때문에 Host에서도 Container에게 Packet을 전달할 수 있다. bird도 Host의 Routing Table을 바탕으로 Container IP를 파악하고 Route Reflector로 전달한다.
 
 ### 2. 참조
 
