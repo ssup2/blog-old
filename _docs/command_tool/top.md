@@ -7,9 +7,11 @@ comment: true
 adsense: true
 ---
 
-top 명령어는 Linux에서 실시간으로 Process들을 보여주는 Tool이다. top은 proc Filesystem의 Process 관련 내용을 파싱 및 계산을 통해 Linux 사용자가 쉽게 Process들의 상태를 파악 할 수 있도록 도와준다.
+top 명령어는 Linux에서 실시간으로 Process들을 보여주는 Tool이다. top은 proc Filesystem의 Process 관련 내용을 Parsing 및 계산을 통해 Linux 사용자가 쉽게 Process들의 상태를 파악 할 수 있도록 도와준다.
 
 ### 1. top Display
+
+top 명령을 통해서 확인 할 수 있는 화면은 아래와 같다.
 
 ~~~
 top - 10:27:27 up 36 min,  3 users,  load average: 0.00, 0.01, 0.05
