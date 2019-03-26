@@ -54,7 +54,7 @@ Root CA의 Private Key를 이용하여 하위 CA가 발행한 Certificate에 서
 ### 2. 참조
 * [https://en.wikipedia.org/wiki/Transport_Layer_Security](https://en.wikipedia.org/wiki/Transport_Layer_Security)
 * [https://sites.google.com/site/amitsciscozone/home/security/ssl-connection-setup](https://sites.google.com/site/amitsciscozone/home/security/ssl-connection-setup)
-* [https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.1.0/com.ibm.mq.doc/sy10660_.htm](https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.1.0/com.ibm.mq.doc/sy10660_.htm)
+* [https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.1.0/com.ibm.mq.doc/sy10660\_.htm](https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.1.0/com.ibm.mq.doc/sy10660\_.htm)
 * [https://wiki.kldp.org/HOWTO/html/SSL-Certificates-HOWTO/x70.html](https://wiki.kldp.org/HOWTO/html/SSL-Certificates-HOWTO/x70.html)
 * [http://whitelka.tistory.com/103](http://whitelka.tistory.com/103)
 * [https://rsec.kr/?p=455](https://rsec.kr/?p=455)
