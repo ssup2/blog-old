@@ -13,7 +13,7 @@ MQ(Message Queue) Protocol인 AMQP(Advanced Message Queuing Protocol)를 분석�
 
 AMQP는 **표준 MQ Protocol**으로써 App사이의 Message를 전달할 때 Message를 어떻게 Queuing하고 Routing 할지 정의하고 있다. AMQP는 다양한 Message 전달 옵션을 정의하고 있기 때문에 많은 App들이 AMQP를 이용하여 Message 전달 규칙을 설계하고 이용하고 있다. RabbitMQ는 AMQP를 제공하는 대표적인 MOM(Message-Oriented Middleware)으로써 많은 곳에서 이용되고 있다.
 
-![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Architecture.PNG){: width="700px"}
+![[그림 1] AMQP Architecture]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Architecture.PNG){: width="700px"}
 
 위의 그림은 AMQP의 Architecture를 나타내고 있다. AMQP는 Producer, Consumer, Broker로 구성되어 있다. Producer는 Message를 생산하여 전송하는 주체이고, Consumer는 Producer가 생산한 Message를 받아서 소비하는 주체이다. Broker는 Producer와 Consumer 사이에서 Message를 중개하는 역활을 수행한다. Broker는 다시 **Exchange**와 **Queue**로 구성되어 있다.
 
@@ -27,25 +27,25 @@ Exchange는 Routing 규칙에 따라서 Fanout, Direct, Topic, Header 4가지 Ty
 
 ##### 1.1.1. Direct
 
-![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Direct.PNG){: width="500px"}
+![[그림 2] Direct Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Direct.PNG){: width="500px"}
 
-Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하는 Exchange이다. Unicast의 기준은 Message와 함께 전달되는 Routing Key이다. Direct Exchange와 Binding하기 위해서는 Direct Exchange에게 Routing Key를 넘겨주어야 한다. Direct Exchange는 Message와 함께온 Routing Key와 동일한 Routing Key로 자신과 Binding된 Queue 또는 Exchange에게 해당 Message를 전달한다.
+Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하는 Exchange이다. Unicast의 기준은 Message와 함께 전달되는 Routing Key이다. Direct Exchange와 Binding하기 위해서는 Direct Exchange에게 Routing Key를 넘겨주어야 한다. 위의 그림에서는 Binding시 Direct Exchange에게 넘겨준 Routing Key를 **Binding Key**라고 표현하고 있다. Direct Exchange는 Message와 함께온 Routing Key와 동일한 Binding Key를 갖고 있는 Queue 또는 Exchange에게 해당 Message를 전달한다.
 
 ##### 1.1.2. Fanout
 
-![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Fanout.PNG){: width="500px"}
+![[그림 3] Direct Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Fanout.PNG){: width="500px"}
 
 Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. Fanout Exchange와 Binding하기 위해서 Fanout Exchange에게 추가적으로 넘겨주어야할 정보는 없다.
 
 ##### 1.1.3. Topic
 
-![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Topic.PNG){: width="500px"}
+![[그림 4] Topic Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Topic.PNG){: width="500px"}
 
 Topic Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message와 함께 전달되는 Routing Key이다. Topic Exchange와 Binding하기 위해서는 Topic Exchange에게 패턴이 포함된 Routing Key를 넘겨주어야 한다. 이용하는 패턴은 '\*'과 '#'이다. '\*'은 하나의 문자로 치환이 가능하다는 의미이다. '#'은 아무것도 없는 문자부터 문자열까지 어떠한 문자들과도 치환이 가능하다는 의미이다. Topic Exchange는 Message와 함께온 Routing Key에 부합하는 패턴 Routing Key로 자신과 Binding한 모든 Queue 또는 Exchange에게 Message를 전달한다.
 
 ##### 1.1.4. Headers
 
-![]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Headers.PNG){: width="600px"}
+![[그림 5] Headers Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Headers.PNG){: width="600px"}
 
 Headers Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message Header에 포함되어 있는 Key, Value 값이다. Headers Exchange와 Binding하기 위해서는 Message Header에 포함될 Key, Value 값을 넘겨주어야 한다. Headers Exchange는 Message Header의 Key, Value 값과 동일한 Key, Value로 자신과 Binding한 모든 Queue 또는 Exchange에게 Message를 전달한다.
 
