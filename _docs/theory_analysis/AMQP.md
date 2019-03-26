@@ -35,7 +35,7 @@ Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하�
 
 ![[그림 3] Direct Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Fanout.PNG){: width="400px"}
 
-Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. 위의 그림에서 Exchange A는 자신과 Binding된 Queue A, Queue B, Exchange B에게 자신이 받은 모든 Message를 전달한다.
+Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. 위의 그림에서 Exchange A는 자신과 Binding된 Queue A, Queue B, Exchange B에게 자신이 받은 모든 Message를 전달하여 Brodcast를 수행한다.
 
 ##### 1.1.3. Topic
 
