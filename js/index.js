@@ -3,7 +3,7 @@
     'use strict';
 
     $(function () {
-        // turn img alt into caption
+        // Turn img alt into caption
         $('.content > p > img[alt]').replaceWith(function () {
             return '<figure>'
                 + '<a href="' + $(this).attr('src') + '" class="mg-link">'
@@ -11,7 +11,8 @@
                 + '<figcaption class="caption">' + $(this).attr('alt') + '</figcaption>'
                 + '</figure>';
         });
-        // and connect magnific popup image viewer
+
+        // Connect magnific popup image viewer
         $('#post-content .mg-link').magnificPopup({
             type: 'image',
             closeOnContentClick: true
