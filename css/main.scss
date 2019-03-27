@@ -22,7 +22,6 @@ $space: 20px;
 $mobile-break: 700px;
 $full-width-break: $nav-width + ($space * 4) + $content-max-width;
 
-@import url(son-of-obsidian.css);
 @import "mixins";
 @import "normalize";
 @import "pygments";
