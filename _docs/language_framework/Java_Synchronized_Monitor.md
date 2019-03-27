@@ -19,7 +19,7 @@ Java에서 Monitor Instance는 별도로 존재하지 않고 **일반 Instance�
 
 #### 2.1 Synchronized with Method
 
-{% highlight Java %}
+{% highlight Java linenos %}
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +47,7 @@ Synchronized Keyword는 일반적으로 Method와 많이 이용된다. 위의 �
 
 #### 2.2. Synchronized with Instance
 
-{% highlight Java %}
+{% highlight Java linenos %}
 import java.util.HashMap;
 import java.util.Map;
 
