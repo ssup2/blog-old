@@ -1,20 +1,19 @@
 table {
+	border-collapse: collapse;
 	width: 100%;
 }
 
-tr {
-	border-bottom: 1px solid #EEE;
+td, #th {
+	border: 1px solid #ddd;
+	padding: 8px;
 }
-
-tr:nth-child(even) {
-	background: #fcfcfc;
-}
-
-td, th {
-	padding: 0px;
-	text-align: left;
-}
+  
+tr:nth-child(even){background-color: #f2f2f2;}
 
 th {
-	padding-bottom: 4px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #ddd;
+	color: white;
 }
