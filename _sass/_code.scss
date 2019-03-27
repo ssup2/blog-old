@@ -2,12 +2,10 @@ pre, code, tt {
 	font-family: Consolas, Courier, "Courier New", "Liberation Mono", monospace;
 	font-size: 0.85em;
 	white-space: pre-wrap;
-	border-radius: 2px;
 	line-height: 1.4;
 	font-weight: 400;
 	background-color: #404145;
 	color: #FAFAFA;
-	border-radius: 2px;
 }
 
 pre {
@@ -19,7 +17,6 @@ pre {
 	tab-size: 4;
 	white-space: pre;
 	overflow: auto;
-	border-radius: 3px;
 
 	code, tt {
 		font-size: inherit;
