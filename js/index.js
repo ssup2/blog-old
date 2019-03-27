@@ -2,6 +2,7 @@
 (function (window, document, $) {
     'use strict';
 
+    $(function () {
         // turn img alt into caption
         $('.content > p > img[alt]').replaceWith(function () {
             return '<figure>'
