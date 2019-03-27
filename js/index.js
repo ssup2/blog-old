@@ -1,4 +1,4 @@
-// 이미지 alt 속 내용을 캡션으로 만들어줌
+// Turn img alt into caption
 $('.content > p > img[alt]').replaceWith(function () {
     return '<figure>'
         + '<a href="' + $(this).attr('src') + '" class="mg-link">'
@@ -7,7 +7,7 @@ $('.content > p > img[alt]').replaceWith(function () {
         + '</figure>';
 });
 
-// 이미지를 magnific popup image viewer에 연결시킴
+ // Connect magnific popup image viewer
 $('.mg-link').magnificPopup({
     type: 'image',
     closeOnContentClick: true
