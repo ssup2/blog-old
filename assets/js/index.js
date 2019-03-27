@@ -8,7 +8,7 @@ $('.content > p > img[alt]').replaceWith(function () {
 });
 
 // Connect magnific popup image viewer
-$('#post-content .mg-link').magnificPopup({
+$('.mg-link').magnificPopup({
     type: 'image',
     closeOnContentClick: true
 });
