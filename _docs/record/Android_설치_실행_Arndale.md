@@ -25,7 +25,7 @@ adsense: true
 * Arndale Board의 USB OTG 단자를 통해 PC와 연결한다.
 * Hardware ID 확인한다. (Computer -> Properties -> Device Manager -> Full -> Properties > Details >Hardware ID)
 
-![]({{site.baseurl}}/images/record/Android_Install_Arndale/Arndale_USB_Hardware_Info.PNG){: width="400px"}
+![[그림 1] Arndale Board의 Hardware ID 확인]({{site.baseurl}}/images/record/Android_Install_Arndale/Arndale_USB_Hardware_Info.PNG){: width="400px"}
 
 * android_winusb.inf (adt-bundle-windows-x86_64-20xxxxxx\sdk\extras\google\usb_driver\android_winusb.inf) 파일 아래에 아래의 내용 추가한다.
 

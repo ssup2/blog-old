@@ -6,6 +6,9 @@ lastmod: 2016-01-22T13:10:00Z
 comment: true
 adsense: true
 ---
+
+C언어의 Macro 문법을 정리한다.
+
 ### 1. # - 문자열화 연산자
 
 #### 1.1. 기능

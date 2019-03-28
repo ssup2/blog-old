@@ -16,17 +16,13 @@ adsense: true
 하이퍼바이저는 기본적으로 **trap-and-emulation** 방식으로 동작한다. 가상 머신이 특정 리소스와 연관된 동작을 하려고 하면 Trap이 발생하여 하이퍼바이저가 실행되고, 하이퍼바이저는 Trap의 원인을 파악한후 적절한 Emulation을 통해 가상 머신이 실제 물리 머신에서 동작하는 듯한 착각을 하게 만든다. 따라서 하이퍼바이저는 다음과 같은 3가지 모듈로 구분할 수 있다.
 
 * Dispatcher - Hardware Trap이 발생하면 실행되는 모듈. Allocator나 Interpreter를 실행한다.
-
 * Allocator - 가상 머신의 요청에 따라서 Resource를 할당/해제하는 역활을 수행한다.
-
 * Interpreter - Trap을 발생시키는 Instruction을 Emulation한다.
 
 ### 3. Instruction의 종류
 
 * Privileged Instruction - User Mode에서 실행하는 경우 Trap이 발생하고, System Mode에서 실행하는 경우 Trap없이 실행하는 명령어를 의미한다.
-
 * Control Sensitive Instruction - Resource의 설정을 바꾸는 명령어를 의미한다.
-
 * Behavior Sensitive Instruction - Resource의 설정에 의존적인 명령어를 의미한다.
 
 ### 4. 하이퍼바이저를 동작시키기 위한 CPU Architecture의 종류

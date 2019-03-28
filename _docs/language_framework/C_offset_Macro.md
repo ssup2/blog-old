@@ -7,6 +7,8 @@ comment: true
 adsense: true
 ---
 
+C언어 Macro로 되어 있는 offsetof() 함수를 분석한다.
+
 ### 1. Macro
 
 {% highlight C linenos  %}
@@ -15,7 +17,7 @@ adsense: true
 
 ### 2. 설명
 
-* (TYPE *)0 : 주소는 0이고 이 주소는 TYPE 구조체의 포인터이다. Address is 0 and this is pointer of TYPE.
+* (TYPE *)0 : 주소는 0이고 이 주소는 TYPE 구조체의 포인터이다.
 * &((TYPE *)0)->MEMBER : MEMBER의 Offset을 구한다.
 * ((sizet) &((TYPE *)0)->MEMBER) : 구한 Offset을 sizet로 Type Casting한다.
 
