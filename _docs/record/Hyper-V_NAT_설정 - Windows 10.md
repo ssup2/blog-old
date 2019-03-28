@@ -43,12 +43,12 @@ network:
     ethernets:
         eth0:
             addresses:
-            - 172.34.0.100/24
+                - 172.34.0.100/24
             dhcp4: false
             gateway4: 172.34.0.1
             nameservers:
                 addresses:
-                - 8.8.8.8
+                    - 8.8.8.8
                 search: []
     version: 2
 {% endhighlight %}
