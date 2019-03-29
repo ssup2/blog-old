@@ -60,10 +60,19 @@ adsense: true
 
 ![[그림 6] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
 
-* WSL Ubuntu root 계정 설정한다.
+* WSL Ubuntu의 root 계정을 생성한다.
   * WSL Ubuntu를 설치 후 처음으로 실행하면 WSL Ubuntu에서 이용할 User와 Password를 입력 받는다.
-  * 입력했던 User, Password를 이용하여 root 계정 생성 및 WSL Ubuntu의 기본 계정이 root가 되도록 설정한다.
-  * PowerShell을 관리자 권한으로 실행하여 아래의 명령어를 실행하고 재부팅 한다.
+  * WSL Ubuntu에서 아래의 명령를 실행한다.
+
+~~~
+$ sudo passwd root
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+~~~
+
+* WSL Ubuntu가 Default 계정으로 root를 이용하도록 설정한다.
+  * WSL Ubuntu를 종료한 다음, PowerShell을 관리자 권한으로 실행하여 아래의 명령어를 실행한다.
 
 ~~~
 > ubuntu config --default-user root
@@ -94,6 +103,13 @@ adsense: true
 * WSL Ubuntu를 종료한다.
 
 ### 4. Visual Studio Code 설치, 설정
+
+* Visual Studio Code 설치
+  * https://code.visualstudio.com/
+
+* Visual Studio Code의 Default Shell을 WSL Ubuntu로 바꾼다.
+  * `Ctrl + Shift + P`를 눌러 Command Palatte를 실행하고 `Terminal: Select Default Shell`을 선택한다.
+  * WSL Ubuntu를 선택한다.
 
 ### 5. 사용법
 
