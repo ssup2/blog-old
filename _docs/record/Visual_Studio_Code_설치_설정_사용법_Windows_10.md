@@ -35,8 +35,9 @@ adsense: true
 
 ![[그림 2] Docker Port 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_02.PNG){: width="550px"}
 
-* PowerShell을 관리자 권한으로 아래의 명령어를 실행하여, Windows에서 Container의 IP에 바로 접근할 수 있도록 Routing Rule을 추가한다.
+* Windows에서 Container의 IP에 바로 접근할 수 있도록 Routing Rule을 추가한다.
   * Default Docker Network인 172.17.0.0/24 Network 관련 Routing Rule을 추가한다.
+  * PowerShell을 관리자 권한으로 실행하여 아래의 명령어를 실행한다.
 
 ~~~
 > route add  172.17.0.0 MASK 255.255.0.0 10.0.75.2
@@ -66,20 +67,40 @@ adsense: true
 
 ![[그림 6] WSL 기능 활성화]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/WSL_Enable.PNG){: width="400px"}
 
-* WSL Ubuntu 설치
+* WSL Ubuntu 설치한다.
   * Store에서 Ubuntu를 검색하여 설치하고 재부팅한다.
 
 ![[그림 7] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
 
-* Docker, Docker Compose 설치 및 설정
-  * WSL Ubuntu를 실행하여 Docker Package를 설치하여 Docker Client를 설치한다.
-  * Docker for Windows의 Docker와 연결하기 위해서 Bash에 Docker Host를 지정한다.
+* WSL Ubuntu root 계정 설정한다.
+  * WSL Ubuntu를 설치 후 처음으로 실행하면 WSL Ubuntu에서 이용할 User와 Password를 입력 받는다.
+  * 입력했던 User, Password를 이용하여 root 계정 생성 및 WSL Ubuntu의 기본 계정이 root가 되도록 설정한다.
+  * PowerShell을 관리자 권한으로 실행하여 아래의 명령어를 실행하고 재부팅 한다.
 
 ~~~
-$ sudo apt update
-$ sudo apt install docker.io
-$ sudo apt install docker-compose
-$ echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
+> ubuntu config --default-user root
+~~~
+
+* Docker, Docker Compose 설치 및 설정한다.
+  * WSL Ubuntu를 실행하여 Docker Client를 위해서 Docker Package를 설치한다.
+  * Docker for Windows의 Docker와 연결하기 위해서 Bash에 Docker Host를 지정한다.
+  * WSL Ubuntu에서 아래의 명령어를 입력한다.
+
+~~~
+# apt update
+# apt install docker.io
+# apt install docker-compose
+# "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
+~~~
+
+* git Client를 설치
+  * git Client를 설치한다. 
+  * git Client가 CRLF를 LF로 자동으로 변경하도록 설정한다.
+  * WSL Ubuntu에서 아래의 명령어를 입력한다.
+
+~~~
+# apt install git
+# git config --global core.autocrlf true
 ~~~
 
 * WSL Ubuntu를 종료한다.
@@ -92,3 +113,4 @@ $ echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashr
 
 * [https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)
 * [https://forums.docker.com/t/connecting-to-containers-ip-address/18817](https://forums.docker.com/t/connecting-to-containers-ip-address/18817)
+* [https://webdir.tistory.com/543](https://webdir.tistory.com/543)
