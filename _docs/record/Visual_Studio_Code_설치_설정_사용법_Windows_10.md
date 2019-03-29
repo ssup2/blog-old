@@ -88,7 +88,7 @@ adsense: true
 
 ~~~
 # apt install git
-# git config --global core.autocrlf true
+# git config --global core.autocrlf input
 ~~~
 
 * WSL Ubuntu를 종료한다.
