@@ -10,5 +10,6 @@ $('.content > p > img[alt]').replaceWith(function () {
 // Connect magnific popup image viewer
 $('.mg-link').magnificPopup({
     type: 'image',
-    closeOnContentClick: true
+    closeOnContentClick: true,
+    closeBtnInside:false
 });

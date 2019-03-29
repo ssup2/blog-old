@@ -46,11 +46,11 @@ adsense: true
 
 * 아래와 같이 선택하여 Unix Tool을 설치한다.
 
-![[그림 2] Git Unix Tool 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_01.PNG){: width="500px"}
+![[그림 3] Git Unix Tool 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_01.PNG){: width="500px"}
 
 * 아래와 같은 End of Line 정책을 선택한다.
 
-![[그림 3] Git End of Line 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_02.PNG){: width="500px"}
+![[그림 4] Git End of Line 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_02.PNG){: width="500px"}
 
 * 나머지는 기본값으로 설정하여 설치한다.
 
@@ -60,16 +60,16 @@ adsense: true
   * 개발자 기능 사용을 검색하여 실행한다.
   * 아래와 같이 **개발자 모드**로 변경한다.
 
-![[그림 4] 개발자 모드 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Developer_Mode.PNG){: width="500px"}
+![[그림 5] 개발자 모드 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Developer_Mode.PNG){: width="500px"}
 
 * Windows 기능에서 WSL을 활성화 한다.
 
-![[그림 5] WSL 기능 활성화]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/WSL_Enable.PNG){: width="400px"}
+![[그림 6] WSL 기능 활성화]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/WSL_Enable.PNG){: width="400px"}
 
 * WSL Ubuntu 설치
   * Store에서 Ubuntu를 검색하여 설치하고 재부팅한다.
 
-![[그림 6] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
+![[그림 7] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
 
 * Docker, Docker Compose 설치 및 설정
   * WSL Ubuntu를 실행하여 Docker Package를 설치하여 Docker Client를 설치한다.
