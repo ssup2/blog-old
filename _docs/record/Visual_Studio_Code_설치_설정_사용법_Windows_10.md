@@ -43,34 +43,22 @@ adsense: true
 > route add  172.17.0.0 MASK 255.255.0.0 10.0.75.2
 ~~~
 
-### 3. Git 설치
-
-* 아래와 같이 선택하여 Unix Tool을 설치한다.
-
-![[그림 3] Git Unix Tool 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_01.PNG){: width="500px"}
-
-* 아래와 같은 End of Line 정책을 선택한다.
-
-![[그림 4] Git End of Line 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Git_Install_02.PNG){: width="500px"}
-
-* 나머지는 기본값으로 설정하여 설치한다.
-
-### 4. WSL Ubuntu 설치
+### 3. WSL Ubuntu 설치
 
 * WSL (Windows Subsystem for Linux) Bash를 활성화한다.
   * 개발자 기능 사용을 검색하여 실행한다.
   * 아래와 같이 **개발자 모드**로 변경한다.
 
-![[그림 5] 개발자 모드 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Developer_Mode.PNG){: width="500px"}
+![[그림 4] 개발자 모드 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Developer_Mode.PNG){: width="500px"}
 
 * Windows 기능에서 WSL을 활성화 한다.
 
-![[그림 6] WSL 기능 활성화]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/WSL_Enable.PNG){: width="400px"}
+![[그림 5] WSL 기능 활성화]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/WSL_Enable.PNG){: width="400px"}
 
 * WSL Ubuntu 설치한다.
   * Store에서 Ubuntu를 검색하여 설치하고 재부팅한다.
 
-![[그림 7] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
+![[그림 6] WSL Ubuntu 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Ubuntu_Install.PNG){: width="500px"}
 
 * WSL Ubuntu root 계정 설정한다.
   * WSL Ubuntu를 설치 후 처음으로 실행하면 WSL Ubuntu에서 이용할 User와 Password를 입력 받는다.
@@ -105,11 +93,11 @@ adsense: true
 
 * WSL Ubuntu를 종료한다.
 
-### 5. Visual Studio Code 설치, 설정
+### 4. Visual Studio Code 설치, 설정
 
-### 6. 사용법
+### 5. 사용법
 
-### 7. 참조
+### 6. 참조
 
 * [https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)
 * [https://forums.docker.com/t/connecting-to-containers-ip-address/18817](https://forums.docker.com/t/connecting-to-containers-ip-address/18817)
