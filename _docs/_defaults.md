@@ -46,4 +46,27 @@ int main()
 }
 {% endhighlight %}
 
+<figure>
+{% highlight yaml %}
+# This file is generated from information provided by
+# the datasource.  Changes to it will not persist across an instance.
+# To disable cloud-init's network configuration capabilities, write a file
+# /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
+# network: {config: disabled}
+network:
+    ethernets:
+        eth0:
+            addresses:
+                - 172.34.0.100/24
+            dhcp4: false
+            gateway4: 172.34.0.1
+            nameservers:
+                addresses:
+                    - 8.8.8.8
+                search: []
+    version: 2
+{% endhighlight %}
+<figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
 * QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
