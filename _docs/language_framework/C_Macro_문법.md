@@ -17,7 +17,7 @@ C언어의 Macro 문법을 정리한다.
 
 #### 1.2. 예제
 
-{% highlight C linenos %}
+{% highlight c linenos %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
 
@@ -40,7 +40,7 @@ THIS IS TEST CODE
 
 #### 2.2. 예제
 
-{% highlight C linenos %}
+{% highlight c linenos %}
 #include <stdio.h>
 
 #define INT_i(n)        int i##n = n;
@@ -71,13 +71,13 @@ i0 = 0
 
 ##### 3.2.1. 1999년 C 표준
 
-{% highlight C linenos %}
+{% highlight c linenos %}
 #define debug(format, ...) fprintf (stderr, format, __VA_ARGS__)
 {% endhighlight %}
 
 ##### 3.2.2. GCC
 
-{% highlight C linenos %}
+{% highlight c linenos %}
 #define debug(format, args...) fprintf (stderr, format, args)
 {% endhighlight %}
 

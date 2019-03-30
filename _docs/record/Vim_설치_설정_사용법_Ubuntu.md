@@ -75,7 +75,7 @@ source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 
 * ~/.vimrc 파일을 다음과 같이 수정하여, Plugin 설치 및 설정 정보를 저장한다.
 
-{% highlight VimL %}
+{% highlight viml %}
 "
 " supsup's .vimrc
 "

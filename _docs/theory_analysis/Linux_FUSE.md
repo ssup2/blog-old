@@ -27,7 +27,7 @@ FUSE Daemon Process는 System Call 처리 후 /dev/fuse Device 파일을 대상�
 
 FUSE Daemon을 작성하기 위해서는 FUSE Module과 FUSE Module을 조작하는 /dev/fuse Device 파일의 이용법을 이해해야 한다. 이러한 불편함을 없애기 위해 나온것이 **libfuse** Libraray이다. libfuse를 이용하면 FUSE Daemon 개발자는 FUSE Module을 이해할 필요없이 각 System Call 별로 호출되는 함수들만 작성하면 된다.
 
-{% highlight C %}
+{% highlight c %}
 struct fuse_operations fuse_oper = {
   .getattr = fuse_getattr,
   .readlink = fuse_readlink,

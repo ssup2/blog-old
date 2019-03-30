@@ -29,7 +29,7 @@ Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역활을
 * Servlet Container는 Servlet Instance의 service() method를 호출하여 HTTP 요청을 처리하고, WAS Server의 Web Server에게 처리 결과를 전달한다.
 * WAS Server의 Web Server는 HTTP 응답을 Web Server에게 전달하고, Web Server는 받은 HTTP 응답을 Web Brower에게 전달한다.
 
-{% highlight Java %}
+{% highlight java %}
 public class MyServlet extends HttpServlet {
     private Object thisIsNOTThreadSafe;
 

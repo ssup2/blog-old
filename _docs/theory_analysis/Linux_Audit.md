@@ -19,7 +19,7 @@ Linux Audit은 Linux Kernel에서 발생하는 다양한 보안 관련 Event를 
 
 Audit은 Audit Event를 수집하기 위해서 기본적으로 **System Call Hooking**을 이용한다. App이 System Call을 호출하면 Kernel은 System Call 처리 중간 중간에 Audit Event를 위한 **Audit Log**를 작성하고 Queue에 Audit Log를 저장한다.
 
-{% highlight C %}
+{% highlight c %}
 #include <iostream>
 using namespace std;
 

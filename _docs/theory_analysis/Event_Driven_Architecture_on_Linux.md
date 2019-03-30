@@ -15,7 +15,7 @@ Event Driven Architecture를 분석하고 Linux에서 동작하는 Event Driven 
 
 Event Driven Architecture는 **Event**와 해당 Event를 처리하는 **Event Handler**로 구성된다. 또한 **Main Loop**라는 Single Thread만 이용한다는 점이 특징이다. Main Loop Thread는 평소에 Blocking되어 있다가 Event가 발생하면 해당 Event가 어떤 Event인지 파악한 후 해당하는 Event Handler를 실행한다. 그 후 다시 Blocking 상태가 되어 다음 Event가 올 때까지 대기한다. 이렇게 평소에 Blocking 되어 있다가 발생한 Event를 알려주는 역활을 하는 함수를 **I/O Multiplexer**라고 한다. Main Loop Thread가 Event 발생순으로 매우 빠르게 Event Handler들을 실행하기 때문에 Concurrent 프로그램처럼 동작하게 된다.
 
-{% highlight C++ %}
+{% highlight cpp %}
 int event_handler1(event *ev){
   // Non-blocking
 }

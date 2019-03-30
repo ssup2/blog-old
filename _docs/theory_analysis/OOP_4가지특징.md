@@ -25,7 +25,7 @@ Class의 같은 Method를 호출해도 각기 **다른 Method**가 호출되는 
 
 Instance에 따라서도 다른 Method가 호출 될 수 있다. 아래의 Code는 Parent라는 부모 Class와 Child라는 자식 Class로 구성이 되어있다. 15줄에서는 iparent라는 Parent Class 변수에 Parent Instance를 할당하였고, 16줄에서는 ichild라는 Parent Class 변수에 Child Instance를 할당하였다. 두 Instance 모두 Parent Class 변수에 할당되었기 때문에 Code상으로는 Parent 문자열이 두 줄 출력되는것 처럼 보이지만, ichild 인스턴스는 Child 문자열을 출력한다. Parent Class의 변수에 실제 할당된 Instance가 다르기 때문이다. 이렇게 Instance에 따라서 호출되는 Method가 달라지는 과정을 **동적바인딩(Dynamic Dispatch)**라고 부른다.
 
-{% highlight Java %}
+{% highlight java %}
 class Parent {
     public void print(){
         System.out.println("Parent");

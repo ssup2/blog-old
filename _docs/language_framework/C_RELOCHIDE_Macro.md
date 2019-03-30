@@ -11,7 +11,7 @@ C언어 Macro로 되어 있는 RELOC_HIDE() 함수를 분석한다.
 
 ### 1. Macro
 
-{% highlight C linenos %}
+{% highlight c linenos %}
 #define RELOC_HIDE(ptr, off)                    \
   ({ unsigned long __ptr;                       \
     __asm__ ("" : "=r"(__ptr) : "0"(ptr));      \

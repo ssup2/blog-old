@@ -13,7 +13,7 @@ C++의 Smart Pointer를 분석한다.
 
 Smart Pointer는 일반 Pointer와 다르게 new 문법으로 생성한 Instance를 **delete 문법을 통해 명시적으로 삭제하지 않아도 자동으로 삭제해주는 Pointer**이다. 다음과 같이 간단한 Smart Pointer를 구현할 수 있다.
 
-{% highlight CPP linenos %}
+{% highlight cpp linenos %}
 #include <iostream>
 using namespace std;
 
@@ -53,7 +53,7 @@ main함수 안에서 ptr Smart Pointer는 new int()을 통해 할당된 Instance
 
 auto_ptr는 **Exclusive Ownership Model**을 이용하는 Smart Pointer이다. 즉 하나의 auto_ptr이 가리키는 Instance는 다른 auto_ptr이 가리키지 못하는 특징을 갖고있다.
 
-{% highlight CPP linenos %}
+{% highlight cpp linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -103,7 +103,7 @@ auto_ptr은 위의 예제처럼 복사 연산자의 호출만으로 NULL로 초�
 
 unique_ptr은 auto_ptr과 동일하게 **Exclusive Ownership Model**을 이용하지만 auto_ptr의 단점을 보안한 Smart Pointer이다. STL에서도 이용이 가능하고, 배열 할당시에도 문제가 없다. C++11 부터 이용 가능하다.
 
-{% highlight CPP linenos %}
+{% highlight cpp linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -146,7 +146,7 @@ A::show()
 
 위의 예제는 unique_ptr의 이용법을 나타내고 있다. unique_ptr에서는 **복사 생성자와 복사 대입 연산자**를 이용할 수 없다. 이용 시 Compile Error가 발생한다. 그 대신 unique_ptr는 소유권 이동을 명시적으로 나타내는 std::move함수를 제공한다. unique_ptr은 std::move 함수를 통해서만 다른 unique_ptr에게 소유권을 이동 할 수 있다.
 
-{% highlight CPP linenos  %}
+{% highlight cpp linenos  %}
 unique_ptr<A> fun()
 {
     unique_ptr<A> ptr(new A);
@@ -164,7 +164,7 @@ unique_ptr은 위의 예제처럼 함수의 return 인자로도 넘길 수 있�
 
 shared_ptr은 **Reference Counting Ownership Model**을 이용한다. 따라서 auto_ptr, unique_ptr과는 다르게 여러개의 shared_ptr가 하나의 Instance를 가리킬 수 있다. Instance를 가리키는 shared_ptr의 개수는 각 shared_ptr에 저장되어 관리된다. Instance를 가리키는 shared_ptr의 개수가 감소하다가 0이 되면 Instance를 해제한다.
 
-{% highlight CPP linenos %}
+{% highlight cpp linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -223,7 +223,7 @@ A::show()
 
 weak_ptr은 **shared_ptr이 가리키는 Instance를 참조**만 하는 참조자 역활을 수행한다. weak_ptr은 Reference Count를 관리하지 않는다. Instace의 생명주기에 영향을 주지 않는다. 따라서 weak_ptr이 가리키는 Instance는 실제 존재하지 않을 수 있다.
 
-{% highlight CPP linenos %}
+{% highlight cpp linenos %}
 #include <iostream>
 #include <memory>
 using namespace std;

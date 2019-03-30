@@ -39,7 +39,7 @@ Pod의 Resource에는 **CPU**와 **Memory**가 있다. CPU와 Memory 둘다 Linu
 
 Kubernetes는 Guaranteed, Burstable, BestEffort라는 3개의 QoS Class를 제공한다. Pod의 Resource 설정에 따라서 Pod의 QoS는 3개의 Class중 하나의 Class에 속하게 된다. Burstable, BestEffort Class에 속한 Pod은 해당 Cgroup 아래 속하게 된다. 그리고 Guaranteed Cgroup에 속한 Pod은 Kubernetes가 생성한 최상위 Cgroup인 kubepods Cgroup아래 속하게 된다. kubepods Cgroup은 cpu, memory, freezer 같은 모든 Cgroup 아래 각각 생성된다.
 
-{% highlight YAML %}
+{% highlight yaml %}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -124,7 +124,7 @@ Probe에는 livenessProbe, readinessProbe 2가지 종류의 Probe가 존재한�
 * livenessProbe - Container가 Running 상태라는걸 감지하기 위한 Probe이다. livenessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 삭제하고 Container의 Restart Policy에 따라서 해당 Container를 재시작하거나 그대로 놔둔다.
 * readinessProbe - Container가 Service 요청을 받을 수 있는 상태인지를 감지하기 위한 Probe이다. readinessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 갖고 있는 Pod의 IP 설정을 제거하여, 해당 Pod이 Service를 제공하지 못하도록 한다.
 
-{% highlight YAML %}
+{% highlight yaml %}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -154,7 +154,7 @@ spec:
 
 Init Container는 Pod의 App Container가 동작하기 전에 Pod의 초기화, 외부 Service 대기 등을 위해 생성하는 Container이다. Init Container는 App Container와 동일하게 Pause Container의 Network Namespace와 IPC Namespace를 이용한다. 또한 Pod이 제공하는 Volume에도 똑같이 접근할 수 있다. 따라서 Init Container를 통해서 App Container가 이용하는 Network Routing Table을 변경하거나, Volume을 초기화 할 수 있다.
 
-{% highlight YAML %}
+{% highlight yaml %}
 apiVersion: v1
 kind: Pod
 metadata:

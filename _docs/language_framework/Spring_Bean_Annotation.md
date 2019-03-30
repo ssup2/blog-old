@@ -11,7 +11,7 @@ Spring의 Bean과 연관된 Annotation을 분석한다.
 
 ### 1. @Component
 
-{% highlight JAVA linenos %}
+{% highlight java linenos %}
 @Component
 public class MyComponentA {
 }
@@ -25,7 +25,7 @@ public class MyComponentB {
 
 ### 2. @Configuration
 
-{% highlight JAVA linenos %}
+{% highlight java linenos %}
 package com.ssup2;
 
 @Component
@@ -33,7 +33,7 @@ public class MyBeanB {
 }
 {% endhighlight %}
 
-{% highlight JAVA linenos %}
+{% highlight java linenos %}
 @Configuration
 @ComponentScan("com.ssup2")
 public class MyConfig {
@@ -49,7 +49,7 @@ public class MyConfig {
 
 #### 2.1. @Bean
 
-{% highlight JAVA linenos %}
+{% highlight java linenos %}
 public class MyBeanA {
 }
 
@@ -75,7 +75,7 @@ public class MyConfig {
 
 ### 3. @Service, @Controller, @Repository
 
-{% highlight JAVA linenos %}
+{% highlight java linenos %}
 @Service
 public class MyService {
 }
