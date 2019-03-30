@@ -55,6 +55,7 @@ AutomaticLogin=root
 ...
 [security]
 AllowRoot=true
+{% endhighlight %}
 <figcaption class="caption">[파일 3] /etc/gdm3/custom.conf</figcaption>
 </figure>
 
