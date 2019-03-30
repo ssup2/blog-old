@@ -25,6 +25,7 @@ Retype new UNIX password:
 
 * /etc/lightdm/lightdm.conf 파일을 만들고 아래 내용을 작성한다. (이미 파일이 있으면 수정한다.)
 
+<figure>
 ~~~
 [SeatDefaults]
 autologin-user=root
@@ -32,13 +33,19 @@ autologin-user-timeout=0
 user-session=ubuntu
 greeter-session=unity-greeter
 ~~~
+<figcaption class="caption">[파일 1] /etc/lightdm/lightdm.conf</figcaption>
+</figure>
 
 ### 4. /root/.profile Error 제거
 
 * 재부팅 후 /root/.profile 파일의 내용을 아래처럼 변경 한다.
 
+<figure>
 ~~~
-mesg n
-->
+...
+...
+
 tty -s && mesg n
 ~~~
+<figcaption class="caption">[파일 2] /root/.profile</figcaption>
+</figure>
