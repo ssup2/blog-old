@@ -108,7 +108,7 @@ passwd: password updated successfully
   * https://code.visualstudio.com/
 
 * Visual Studio Code의 Default Shell을 WSL Ubuntu로 바꾼다.
-  * `Ctrl + Shift + P`를 눌러 Command Palatte를 실행하고 **Terminal: Select Default Shell**을 선택한다.
+  * `Ctrl + Shift + P`를 눌러 Command Palatte를 실행하고 Terminal: Select Default Shell을 선택한다.
   * WSL Ubuntu를 선택한다.
 
 ### 5. 사용법
