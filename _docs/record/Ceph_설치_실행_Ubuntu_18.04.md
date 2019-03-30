@@ -31,9 +31,10 @@ adsense: true
 
 #### 2.1. Ceph Node
 
-* Ceph Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Ceph Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -48,11 +49,14 @@ network:
             addresses: [192.168.0.150/24]
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-* Ceph Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Ceph Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -62,11 +66,14 @@ network:
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-* Ceph Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Ceph Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -76,7 +83,9 @@ network:
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 3] Node 03의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
 ### 3. Package 설치
 
@@ -155,7 +164,8 @@ $ ssh-copy-id cephnode@node3
 
 * /home/cephdeploy/.ssh/config 파일을 다음과 같이 수정한다.
 
-~~~
+<figure>
+{% highlight text %}
 Host node1
    Hostname node1
    User cephnode
@@ -165,11 +175,13 @@ Host node2
 Host node3
    Hostname node3
    User cephnode
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 4] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
+</figure>
 
 ### 4. Storage Cluster 구성
 
-#### 4.1. Depoly Node
+#### 4.1. Deploy Node
 
 * Storage Cluster Config 폴더를 생성한다.
 
@@ -300,7 +312,7 @@ $ sudo ceph -s
 # ceph fs new filesystem cephfs_metadata cephfs_data
 ~~~
 
-* admin Key 확인 및 admin.secret 파일을 생성한다.
+* admin Key를 확인한다.
 
 ~~~
 # cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
@@ -310,16 +322,22 @@ $ sudo ceph -s
         caps mgr = "allow *"
         caps mon = "allow *"
         caps osd = "allow *"
-
-# vim admin.secret
-AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 ~~~
+
+* 확인한 admin Key를 이용하여 /root/admin.secret 파일을 생성한다.
+
+<figure>
+{% highlight text %}
+AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
+{% endhighlight %}
+<figcaption class="caption">[파일 5] /root/admin.secret</figcaption>
+</figure>
 
 * Ceph File Server를 Mount 한다.
 
 ~~~
 # mkdir mnt
-# mount -t ceph 10.0.0.10:6789:/ mnt/ -o name=admin,secretfile=admin.secret
+# mount -t ceph 10.0.0.10:6789:/ mnt/ -o name=admin,secretfile=/root/admin.secret
 # mount
 ...
 10.0.0.10:6789:/ on /root/test/ceph/mnt type ceph (rw,relatime,name=admin,secret=<hidden>,acl,wsize=16777216)

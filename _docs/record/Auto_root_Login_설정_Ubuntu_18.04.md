@@ -25,39 +25,46 @@ Retype new UNIX password:
 
 * /etc/pam.d/gdm-password 파일을 아래와 같이 변경한다.
 
-~~~
+<figure>
+{% highlight text %}
 #%PAM-1.0
 auth    requisite       pam_nologin.so
 #auth   required        pam_succeed_if.so user != root quiet_success
 ...
-~~~
+<figcaption class="caption">[파일 1] /etc/pam.d/gdm-password</figcaption>
+</figure>
 
 * /etc/pam.d/gdm-autologin 파일을 아래와 같이 변경한다.
 
-~~~
+<figure>
+{% highlight text %}
 #%PAM-1.0
 auth    requisite       pam_nologin.so
 #auth   required        pam_succeed_if.so user != root quiet_success
 ...
-~~~
+<figcaption class="caption">[파일 2] /etc/pam.d/gdm-autologin</figcaption>
+</figure>
 
 * /etc/gdm3/custom.conf 파일을 아래와 같이 변경한다.
 
-~~~
+<figure>
+{% highlight text %}
 [daemon]
 AutomaticLoginEnable=true
 AutomaticLogin=root
 ...
 [security]
 AllowRoot=true
-~~~
+<figcaption class="caption">[파일 3] /etc/gdm3/custom.conf</figcaption>
+</figure>
 
 ### 4. /root/.profile Error 제거
 
-* 재부팅 후 /root/.profile 파일의 내용을 아래처럼 변경 한다.
+<figure>
+{% highlight text %}
+...
 
-~~~
-mesg n || true
-->
-tty -s && mesg n || true
-~~~
+tty -s && mesg n
+{% endhighlight %}
+<figcaption class="caption">[파일 4] /root/.profile</figcaption>
+</figure>
