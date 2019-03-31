@@ -31,6 +31,7 @@ Retype new UNIX password:
 auth    requisite       pam_nologin.so
 #auth   required        pam_succeed_if.so user != root quiet_success
 ...
+{% endhighlight %}
 <figcaption class="caption">[파일 1] /etc/pam.d/gdm-password</figcaption>
 </figure>
 
