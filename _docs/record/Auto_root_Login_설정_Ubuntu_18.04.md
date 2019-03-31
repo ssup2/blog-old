@@ -42,6 +42,7 @@ auth    requisite       pam_nologin.so
 auth    requisite       pam_nologin.so
 #auth   required        pam_succeed_if.so user != root quiet_success
 ...
+{% endhighlight %}
 <figcaption class="caption">[파일 2] /etc/pam.d/gdm-autologin</figcaption>
 </figure>
 
