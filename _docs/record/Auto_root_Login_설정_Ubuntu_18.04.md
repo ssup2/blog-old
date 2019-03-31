@@ -63,6 +63,8 @@ AllowRoot=true
 
 ### 4. /root/.profile Error 제거
 
+* 재부팅 후 /root/.profile 파일의 내용을 아래처럼 변경 한다.
+
 <figure>
 {% highlight text %}
 ...
