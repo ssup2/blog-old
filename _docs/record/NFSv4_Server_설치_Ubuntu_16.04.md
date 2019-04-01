@@ -10,11 +10,12 @@ adsense: true
 ### 1. 설치 환경
 
 * Ubuntu 16.04 LTS 64bit, root user
+* NFS Root - NFSv4 Server의 Root Directory 절대 경로를 의미한다.
+  * NFS Root로 /export/nfs_root를 이용한다.
+* NFS share - NFSv4 Server를 통해 실제 공유할 Directory의 절대 경로를 의미한다.
+  * NFS share로 /root/nfs_share를 이용한다.
 
 ### 2. NFSv4 Server 설정
-
-* [NFS root] - NFSv4 Server의 Root 폴더 이름을 의미한다.
-* [NFS share] - NFSv4 Server를 통해 실제 공유할 폴더의 절대 경로를 의미한다.
 
 #### 2.1. Ubuntu Package 설치
 
@@ -29,41 +30,33 @@ adsense: true
 * 공유 폴더 생성 및 Bind Mount를 수행한다.
 
 ~~~
-# mkdir -p /export/[NFS root]
-# chmod 777 [NFS share]
-# mount --bind [NFS share] /export/[NFS root]
-~~~
-
-~~~
 # mkdir -p /export/nfs_root
 # mkdir -p /root/nfs_share
 # chmod 777 /root/nfs_share
 # mount --bind /root/nfs_share /export/nfs_root
 ~~~
 
-*  /etc/fstab에 다음 내용을 추가하여 재부팅 후에도 Bind Mount 되도록 설정한다.
+* /etc/fstab에 다음 내용을 추가하여 재부팅 후에도 Bind Mount 되도록 설정한다.
 
-~~~
-[NFS share] /export/[NFS root] none bind  0  0
-~~~
-
-~~~
+<figure>
+{% highlight text %}
+...
 /root/nfs_share /export/nfs_root none bind  0  0
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] /etc/fstab</figcaption>
+</figure>
 
 #### 2.3. 설정
 
 * /etc/exports 파일에 다음의 내용을 추가한다.
 
-~~~
-/export               *(rw,fsid=0,insecure,no_subtree_check,async)
-/export/[NFS dir]     *(rw,nohide,insecure,no_subtree_check,async)
-~~~
-
-~~~
+<figure>
+{% highlight text %}
 /export               *(rw,fsid=0,insecure,no_subtree_check,async)
 /export/nfs_root      *(rw,nohide,insecure,no_subtree_check,async)
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] /etc/exports</figcaption>
+</figure>
 
 #### 2.4. Restart
 
@@ -82,10 +75,6 @@ adsense: true
 ~~~
 
 * 3.2. NFSv4 Mount를 수행한다.
-
-~~~
-# mount -t nfs4 [NFS Server IP]:/[NFS Server Path] [Mount dir]
-~~~
 
 ~~~
 # mount -t nfs4 localhost:/nfs_root /mnt

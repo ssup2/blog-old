@@ -151,7 +151,8 @@ Kernel Features -> Xen guest support on ARM <*>
 
 * /etc/xinetd.d/tftp 파일을 설정한다.
 
-~~~
+<figure>
+{% highlight text %}
 service tftp
 {
     socket_type     = dgram
@@ -165,7 +166,9 @@ service tftp
     cps             = 100 2
     flags           = IPv4
 }
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] /etc/xinetd.d/tftp</figcaption>
+</figure>
 
 * tftp server Directory 생성한다.
 
@@ -227,13 +230,30 @@ service tftp
 
 #### 8.2.1. load-xen-uSD.scr.txt 파일 생성 및 img 파일 생성 
 
+* load-xen-tftp.scr.txt 파일을 통해서 load-xen-uSD.scr.txt 파일을 생성한다.
+
 ~~~
 # wget http://xenbits.xen.org/people/julieng/load-xen-tftp.scr.txt
 # mv load-xen-tftp.scr.txt load-xen-uSD.scr.txt
-# vim load-xen-uSD.scr.txt
-  - revise : tftpboot $kernel_addr_r $serverip:$kernel_path -> ext2load mmc 0:1 $kernel_addr_r /linux-zImage
-  - revise : tftpboot $xen_addr_r $serverip:$xen_path -> ext2load mmc 0:1 $xen_addr_r /xen-uImage
-  - revise : tftpboot $dtb_addr_r $serverip:$dtb_path -> ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb
+~~~
+
+<figure>
+{% highlight text %}
+...
+# Load Linux in memory
+ext2load mmc 0:1 $kernel_addr_r /linux-zImage
+# Load Xen in memory
+ext2load mmc 0:1 $xen_addr_r /xen-uImage
+# Load the device tree in memory
+ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb
+...
+{% endhighlight %}
+<figcaption class="caption">[파일 2] /etc/xinetd.d/tftp</figcaption>
+</figure>
+
+* Image 파일을 생성한다.
+
+~~~
 # mkimage -T script -C none -d load-xen-uSD.scr.txt /tftpboot/load-xen-uSD.img
 ~~~
 
@@ -273,21 +293,29 @@ service tftp
 ~~~
 # sbuild-createchroot --components=main,universe trusty /srv/chroots/trusty-armhf-cross http://archive.ubuntu.com/ubuntu/
 # mv /etc/schroot/chroot.d/trusty-amd64-sbuild-*(random suffix) /etc/schroot/chroot.d/trusty-armhf-cross
-# vi /etc/schroot/chroot.d/trusty-armhf-cross
-  - 수정 : [trusty-amd64-sbuild] -> [trusty-armhf-cross]
-  - 수정 : description=Debian trusty/amd64 autobuilder -> description=Debian trusty/armhf crossbuilder
 ~~~
+
+* /etc/schroot/chroot.d/trusty-armhf-cross 파일을 아래와 같이 수정한다.
+
+<figure>
+{% highlight text %}
+...
+[trusty-armhf-cross]
+...
+description=Debian trusty/armhf crossbuilder
+...
+{% endhighlight %}
+<figcaption class="caption">[파일 3] /etc/schroot/chroot.d/trusty-armhf-cross</figcaption>
+</figure>
 
 * root에 Package를 설치한다.
 
 ~~~
 # schroot -c trusty-armhf-cross
 (schroot)# apt-get install vim-tiny wget sudo less pkgbinarymangler
-(schroot)# vi /etc/apt/sources.list
-  - add : 'deb http://ports.ubuntu.com/ trusty main universe'
-(schroot)# vi /etc/apt/apt.conf.d/30norecommends
-  - add : 'APT::Install-Recommends "0";'
-  - add : 'APT::Install-Suggests "0";'
+(schroot)# echo deb http://ports.ubuntu.com/ trusty main universe >> /etc/apt/
+(schroot)# echo 'APT::Install-Recommends "0"' >> /etc/apt/apt.conf.d/30norecommends
+(schroot)# echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/30norecommends
 (schroot)# dpkg --add-architecture armhf
 (schroot)# apt-get update
 (schroot)# apt-get install wget
@@ -306,7 +334,7 @@ service tftp
 (schroot)# exit
 ~~~
 
-### 10. Root Filesystem Image 생성
+### 10. 기본 Root Filesystem Image 생성
 
 * Image 파일을 생성한다. 
 
@@ -332,34 +360,42 @@ service tftp
 (chroot)# passwd
 ~~~
 
-* Network를 설정한다.
+* /etc/network/interfaces를 설정한다.
 
-~~~
-(chroot)# vi /etc/network/interfaces
-  -> auto eth0
-     iface eth0 inet dhcp
-~~~
+<figure>
+{% highlight text %}
+auto eth0
+iface eth0 inet dhcp
+{% endhighlight %}
+<figcaption class="caption">[파일 4] 기본 Root Filesystem Image의 /etc/network/interfaces</figcaption>
+</figure>
 
 * Repository를 설정한다. 
 
 ~~~
-(chroot)# vi /etc/apt/sources.list
-  -> deb http://ports.ubuntu.com/ trusty main 
+(chroot)# echo deb http://ports.ubuntu.com/ trusty main >> /etc/apt/sources.list
 ~~~
 
 * getty를 설정한다.
+  * /etc/init/xvc0.conf 파일을 아래와 같이 생성한다.
 
 ~~~
 (chroot)# cp /etc/init/tty1.conf /etc/init/xvc0.conf
-(chroot)# vi /etc/init/xvc0.conf
-  -> change 'exec /sbin/getty -8 38400 tty1' to 'exec /sbin/getty -8 115200 hvc0
 ~~~
+
+<figure>
+{% highlight text %}
+...
+respawn
+exec exec /sbin/getty -8 115200 hvc0
+{% endhighlight %}
+<figcaption class="caption">[파일 5] 기본 Root Filesystem Image의 /etc/init/xvc0.conf</figcaption>
+</figure>
 
 * fstab을 설정한다.
 
 ~~~
-(chroot)# vi /etc/fstab
-  -> xenfs   /proc/xen    xenfs    defaults   0   0
+(chroot) # echo 'xenfs   /proc/xen    xenfs    defaults   0   0' >> /etc/fstab
 (chroot) # exit
 # umount /mnt
 ~~~
@@ -390,17 +426,17 @@ service tftp
 
 ~~~
 # sudo chroot /mnt
-(chroot)# vi /etc/modules
-  -> xen-gntalloc
-     xen-gntdev
-     bridge
+(chroot)# cat << EOF > /etc/modules
+xen-gntalloc
+xen-gntdev
+bridge
+EOF
 ~~~
 
 * Hostname을 설정한다. 
 
 ~~~
-(chroot)# vi /etc/hostname
-  -> Dom0
+(chroot) # echo Dom0 > /etc/hostname
 (chroot) # exit
 # umount /mnt
 ~~~
@@ -412,12 +448,12 @@ service tftp
 ~~~
 # cp rootfs_ori.img rootfs_DomU_01.img
 # mount -o loop rootfs_DomU_01.img /mnt
-# cd /mnt/dev
 ~~~
 
 * xvdX Device Node를 생성한다.
 
 ~~~
+# cd /mnt/dev
 # mknod xvda b 202 0
 # mknod xvdb b 202 16 
 # mknod xvdc b 202 32
@@ -431,20 +467,20 @@ service tftp
 * Hostname을 설정한다.
 
 ~~~
-(chroot)# vi /mnt/etc/hostname
-  -> DomU01
+# echo DomU01 > /mnt/etc/hostname
 ~~~
 
 * Network를 설정한다.
 
 ~~~
-# vim  /mnt/etc/network/interfaces
-  -> auto eth0
-      iface eth0 inet static
-      address 192.168.0.160
-      netmask 255.255.255.0
-      gateway 192.168.0.1
-      dns-nameservers 8.8.8.8'
+# cat << EOF > /mnt/etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.0.160
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 8.8.8.8
+EOF
 # umount /mnt
 ~~~
 
@@ -467,17 +503,20 @@ service tftp
 * Network를 설정한다.
 
 ~~~
-# vim  /mnt/etc/network/interfaces
-  -> auto eth0
-      iface eth0 inet static
-      address 192.168.0.161
-      netmask 255.255.255.0
-      gateway 192.168.0.1
-      dns-nameservers 8.8.8.8'
+# cat << EOF > /mnt/etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.0.161
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 8.8.8.8
+EOF
 # umount /mnt
 ~~~
 
 ### 14. zImage, Root Filesystem 복사
+
+* zImage, Root Filesystem들을 uSD에 복사한다.
 
 ~~~
 # mount -o loop rootfs_Dom0.img /mnt
@@ -504,31 +543,35 @@ service tftp
 
 ### 16. DomU Config 파일 생성
 
-* DomU_01 Config 파일을 생성한다.
+* DomU_01.cfg 파일을 생성한다.
 
-~~~
-(Dom0)# vim DomU_01.cfg
--> kernel = "/root/Xen_Guest/DomU_zImage"
-   name = "DomU_01"
-   memory = 128
-   vcpus = 1
-   disk = [ 'phy:/dev/loop0,xvda,w' ]
-   vif = ['bridge=xenbr0']
-   extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
-~~~
+<figure>
+{% highlight text %}
+kernel = "/root/Xen_Guest/DomU_zImage"
+name = "DomU_01"
+memory = 128
+vcpus = 1
+disk = [ 'phy:/dev/loop0,xvda,w' ]
+vif = ['bridge=xenbr0']
+extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
+{% endhighlight %}
+<figcaption class="caption">[파일 6] 기본 Root Filesystem Image의 DomU_01.cfg</figcaption>
+</figure>
 
-* DomU_02 Config 파일을 생성한다.
+* DomU_02.cfg 파일을 생성한다.
 
-~~~
-(Dom0)# vim DomU_02.cfg
--> kernel = "/root/Xen_Guest/DomU_zImage"
-   name = "DomU_02"
-   memory = 128
-   vcpus = 1
-   disk = [ 'phy:/dev/loop1,xvda,w' ]
-   vif = ['bridge=xenbr0']
-   extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
-~~~
+<figure>
+{% highlight text %}
+kernel = "/root/Xen_Guest/DomU_zImage"
+name = "DomU_02"
+memory = 128
+vcpus = 1
+disk = [ 'phy:/dev/loop1,xvda,w' ]
+vif = ['bridge=xenbr0']
+extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
+{% endhighlight %}
+<figcaption class="caption">[파일 7] 기본 Root Filesystem Image의 DomU_02.cfg</figcaption>
+</figure>
 
 ### 17. DomU 구동
 

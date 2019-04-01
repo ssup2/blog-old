@@ -190,15 +190,14 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 # cp rootfs.img rootfs_guest_01.img
 # mount -o loop rootfs_guest_01.img /mnt
-# vi /mnt/etc/hostname
-  -> guest01
-# vim /mnt/etc/network/interfaces
-  -> 'auto eth0
-      iface eth0 inet static
-      address 192.168.0.160
-      netmask 255.255.255.0
-      gateway 192.168.0.1
-      dns-nameservers 8.8.8.8'
+# echo guest01 > /mnt/etc/hostname
+# cat << EOF > /mnt/etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.0.160
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 8.8.8.8
 # umount /mnt
 ~~~
 
@@ -209,15 +208,15 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ~~~
 # cp rootfs.img rootfs_guest_02.img
 # mount -o loop rootfs_guest_02.img /mnt
-# vi /mnt/etc/hostname
-  -> guest02
-# vim /mnt/etc/network/interfaces
-  -> 'auto eth0
-      iface eth0 inet static
-      address 192.168.0.161
-      netmask 255.255.255.0
-      gateway 192.168.0.1
-      dns-nameservers 8.8.8.8'
+# echo guest02 > /mnt/etc/hostname
+# cat << EOF > /mnt/etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.0.161
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 8.8.8.8'
+EOF
 # umount /mnt
 ~~~
 
@@ -227,13 +226,13 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ~~~
 # apt-get install xapt
-# vim /etc/apt/sources.list.d/armel-precise.list
- -> add 'deb [arch=armel] http://ports.ubuntu.com/ubuntu-ports precise main restricted universe multiverse
-         deb-src [arch=armel] http://ports.ubuntu.com/ubuntu-ports precise main restricted universe multiverse'
+# cat << EOF >> /etc/apt/sources.list.d/armel-precise.list
+deb [arch=armel] http://ports.ubuntu.com/ubuntu-ports precise main restricted universe multiverse
+deb-src [arch=armel] http://ports.ubuntu.com/ubuntu-ports precise main restricted universe multiverse
+EOF
 # xapt -a armel -m -b zlib1g-dev libglib2.0-dev libfdt-dev libpixman-1-dev
 # dpkg -i /var/lib/xapt/output/*.deb
 # apt-get install pkg-config-arm-linux-gnueabi
-
 # git clone git://github.com/virtualopensystems/qemu.git
 # cd qemu
 # git checkout origin/kvm-arm-virtio-fb-hack -b virtio

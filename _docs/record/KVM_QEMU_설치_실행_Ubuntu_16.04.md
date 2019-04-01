@@ -85,12 +85,10 @@ adsense: true
 ~~~
 
 * VM이 이용할 기본 tty를 설정한다.
+  * mnt에 Mount된 etc/init/ttyS0.conf 파일을 아래와 같이 수정한다.
 
-~~~
-# vim /mnt/etc/init/ttyS0.conf
-~~~
-
-~~~
+<figure>
+{% highlight text %}
 # ttyS0 - getty
 #
 # This service maintains a getty on ttyS0 from the point the system is
@@ -105,17 +103,17 @@ stop on runlevel [!2345]
 
 respawn
 exec /sbin/getty -8 115200 ttyS0
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] etc/init/ttyS0.conf</figcaption>
+</figure>
 
 * VM의 Network를 설정한다.
+  * mnt에 Mount된 etc/network/interfaces 파일을 아래와 같이 수정한다.
 
-~~~
-# vim /mnt/etc/network/interfaces
-~~~
-
-~~~
+<figure>
+{% highlight text %}
 # interfaces(5) file used by ifup(8) and ifdown(8)
-# Include files from /etc/network/interfaces.d:
+# Include files from /etc/network/interfaces.d
 source-directory /etc/network/interfaces.d
 
 auto lo
@@ -123,7 +121,9 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet dhcp
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] etc/network/interfaces</figcaption>
+</figure>
 
 * VM의 root Password를 설정한다.
 
@@ -171,14 +171,18 @@ route add default gw 192.168.77.1
 
 ### 6. LIO 설정
 
-* vhost-scsi를 위한 LIO Package를 설치 및 설정한다.
+* vhost-scsi를 위한 LIO Package를 설치한다.
 
 ~~~
 # apt-get install targetcli
 # vim /var/target/fabric/vhost.spec
 ~~~
 
-~~~
+* vhost-scsi를 위한 LIO를 설정한다.
+  * /var/target/fabric/vhost.spec 파일을 아래와 같이 설정한다.
+
+<figure>
+{% highlight text %}
 # The fabric module feature set
 features = nexus, tpgts
 
@@ -191,7 +195,9 @@ kernel_module = vhost_scsi
 
 # The configfs group
 configfs_group = vhost
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 3] /var/target/fabric/vhost.spec</figcaption>
+</figure>
 
 * LIO CLI를 이용하여 LIO를 설정한다.
 
