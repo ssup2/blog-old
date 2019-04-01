@@ -308,13 +308,19 @@ nav > ul {
 }
 
 .highlight {
-	margin: 1rem 0 1rem 0;
+	margin: 0 0 2rem 0;
+	.caption {
+		margin: -2rem 0 0 0;
+	}
+}
+
+.caption {
+	text-align: center
 }
 
 h3 + .warning {
 	margin-top: 1.75em;
 }
-
 
 h4 code {
 	background: $nav-background-color;
@@ -367,7 +373,6 @@ h4 svg {
 		}
 	}
 }
-
 
 #search-input {
 	-webkit-appearance: none;
