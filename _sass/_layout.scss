@@ -309,9 +309,10 @@ nav > ul {
 
 .highlight {
 	margin: 0 0 2rem 0;
-	> .caption {
-		margin: -2rem 0 0 0;
-	}
+}
+
+.highlight + .caption {
+    margin: -2rem 0 0 0;
 }
 
 .caption {
