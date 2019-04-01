@@ -26,13 +26,16 @@ adsense: true
 
 * /etc/ssh/sshd_config 파일에 아래와 같이 수정하여 root Login 허용한다.
 
-~~~
+<figure>
+{% highlight text %}
 ...
 #LoginGraceTime 2m
 PermitRootLogin yes
 #StrictModes yes
 ...
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] /etc/ssh/sshd_config</figcaption>
+</figure>
 
 * sshd 재시작 및 ssh 접속시 password가 불필요하도록 설정한다.
 
@@ -69,37 +72,48 @@ Are you sure you want to continue connecting (yes/no)? yes
 
 * ~/hadoop-3.0.3/etc/hadoop/hadoop-env.sh 파일을 아래와 같이 수정한다.
 
-~~~
+<figure>
+{% highlight text %}
 # The java implementation to use. By default, this environment
 # variable is REQUIRED on ALL platforms except OS X!
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] ~/hadoop-3.0.3/etc/hadoop/hadoop-env.sh</figcaption>
+</figure>
 
 * ~/hadoop-3.0.3/etc/hadoop/core-site.xml 파일을 아래와 같이 수정한다.
 
-~~~
+<figure>
+{% highlight xml %}
 <configuration>
 	<property>
         <name>fs.defaultFS</name>
         <value>hdfs://localhost:9000</value>
     </property>
 </configuration>
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 3] ~/hadoop-3.0.3/etc/hadoop/core-site.xml</figcaption>
+</figure>
 
-* ~/hadoop-3.0.3/etc/hadoop/hdfs-site.xml 파일을 아래와 같이 수정한다.
+* ~/hadoop-3.0.3/etc/hadoop/core-site.xml 파일을 아래와 같이 수정한다.
 
-~~~
+<figure>
+{% highlight xml %}
 <configuration>
 	<property>
         <name>dfs.replication</name>
         <value>1</value>
     </property>
 </configuration>
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 4] ~/hadoop-3.0.3/etc/hadoop/core-site.xml</figcaption>
+</figure>
 
 * ~/.bashrc 파일에 아래의 환경변수를 추가한다.
 
-~~~
+<figure>
+{% highlight text %}
+...
 export HADOOP_HOME="/root/hadoop-3.0.3"
 export PATH=$PATH:$HADOOP_HOME/bin
 export PATH=$PATH:$HADOOP_HOME/sbin
@@ -113,7 +127,9 @@ export HDFS_DATANODE_USER="root"
 export HDFS_SECONDARYNAMENODE_USER="root"
 export YARN_RESOURCEMANAGER_USER="root"
 export YARN_NODEMANAGER_USER="root"
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 5] ~/.bashrc</figcaption>
+</figure>
 
 * HDFS Format 및 HDFS을 시작한다.
 
@@ -137,7 +153,8 @@ export YARN_NODEMANAGER_USER="root"
 
 * ~/hadoop-3.0.3/etc/hadoop/mapred-site.xml 파일을 아래와 같이 수정한다.
 
-~~~
+<figure>
+{% highlight xml %}
 <configuration>
 	<property>
 		<name>mapreduce.framework.name</name>
@@ -156,11 +173,14 @@ export YARN_NODEMANAGER_USER="root"
 		<value>HADOOP_MAPRED_HOME=/root/hadoop-3.0.3</value>
 	</property>
 </configuration>
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 6] ~/hadoop-3.0.3/etc/hadoop/mapred-site.xml</figcaption>
+</figure>
 
 * ~/hadoop-3.0.3/etc/hadoop/yarn-site.xml 파일을 아래와 같이 수정한다.
 
-~~~
+<figure>
+{% highlight xml %}
 <configuration>
 	<property>
 		<name>yarn.nodemanager.aux-services</name>
@@ -171,7 +191,9 @@ export YARN_NODEMANAGER_USER="root"
 		<value>false</value>
 	</property>
 </configuration>
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 7] ~/hadoop-3.0.3/etc/hadoop/yarn-site.xml</figcaption>
+</figure>
 
 * YARN을 시작한다. 
 

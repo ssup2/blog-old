@@ -31,7 +31,7 @@ adsense: true
 
 #### 2.1. Ceph Node
 
-* Ceph Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
+* Ceph Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
 <figure>
 {% highlight yaml %}
@@ -53,7 +53,7 @@ network:
 <figcaption class="caption">[파일 1] Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* Ceph Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
+* Ceph Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
 <figure>
 {% highlight yaml %}
@@ -70,7 +70,7 @@ network:
 <figcaption class="caption">[파일 2] Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* Ceph Node 03의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/50-cloud-init.yaml 파일을 작성한다.
+* Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
 <figure>
 {% highlight yaml %}

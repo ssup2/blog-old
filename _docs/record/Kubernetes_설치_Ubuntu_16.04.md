@@ -43,7 +43,8 @@ adsense: true
 
 * /etc/network/interfaces을 다음과 같이 수정한다.
 
-~~~
+<figure>
+{% highlight text %}
 source /etc/network/interfaces.d/*
 
 # The loopback network interface
@@ -64,13 +65,16 @@ address 192.168.77.170
 netmask 255.255.255.0
 gateway 192.168.77.1
 dns-nameservers 8.8.8.8
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] Master Node의 /etc/network/interfaces</figcaption>
+</figure>
 
 #### 2.2. Worker Node
 
 * Worker Node 01의 /etc/network/interfaces을 다음과 같이 수정한다.
 
-~~~
+<figure>
+{% highlight text %}
 source /etc/network/interfaces.d/*
 
 # The loopback network interface
@@ -84,11 +88,14 @@ address 10.0.0.31
 netmask 255.255.255.0
 gateway 10.0.0.1
 dns-nameservers 8.8.8.8
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] Worker Node 01의 /etc/network/interfaces</figcaption>
+</figure>
 
 * Worker Node 02의 /etc/network/interfaces을 다음과 같이 수정한다.
 
-~~~
+<figure>
+{% highlight text %}
 source /etc/network/interfaces.d/*
 
 # The loopback network interface
@@ -102,7 +109,9 @@ address 10.0.0.41
 netmask 255.255.255.0
 gateway 10.0.0.1
 dns-nameservers 8.8.8.8
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 3] Worker Node 02의 /etc/network/interfaces</figcaption>
+</figure>
 
 ### 3. Package 설치
 

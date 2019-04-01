@@ -39,9 +39,10 @@ adsense: true
 
 #### 2.1. Master Node
 
-* /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Master Node의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -56,13 +57,16 @@ network:
             addresses: [192.168.0.150/24]
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] Master Node의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
 #### 2.2. Worker Node
 
-* Worker Node 01의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Worker Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -72,11 +76,14 @@ network:
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 2] Worker Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-* Worker Node 02의 /etc/netplan directory의 모든 파일을 삭제하고 /etc/netplan/01-network.yaml 파일을 작성한다.
+* Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 network:
     version: 2
     ethernets:
@@ -86,7 +93,9 @@ network:
             gateway4: 10.0.0.1
             nameservers:
                 addresses: [8.8.8.8]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 3] Worker Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
 ### 3. Package 설치
 
@@ -219,7 +228,8 @@ node3   NotReady   <none>   27s   v1.12.3
   * prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다.
   * Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 # vim cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ...
       containers:
@@ -235,7 +245,9 @@ node3   NotReady   <none>   27s   v1.12.3
             - "--prefilter-device=enp0s3"
             - "--prefilter-mode=generic"
 ...
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 4] cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
+</figure>
 
 * Cilium을 설치한다.
 
@@ -267,7 +279,8 @@ node3   NotReady   <none>   27s   v1.12.3
 * kube-apiserver Insecure 설정
   * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용을 수정 및 추가한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 ...
 spec:
   containers:
@@ -276,7 +289,9 @@ spec:
     - --insecure-bind-address=0.0.0.0
     - --insecure-port=8080
 ...
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 5] /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
+</figure>
 
 * kubelet Service를 재시작한다.
 
@@ -287,7 +302,8 @@ spec:
 * Web UI Privilege 권한을 위한 config 파일을 생성한다.
   * 아래의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
 
-~~~
+<figure>
+{% highlight yaml %}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -302,7 +318,9 @@ subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard
   namespace: kube-system
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 6] ~/dashboard-admin.yaml</figcaption>
+</figure>
 
 * Web UI에 Privilege 권한을 적용한다.
 
@@ -348,11 +366,15 @@ subjects:
 
 * rbac/clusterrole.yaml 파일에 아래의 내용 추가한다. (Secret Role)
 
-~~~
+<figure>
+{% highlight yaml %}
+...
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "create", "delete"]
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 7] rbac/clusterrole.yaml</figcaption>
+</figure>
 
 * rbd-provisioner, role, cluster role을 설정한다.
 
@@ -364,7 +386,8 @@ subjects:
 
 * storage_class.yaml 파일 생성 및 아래의 내용으로 저장한다.
 
-~~~
+<figure>
+{% highlight yaml %}
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -383,7 +406,9 @@ parameters:
   userSecretName: ceph-secret
   imageFormat: "2"
   imageFeatures: layering
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 8] storage_class.yaml</figcaption>
+</figure>
 
 * Storage Class 생성 및 확인한다.
 

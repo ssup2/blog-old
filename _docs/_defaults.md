@@ -47,7 +47,7 @@ int main()
 {% endhighlight %}
 
 <figure>
-{% highlight yaml %}
+{% highlight text %}
 # This file is generated from information provided by
 # the datasource.  Changes to it will not persist across an instance.
 # To disable cloud-init's network configuration capabilities, write a file
