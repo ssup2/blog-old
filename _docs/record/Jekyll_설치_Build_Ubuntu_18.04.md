@@ -16,7 +16,7 @@ adsense: true
 * Jeykll 구동에 필요한 Ubuntu Package를 설치한다.
 
 ~~~
-# apt install ruby-full bundler build-essential zlib1g-dev
+# apt install ruby-full build-essential zlib1g-dev
 ~~~
 
 ### 3. Ruby Gem, Jekyll 설치
