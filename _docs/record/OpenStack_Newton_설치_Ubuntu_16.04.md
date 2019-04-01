@@ -708,6 +708,7 @@ lock_path = /var/lib/nova/tmp
 
 <figure>
 {% highlight text %}
+...
 [DEFAULT]
 compute_driver=libvirt.LibvirtDriver
 [libvirt]
