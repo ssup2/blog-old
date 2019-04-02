@@ -27,14 +27,17 @@ ARP Packet을 받은 Host는 자신의 논리적 주소가 Target protocol addre
 
 #### 1.3. ARP Caching, Table
 
-~~~~
+<figure>
+{% highlight text %}
 # arp
 Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.0.1              ether   90:9f:33:b2:ef:08   C                     eth0
 192.168.0.4              ether   1c:23:2c:8c:6c:99   C                     eth0
-~~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 1] ARP Table 확인</figcaption>
+</figure>
 
-Data를 전송할때마다 ARP를 이용하여 주소를 알아낸다면 네트워크에는 수많은 ARP Packet이 발생하고 많은 전송 Overhead도 발생하게 된다. 따라서 각 Host는 ARP로 알아낸 MAC 주소를 Caching하여 관리한다. 리눅스에서는 arp 명령어를 통해서 리눅스가 관리하는 ARP Table을 볼 수 있다. 위의 ARP Table에서는 192.168.0.1은 90:9f:33:b2:ef:08에 Mapping되어 있고, 192.168.0.4는 1c:23:2c:8c:6c:99에 Mapping되어 있는걸 확인 할 수 있다.
+Data를 전송할때마다 ARP를 이용하여 주소를 알아낸다면 네트워크에는 수많은 ARP Packet이 발생하고 많은 전송 Overhead도 발생하게 된다. 따라서 각 Host는 ARP로 알아낸 MAC 주소를 Caching하여 관리한다. 리눅스에서는 arp 명령어를 통해서 리눅스가 관리하는 ARP Table을 볼 수 있다. [Shell 1]에서는 arp 명령어로 ARP Table을 확인하는 과정을 있다. [Shell 1]의 ARP Table에서는 192.168.0.1은 90:9f:33:b2:ef:08에 Mapping되어 있고, 192.168.0.4는 1c:23:2c:8c:6c:99에 Mapping되어 있는걸 확인 할 수 있다.
 
 ### 2. 참조
 
