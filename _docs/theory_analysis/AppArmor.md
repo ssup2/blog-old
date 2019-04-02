@@ -17,7 +17,8 @@ AppArmor는 Enforcement, Complain 2개의 Mode로 동작한다.
 * Enforcement - Program의 허용되지 않은 동작을 제한하고 Log에 남긴다. 실제 Program을 운영하면서 동작을 제한 할 때 이용하는 Mode이다.
 * Complain - Program의 허용되지 않은 동작을 제한하지는 않고 Log만 남긴다. 특정 Program의 AppArmor Profile을 작성할때 이용하는 Mode이다. Log를 통해서 AppArmor Profile 작성을 도움 받을 수 있다.
 
-~~~
+<figure>
+{% highlight text %}
 # aa-status
 apparmor module is loaded.
 29 profiles are loaded.
@@ -70,9 +71,11 @@ apparmor module is loaded.
    lxc-container-default-cgns (12505)
 0 processes are in complain mode.
 0 processes are unconfined but have a profile defined.
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 1] aa-status Output</figcaption>
+</figure>
 
-위의 결과는 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역활을 수행한다.
+[Shell 1]은 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역활을 수행한다.
 
 #### 1.1. AppArmor Profile
 
@@ -80,7 +83,8 @@ AppArmor Profile의 이름은 /로 시작하는 이름과 /로 시작하지 않�
 
 /으로 시작하지 않는 Profile은 특정 Program을 동작시킬때 aa-exec 명령을 통해 수동으로 Profile을 적용시켜야 한다. 물론 /으로 시작하는 Profile도 aa-exec 명령을 통해 특정 Program에 Profile을 적용시킬 수 있다. Profile들은 **/etc/AppArmor.d**에 위치하고 있다.
 
-~~~
+<figure>
+{% highlight text %}
 #include <tunables/global>
 
 profile apparmor-example {
@@ -97,9 +101,11 @@ profile apparmor-example {
 
   network tcp,
 }
-~~~
+{% endhighlight %}
+<figcaption class="caption">[파일 1] apparmor-example</figcaption>
+</figure>
 
-위에는 apparmor-example Profile을 나타내고 있다. 다음과 같은 의미를 나타내고 있다.
+[파일 1]은 apparmor-example Profile을 나타내고 있다. 다음과 같은 의미를 나타내고 있다.
 * net_admin, setuid, setgid Capability를 이용할 수 있다.
 * proc File System을 /mnt/proc 아래의 경로에만 Mount 할 수 있다.
 * /etc/hots.allow 파일을 읽고, 쓸 수 있다.
@@ -124,7 +130,8 @@ apparmor module is loaded.
 작성한 Profile을 apparmor_parser 명령어를 이용하여 AppArmor에 등록한다. 등록이 완료되면 aa-status 명령어를 통해
 apparmor_parser Profile을 확인 할 수 있다.
 
-{% highlight bash %}
+<figure>
+{% highlight shell %}
 #!/bin/bash
 
 sleep 10000 &
@@ -133,8 +140,10 @@ ping 127.0.0.1 -c 10
 
 while true; do sleep 1; done
 {% endhighlight %}
+<figcaption class="caption">[파일 2] test.sh</figcaption>
+</figure>
 
-위의 내용은 test.sh라는 간단한 스크립트 내용이다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그후 test.sh가 종료되지 않도록 while문을 수행한다.
+[파일 2]는 test.sh라는 간단한 스크립트 내용이다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그후 test.sh가 종료되지 않도록 while문을 수행한다.
 
 ~~~
 # aa-exec -p apparmor-example ./test.sh
