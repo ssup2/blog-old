@@ -72,7 +72,7 @@ apparmor module is loaded.
 0 processes are in complain mode.
 0 processes are unconfined but have a profile defined.
 {% endhighlight %}
-<figcaption class="caption">[Shell 1] aa-status Output</figcaption>
+<figcaption class="caption">[Shell 1] Apparmor 상태 확인</figcaption>
 </figure>
 
 [Shell 1]은 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역활을 수행한다.
@@ -112,7 +112,8 @@ profile apparmor-example {
 * /root/test.sh 파일을 읽고, 쓰고, 실행 할 수 있다.
 * tcp Protocol만을 이용 할 수 있다.
 
-~~~
+<figure>
+{% highlight text %}
 # apparmor_parser /etc/apparmor.d/test/apparmor-example
 # aa-status
 apparmor module is loaded.
@@ -125,10 +126,11 @@ apparmor module is loaded.
    lxc-container-default
    lxc-container-default-cgns
 ...
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 2] Apparmor Profile 등록 및 확인</figcaption>
+</figure>
 
-작성한 Profile을 apparmor_parser 명령어를 이용하여 AppArmor에 등록한다. 등록이 완료되면 aa-status 명령어를 통해
-apparmor_parser Profile을 확인 할 수 있다.
+[Shell 2]는 작성한 Profile을 apparmor_parser 명령어를 이용하여 AppArmor에 등록하고, aa-status 명령어를 이용하여 Profile 등록을 확인하는 과정을 나타내고 있다. 등록이 완료되면 aa-status 명령어를 통해 apparmor_parser Profile을 확인 할 수 있다.
 
 <figure>
 {% highlight shell %}
@@ -145,23 +147,22 @@ while true; do sleep 1; done
 
 [파일 2]는 test.sh라는 간단한 스크립트 내용이다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그후 test.sh가 종료되지 않도록 while문을 수행한다.
 
-~~~
+<figure>
+{% highlight text %}
 # aa-exec -p apparmor-example ./test.sh
 socket: Permission denied
-~~~
 
-aa-exec 명령어로 apparmor_example Profile 적용시켜 test.sh를 실행하면 socket: Permission denied Message를 확인 할 수 있다. apparmor_exmaple Profile은 tcp만 이용할 수 있도록 설정되어 있기 때문에 icmp를 이용하는 ping을 이용 할 수 없기 때문이다.
-
-~~~
 # ps -efZ
 apparmor-example (enforce)      root     20635 30300  0 13:38 pts/26   00:00:00 /bin/bash ./t
 apparmor-example (enforce)      root     20636 20635  0 13:38 pts/26   00:00:00 sleep 10000
 apparmor-example (enforce)      root     20637 20635  0 13:38 pts/26   00:00:00 sleep 10000
 apparmor-example (enforce)      root     20640 20635  0 13:38 pts/26   00:00:00 sleep 1
 unconfined                      root     20641 20611  0 13:38 pts/29   00:00:00 ps -efZ
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 3] Apparmor 적용</figcaption>
+</figure>
 
-ps -efZ 명령을 통해 test.sh관련 Process들에 appArmor-example Profile이 적용된 것을 확인 할 수 있다.
+[Shell 3]는 aa-exec 명령어로 apparmor_example Profile 적용시켜 test.sh를 실행한 결과를 나타내고 있다.  socket: Permission denied Message를 확인 할 수 있다. apparmor_exmaple Profile은 tcp만 이용할 수 있도록 설정되어 있기 때문에 icmp를 이용하는 ping을 이용 할 수 없기 때문이다. ps -efZ 명령을 통해 test.sh관련 Process들에 appArmor-example Profile이 적용된 것을 확인 할 수 있다.
 
 ### 2. 참조
 
