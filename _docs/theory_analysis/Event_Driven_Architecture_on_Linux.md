@@ -11,10 +11,11 @@ Event Driven Architecture를 분석하고 Linux에서 동작하는 Event Driven 
 
 ### 1. Event Driven Architecture
 
-![]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture.PNG){: width="500px"}
+![[그림 1] Event Driven]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture.PNG){: width="500px"}
 
 Event Driven Architecture는 **Event**와 해당 Event를 처리하는 **Event Handler**로 구성된다. 또한 **Main Loop**라는 Single Thread만 이용한다는 점이 특징이다. Main Loop Thread는 평소에 Blocking되어 있다가 Event가 발생하면 해당 Event가 어떤 Event인지 파악한 후 해당하는 Event Handler를 실행한다. 그 후 다시 Blocking 상태가 되어 다음 Event가 올 때까지 대기한다. 이렇게 평소에 Blocking 되어 있다가 발생한 Event를 알려주는 역활을 하는 함수를 **I/O Multiplexer**라고 한다. Main Loop Thread가 Event 발생순으로 매우 빠르게 Event Handler들을 실행하기 때문에 Concurrent 프로그램처럼 동작하게 된다.
 
+<figure>
 {% highlight cpp %}
 int event_handler1(event *ev){
   // Non-blocking
@@ -50,6 +51,8 @@ int main()
   }
 }
 {% endhighlight %}
+<figcaption class="caption">[파일 1] Event Driven Architecture Example</figcaption>
+</figure>
 
 Event Drivent Architecture는 Main Loop라는 Single Thread를 이용하기 때문에 Race Condtion이 발생하지 않는다. Lock을 이용한 자원 동기화가 불필요 하기 때문에 프로그래밍이 간단하다는 큰 장점이 있다. 하지만 몇가지 단점도 가지고 있다.
 
@@ -75,11 +78,12 @@ eventfd()는 Counter 값의 조작만으로 Event를 전달하는 방식이기 �
 
 #### 2.3. Architecture Design
 
-![]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture_on_Linux.PNG){: width="500px"}
+![[그림 2] Event Driven Architecture on Linux]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture_on_Linux.PNG){: width="500px"}
 
-epoll()과 fd Helper Function들을 이용하면 위의 그림과 같은 Architecture 설계가 가능하다. Handler 간의 통신의 경우 eventfd()와 전역 공간의 Queue를 이용한다. Message를 Queue에 넣은 다음 eventfd()를 통해서 Event를 Handler에게 전달하는 방식으로 통신한다.
+epoll()과 fd Helper Function들을 이용하면 [그림 2]와 같은 Architecture 설계가 가능하다. Handler 간의 통신의 경우 eventfd()와 전역 공간의 Queue를 이용한다. Message를 Queue에 넣은 다음 eventfd()를 통해서 Event를 Handler에게 전달하는 방식으로 통신한다.
 
 ### 3. 참조
+
 * timerfd_create man page - [http://man7.org/linux/man-pages/man2/timerfd_create.2.html](http://man7.org/linux/man-pages/man2/timerfd_create.2.html)
 * signalfd man page - [http://man7.org/linux/man-pages/man2/signalfd.2.html](http://man7.org/linux/man-pages/man2/signalfd.2.html)
 * eventfd man page - [http://man7.org/linux/man-pages/man2/eventfd.2.html](http://man7.org/linux/man-pages/man2/eventfd.2.html)

@@ -11,7 +11,7 @@ adsense: true
 
 HTTP Basic 인증 기법은 HTTP 표준에 정의된 가장 단순한 인증 기법이다. 아래의 그림은 HTTP Basic 인증 기법의 Example을 나타내고 있다.
 
-![]({{site.baseurl}}/images/theory_analysis/HTTP_Basic_Authorization/HTTP_Basic_Example.PNG){: width="600px"}
+![[그림 1] HTTP Basic 인증]({{site.baseurl}}/images/theory_analysis/HTTP_Basic_Authorization/HTTP_Basic_Example.PNG){: width="600px"}
 
 * Client는 Server에게 Resource를 요청한다.
 * Client가 요청한 Resource를 이용하기 위해서는 인증이 필요하다. 따라서 Server는 Client에게 **WWW-Authenticate Header**를 통해 인증 필요성을 Client에게 전달한다. Basic 문자열을 통해 Basic 인증 과정이 필요하다는걸  Client에게 알린다.

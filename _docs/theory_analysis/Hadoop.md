@@ -11,15 +11,15 @@ Hadoop과 Hadoop을 구성하는 HDFS, YARN, MapReduce Framework를 분석한다
 
 ### 1. Hadoop (High-Available Distribute Object-Oriented Platform)
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/Hadoop.PNG){: width="400px"}
+![[그림 1] Hadoop]({{site.baseurl}}/images/theory_analysis/Hadoop/Hadoop.PNG){: width="400px"}
 
-Hadoop은 Compute Cluster에 분포된 대용량 Data를 동시에 쉽게 처리 할 수 있도록 도와주는 Framework이다. Hadoop V2에서는 위의 그림과 같이 HDFS, YARN, MapReduce 3개의 Layer로 분리되어 있다.
+Hadoop은 Compute Cluster에 분포된 대용량 Data를 동시에 쉽게 처리 할 수 있도록 도와주는 Framework이다. Hadoop V2에서는 [그림 1]과 같이 HDFS, YARN, MapReduce 3개의 Layer로 분리되어 있다.
 
 HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이다. HDFS을 통해서 대용량 Data는 Cluster안에서 안전하게 저장된다. YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. MapReduce는 HDFS, YARN 위에서 많은 Data를 쉽게 처리할 수 있도록 도와주는 App Framework이다.
 
 ### 2. HDFS
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/HDFS_Architecture.PNG){: width="700px"}
+![[그림 2] HDFS Architecture]({{site.baseurl}}/images/theory_analysis/Hadoop/HDFS_Architecture.PNG){: width="700px"}
 
 HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이다. HDFS는 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **Name Node**와 Slave 역활을 수행하는 **Data Node**로 이루어져 있다. Name Node는 HDFS을 위한 Meta Data를 관리 및 Client에게 File Open, Close, Rename 같은 Namespace 기능을 제공한다. Data Node는 File 저장을 위한 Storage가 붙어 있는 모든 Node를 의미하며, Block 단위로 쪼개진 File들을 Storage에 저장하고 Client에게 제공하는 역활을 수행한다.
 
@@ -55,7 +55,7 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 ### 3. YARN
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
+![[그림 3] YARN Architecture]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
 
 YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. YARN도 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **RM (Resource Manager)**과 Slave 역활을 수행하는 **NM (Node Manager)**로 이루어져 있다. RM은 NM를 통해서 **Container**라고 명칭된 Compute Resource (JVM)을 각 Node에 할당한다. Container중 일부 Container는 MapReduce같은 App을 전반적으로 관리하는 **AM (Application Master)**를 수행한다.
 
@@ -67,9 +67,9 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 
 #### 3.1. App Submission
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_App_Submission.PNG){: width="700px"}
+![[그림 4] YARN App Submission]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_App_Submission.PNG){: width="700px"}
 
-위의 그림의 Client로부터 App이 제출되고 실행되는 과정을 나타낸다.
+[그림 4]는 Client로부터 YARN에게 App이 제출되고 실행되는 과정을 나타낸다.
 
 * 1,2,3 - Client는 App은 Job Object를 통해서 RM으로부터 App ID를 얻는다.
 * 4 - Job Object는 분산되어 실행될 Task Code가 담긴 Task Jar파일과 App을 수행하기 위한 관련 정보를 HDFS같은 Shared Filesystem에 저장한다.
@@ -89,7 +89,7 @@ AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 Fil
 
 ### 4. MapReduce Framework
 
-![]({{site.baseurl}}/images/theory_analysis/Hadoop/MapReduce.PNG){: width="700px"}
+![[그림 5] MapReduce]({{site.baseurl}}/images/theory_analysis/Hadoop/MapReduce.PNG){: width="700px"}
 
 MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다. 위의 그림은 MapReduce 과정을 나타내고 있다. MapReduce는 크게 Splitting, Mapping, Shuffling, Reducing 4가지 과정으로 진행된다. 
 

@@ -27,17 +27,17 @@ Linux에서는 flock System Call을 이용하여 Shell에서 File Lock을 이용
 
 #### 2.1. Flow
 
-![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_Flow.PNG)
+![[그림 1] flock Tool Flow]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_Flow.PNG)
 
-위의 그림은 flock Tool의 실행 순서를 나타내고 있다. Open시 O_CREAT Option을 이용하기 때문에 Lock 파일이 없으면 Lock 파일이 생성된다. -x 옵션은 LOCK_EX 수행을 한다는 의미이고, Lock 파일은 file.lock 파일을 이용한다. /bin/bash가 Exclusive하게 수행된다.
+[그림 1]은 flock Tool의 실행 순서를 나타내고 있다. Open시 O_CREAT Option을 이용하기 때문에 Lock 파일이 없으면 Lock 파일이 생성된다. -x 옵션은 LOCK_EX 수행을 한다는 의미이고, Lock 파일은 file.lock 파일을 이용한다. /bin/bash가 Exclusive하게 수행된다.
 
 -o 옵션을 주면 flock Tool이 Fork 후 Child Process에서 Command 수행전 fd를 Close한다. Lock은 Command에 관계 없이 flock Tool이 wait 동작을 수행하고 종료되면 반드시 Unlock된다. 반면에 -o 옵션을 주지 않으면 Fork 후 fd를 Close 하지 않는다. Child Process에서 동작하는 Command가 Fork를 수행하여 또 다른 Child Process를 생성하는 경우, flock Tool이 종료되어도 Child의 Child Process가 fd를 Close하지 않으면 Unlock이 수행되지 않는다. 따라서 Command가 Fork를 수행한다면 -o 옵션을 이용 해야한다.
 
 #### 2.2. Lock File 삭제
 
-![]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_File_Delete.PNG)
+![[그림 2] Flock Lock File 삭제]({{site.baseurl}}/images/theory_analysis/flock_System_Call_Tool/flock_Tool_File_Delete.PNG)
 
-flock Tool을 이용하면 Lock 파일이 생기기만 하고 삭제되지 않아, Lock 파일이 쌓이는 문제가 발생한다. 하지만 Lock 파일을 외부에서 임의로 지우면 안된다. 위의 그림은 Lock 파일을 임의로 지우는 경우 Command가 Exclusive하게 동작하지 않을 수 있는 경우를 나타내고 있다.
+flock Tool을 이용하면 Lock 파일이 생기기만 하고 삭제되지 않아, Lock 파일이 쌓이는 문제가 발생한다. 하지만 Lock 파일을 외부에서 임의로 지우면 안된다. [그림 2]는 Lock 파일을 임의로 지우는 경우 Command가 Exclusive하게 동작하지 않을 수 있는 경우를 나타내고 있다.
 
 첫번째 flock Tool이 수행되고 있을 때 2번째 flock Tool이 수행되면 같은 file.lock 파일을 Lock 파일로 이용하기 때문에 두번째 flock Tool은 Blocking된다. (빨간구간) 그 후 첫번째 flock Tool이 수행을 마치면서 두번째 flock Tool이 수행된다. 이때 세번째 flock Tool이 수행되기 전 file.lock이 지워지면, 두번째 flock Tool이 이용한 file.lock을 세번째 flock Tool이 볼 수 없기 때문에 Command가 동시에 실행될 수 있다.
 

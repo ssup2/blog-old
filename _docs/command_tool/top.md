@@ -40,7 +40,7 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
    16 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:+
    17 root      rt   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/2
 {% endhighlight %}
-<figcaption class="caption">[Shell 1] top</figcaption>
+<figcaption class="caption">[Shell 1] top Display</figcaption>
 </figure>
 
 ### 2. CPU 사용률

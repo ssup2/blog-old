@@ -11,7 +11,7 @@ Digital Signature 기법을 분석한다.
 
 ### 1. Digital Signature
 
-![]({{site.baseurl}}/images/theory_analysis/Digital_Signature/Digital_Signature.PNG)
+![[그림 1] Digital Signature]({{site.baseurl}}/images/theory_analysis/Digital_Signature/Digital_Signature.PNG)
 
 Digital Signature 기법은 의미 그대로 Digital Data에 서명을 통해 서명자가 해당 Digital Data를 보증하는 기법이다. Digital Signature 기법은 Signing 단계와 Verification 2단계로 나눌 수 있다. Signing은 의미 그대로 서명하는 단계이며, Digital Data를 Hashing하여 Binary로 변환한뒤 서명자의 Private Key를 통해 암호화하여 Digital Signature를 얻는다. 그 후 Digital Signature는 원본 Digital Data와 같이 Digital Data 수신자에게 전달 된다.
 

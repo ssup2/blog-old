@@ -11,7 +11,7 @@ adsense: true
 
 HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개선하기 위한 인증 기법이다. 아래의 그림은 HTTP Digest 인증 기법의 Example을 나타내고 있다.
 
-![]({{site.baseurl}}/images/theory_analysis/HTTP_Digest_Authorization/HTTP_Digest_Example.PNG){: width="700px"}
+![[그림 1] HTTP Digest 인증]({{site.baseurl}}/images/theory_analysis/HTTP_Digest_Authorization/HTTP_Digest_Example.PNG){: width="700px"}
 
 * Client는 Server에게 Resource를 요청한다.
 * Client가 요청한 Resource를 이용하기 위해서는 인증이 필요하다. 따라서 Server는 Client에게 **WWW-Authenticate Header**를 통해 인증 필요성을 Client에게 전달한다. Digest 문자열을 통해 Digest 인증 과정이 필요한걸 Client에게 알린다.
