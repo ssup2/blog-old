@@ -15,7 +15,7 @@ AMQP는 **표준 MQ Protocol**으로써 App사이의 Message를 전달할 때 Me
 
 ![[그림 1] AMQP Architecture]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Architecture.PNG){: width="700px"}
 
-위의 그림은 AMQP의 Architecture를 나타내고 있다. AMQP는 Producer, Consumer, Broker로 구성되어 있다. Producer는 Message를 생산하여 전송하는 주체이고, Consumer는 Producer가 생산한 Message를 받아서 소비하는 주체이다. Broker는 Producer와 Consumer 사이에서 Message를 중개하는 역활을 수행한다. Broker는 다시 **Exchange**와 **Queue**로 구성되어 있다.
+[그림 1]은 AMQP의 Architecture를 나타내고 있다. AMQP는 Producer, Consumer, Broker로 구성되어 있다. Producer는 Message를 생산하여 전송하는 주체이고, Consumer는 Producer가 생산한 Message를 받아서 소비하는 주체이다. Broker는 Producer와 Consumer 사이에서 Message를 중개하는 역활을 수행한다. Broker는 다시 **Exchange**와 **Queue**로 구성되어 있다.
 
 Producer는 임의의 Exchange를 선택하여 자유롭게 Message를 전송할 수 있다. Producer는 Exchange에게 Message와 함께 Message Routing을 위한 **Routing Key**를 같이 전달한다. Exchange는 Routing Key를 이용하여 해당 Message를 **Filtering** 하거나, Queue 또는 다른 Exchange에게 **Routing** 한다. Exchange는 자신과 연결되어 있는 Queue 또는 Exchange에게만 Message를 전달 할 수 있는데, 이러한 연결 과정을 **Binding**이라고 표현한다.
 
@@ -29,25 +29,25 @@ Exchange는 Routing 규칙에 따라서 Fanout, Direct, Topic, Header 4가지 Ty
 
 ![[그림 2] Direct Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Direct.PNG){: width="450px"}
 
-Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하는 Exchange이다. Unicast의 기준은 Message와 함께 전달되는 Routing Key이다. Direct Exchange와 Binding하기 위해서는 Direct Exchange에게 Routing Key를 넘겨주어야 한다. 위의 그림에서는 Binding시 Direct Exchange에게 넘겨준 Routing Key를 **Binding Key**라고 표현하고 있다. Direct Exchange는 Message와 함께온 Routing Key와 동일한 Binding Key를 갖고 있는 Queue 또는 Exchange에게 해당 Message를 전달한다.
+Direct Exchange는 하나의 Queue 또는 Exchange에게 Message를 Unicast하는 Exchange이다. Unicast의 기준은 Message와 함께 전달되는 Routing Key이다. Direct Exchange와 Binding하기 위해서는 Direct Exchange에게 Routing Key를 넘겨주어야 한다. [그림 2]에서는 Binding시 Direct Exchange에게 넘겨준 Routing Key를 **Binding Key**라고 표현하고 있다. Direct Exchange는 Message와 함께온 Routing Key와 동일한 Binding Key를 갖고 있는 Queue 또는 Exchange에게 해당 Message를 전달한다.
 
 ##### 1.1.2. Fanout
 
 ![[그림 3] Direct Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Fanout.PNG){: width="450px"}
 
-Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. 위의 그림에서 Exchange A는 자신과 Binding된 Queue A, Queue B, Exchange B에게 자신이 받은 모든 Message를 전달하여 Brodcast를 수행한다.
+Fanout Exchange는 자신과 Binding된 모든 Queue에게 Message를 Broadcast하는 Exchange이다. [그림 3]에서 Exchange A는 자신과 Binding된 Queue A, Queue B, Exchange B에게 자신이 받은 모든 Message를 전달하여 Brodcast를 수행한다.
 
 ##### 1.1.3. Topic
 
 ![[그림 4] Topic Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Topic.PNG){: width="450px"}
 
-Topic Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message와 함께 전달되는 Routing Key이다. Topic Exchange와 Binding하기 위해서는 Topic Exchange에게 **패턴**이 포함된 Routing Key를 넘겨주어야 한다. 위의 그림에서는 Binding시 Topic Exchange에게 넘겨준 패턴이 포함된 Routing Key를 Binding Key라고 표현하고 있다. 이용하는 패턴은 '\*'과 '#'이다. '\*'은 하나의 문자로 치환이 가능하다는 의미이다. '#'은 아무것도 없는 문자부터 문자열까지 어떠한 문자들과도 치환이 가능하다는 의미이다. Topic Exchange는 Message와 함께온 Routing Key에 부합하는 Binding Key가 있는 모든 Queue 또는 Exchange에게 Message를 전달한다.
+Topic Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message와 함께 전달되는 Routing Key이다. Topic Exchange와 Binding하기 위해서는 Topic Exchange에게 **패턴**이 포함된 Routing Key를 넘겨주어야 한다. [그림 4]에서는 Binding시 Topic Exchange에게 넘겨준 패턴이 포함된 Routing Key를 Binding Key라고 표현하고 있다. 이용하는 패턴은 '\*'과 '#'이다. '\*'은 하나의 문자로 치환이 가능하다는 의미이다. '#'은 아무것도 없는 문자부터 문자열까지 어떠한 문자들과도 치환이 가능하다는 의미이다. Topic Exchange는 Message와 함께온 Routing Key에 부합하는 Binding Key가 있는 모든 Queue 또는 Exchange에게 Message를 전달한다.
 
 ##### 1.1.4. Headers
 
 ![[그림 5] Headers Type Exchange]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Exchange_Headers.PNG){: width="550px"}
 
-Headers Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message Header에 포함되어 있는 Key, Value 값이다. Headers Exchange와 Binding하기 위해서는 Message Header에 포함될 Key, Value 값을 넘겨주어야 한다. 위의 그림에서 Binding시 Headers Exchange에게 넘겨주는 Message Header를 **Binding Header**라고 표현하고 있다. Headers Exchange는 Message Header의 Key, Value 값과 동일한 Binding Header가 있는 모든 Queue 또는 Exchange에게 Message를 전달한다.
+Headers Exchange는 다수의 Queue 또는 Exchange에게 Message를 Multicast하는 Exchange이다. Mulicast의 기준은 Message Header에 포함되어 있는 Key, Value 값이다. Headers Exchange와 Binding하기 위해서는 Message Header에 포함될 Key, Value 값을 넘겨주어야 한다. [그림 5]에서 Binding시 Headers Exchange에게 넘겨주는 Message Header를 **Binding Header**라고 표현하고 있다. Headers Exchange는 Message Header의 Key, Value 값과 동일한 Binding Header가 있는 모든 Queue 또는 Exchange에게 Message를 전달한다.
 
 Headers Exchange는 **x-match**라는 Option을 제공하는데 x-match는 'all'과 'any' 2가지 값이 존재한다. 'all'은 Message Header에 있는 모든 Key, Value 값이 Binding시에 전달 받은 Key, Value 값과 일치하는 경우에만 해당 Queue 또는 Exchange에게 Messsage를 전달한다. 'any'는 Message Header에 있는 Key, Value값의 일부만 Binding시에 전달 받은 Key, Value과 일치하더라도 해당 Queue 또는 Exchange에게 Message를 전달한다.
 
