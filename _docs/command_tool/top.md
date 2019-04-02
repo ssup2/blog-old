@@ -13,7 +13,8 @@ top 명령어는 Linux에서 실시간으로 Process들을 보여주는 Tool이�
 
 top 명령을 통해서 확인 할 수 있는 화면은 아래와 같다.
 
-~~~
+<figure>
+{% highlight text %}
 top - 10:27:27 up 36 min,  3 users,  load average: 0.00, 0.01, 0.05
 Tasks: 238 total,   1 running, 237 sleeping,   0 stopped,   0 zombie
 %Cpu(s):  0.2 us,  0.1 sy,  0.0 ni, 99.7 id,  0.1 wa,  0.0 hi,  0.0 si,  0.0 st
@@ -38,7 +39,9 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
    14 root      20   0       0      0      0 S   0.0  0.0   0:00.44 ksoftirqd/1
    16 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:+
    17 root      rt   0       0      0      0 S   0.0  0.0   0:00.00 watchdog/2
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 1] top</figcaption>
+</figure>
 
 ### 2. CPU 사용률
 

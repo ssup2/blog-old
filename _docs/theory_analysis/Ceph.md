@@ -11,7 +11,7 @@ adsense: true
 
 ### 1. Ceph
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Architecture.PNG)
+![[그림 1] Ceph Architecture]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Architecture.PNG)
 
 Ceph는 Ojbect Storage 기반 분산 Storage이다. Object Storage이지만 File Storage, Block Storage 기능도 제공하고 있다. 따라서 다양한 환경에서 Ceph가 이용되고 있다. Ceph의 가장 큰 특징은 **Single Point of Failure** 문제를 고려한 Achitecture를 채택하고 있다는 점이다. 즉 Ceph는 중앙처리 방식이 아닌 분산처리 방식을 이용하고 있고, 특정 Node에 문제가 발생하더라도 Ceph 동작에는 문제가 없도록 설계되어 있다.
 
@@ -39,9 +39,9 @@ RADOS Cluster는 OSD(Object Storage Daemon), Monitor, MDS(Meta Data Server) 3가
 
 ##### 1.2.1. OSD (Object Storage Daemon)
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Object.PNG){: width="700px"}
+![[그림 2] Ceph Object]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Object.PNG){: width="700px"}
 
-OSD는 Disk에 **Object 형태**로 Data를 저장하는 Daemon이다. Object 형태로 저장한다는 의미는 Data를 **Key/Value/Metadata**로 저장한다는 의미이다. 위의 그림은 OSD가 Data를 저장하는 모습을 나타내고 있다. Data는 File System의 폴더역활을 수행하는 Namespace라는 곳에 저장된다. 위의 Object Stroage 설명에서 나오는 Bucket이 OSD의 Namespace와 동일한 개념이다. Namespace는 Files System의 폴더처럼 Tree 계층을 구성하지는 않는다. Metadata는 다시 Key/Value로 구성되어 있다.
+OSD는 Disk에 **Object 형태**로 Data를 저장하는 Daemon이다. Object 형태로 저장한다는 의미는 Data를 **Key/Value/Metadata**로 저장한다는 의미이다. [그림 2]는 OSD가 Data를 저장하는 모습을 나타내고 있다. Data는 File System의 폴더역활을 수행하는 Namespace라는 곳에 저장된다. 위의 Object Stroage 설명에서 나오는 Bucket이 OSD의 Namespace와 동일한 개념이다. Namespace는 Files System의 폴더처럼 Tree 계층을 구성하지는 않는다. Metadata는 다시 Key/Value로 구성되어 있다.
 
 Node의 각 Disk마다 별도의 OSD Daemon이 동작한다. Disk는 주로 XFS Filesystem으로 Format된 Disk를 이용한다. 하지만 ZFS, EXT4 Filesystem도 이용이 가능하고, 최신 버전 Ceph의 OSD는 BlueStore Backend를 이용해 별도의 Filesystem을 이용하지 않고 Disk를 직접 이용하기도 한다.
 
@@ -53,19 +53,19 @@ Monitor는 OSD Map, MDS Map, CRUSH Map, Monitor Map 등과 같은 RADOS Cluster 
 
 MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 관리하는 Daemon으로, Ceph가 File Storage로 동작할때만 필요하다. Directory 계층 구조, Owner, Timestamp같은 File의 Meta 정보들을 Object 형태로 RADOS Cluster에 저장하고 관리한다.
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_MDS_Namespace.PNG){: width="600px"}
+![[그림 3] Ceph MDS Namespace]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_MDS_Namespace.PNG){: width="600px"}
 
-위의 그림은 Ceph File System의 Namespace를 나타내고 있다. Tree 모양은 File System의 Directory 구조를 나타낸다. Ceph에서는 전체 Tree 또는 Sub Tree를 Namespace라고 표현한다. 각 MDS는 하나의 Namespace만 관리하고, 관리하는 Namespace와 연관된 Meta Data만 관리한다. Namespace는 Tree의 부하상태 및 Replica 상태에 따라 동적으로 바뀐다.
+[그림 3]은 Ceph File System의 Namespace를 나타내고 있다. Tree 모양은 File System의 Directory 구조를 나타낸다. Ceph에서는 전체 Tree 또는 Sub Tree를 Namespace라고 표현한다. 각 MDS는 하나의 Namespace만 관리하고, 관리하는 Namespace와 연관된 Meta Data만 관리한다. Namespace는 Tree의 부하상태 및 Replica 상태에 따라 동적으로 바뀐다.
 
 #### 1.3. CRUSH, CRUSH Map
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_PG_CRUSH.PNG){: width="600px"}
+![[그림 4] Ceph PG, CRUSH]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_PG_CRUSH.PNG){: width="600px"}
 
-**CRUSH**는 Object를 어느 OSD에 배치할지 결정하는 알고리즘이다. Replica 설정시 Replica의 위치까지 CRUSH를 통해 결정된다. 위의 그림은 Object가 OSD에 할당되는 과정을 나타내고 있다. Object는 Hashing을 통해 특정 PG(Placement Group)에 할당된다. 그리고 PG는 다시 CRUSH를 통해서 특정 OSD에 할당된다. 위의 그림은 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH은 3개의 OSD를 할당한다.
+**CRUSH**는 Object를 어느 OSD에 배치할지 결정하는 알고리즘이다. Replica 설정시 Replica의 위치까지 CRUSH를 통해 결정된다. [그림 4]는 Object가 OSD에 할당되는 과정을 나타내고 있다. Object는 Hashing을 통해 특정 PG(Placement Group)에 할당된다. 그리고 PG는 다시 CRUSH를 통해서 특정 OSD에 할당된다. [그림 4]는 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH은 3개의 OSD를 할당한다.
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
+![[그림 5] Ceph CRUSH MAP]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
 
-CRUSH는 **CRUSH Map**이라는 Storage Topology를 용한다. 위의 그림은 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. Bucket은 **Weight**값을 가지고 있는데 일반적으로 osd Bucket의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket type의 weight는 모든 하위 Bucket의 Weight의 합이다.
+CRUSH는 **CRUSH Map**이라는 Storage Topology를 용한다. [그림 5]는 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. Bucket은 **Weight**값을 가지고 있는데 일반적으로 osd Bucket의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket type의 weight는 모든 하위 Bucket의 Weight의 합이다.
 
 CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Ceph의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 CRUSH에 의해 선택된 3개의 Rack에 하나씩 존재하게 된다.
 
@@ -95,9 +95,9 @@ Straw에 Bucket 추가,제거 또는 Bucket의 Weight가 변경되더라도 각 
 
 #### 1.4. Read/Write
 
-![]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Read_Write.PNG){: width="600px"}
+![[그림 6] Ceph Read/Write]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Read_Write.PNG){: width="600px"}
 
-Ceph의 특징 중 하나는 Ceph Client가 OSD에 바로 접근하여 Object를 관리한다는 점이다. 위의 그림은 Ceph의 Read/Write 과정을 나타내고 있다. Ceph Client는 RADOS Cluster의 Monitor로부터 CRUSH Map 정보를 받는다. 그 후 Client는 별도의 외부 통신 없이 CRUSH Map과 CRUSH를 통해서 접근하려는 Object가 있는 OSD의 위치를 파악 할 수 있다.
+Ceph의 특징 중 하나는 Ceph Client가 OSD에 바로 접근하여 Object를 관리한다는 점이다. [그림 6]은 Ceph의 Read/Write 과정을 나타내고 있다. Ceph Client는 RADOS Cluster의 Monitor로부터 CRUSH Map 정보를 받는다. 그 후 Client는 별도의 외부 통신 없이 CRUSH Map과 CRUSH를 통해서 접근하려는 Object가 있는 OSD의 위치를 파악 할 수 있다.
 
 CRUSH를 통해 결정된 OSD 중에서 첫번째 OSD를 **Primary OSD**라고 표현한다. Read 과정의 경우 Primary OSD만을 이용하여 Read 동작을 수행한다. Write 과정의 경우 Client는 Primary OSD에게 Object와 같이 Object의 Replica가 저장될 추가 OSD 정보도 같이 보낸다. Primary OSD는 Client로부터 Object를 다 받으면, 받은 Object를 나머지 OSD들에게 전송한다. 모든 전송이 완료된뒤 Primary OSD는 Client에게 Write Ack를 전송한다.
 
