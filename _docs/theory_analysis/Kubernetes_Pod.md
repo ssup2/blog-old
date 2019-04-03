@@ -11,7 +11,7 @@ Kubernetes Pod을 분석한다.
 
 ### 1. Pod
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Component.PNG){: width="500px"}
+![[그림 1] Kubernetes Pod]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Component.PNG){: width="500px"}
 
 Pod은 Kubernetes에서 이용하는 **Container 관리 단위**이다. Kubernetes는 Pod 단위로 Scheduling을 및 Load Balancing을 수행한다. 대부분의 Pod은 하나의 Container로 구성되어 있지만 다수의 Container로도 구성 될 수 있다. 이러한 Pod을 Multi-container Pod이라고 표현한다. Multi-container Pod의 Container들은 같은 Network Namespace와 IPC Namespace를 공유한다. 또한 같은 Volume(Storage)를 공유한다.
 
@@ -21,7 +21,7 @@ Multi-container Pod의 경우 서로 Tightly Coupling되어 주로 하나의 Mai
 
 #### 1.1. (Linux) Namespace
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Namespace.PNG){: width="650px"}
+![[그림 2] Kubernetes Pod Namespace]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Namespace.PNG){: width="650px"}
 
 위에서 언급한 것 처럼 Multi-container Pod의 Container들은 같은 Network Namespace와 IPC Namespace를 공유하는 특징을 갖는다. 이때 공유되는 Namespace는 사용자가 지정한 App이 동작하는 Container의 Namespace가 아니라, Kubernetes가 각 Pod마다 하나씩 생성하는 Pause Container의 Namespace이다. App Container의 Namespace가 아닌 Pause Container의 Namespace를 공유하는 이유에는 Namespace이 갖고 있는 특징 때문이다.
 
@@ -33,12 +33,13 @@ Pause Container는 pause라는 binary를 Init Process로 이용하여 **pause()*
 
 #### 1.2. Resource Manage (Cgroup)
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Cgroup.PNG){: width="650px"}
+![[그림 3] Kubernetes Pod Cgroup ]({{site.baseurl}}/images/theory_analysis/Kubernetes_Pod/Pod_Cgroup.PNG){: width="650px"}
 
-Pod의 Resource에는 **CPU**와 **Memory**가 있다. CPU와 Memory 둘다 Linux Kernel의 Cgroup을 이용하여 제어한다. 위의 그림은 Kubernetes가 Cgroup을 어떻게 구성하는지를 나타내고 있다. Pod A, Pod B, Pod C 처럼 Pod 단위의 Cgroup이 존재한다. 그리고 Pod Cgroup 아래에는 Pod에 속한 App Container의 Cgroup과 Pause Container의 Cgroup이 각각 존재한다.
+Pod의 Resource에는 **CPU**와 **Memory**가 있다. CPU와 Memory 둘다 Linux Kernel의 Cgroup을 이용하여 제어한다. [그림 3]은 Kubernetes가 Cgroup을 어떻게 구성하는지를 나타내고 있다. Pod A, Pod B, Pod C 처럼 Pod 단위의 Cgroup이 존재한다. 그리고 Pod Cgroup 아래에는 Pod에 속한 App Container의 Cgroup과 Pause Container의 Cgroup이 각각 존재한다.
 
 Kubernetes는 Guaranteed, Burstable, BestEffort라는 3개의 QoS Class를 제공한다. Pod의 Resource 설정에 따라서 Pod의 QoS는 3개의 Class중 하나의 Class에 속하게 된다. Burstable, BestEffort Class에 속한 Pod은 해당 Cgroup 아래 속하게 된다. 그리고 Guaranteed Cgroup에 속한 Pod은 Kubernetes가 생성한 최상위 Cgroup인 kubepods Cgroup아래 속하게 된다. kubepods Cgroup은 cpu, memory, freezer 같은 모든 Cgroup 아래 각각 생성된다.
 
+<figure>
 {% highlight yaml %}
 apiVersion: v1
 kind: Pod
@@ -68,8 +69,10 @@ spec:
         memory: "128Mi"
         cpu: "500m"
 {% endhighlight %}
+<figcaption class="caption">[파일 1] Kubernetes Pod 예제</figcaption>
+</figure>
 
-위의 YAML 파일은 Pod의 설정 파일이다. Pod의 Resource 설정은 Pod 단위로 설정하는 기능은 없고, Pod에 속한 App Container 단위로 CPU, Memory 설정이 가능하다. CPU, Memory 설정값에는 **Request**와 **Limit** 두가지가 존재한다. Request는 Container가 언제나 이용할 수 있는 보장된 값을 의미하고, Limit는 Container가 이용할 수 있는 최대값을 나타낸다.
+[파일 1]은 Kubernetes Pod의 설정 파일이다. Pod의 Resource 설정은 Pod 단위로 설정하는 기능은 없고, Pod에 속한 App Container 단위로 CPU, Memory 설정이 가능하다. CPU, Memory 설정값에는 **Request**와 **Limit** 두가지가 존재한다. Request는 Container가 언제나 이용할 수 있는 보장된 값을 의미하고, Limit는 Container가 이용할 수 있는 최대값을 나타낸다.
 
 ##### 1.2.1. CPU
 
@@ -124,6 +127,7 @@ Probe에는 livenessProbe, readinessProbe 2가지 종류의 Probe가 존재한�
 * livenessProbe - Container가 Running 상태라는걸 감지하기 위한 Probe이다. livenessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 삭제하고 Container의 Restart Policy에 따라서 해당 Container를 재시작하거나 그대로 놔둔다.
 * readinessProbe - Container가 Service 요청을 받을 수 있는 상태인지를 감지하기 위한 Probe이다. readinessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 갖고 있는 Pod의 IP 설정을 제거하여, 해당 Pod이 Service를 제공하지 못하도록 한다.
 
+<figure>
 {% highlight yaml %}
 apiVersion: v1
 kind: Pod
@@ -147,13 +151,16 @@ spec:
       initialDelaySeconds: 5
       periodSeconds: 5
 {% endhighlight %}
+<figcaption class="caption">[파일 2] Kubernetes Pod의 livenessProbe 예제</figcaption>
+</figure>
 
-위의 예제는 Exec Type의 livenessProbe를 이용한 Pod의 예제를 나타내고 있다. 위의 Pod은 /tmp/healthy 파일을 생성하고 30초 동안 대기하고 있다가 /tmp/healty 파일을 삭제하고 600초 동안 대기후 사라지는 Pod이다. livenessProbe는 cat 명령어를 통해 /tmp/healty 파일을 읽는 명령을 5초 주기로 수행한다. 30초동안은 /tmp/healty파일이 존재하기 때문에 Probe 결과는 성공으로 나오겠지만, 30초 이후에는 /tmp/healty 파일이 사라지기 때문에 Probe 결과는 실패가 된다.
+[파일 2]는 Exec Type의 livenessProbe를 이용한 Pod의 예제를 나타내고 있다. [파일 2]는 /tmp/healthy 파일을 생성하고 30초 동안 대기하고 있다가 /tmp/healty 파일을 삭제하고 600초 동안 대기후 사라지는 Pod을 나타낸다. livenessProbe는 cat 명령어를 통해 /tmp/healty 파일을 읽는 명령을 5초 주기로 수행한다. 30초동안은 /tmp/healty파일이 존재하기 때문에 Probe 결과는 성공으로 나오겠지만, 30초 이후에는 /tmp/healty 파일이 사라지기 때문에 Probe 결과는 실패가 된다.
 
 ##### 1.3.2. Init Container
 
 Init Container는 Pod의 App Container가 동작하기 전에 Pod의 초기화, 외부 Service 대기 등을 위해 생성하는 Container이다. Init Container는 App Container와 동일하게 Pause Container의 Network Namespace와 IPC Namespace를 이용한다. 또한 Pod이 제공하는 Volume에도 똑같이 접근할 수 있다. 따라서 Init Container를 통해서 App Container가 이용하는 Network Routing Table을 변경하거나, Volume을 초기화 할 수 있다.
 
+<figure>
 {% highlight yaml %}
 apiVersion: v1
 kind: Pod
@@ -174,10 +181,10 @@ spec:
     image: busybox
     command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
 {% endhighlight %}
+<figcaption class="caption">[파일 3] Kubernetes Pod의 Init Container 에제</figcaption>
+</figure>
 
-위의 예제는 2개의 Init Container를 이용하는 예제이다. 다수의 Init Container가 존재하는 경우 먼져 정의된 Init Container 부터 차례대로 실행한다. 앞의 Init Container가 정상 종료해야 다음 Init Container가 수행된다. 마지막 Init Container가 정상 종료된 뒤에야 App Container가 수행된다. 따라서 Init Container들은 반드시 초기화 진행 후 종료되는 Container야 한다. 위의 예제에서는 init-myservice -> init-mydb -> myapp-container 순으로 Container가 생성된다.
-
-만약 Init Container가 정상 종료되지 않으면 Pod의 Restart 정책에 따라 해당 Pod을 재시작하여 Init Container를 다시 수행하거나, 그대로 놔둔다.
+[파일 3]은 2개의 Init Container를 이용하는 예제이다. 다수의 Init Container가 존재하는 경우 먼져 정의된 Init Container 부터 차례대로 실행한다. 앞의 Init Container가 정상 종료해야 다음 Init Container가 수행된다. 마지막 Init Container가 정상 종료된 뒤에야 App Container가 수행된다. 따라서 Init Container들은 반드시 초기화 진행 후 종료되는 Container야 한다. [파일 3]에서는 init-myservice -> init-mydb -> myapp-container 순으로 Container가 생성된다. 만약 Init Container가 정상 종료되지 않으면 Pod의 Restart 정책에 따라 해당 Pod을 재시작하여 Init Container를 다시 수행하거나, 그대로 놔둔다.
 
 ### 2. 참조
 

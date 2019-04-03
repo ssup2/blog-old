@@ -87,7 +87,7 @@ passwd: password updated successfully
 # apt update
 # apt install docker.io
 # apt install docker-compose
-# "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
+# echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
 ~~~
 
 * git Client를 설치

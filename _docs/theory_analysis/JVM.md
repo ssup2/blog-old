@@ -11,7 +11,7 @@ JVM (Java Virtual Machine)을 분석한다.
 
 ### 1. JVM (Java Virtual Machine)
 
-![]({{site.baseurl}}/images/theory_analysis/JVM/JVM_Architecture.PNG)
+![[그림 1] JVM Architecture]({{site.baseurl}}/images/theory_analysis/JVM/JVM_Architecture.PNG)
 
 Java는 **Write once, Run anywhere**라는 철학 위에서 만들어진 언어이다. 한번 작성된 App이 다양한 Platform에서 동작하기 위해서는 App의 구동 환경이 Platform에 종속적이면 안된다. JVM은 이러한 문제를 해결하기 위해서 Platform과 Java App 사이에서 Java App에게 일정한 구동 환경을 제공하는 User Level Program이다. JVM은 크게 Class Loader, Runtime Memory, Execution Engine, Natvie Method Inteface (JNI)로 구성되어 있다.
 
@@ -25,9 +25,9 @@ Class Loader는 Byte Code로 Compile된 Class File을 Memory에 올리는 역활
 
 위의 3개의 Class Loader 말고도 Java App 개발자가 Class Loading을 관리하고 싶을때에는 직접 Class Loader Class를 상속하여 User Class Loader를 생성할 수 있다. Claas Loader는 **Parent Delegation Model**을 이용한다. Class Loader가 올릴 Class가 Memory에 없는걸 확인한 뒤 Class를 직접 올리기전에 무조건 Parent Class Loader를 호출하는 방식을 의미한다. Parent Class Loader 호출뒤에도 Class가 올라가있지 않으면, 직접 Class를 올린다. 호출된 Parent Class Loader 또한 자신이 직접 Class를 올리기전 자신의 Parent Class Loader를 호출한다. Parent Delegation Model을 통해서 Java App 개발자가 User Class Loader 개발시 Class 중복 Loading을 고민할 필요 없이 Class Loader를 쉽게 제작할 수 있다.
 
-![]({{site.baseurl}}/images/theory_analysis/JVM/Class_Loader_Hierarchy.PNG){: width="500px"}
+![[그림 2] JVM Class Loader 계층]({{site.baseurl}}/images/theory_analysis/JVM/Class_Loader_Hierarchy.PNG){: width="500px"}
 
-Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 형성하게 된다. 위의 그림은 Class Loader간의 계층을 나타내고 있다. Bootstrap Class를 제외한 모든 Class Loader는 반드시 Parent Class Loader를 갖는다. Class Loader는 다음과 같은 3단계의 동작을 수행한다.
+Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 형성하게 된다. [그림 2]는 Class Loader간의 계층을 나타내고 있다. Bootstrap Class를 제외한 모든 Class Loader는 반드시 Parent Class Loader를 갖는다. Class Loader는 다음과 같은 3단계의 동작을 수행한다.
 
 * Loading - Bytecode로 구성된 Class를 Memory에 올린다.
 * Linking - static 변수들을 초기화 하고, Symbol을 Resolve한다.
@@ -38,7 +38,7 @@ Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 �
 
 #### 1.2. Runtime Memory
 
-![]({{site.baseurl}}/images/theory_analysis/JVM/Runtime_Memory.PNG)
+![[그림 3] JVM Runtime Memory]({{site.baseurl}}/images/theory_analysis/JVM/Runtime_Memory.PNG)
 
 Runtime Memory는 JVM이 관리하는 Memory 영역이다. Method Area, Heap, Stack, PC Register, Native Method Stack으로 구성되어 있다.
 

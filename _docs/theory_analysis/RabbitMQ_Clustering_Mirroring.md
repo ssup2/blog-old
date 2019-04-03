@@ -21,7 +21,7 @@ Client는 Cluster의 RabbitMQ중에서 하나의 RabbitMQ와 Connection을 맺�
 
 Cluster를 구성하는 각 RabbitMQ는 Disk, RAM 2가지 Mode를 이용할 수 있다. Disk Mode는 Default Mode이다. RAM Mode는 Message, Message Index, Queue Index, 다른 RebbitMQ의 상태 정보를 제외한 나머지 모든 정보를 Memory (RAM)에만 저장하고 구동하는 Mode이다. RAM Mode에서도 Message와 관련된 정보는 여전히 Disk에 저장되기 때문에 RAM Mode를 이용해도 Message 처리량은 증가하지 않는다. 하지만 Exchange, Queue, Binding 등의 정보가 굉장히 많고 설정이 자주 변경되는 환경에서는 RAM Mode를 이용하여 빠르게 설정을 변경 할 수 있다. Cluster 구성시 반드시 하나 이상의 RabbitMQ는 반드시 Disk Mode로 동작시켜야 한다. RAM Mode의 RabbitMQ는 재시작시 Disk Mode가 갖고 있는 RabbitMQ의 정보를 받아서 초기화하기 때문이다.
 
-Client가 Cluster의 모든 RabbitMQ와 Connection을 맺을 수 있어 Client는 언제나 RabbitMQ를 이용 할 수 있다고 하더라도, Queue는 Cluster에 하나만 존재하기 때문에 장애가 발생한 RabbitMQ의 Queue에 있는 Message의 손실 까지는 막을수 없다. 이러한 Message 손실을 최소화 하기위해 적용하는 기법이 Mirroring이다.
+Client가 Cluster의 모든 RabbitMQ와 Connection을 맺을 수 있어 Client는 언제나 RabbitMQ를 이용 할 수 있다고 하더라도, Queue는 Cluster에 하나만 존재하기 때문에 장애가 발생한 RabbitMQ의 Queue에 있는 Message의 손실 까지는 막을수 없다. 이러한 Message 손실을 방지하기 위해 적용하는 기법이 Mirroring이다.
 
 ### 2. RabbitMQ Mirroring
 

@@ -11,19 +11,19 @@ Network Tunneling 기법인 IP-in-Ip 기법과 GRE 기법을 분석한다.
 
 ### 1. IP-in-IP
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Header.PNG){: width="450px"}
+![[그림 1] IP-in-IP Header]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Header.PNG){: width="450px"}
 
-IP-in-IP는 IP기반 Tunneling 기법이다. 위의 그림은 IP-in-IP의 Header를 나타내고 있다. 원본 IP Header위에 **Outer IP Header**를 붙여 네트워크 통과하는 방식이다.
+IP-in-IP는 IP기반 Tunneling 기법이다. [그림 1]은 IP-in-IP의 Header를 나타내고 있다. 원본 IP Header위에 **Outer IP Header**를 붙여 네트워크 통과하는 방식이다.
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Process.PNG)
+![[그림 2] IP-in-IP 처리과정]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/IPIP_Process.PNG)
 
-위의 그림은 IP-in-IP가 처리되는 과정을 나타내고 있다. PC에서 전송된 Packet은 Routing 규칙에 따라서 출발지 Tunnel에 전송된다. Tunnel은 Packet의 Dst IP와 Tunnel에 설정된 Mapping Table을 참조하여 목적지 Tunnel의 IP를 알아낸다. 그뒤 원본 IP Header 위에 Dst IP는 목적지 Tunnel의 IP를 갖고 Src IP는 출발지 Tunnel의 IP를 갖는 Outer IP Header를 붙여 캡슐화한다. 목적지 Tunnel은 캡슐화된 Packet을 받으면 Outer IP Header를 제거한뒤 Packet을 목적지에 전달한다.
+[그림 2]는 IP-in-IP가 처리되는 과정을 나타내고 있다. PC에서 전송된 Packet은 Routing 규칙에 따라서 출발지 Tunnel에 전송된다. Tunnel은 Packet의 Dst IP와 Tunnel에 설정된 Mapping Table을 참조하여 목적지 Tunnel의 IP를 알아낸다. 그뒤 원본 IP Header 위에 Dst IP는 목적지 Tunnel의 IP를 갖고 Src IP는 출발지 Tunnel의 IP를 갖는 Outer IP Header를 붙여 캡슐화한다. 목적지 Tunnel은 캡슐화된 Packet을 받으면 Outer IP Header를 제거한뒤 Packet을 목적지에 전달한다.
 
 ### 2. GRE (Generic Routing Encapsulation)
 
-![]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/GRE_Header.PNG){: width="600px"}
+![[그림 3] GRE Header]({{site.baseurl}}/images/theory_analysis/IPIP_GRE_Tunneling/GRE_Header.PNG){: width="600px"}
 
-GRE(Generic Routing Encapsulation)는 IP-in-IP와 유사한 방식의 Tunneling Protocol이다. IP-in-IP와 동일하게 원본 Packet에 Outer IP Header를 붙여 Tunneling을 수행한다. IP-in-IP와의 차이점은 원본 IP Header와 Outer IP Header 사이에 **GRE Header**가 추가된다는 점이다. 위의 그림은 GRE Header를 나타내고 있다.
+GRE(Generic Routing Encapsulation)는 IP-in-IP와 유사한 방식의 Tunneling Protocol이다. IP-in-IP와 동일하게 원본 Packet에 Outer IP Header를 붙여 Tunneling을 수행한다. IP-in-IP와의 차이점은 원본 IP Header와 Outer IP Header 사이에 **GRE Header**가 추가된다는 점이다. [그림 3]은 GRE Header를 나타내고 있다.
 
 * C - Checksum Bit이며 1일경우 Checksum을 이용한다.
 * K - Key Bit이며 1일경우 Key를 이용한다.

@@ -15,3 +15,4 @@ NoSQL DB중 하나인 Graph DB를 분석한다.
 
 * [https://database.guide/what-is-a-graph-database/](https://database.guide/what-is-a-graph-database/)
 * [https://neo4j.com/developer/graph-db-vs-nosql/](https://neo4j.com/developer/graph-db-vs-nosql/)
+* [https://neo4j.com/developer/graph-db-vs-rdbms/](https://neo4j.com/developer/graph-db-vs-rdbms/)
