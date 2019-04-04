@@ -11,15 +11,15 @@ Linux Kernel Level에서 Load Balancing을 수행하는 기법인 LVS (Linux Vir
 
 ### 1. LVS (Linux Virtual Server)
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/LVS.PNG){: width="500px"}
+![[그림 1] Linux LVS]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/LVS.PNG){: width="500px"}
 
-LVS는 Linux에서 제공하는 L4 Load Balancer 솔루션이다. 위의 그림은 LVS 구성을 나타낸다. LVS는 크게 Packet Load Balacing을 수행하는 Load Balancer와 Packet의 실제 목적지인 Real Server로 구성되어 있다. Load Balancer는 SPOF (Single Pointer Of Failure) 방지를 위해 일반적으로 2대 이상의 Load Balancer를 VRRP로 묶어서 구성한다. VRRP로 묶는데는 Linux Kernel의 Network Stack에서 제공하는 Keepalived 기능을 이용한다. 각 Load Balancer에서는 아래에서 설명할 Linux Kenrel의 IPVS를 이용하여 Packet Load Balancing을 수행한다.
+LVS는 Linux에서 제공하는 L4 Load Balancer 솔루션이다. [그림 1]은 LVS 구성을 나타낸다. LVS는 크게 Packet Load Balacing을 수행하는 Load Balancer와 Packet의 실제 목적지인 Real Server로 구성되어 있다. Load Balancer는 SPOF (Single Pointer Of Failure) 방지를 위해 일반적으로 2대 이상의 Load Balancer를 VRRP로 묶어서 구성한다. VRRP로 묶는데는 Linux Kernel의 Network Stack에서 제공하는 Keepalived 기능을 이용한다. 각 Load Balancer에서는 아래에서 설명할 Linux Kenrel의 IPVS를 이용하여 Packet Load Balancing을 수행한다.
 
 ### 2. IPVS (IP Virtual Server)
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/IPVS.PNG)
+![[그림 2] Linux IPVS]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/IPVS.PNG)
 
-IPVS는 Linux의 Netfilter 위에서 동작하는 L4 Load Balancer이다. Linux Kernel Level에서 동작하기 때문에 Haproxy같은 User Level Load Balancer보다 빠른 성능으로 동작한다. IPVS는 ipvsadm 명령어를 통해 제어가 가능하다. 위의 그림은 Netfilter에서 동작하는 IPVS의 Hook Function들을 나타내고 있다. IPVS는 6개의 Hook Function을 이용한다.
+IPVS는 Linux의 Netfilter 위에서 동작하는 L4 Load Balancer이다. Linux Kernel Level에서 동작하기 때문에 Haproxy같은 User Level Load Balancer보다 빠른 성능으로 동작한다. IPVS는 ipvsadm 명령어를 통해 제어가 가능하다. [그림 2]는 Netfilter에서 동작하는 IPVS의 Hook Function들을 나타내고 있다. IPVS는 6개의 Hook Function을 이용한다.
 
 * ip_vs_reply() - LOCAL_IN Hook 및 FORWARD Hook에서 호출되는 Hook Function이다. IPVS로 Load Balancing 및 Real Server IP로 DNAT를 같이 수행하여 Real Server에 Packet을 전달할 경우, IPVS는 Real Server로부터 받은 Packet을 Load Balancer IP (VIP)로 SNAT하여 IP로 외부로 내보내야한다. ip_vs_reply() Function은 이러한 SNAT를 수행하는 Hook Funciton이다. ip_vs_reply() Function은 Packet이 LOCAL_IN 및 FORWARD Hook 기반의 iptables filter Table을 지난뒤 호출되기 때문에, iptables filter Table에서 Filtering된 Packet은 처리하지 못한다. 실제 구현은 ip_vs_in() Function을 단순히 실행하는 Wrapper Function으로 되어있다.
 
