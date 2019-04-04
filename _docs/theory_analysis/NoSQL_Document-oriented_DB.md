@@ -13,7 +13,7 @@ NoSQL DB중 하나인 Document-oriented DB를 분석한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/NoSQL_Document-oriented_DB/Document-oriented.PNG){: width="500px"}
 
-Document-oriented DB는 의미그대로 Document 형태의 Data를 저장하고 관리하는 DB이다. 여기서 Document는 XML이나 JSON처럼 **계층을 이루는 Key-value Data**를 의미한다. 따라서 Document-oriented DB는 Key-value DB로부터 발전된 형태의 DB로 볼 수 있다. 위의 그림은 MongoDB Document의 예시를 나타내고 있다. Document의 Key/Value 규칙은 JSON과 거의 유사하다. Key는 Object안에서 (JSON에서는 {}안에서) 반드시 Unique해야 한다. Value는 Integer부터 String까지 다양한 Data가 들어 갈 수 있다.
+Document-oriented DB는 의미그대로 Data를 Document 형태로 저장하고 관리하는 DB이다. 여기서 Document는 XML이나 JSON처럼 **계층을 이루는 Key-value Data**를 의미한다. 따라서 Document-oriented DB는 Key-value DB로부터 발전된 형태의 DB로 볼 수 있다. 위의 그림은 MongoDB Document의 예시를 나타내고 있다. Document의 Key/Value 규칙은 JSON과 거의 유사하다. Key는 Object안에서 (JSON에서는 {}안에서) 반드시 Unique해야 한다. Value는 Integer부터 String까지 다양한 Data가 들어 갈 수 있다.
 
 Document-oriented DB는 Key-value DB처럼 Schema가 필요없다. 사용자는 필요에 따라 Data를 Document에 자유롭게 넣을 수 있고, 이러한 특징은 높은 유연성(Flexibility)으로 이어진다. 또한 Key의 Unique 조건과 Key간의 계층을 제외한 Key 사이의 Depedency가 없기 때문에 비교적 높은 확장성(Scalability)를 갖고 있다.
 
