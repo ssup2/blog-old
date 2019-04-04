@@ -49,9 +49,7 @@ bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용
 
 #### 2.1. XDP (eXpress Data Path)
 
-XDP eBPF Program은 Network Device Driver 내부의 Hook에서 동작하는 eBPF에 적재되어 구동된다. XDP eBPF Program은 Software로 구성된 Network Stack에서 가장 낮은 Level에서 실행되는 eBPF Program이다. 따라서 시간당 가장 많은양의 Packet을 처리할 수 있는 eBPF Program이다.
-
-XDP eBPF Program은 Socket Buffer를 할당하기 전에 수행되기 때문에, XDP eBPF Program의 Input Type은 들어온 Packet의 값만을 알 수 있는 xdp_md 구조체를 이용한다. 사용할 수 있는 Kernel Helper Function도 제한적이다. XDP eBPF Program의 실행결과는 다음과 같은 4가지 결과만을 지원한다. XDP eBPF Program은 Packet을 가공하는 동작보다는 Packet Drop, Routing이 주요 목적인 eBPF Program이다.
+XDP eBPF Program은 Network Device Driver 내부의 Hook에서 동작하는 eBPF에 적재되어 구동된다. XDP eBPF Program은 Software로 구성된 Network Stack에서 가장 낮은 Level에서 실행되는 eBPF Program이다. 따라서 시간당 가장 많은양의 Packet을 처리할 수 있는 eBPF Program이다. XDP eBPF Program은 Socket Buffer를 할당하기 전에 수행되기 때문에, XDP eBPF Program의 Input Type은 들어온 Packet의 값만을 알 수 있는 xdp_md 구조체를 이용한다. 사용할 수 있는 Kernel Helper Function도 제한적이다. XDP eBPF Program은 Packet을 가공하는 동작보다는 Packet Drop, Routing이 주요 목적인 eBPF Program이다. XDP eBPF Program의 실행결과는 다음과 같은 4가지만을 지원한다.
 
 * XDP_DROP - 해당 Packet을 버린다.
 * XDP_ABORTED - 해당 Packet을 버리고, trace_xdp_exception을 발생시킨다.
@@ -65,7 +63,7 @@ Generic XDP는 위에서 언급한 것 처럼 XDP 개발 및 Debugging을 위한
 
 #### 2.2. SCHED_CLS, SCHED_ACT
 
-SCHED_CLS, SCHED_ACT BPF Program은 Packet이 Network Device에서 tc로 전달되는 Ingress, 또는 Packet이 tc에서 Network Device로 전달되는 Egress 경로의 Hook에서 동작하는 BPF에 적재되어 구동된다. cBFP, eBPF 둘다 지원한다. XDP eBPF Program보다는 상위 Layer에서 동작하기 때문에 시간당 Packet 처리량은 XDP eBPF Program 보다는 적지만, 좀더 다양한 Packet 처리가 가능하다. 
+SCHED_CLS, SCHED_ACT BPF Program은 Packet이 Network Device에서 tc로 전달되는 Ingress, 또는 Packet이 tc에서 Network Device로 전달되는 Egress 경로의 Hook에서 동작하는 BPF에 적재되어 구동된다. cBFP, eBPF 둘다 지원한다. XDP eBPF Program보다는 상위 Layer에서 동작하기 때문에 시간당 Packet 처리량은 XDP eBPF Program 보다는 적지만, 좀더 다양한 Packet 처리가 가능하다.
 
 SCHED_CLS, SCHED_ACT BPF Program의 Input Type은 Socket Buffer (\_\_sk_buff)이다. Socket Buffer를 바탕으로 XDP eBPF Program보다 좀더 다양한 Kernel Helper Function을 이용 할 수 있다. SCHED_CLS BPF Program의 실행결과는 classid 반환하고, SCHED_ACT BPF Program의 실행결과는 'TC_ACT_'으로 시작하는 Linux Kernel에 정의된 값을 반환한다.
 
