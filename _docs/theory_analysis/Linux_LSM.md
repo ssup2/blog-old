@@ -33,7 +33,7 @@ LSM의 Hook은 System Call을 처리하면서 가장 많이 만나게 된다. [�
 
 LSM 위에 다양한 Security Module들을 동시에 올릴 수 있다. 이러한 기법을 Module Stacking이라고 명칭한다. [그림 4]는 Capability Module, Yama Module, AppArmor Module이 순서대로 LSM 위에 올라간 그림을 나타내고 있다.
 
-![[그림 5] ]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Function_Pointer.PNG)
+![[그림 5] LSM security_hook_heads 구조체]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Function_Pointer.PNG)
 
 [그림 5]는 여러개의 Security Module들이 실제로 LSM 위에 어떤 방법으로 올라가는지를 나타내고 있다. LSM은 **security_hook_heads**라는 Struct를 가지고 있다. security_hook_heads는 각 Security Module의 Hook Function으로 연결되는 Linked List의 Head(Hook Head)들을 가지고 있다. 그림에서는 task_ptr, task_free, ptrace_access_check같은 몇개의 Hook Head만을 나타냈지만 실제로 security_hook_heads는 LSM의 Hook 개수만큼의 Hook Head를 가지고 있다.
 

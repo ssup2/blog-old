@@ -27,12 +27,12 @@ Meta Data에는 Namespace 정보, File-Block Mapping 정보등을 저장하고 �
 
 #### 2.1. Read, Write
 
-위의 그림에서 빨간선은 HDFS의 Read 과정을 나타내고 있다.
+[그림 2]에서 빨간선은 HDFS의 Read 과정을 나타내고 있다.
 
 * 1,2 - Client는 Name Node로부터 읽을 파일의 Block 정보를 얻어온다.
 * 3,4 - Client는 Block 정보를 바탕으로 및 Block이 위치한 Data Node들에게 직접 Block Read 요청을 전송하고, Block Data를 전달 받는다. Read할 Block이 다수의 Data Node에게 위치하면 동시에 Block Read를 수행한다. 따라서 HDFS은 높은 Read 성능을 얻을 수 있다.
 
-위의 그림에서 파란선은 HDFS의 Write 과정을 나타내고 있다.
+[그림 2]에서 파란선은 HDFS의 Write 과정을 나타내고 있다.
 
 * 1,2 - Client는 Name Node로부터 Write될 Block 정보를 얻는다. 이때 Replication 설정에 따라서 Block 복제본이 저장될 Data Node 정보도 Client에게 전달된다.
 * 3 - Client는 전달 받은 Data Node중 임의의 Data Node에 직접 Block Data를 전송한다. 또한 해당 Block이 복제되어 저장될 다른 Data Node 정보도 Data Node에게 전달한다.
@@ -43,9 +43,9 @@ HDFS은 한번 Write된 Block의 수정을 지원하지 않기 때문에, HDFS�
 
 #### 2.2 Replication
 
-File을 구성하는 Block은 HDFS의 Replication 설정 또는 File의 Replication 설정에 따라 여러 Node에 복제되어 저장된다. 만약 Replication을 3으로 설정하였다면, Block은 3개로 복사되어 Data Node에 저장된다. 위의 그림은 Replication을 3으로 설정 할 경우의 Block을 나타내고 있다. 같은색의 Block은 같은 Data를 가지고 있다는 의미이다.
+File을 구성하는 Block은 HDFS의 Replication 설정 또는 File의 Replication 설정에 따라 여러 Node에 복제되어 저장된다. 만약 Replication을 3으로 설정하였다면, Block은 3개로 복사되어 Data Node에 저장된다. [그림 2]는 Replication을 3으로 설정할 경우의 Block 상태도 나타내고 있다. 같은색의 Block은 같은 Data를 가지고 있다는 의미이다.
 
-Name Node는 Block Write시 Replication을 위한 Data Node를 선택할때 **Rack Awareness**, 즉 Rack Topology를 고려하여 Data Node를 선택한다. 위의 그림처럼 Replication 설정이 3일 경우 Name Node가 주황색 Block을 위한 Data Node로 Data Node B를 선택하였다면 나머지 2개의 Data Node는 Data Node B가 없는 Rack B의 Data Node중에서 2개를 선택한다.
+Name Node는 Block Write시 Replication을 위한 Data Node를 선택할때 **Rack Awareness**, 즉 Rack Topology를 고려하여 Data Node를 선택한다. [그림 2]처럼 Replication 설정이 3일 경우 Name Node가 주황색 Block을 위한 Data Node로 Data Node B를 선택하였다면 나머지 2개의 Data Node는 Data Node B가 없는 Rack B의 Data Node중에서 2개를 선택한다.
 
 같은 Rack안의 Data Node만을 선택하지 않기 때문에, Rack 하나에 장애가 발생에도 Client는 모든 File에 접근 할 수 있다. 2개의 Data Node 선택시 같은 Rack의 Data Node를 선택하는 이유는 Network Hope을 줄이기 위해서다. Block Write시 Replication Pipelining 때문에 Data Node사이의 Network Hope이 커질수록 Write 시간이 오래 걸리기 때문이다.
 
@@ -91,7 +91,7 @@ AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 Fil
 
 ![[그림 5] MapReduce]({{site.baseurl}}/images/theory_analysis/Hadoop/MapReduce.PNG){: width="700px"}
 
-MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다. 위의 그림은 MapReduce 과정을 나타내고 있다. MapReduce는 크게 Splitting, Mapping, Shuffling, Reducing 4가지 과정으로 진행된다. 
+MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다. [그림 5]는 MapReduce 과정을 나타내고 있다. MapReduce는 크게 Splitting, Mapping, Shuffling, Reducing 4가지 과정으로 진행된다. 
 
 * Spliiting - Splitting은 Input File을 분리한 뒤 분리된 Input File을 각 Node에게 전달하는 과정이다. Splitting 과정을 통해 Input File은 K1, V1 Key-Value 관계로 분리된다. 위의 예제에서 Key는 File의 Line이고 Value은 Line의 String이 된다. MapReduce Framework에서 Input File 분리를 담당하는 Class가 InputFormat Class이다. 개발자는 기본 InputFormat Class인 TextInputFormat, KeyValueInputFormat Class를 이용하거나 직접 InputFormat Class를 개발하여 Input File을 어떻게 분리할지 결정 할 수 있다.
 
