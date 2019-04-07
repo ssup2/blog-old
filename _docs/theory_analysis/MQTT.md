@@ -11,21 +11,21 @@ MQ(Message Queue) Protocol인 MQTT(Message Queuing Telemetry Transport)를 분�
 
 ### 1. MQTT (Message Queuing Telemetry Transport)
 
-![]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_Architecture.PNG){: width="700px"}
+![[그림 1] MQTT Architecture]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_Architecture.PNG){: width="600px"}
 
-MQTT는 IoT 환경같은 **부족한 Resource 환경에서 이용되는 PUB(Publish)/SUB(Subscribe) 기반**의 Messaging Protocol이다. 위의 그림은 MQTT를 간략하게 나타내고 있다. PUB/SUB은 **Topic**을 기준으로 동작한다. Publisher가 특정 Topic으로 Message를 Broker에게 전달하면 Broker는 해당 Topic을 구독하는 모든 Subscriber에게 Message를 전달한다. 따라서 MQTT는 AMQP와 다르게 Multicast 동작만을 수행한다.
+MQTT는 IoT 환경같은 **부족한 Resource 환경에서 이용되는 PUB(Publish)/SUB(Subscribe) 기반**의 Messaging Protocol이다. [그림 1]은 MQTT를 간략하게 나타내고 있다. PUB/SUB은 **Topic**을 기준으로 동작한다. Publisher가 특정 Topic으로 Message를 Broker에게 전달하면 Broker는 해당 Topic을 구독하는 모든 Subscriber에게 Message를 전달한다. 따라서 MQTT는 AMQP와 다르게 Multicast 동작만을 수행한다.
 
 #### 1.1. Topic
 
-![]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_Topic.PNG){: width="600px"}
+![[그림 2] MQTT Topic]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_Topic.PNG){: width="500px"}
 
-위의 그림은 MQTT의 Topic 구조를 나타내고 있다. Topic은 Directory 구조 처럼 /를 기준으로 계층 구조를 갖게 된다.
+[그림 2]는 MQTT의 Topic 구조를 나타내고 있다. Topic은 Directory 구조 처럼 /를 기준으로 계층 구조를 갖게 된다.
 
 #### 1.2. QoS
 
-![]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_QoS.PNG)
+![[그림 3] MQTT QoS]({{site.baseurl}}/images/theory_analysis/MQTT/MQTT_QoS.PNG)
 
-MQTT는 3단계의 QoS를 제공한다. 위의 그림은 QoS에 따른 Message 전달 및 ACK 과정을 나타내고 있다.
+MQTT는 3단계의 QoS를 제공한다. [그림 3]은 QoS에 따른 Message 전달 및 ACK 과정을 나타내고 있다.
 
 * Level 0 - Publisher는 Broker에게 Message 전달 후 ACK를 받지 않고 Message를 삭제한다.
 * Level 1 - Publisher는 Broker에게 Message 전달한다. Broker는 Publisher에게 Message를 전달한 다음에 ACK를 받는다. Broker는 다시 Publisher에게 ACK(PUBACK)를 전달하고 Message를 삭제한다. ACK를 받은 Publisher는 Message를 삭제한다.
