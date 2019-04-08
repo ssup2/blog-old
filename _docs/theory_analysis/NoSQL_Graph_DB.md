@@ -13,7 +13,7 @@ NoSQL DB중 하나인 Graph DB를 분석한다.
 
 ![[그림 1] NoSQL Graph DB]({{site.baseurl}}/images/theory_analysis/NoSQL_Graph_DB/NoSQL_Graph.PNG){: width="500px"}
 
-Graph DB는 의미그대로 Data를 Graph 형태로 저장하고 관리하는 DB를 의미한다. 여기서 Graph는 **Data와 Data 사이를 연결하는 Data Relationship**으로 구성된다. [그림 1]은 Graph 형태의 Data를 나타내고 있다. Graph의 Node는 Data를 의미하고, Graph의 Edge는 Data Relationship을 나타낸다. 사용자는 Schema의 정의없이 자유롭게 Data와 Data Relation를 Graph DB에 저장할 수 있다. Transaction은 지원하지 않는다. 
+Graph DB는 의미그대로 Data를 Graph 형태로 저장하고 관리하는 DB를 의미한다. 여기서 Graph는 **Data와 Data 사이를 연결하는 Data Relationship**으로 구성된다. [그림 1]은 Graph 형태의 Data를 나타내고 있다. Graph의 Node는 Data를 의미하고, Graph의 Edge는 Data Relationship을 나타낸다. 사용자는 Schema의 정의없이 자유롭게 Data와 Data Relation를 Graph DB에 저장할 수 있다. Transaction은 지원하지 않는다.
 
 #### 1.1. vs RDBMS
 

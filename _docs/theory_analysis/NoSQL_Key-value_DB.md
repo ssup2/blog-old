@@ -9,9 +9,9 @@ adsense: true
 
 NoSQL DB중 하나인 Key-value DB를 분석한다.
 
-### 1. Key-value
+### 1. Key-value DB
 
-![]({{site.baseurl}}/images/theory_analysis/NoSQL_Key-value_DB/NoSQL_Key-value.PNG){: width="300px"}
+![[그림 1] NoSQL Key-value DB]({{site.baseurl}}/images/theory_analysis/NoSQL_Key-value_DB/NoSQL_Key-value.PNG){: width="300px"}
 
 Key-value 의미 그대로 Key/Value 관계를 갖는 Data를 저장하는 관리하는 DB이다. Key 값은 Binary Sequence를 이용하기 때문에 정수, 문자열 같은 Primitive Type부터 Image File까지 다양한 Data들을 Key로 이용 할 수 있지만, 반드시 **Unique** 해야하는 특징을 갖고있다. Key-value DB는 Key가 Unique한 것을 보장해야 하기 때문에 Key/Value Data가 추가될 때마다 Key 비교 연산을 수행하게 된다. Key값이 길어 질수록 Key 비교 연산 Overhead가 커지기 때문에 Key-value DB 성능을 높이기 위해서는 가능한 짧은 Binary Sequence를 이용하는 것이 좋다.
 

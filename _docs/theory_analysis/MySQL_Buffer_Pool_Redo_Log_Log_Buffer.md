@@ -11,9 +11,9 @@ MySQL의 Buffer Pool, Redo Log 및 Log Buffer를 분석한다.
 
 ### 1. Buffer Pool, Redo Log, Log Buffer
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Buffer_Pool_Redo_Log_Log_Buffer.PNG){: width="500px"}
+![[그림 1] MySQL Buffer Pool, Redo Log, Log Buffer]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Buffer_Pool_Redo_Log_Log_Buffer.PNG){: width="500px"}
 
-위의 그림은 Transaction을 처리하는 Buffer Pool, Redo Log, Log Buffer을 나타내고 있다. **Buffer Pool**은 MySQL의 DB Engine인 InnoDB가 Table Caching 및 Index Data Caching을 위해 이용하는 Memory 공간이다. Buffer Pool 크기가 클수록 상대적으로 Disk에 접근하는 횟수가 줄어들기 때문에 DB의 성능이 향상된다. Buffer Pool은 Memory 공간이기 때문에 MySQL에 장애가 발생하면 Buffer Pool 내용은 사라지고 Transaction의 유실로 이어질 수 있다. 이러한 유실을 방지하기 위해서 사용되는 File이 **Redo Log**이다. Redo Log는 Transaction 내용을 기록하고 있다가 MySQL 장애발생시 Redo Log에 기록된 Transaction 내용을 바탕으로 MySQL을 장애가 발생하기 이전 시점으로 **Recovery**한다.
+[그림 1]은 Transaction을 처리하는 Buffer Pool, Redo Log, Log Buffer을 나타내고 있다. **Buffer Pool**은 MySQL의 DB Engine인 InnoDB가 Table Caching 및 Index Data Caching을 위해 이용하는 Memory 공간이다. Buffer Pool 크기가 클수록 상대적으로 Disk에 접근하는 횟수가 줄어들기 때문에 DB의 성능이 향상된다. Buffer Pool은 Memory 공간이기 때문에 MySQL에 장애가 발생하면 Buffer Pool 내용은 사라지고 Transaction의 유실로 이어질 수 있다. 이러한 유실을 방지하기 위해서 사용되는 File이 **Redo Log**이다. Redo Log는 Transaction 내용을 기록하고 있다가 MySQL 장애발생시 Redo Log에 기록된 Transaction 내용을 바탕으로 MySQL을 장애가 발생하기 이전 시점으로 **Recovery**한다.
 
 InnoDB는 Transaction 내용은 계속 Buffer Pool과 Redo Log에 쌓지 않고, 주기적으로 또는 Redo Log가 가득차면 Buffer Pool에 기록된 Transaction 내용을 실제 Disk에 반영한다. 이러한 동작을 **Checkpoint**라고 한다. Redo Log는 2개의 파일을 번갈아가며 이용한다. Redo Log가 가득차면 가득찬 Redo Log는 놔두고 이용하지 않고 있던 Redo Log에 Transaction 내용을 기록한다. 가득찬 Redo Log는 Checkpoint 동작을 수행하고 비워진다.
 
@@ -37,9 +37,9 @@ innodb_log_buffer_size는 Log Buffer의 크기를 설정한다. innodb_log_buffe
 
 #### 2.4. innodb_flush_log_at_trx_commit
 
-![]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Flush_Log_Buffer.PNG)
+![[그림 2] MySQL Flush Log Buffer]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Flush_Log_Buffer.PNG)
 
-InnoDB가 Log Buffer의 내용을 Redo Log에 Write 및 Flush 동작을 언제 수행할지 설정한다. 현재 MySQL에서는 0,1,2 3개의 Option만을 제공한다. Default 값은 1로 설정되어 있다. 위의 그림은 Option에 따른 Write, Flush 동작이 언제 수행되는지를 나타내고 있다.
+InnoDB가 Log Buffer의 내용을 Redo Log에 Write 및 Flush 동작을 언제 수행할지 설정한다. 현재 MySQL에서는 0,1,2 3개의 Option만을 제공한다. Default 값은 1로 설정되어 있다. [그림 2]는 Option에 따른 Write, Flush 동작이 언제 수행되는지를 나타내고 있다.
 
 * Option 0 - InnoDB는 Redo Log에 Write 및 Flush 동작을 Commit과 관계없이 1초 간격으로 수행한다. Commit 명령으로 Transaction이 끝나도 Data 변경 내용은 최대 1초동안 Redo Log Buffer에만 반영 되어 있고, Redo Log에 반영되지 않을 수 있다. 따라서 0 Option 이용시 MySQL에 장애 및 MySQL이 동작하는 Node에 장애가 발생 할 경우, 장애 발생전 1초 동안의 Transaction 내용은 유실된다.
 
