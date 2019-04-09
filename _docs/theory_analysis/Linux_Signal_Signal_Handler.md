@@ -33,7 +33,9 @@ Linux에서 Signal은 Process에게 Event를 전달하는 대표적인 기법중
 
 ![[그림 1] Signal Handler 실행 과정]({{site.baseurl}}/images/theory_analysis/Linux_Signal_Signal_Handler/Linux_Signal_Handler_Process.PNG){: width="500px"}
 
-[그림 1]은 Signal Handler의 실행 과정을 나타내고 있다. User Mode에서 App을 실행하던 Thread는 Trap 발생으로 인해 Kernel Mode에 진입 할때마다 Thread의 Process에 전달된 Signal이 있는지 확인한다. Signal이 존재하면 Thread의 Stack에 저장된 App의 Context를 다른 Memory에 저장하고 User Mode로 돌아가 Signal Handler를 실행한다.
+[그림 1]은 Signal Handler의 실행 과정을 나타내고 있다. User Mode에서 App을 실행하던 Thread는 Trap 발생으로 인해 Kernel Mode에 진입하여 Trap을 처리한다. Trap 처리가 완료된 이후 Thread는 User Mode에 진입하기 전에 do_signal() 함수 호출을 통해 Thread의 Process가 전달받은 Signal이 있는지 확인한다. 전달받은 Signal이 있을경우 전달받은 Signal을 처리하는 Signal Handler가 등록되어있는지 확인한다. Signal Handler가 등록되어 있다면 setup_frame() 함수는 Thread의 User Mode Context가 저장되어 있는 Stack을 조작하여 Thread가 User Mode로 진입시 App이 아니라 Signal Handler가 실행되도록 만들고, Signal Handler 실행이 완료된 이후에는 sigreturn System Call을 호출하도록 만든다. 그 후 Thread는 User Mode로 진입한다.
+
+User Mode로 진입한 Thread는 Thread의 User Mode Stack 조작으로 인해서 Signal Handler를 실행하고, sigreturn System Call을 호출하여 다시 Kenrel Mode로 진입한다. Kernel Mode로 진입한 Thread는 restore_sigcontext() 함수를 통해서 User Mode Stack을 setup_frame() 함수를 통해 변경되기 전의 상태로 만든다. 그 후 Thread는 User Mode로 진입하여 App을 실행한다.
 
 #### 2.1. with Multithread
 
@@ -42,6 +44,7 @@ Linux에서 Signal은 Process에게 Event를 전달하는 대표적인 기법중
 ### 3. 참조
 
 * Signal - [http://man7.org/linux/man-pages/man7/signal.7.html](http://man7.org/linux/man-pages/man7/signal.7.html)
+* Signal Handler - Understanding the Linux Kernel
 * Signal Handler - [https://www.joinc.co.kr/w/Site/system_programing/Book_LSP/ch06_Signal](https://www.joinc.co.kr/w/Site/system_programing/Book_LSP/ch06_Signal)
 * Signal Handler - [https://devarea.com/linux-handling-signals-in-a-multithreaded-application/#.XKtY6JgzaiM](https://devarea.com/linux-handling-signals-in-a-multithreaded-application/#.XKtY6JgzaiM)
 * Signal Handler - [http://egloos.zum.com/studyfoss/v/5182475](http://egloos.zum.com/studyfoss/v/5182475)
