@@ -11,9 +11,12 @@ C언어 Macro로 되어 있는 offsetof() 함수를 분석한다.
 
 ### 1. Macro
 
-{% highlight c linenos  %}
+<figure>
+{% highlight c linenos %}
 #define‬ offsetof(TYPE, MEMBER) ((sizet) &((TYPE *)0)->MEMBER)
 {% endhighlight %}
+<figcaption class="caption">[Code 1] offsetof() MACRO 함수</figcaption>
+</figure>
 
 ### 2. 설명
 
@@ -23,7 +26,8 @@ C언어 Macro로 되어 있는 offsetof() 함수를 분석한다.
 
 ### 3. 예제
 
-{% highlight c linenos  %}
+<figure>
+{% highlight c linenos %}
 #include <stdio.h>
 #define  offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
@@ -46,11 +50,16 @@ int main(void)
     return 0;
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 2] offsetof() MACRO 함수 예제</figcaption>
+</figure>
 
-~~~
+<figure>
+{% highlight text %}
 a - 0
 b - 4
 c - 8
 d - 12
 e - 20
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 1] offsetof() MACRO 함수의 예제 출력</figcaption>
+</figure>

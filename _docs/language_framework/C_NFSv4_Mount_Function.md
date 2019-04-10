@@ -13,6 +13,7 @@ Linux, FreeBSD 환경에서 C언어를 이용하여 NFSv4 Mount를 수행하는 
 
 아래는 Linux 환경에서 mount() 함수를 이용하여 NFSv4 Mount를 수행하는 함수이다. 리눅스 Man Page에도 mount() 함수를 이용한 NFSv4 Mount 수행 방법이 나와있지 않다.
 
+<figure>
 {% highlight c linenos %}
 int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
 {
@@ -34,11 +35,14 @@ int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
         return -1;
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 1] Linux NFS4 Mount 함수</figcaption>
+</figure>
 
 ### 2. FreeBSD
 
 아래는 FreeBSD 환경에서 mount() 함수를 이용하여 NFSv4 Mount를 수행하는 함수이다. FreeBSD의 mount_nfs Tool을 참고하여 제작하였다. 57 줄에서 NFSv4 서버 상태를 점검 하였을때는 NFSv4 서버의 동작이 문제 없다가, 78 줄에서 nmount() 함수 수행 시 NFSv4 서버에 문제가 생기면 nmount() 함수에서 Blocking 되는 문제가 발생한다. (해결방법을 알려주세요.)
 
+<figure>
 {% highlight c linenos %}
 int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
 static void build_iovec(struct iovec **iov, int *iovlen, const char *name, void *val, size_t len)
@@ -129,6 +133,8 @@ static int freebsd_mount_nfs4(char *mount_point, char *server_ip, char *server_p
         return -1;
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 1] FreeBSD NFS4 Mount 함수</figcaption>
+</figure>
 
 ### 3. 참조
 

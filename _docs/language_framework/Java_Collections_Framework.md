@@ -11,9 +11,9 @@ Java Collections Framework에서 제공하는 Interface와 Class를 분석한다
 
 ### 1. Collection Interface
 
-![]({{site.baseurl}}/images/language/Java_Collections_Framework/Collection_Interface.PNG)
+![[그림 1] Java Collection Interface]({{site.baseurl}}/images/language/Java_Collections_Framework/Collection_Interface.PNG)
 
-Collection Interface는 Object Group을 관리하는 Interface를 제공하는 뼈대 역활을 수행한다. 위의 그림은 Collection Interface의 관계도를 나타내고 있다.
+Collection Interface는 Object Group을 관리하는 Interface를 제공하는 뼈대 역활을 수행한다. [그림 1]은 Collection Interface의 관계도를 나타내고 있다.
 
 #### 1.1. Interface
 
@@ -76,9 +76,9 @@ Vector는 ArrayList와 유사하지만 모든 Method에 동기화를 위한 **sy
 
 ### 2. Map Interface
 
-![]({{site.baseurl}}/images/language/Java_Collections_Framework/Map_Interface.PNG){: width="550px"}
+![[그림 2] Java Collection Framework]({{site.baseurl}}/images/language/Java_Collections_Framework/Map_Interface.PNG){: width="550px"}
 
-Map Interface는 Key-Value Group을 관리하는 Interface를 제공하는 뼈대 역활을 수행한다. 위의 그림은 Map Interface의 관계도를 나타내고 있다.
+Map Interface는 Key-Value Group을 관리하는 Interface를 제공하는 뼈대 역활을 수행한다. [그림 2]는 Map Interface의 관계도를 나타내고 있다.
 
 #### 2.1. Interface
 

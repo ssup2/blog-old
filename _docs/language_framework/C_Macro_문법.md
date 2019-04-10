@@ -17,6 +17,7 @@ C언어의 Macro 문법을 정리한다.
 
 #### 1.2. 예제
 
+<figure>
 {% highlight c linenos %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
@@ -27,10 +28,15 @@ int main()
     return 0;
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 1] C Macro # 예제</figcaption>
+</figure>
 
-~~~
+<figure>
+{% highlight text %}
 THIS IS TEST CODE
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 1] C Macro # 예제의 출력</figcaption>
+</figure>
 
 ### 2. ## - 토큰 붙여넣기 연산자
 
@@ -40,6 +46,7 @@ THIS IS TEST CODE
 
 #### 2.2. 예제
 
+<figure>
 {% highlight c linenos %}
 #include <stdio.h>
 
@@ -54,10 +61,16 @@ int main()
     return 0;
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 2] C Macro ## 예제</figcaption>
+</figure>
 
-~~~
+<figure>
+{% highlight text %}
 i0 = 0
-~~~
+{% endhighlight %}
+<figcaption class="caption">[Shell 2] C Macro ## 예제의 출력</figcaption>
+</figure>
+
 
 ### 3. 가변 인자 Macro
 
@@ -71,15 +84,21 @@ i0 = 0
 
 ##### 3.2.1. 1999년 C 표준
 
+<figure>
 {% highlight c linenos %}
 #define debug(format, ...) fprintf (stderr, format, __VA_ARGS__)
 {% endhighlight %}
+<figcaption class="caption">[Code 3] 표준 C Macro 가변인자</figcaption>
+</figure>
 
 ##### 3.2.2. GCC
 
+<figure>
 {% highlight c linenos %}
 #define debug(format, args...) fprintf (stderr, format, args)
 {% endhighlight %}
+<figcaption class="caption">[Code 4] GCC C Macro 가변인자</figcaption>
+</figure>
 
 ### 4. 참조
 
