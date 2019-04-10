@@ -44,6 +44,7 @@ int main()
 
     return 0;
 }
+{% endhighlight %}
 <figcaption class="caption">[Code 1] Smart Pointer 구현</figcaption>
 </figure>
 
