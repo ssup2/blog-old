@@ -11,7 +11,7 @@ Service Mesh Architecture를 분석한다.
 
 ### 1. Service Mesh Architecture
 
-![]({{site.baseurl}}/images/theory_analysis/Service_Mesh_Architecture/Service_Mesh_Architecture.PNG)
+![[그림 1] Service Mesh Architecture]({{site.baseurl}}/images/theory_analysis/Service_Mesh_Architecture/Service_Mesh_Architecture.PNG)
 
 Service Mesh Architecture는 다수의 Service를 이용하는 MSA (Mirco Service Archiecture)의 **중앙 제어**가 쉽지 않다는 단점을 극복하기 위해서 설계된 **Infra Level** Architecture이다. Google의 Istio는 대표적인 Service Mesh Architecture 구현체이다. 위의 그림은 Service Mesh Architecture를 나타내고 있다.
 

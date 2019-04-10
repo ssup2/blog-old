@@ -23,9 +23,8 @@ Class의 변수와 Method를 **물려받아** Class를 정의하는 방법을 �
 
 Class의 같은 Method를 호출해도 각기 **다른 Method**가 호출되는 특징을 다형성의 특징이라고 부른다. Method의 이름은 같지만 Method의 Parameter의 Type, Parameter의 개수, Return Type에 따라서 실제로 다른 Method가 호출되도록 구현할 수 있는데 이러한 기능을 **Overloading**이라고 한다.
 
-Instance에 따라서도 다른 Method가 호출 될 수 있다. 아래의 Code는 Parent라는 부모 Class와 Child라는 자식 Class로 구성이 되어있다. 15줄에서는 iparent라는 Parent Class 변수에 Parent Instance를 할당하였고, 16줄에서는 ichild라는 Parent Class 변수에 Child Instance를 할당하였다. 두 Instance 모두 Parent Class 변수에 할당되었기 때문에 Code상으로는 Parent 문자열이 두 줄 출력되는것 처럼 보이지만, ichild 인스턴스는 Child 문자열을 출력한다. Parent Class의 변수에 실제 할당된 Instance가 다르기 때문이다. 이렇게 Instance에 따라서 호출되는 Method가 달라지는 과정을 **동적바인딩(Dynamic Dispatch)**라고 부른다.
-
-{% highlight java %}
+<figure>
+{% highlight java %}f
 class Parent {
     public void print(){
         System.out.println("Parent");
@@ -48,8 +47,13 @@ public class BlogMain {
     }
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 1] Java 다형형 Example</figcaption>
+</figure>
 
-~~~
+<figure>
 Parent
 Child
-~~~
+<figcaption class="caption">[Shell 1] Java 다형형 Example 결과</figcaption>
+</figure>
+
+Instance에 따라서도 다른 Method가 호출 될 수 있다. [Code 1]은 Parent라는 부모 Class와 Child라는 자식 Class로 구성이 되어있다. 15줄에서는 iparent라는 Parent Class 변수에 Parent Instance를 할당하였고, 16줄에서는 ichild라는 Parent Class 변수에 Child Instance를 할당하였다. 두 Instance 모두 Parent Class 변수에 할당되었기 때문에 Code상으로는 Parent 문자열이 두 줄 출력되는것 처럼 보이지만, ichild 인스턴스는 Child 문자열을 출력한다. Parent Class의 변수에 실제 할당된 Instance가 다르기 때문이다. 이렇게 Instance에 따라서 호출되는 Method가 달라지는 과정을 **동적바인딩(Dynamic Dispatch)**라고 부른다.

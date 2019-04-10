@@ -102,10 +102,10 @@ profile apparmor-example {
   network tcp,
 }
 {% endhighlight %}
-<figcaption class="caption">[파일 1] apparmor-example</figcaption>
+<figcaption class="caption">[파일 1] apparmor-example Apparmor Profile</figcaption>
 </figure>
 
-[파일 1]은 apparmor-example Profile을 나타내고 있다. 다음과 같은 의미를 나타내고 있다.
+[파일 1]은 apparmor-example이란 예제 AppArmor Profile을 나타내고 있다. 다음과 같은 의미를 나타내고 있다.
 * net_admin, setuid, setgid Capability를 이용할 수 있다.
 * proc File System을 /mnt/proc 아래의 경로에만 Mount 할 수 있다.
 * /etc/hots.allow 파일을 읽고, 쓸 수 있다.
@@ -142,10 +142,10 @@ ping 127.0.0.1 -c 10
 
 while true; do sleep 1; done
 {% endhighlight %}
-<figcaption class="caption">[파일 2] test.sh</figcaption>
+<figcaption class="caption">[Code 1] Apparmor Test Script</figcaption>
 </figure>
 
-[파일 2]는 test.sh라는 간단한 스크립트 내용이다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그후 test.sh가 종료되지 않도록 while문을 수행한다.
+[Code 1]은 AppArmor Test를 위한 간단한 Script를 나타내고 있다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그 후 test.sh가 종료되지 않도록 while문을 수행한다.
 
 <figure>
 {% highlight text %}

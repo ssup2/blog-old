@@ -25,13 +25,13 @@ QEMU는 하나의 Main Loop Thread에서 대부분의 Event 및 관련 연산를
 
 ##### 2.1.1. QEMU with non-iothread
 
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+![[그림 1] non-iothread를 이용하는 QEMU 구조]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
 
-non-iothread 방식은 Main Loop Thread에서 vCPU 처리와 Event를 같이 처리한다. 즉 하나의 Thread에서 vCPU 처리와 대부분의 주변 장치 Emulation을 같이하는 구조이다. TCG는 vCPU를 Emulation하는 QEMU의 모듈이다. 위의 그림처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 Main Loop Thread에서만 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 따라서 non-iothread 구조의 가상 머신은 매우 느릴수 밖에 없다. 초기 QEMU의 Architecture이다.
+non-iothread 방식은 Main Loop Thread에서 vCPU 처리와 Event를 같이 처리한다. 즉 하나의 Thread에서 vCPU 처리와 대부분의 주변 장치 Emulation을 같이하는 구조이다. TCG는 vCPU를 Emulation하는 QEMU의 모듈이다. [그림 1]처럼 가상 머신의 2개의 vCPU를 가지고 있더라도 Main Loop Thread에서만 Multiplexing되어 처리되기 때문에, 가상 머신이 여러개의 vCPU를 가지고 있더라도 실제로는 병렬적으로 처리되지 않는다. 따라서 non-iothread 구조의 가상 머신은 매우 느릴수 밖에 없다. 초기 QEMU의 Architecture이다.
 
 ##### 2.1.2. QEMU with iothread
 
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_iothread.PNG)
+![[그림 2] iothred를 이용하는 QEMU 구조]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_iothread.PNG)
 
 iothread 방식은 Main Loop Thread에서는 Event만 처리하고 각 vCPU마다 Thread를 할당하여 처리하는 방식이다. Main Loop Thread뿐만 아니라 모든 vCPU Thread에서도 주변 장치 Emulation을 수행한다. 다수의 Thread를 이용하기 때문에 iothread 방식에서는 주변 장치 Emulation 과정이 병렬로 처리되는것 처럼 보인다. 하지만 QEMU의 주변 장치 Emulation Code는 대부분 Thread Safe하게 작성되어 있지 않기 때문에 Global Mutex를 이용하여 Serialization 되어 있고, 이에 따라 병렬로 처리되지 않는다. 이러한 주변 장치 Emulation의 Serialization은 가상 머신의 I/O 성능을 떨어트리는 주요 원인중 하나이다.
 
@@ -39,7 +39,7 @@ vCPU도 상황은 비슷하다. vCPU들이 별도의 Thread를 이용하기 때�
 
 ##### 2.1.3. QEMU with iothread and KVM
 
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_KVM.PNG)
+![[그림 3] iothread, KVM을 이용하는 QEMU 구조]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_KVM.PNG)
 
 iothread 방식에서 TCG대신 KVM을 이용하여 vCPU를 구동하는 방법이다. 주변 장치 Emulation의 Serialization 문제는 여전히 갖고 있지만, KVM에 의해서 각 vCPU는 병렬로 처리된다. 이러한 이유 때문에 SMP 가상 머신을 제대로 지원하기 위해서는 QEMU + KVM을 이용해야 한다.
 

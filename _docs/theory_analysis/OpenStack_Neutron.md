@@ -11,9 +11,9 @@ OpenStack의 Network Concept을 이해하고 OpenStack에서 Network를 제어�
 
 ### 1. OpenStack Network
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/OpenStack_Network.PNG){: width="700px"}
+![[그림 1] OpenStack Network 분류]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/OpenStack_Network.PNG){: width="700px"}
 
-OpenStack Network은 OpenStack을 이용하여 Cloud를 제공하는 Provider 관점에서의 Network와 Cloud를 이용하는 User 관점의 Network로 접근할 수 있다. 위의 그림은 OpenStack Network를 나타내고 있다. Provider 관점에서의 Network는 Management, Guest, External, API 4가지로 분류 할 수 있다.
+OpenStack Network은 OpenStack을 이용하여 Cloud를 제공하는 Provider 관점에서의 Network와 Cloud를 이용하는 User 관점의 Network로 접근할 수 있다. [그림 1]은 OpenStack Network를 나타내고 있다. Provider 관점에서의 Network는 Management, Guest, External, API 4가지로 분류 할 수 있다.
 
 * Management Network - OpenStack을 구성하는 Service들이 이용하는 Network이다. 일반적으로 Node 사이의 물리 Network(VLAN)를 이용한다.
 
@@ -31,9 +31,9 @@ User 관점에서의 Network는 Provider Network, Self-service Network 2가지�
 
 ### 2. Neutron
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Neutron_Architecture.PNG){: width="700px"}
+![[그림 2] Neutorn Architecture]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Neutron_Architecture.PNG){: width="700px"}
 
-OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. 위의 그림은 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다.
+OpenStack의 모든 Network를 담당하는 Service이다. Neutron은 Network, Subnet, Router, LB 등 Infra 구성에 필요한 대부분의 Network 구성요소를 Provider 또는 User가 쉽게 생성하고 설정 할 수 있도록 도와준다. [그림 2]는 Neutron의 Architecture를 나타내고 있다. Neutron은 Master 역활을 수행하는 Neutron Server과 Slave 역활을 수행하는 ML2 Plugin Agent, L3 Agent, DHCP Agent, Meta Agent 등으로 구성되어 있다.
 
 Neutron Server와 Agent들은 사이의 통신은 Message Queue를 이용한다. Neutron Server, Agent들은 Message Queue와 통신할때 RPC (Remote Procedure Call)를 이용한다. 별도의 SDN Service가 Neutron과 협력하여 Network를 제어하는 경우 Neutron과 SDN Service는 REST API 방식으로 통신한다.
 
@@ -53,17 +53,17 @@ OpenStack 구성에 따라서 Management Network, Provider Network, Self-service
 
 ##### 2.1.1. Without SDN
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="700px"}
+![[그림 3] Compute Node의 Network 구성]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="700px"}
 
-위의 그림은 Compute Node의 Network 설정을 나타내고 있다. eth0는 Management Network와 연결되어 있다. Guest/Provider Network는 VLAN 10번을 이용하기 때문에 eth0 Interface에 VLAN 10번 Interface와 VLAN 10번에 VM을 붙일때 이용하는 Bridge를 설정한다. 이와 유사하게 Guest/Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙일때 이용하는 Bridge를 설정한다.
+[그림 3]은 Compute Node의 Network 설정을 나타내고 있다. eth0는 Management Network와 연결되어 있다. Guest/Provider Network는 VLAN 10번을 이용하기 때문에 eth0 Interface에 VLAN 10번 Interface와 VLAN 10번에 VM을 붙일때 이용하는 Bridge를 설정한다. 이와 유사하게 Guest/Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙일때 이용하는 Bridge를 설정한다.
 
 VM A는 Provider Network에만 연결되어 있기 때문에 VM A의 TAP Interface는 VLAN 10번 Interface와  연결되어 있는 Bridge에만 연결되어 있다. VM C는 Self-serviced Network에만 연결되어 있기 때문에 VM C의 TAP Interface는 VLAN 20번 Interface와 연결되어 있는 Bridge에만 연결되어 있다. VM B는 양쪽 Network 모두와 연결되어 있기 때문에 VM B의 2개의 TAP Interface를 이용하여 모든 Bridge에 연결되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
 
-![]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="700px"}
+![[그림 4] Network Node의 Network 구성]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="700px"}
 
-위의 그림은 Network Node의 Network 설정을 나타내고 있다. eth1는 Management Network와 연결되어있고, eth0은 External/Provider Network에 연결되어 있다. Compute Node와 유사하게 VLAN 10번 Interface, VXLAN 20번 Interface 설정 및 관련 Bridge들을 설정한다. 이와 더불어 External/Provider Network와 연결을 위한 별도의 Bridge가 설정되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
+[그림 4]는 Network Node의 Network 설정을 나타내고 있다. eth1는 Management Network와 연결되어있고, eth0은 External/Provider Network에 연결되어 있다. Compute Node와 유사하게 VLAN 10번 Interface, VXLAN 20번 Interface 설정 및 관련 Bridge들을 설정한다. 이와 더불어 External/Provider Network와 연결을 위한 별도의 Bridge가 설정되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
 
-Router와 Network Namespace는 1:1 관계를 갖는다. Router별로 별도의 Network Namespace를 이용하기 때문에 각 Router는 완전히 독립된 Routing Table을 구성할 수 있다. 위의 그림의 Router는 External/Provider Network, Guest/Provider Network, Guest/Self-service Network를 연결하는 Router이다. 각 Network를 연결하는 Bridge에 VETH Interface를 이용하여 Router Network Namespace로 Packet을 전송한다. Router Network Namespace로 전송된 Packet은 iptables을 통해 설정된 Routing Rule에 의해서 Routing된다. Router 설정은 L3 Agent가 수행한다.
+Router와 Network Namespace는 1:1 관계를 갖는다. Router별로 별도의 Network Namespace를 이용하기 때문에 각 Router는 완전히 독립된 Routing Table을 구성할 수 있다. [그림 4]의 Router는 External/Provider Network, Guest/Provider Network, Guest/Self-service Network를 연결하는 Router이다. 각 Network를 연결하는 Bridge에 VETH Interface를 이용하여 Router Network Namespace로 Packet을 전송한다. Router Network Namespace로 전송된 Packet은 iptables을 통해 설정된 Routing Rule에 의해서 Routing된다. Router 설정은 L3 Agent가 수행한다.
 
 DHCP Server는 Network Node에 Guest Network의 Bridge에 dnsmasq를 붙여 구성한다. 각 dnsmasq는 별도의 Network Namespace에서 구동되기 때문에 Network Node에 여러개의 dnsmasq가 동작하여도 충돌이 발생하지 않는다. dnsmasq의 Network Namespace로 Packet을 전송하기 위해서 Router와 동일하게 VETH를 이용한다. dnsmasq 설정은 DHCP Agent가 수행한다.
 

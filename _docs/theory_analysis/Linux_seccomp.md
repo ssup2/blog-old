@@ -43,10 +43,10 @@ int main() {
   return 0;
 }
 {% endhighlight %}
-<figcaption class="caption">[파일 1] seccomp Strict Mode</figcaption>
+<figcaption class="caption">[Code 1] seccomp Strict Mode</figcaption>
 </figure>
 
-[파일 1]은 libseccomp을 이용하여 seccomp strick mode를 적용하고, dup2() System Call을 호출하는 Code이다. strick mode에서 dup2() System call은 허용되지 않기 때문에 위의 Code는 STRICT 문자열을 출력하지 못하고 종료된다.
+[Code 1]은 libseccomp을 이용하여 seccomp strick mode를 적용하고, dup2() System Call을 호출하는 Code이다. strick mode에서 dup2() System call은 허용되지 않기 때문에 [Code 1]은 STRICT 문자열을 출력하지 못하고 종료된다.
 
 #### 2.2. Filter Mode
 
@@ -94,10 +94,10 @@ int main() {
   return 0;
 }
 {% endhighlight %}
-<figcaption class="caption">[파일 2] seccomp Filter Mode</figcaption>
+<figcaption class="caption">[Code 2] seccomp Filter Mode</figcaption>
 </figure>
 
-[파일 2]는 libseccomp을 이용하여 seccomp을 Filter Mode로 동작시키는 Code이다. SCMP_ACT_KILL은 seccomp의 기본 정책으로써, 허용되지 않은 System Call을 호출하는 Process는 죽인다는 의미이다. dup2() System Call은 허용되었기 때문에 dup2() System Call을 수행된다. open() System Call은 허용되지 않았기 때문에 위의 Code는 open() System Call에서 종료된다.
+[Code 2]는 libseccomp을 이용하여 seccomp을 Filter Mode로 동작시키는 Code이다. SCMP_ACT_KILL은 seccomp의 기본 정책으로써, 허용되지 않은 System Call을 호출하는 Process는 죽인다는 의미이다. dup2() System Call은 허용되었기 때문에 dup2() System Call을 수행된다. open() System Call은 허용되지 않았기 때문에 [Code 2]는 open() System Call에서 종료된다.
 
 ### 3. 참조
 

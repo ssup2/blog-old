@@ -19,9 +19,9 @@ Servlet은 Java EE의 표준중 하나로 **javax.servlet Package**를 기반으
 
 ### 2. Servlet Container
 
-![]({{site.baseurl}}/images/theory_analysis/Servlet_Servlet_Container/Servlet_Servlet_Container.PNG)
+![[그림 1] Servlet Container]({{site.baseurl}}/images/theory_analysis/Servlet_Servlet_Container/Servlet_Servlet_Container.PNG)
 
-Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역활을 수행한다. Web Container라고도 불린다. 위의 그림은 3 Tier Architecture로 서버를 구성할때의 Servlet Container의 위치를 나타내고 있다. HTTP 요청을 다음과 같은 과정을 통해 처리된다.
+Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역활을 수행한다. Web Container라고도 불린다. [그림 1]은 3 Tier Architecture로 서버를 구성할때의 Servlet Container의 위치를 나타내고 있다. HTTP 요청을 다음과 같은 과정을 통해 처리된다.
 
 * Web Brower에서 Web Server에게 HTTP 요청을 보내면 Web Server는 받은 HTTP 요청을 그대로 WAS Server의 Web Server에게 전달한다.
 * WAS Server의 Web Server는 다시 HTTP 요청을 Servlet Container에게 전달한다.
@@ -29,6 +29,7 @@ Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역활을
 * Servlet Container는 Servlet Instance의 service() method를 호출하여 HTTP 요청을 처리하고, WAS Server의 Web Server에게 처리 결과를 전달한다.
 * WAS Server의 Web Server는 HTTP 응답을 Web Server에게 전달하고, Web Server는 받은 HTTP 응답을 Web Brower에게 전달한다.
 
+<figure>
 {% highlight java %}
 public class MyServlet extends HttpServlet {
     private Object thisIsNOTThreadSafe;
@@ -38,10 +39,10 @@ public class MyServlet extends HttpServlet {
     }
 }
 {% endhighlight %}
+<figcaption class="caption">[Code 1] Servlet Example</figcaption>
+</figure>
 
-HTTP 요청 처리 과정을 보면 Servlet Instance는 HTTP 요청이 올때마다 하나씩 생성하는게 아니라 기존의 Servlet Instance를 이용한다. 즉 하나의 Servlet Instance가 여러개의 HTTP 요청을 동시에 처리하게 된다. 따라서 **Servlet Instance는 Thread-Safe하지 않는다.** 위의 HtttpServlet 예제처럼 Servlet의 멤버 변수는 Thread-Safe하지 않는다. Thread-Safe한 변수를 이용하기 위해서는 Method의 지역변수를 이용해야 한다.
-
-Servlet Container는 사용되지 않아 제거되야할 Servlet Instance의 destory() method를 호출하고 JVM의 GC(Garbage Collector)에서 Servlet Instance를 해지할 수 있도록 표시해둔다. GC는 표시된 Servlet Instance를 해지한다.
+HTTP 요청 처리 과정을 보면 Servlet Instance는 HTTP 요청이 올때마다 하나씩 생성하는게 아니라 기존의 Servlet Instance를 이용한다. 즉 하나의 Servlet Instance가 여러개의 HTTP 요청을 동시에 처리하게 된다. 따라서 **Servlet Instance는 Thread-Safe하지 않는다.** [Code 1]의 HtttpServlet 예제처럼 Servlet의 멤버 변수는 Thread-Safe하지 않는다. Thread-Safe한 변수를 이용하기 위해서는 Method의 지역변수를 이용해야 한다. Servlet Container는 사용되지 않아 제거되야할 Servlet Instance의 destory() method를 호출하고 JVM의 GC(Garbage Collector)에서 Servlet Instance를 해지할 수 있도록 표시해둔다. GC는 표시된 Servlet Instance를 해지한다.
 
 ### 3. 참조
 

@@ -35,10 +35,10 @@ struct fuse_operations fuse_oper = {
   ...
 };
 {% endhighlight %}
-<figcaption class="caption">[파일 1] fuse_operation 구조체</figcaption>
+<figcaption class="caption">[Code 1] fuse_operation 구조체</figcaption>
 </figure>
 
-[파일 1]은 libfuse에서 제공하는 fuse_operations 구조체를 나타내고 있다. FUSE Daemon 개발자는 각 System Call에 대응하는 함수들을 작성한 후 fuse_operations 구조체를 통해 작성한 함수들을 실제 System Call과 Mapping만 하면 된다.
+[Code 1]은 libfuse에서 제공하는 fuse_operations 구조체를 나타내고 있다. FUSE Daemon 개발자는 각 System Call에 대응하는 함수들을 작성한 후 fuse_operations 구조체를 통해 작성한 함수들을 실제 System Call과 Mapping만 하면 된다.
 
 ### 2. 참조
 

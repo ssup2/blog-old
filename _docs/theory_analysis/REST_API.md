@@ -33,9 +33,9 @@ REST API의 핵심 요소는 Resource를 나타내는 URI와, Resource를 대상
 
 ##### 1.2.1. Resource Model
 
-![]({{site.baseurl}}/images/theory_analysis/REST_API/Resource_Model.PNG){: width="600px"}
+![[그림 1] REST API Resource Model]({{site.baseurl}}/images/theory_analysis/REST_API/Resource_Model.PNG){: width="600px"}
 
-위의 그림은 REST API의 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다. 각각의 Resource는 JSON, YAML, XML등 다양한 형태로 표현될 수 있다. 일반적으로는 **JSON** 형태를 가장 많이 이용하고 있다.
+[그림 1]은 REST API의 Resource Model을 나타내고 있다. Resource는 하나의 자원을 타나내고 있고, **Collection**은 Resource의 집합을 의미한다. Resource 하위에 또 다른 Collection(Sub-collection)이 존재 할 수 있다. 각각의 Resource는 JSON, YAML, XML등 다양한 형태로 표현될 수 있다. 일반적으로는 **JSON** 형태를 가장 많이 이용하고 있다.
 
 ##### 1.2.2. HTTP Method
 
