@@ -1,8 +1,8 @@
 ---
-title: Elasticsearch
-category: Theory, Analysis
-date: 2017-01-14T12:00:00Z
-lastmod: 2017-01-15T12:00:00Z
+title: ELK (Elasticsearch, Logstash, Kibana) Stack
+category: 
+date: 2019-05-10T12:00:00Z
+lastmod: 2019-05-10T12:00:00Z
 comment: true
 adsense: true
 ---
