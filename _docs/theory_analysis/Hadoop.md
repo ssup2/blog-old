@@ -59,9 +59,7 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. YARN도 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **RM (Resource Manager)**과 Slave 역활을 수행하는 **NM (Node Manager)**로 이루어져 있다. RM은 NM를 통해서 **Container**라고 명칭된 Compute Resource (JVM)을 각 Node에 할당한다. Container중 일부 Container는 MapReduce같은 App을 전반적으로 관리하는 **AM (Application Master)**를 수행한다.
 
-RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역활을 수행한다.
-
-NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Node들의 상태를 RM에게 주기적으로 보고한다. 또한 RM이나 AM의 요청에 의해서 Node에 Container를 생성하거나 삭제한다.
+RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역활을 수행한다. NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Node들의 상태를 RM에게 주기적으로 보고한다. 또한 RM이나 AM의 요청에 의해서 Node에 Container를 생성하거나 삭제한다.
 
 Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이용 할 수 있었지만, Hadoop 2.0에서 YARN이 추가되면서 MapReduce뿐만 아니라 다양한 Spark, Hive같은 다양한 App이 Hadoop Cluster의 Compute Resource를 동시에 이용 할 수 있게 되었다. YARN을 HDFS과 같은 Cluster에 구축시 YARN의 Resource Manager를 HDFS의 Name Node에 구동하고, YARN의 Node Manager를 HDFS의 Data Node에 구동한다.
 
@@ -83,25 +81,16 @@ Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이�
 
 #### 3.2. Data Locality
 
-Hadoop은 Data를 처리할때 Data를 특정 Node로 옮겨 Data를 처리하는 방식이 아닌, Data가 있는 Node로 처리 Task를 전송하여 Data를 처리하는 방식이다. 대용량 Data를 옮기며 Data를 처리하는것 보다 처리 Task를 옯기는 방식이 더욱 빠르기 때문이다. 이러한 처리 방식을 Data Locality라고 한다.
+Hadoop은 Data를 처리할때 Data를 특정 Node로 옮겨 Data를 처리하는 방식이 아닌, Data가 있는 Node로 처리 Task를 전송하여 Data를 처리하는 방식이다. 대용량 Data를 옮기며 Data를 처리하는것 보다 처리 Task를 옯기는 방식이 더욱 빠르기 때문이다. 이러한 처리 방식을 Data Locality를 고려한 방식이라고 표현한다.
 
 AM은 App이 정의한 getSplits() Method를 통해 Task 수행에 필요한 File(Input Split)의 Node 위치를 알 수 있다. AM은 File이 위치한 Node 정보를 RM에게 전달하여 Task가 가능하면 해당 File이 있는 Node에서 구동되도록, Data Locality를 고려하여 Scheuling을 수행한다.
 
 ### 4. MapReduce Framework
 
-![[그림 5] MapReduce]({{site.baseurl}}/images/theory_analysis/Hadoop/MapReduce.PNG){: width="700px"}
-
-MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다. [그림 5]는 MapReduce 과정을 나타내고 있다. MapReduce는 크게 Splitting, Mapping, Shuffling, Reducing 4가지 과정으로 진행된다. 
-
-* Spliiting - Splitting은 Input File을 분리한 뒤 분리된 Input File을 각 Node에게 전달하는 과정이다. Splitting 과정을 통해 Input File은 K1, V1 Key-Value 관계로 분리된다. 위의 예제에서 Key는 File의 Line이고 Value은 Line의 String이 된다. MapReduce Framework에서 Input File 분리를 담당하는 Class가 InputFormat Class이다. 개발자는 기본 InputFormat Class인 TextInputFormat, KeyValueInputFormat Class를 이용하거나 직접 InputFormat Class를 개발하여 Input File을 어떻게 분리할지 결정 할 수 있다.
-
-* Mapping - Mapping은 분리된 Input File을 필요에 따라 List(K2, V2) Key-Value로 Mapping하는 과정이다. MapReduce Framework는 분리된 Input File의 개수만큼 YARN의 Container를 생성하고, 각 Container안에서 Mapping 작업을 병렬적으로 수행한다. 따라서 YARN Cluster를 구성하는 Node가 많아 질 수록 대용량 Data를 빠르게 처리 할 수 있다. MapReduce Framework는 Mapping을 담당하는 Mapper Class를 개발자에게 제공하여 개발자가 쉽게 Mapping을 수행 할 수 있도록 도와준다.
-
-* Shuffling - Shuffling은 Mapping 결과물을 Reducing 수행하는 Node에게 전달하는 과정이다. Shuffling 과정을 통해 Mapping 과정에서 이용했던 Key(K2)를 기준으로 Value들이 특정 Node로 모이게 된다.
-
-* Reducing - Reducing은 Mapping 결과물들을 합치는 과정이다. MapReduce Framework는 Reducing을 담당하는 Reducer Class를 개발자에게 제공하여 개발자가 쉽게 Reducing을 수행 할 수 있도록 한다.
+MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는 Framework이다. MapReduce 기법을 이용하여 대용량 Data를 병렬적으로 빠르게 처리 할 수 있다.
 
 ### 5. 참조
+
 * Hadoop - [https://noobergeek.wordpress.com/2012/11/12/why-is-hadoop-so-fast/](https://noobergeek.wordpress.com/2012/11/12/why-is-hadoop-so-fast/)
 * HDFS - [https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
 * HDFS - [http://www.waytoeasylearn.com/2018/01/hdfs-read-write-architecture.html](http://www.waytoeasylearn.com/2018/01/hdfs-read-write-architecture.html)
@@ -112,5 +101,3 @@ MapReduce Framework는 HDFS과 YARN위에서 MapReduce를 수행을 도와주는
 * YARN - [https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce](https://stackoverflow.com/questions/34709213/hadoop-how-job-is-send-to-master-and-to-nodes-on-mapreduce)
 * YARN - [http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/](http://blog.cloudera.com/blog/2015/09/untangling-apache-hadoop-yarn-part-1/)
 * HDFS + YARN - [https://stackoverflow.com/questions/36215672/spark-yarn-architecture](https://stackoverflow.com/questions/36215672/spark-yarn-architecture)
-* MapReduce - [https://data-flair.training/blogs/hadoop-inputformat/](https://data-flair.training/blogs/hadoop-inputformat/)
-* MapReduce - [http://icecello.tistory.com/35](http://icecello.tistory.com/35)

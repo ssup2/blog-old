@@ -15,7 +15,7 @@ ZooKeeper는 분산 시스템 환경에서 Leader 선출, Node 상태, 분산 Lo
 
 #### 1.1. Architecture
 
-![]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Architecture.PNG)
+![[그림 1] ZooKeeper Architecture]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Architecture.PNG)
 
 분산 Coordinator는 분산 시스템의 일부분이 되어 동작하기 때문에 분산 Coordinator의 작동이 멈춘다면 분산 시스템도 정지하게 된다. ZooKeeper는 안전성을 확보하기 위해 다수의 Server를 이용하는 **Server Cluster - Client** 구조를 이용한다. Server Cluster는 하나의 **Leader**와 여러개의 **Follower**로 구성되어 있다. Server Cluster는 홀수 개수로 구성하는 것이 유리하다. Server간의 Consistency가 깨졌:q을 경우 과반수 이상의 Data를 기준으로 Consistency를 맞추기 때문이다.
 
@@ -25,17 +25,15 @@ ZNode 정보는 In-meomry DB에 저장된다. Local Filesystem에 In-memory DB�
 
 #### 1.2. ZNode
 
-![]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_ZNode.PNG){: width="700px"}
+![[그림 2] ZooKeeper ZNode]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_ZNode.PNG){: width="700px"}
 
-ZooKeeper는 **ZNode** 단위로 Data 저장 및 계층을 생성한다. 위의 그림은 ZNode로 구성된 Data Model을 나타내고 있다. File System처럼 Root를 기준으로 Tree 형태로 ZNode가 구성된다. 각 ZNode는 Data(byte[])와 Child Node를 가질 수 있다.
+ZooKeeper는 **ZNode** 단위로 Data 저장 및 계층을 생성한다. [그림 2]는 ZNode로 구성된 Data Model을 나타내고 있다. File System처럼 Root를 기준으로 Tree 형태로 ZNode가 구성된다. 각 ZNode는 Data(byte[])와 Child Node를 가질수 있다.
 
-ZNode는 **Persistent Node**와 **Ephemeral Node**로 구분된다. Persistent Node는 Client가 종료되더라도 유지되는 Node이다. Ephemeral Node는 Client가 종료되면 사라지는 Node이고, Child를 가질 수 없다. 또한 ZNode는 **Sequence Node**와 일반 Node로 구분 할 수 있다. Sequence Node는 생성시 Node이름 뒤에 숫자가 붙으며, 숫자는 중복되지 않는다. Persistent Node와 Ephemeral Node 모두 Sequence Node가 될 수 있다.
-
-Server의 Atomic Broadcast를 통해서 ZNode 생성/변경/삭제 동작은 Client 입장에서는 Sequence Consistency, Atomicity 특징을 보인다.
+ZNode는 **Persistent Node**와 **Ephemeral Node**로 구분된다. Persistent Node는 Client가 종료되더라도 유지되는 Node이다. Ephemeral Node는 Client가 종료되면 사라지는 Node이고, Child를 가질 수 없다. 또한 ZNode는 **Sequence Node**와 일반 Node로 구분 할 수 있다. Sequence Node는 생성시 Node이름 뒤에 숫자가 붙으며, 숫자는 중복되지 않는다. Persistent Node와 Ephemeral Node 모두 Sequence Node가 될 수 있다. Server의 Atomic Broadcast를 통해서 ZNode 생성/변경/삭제 동작은 Client 입장에서는 Sequence Consistency, Atomicity 특징을 보인다.
 
 #### 1.3. Watcher
 
-![]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Watcher.PNG)
+![[그림 3] Zookeeper Watcher]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Watcher.PNG)
 
 Watcher는 ZNode의 변경을 Client에게 먼져 알려주는 역활을 수행한다. Client는 먼져 특정 ZNode에 대해 Watcher를 등록한다. 그 후 해당 ZNode의 Data가 변경되거나, Child Node가 생성/삭제 될 경우 Client에게 변경되었다는 Event를 Client에게 전달한다.
 

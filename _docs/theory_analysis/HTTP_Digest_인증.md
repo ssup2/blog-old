@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. HTTP Digest 인증
 
-HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개선하기 위한 인증 기법이다. 아래의 그림은 HTTP Digest 인증 기법의 Example을 나타내고 있다.
+HTTP Digest 인증 기법은 HTTP Basic 인증 기법의 보안 취약점을 개선하기 위한 인증 기법이다. [그림 1]은 HTTP Digest 인증 기법의 Example을 나타내고 있다.
 
 ![[그림 1] HTTP Digest 인증]({{site.baseurl}}/images/theory_analysis/HTTP_Digest_Authorization/HTTP_Digest_Example.PNG){: width="700px"}
 

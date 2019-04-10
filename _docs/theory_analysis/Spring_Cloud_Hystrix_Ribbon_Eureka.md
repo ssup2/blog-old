@@ -15,15 +15,15 @@ Spring Cloud는 Cloud같은 분산 환경에서 **Cloud-native App 구축 및 �
 
 ### 2. Hystrix
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Circuit_Breaker.PNG){: width="500px"}
+![[그림 1] Spring Cloud Hystrix]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Circuit_Breaker.PNG){: width="500px"}
 
-Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Service 호출을 제어하고, Service 사이의 Isolation Point를 제공하는 Library이다. 위의 그림은 Hystrix를 이용하여 생성 및 삽입한 Circuit Breaker를 나타내고 있다. Service D가 이용불가능인 상태이거나 Service D의 응답이 늦어 Circuit이 Open되어 있는 경우, Circuit Breaker는 Service A 또는 Service B에서 수행하는 Service D 호출을 차단하여 장애 전파 및 불필요한 Resource 사용을 방지한다. 또한 등록된 Fallback Service인 Service E를 수행하여 유연한 장애대처가 가능하도록 만든다. Circuit Breaker의 Open/Close 기준은 개발자의 설정을 통해 정해진다.
+Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Service 호출을 제어하고, Service 사이의 Isolation Point를 제공하는 Library이다. [그림 1]은 Hystrix를 이용하여 생성 및 삽입한 Circuit Breaker를 나타내고 있다. Service D가 이용불가능인 상태이거나 Service D의 응답이 늦어 Circuit이 Open되어 있는 경우, Circuit Breaker는 Service A 또는 Service B에서 수행하는 Service D 호출을 차단하여 장애 전파 및 불필요한 Resource 사용을 방지한다. 또한 등록된 Fallback Service인 Service E를 수행하여 유연한 장애대처가 가능하도록 만든다. Circuit Breaker의 Open/Close 기준은 개발자의 설정을 통해 정해진다.
 
 #### 2.1. Flow
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Flow.PNG)
+![[그림 2] Spring Cloud Hystrix 동작과정]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Flow.PNG)
 
-위의 그림은 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
+[그림 2]는 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
 
 * 1 - Circuit이 Open되어 있는지 확인한다. 만약 Circuit이 Open되어 있다면 Service 호출은 중단되고 Fallback Service를 호출한다.
 * 2 - Circuit이 Open되어 있더라도, Service 호출에 필요한 Thread Pool의 Thread나 남은 Semaphore가 없는 경우 Service 호출은 중단되고 Fallback Service를 호출한다.
@@ -50,9 +50,9 @@ Thread Pool 정책에서 최대로 Service를 동시 호출할 수 있는 개수
 
 ### 3. Ribbon
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Ribbon.PNG){: width="450px"}
+![[그림 3] Spring Cloud Ribbon]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Ribbon.PNG){: width="450px"}
 
-Ribbon은 **Client-side Load Balancer**로써 의미그대로 Client에서 Server Load Balancing을 수행하는 Library이다. 위의 그림은 Ribbon을 나타내고 있다. Ribbon은 Rule, Ping, ServerList 3가지의 구성요소로 이루어져 있다.
+Ribbon은 **Client-side Load Balancer**로써 의미그대로 Client에서 Server Load Balancing을 수행하는 Library이다. [그림 3]은 Ribbon을 나타내고 있다. Ribbon은 Rule, Ping, ServerList 3가지의 구성요소로 이루어져 있다.
 
 #### 3.1. Rule
 
@@ -81,9 +81,9 @@ Load Balancing이 수행가능한 Server List를 의미한다. Server List를 �
 
 ### 4. Eureka
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Eureka.PNG){: width="600px"}
+![[그림 4] Spring Cloud Eureka]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Eureka.PNG){: width="600px"}
 
-Eureka는 **Service Discovery**를 제공하는 Service이다. 위의 그림은 Eureka를 나타내고 있다. Service를 관리하는 Service Registry는 Eureka Server로 동작한다. 그리고 Eureka를 이용하는 Service는 Eureka Client로 동작한다. 동작을 시작한 Service Instance는 Eureka Client를 통해 Eureka Server에게 Service 이름,IP,Port 등의 Service 정보를 전달한다. Eureka Server는 Client로 받은 Service 정보를 저장한 뒤, Service Discover를 요청하는 Eureka Client에게 Service 정보를 전달한다.
+Eureka는 **Service Discovery**를 제공하는 Service이다. [그림 4]은 Eureka를 나타내고 있다. Service를 관리하는 Service Registry는 Eureka Server로 동작한다. 그리고 Eureka를 이용하는 Service는 Eureka Client로 동작한다. 동작을 시작한 Service Instance는 Eureka Client를 통해 Eureka Server에게 Service 이름,IP,Port 등의 Service 정보를 전달한다. Eureka Server는 Client로 받은 Service 정보를 저장한 뒤, Service Discover를 요청하는 Eureka Client에게 Service 정보를 전달한다.
 
 Eureka Client는 Eureka Server에게 주기적으로 Service 정보를 요청하고 Caching한다. Service 정보 Cache는 Client 성능을 높이거나 HA(High Availability)를 위해서 이용된다. 또한 주기적으로 Heartbeat를 전달하여 Eureka Client의 동작 상태를 Eureka Server에게 전달한다. 만약 일정시간 Eureka Server에게 Heartbeat를 전달하지 않으면 해당 Eureka Client를 이용하는 Service는 Eureka Server로부터 비정상 상태라고 간주되어 Eureka Server가 관리하는 Server 정보에서 제외된다.
 
@@ -95,9 +95,9 @@ Eureka는 모든 Service 정보를 관리하는 중요한 Service이기 때문�
 
 ### 5. Hystrix + Ribbon + Eureka
 
-![]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
+![[그림 5] Spring Cloud Hystrix + Ribbon + Eureka]({{site.baseurl}}/images/theory_analysis/Spring_Cloud_Hystrix_Ribbon_Eureka/Hystrix_Ribbon_Eureka.PNG){: width="700px"}
 
-지금까지 분석한 Spring Cloud의 Hystrix, Ribbon, Eureka를 이용하여 Service를 구성하면 위의 그림과 같은 구조가 된다. Service A의 Hystrix는 Service B가 제대로 동작하지 않는것을 파악한뒤, Service B의 Circuit을 Open하고 Fallback Service인 Service C를 호출하고 있다. Service A의 Eureka는 Eureka Server로 부터 Service 정보를 얻은뒤 Ribbon에게 전달한다. Eureka Server는 2개의 Instance가 구동하고 있고 첫번째 Eureka Server의 Eureka Client는 두번째 Eureka Server로부터 Service 정보를 얻고있다. Service A의 Ribbon은 Eureka로부터 얻은 Service D의 Instance 정보를 바탕으로 Load Balancing을 수행한다. Service D의 첫번째 Instance가 동작하지 않아 두번째 Instance로 Service D를 호출하고 있다.
+지금까지 분석한 Spring Cloud의 Hystrix, Ribbon, Eureka를 이용하여 Service를 구성하면 [그림 5]와 같은 구조가 된다. Service A의 Hystrix는 Service B가 제대로 동작하지 않는것을 파악한뒤, Service B의 Circuit을 Open하고 Fallback Service인 Service C를 호출하고 있다. Service A의 Eureka는 Eureka Server로 부터 Service 정보를 얻은뒤 Ribbon에게 전달한다. Eureka Server는 2개의 Instance가 구동하고 있고 첫번째 Eureka Server의 Eureka Client는 두번째 Eureka Server로부터 Service 정보를 얻고있다. Service A의 Ribbon은 Eureka로부터 얻은 Service D의 Instance 정보를 바탕으로 Load Balancing을 수행한다. Service D의 첫번째 Instance가 동작하지 않아 두번째 Instance로 Service D를 호출하고 있다.
 
 Zuul은 API Gateway로써 Service End-point 역활을 수행한다. Zuul에서도 Hystrix, Ribbon, Eureka를 이용하여 안정적인 Service-end point를 제공한다.
 

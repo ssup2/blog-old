@@ -53,7 +53,7 @@ iptables는 Filter Table, NAT Table, Mangle Table, Raw Table, Security Table 총
 
 #### 2.3. Chain, Rule
 
-각 Table은 Chain의 조합으로 이루어져 있다. 위의 그림에서 NAT Table은 PREROUTING, INPUT, OUTPUT, POSTROUTING 4개의 hook에 포함되어있는걸 알 수 있는데, 다시 말하면 NAT Table은 4개 이상의 Chain으로 이루어졌다고 할 수 있다. 또한 각 Chain은 여러 Rule들의 조합으로 이루어져 있다.
+각 Table은 Chain의 조합으로 이루어져 있다. [그림 2]에서 NAT Table은 PREROUTING, INPUT, OUTPUT, POSTROUTING 4개의 hook에 포함되어있는걸 알 수 있는데, 다시 말하면 NAT Table은 4개 이상의 Chain으로 이루어졌다고 할 수 있다. 또한 각 Chain은 여러 Rule들의 조합으로 이루어져 있다.
 
 ~~~
 # iptables -t nat -vL

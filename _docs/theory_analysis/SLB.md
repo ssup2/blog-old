@@ -11,7 +11,7 @@ SLB(Server Load Balancing) 기법을 분석한다.
 
 ### 1. SLB (Server Load Balancing)
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB.PNG){: width="450px"}
+![[그림 1] SLB]({{site.baseurl}}/images/theory_analysis/SLB/SLB.PNG){: width="450px"}
 
 SLB는 의미 그대로 Server의 부하를 조절하는 기법을 의미한다. SLB는 **LB(Load Balancer)**와 **VIP(Virtual IP)**로 구성된다. LB는 Server에 전달되야 하는 Client의 요청을 대신 받아 적절한 Server에게 전달하는 역활을 수행한다. VIP(Virtual IP)는 Load Balancing의 대상이 되는 여러 Server들을 대표하는 하나의 가상 IP이다. Client는 각 Server의 IP가 아닌 LB가 갖고 있는 VIP(Virtual IP)를 대상으로 요청한다. 따라서 Client는 여러 Server들의 존재를 알지 못하고 하나의 Server와 통신한다고 생각한다.
 
@@ -25,7 +25,7 @@ SLB의 핵심은 LB의 역활이다. LB는 어떻게 Load Balancing을 수행할
 
 #### 1.1. Proxy
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Proxy.PNG)
+![[그림 2] SLB Proxy]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Proxy.PNG)
 
 Server가 Client로부터 받는 Inbound Packet과 Server가 Client에게 전달하는 Outbound Packet 모두 LB를 거친다. LB에서 Inbound Packet의 Source IP는 SNAT(Src NAT)를 통해 LB의 VIP로 바뀌고, Destination IP는 DNAT(Dst NAT)를 통해 실제 Server의 IP로 바뀐다. 그 후 Inbound Packet은 실제 Server에게 전달된다. 실제 Server는 LB가 Client라고 생각하고 받은 Packet의 Src IP와 Dst IP를 바꾸어 LB에게 응답 Packet을 전송한다. LB는 다시 SNAT,DNAT를 수행하여 원래의 IP로 바꾸어 Client에게 응답을 전달한다.
 
@@ -33,7 +33,7 @@ Server가 Client로부터 받는 Inbound Packet과 Server가 Client에게 전달
 
 #### 1.2. Inline (Transparent)
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Inline.PNG)
+![[그림 3] SLB Inline]({{site.baseurl}}/images/theory_analysis/SLB/SLB_Inline.PNG)
 
 Proxy 기법처럼 Inbound Packet과 Outbound Packet 모두 LB를 거친다. LB에서 Inbound Packet은 실제 Server에 전달하기 위해 DNAT(Dst NAT)만을 수행한뒤 실제 Server에게 전달된다. Server의 Default Gateway는 LB로 설정되어 있기 때문에 Outbound Packet은 LB로 전달된다. Outbound Packet은 LB에서 다시 SNAT(Src NAT)를 통해서 Src IP를 LB의 VIP로 변환한다.
 
@@ -45,27 +45,26 @@ Proxy, Inline 기법은 모든 Inbound, Outbound Packet을 처리해야하기 �
 
 ##### 1.3.1. L2DSR
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L2DSR.PNG)
+![[그림 4] SLB L2DSR]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L2DSR.PNG)
 
 L2DSR은 Inbound의 Packet의 Dst Mac을 바꾸는 기법이다. LB는 Inbound Packet의 Mac Address를 Server의 Mac Address로 변환한 후 실제 Server에게 전달한다. 그 후 실제 Server는 VIP 주소를 갖고 있는 Loopback Interface를 통해 Src IP를 변환하여 Client에게 바로 Outbound Packet을 전달한다. Inbound Packet의 Mac Address만 바꾸기 때문에 LB와 Server들은 반드시 같은 Network에 속해야 한다.
 
 ##### 1.3.2. L3DSR
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L3DSR_DSCP.PNG)
+![[그림 5] SLB L3DSR DSCP]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L3DSR_DSCP.PNG)
 
-L3DSR은 L2DSR의 LB와 Server들이 반드시 같은 Network에 속해야 하는 한계점을 극복하기 위해 나온 기법이다. L3DSR은 Inbound Packet의 Dst IP를 바꾸는 기법이다. 이와 더불어 Server가 VIP 정보를 알 수 있게 Inbound Packet의 DSCP Field를 변경하거나, Inbound Packet을 Tunneling한다. 위의 그림은 DSCP Field를 이용하는 L3DSR을 나타내고 있다. LB와 모든 Server는 DSCP/VIP Mapping Table을 알고 있다. LB는 Inbound Packet의 Dst IP를 실제 Server의 IP로 변환하고, Packet의 Dst IP 정보와 Mapaping Table 정보를 바탕으로 DSCP 값도 변경한다. 그 후 실제 Server에게 전달한다. Packet을 받은 Server는 Mapaping Table과 Loopback Interface를 통해 Src IP를 변경하고 DSCP 값을 0으로 만들어 Client에게 바로 전달한다.
+L3DSR은 L2DSR의 LB와 Server들이 반드시 같은 Network에 속해야 하는 한계점을 극복하기 위해 나온 기법이다. L3DSR은 Inbound Packet의 Dst IP를 바꾸는 기법이다. 이와 더불어 Server가 VIP 정보를 알 수 있게 Inbound Packet의 DSCP Field를 변경하거나, Inbound Packet을 Tunneling한다. [그림 5]는 DSCP Field를 이용하는 L3DSR을 나타내고 있다. LB와 모든 Server는 DSCP/VIP Mapping Table을 알고 있다. LB는 Inbound Packet의 Dst IP를 실제 Server의 IP로 변환하고, Packet의 Dst IP 정보와 Mapaping Table 정보를 바탕으로 DSCP 값도 변경한다. 그 후 실제 Server에게 전달한다. Packet을 받은 Server는 Mapaping Table과 Loopback Interface를 통해 Src IP를 변경하고 DSCP 값을 0으로 만들어 Client에게 바로 전달한다.
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L3DSR_Tunnel.PNG)
+![[그림 6] SLB L3DSR Tunnel]({{site.baseurl}}/images/theory_analysis/SLB/SLB_L3DSR_Tunnel.PNG)
 
 Packet을 Tunneling 하는 기법도 DSCP 기법과 유사하다. LB와 Server들은 Tunnel/VIP Mapping 정보를 갖는다. 이 Mapping Table을 바탕으로 LB와 각 Server들은 L3DSR기법을 수행한다.
 
 ### 2. GSLB (Global Server Load Balancing)
 
-![]({{site.baseurl}}/images/theory_analysis/SLB/GSLB.PNG){: width="650px"}
+![[그림 7] GSLB]({{site.baseurl}}/images/theory_analysis/SLB/GSLB.PNG){: width="650px"}
 
-GSLB는 SLB와 이름은 유사하지만 VIP기반이 아닌 **DNS**기반의 Load Balancing 기법이다. Service를 제공하는 Server들이 여러 지역에 분리되어 완전히 다른 네트워크에서 운용 될 때 이용하는 기법이다. 따라서 GSLB + SLB 형태로 Load Balancing을 수행 할 수 있다.
+GSLB는 SLB와 이름은 유사하지만 VIP기반이 아닌 **DNS**기반의 Load Balancing 기법이다. Service를 제공하는 Server들이 여러 지역에 분리되어 완전히 다른 네트워크에서 운용 될 때 이용하는 기법이다. 따라서 GSLB + SLB 형태로 Load Balancing을 수행 할 수 있다.일반적인 DNS는 Server나 Network의 상태를 전혀 고려하지 않지만 GSLB는 아래와 같은 순으로 Server를 선택하기 때문에 지능형 DNS라고 이해하면 쉽다.
 
-일반적인 DNS는 Server나 Network의 상태를 전혀 고려하지 않지만 GSLB는 아래와 같은 순으로 Server를 선택하기 때문에 지능형 DNS라고 이해하면 쉽다.
 * Server Health
 * SLB Session / Network Capacity Threashold
 * Network Proximity

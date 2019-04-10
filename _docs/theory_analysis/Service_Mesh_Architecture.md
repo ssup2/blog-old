@@ -13,7 +13,7 @@ Service Mesh Architecture를 분석한다.
 
 ![[그림 1] Service Mesh Architecture]({{site.baseurl}}/images/theory_analysis/Service_Mesh_Architecture/Service_Mesh_Architecture.PNG)
 
-Service Mesh Architecture는 다수의 Service를 이용하는 MSA (Mirco Service Archiecture)의 **중앙 제어**가 쉽지 않다는 단점을 극복하기 위해서 설계된 **Infra Level** Architecture이다. Google의 Istio는 대표적인 Service Mesh Architecture 구현체이다. 위의 그림은 Service Mesh Architecture를 나타내고 있다.
+Service Mesh Architecture는 다수의 Service를 이용하는 MSA (Mirco Service Archiecture)의 **중앙 제어**가 쉽지 않다는 단점을 극복하기 위해서 설계된 **Infra Level** Architecture이다. Google의 Istio는 대표적인 Service Mesh Architecture 구현체이다. [그림 1]은 Service Mesh Architecture를 나타내고 있다.
 
 Service와 Proxy는 1:1 관계를 갖으며, Service는 Business Logic을 제외한 대부분의 기능을 Service가 아닌 Service와 Mapping된 Proxy에서 수행(Offloading)한다. 이러한 Proxy를 Sidecar Pattern이 적용된 **Sidecar Proxy**라고 부른다. Service의 대부분의 기능이 Proxy로 Offlaoding 되었기 때문에 Proxy 제어을 통해서 Service를 간접적으로 제어할 수 있다. 이러한 Proxy들을 중앙에서 제어하는 Control Plane을 통해서 다수의 Service를 편리하게 제어하는 것이 Service Mesh Architecture의 핵심이다.
 

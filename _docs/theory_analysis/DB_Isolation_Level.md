@@ -62,7 +62,7 @@ Isolation Level에 따라서 [표 1]과 같은 Issue가 발생한다.
 | | UPDATE users SET age = 31 WHERE id = 1; <br> COMMIT;|
 
 <figure>
-<figcaption class="caption">[표 2] Lost Update Example</figcaption>
+<figcaption class="caption">[표 2] Lost Update 예제</figcaption>
 </figure>
 
 Lost Update는 2개 이상의 Transaction이 하나의 Row를 동시에 변경하는 경우 변경 내용이 사라지는 현상이다. Transaction 단위로 Lock을 걸지 않는 Read Uncommitted, Read Committed Level에서 발생한다. [표 2]의 경우 Read UnCommitted, Read Committed Level에서 T1의 21값은 사라진다. 하지만 Repeatable Read, Serializable Level에서는 T2의 Commit 수행시 Exception이 발생하면서 31값으로 변경되지 않는다.
@@ -77,7 +77,7 @@ Lost Update는 2개 이상의 Transaction이 하나의 Row를 동시에 변경�
 | | ROLLBACK; |
 
 <figure>
-<figcaption class="caption">[표 3] Dirty Read Example</figcaption>
+<figcaption class="caption">[표 3] Dirty Read 예제</figcaption>
 </figure>
 
 Dirty Read는 Commit 되지 않은 변경 내용이 다른 Transaction의 Read에 영향을 미치는 현상이다. [표 3]의 경우 T1는 T2의 Rollback되어 사라진 21값을 가지고 있게된다.
@@ -91,7 +91,7 @@ Dirty Read는 Commit 되지 않은 변경 내용이 다른 Transaction의 Read�
 | SELECT age FROM users WHERE id = 1; <br> COMMIT;| |
 
 <figure>
-<figcaption class="caption">[표 4] Non-repeatable Read Example</figcaption>
+<figcaption class="caption">[표 4] Non-repeatable Read 예제</figcaption>
 </figure>
 
 Non-repeatable Read는 Transaction에서 하나의 Row를 반복해서 읽을때 외부 Transaction의 Commit에 따라서 값이 변경되는 현상이다. [표 4]에서 T2의 의해서 T1은 첫번째 age의 Read 값과 두번째 age의 Read값이 달라진다.
@@ -105,7 +105,7 @@ Non-repeatable Read는 Transaction에서 하나의 Row를 반복해서 읽을때
 | SELECT * FROM users WHERE age BETWEEN 10 AND 30; <br> COMMIT;| |
 
 <figure>
-<figcaption class="caption">[표 5] Phantom Read Example</figcaption>
+<figcaption class="caption">[표 5] Phantom Read 예제</figcaption>
 </figure>
 
 Phantom Reae는 외부 Transaction에 의해서 새롭게 추가된 Row가 결과에 반영되는 현상이다. [표 5]에서 T1은 첫번째 SELECT Query에서 Bob의 정보를 읽어오지 못하지만, 두번째 SELECT Query에서는 T2 Transaction에 의해서 Bob의 정보를 읽어오게 된다.

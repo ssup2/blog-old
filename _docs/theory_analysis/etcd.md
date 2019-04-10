@@ -1,6 +1,6 @@
 ---
 title: etcd
-category: Theory, Analysis
+category: 
 date: 2019-02-17T12:00:00Z
 lastmod: 2019-02-17T12:00:00Z
 comment: true

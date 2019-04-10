@@ -51,7 +51,7 @@ int main()
   }
 }
 {% endhighlight %}
-<figcaption class="caption">[파일 1] Event Driven Architecture Example</figcaption>
+<figcaption class="caption">[파일 1] Event Driven Architecture 예제</figcaption>
 </figure>
 
 Event Drivent Architecture는 Main Loop라는 Single Thread를 이용하기 때문에 Race Condtion이 발생하지 않는다. Lock을 이용한 자원 동기화가 불필요 하기 때문에 프로그래밍이 간단하다는 큰 장점이 있다. 하지만 몇가지 단점도 가지고 있다.
@@ -78,7 +78,7 @@ eventfd()는 Counter 값의 조작만으로 Event를 전달하는 방식이기 �
 
 #### 2.3. Architecture Design
 
-![[그림 2] Event Driven Architecture on Linux]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture_on_Linux.PNG){: width="500px"}
+![[그림 2] Linux에서 동작하는 Event Driven Architecture]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture_on_Linux.PNG){: width="500px"}
 
 epoll()과 fd Helper Function들을 이용하면 [그림 2]와 같은 Architecture 설계가 가능하다. Handler 간의 통신의 경우 eventfd()와 전역 공간의 Queue를 이용한다. Message를 Queue에 넣은 다음 eventfd()를 통해서 Event를 Handler에게 전달하는 방식으로 통신한다.
 

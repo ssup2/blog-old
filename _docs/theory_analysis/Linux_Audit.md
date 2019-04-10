@@ -79,7 +79,7 @@ type=PATH msg=audit(2018년 02월 14일 15:33:57.911:363) : item=0 name=/etc/sha
 type=CWD msg=audit(2018년 02월 14일 15:33:57.911:363) :  cwd=/root/linux
 type=SYSCALL msg=audit(2018년 02월 14일 15:33:57.911:363) : arch=x86_64 syscall=open success=yes exit=3 a0=0x7f995dee6c9d a1=O_RDONLY|O_CLOEXEC a2=0x1b6 a3=0x80000 items=1 ppid=12206 pid=14541 auid=unset uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts13 ses=unset comm=passwd exe=/usr/bin/passwd key=(null)
 {% endhighlight %}
-<figcaption class="caption">[Shell 1] Audit Example</figcaption>
+<figcaption class="caption">[Shell 1] Audit 예제</figcaption>
 </figure>
 
 [Shell 1]은 Linux User의 Password를 변경하는 passwd Binary와 Password를 기록하는 /etc/shadow 파일에 Audit Rule을 내리는 예제이다. passwd Binary가 실행될 때와 /etc/shadow 파일이 Read될때 Audit Event가 발생하도록 Rule을 설정한 다음 auditd가 남긴 Log를 확인하는 과정을 나타내고 있다. 

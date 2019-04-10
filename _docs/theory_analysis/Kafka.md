@@ -53,5 +53,6 @@ Consumer Group은 다수의 Consumer를 묶어 하나의 Topic을 다수의 Cons
 * [https://sookocheff.com/post/kafka/kafka-in-a-nutshell/](https://sookocheff.com/post/kafka/kafka-in-a-nutshell/)
 * [https://epicdevs.com/17](https://epicdevs.com/17)
 * [https://medium.freecodecamp.org/what-makes-apache-kafka-so-fast-a8d4f94ab145]
+* [https://www.popit.kr/kafka-%EC%9A%B4%EC%98%81%EC%9E%90%EA%B0%80-%EB%A7%90%ED%95%98%EB%8A%94-producer-acks/](https://www.popit.kr/kafka-%EC%9A%B4%EC%98%81%EC%9E%90%EA%B0%80-%EB%A7%90%ED%95%98%EB%8A%94-producer-acks/)
 
 

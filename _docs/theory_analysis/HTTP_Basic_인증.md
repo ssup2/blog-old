@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. HTTP Basic 인증
 
-HTTP Basic 인증 기법은 HTTP 표준에 정의된 가장 단순한 인증 기법이다. 아래의 그림은 HTTP Basic 인증 기법의 Example을 나타내고 있다.
+HTTP Basic 인증 기법은 HTTP 표준에 정의된 가장 단순한 인증 기법이다. [그림 1]은 HTTP Basic 인증 기법의 Example을 나타내고 있다.
 
 ![[그림 1] HTTP Basic 인증]({{site.baseurl}}/images/theory_analysis/HTTP_Basic_Authorization/HTTP_Basic_Example.PNG){: width="600px"}
 
