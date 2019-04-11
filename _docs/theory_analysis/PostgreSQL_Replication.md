@@ -35,9 +35,7 @@ WAL Replication은 WAL을 저장하는 파일 단위인 **Segment** 단위로 �
 
 Streaming Replication은 WAL에 기록된 변경 내용을 바로 Slave DB에게 전달하는 기법이다. [그림 3]은 Streaming Replication을 나타내고 있다. Master DB는 WAL Sender를 통해 WAL에 기록된 Master DB 변경 내용을 Slave DB의 WAL Receiver에게 전달한다. Slave DB는 WAL Receiver을 통해 받은 Master DB의 변경 내용을 자신의 WAL에 기록하여 Replication을 수행한다. Streaming Replication은 Master DB의 변경 내용을 변경 내용 단위인 **Record** 단위로 바로 Slave DB에게 전달하기 때문에 갑작스러운 Master DB의 죽음으로 인한 Data 손실을 최소화 할 수 있다.
 
-Streaming Replication은 Archive에 있는 WAL을 이용하지 않고 원본 WAL을 이용하여 수행된다. 따라서 Checkpoint으로 인해서 삭제된 WAL안의 Master DB 변경 내용은 Streaming Replication을 통해서 Slave DB에게 전달되지 못한다. 다시 말해 시간이 오래 경과된 Master DB 변경 내용은 Streaming Replication을 통해서 Slave DB에게 전달되지 못한다는 의미이다. 이러한 문제를 해결하기 위해서 PostgreSQL은 Streaming Replication 이용시 WAL Replication을 보조로 이용할 수 있다. WAL Replication을 보조로 이용하는 Slave DB는 먼져 Master DB의 Archive에 있는 WAL을 복사하여 가져와 Replication을 수행한다. 그 뒤 Streaming으로 넘어오는 WAL Record를 통해서 Replication을 마무리한다.
-
-Streaming Replication은 Sync, Async 2가지 방식 모두 지원하고 있으며, 기본 설정은 Async 방식을 이용하도록 설정되어 있다.
+Streaming Replication은 Archive에 있는 WAL을 이용하지 않고 원본 WAL을 이용하여 수행된다. 따라서 Checkpoint으로 인해서 삭제된 WAL안의 Master DB 변경 내용은 Streaming Replication을 통해서 Slave DB에게 전달되지 못한다. 다시 말해 시간이 오래 경과된 Master DB 변경 내용은 Streaming Replication을 통해서 Slave DB에게 전달되지 못한다는 의미이다. 이러한 문제를 해결하기 위해서 PostgreSQL은 Streaming Replication 이용시 WAL Replication을 보조로 이용할 수 있다. WAL Replication을 보조로 이용하는 Slave DB는 먼져 Master DB의 Archive에 있는 WAL을 복사하여 가져와 Replication을 수행한다. 그 뒤 Streaming으로 넘어오는 WAL Record를 통해서 Replication을 마무리한다. Streaming Replication은 Sync, Async 2가지 방식 모두 지원하고 있으며, 기본 설정은 Async 방식을 이용하도록 설정되어 있다.
 
 #### 1.2. Pgpool-II
 

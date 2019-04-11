@@ -56,10 +56,18 @@ REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method
 {: .newline }
 > http://restapi.example.com/house/apartments/101
 
+<figure>
+<figcaption class="caption">[Quote 1] URI</figcaption>
+</figure>
+
 REST API의 URI는 Resource Model에 맞게 Directory 구조의 형태를 갖는다. 하나의 URI는 하나의 Resource를 나타내거나 Resource의 모음을 나타내는 하나의 Collection을 나타낸다. Resource는 **단수**로 표현하고 Collection은 **복수**로 표현한다. 위의 URI는 house Resource가 있고 그 아래 apartments라는 Collection이 존재하고 있고 다시 그 아래 101이란 Resource를 나타내고 있다.
 
 {: .newline }
 > http://restapi.example.com/house/apartments?color=white&floor=20
+
+<figure>
+<figcaption class="caption">[Quote 2] URI + Query String</figcaption>
+</figure>
 
 Collection을 대상으로 GET Method를 수행하여 가지고 오는 Resource를 Filtering 해야하는 경우, Query String을 이용한다. 위의 예제에서는 하얀색이고 20층인 Apartment들의 Resource만 얻을때 이용하는 URI를 나타내고 있다.
 

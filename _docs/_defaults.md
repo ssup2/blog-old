@@ -11,6 +11,10 @@ adsense: true
 > a = G * x, b = G * y
 > ---> L = G * x * y = (a * b) / G
 
+<figure>
+<figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
 ![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
 ![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
 
