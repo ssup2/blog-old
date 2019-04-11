@@ -7,16 +7,27 @@ comment: true
 adsense: true
 ---
 
+
+![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
+![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+
 {: .newline }
 > a = G * x, b = G * y
 > ---> L = G * x * y = (a * b) / G
-
 <figure>
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
-![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+| | Read Uncommitted | Read Committed | Repeatable-Read | Serializable |
+|----|----|----|----|----|
+| Lost Update | O | O | X | X |
+| Dirty Read | O | X | X | X |
+| Non-repeatable Read | O | O | X | X |
+| Phantom Read | O | O | O | X |
+
+<figure>
+<figcaption class="caption">[표 1] DB Isolation Level에 따른 Issue</figcaption>
+</figure>
 
 {% highlight cpp linenos %}
 #include <iostream>

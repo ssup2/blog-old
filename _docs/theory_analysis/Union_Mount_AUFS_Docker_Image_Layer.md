@@ -19,10 +19,10 @@ Union이란 이름에서도 알 수 있듯이, 여러개의 폴더를 동시에 
 
 AUFS (Advanced Multi Layered Unification Filesystem)은 리눅스 환경에서 Union Mount를 제공하는 기법이다. AUFS는 현재 Linux Kernel의 Main Stream에 포함되어 있지 않다. 하지만 Docker Image Layer의 기본 Filesystem으로 이용되고 있기 때문에 현재 많은 곳에서 AUFS를 이용하고 있다. 대부분의 리눅스 배포판에서는 별도의 Package 설치를 통해 AUFS를 쉽게 설치 할 수 있다.
 
-<figure>
 {% highlight text %}
 # mount -t aufs -o br=/layer_rw=rw:/layer_01=ro+wh:/layer_02=ro+wh:/layer_03=ro+wh none /mnt
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 1] AUFS Mount 명령어 예제</figcaption>
 </figure>
 
@@ -59,7 +59,7 @@ AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있�
 
 ![[그림 5] Docker에서 AUFS를 이용하는 방법]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/Docker_Image_Layer.PNG){: width="600px"}
 
-AUFS를 이해했다면 Docker가 어떻게 Image Layer를 이용하는지 예측 할 수 있다. [Shell 2]와 [그림 5]는 Docker가 Container 생성시 AUFS를 어떻게 이용하는지를 나타내고 있다. Docker는 Container 생성시 Container를 위한 Root 폴더와 RW 폴더를 생성한다. 그 후 Docker는 Base Image의 Layer(폴더)들을 RO Branch로 설정하고, Container RW 폴더를 RW Branch로 설정하여 Container의 Root 폴더에 AUFS Mount를 수행한다.  
+AUFS를 이해했다면 Docker가 어떻게 Image Layer를 이용하는지 예측 할 수 있다. [Shell 2]와 [그림 5]는 Docker가 Container 생성시 AUFS를 어떻게 이용하는지를 나타내고 있다. Docker는 Container 생성시 Container를 위한 Root 폴더와 RW 폴더를 생성한다. 그 후 Docker는 Base Image의 Layer(폴더)들을 RO Branch로 설정하고, Container RW 폴더를 RW Branch로 설정하여 Container의 Root 폴더에 AUFS Mount를 수행한다.
 
 Container가 동작하면서 변경하거나 추가한 파일들은 모두 Container의 RW 폴더에 남게되고 RO Branch들인 Base Image Layer들에게는 전혀 영향을 주지 않는다. Base Image Layer들은 변경되지 않으므로 다른 Container들과 공유해서 사용 가능하다. Container의 파일 변경 내용은 RW 폴더에만 남기 때문에 Docker는 Snapshot 수행시 Container RW 폴더만 복사하여 관리한다. Snapshot으로 생성한 이미지를 이용하는 Container를 생성 할 경우 Docker는 복사해둔 RW 폴더를 새로운 Container의 RO Branch로 설정하여 이용한다. 이와 같이 **하나의 AUFS Branch가 하나의 Docker Image Layer**가 된다.
 

@@ -17,7 +17,6 @@ C언어의 Macro 문법을 정리한다.
 
 #### 1.2. 예제
 
-<figure>
 {% highlight c linenos %}
 #include <stdio.h>
 #define PRINT(s)    printf(#s)
@@ -28,13 +27,14 @@ int main()
     return 0;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] C Macro # 예제</figcaption>
 </figure>
 
-<figure>
 {% highlight text %}
 THIS IS TEST CODE
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 1] C Macro # 예제의 출력</figcaption>
 </figure>
 

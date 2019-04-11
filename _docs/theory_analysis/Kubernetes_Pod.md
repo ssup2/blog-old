@@ -78,23 +78,30 @@ spec:
 
 CPU Resource 값은 **milicpu**라는 독특한 단위를 이용한다. 1cpu는 1000milicpu와 동일하다. 여기서 1cpu는 Container가 보는 CPU Core 1개의 Bandwidth를 의미한다. Container가 물리 머신에서 동작하면 1cpu는 물리 CPU Core 1개의 Bandwith를 의미하고, container가 VM에 올라가 동작하면 1cpu는 가상 CPU인 vCPU Core 1개의 Bandwidth를 의미한다
 
-CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용되는 Cgroup의 CPU Quota를 설정하는데 이용된다. CPU Quota는 cfs_period_us와 cfs_quota_us라는 두개의 값으로 조작된다. cfs_period_us은 Quota의 주기를 의미하고 Default값은 100000이다. cfs_quota_us값은 Quota 주기 중에 얼만큼나 이용할지 설정하는 값이다. cfs_quota_us값도 100000으로 설정하면 아래와 같은 공식에 의해서 1cpu으로 CPU 사용량이 제한된다.
-
 > cfs_quota_us / cfs_period_us = 100000 / 100000 = 1
+<figure>
+<figcaption class="caption">[공식 1] /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-2cpu만 이용하도록 제한한다면 cfs_quota_us 값을 200000으로 설정하면 된다. CPU 할당은 Container가 동작하는 (v)CPU의 개수에 의해 제한된다. 예를 들어 Container가 동작하는 Node에 4 (v)CPU만 있는데 Container에게 8cpu를 할당 할 수는 없다. 최대 4cpu까지만 할당 할 수 있다.
+CPU Limit 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용되는 Cgroup의 CPU Quota를 설정하는데 이용된다. CPU Quota는 cfs_period_us와 cfs_quota_us라는 두개의 값으로 조작된다. cfs_period_us은 Quota의 주기를 의미하고 Default값은 100000이다. cfs_quota_us값은 Quota 주기 중에 얼만큼나 이용할지 설정하는 값이다. cfs_quota_us값도 100000으로 설정하면 [공식 1]에 의해서 1cpu으로 CPU 사용량이 제한된다.
 
-위와 같은 방식을 이해한다면 Kubernetes에서 CPU limit에 따라서 cfs_quota_us 값 어떻게 계산하여 넣는지 이해 할 수 있다. 만약 CPU limit를 500milicpu를 설정하였다면 아래와 같이 cfs_quota_us값이 계산된다.
+2cpu만 이용하도록 제한한다면 cfs_quota_us 값을 200000으로 설정하면 된다. CPU 할당은 Container가 동작하는 (v)CPU의 개수에 의해 제한된다. 예를 들어 Container가 동작하는 Node에 4 (v)CPU만 있는데 Container에게 8cpu를 할당 할 수는 없다. 최대 4 (v)CPU까지만 할당 할 수 있다.
 
 > cfs_quota_us = (500 / 1000) * cfs_period_us = 0.5 * 100000 = 50000
+<figure>
+<figcaption class="caption">[공식 2] /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-CPU Request 값은 Linux에서 Process의 Scheduling 가중치를 주는데 이용되는 Cgroup의 CPU Weight를 설정하는데 이용된다. Process A는 1024 Weight를 갖고 있고, Process B는 512 Weight를 갖고 있다면 Process A는 Process B보다 2배 많이 CPU Bandwith를 이용할 수 있게 된다. CPU weight를 활용하면 Container가 필요한 최소의 CPU Bandwith를 확보 할 수 있다.
-
-Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 750milicpu로 설정하였다면 Kubernetes는 아래와 식을 이용하여 shares 값을 설정한다. 만약 CPU Request를 설정하지 않아 shares가 0이 나왔다면 최소 shares 값인 2로 설정한다.
+[공식 1]을 이해한다면 Kubernetes에서 CPU limit에 따라서 cfs_quota_us 값을 어떻게 계산하여 넣는지 이해할 수 있다. 만약 CPU limit를 500milicpu를 설정하였다면 [공식 2]처럼 cfs_quota_us값은 50000이 된다.
 
 > shares(weight) = (750 / 1000) * 1024 = 768
+<figure>
+<figcaption class="caption">[공식 3] /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
 
-1000 milicpu를 갖고있는 Node에 750milicpu를 Container를 할당한다고 가정하자. shares는 위의 계산처럼 768이 된다. 이 Node에는 250milicpu만 남아있기 때문에 최대 250milicpu Container만 이 Node에 생성이 가능하다. 250milicpu Container의 share값은 256이다. share 값에 따라서 250 milicpu Container가 이 Node에 생성되더라도 처음 생성된 Container는 750milicpu를 보장받는다는 걸 알 수 있다. 이처럼 CPU Request 값은 CPU Weight와 Kubernets의 Pod Scheduling을 통해서 보장된다.
+CPU Request 값은 Linux에서 Process의 Scheduling 가중치를 주는데 이용되는 Cgroup의 CPU Weight를 설정하는데 이용된다. Process A는 1024 Weight를 갖고 있고, Process B는 512 Weight를 갖고 있다면 Process A는 Process B보다 2배 많이 CPU Bandwith를 이용할 수 있게 된다. CPU weight를 활용하면 Container가 필요한 최소의 CPU Bandwith를 확보 할 수 있다. Cgroup에서 CPU Weigth는 shares라는 값으로 표현된다. CPU Request를 750milicpu로 설정하였다면 Kubernetes는 [공식 3]을 이용하여 shares 값을 설정한다. 만약 CPU Request를 설정하지 않아 shares가 0이 나왔다면 최소 shares 값인 2로 설정한다.
+
+1000 milicpu를 갖고있는 Node에 750milicpu를 Container를 할당한다고 가정하자. shares는 [공식 3]처럼 768이 된다. 이 Node에는 250milicpu만 남아있기 때문에 최대 250milicpu Container만 이 Node에 생성이 가능하다. 250milicpu Container의 share값은 256이다. share 값에 따라서 250 milicpu Container가 이 Node에 생성되더라도 처음 생성된 Container는 750milicpu를 보장받는다는 걸 알 수 있다. 이처럼 CPU Request 값은 CPU Weight와 Kubernets의 Pod Scheduling을 통해서 보장된다.
 
 ##### 1.2.2. Memory
 
