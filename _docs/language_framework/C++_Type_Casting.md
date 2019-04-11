@@ -122,10 +122,10 @@ int main () {
   return 0;
 }
 {% endhighlight %}
-<figcaption class="caption">[Code 1] RELOC_HIDE() MACRO 함수</figcaption>
+<figcaption class="caption">[Code 6] const_cast 예제</figcaption>
 </figure>
 
-const_cast는 Type의 const 속성이나 volatile 속성을 제거하기 위해 이용된다. 위의 예제에서 const char* Type의 포인터 c를 const_cast를 이용하여 char*로 Type Casting하여 이용하고 있다.
+const_cast는 Type의 const 속성이나 volatile 속성을 제거하기 위해 이용된다. [Code 6]에서 const char* Type의 포인터 c를 const_cast를 이용하여 char*로 Type Casting하여 이용하고 있다.
 
 ### 2. 참조
 * [http://www.cplusplus.com/doc/oldtutorial/typecasting/](http://www.cplusplus.com/doc/oldtutorial/typecasting/)

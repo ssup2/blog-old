@@ -49,7 +49,7 @@ iptables는 Filter Table, NAT Table, Mangle Table, Raw Table, Security Table 총
 
 #### 2.2. Packet flow
 
-위 그림과 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다. Connection Tracking은 Netfilter Framework가 Packet의 정보를 바탕으로 Connection 추적을 시작하는 부분을 의미한다. 
+[그림 2]와 같이 Packet들은 각 Hook에서 여러 Table들을 통과하면서 처리된다. Hook 점선 안에 있는 검은 네모들은 Packet을 처리하는 iptables의 table들을 나타내고 있고, Hook 점선 밖에 있는 파란 네모들은 iptables와 관계없는 Packet 처리과정을 나타낸다. Connection Tracking은 Netfilter Framework가 Packet의 정보를 바탕으로 Connection 추적을 시작하는 부분을 의미한다.
 
 #### 2.3. Chain, Rule
 

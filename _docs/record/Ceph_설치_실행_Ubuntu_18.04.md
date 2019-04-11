@@ -23,7 +23,7 @@ adsense: true
 
 ![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_Ubuntu_18.04/Node_Setting.PNG)
 
-* VirtualBox를 이용하여 위의 그림과 같이 가상의 Node (VM)을 생성한다.
+* VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
 * Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * HDD : 각 Node에 Ceph가 이용할 추가 HDD (/dev/sdb)를 생성하고 붙인다.

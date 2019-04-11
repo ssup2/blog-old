@@ -37,7 +37,7 @@ VTEP은 가상 Network Packet이 Encapsulation되는 지점이기 때문에 Enca
 
 ![[그림 4] VXLAN Address Learning 과정]({{site.baseurl}}/images/theory_analysis/Overlay_Network_VXLAN/VXLAN_Address_Learning.PNG)
 
-[그림 4]는 가상 Network안에서 발생한 ARP Packet에 따른 VTEP의 MAC Address Learning 과정을 나타내고 있다. ARP Packet의 처리 과정을 통해서 VXLAN Broadcast의 처리 과정을 이해 할 수 있다. 위 그림의 모든 VTEP은 VNI 10과 239.1.1.1 Multicast Group을 Mapping하도록 설정되어 있다. 또한 VNI 10과 VLAN 1을 Mapping하도록 설정되어 있다.
+[그림 4]는 가상 Network안에서 발생한 ARP Packet에 따른 VTEP의 MAC Address Learning 과정을 나타내고 있다. ARP Packet의 처리 과정을 통해서 VXLAN Broadcast의 처리 과정을 이해 할 수 있다. [그림 4]의 모든 VTEP은 VNI 10과 239.1.1.1 Multicast Group을 Mapping하도록 설정되어 있고. 또한 VNI 10과 VLAN 1을 Mapping하도록 설정되어 있다.
 
 1. Machine A에서 IP B의 Mac Address를 알기 위해 ARP Request Packet을 VLAN ID 1과 함께 전송한다.
 

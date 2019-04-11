@@ -27,9 +27,13 @@ Cluster Map은 논리적인 Storage Device의 **계층**을 표현하는 지도�
 | select(1, disk) | disk2107 disk2313 disk2437 |
 | emit |  |
 
-Cluster Map의 계층 정보를 바탕으로 CEPH 관리자는 Replica의 배치를 자유롭게 설정할 수 있다. Replica를 같은 Disk 선반에 위치 시킬 수도 있고, 다른 Disk 선반에 위치 시킬 수도 있고, 다른 Server 캐비넷에 위치 시킬 수도 있다. 이러한 Replica 배치 설정은 좀더 물리적으로 Replica를 안전하게 보관할 수 있게 한다. Replica를 같은 전원을 이용하는 Disk 선반에 위치시키는 것 보다는, 다른 전원을 이용하는 Server 캐비넷에 위치시키는 것이 좀더 안전하게 Replica를 보존 할 수 있을것이다. 위의 예제는 CRUSH이 Server 캐비넷 단위로 3개의 Replica를 선택하는 과정을 나타내고 있다.
+<figure>
+<figcaption class="caption">[표 1] Clush Map 예제</figcaption>
+</figure>
 
-Cluster Map은 **Bucket**과 **Device**로 구성된다. Bucket은 논리적인 그룹으로 위의 예제에서 Server 캐비넷, Disk 선반이 될 수 있다. Bucket은 하위 Bucket을 가지거나 하위 Device를 갖을 수 있다. Device는 실제 Disk를 의미하며 Disk는 Cluster Map의 Leaf에만 위치 할 수 있다. Bucket과 Device는 각각 **Weight**를 가질 수 있다. Bucket의 Weight는 하위 Bucket들이나 하위 Disk들의 Weight의 합이다. 일반적으로 하위 Device의 용량에 비례하여 Weight를 설정한다. 따라서 Bucket의 Weight값은 Bucket에 속한 Disk 용량에 비례하게 된다.
+Cluster Map의 계층 정보를 바탕으로 CEPH 관리자는 Replica의 배치를 자유롭게 설정할 수 있다. Replica를 같은 Disk 선반에 위치 시킬 수도 있고, 다른 Disk 선반에 위치 시킬 수도 있고, 다른 Server 캐비넷에 위치 시킬 수도 있다. 이러한 Replica 배치 설정은 좀더 물리적으로 Replica를 안전하게 보관할 수 있게 한다. Replica를 같은 전원을 이용하는 Disk 선반에 위치시키는 것 보다는, 다른 전원을 이용하는 Server 캐비넷에 위치시키는 것이 좀더 안전하게 Replica를 보존 할 수 있을것이다. [표 1]은 CRUSH이 Server 캐비넷 단위로 3개의 Replica를 선택하는 과정을 나타내고 있다.
+
+Cluster Map은 **Bucket**과 **Device**로 구성된다. Bucket은 논리적인 그룹으로 [표 1]에서 Server 캐비넷, Disk 선반이 될 수 있다. Bucket은 하위 Bucket을 가지거나 하위 Device를 갖을 수 있다. Device는 실제 Disk를 의미하며 Disk는 Cluster Map의 Leaf에만 위치 할 수 있다. Bucket과 Device는 각각 **Weight**를 가질 수 있다. Bucket의 Weight는 하위 Bucket들이나 하위 Disk들의 Weight의 합이다. 일반적으로 하위 Device의 용량에 비례하여 Weight를 설정한다. 따라서 Bucket의 Weight값은 Bucket에 속한 Disk 용량에 비례하게 된다.
 
 각 Bucket에서 하위 Bucket이나 하위 Device를 선택하는 기준은 하위 Bucket이나 하위 Device이 갖고 있는 **Weight**와 하위 **Bucket Type**에 따라 달리진다.
 

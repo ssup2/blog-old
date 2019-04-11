@@ -177,7 +177,7 @@ public interface Toy {
 <figcaption class="caption">[Code 6] Interface Segregation 적용전</figcaption>
 </figure>
 
-위의 Toy Interface는 색깔, 이동, 비행 3가지 종류의 method를 정의하고 있다. 문제는 모든 장난감이 이동, 비행 기능을 갖고 있지 않기 때문에 이동, 비행 기능이 없는 Toy Class의 move, fly Method는 dummy Method가 된다는 점이 문제이다.
+[Code 6]의 Toy Interface는 색깔, 이동, 비행 3가지 종류의 method를 정의하고 있다. 문제는 모든 장난감이 이동, 비행 기능을 갖고 있지 않기 때문에 이동, 비행 기능이 없는 Toy Class의 move, fly Method는 dummy Method가 된다는 점이 문제이다.
 
 <figure>
 {% highlight java %}
