@@ -7,9 +7,12 @@ comment: true
 adsense: true
 ---
 
+### URL
 
 ![]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
 ![]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+
+### Block Quote
 
 {: .newline }
 > a = G * x, b = G * y
@@ -17,6 +20,8 @@ adsense: true
 <figure>
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
+
+### Table
 
 | | Read Uncommitted | Read Committed | Repeatable-Read | Serializable |
 |----|----|----|----|----|
@@ -28,6 +33,8 @@ adsense: true
 <figure>
 <figcaption class="caption">[표 1] DB Isolation Level에 따른 Issue</figcaption>
 </figure>
+
+### highligter
 
 {% highlight cpp linenos %}
 #include <iostream>
@@ -60,27 +67,7 @@ int main()
     return 0;
 }
 {% endhighlight %}
-
 <figure>
-{% highlight text %}
-# This file is generated from information provided by
-# the datasource.  Changes to it will not persist across an instance.
-# To disable cloud-init's network configuration capabilities, write a file
-# /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
-# network: {config: disabled}
-network:
-    ethernets:
-        eth0:
-            addresses:
-                - 172.34.0.100/24
-            dhcp4: false
-            gateway4: 172.34.0.1
-            nameservers:
-                addresses:
-                    - 8.8.8.8
-                search: []
-    version: 2
-{% endhighlight %}
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 

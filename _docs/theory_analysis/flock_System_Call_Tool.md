@@ -11,7 +11,12 @@ Unix System의 System Call중 하나인 flock System Call을 이해하고, Linux
 
 ### 1. flock() System Call
 
-> int flock(int fd, int operation)
+{% highlight C %}
+int flock(int fd, int operation)
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 1] flock() System Call</figcaption>
+</figure>
 
 파일에 Lock을 걸거나 푸는 System Call이다. 다음과 같은 Parameter를 이용한다.
 * fd - Open한 파일의 File Descriptor를 넣는다.
