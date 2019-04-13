@@ -44,17 +44,16 @@ Retype new UNIX password: kafka
 
 * /opt/kafka/config/server.properties 파일의 마지막에 아래의 내용을 추가한다.
 
-<figure>
 {% highlight text %}
 ...
 delete.topic.enable = true
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] /opt/kafka/config/server.properties</figcaption>
 </figure>
 
 * /lib/systemd/system/zookeeper.service에 아래의 내용을 저장한다.
 
-<figure>
 {% highlight text %}
 ...
 
@@ -72,12 +71,12 @@ Restart=on-abnormal
 [Install]
 WantedBy=multi-user.target
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] /lib/systemd/system/zookeeper.service</figcaption>
 </figure>
 
 * /lib/systemd/system/kafka.service에 아래의 내용을 저장한다.
 
-<figure>
 {% highlight text %}
 [Unit]
 Requires=zookeeper.service
@@ -93,6 +92,7 @@ Restart=on-abnormal
 [Install]
 WantedBy=multi-user.target
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 3] /lib/systemd/system/kafka.service</figcaption>
 </figure>
 

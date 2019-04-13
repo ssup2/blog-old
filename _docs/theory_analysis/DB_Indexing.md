@@ -15,10 +15,10 @@ DB의 Indexing 기법을 분석한다.
 
 DB Indexing 기법은 단어 그대로 Index(색인)를 생성하여 DB의 성능을 높이는 기법이다. [그림 1]은 DB Indexing 기법을 간략하게 나타내고 있다. 오른쪽 표는 DB Table을 나타내고 있고, 왼쪽 표는 생성한 Index를 나타내고 있다. Index는 State Field의 Record값을 **정렬**한 후 해당 Record값의 **위치**를 저장하고 있다.
 
-<figure>
 {% highlight sql %}
 SELECT * FROM Fruit_Info WHERE State = 'NC'
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Query 1] Select, Where 단일 조건문</figcaption>
 </figure>
 
@@ -30,22 +30,22 @@ DB는 생성한 Index를 이용하여 특정 SQL Query의 성능을 높일 수 �
 
 #### 1.1. Where
 
-<figure>
 {% highlight sql %}
 WHERE State = 'NC'
 WHERE State >= 'NC'
 WHERE State < 'NC'
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Query 2] Where 단일 조건문</figcaption>
 </figure>
 
 Index를 이용하여 WHERE 조건문을 이용하는 Query의 성능을 향상 시킬 수 있다. State Field의 Index가 존재할 때 같은 값뿐만 아니라, [Query 2]의 Where 조건문 처럼 크거나 작은 값을 찾을때에도 이용 가능하다.
 
-<figure>
 {% highlight sql %}
 WHERE State = 'NC' AND Fruit >= 'Apple' AND Fruit < 'Lemon'
 WHERE State > 'NC' AND Fruit >= 'Apple' AND Fruit < 'Lemon'
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Query 3] Where 복수 조건문</figcaption>
 </figure>
 
@@ -54,10 +54,10 @@ WHERE 조건문에 AND로 여러가지 조건이 추가되는 경우 조건의 �
 
 #### 1.2. Join
 
-<figure>
 {% highlight sql %}
 SELECT * FROM dept, emp WHERE dept.dept_id = emp.dept
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Query 4] Join</figcaption>
 </figure>
 
@@ -69,10 +69,10 @@ Index를 이용하여 Join Query의 성능을 향상 시킬 수 있다. DB는 [Q
 
 현재 대부분의 DB에서는 하나의 Field가 아니라 여러개의 Field를 결합하여 Index를 생성하는 기능을 지원하고 있다. 이러한 Index를 **Concatenated Index(결합인덱스)**라고 한다.  Concatenated Index 생성시 Field 결합 순서는 매우 중요하다. Field의 결합 순서대로 Record의 값을 붙여 Index를 생성하기 때문이다. [그림 1]에서 Fruit, State Field 순으로 Index를 생성하면 Index에는 OrangeFL값이 들어가고, State, Fruit 순으로 Index를 생성하면 Index에는 FLOrange값이 들어가게 된다.
 
-<figure>
 {% highlight sql %}
 SELECT * FROM Fruit_Info WHERE Fruit = 'Lemon' AND State = 'NC'
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Query 5] Select, Where 복수 조건문</figcaption>
 </figure>
 

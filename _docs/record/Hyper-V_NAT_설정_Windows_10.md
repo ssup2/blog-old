@@ -33,7 +33,6 @@ adsense: true
 * NAT로 구성한 Network 안에는 DHCP Server가 없기 때문에 수동으로 IP 설정이 필요하다.
   * /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 # This file is generated from information provided by
 # the datasource.  Changes to it will not persist across an instance.
@@ -53,6 +52,7 @@ network:
                 search: []
     version: 2
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 

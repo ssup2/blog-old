@@ -17,7 +17,6 @@ SOLID는 객체지향 프로그래밍에서 Class 설계시 5가지의 원칙을
 
 하나의 Class는 하나의 책임(Responsibility)를 갖는다. 즉 Class가 변경될 이유는 오직 한가지어야 한다는 의미이다.
 
-<figure>
 {% highlight java %}
 class Text {
     String text;
@@ -33,12 +32,12 @@ class Text {
     void printText() { ... }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] Single Responsibility 적용전</figcaption>
 </figure>
 
 Text Class는 Text를 변경하는 책임과 Text를 출력하는 책임 2가지의 책임을 갖고 있다.
 
-<figure>
 {% highlight java %}
 class Text {
     String text;
@@ -61,6 +60,7 @@ class Printer {
     void printText() { ... }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] Single Responsibility 적용후</figcaption>
 </figure>
 
@@ -70,7 +70,6 @@ Printer Class를 정의하고 Text Class가 갖고 있던 출력 책임을 Print
 
 기능 확장에는 열려 있으면서, 기존 Class의 변경은 닫혀 있어야 한다는 원칙이다. 즉 Class의 변경을 최소화 화면서 새로운 기능 추가는 자유롭게 가능해야 한다는 의미이다.
 
-<figure>
 {% highlight java %}
 public class ClaimApprovaManager {
 
@@ -87,12 +86,12 @@ public class ClaimApprovaManager {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 3] Open/closed 적용전</figcaption>
 </figure>
 
 ClaimApprovalManager Class는 Surveyor Class가 추가 될때마다 해당 Surveyor Class를 위한 ClaimApprovaManager의 Method가 추가되어야 하는 단점을 가지고 있다.
 
-<figure>
 {% highlight java %}
 public abstract class InsuranceSurveyor {
     public abstract boolean isValidClaim();
@@ -120,6 +119,7 @@ public class ClaimApprovalManager {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 4] Open/closed 적용후</figcaption>
 </figure>
 
@@ -129,7 +129,6 @@ ClaimApprovaManager는 InsuranceSurveyor Interface를 통해서 Code의 변화 �
 
 Subclass는 언제나 자신의 Superclass를 대신할 수 있어야 한다는 원칙이다. 즉 Superclass의 Method 기능을 Subclass에서 임의로 변경하거나 오류가 발생하도록 수정하면 안된다는 의미이다.
 
-<figure>
 {% highlight java %}
 public class Rectangle {
     protected double itsWidth;
@@ -156,6 +155,7 @@ public class Square : Rectangle {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 5] Liskov Substitution 예제</figcaption>
 </figure>
 
@@ -165,7 +165,6 @@ public class Square : Rectangle {
 
 Interface를 이용하여 Class 구성시, Interface는 Class 구성에 불필요한 Method까지 정의하게 만들면 안된다는 원칙이다. 즉 Interface를 기능단위로 작게 쪼개고 Class에서 필요한 Interface를 선택해 구현하라는 의미이다.
 
-<figure>
 {% highlight java %}
 public interface Toy {
     void setPrice(double price);
@@ -174,12 +173,12 @@ public interface Toy {
     void fly();
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 6] Interface Segregation 적용전</figcaption>
 </figure>
 
 [Code 6]의 Toy Interface는 색깔, 이동, 비행 3가지 종류의 method를 정의하고 있다. 문제는 모든 장난감이 이동, 비행 기능을 갖고 있지 않기 때문에 이동, 비행 기능이 없는 Toy Class의 move, fly Method는 dummy Method가 된다는 점이 문제이다.
 
-<figure>
 {% highlight java %}
 public interface Toy {
     void setPrice(double price);
@@ -194,6 +193,7 @@ public interface Flyable {
     void fly();
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 7] Interface Segregation 적용후</figcaption>
 </figure>
 
@@ -203,7 +203,6 @@ Toy Interface를 분리하여 Movable, Flyable Interface를 만들었다. Toy Cl
 
 Class간의 의존은 Interface를 통한 느슨한 관계를 유지해야 한다는 원칙이다. Instance A가 Interface B를 통해 Instance B를 참조하는 경우, Instance A는 Instance B가 정확히 어떤 동작을 수행하는지는 알지 못한채 Instance B에 의존하게 된다. 이처럼 호출당하는 Instance가 호출하는 Instance의 동작을 결정하기 때문에 Dependency Invsersion이라는 용어가 쓰인다.
 
-<figure>
 {% highlight java %}
 public class LightBulb {
     public void turnOn() {
@@ -236,12 +235,12 @@ public class ElectricSwitch {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 8] Dependency Invsersion 적용전</figcaption>
 </figure>
 
 ElectricSwitch Class는 LightBulb Class를 직접 참조하여 이용하고 있다. 새로운 전자제품이 추가 될때마다 ElectricSwith Class도 계속 변경되야 한다.
 
-<figure>
 {% highlight java %}
 public interface Switchable {
     void turnOn();
@@ -294,6 +293,7 @@ public class Fan implements Switchable {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 9] Dependency Invsersion 적용후</figcaption>
 </figure>
 

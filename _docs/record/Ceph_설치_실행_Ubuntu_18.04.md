@@ -33,7 +33,6 @@ adsense: true
 
 * Ceph Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -50,12 +49,12 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 * Ceph Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -67,12 +66,12 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 * Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -84,6 +83,7 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 3] Node 03의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
@@ -164,7 +164,6 @@ $ ssh-copy-id cephnode@node3
 
 * /home/cephdeploy/.ssh/config 파일을 다음과 같이 수정한다.
 
-<figure>
 {% highlight text %}
 Host node1
    Hostname node1
@@ -176,6 +175,7 @@ Host node3
    Hostname node3
    User cephnode
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 4] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
 </figure>
 
@@ -326,10 +326,10 @@ $ sudo ceph -s
 
 * 확인한 admin Key를 이용하여 /root/admin.secret 파일을 생성한다.
 
-<figure>
 {% highlight text %}
 AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 5] /root/admin.secret</figcaption>
 </figure>
 

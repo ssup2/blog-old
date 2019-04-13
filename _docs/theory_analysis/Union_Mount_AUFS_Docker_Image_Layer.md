@@ -50,10 +50,10 @@ AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있�
 
 ### 3. Docker Image Layer
 
-<figure>
 {% highlight text %}
 # mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 2] Docker에서 이용하는 AUFS Mount 명령어 예제</figcaption>
 </figure>
 

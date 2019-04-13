@@ -11,7 +11,6 @@ adsense: true
 
 여러 Thread에서 동시에 실행해도 문제 없는 함수를 의미한다. 여러 Thread가 같은 함수를 동시에 실행할 경우 가장 큰 문제는 함수가 이용하는 Thread간 공유자원이다. 공유자원을 Lock같은 동기화 기법으로 보호하여 공유 자원의 무결성을 보장해야한다. 이렇게 공유 자원의 무결성을 보장하는 함수를 Thread-safe 함수라고 한다. Thread-safe 함수는 Thread간 공유자원을 이용할 수도 있기 때문에 각 Thread가 Thread-safe 함수를 호출하는 시간에 따라 호출 결과가 달라질 수 있다.
 
-<figure>
 {% highlight c %}
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 int global_var = 0;
@@ -24,6 +23,7 @@ int thread_safe_function()
     return global_var;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] Thread-safe 함수 예제</figcaption>
 </figure>
 
@@ -33,7 +33,6 @@ int thread_safe_function()
 
 Thread-safe 함수와 마찬가지로 여러 Thread에서 동시에 실행이 가능하지만 Thread간 공유 자원를 이용하지 않는 함수를 의미한다. 공유 변수를 이용하지 않기 때문에 각 Thread는 언제나 같은 호출 결과를 얻을 수 있다. 이러한 성질을 Reentrancy(재진입 가능한) 하다라고 표현하기 때문에 Reentrant 함수라고 한다. Reentrant 함수는 Thread-safe 함수이지만 Thread-safe 함수는 Reentrant 함수라고 말할 수 없다.
 
-<figure>
 {% highlight c %}
 int reentrant_function()
 {
@@ -42,6 +41,7 @@ int reentrant_function()
     return global_var;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] /Reentrant 함수 예제</figcaption>
 </figure>
 

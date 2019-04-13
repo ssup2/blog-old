@@ -11,7 +11,6 @@ Spring의 Bean과 연관된 Annotation을 분석한다.
 
 ### 1. @Component
 
-<figure>
 {% highlight java linenos %}
 @Component
 public class MyComponentA {
@@ -21,6 +20,7 @@ public class MyComponentA {
 public class MyComponentB {
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] @Component 예제</figcaption>
 </figure>
 
@@ -28,7 +28,6 @@ public class MyComponentB {
 
 ### 2. @Configuration
 
-<figure>
 {% highlight java linenos %}
 package com.ssup2;
 
@@ -36,10 +35,10 @@ package com.ssup2;
 public class MyBeanB {
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] @@Configuration 예제1</figcaption>
 </figure>
 
-<figure>
 {% highlight java linenos %}
 @Configuration
 @ComponentScan("com.ssup2")
@@ -51,6 +50,7 @@ public class MyConfig {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 3] @@Configuration 예제2</figcaption>
 </figure>
 
@@ -58,7 +58,6 @@ public class MyConfig {
 
 #### 2.1. @Bean
 
-<figure>
 {% highlight java linenos %}
 public class MyBeanA {
 }
@@ -80,6 +79,7 @@ public class MyConfig {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 4] @Bean 예제</figcaption>
 </figure>
 
@@ -87,7 +87,6 @@ public class MyConfig {
 
 ### 3. @Service, @Controller, @Repository
 
-<figure>
 {% highlight java linenos %}
 @Service
 public class MyService {
@@ -101,6 +100,7 @@ public class MyController {
 public class MyRepository {
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 5] @Service, @Controller, @Repository 예제</figcaption>
 </figure>
 

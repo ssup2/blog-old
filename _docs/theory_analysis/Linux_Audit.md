@@ -19,8 +19,6 @@ Linux Audit은 Linux Kernel에서 발생하는 다양한 보안 관련 Event를 
 
 Audit은 Audit Event를 수집하기 위해서 기본적으로 **System Call Hooking**을 이용한다. App이 System Call을 호출하면 Kernel은 System Call 처리 중간 중간에 Audit Event를 위한 **Audit Log**를 작성하고 Queue에 Audit Log를 저장한다.
 
-
-<figure>
 {% highlight c %}
 #include <iostream>
 using namespace std;
@@ -46,6 +44,7 @@ struct task_struct{
   ...
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] Audit Context</figcaption>
 </figure>
 
@@ -61,7 +60,6 @@ Audit 관련 여러개의 User Level Tool/Process가 존재한다. auditd는 kau
 
 #### 1.3. Example
 
-<figure>
 {% highlight text %}
 # auditctl -w /usr/bin/passwd -p x
 # auditctl -w /etc/shadow -p r
@@ -79,6 +77,7 @@ type=PATH msg=audit(2018년 02월 14일 15:33:57.911:363) : item=0 name=/etc/sha
 type=CWD msg=audit(2018년 02월 14일 15:33:57.911:363) :  cwd=/root/linux
 type=SYSCALL msg=audit(2018년 02월 14일 15:33:57.911:363) : arch=x86_64 syscall=open success=yes exit=3 a0=0x7f995dee6c9d a1=O_RDONLY|O_CLOEXEC a2=0x1b6 a3=0x80000 items=1 ppid=12206 pid=14541 auid=unset uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts13 ses=unset comm=passwd exe=/usr/bin/passwd key=(null)
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 1] Audit 예제</figcaption>
 </figure>
 

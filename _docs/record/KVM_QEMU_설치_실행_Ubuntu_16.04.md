@@ -87,7 +87,6 @@ adsense: true
 * VM이 이용할 기본 tty를 설정한다.
   * mnt에 Mount된 etc/init/ttyS0.conf 파일을 아래와 같이 수정한다.
 
-<figure>
 {% highlight text %}
 # ttyS0 - getty
 #
@@ -104,13 +103,13 @@ stop on runlevel [!2345]
 respawn
 exec /sbin/getty -8 115200 ttyS0
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] etc/init/ttyS0.conf</figcaption>
 </figure>
 
 * VM의 Network를 설정한다.
   * mnt에 Mount된 etc/network/interfaces 파일을 아래와 같이 수정한다.
 
-<figure>
 {% highlight text %}
 # interfaces(5) file used by ifup(8) and ifdown(8)
 # Include files from /etc/network/interfaces.d
@@ -122,6 +121,7 @@ iface lo inet loopback
 auto eth0
 iface eth0 inet dhcp
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] etc/network/interfaces</figcaption>
 </figure>
 
@@ -181,7 +181,6 @@ route add default gw 192.168.77.1
 * vhost-scsi를 위한 LIO를 설정한다.
   * /var/target/fabric/vhost.spec 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight text %}
 # The fabric module feature set
 features = nexus, tpgts
@@ -196,6 +195,7 @@ kernel_module = vhost_scsi
 # The configfs group
 configfs_group = vhost
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 3] /var/target/fabric/vhost.spec</figcaption>
 </figure>
 

@@ -17,7 +17,6 @@ AppArmor는 Enforcement, Complain 2개의 Mode로 동작한다.
 * Enforcement - Program의 허용되지 않은 동작을 제한하고 Log에 남긴다. 실제 Program을 운영하면서 동작을 제한 할 때 이용하는 Mode이다.
 * Complain - Program의 허용되지 않은 동작을 제한하지는 않고 Log만 남긴다. 특정 Program의 AppArmor Profile을 작성할때 이용하는 Mode이다. Log를 통해서 AppArmor Profile 작성을 도움 받을 수 있다.
 
-<figure>
 {% highlight text %}
 # aa-status
 apparmor module is loaded.
@@ -72,6 +71,7 @@ apparmor module is loaded.
 0 processes are in complain mode.
 0 processes are unconfined but have a profile defined.
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 1] Apparmor 상태 확인</figcaption>
 </figure>
 
@@ -81,7 +81,6 @@ apparmor module is loaded.
 
 AppArmor Profile의 이름은 /로 시작하는 이름과 /로 시작하지 않는 이름으로 구분할 수 있다. /으로 시작하는 Profile인 경우 Profile이 이름이 해당 Profile이 적용될 프로그램을 나타내고 있다. [Shell 1]에서 조회된 Profile 목록 중에서 /usr/sbin/tcpdump Profile을 확인할 수 있는데, /usr/sbin/tcpdump 프로그램이 실행되면 /usr/sbin/tcpdump Profile이 자동으로 적용되어 동작하게 된다. /으로 시작하지 않는 Profile은 특정 Program을 동작시킬때 aa-exec 명령을 통해 수동으로 Profile을 적용시켜야 한다. 물론 /으로 시작하는 Profile도 aa-exec 명령을 통해 특정 Program에 Profile을 적용시킬 수 있다. Profile들은 **/etc/AppArmor.d**에 위치하고 있다.
 
-<figure>
 {% highlight text %}
 #include <tunables/global>
 
@@ -100,6 +99,7 @@ profile apparmor-example {
   network tcp,
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] apparmor-example Apparmor Profile</figcaption>
 </figure>
 
@@ -111,7 +111,6 @@ profile apparmor-example {
 * /root/test.sh 파일을 읽고, 쓰고, 실행 할 수 있다.
 * tcp Protocol만을 이용 할 수 있다.
 
-<figure>
 {% highlight text %}
 # apparmor_parser /etc/apparmor.d/test/apparmor-example
 # aa-status
@@ -126,12 +125,12 @@ apparmor module is loaded.
    lxc-container-default-cgns
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 2] Apparmor Profile 등록 및 확인</figcaption>
 </figure>
 
 [Shell 2]는 작성한 Profile을 apparmor_parser 명령어를 이용하여 AppArmor에 등록하고, aa-status 명령어를 이용하여 Profile 등록을 확인하는 과정을 나타내고 있다. 등록이 완료되면 aa-status 명령어를 통해 apparmor_parser Profile을 확인 할 수 있다.
 
-<figure>
 {% highlight shell %}
 #!/bin/bash
 
@@ -141,12 +140,12 @@ ping 127.0.0.1 -c 10
 
 while true; do sleep 1; done
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] Apparmor Test Script</figcaption>
 </figure>
 
 [Code 1]은 AppArmor Test를 위한 간단한 Script를 나타내고 있다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그 후 test.sh가 종료되지 않도록 while문을 수행한다.
 
-<figure>
 {% highlight text %}
 # aa-exec -p apparmor-example ./test.sh
 socket: Permission denied
@@ -158,6 +157,7 @@ apparmor-example (enforce)      root     20637 20635  0 13:38 pts/26   00:00:00 
 apparmor-example (enforce)      root     20640 20635  0 13:38 pts/26   00:00:00 sleep 1
 unconfined                      root     20641 20611  0 13:38 pts/29   00:00:00 ps -efZ
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 3] Apparmor 적용</figcaption>
 </figure>
 

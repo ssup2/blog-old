@@ -34,7 +34,6 @@ adsense: true
 * v3.ext 파일 생성 및 아래의 내용으로 작성한다.
   * CN (Common Name) - 192.168.0.100
 
-<figure>
 {% highlight text %}
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -44,6 +43,7 @@ subjectAltName = @alt_names
 [alt_names]
 IP.1 = 192.168.0.100
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] v3.ext</figcaption>
 </figure>
 

@@ -41,7 +41,6 @@ adsense: true
 
 * Master Node의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -58,6 +57,7 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] Master Node의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
@@ -65,7 +65,6 @@ network:
 
 * Worker Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -77,12 +76,12 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] Worker Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 * Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
-<figure>
 {% highlight yaml %}
 network:
     version: 2
@@ -94,6 +93,7 @@ network:
             nameservers:
                 addresses: [8.8.8.8]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 3] Worker Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
@@ -229,7 +229,6 @@ node3   NotReady   <none>   27s   v1.12.3
   * Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다.
   * cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 아래와 같이 변경한다.
 
-<figure>
 {% highlight yaml %}
 ...
       containers:
@@ -246,6 +245,7 @@ node3   NotReady   <none>   27s   v1.12.3
             - "--prefilter-mode=generic"
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 4] cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
 </figure>
 
@@ -279,7 +279,6 @@ node3   NotReady   <none>   27s   v1.12.3
 * kube-apiserver Insecure 설정
   * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용을 수정 및 추가한다.
 
-<figure>
 {% highlight yaml %}
 ...
 spec:
@@ -290,6 +289,7 @@ spec:
     - --insecure-port=8080
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 5] /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
 </figure>
 
@@ -302,7 +302,6 @@ spec:
 * Web UI Privilege 권한을 위한 config 파일을 생성한다.
   * 아래의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
 
-<figure>
 {% highlight yaml %}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -319,6 +318,7 @@ subjects:
   name: kubernetes-dashboard
   namespace: kube-system
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 6] ~/dashboard-admin.yaml</figcaption>
 </figure>
 
@@ -366,13 +366,13 @@ subjects:
 
 * rbac/clusterrole.yaml 파일에 아래의 내용 추가한다. (Secret Role)
 
-<figure>
 {% highlight yaml %}
 ...
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "create", "delete"]
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 7] rbac/clusterrole.yaml</figcaption>
 </figure>
 
@@ -386,7 +386,6 @@ subjects:
 
 * storage_class.yaml 파일 생성 및 아래의 내용으로 저장한다.
 
-<figure>
 {% highlight yaml %}
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -407,6 +406,7 @@ parameters:
   imageFormat: "2"
   imageFeatures: layering
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 8] storage_class.yaml</figcaption>
 </figure>
 

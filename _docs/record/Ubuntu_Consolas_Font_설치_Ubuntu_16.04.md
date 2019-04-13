@@ -30,7 +30,6 @@ adsense: true
 
 * 아래의 내용을 vim consolas.sh에 복사한다.
 
-<figure>
 {% highlight shell %}
 #!/bin/sh
 set -e
@@ -41,6 +40,7 @@ wget http://download.microsoft.com/download/E/6/7/E675FFFC-2A6D-4AB0-B3EB-27C9F8
 cabextract -L -F ppviewer.cab PowerPointViewer.exe
 cabextract ppviewer.cab
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] consolas.sh</figcaption>
 </figure>
 

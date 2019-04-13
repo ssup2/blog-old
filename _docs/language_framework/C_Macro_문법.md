@@ -46,7 +46,6 @@ THIS IS TEST CODE
 
 #### 2.2. 예제
 
-<figure>
 {% highlight c linenos %}
 #include <stdio.h>
 
@@ -61,16 +60,16 @@ int main()
     return 0;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] C Macro ## 예제</figcaption>
 </figure>
 
-<figure>
 {% highlight text %}
 i0 = 0
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 2] C Macro ## 예제의 출력</figcaption>
 </figure>
-
 
 ### 3. 가변 인자 Macro
 
@@ -84,19 +83,19 @@ i0 = 0
 
 ##### 3.2.1. 1999년 C 표준
 
-<figure>
 {% highlight c linenos %}
 #define debug(format, ...) fprintf (stderr, format, __VA_ARGS__)
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 3] 표준 C Macro 가변인자</figcaption>
 </figure>
 
 ##### 3.2.2. GCC
 
-<figure>
 {% highlight c linenos %}
 #define debug(format, args...) fprintf (stderr, format, args)
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 4] GCC C Macro 가변인자</figcaption>
 </figure>
 

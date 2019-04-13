@@ -17,7 +17,6 @@ CNI는 **Linux Container의 Network 설정 Spec**을 의미한다. Kubernetes, r
 
 #### 1.1 Conf (Configuration) 파일
 
-<figure>
 {% highlight json %}
 {
 	"cniVersion": "0.2.0",
@@ -35,6 +34,7 @@ CNI는 **Linux Container의 Network 설정 Spec**을 의미한다. Kubernetes, r
 	}
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] mynet.conf</figcaption>
 </figure>
 
@@ -49,7 +49,6 @@ Plugin은 Conf 파일에 정의된 Container Network에 특정 Container를 붙�
 * CNI_NETNS - Target Container의 Network Namespace File의 위치
 * CNI_IFNAME - Network Interface 이름
 
-<figure>
 {% highlight text %}
 # export CNI_COMMAND=ADD; export CNI_CONTAINERID=...
 # /opt/cni/bin/bridge < ~/test_cni/mynet.conf
@@ -67,6 +66,7 @@ Plugin은 Conf 파일에 정의된 Container Network에 특정 Container를 붙�
     "dns": {}
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Shell 1] mynet.conf 적용</figcaption>
 </figure>
 

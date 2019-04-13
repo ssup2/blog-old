@@ -29,7 +29,6 @@ adsense: true
 
 * android_winusb.inf (adt-bundle-windows-x86_64-20xxxxxx\sdk\extras\google\usb_driver\android_winusb.inf) 파일 아래에 아래의 내용 추가한다.
 
-<figure>
 {% highlight text %}
 ...
 [Google.NTx86]
@@ -43,6 +42,7 @@ adsense: true
 %CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_0002&REV_0100
 %CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_0002
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] adt-bundle-windows-x86_64-20xxxxxx\sdk\extras\google\usb_driver\android_winusb.inf</figcaption>
 </figure>
 

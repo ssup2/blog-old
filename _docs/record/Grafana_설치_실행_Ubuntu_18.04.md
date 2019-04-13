@@ -16,10 +16,10 @@ adsense: true
 
 * /etc/apt/sources.list에 다음의 내용을 추가한다.
 
-<figure>
 {% highlight text %}
 deb https://packagecloud.io/grafana/stable/debian/ stretch main
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] /etc/apt/sources.list</figcaption>
 </figure>
 

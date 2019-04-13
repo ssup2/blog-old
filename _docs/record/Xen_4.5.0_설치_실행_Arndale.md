@@ -151,7 +151,6 @@ Kernel Features -> Xen guest support on ARM <*>
 
 * /etc/xinetd.d/tftp 파일을 설정한다.
 
-<figure>
 {% highlight text %}
 service tftp
 {
@@ -167,6 +166,7 @@ service tftp
     flags           = IPv4
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] /etc/xinetd.d/tftp</figcaption>
 </figure>
 
@@ -237,7 +237,6 @@ service tftp
 # mv load-xen-tftp.scr.txt load-xen-uSD.scr.txt
 ~~~
 
-<figure>
 {% highlight text %}
 ...
 # Load Linux in memory
@@ -248,6 +247,7 @@ ext2load mmc 0:1 $xen_addr_r /xen-uImage
 ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] /etc/xinetd.d/tftp</figcaption>
 </figure>
 
@@ -297,7 +297,6 @@ ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb
 
 * /etc/schroot/chroot.d/trusty-armhf-cross 파일을 아래와 같이 수정한다.
 
-<figure>
 {% highlight text %}
 ...
 [trusty-armhf-cross]
@@ -305,6 +304,7 @@ ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb
 description=Debian trusty/armhf crossbuilder
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 3] /etc/schroot/chroot.d/trusty-armhf-cross</figcaption>
 </figure>
 
@@ -362,11 +362,11 @@ description=Debian trusty/armhf crossbuilder
 
 * /etc/network/interfaces를 설정한다.
 
-<figure>
 {% highlight text %}
 auto eth0
 iface eth0 inet dhcp
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 4] 기본 Root Filesystem Image의 /etc/network/interfaces</figcaption>
 </figure>
 
@@ -383,12 +383,12 @@ iface eth0 inet dhcp
 (chroot)# cp /etc/init/tty1.conf /etc/init/xvc0.conf
 ~~~
 
-<figure>
 {% highlight text %}
 ...
 respawn
 exec exec /sbin/getty -8 115200 hvc0
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 5] 기본 Root Filesystem Image의 /etc/init/xvc0.conf</figcaption>
 </figure>
 
@@ -545,7 +545,6 @@ EOF
 
 * DomU_01.cfg 파일을 생성한다.
 
-<figure>
 {% highlight text %}
 kernel = "/root/Xen_Guest/DomU_zImage"
 name = "DomU_01"
@@ -555,12 +554,12 @@ disk = [ 'phy:/dev/loop0,xvda,w' ]
 vif = ['bridge=xenbr0']
 extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 6] 기본 Root Filesystem Image의 DomU_01.cfg</figcaption>
 </figure>
 
 * DomU_02.cfg 파일을 생성한다.
 
-<figure>
 {% highlight text %}
 kernel = "/root/Xen_Guest/DomU_zImage"
 name = "DomU_02"
@@ -570,6 +569,7 @@ disk = [ 'phy:/dev/loop1,xvda,w' ]
 vif = ['bridge=xenbr0']
 extra = "earlyprintk=xenboot console=hvc0 rw rootwait root=/dev/xvda"
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 7] 기본 Root Filesystem Image의 DomU_02.cfg</figcaption>
 </figure>
 

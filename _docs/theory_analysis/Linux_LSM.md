@@ -41,7 +41,6 @@ LSM에 올라온 Security Module의 순서대로 Security Module의 Hook Functio
 
 먼저 LSM에 올라온 Security Module의 Hook Function이 먼져 수행되고 중간 Hook Function의 결과가 No라면 그 즉시 다음 Hook Function을 수행하지 않고 중단한다. [그림 5]처럼 Security Module이 설정되어 있는 상태에서 ptrace_access_check hook이 발생하면 가장 먼져 Capability의 ptrace_access_check Hook Function이 실행된다. Capability의 ptrace_access_check Hook Function의 결과가 Yes라면 Yama의 ptrace_access_check Hook Function이 수행된다. 만약 결과가 No라면 다음 Yama의 Hook Function을 수행하지 않고 바로 LSM을 빠져 나온다.
 
-<figure>
 {% highlight C linenos %}
 /**
  * security_init - initializes the security framework
@@ -73,6 +72,7 @@ int __init security_init(void)
 	return 0;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] security_init() 함수</figcaption>
 </figure>
 

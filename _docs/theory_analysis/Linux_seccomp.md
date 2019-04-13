@@ -23,7 +23,6 @@ seccomp은 Strict, Filter 2가지 Mode를 지원한다.
 
 exit(), sigreturn(), read(), write() 4가지의 System Call만을 이용 할 수 있다. 만약 4가지 이외의 System Call을 호출하는 경우 해당 Process는 SIGKILL Signal을 받고 바로 종료된다.
 
-<figure>
 {% highlight C %}
 #include <stdio.h>
 #include <sys/prctl.h>
@@ -43,6 +42,7 @@ int main() {
   return 0;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] seccomp Strict Mode</figcaption>
 </figure>
 
@@ -58,7 +58,6 @@ int main() {
 * SECCOMP_RET_TRACE - tracer에게 System Call 이벤트를 전달한다. 만약 tracer가 존재하지 않으면 -ENOSYS를 Return하고 System Call을 수행하지 않는다.
 * SECCOMP_RET_ALLOW - System Call을 수행한다.
 
-<figure>
 {% highlight C %}
 #include <stdio.h>
 #include <unistd.h>
@@ -94,6 +93,7 @@ int main() {
   return 0;
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] seccomp Filter Mode</figcaption>
 </figure>
 

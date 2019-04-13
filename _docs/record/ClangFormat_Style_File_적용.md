@@ -15,7 +15,6 @@ adsense: true
 
 * Project Root 폴더에 **.clang-format** 이름으로 아래의 Style File 생성한다.
 
-<figure>
 {% highlight text %}
 ---
 Language:        Cpp
@@ -113,6 +112,7 @@ TabWidth:        4
 UseTab:          Always
 ...
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] ProjectRoot/.clang-format</figcaption>
 </figure>
 

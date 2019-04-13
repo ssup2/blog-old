@@ -19,7 +19,6 @@ Java에서 Monitor Instance는 별도로 존재하지 않고 **일반 Instance�
 
 #### 2.1 Synchronized Method
 
-<figure>
 {% highlight java linenos %}
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +42,7 @@ public class TwoMap {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 1] Synchronized Method</figcaption>
 </figure>
 
@@ -50,7 +50,6 @@ Synchronized Keyword는 일반적으로 Method와 많이 이용된다. [Code 1]�
 
 #### 2.2. Synchronized with Instance
 
-<figure>
 {% highlight java linenos %}
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +83,7 @@ public class TwoMap {
     }
 }
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[Code 2] Synchronized Instance</figcaption>
 </figure>
 

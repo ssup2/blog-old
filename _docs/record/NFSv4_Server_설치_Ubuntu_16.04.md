@@ -38,11 +38,11 @@ adsense: true
 
 * /etc/fstab에 다음 내용을 추가하여 재부팅 후에도 Bind Mount 되도록 설정한다.
 
-<figure>
 {% highlight text %}
 ...
 /root/nfs_share /export/nfs_root none bind  0  0
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] /etc/fstab</figcaption>
 </figure>
 
@@ -50,11 +50,11 @@ adsense: true
 
 * /etc/exports 파일에 다음의 내용을 추가한다.
 
-<figure>
 {% highlight text %}
 /export               *(rw,fsid=0,insecure,no_subtree_check,async)
 /export/nfs_root      *(rw,nohide,insecure,no_subtree_check,async)
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 2] /etc/exports</figcaption>
 </figure>
 

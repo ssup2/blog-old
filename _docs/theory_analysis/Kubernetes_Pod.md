@@ -37,7 +37,6 @@ Pod의 Resource에는 **CPU**와 **Memory**가 있다. CPU와 Memory 둘다 Linu
 
 Kubernetes는 Guaranteed, Burstable, BestEffort라는 3개의 QoS Class를 제공한다. Pod의 Resource 설정에 따라서 Pod의 QoS는 3개의 Class중 하나의 Class에 속하게 된다. Burstable, BestEffort Class에 속한 Pod은 해당 Cgroup 아래 속하게 된다. 그리고 Guaranteed Cgroup에 속한 Pod은 Kubernetes가 생성한 최상위 Cgroup인 kubepods Cgroup아래 속하게 된다. kubepods Cgroup은 cpu, memory, freezer 같은 모든 Cgroup 아래 각각 생성된다.
 
-<figure>
 {% highlight yaml %}
 apiVersion: v1
 kind: Pod
@@ -67,6 +66,7 @@ spec:
         memory: "128Mi"
         cpu: "500m"
 {% endhighlight %}
+<figure>
 <figcaption class="caption">[파일 1] Kubernetes Pod 예제</figcaption>
 </figure>
 
