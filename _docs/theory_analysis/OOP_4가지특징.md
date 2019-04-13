@@ -23,7 +23,7 @@ Class의 변수와 Method를 **물려받아** Class를 정의하는 방법을 �
 
 Class의 같은 Method를 호출해도 각기 **다른 Method**가 호출되는 특징을 다형성의 특징이라고 부른다. Method의 이름은 같지만 Method의 Parameter의 Type, Parameter의 개수, Return Type에 따라서 실제로 다른 Method가 호출되도록 구현할 수 있는데 이러한 기능을 **Overloading**이라고 한다.
 
-{% highlight java %}
+{% highlight java linenos %}
 class Parent {
     public void print(){
         System.out.println("Parent");
