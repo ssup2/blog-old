@@ -1,6 +1,6 @@
 ---
 title: Kubernetes Pod
-category: Theory, Analysis
+category:
 date: 2018-06-05T12:00:00Z
 lastmod: 2018-06-05T12:00:00Z
 comment: true
