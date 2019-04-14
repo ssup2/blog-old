@@ -27,7 +27,7 @@ RADOS Gateway는 동시에 여러대가 운영될 수 있으며 Single Point of 
 
 ##### 1.1.2. Block Storage
 
-Ceph가 Block Storage로 동작할때는 Linux Kernel의 RDB Module이나, Librados 기반의 Librbd이 RADOS Cluster의 Client가 된다. Kernel은 RBD Module을 통해 RADOS Cluster로부터 Block Storage를 할당받고 이용 할 수 있다. QEMU는 Librbd를 통해서 VM에게 줄 Block Storage를 할당 받을 수 있다.
+Ceph가 Block Storage로 동작할때는 Linux Kernel의 RDB Module이나, Librados를 기반으로하는 Librbd이 RADOS Cluster의 Client가 된다. Kernel은 RBD Module을 통해 RADOS Cluster로부터 Block Storage를 할당받고 이용 할 수 있다. QEMU는 Librbd를 통해서 VM에게 줄 Block Storage를 할당 받을 수 있다.
 
 ##### 1.1.3. File Storage
 
@@ -47,7 +47,7 @@ Node의 각 Disk마다 별도의 OSD Daemon이 동작한다. Disk는 주로 XFS 
 
 ##### 1.2.2. Monitor
 
-Monitor는 OSD Map, MDS Map, CRUSH Map, Monitor Map 등과 같은 RADOS Cluster 상태 정보를 관리하고 유지하는 Daemon이다. 또한 Ceph의 보안을 관리하거나 Log를 남기는 기능도 담당한다. Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 **Paxos** 알고리즘을 이용하여 다수의 Monitor가 운영될 시 Monitor간의 Consensus를 맞춘다.
+**Cluster Map**은 RADOS Cluster를 운영 및 유지에 필요한 정보로써 Monitor Map, OSD Map, PG Map, CRUSH Map, MDS Map으로 구성되어 있다. Monitor는 이러한 Cluster Map을 관리하고 유지하는 Daemon이다. 또한  Monitor는 Ceph의 보안을 관리하거나 Log를 남기는 기능도 담당한다. Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 **Paxos** 알고리즘을 이용하여 다수의 Monitor가 운영될 시 Monitor간의 Consensus를 맞춘다.
 
 ##### 1.2.3. MDS (Meta Data Server)
 
@@ -56,6 +56,10 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 ![[그림 3] Ceph MDS Namespace]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_MDS_Namespace.PNG){: width="600px"}
 
 [그림 3]은 Ceph File System의 Namespace를 나타내고 있다. Tree 모양은 File System의 Directory 구조를 나타낸다. Ceph에서는 전체 Tree 또는 Sub Tree를 Namespace라고 표현한다. 각 MDS는 하나의 Namespace만 관리하고, 관리하는 Namespace와 연관된 Meta Data만 관리한다. Namespace는 Tree의 부하상태 및 Replica 상태에 따라 동적으로 바뀐다.
+
+##### 1.2.4. Client (Librados, RBD Module, Ceph File System)
+
+위에서 언급한 것처럼 Librados, Kernel의 RBD Module, Kernel의 Ceph File System은 RADOS Cluster의 Client 역활을 수행한다. Client는 Ceph 관리자가 Config 파일에 써놓은 **Monitor IP List**를 통해서 Monitor에 직접 연결하여 Monitor가 관리하는 Cluster Map 정보를 얻어온다. 그 후 Client는 Cluster Map에 있는 OSD Map, MDS Map등의 정보를 이용하여 OSD, MDS에 직접 접속하여 필요한 동작을 수행한다.
 
 #### 1.3. CRUSH, CRUSH Map
 
@@ -73,7 +77,7 @@ CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica �
 
 ![[그림 6] Ceph Read/Write]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Read_Write.PNG){: width="600px"}
 
-Ceph의 특징 중 하나는 Ceph Client가 OSD에 바로 접근하여 Object를 관리한다는 점이다. [그림 6]은 Ceph의 Read/Write 과정을 나타내고 있다. Ceph Client는 RADOS Cluster의 Monitor로부터 CRUSH Map 정보를 받는다. 그 후 Client는 별도의 외부 통신 없이 CRUSH Map과 CRUSH를 통해서 접근하려는 Object가 있는 OSD의 위치를 파악 할 수 있다.
+Ceph의 특징 중 하나는 Ceph Client가 OSD에 바로 접근하여 Object를 관리한다는 점이다. [그림 6]은 Ceph의 Read/Write 과정을 나타내고 있다. Ceph Client는 Read/Write를 수행하기전에 **RADOS Cluster의 Monitor로부터 CRUSH Map 정보를 얻는다.** 그 후 Client는 별도의 외부 통신 없이 CRUSH Map과 CRUSH를 이용하여 접근하려는 Object가 있는 OSD의 위치를 파악할 수 있다.
 
 CRUSH를 통해 결정된 OSD 중에서 첫번째 OSD를 **Primary OSD**라고 표현한다. Read 과정의 경우 Primary OSD만을 이용하여 Read 동작을 수행한다. Write 과정의 경우 Client는 Primary OSD에게 Object와 같이 Object의 Replica가 저장될 추가 OSD 정보도 같이 보낸다. Primary OSD는 Client로부터 Object를 다 받으면, 받은 Object를 나머지 OSD들에게 전송한다. 모든 전송이 완료된뒤 Primary OSD는 Client에게 Write Ack를 전송한다.
 
