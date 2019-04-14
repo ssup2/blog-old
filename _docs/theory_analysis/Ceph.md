@@ -47,7 +47,7 @@ Node의 각 Disk마다 별도의 OSD Daemon이 동작한다. Disk는 주로 XFS 
 
 ##### 1.2.2. Monitor
 
-**Cluster Map**은 RADOS Cluster를 운영 및 유지에 필요한 정보로써 Monitor Map, OSD Map, PG Map, CRUSH Map, MDS Map으로 구성되어 있다. Monitor는 이러한 Cluster Map을 관리하고 유지하는 Daemon이다. 또한  Monitor는 Ceph의 보안을 관리하거나 Log를 남기는 기능도 담당한다. Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 **Paxos** 알고리즘을 이용하여 다수의 Monitor가 운영될 시 Monitor간의 Consensus를 맞춘다.
+**Cluster Map**은 RADOS Cluster를 운영 및 유지에 필요한 정보로써 Monitor Map, OSD Map, PG Map, CRUSH Map, MDS Map으로 구성되어 있다. Monitor는 이러한 Cluster Map을 관리하고 유지하는 Daemon이다. 또한  Monitor는 Ceph의 보안을 관리하거나 Log를 남기는 기능도 담당한다. Monitor는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 Monitor를 운영하는것이 좋다. Monitor는 다수의 Monitor가 운영될시 **Paxos** 알고리즘을 이용하여 각 Monitor가 저장하고 있는 Cluster Map의 Consensus를 맞춘다.
 
 ##### 1.2.3. MDS (Meta Data Server)
 
@@ -59,7 +59,7 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 
 ##### 1.2.4. Client (Librados, RBD Module, Ceph File System)
 
-위에서 언급한 것처럼 Librados, Kernel의 RBD Module, Kernel의 Ceph File System은 RADOS Cluster의 Client 역활을 수행한다. Client는 Ceph 관리자가 Config 파일에 써놓은 **Monitor IP List**를 통해서 Monitor에 직접 연결하여 Monitor가 관리하는 Cluster Map 정보를 얻어온다. 그 후 Client는 Cluster Map에 있는 OSD Map, MDS Map등의 정보를 이용하여 OSD, MDS에 직접 접속하여 필요한 동작을 수행한다.
+위에서 언급한 것처럼 Librados, Kernel의 RBD Module, Kernel의 Ceph File System은 RADOS Cluster의 Client 역활을 수행한다. Client는 Ceph 관리자가 Config 파일에 써놓은 **Monitor IP List**를 통해서 Monitor에 직접 연결하여 Monitor가 관리하는 Cluster Map 정보를 얻어온다. 그 후 Client는 Cluster Map에 있는 OSD Map, MDS Map등의 정보를 이용하여 OSD, MDS에 직접 접속하여 필요한 동작을 수행한다. 각 Client와 Monitor가 저장하고 있는 Cluster Map들의 Consensus도 paxos 알고리즘을 이용하여 맞춘다.
 
 #### 1.3. CRUSH, CRUSH Map
 
