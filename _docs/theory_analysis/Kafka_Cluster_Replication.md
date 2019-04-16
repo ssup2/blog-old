@@ -24,7 +24,7 @@ Kafka Cluster는 Partition을 최대한 각 Node에 분산시켜 Load Balancing�
 
 ![[그림 2] Kafka Replication]({{site.baseurl}}/images/theory_analysis/Kafka_Cluster_Replication/Kafka_Cluster_Replication.PNG)
 
-Kafka는 Partition Replication을 지원한다. [그림 2]는 Topic A와 Topic B는 Replica 2, Topic C는 Replica 3으로 설정한 상태를 나타내고 있다. Partition이 Replication이 되어도 Producer와 Consumer는 **오직 하나의 Partition**만을 이용한다. Kafka에서는 Producer와 Consumer가 이용하는 Partition은 **Leader**라고 부르며 나머지 복재본은 **Follower**라고 부른다. Leader Partition과 Follower Partition 사이의 Replication은 Producer의 ACK 설정에 따라서 Sync 방식, Async 방식 둘다 이용이 가능하다.
+Kafka는 Partition Replication을 지원한다. Replica는  [그림 2]는 Topic A와 Topic B는 Replica 2, Topic C는 Replica 3으로 설정한 상태를 나타내고 있다. Partition이 Replication이 되어도 Producer와 Consumer는 **오직 하나의 Partition**만을 이용한다. Kafka에서는 Producer와 Consumer가 이용하는 Partition은 **Leader**라고 부르며 나머지 복재본은 **Follower**라고 부른다. Leader Partition과 Follower Partition 사이의 Replication은 Producer의 ACK 설정에 따라서 Sync 방식, Async 방식 둘다 이용이 가능하다.
 
 ### 3. 참조
 
