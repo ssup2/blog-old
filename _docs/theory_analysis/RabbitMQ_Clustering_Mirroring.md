@@ -37,13 +37,19 @@ Mirroring 정책이 변경되거나, Cluster에 새로운 RabbitMQ가 추가되�
 
 Master Queue가 있는 RabbitMQ가 죽으면 일반적으로 Slave Queue 중에서 가장 오래된 Slave Queue가 Master Queue로 승격된다. 이때 RabbitMQ는 기본적으로 Unsynchronised Slave Queue를 승격 대상에서 제외시킨다. 만약 모든 Slave Queue가 Unsynchronised 상태에서 Master Queue의 RabbitMQ가 죽는다면, Master Queue의 RabbitMQ가 복구될때까지 해당 Queue는 이용하지 못한다. 만약 Master Queue의 RabbitMQ를 복구하지 못한다면 Message 손실이 발생한다. 설정을 통해서 RabbitMQ가 Unsynchronised Slave Queue를 Master로 승격시키도록 만들 수 있지만 Message 손실을 피할 수는 없다.
 
-### 3. 참조
+### 3. RabbitMQ Cluster 확장
+
+RabbitMQ Cluster는 동작중에 RabbitMQ를 추가할 수 있다. RabbitMQ는 **Peer Discovery Plugin**을 통해서 Cluster에 추가된 RabbitMQ를 자동으로 발견하고 Clustering까지 수행한다. Peer Discovery Plugin은 현재 4가지를 지원하고 있으며 각각 Consul, etcd, Kubernetes, AWS를 기반으로 하고 있다. RabbitMQ Cluster에 RabbitMQ를 추가하였어도 추가된 RabbitMQ에 Queue가 없다면, 추가된 RabbitMQ로는 부하가 제대로 분산되지 않는다. 따라서 Cluster에 RabbitMQ를 추가한 뒤에는 **Queue Rebalancing**을 통해서 Cluster 부하를 분산시켜야 한다. Queue Rebalancing 작업은 Script 수행이나 Qeueu Rebalancing Plugin을 통해서 진행이 가능하다.
+
+### 4. 참조
 
 * [https://www.rabbitmq.com/clustering.html](https://www.rabbitmq.com/clustering.html)
 * [https://www.rabbitmq.com/ha.html](https://www.rabbitmq.com/ha.html)
+* [https://www.rabbitmq.com/cluster-formation.html](https://www.rabbitmq.com/cluster-formation.html)
 * [https://www.rabbitmq.com/distributed.html](https://www.rabbitmq.com/distributed.html)
 * [https://www.rabbitmq.com/reliability.html](https://www.rabbitmq.com/reliability.html)
 * [https://www.rabbitmq.com/confirms.html](https://www.rabbitmq.com/confirms.html)
 * [https://m.blog.naver.com/tmondev/221051503100](https://m.blog.naver.com/tmondev/221051503100)
 * [https://www.slideshare.net/visualdensity/rabbit-fairlyindepth](https://www.slideshare.net/visualdensity/rabbit-fairlyindepth)
-* [https://tech.labs.oliverwyman.com/blog/2015/12/18/the-end-to-end-principle-and-rabbitmq-queue-mirroring/]
+* [https://tech.labs.oliverwyman.com/blog/2015/12/18/the-end-to-end-principle-and-rabbitmq-queue-mirroring/](https://tech.labs.oliverwyman.com/blog/2015/12/18/the-end-to-end-principle-and-rabbitmq-queue-mirroring/)
+* [https://github.com/Ayanda-D/rabbitmq-queue-master-balancer](https://github.com/Ayanda-D/rabbitmq-queue-master-balancer)
