@@ -39,7 +39,7 @@ Master Queue가 있는 RabbitMQ가 죽으면 일반적으로 Slave Queue 중에�
 
 ### 3. RabbitMQ Cluster 확장
 
-RabbitMQ Cluster는 동작중에 RabbitMQ를 추가할 수 있다. RabbitMQ는 **Peer Discovery Plugin**을 통해서 Cluster에 추가된 RabbitMQ를 자동으로 발견하고 Clustering까지 수행한다. Peer Discovery Plugin은 현재 4가지를 지원하고 있으며 각각 Consul, etcd, Kubernetes, AWS를 기반으로 하고 있다. RabbitMQ Cluster에 RabbitMQ를 추가하였어도 추가된 RabbitMQ에 Queue가 없다면, 추가된 RabbitMQ로는 부하가 제대로 분산되지 않는다. 따라서 Cluster에 RabbitMQ를 추가한 뒤에는 **Queue Rebalancing**을 통해서 Cluster 부하를 분산시켜야 한다. Queue Rebalancing 작업은 Script 수행이나 Queue Rebalancing Plugin을 통해서 진행이 가능하다.
+RabbitMQ Cluster는 동작중에 RabbitMQ를 추가할 수 있다. RabbitMQ는 **Peer Discovery Plugin**을 통해서 Cluster에 추가된 RabbitMQ를 자동으로 발견하고 Clustering까지 수행한다. Peer Discovery Plugin은 현재 4가지를 지원하고 있으며 각각 Consul, etcd, Kubernetes, AWS를 기반으로 하고 있다. RabbitMQ Cluster에 RabbitMQ를 추가하였어도 추가된 RabbitMQ에 Queue가 없다면, 추가된 RabbitMQ로는 부하가 제대로 분산되지 않는다. 따라서 Cluster에 RabbitMQ를 추가한 뒤에는 **Queue Rebalancing**을 통해서 Cluster 부하를 분산시켜야 한다. Queue Rebalancing 작업은 RabbitMQ에서 제공하는 Script 수행이나 Queue Rebalancing Third-party Plugin을 통해서 진행이 가능하다.
 
 ### 4. 참조
 
