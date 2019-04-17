@@ -80,14 +80,14 @@ CPU Resource 값은 **milicpu**라는 독특한 단위를 이용한다. 1000mili
 > (cfs_quota_us / cfs_period_us) * 1000 = Limit milicpu
 > (150000 / 100000) * 1000 = 1500 milicpu
 <figure>
-<figcaption class="caption">[공식 1] /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[공식 1] CPU Quota 계산 01</figcaption>
 </figure>
 
 {: .newline }
 > (milicpu / 1000) * cfs_period_us = cfs_quota_us
 > 0.5 * 100000 = 50000
 <figure>
-<figcaption class="caption">[공식 2] /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[공식 2] CPU Quota 계산 02</figcaption>
 </figure>
 
 **CPU Limit** 값은 Linux에서 Process의 CPU Bandwidth를 제한하는데 이용되는 Cgroup의 CPU Quota를 설정하는데 이용된다. CPU Quota는 cfs_period_us와 cfs_quota_us라는 두개의 값으로 조작된다. cfs_period_us은 Quota 주기를 의미하고 Default 값은 100000이다. cfs_quota_us은 Quota 주기동간 최대 얼마만큼 CPU를 이용할지 설정하는 값이다. cfs_quota_us값을 150000으로 설정하면 [공식 1]에 의해서 Container는 최대 1500milicpu만 이용 할 수 있다. 
@@ -99,7 +99,7 @@ CPU Resource 값은 **milicpu**라는 독특한 단위를 이용한다. 1000mili
 > Contaier A - (1500 / 2000) * 1024 = 768
 > Contaier B - (500 / 2000) * 1024 = 256
 <figure>
-<figcaption class="caption">[공식 3] /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[공식 3] CPU Weight 계산</figcaption>
 </figure>
 
 **CPU Request** 값은 Linux에서 Process의 Scheduling 가중치를 주는데 이용되는 Cgroup의 CPU Weight를 설정하는데 이용된다. Cgroup에서 CPU Weigth는 shares라는 값으로 조작된다. Process A는 1024 shares를 갖고 있고, Process B는 512 shares를 갖고 있다면 Process A는 Process B보다 2배 많은 CPU Bandwith를 이용할 수 있게 된다. CPU Weight와 Kubernets의 Pod Scheduling을 이용하면 Container가 요구하는 CPU Request 값을 Container에게 제공할 수 있다.
