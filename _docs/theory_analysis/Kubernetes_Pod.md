@@ -96,8 +96,8 @@ CPU Resource 값은 **milicpu**라는 독특한 단위를 이용한다. 1000mili
 
 {: .newline }
 > (Request milicpu / Node Total milicpu) * 1024 = shares
-> Contaier A - (1500 / 2000) * 1024 = 768
-> Contaier B - (500 / 2000) * 1024 = 256
+> Contaier A : (1500 / 2000) * 1024 = 768
+> Contaier B : (500 / 2000) * 1024 = 256
 <figure>
 <figcaption class="caption">[공식 3] CPU Weight 계산</figcaption>
 </figure>
