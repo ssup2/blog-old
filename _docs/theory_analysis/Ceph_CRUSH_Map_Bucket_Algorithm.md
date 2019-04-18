@@ -15,7 +15,7 @@ Ceph에서 Storage Topology를 나타내는 CRUSH Map을 분석하고 CRUSH Map�
 
 Ceph는 RADOS Cluster의 OSD (Object Storage Daemon)에 Object를 배치하는 알고리즘으로 **CRUSH**를 이용한다. [그림 1]은 CRUSH를 통해서 Object가 OSD에 배치되는 과정을 나타내고 있다. Object는 Object ID의 Hashing을 통해 특정 PG (Placement Group)에 할당된다. 그리고 PG는 다시 PG ID와 CRUSH를 통해서 특정 OSD에 할당된다. [그림 1]은 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH는 Object 하나당 3개의 OSD를 할당한다.
 
-![[그림 2] Ceph CRUSH Map]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/Ceph_CRUSH_Map.PNG){: width="600px"}
+![[그림 2] Ceph CRUSH Map]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/Ceph_CRUSH_Map.PNG){: width="700px"}
 
 CRUSH는 **CRUSH Map**이라고 불리는 Storage Topology를 이용한다. [그림 2]은 CRUSH Map을 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다.
 
