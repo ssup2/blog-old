@@ -69,11 +69,13 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 
 ![[그림 5] Ceph CRUSH Map]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
 
-CRUSH는 **CRUSH Map**이라는 Storage Topology를 이용한다. [그림 5]는 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. 
+CRUSH는 **CRUSH Map**이라는 Storage Topology를 이용한다. [그림 5]는 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다.
 
-각 Bucket은 **Weight**값을 가지고 있는데 Weight는 각 Bucket이 갖고있는 Object의 비율을 나타낸다. 만약 Bucket A의 Weight가 100이고 Bucket B의 Weight가 200이라면 Bucket B가 Bucket A보다 2배많은 Object를 갖는다는걸 의미한다. 따라서 일반적으로 osd Bucket Type의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket Type의 weight는 모든 하위 Bucket의 Weight의 합이다.
+각 Bucket은 **Weight**값을 가지고 있는데 Weight는 각 Bucket이 갖고있는 Object의 비율을 나타낸다. 만약 Bucket A의 Weight가 100이고 Bucket B의 Weight가 200이라면 Bucket B가 Bucket A보다 2배많은 Object를 갖는다는걸 의미한다. 따라서 일반적으로 osd Bucket Type의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket Type의 weight는 모든 하위 Bucket의 Weight의 합이다. [그림 5]의 Bucket안에 있는 숫자는 Weight를 나타내고 있다.
 
-CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Object의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 CRUSH에 의해 선택된 3개의 Rack에 하나씩 존재하게 된다. Bucket은 자신의 하위 Bucket을 선택하는 다양한 알고리즘을 제공한다. 각 알고리즘은 장단점을 갖고 있으며 알고리즘에는 Uniform, List, Tree, Straw가 있다.
+CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Object의 Replica 개수, 위치는 CRUSH Map과 Bucket Type에 설정된 Replica에 따라 정해진다. Rack Bucket Type에는 3개의 Replica를 설정하고 Row Bucket Type에는 2개의 Replica를 설정하였다면, CRUSH는 3개의 Rack Bucket을 선택하고 선택한 Rack Bucket의 하위 Bucket인 Row Bucket을 각 Rack Bucket당 2개씩 선택하기 때문에 Object의 Replica는 6이 된다.
+
+Bucket은 자신의 하위 Bucket을 선택하는 다양한 알고리즘을 제공한다. 각 알고리즘은 장단점을 갖고 있으며 알고리즘에는 Uniform, List, Tree, Straw가 있다.
 
 #### 1.4. Read/Write
 
