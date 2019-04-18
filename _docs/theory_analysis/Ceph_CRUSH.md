@@ -1,5 +1,5 @@
 ---
-title: Ceph CRUSH Map
+title: Ceph CRUSH
 category: 
 date: 2018-05-14T12:00:00Z
 lastmod: 2018-05-15T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-### 1. Ceph CRUSH Map
+### 1. Ceph CRUSH
 
 #### 1.1. Uniform
 
