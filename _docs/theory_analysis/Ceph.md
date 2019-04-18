@@ -65,13 +65,15 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 
 ![[그림 4] Ceph PG, CRUSH]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_PG_CRUSH.PNG){: width="600px"}
 
-**CRUSH**는 Object를 어느 OSD에 배치할지 결정하는 알고리즘이다. Replica 설정시 Replica의 위치까지 CRUSH를 통해 결정된다. [그림 4]는 Object가 OSD에 할당되는 과정을 나타내고 있다. Object는 Hashing을 통해 특정 PG(Placement Group)에 할당된다. 그리고 PG는 다시 CRUSH를 통해서 특정 OSD에 할당된다. [그림 4]는 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH은 3개의 OSD를 할당한다.
+**CRUSH**는 Object를 어느 OSD에 배치할지 결정하는 알고리즘이다. Replica 설정시 Replica의 위치까지 CRUSH를 통해 결정된다. [그림 4]는 Object가 OSD에 할당되는 과정을 나타내고 있다. Object는 Object ID의 Hashing을 통해 특정 PG (Placement Group)에 할당된다. 그리고 PG는 다시 PG ID와 CRUSH를 통해서 특정 OSD에 할당된다. [그림 4]는 Replica가 3으로 설정되어 있다고 가정하고 있다. 따라서 CRUSH는 Object 하나당 3개의 OSD를 할당한다.
 
-![[그림 5] Ceph CRUSH MAP]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
+![[그림 5] Ceph CRUSH Map]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_CRUSH_Map.PNG){: width="700px"}
 
-CRUSH는 **CRUSH Map**이라는 Storage Topology를 용한다. [그림 5]는 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. Bucket은 **Weight**값을 가지고 있는데 일반적으로 osd Bucket의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket type의 weight는 모든 하위 Bucket의 Weight의 합이다.
+CRUSH는 **CRUSH Map**이라는 Storage Topology를 이용한다. [그림 5]는 CRUSH Map 나타내고 있다. CRUSH Map은 **Bucket**이라는 논리적 단위의 계층으로 구성된다. Bucket은 root, region, datacentor, room, pod, pdu, row, rack, chassis, host, osd 11가지 type으로 구성되어 있다. CRUSH Map의 Leaf는 반드시 osd bucket이어야 한다. 
 
-CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Ceph의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 CRUSH에 의해 선택된 3개의 Rack에 하나씩 존재하게 된다. 각 Bucket은 자신의 하위 Bucket을 어떤 알고리즘을 이용하여 관리할지 설정 할 수 있다. 알고리즘은 Uniform, List, Tree, Straw 방식을 지원한다.
+각 Bucket은 **Weight**값을 가지고 있는데 Weight는 각 Bucket이 갖고있는 Object의 비율을 나타낸다. 만약 Bucket A의 Weight가 100이고 Bucket B의 Weight가 200이라면 Bucket B가 Bucket A보다 2배많은 Object를 갖는다는걸 의미한다. 따라서 일반적으로 osd Bucket Type의 Weight값은 OSD가 관리하는 Disk의 용량에 비례하여 설정한다. 나머지 Bucket Type의 weight는 모든 하위 Bucket의 Weight의 합이다.
+
+CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica 개수 만큼 선택하고, 선택한 Bucket에서 동일한 작업을 반복하여 Leaf에 있는 osd Bucket을 찾는 알고리즘이다. 따라서 Object의 Replica 개수, 위치는 CRUSH Map에 따라 정해진다. Rack Bucket에 3개의 Replica를 설정해 놓으면 3개의 Replica는 CRUSH에 의해 선택된 3개의 Rack에 하나씩 존재하게 된다. Bucket은 자신의 하위 Bucket을 선택하는 다양한 알고리즘을 제공한다. 각 알고리즘은 장단점을 갖고 있으며 알고리즘에는 Uniform, List, Tree, Straw가 있다.
 
 #### 1.4. Read/Write
 
