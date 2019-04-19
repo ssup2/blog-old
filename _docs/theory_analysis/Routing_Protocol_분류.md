@@ -37,7 +37,7 @@ Count to Infinity는 Distance Vector Protocol에서 빈번하게 발생 할 수 
 
 ### 3. Path Vector
 
-![[그림 4] Path Vector]({{site.baseurl}}/images/theory_analysis/Routing_Protocol/Path_Vector.PNG){: width="700px"}
+![[그림 4] Path Vector]({{site.baseurl}}/images/theory_analysis/Routing_Protocol_분류/Path_Vector.PNG){: width="700px"}
 
 [그림 4]는 Path Vector Protocol을 나타내고 있다. Path Vector Protocol에서 각 Router는 특정 Router로 Packet을 보낼때 Packet이 경유하는 모든 Router들을 기록하여 Path 정보를 저장한다. 각 Router는 자신과 인접한 Router의 Path 정보를 기록하고 Router끼리 교환하면서 Routing Table을 완성한다. Path 정보를 교환하는 방식이기 때문에 Distance Vector보다는 많은 양의 정보를 Router끼리 교환해야 하지만 Path 정보를 바탕으로 Packet Looping 현상을 쉽게 얘방 및 감지 할 수 있다. BGP Protocol이 Path Vector 기반의 Protocol이다.
 
