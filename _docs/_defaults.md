@@ -16,7 +16,7 @@ adsense: true
 
 {: .newline }
 > a = G * x, b = G * y
-> ---> L = G * x * y = (a * b) / G
+> ---> L = G * x * y = (a * b) / G <br/>
 <figure>
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
