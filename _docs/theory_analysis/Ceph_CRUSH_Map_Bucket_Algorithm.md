@@ -40,19 +40,47 @@ Bucket은 자신의 하위 Bucket을 선택하는 Bucket 알고리즘을 선택�
 #### 2.1. Uniform
 
 {% highlight text %}
-CBucket = Bucket->CBuckets[Hash(PG_ID, Replica) % Bucket->CBucket_Count]
+uniform(bucket, pg_id, replica) {
+    cbucket = Bucket->CBuckets[hash(PG_ID, replica) % length(bucket->cbuckets)];
+    return cbucket;
+}
 {% endhighlight %}
-* Bucket - 상위 Bucket의 구조체를 나타낸다.
-* CBucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
-* PG_ID - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* Replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+* bucket - 상위 Bucket을 나타낸다.
+* cbucket - Hashing을 통해서 선택된 하위 Bucket을 나타낸다.
+* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica - Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
 <figure>
-<figcaption class="caption">[공식 1] Uniform 알고리즘</figcaption>
+<figcaption class="caption">[Code 1] uniform 함수</figcaption>
 </figure>
 
-Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [공식 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 과정을 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Hashing 결과가 달라지기 때문에 Object Rebalancing에 많은 시간이 소요된다. Uniform 알고리즘은 모든 하위 Bucket이 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
+Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [Code 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 uniform 함수를 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Hashing 결과가 달라지기 때문에 Object Rebalancing에 많은 시간이 소요된다. Uniform 알고리즘은 모든 하위 Bucket이 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
 
 #### 2.2. List
+
+{% highlight text %}
+init(cbucket_weight);
+init(sum_weight);
+
+list(bucket, pg_id, replica) {
+    for (i = 0; i < length(bucket->cbuckets); i++) {
+        tmp = hash(pg_id, bucket->cbuckets[i]->id, replica)
+        if ( tmp < (cbucket_weight[i] / sum_weigth[i]) ) {
+            cbucket = bucket->cbuckets[i];
+            return cbucket;
+        }
+    }
+
+    cbucket = bucket->cbuckets[0];
+    return cbucket;
+}
+{% endhighlight %}
+* bucket - 상위 Bucket의 구조체를 나타낸다.
+* cbucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
+* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+<figure>
+<figcaption class="caption">[Code 2] list 함수</figcaption>
+</figure>
 
 List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. 하위 Bucket을 찾는 경우 Linked List를 순회 해야하기 때문에 O(n) 시간이 걸린다. 따라서 하위 Bucket의 개수가 많아질 경우 탐색시간이 느린 단점을 갖고 있다. Linked List에 Bucket이 추가되는 경우 Linked List의 가장 앞에 추가된다. Bucket이 추가되는 경우, 기존 Bucket들의 하위 Bucket 중 일부만 추가된 Bucket의 하위 Bucket으로 옮기기만 하면 되기 때문에 비교적 빠른 Rebalancing이 가능하다. 하지만 Linked List의 중간이나 마지막 Bucket 제거 또는 Bucket의 Weight 변경이 발생하는 경우 하위 Bucket들을 전반적으로 옮겨야 하기 때문에 Rebalancing에 많은 시간이 소요된다.
 
