@@ -39,14 +39,13 @@ Bucket은 자신의 하위 Bucket을 선택하는 Bucket 알고리즘을 선택�
 
 #### 2.1. Uniform
 
-{% highlight cpp linenos %}
+{% highlight text %}
 CBucket = Bucket->CBuckets[Hash(PG_ID, Replica) % Bucket->CBucket_Count]
-
-Bucket - 상위 Bucket의 구조체를 나타낸다.
-CBucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
-PG_ID - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-Replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 {% endhighlight %}
+* Bucket - 상위 Bucket의 구조체를 나타낸다.
+* CBucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
+* PG_ID - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* Replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 <figure>
 <figcaption class="caption">[공식 1] Uniform 알고리즘</figcaption>
 </figure>
