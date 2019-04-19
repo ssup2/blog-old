@@ -109,7 +109,7 @@ list(bucket, pg_id, replica) {
 
 ![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Remove.PNG){: width="600px"}
 
-[그림 5]는 Linked-list에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 2번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
+[그림 5]는 Linked-list에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 1번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
 
 #### 2.3. Tree
 
