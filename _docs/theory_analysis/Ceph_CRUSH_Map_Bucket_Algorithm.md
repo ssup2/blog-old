@@ -102,7 +102,7 @@ list(bucket, pg_id, replica) {
 
 ![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="650px"}
 
-[그림 4]는 Linked-list에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked-list의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** 왜냐하면 Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
+[그림 4]는 Linked-list에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked-list의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
 
 ![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Remove.PNG){: width="600px"}
 
