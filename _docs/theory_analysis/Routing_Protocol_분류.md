@@ -1,5 +1,5 @@
 ---
-title: Routing Protocol
+title: Routing Protocol 분류
 category: Theory, Analysis
 date: 2019-01-22T12:00:00Z
 lastmod: 2019-01-22T12:00:00Z
@@ -11,7 +11,7 @@ Routing Protocol을 Link State, Distance Vector, Path Vector로 분류하고 분
 
 ### 1. Link State
 
-![[그림 1] Link State]({{site.baseurl}}/images/theory_analysis/Routing_Protocol/Link_State.PNG){: width="400px"}
+![[그림 1] Link State]({{site.baseurl}}/images/theory_analysis/Routing_Protocol_분류/Link_State.PNG){: width="400px"}
 
 [그림 1]은 Link State Protocol을 나타내고 있다. Link State Protocol에서 **모든 Router는 완전한 Network Topology 정보를 갖는다.** 각 Router는 Network Topology 정보를 바탕으로 모든 Router를 대상으로 **Dijkstra 알고리즘**을 활용하여 최단 경로를 찾고, Routing Table을 설정한다.
 
@@ -21,7 +21,7 @@ Link State Protocol에서 각 Router는 완전한 Network Topology 정보를 바
 
 ### 2. Distance Vector
 
-![[그림 2] Distance Vector]({{site.baseurl}}/images/theory_analysis/Routing_Protocol/Distance_Vector.PNG){: width="700px"}
+![[그림 2] Distance Vector]({{site.baseurl}}/images/theory_analysis/Routing_Protocol_분류/Distance_Vector.PNG){: width="700px"}
 
 [그림 2]는 Distance Vector Protocol을 나타내고 있다. Distance Vector Protocol에서 **각 Router는 오직 인접한 Router의 거리 및 Packet을 목적지 Router로 보내기 위한 경유 Router 정보 Table만 가지고 있다.** 전체 Network Topology 정보는 갖고 있지 않는다. [그림 2]에서 Router A는 Router E로 Packet을 보내기 위해서는 Router C와 Router D를 경유해서 보내야 한다. 따라서 Router A의 Routing Table에는 Router E로 Packet을 보낼때는 Router C로 Packet을 보내야 한다는 정보가 써있다. 거리는 Packet이 하나의 Router를 지날때 마다 1씩 증가한다. Packet이 Router A에서 Router E로 전달될 경우 Router C와 Router D, 2개의 Router를 경유하기 때문에 거리는 3가 된다.
 
@@ -31,7 +31,7 @@ Link State Protocol에서 각 Router는 완전한 Network Topology 정보를 바
 
 #### 2.1. Count to Infinity
 
-![[그림 3] Count to Infinity 현상]({{site.baseurl}}/images/theory_analysis/Routing_Protocol/Count_To_Infinity.PNG){: width="700px"}
+![[그림 3] Count to Infinity 현상]({{site.baseurl}}/images/theory_analysis/Routing_Protocol_분류/Count_To_Infinity.PNG){: width="700px"}
 
 Count to Infinity는 Distance Vector Protocol에서 빈번하게 발생 할 수 있는 Packet Looping 현상이다. [그림 3]은 Count to Infinity 현상을 나타내고 있다. Router C에 장애를 발견한 Router A는 Router Table을 수정하여 Packet이 Router C에게 전달되지 못하게 한다. 그 후 수정된 Routing Table 정보를 Router B에게 전달한다. Router B는 Router A로부터 받은 Routing Table 정보를 바탕으로 Router C의 거리를 1 증가시킨다. Router B의 Routing Table이 변경 되있기 때문에 Router B는 변경된 Routing Table 정보를 다시 Router A에게 전달한다. Router A는 Router B의 Routing Table 정보를 바탕으로 C의 거리를 1 증가 시킨다. Router A와 Router B의 Routing Table의 Router C의 거리값은 계속 증가하게 된다. Count to Infinity 문제를 가장 쉽게 해결하는 방법은 거리 값이 특정 값 이상으로 오르지 못하게 제한을 두는 방법이 있다.
 

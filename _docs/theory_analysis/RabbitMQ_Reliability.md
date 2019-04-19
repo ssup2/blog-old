@@ -1,6 +1,6 @@
 ---
 title: RabbitMQ Reliability
-category: Theory, Analysis
+category:
 date: 2019-04-01T12:00:00Z
 lastmod: 2019-04-01T12:00:00Z
 comment: true
