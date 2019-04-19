@@ -39,9 +39,9 @@ Bucket은 자신의 하위 Bucket을 선택하는 Bucket 알고리즘을 선택�
 
 #### 2.1. Uniform
 
-{% highlight text %}
+{% highlight cpp %}
 uniform(bucket, pg_id, replica) {
-    cbucket = Bucket->CBuckets[hash(PG_ID, replica) % length(bucket->cbuckets)];
+    cbucket = bucket->cbuckets[hash(PG_ID, replica) % length(bucket->cbuckets)];
     return cbucket;
 }
 {% endhighlight %}
@@ -50,21 +50,37 @@ uniform(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
 <figure>
-<figcaption class="caption">[Code 1] uniform 함수</figcaption>
+<figcaption class="caption">[Code 1] uniform() 함수</figcaption>
 </figure>
 
-Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [Code 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 uniform 함수를 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Hashing 결과가 달라지기 때문에 Object Rebalancing에 많은 시간이 소요된다. Uniform 알고리즘은 모든 하위 Bucket이 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
+Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [Code 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 uniform() 함수를 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Consistency Hashing을 이용하더라도 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다. Uniform 알고리즘은 모든 하위 Bucket이 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
 
 #### 2.2. List
 
-{% highlight text %}
-init(cbucket_weight);
-init(sum_weight);
+![[그림 3] List 알고리즘에 이용되는 Weight Linked List]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket.PNG){: width="500px"}
 
+{% highlight cpp %}
+init_sum_weights(cbucket_weights, sum_weights) {
+    sum_weights[0] = cbucket_weights[0];
+
+    for (i = 1; i < length(cbucket_weights); i++) {
+        sum_weights[i] = sum_weights[i - i] + cbucket_weights[i];
+    }
+}
+{% endhighlight %}
+* cbucket_weights - CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
+* sum_weights - List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
+<figure>
+<figcaption class="caption">[Code 2] init_sum_weights() 함수</figcaption>
+</figure>
+
+List 알고리즘은 하위 Bucket들을 **Linked-list**를 이용하여 관리한다. Link 알고리즘을 수행하기 위해서는 CRUSH Map에 있는 하위 Bucket의 Weight 정보를 바탕으로 [그림 3]과 같은 Linked List를 준비해 두어야한다. [Code 2]는 [그림 3]의 sum_weights Linked-list를 초기화하는 init_cbucket_weights() 함수를 간략하게 나타내고 있다.
+
+{% highlight cpp %}
 list(bucket, pg_id, replica) {
-    for (i = 0; i < length(bucket->cbuckets); i++) {
+    for (i = length(bucket->cbuckets) - 1; i >= 0; i--) {
         tmp = hash(pg_id, bucket->cbuckets[i]->id, replica)
-        if ( tmp < (cbucket_weight[i] / sum_weigth[i]) ) {
+        if ( tmp < (cbucket_weights[i] / sum_weigths[i]) ) {
             cbucket = bucket->cbuckets[i];
             return cbucket;
         }
@@ -79,18 +95,24 @@ list(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 <figure>
-<figcaption class="caption">[Code 2] list 함수</figcaption>
+<figcaption class="caption">[Code 3] list() 함수</figcaption>
 </figure>
 
-List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. 하위 Bucket을 찾는 경우 Linked List를 순회 해야하기 때문에 O(n) 시간이 걸린다. 따라서 하위 Bucket의 개수가 많아질 경우 탐색시간이 느린 단점을 갖고 있다. Linked List에 Bucket이 추가되는 경우 Linked List의 가장 앞에 추가된다. Bucket이 추가되는 경우, 기존 Bucket들의 하위 Bucket 중 일부만 추가된 Bucket의 하위 Bucket으로 옮기기만 하면 되기 때문에 비교적 빠른 Rebalancing이 가능하다. 하지만 Linked List의 중간이나 마지막 Bucket 제거 또는 Bucket의 Weight 변경이 발생하는 경우 하위 Bucket들을 전반적으로 옮겨야 하기 때문에 Rebalancing에 많은 시간이 소요된다.
+[Code 3]은 초기화된 cbucket_weights Linked-list와 sum_weigths Linked-list를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked-list의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 Object를 할당한다. Hashing을 Linked-list만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+
+![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="500px"}
+
+[그림 4]는 Linked-list에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked-list의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** 왜냐하면 Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
+
+![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="500px"}
+
+[그림 5]는 Linked-list에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 2번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
 
 #### 2.3. Tree
 
-Tree 알고리즘은 하위 Bucket을 **Weighted Binary Search Tree**를 이용한다. Tree의 끝에 하위 Bucket들이 달려있다. Tree 기반이기 때문에 하위 Bucket 탐색에 O(log n) 시간이 걸린다. Tree의 Left/Right Weight는 Left/Write Subtree에 속한 모든 Bucket들의 Weight의 합과 동일하다. Tree에 Bucket 추가,제거 또는 Bucket의 Weight 변경이 발생하는 경우 Weighted Binary Search Tree의 일부 Weight에만 영향을 주기 때문에 일부 Bucket의 하위 Bucket들만 Rebalancing에 참여해도 된다. 따라서 비교적 빠른 Rebalancing이 가능하다.
-
 #### 2.4. Straw
 
-알고리즘 Straw Bucket은 하위 Bucket별로 Straw를 뽑아 **Straw의 길이가 가장 긴 Bucket을 선택**하는 방식이다. Straw의 길이는 **각 Bucket의 Weight에 영향을 받는 Hashing**을 이용한다. Bucket의 Weight가 클수록 긴 길이의 Straw를 할당 받을 확률이 높아진다. 모든 하위 Bucket을 대상으로 Hashing을 수행해야 하기 때문에 하위 Bucket 선택에 O(n)의 시간이 걸린다. Straw에 Bucket 추가,제거 또는 Bucket의 Weight가 변경되더라도 각 Bucket별로 수행한 Hashing을 이용하는 방식이기 때문에 영향받은 Bucket에 속한 하위 Bucket들만 Rebalancing을 수행하면 된다. 따라서 빠른 Rebalancing이 가능하다.
+#### 2.5. Straw2
 
 ### 3. 참조
 
