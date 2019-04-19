@@ -57,7 +57,7 @@ Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여
 
 #### 2.2. List
 
-![[그림 3] List 알고리즘에 이용되는 Weight Linked List]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket.PNG){: width="500px"}
+![[그림 3] List 알고리즘에 이용되는 Weight Linked List]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket.PNG){: width="600px"}
 
 {% highlight cpp %}
 init_sum_weights(cbucket_weights, sum_weights) {
@@ -100,11 +100,11 @@ list(bucket, pg_id, replica) {
 
 [Code 3]은 초기화된 cbucket_weights Linked-list와 sum_weigths Linked-list를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked-list의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 Object를 할당한다. Hashing을 Linked-list만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
-![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="500px"}
+![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="650px"}
 
 [그림 4]는 Linked-list에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked-list의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** 왜냐하면 Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
 
-![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="500px"}
+![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Remove.PNG){: width="600px"}
 
 [그림 5]는 Linked-list에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 2번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
 
