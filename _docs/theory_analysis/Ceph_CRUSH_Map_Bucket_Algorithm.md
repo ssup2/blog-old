@@ -45,13 +45,14 @@ uniform(bucket, pg_id, replica) {
     return cbucket;
 }
 {% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 1] uniform() 함수</figcaption>
+</figure>
+
 * bucket - 상위 Bucket을 나타낸다.
 * cbucket - Hashing을 통해서 선택된 하위 Bucket을 나타낸다.
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
-<figure>
-<figcaption class="caption">[Code 1] uniform() 함수</figcaption>
-</figure>
 
 Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [Code 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 uniform() 함수를 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Consistency Hashing을 이용하더라도 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다. Uniform 알고리즘은 모든 하위 Bucket이 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
 
@@ -68,11 +69,12 @@ init_sum_weights(cbucket_weights, sum_weights) {
     }
 }
 {% endhighlight %}
-* cbucket_weights - CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
-* sum_weights - List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
 <figure>
 <figcaption class="caption">[Code 2] init_sum_weights() 함수</figcaption>
 </figure>
+
+* cbucket_weights - CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
+* sum_weights - List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
 
 List 알고리즘은 하위 Bucket들을 **Linked-list**를 이용하여 관리한다. Link 알고리즘을 수행하기 위해서는 CRUSH Map에 있는 하위 Bucket의 Weight 정보를 바탕으로 [그림 3]과 같은 Linked List를 준비해 두어야한다. [Code 2]는 [그림 3]의 sum_weights Linked-list를 초기화하는 init_cbucket_weights() 함수를 간략하게 나타내고 있다.
 
@@ -90,13 +92,14 @@ list(bucket, pg_id, replica) {
     return cbucket;
 }
 {% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 3] list() 함수</figcaption>
+</figure>
+
 * bucket - 상위 Bucket의 구조체를 나타낸다.
 * cbucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
-<figure>
-<figcaption class="caption">[Code 3] list() 함수</figcaption>
-</figure>
 
 [Code 3]은 초기화된 cbucket_weights Linked-list와 sum_weigths Linked-list를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked-list의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 Object를 할당한다. Hashing을 Linked-list만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
