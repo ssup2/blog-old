@@ -25,11 +25,32 @@ CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica �
 
 ### 2. Bucket 알고리즘
 
-Bucket은 자신의 하위 Bucket을 선택하는 다양한 알고리즘을 제공한다. 각 알고리즘은 장단점을 갖고 있으며 알고리즘에는 Uniform, List, Tree, Straw가 있다.
+| | Uniform | List | Tree | Straw | Straw2 |
+|----|----|----|----|----|----|
+| Object 할당 | O(1) | O(n) | O(log n) | O (n) | O (n) |
+| 하위 Bucket 추가 | Poor | Optimal | Good | Optimal | Optimal |
+| 하위 Bucket 삭제 | Poor | Poor | Good | Optimal | Optimal |
+
+<figure>
+<figcaption class="caption">[표 1] Bucket 알고리즘 성능 비교</figcaption>
+</figure>
+
+Bucket은 자신의 하위 Bucket을 선택하는 Bucket 알고리즘을 선택할 수 있다. 알고리즘에는 Uniform, List, Tree, Straw, Straw2가 있으며 각 알고리즘은 장단점을 갖고 있다. 기본 알고리즘은 Straw2를 이용한다. [표 1]은 각 알고리즘의 성능을 서로 비교하여 나타내고 있다.
 
 #### 2.1. Uniform
 
-Uniform 알고리즘은 하위 Bucket들을 **Consistency Hashing**을 이용하여 관리한다. Hashing 기반이기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 Bucket이 추가되거나 제거될 경우 Hashing 결과가 달라지기 때문에 Rebalancing에 많은 시간이 소요된다. Uniform Bucket은 모든 Bucket의 Weight가 동일하다는 가정에 진행된다. Bucket 마다 다른 Weight를 주고 싶으면 다른 Bucket Type을 이용해야 한다.
+{: .newline }
+> CBucket = Bucket->CBuckets[Hash(PG_ID, Replica) % Bucket->CBucket_Count]
+>
+> Bucket : 상위 Bucket의 구조체를 나타낸다.
+> CBucket : 선택된 하위 Bucket의 구조체를 나타낸다.
+> PG_ID : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+> Replica : Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+<figure>
+<figcaption class="caption">[공식 1] Uniform 알고리즘</figcaption>
+</figure>
+
+Uniform 알고리즘은 하위 Bucket들을 **Consistency Hashing**을 이용하여 관리한다. [공식 1]은 Uniform 알고리즘을 간략하게 나타내고 있다. Hashing 기반이기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 하위 Bucket이 추가되거나 제거될 경우 Hashing 결과가 달라지기 때문에 Object Rebalancing에 많은 시간이 소요된다. Uniform 알고리즘은 Hasing 기반이기 때문에 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. 따라서 Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
 
 #### 2.2. List
 
