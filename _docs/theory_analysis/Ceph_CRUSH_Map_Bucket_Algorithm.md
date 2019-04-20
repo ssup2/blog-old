@@ -30,6 +30,7 @@ CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica �
 | Object 할당 | O(1) | O(n) | O(log n) | O (n) | O (n) |
 | 하위 Bucket 추가 | Poor | Optimal | Good | Optimal | Optimal |
 | 하위 Bucket 삭제 | Poor | Poor | Good | Optimal | Optimal |
+| 하위 Bucket Weight 변경 | X | Poor | Good | Optimal | Optimal |
 
 <figure>
 <figcaption class="caption">[표 1] Bucket 알고리즘 성능 비교</figcaption>
@@ -81,7 +82,7 @@ List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리�
 cbucket list(bucket, pg_id, replica) {
     for (i = length(bucket->cbuckets) - 1; i > 0; i--) {
         tmp = hash(pg_id, bucket->cbuckets[i]->id, replica)
-        if ( tmp < (cbucket_weights[i] / sum_weigths[i]) ) {
+        if ( tmp < (cbucket_weights[i] / sum_weights[i]) ) {
             return bucket->cbuckets[i];
         }
     }
@@ -98,15 +99,15 @@ cbucket list(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
-[Code 3]은 초기화된 cbucket_weights Linked List와 sum_weigths Linked List를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked List의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 PG를 할당한다. Hashing을 Linked List의 길이인 하위 버켓의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+[Code 3]은 초기화된 cbucket_weights Linked List와 sum_weights Linked List를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked List의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 PG를 할당한다. Hashing을 Linked List의 길이인 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
 ![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="650px"}
 
-[그림 4]는 Linked List에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked List의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
+[그림 4]는 Linked List에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked List의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** Bucket이 추가되어도 기존의 sum_weights 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
 
 ![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Remove.PNG){: width="600px"}
 
-[그림 5]는 Linked List에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 1번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
+[그림 5]는 Linked List에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 1번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weights 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치된다. 따라서 많은 수의 Object들이 Rebalancing 된다. 하위 Bucket의 Weight를 변경하는 경우에도 sum_weights값이 바뀌기 때문에 많은 수의 Object들이 Rebalancing 된다.
 
 #### 2.3. Tree
 
@@ -121,7 +122,7 @@ cbucket tree(bucket, pg_id, replica) {
 
     for(i = 0; i < level - 1; i++) {
         if (hash(pg_id, bucket->id, index, replica) < 
-            (array[get_left(index)]->weigth/array[index]->weigth)) {
+            (array[get_left(index)]->weight/array[index]->weight)) {
             index = get_left(index);
         } else {
             index = get_rigth(index);
@@ -145,12 +146,56 @@ cbucket tree(bucket, pg_id, replica) {
 
 ![[그림 6] Tree에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="750px"}
 
-[그림 6]은 Binary Tree에 새로운 하위 Bucket이 추가될때를 나타내고 있다. **새로운 Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
+[그림 6]은 Binary Tree에 새로운 하위 Bucket이 추가될때를 나타내고 있다. **새로운 Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제되거나 하위 Bucket의 Weight가 변경될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
 
 #### 2.4. Straw
 
+{% highlight cpp %}
+cbucket straw(bucket, pg_id, replica) {
+    
+}
+{% endhighlight %}
+
+<figure>
+<figcaption class="caption">[Code 6] straw() 함수</figcaption>
+</figure>
+
 #### 2.5. Straw2
+
+{% highlight cpp %}
+cbucket straw2(bucket, pg_id, replica) {
+    max_index = 0;
+    max_value = 0;
+
+    for (i = 0; i < length(bucket->cbuckets); i++) {
+        value = hash(pg_id, bucket->cbuckets[i]->id, replica) * 
+            bucket->cbuckets[i]->weight;
+        if (value > max_value) {
+            max_index = i;
+            max_value = value;
+        }
+    }
+
+    return bucket->cbuckets[max_index];
+}
+{% endhighlight %}
+
+* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket - 상위 Bucket을 나타낸다.
+* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+
+<figure>
+<figcaption class="caption">[Code 7] straw2() 함수</figcaption>
+</figure>
+
+straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 그중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 7]은 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+
+![[그림 7] Straw2에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="600px"}
+
+[그림 7]은 Straw2에 새로운 하위 Bucket이 추가되는 경우를 나타내고 있다. 새로운 Bucket이 추가되어도 **PG는 새로운 Bucket에 배치되거나 기존의 Bucket에 그대로 배치된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 기존의 Bucket이 삭제되어도 삭제된 Bucket에 배치되었던 PG들만 재배치되고 기존의 PG는 그대로 유지되기 때문에 적은 수의 Object들만 Rebalancing된다.
 
 ### 3. 참조
 
 * [http://www.nminoru.jp/~nminoru/unix/ceph/rados-overview.html#mapping](http://www.nminoru.jp/~nminoru/unix/ceph/rados-overview.html#mapping)
+* [https://my.oschina.net/linuxhunter/blog/639016](https://my.oschina.net/linuxhunter/blog/639016)
