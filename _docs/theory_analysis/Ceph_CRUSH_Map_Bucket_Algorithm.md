@@ -144,9 +144,9 @@ cbucket tree(bucket, pg_id, replica) {
 
 [Code 4]은 초기화된 Binary Tree를 이용하여 Tree 알고리즘을 수행하는 tree() 함수를 나타내고 있다. Root Node를 시작으로 Binaray Tree를 탐색하면서 Weight에 비례하여 PG를 배치한다. Hashing을 Binary Tree의 높이만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(log N) 시간이 걸린다.
 
-![[그림 6] Tree에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="750px"}
+![[그림 7] Tree에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="750px"}
 
-[그림 6]은 Binary Tree에 하위 Bucket이 추가될때를 나타내고 있다. **Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제되거나 하위 Bucket의 Weight가 변경될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
+[그림 7]은 Binary Tree에 하위 Bucket이 추가될때를 나타내고 있다. **Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제되거나 하위 Bucket의 Weight가 변경될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
 
 #### 2.4. Straw2
 
@@ -167,7 +167,7 @@ cbucket straw2(bucket, pg_id, replica) {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 6] straw2() 함수</figcaption>
+<figcaption class="caption">[Code 5] straw2() 함수</figcaption>
 </figure>
 
 * cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
@@ -175,11 +175,11 @@ cbucket straw2(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
-straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 **dist()** 함수를 이용하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. dist() 함수는 hash() 함수처럼 Random 값을 생성하지만, Weight 값이 클수록 큰 Random 값이 나올확률이 높아지는 함수이다. [Code 6]은 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 **dist()** 함수를 이용하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. dist() 함수는 hash() 함수처럼 Random 값을 생성하지만, Weight 값이 클수록 큰 Random 값이 나올확률이 높아지는 함수이다. [Code 5]는 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
-![[그림 7] Straw2에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Straw2_Add.PNG){: width="600px"}
+![[그림 8] Straw2에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Straw2_Add.PNG){: width="600px"}
 
-[그림 7]은 Straw2에 하위 Bucket이 추가되는 경우를 나타내고 있다. 하위 Bucket이 추가되어도 **PG는 새로운 Bucket에 배치되거나 기존의 Bucket에 그대로 배치된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 기존의 Bucket이 삭제되어도 삭제된 Bucket에 배치되었던 PG들만 재배치되고 기존의 PG는 그대로 유지되기 때문에 적은 수의 Object들만 Rebalancing된다. Bucket의 Weight를 변경하면 Weight를 변경한 Bucket에 배치된 PG가 다른 Bucket으로 재배치되거나, 다른 Bucket에 배치되었던 PG가 Weight를 변경한 PG로 재배치 될 수 있다. 하지만 PG는 Weight를 변경하지 않은 Bucket 사이에서는 재배치 되지않기 때문에, Bucket의 Weight를 변경하여도 적은 수의 Object들만 Rebalancing된다.
+[그림 8]은 Straw2에 하위 Bucket이 추가되는 경우를 나타내고 있다. 하위 Bucket이 추가되어도 **PG는 새로운 Bucket에 배치되거나 기존의 Bucket에 그대로 배치된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 기존의 Bucket이 삭제되어도 삭제된 Bucket에 배치되었던 PG들만 재배치되고 기존의 PG는 그대로 유지되기 때문에 적은 수의 Object들만 Rebalancing된다. Bucket의 Weight를 변경하면 Weight를 변경한 Bucket에 배치된 PG가 다른 Bucket으로 재배치되거나, 다른 Bucket에 배치되었던 PG가 Weight를 변경한 PG로 재배치 될 수 있다. 하지만 PG는 Weight를 변경하지 않은 Bucket 사이에서는 재배치 되지않기 때문에, Bucket의 Weight를 변경하여도 적은 수의 Object들만 Rebalancing된다.
 
 #### 2.5. Straw
 
@@ -201,7 +201,7 @@ cbucket straw(bucket, pg_id, replica) {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 7] straw() 함수</figcaption>
+<figcaption class="caption">[Code 6] straw() 함수</figcaption>
 </figure>
 
 * cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
@@ -209,7 +209,7 @@ cbucket straw(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
-Straw 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 **Straw**를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 7]은 Straw 알고리즘을 수행하는 straw() 함수를 나타내고 있다. Straw 값은 하위 Bucket들을 Weight순으로 오름차순으로 정렬한 다음, Straw 값을 구하려는 하위 Bucket의 Weight 값과 바로 앞의 하위 Bucket의 Weight 값을 이용하여 구한다. 예를들어 A/1.0, B/3.0, C/2.5 3개의 하위 Bucket들이 있을때 Weight에 따라서 A, C, B 순으로 정렬이된다. 그 후 C Bucket의 Straw값을 구하기 위해서 C Bucket의 Weight 값과 A Bucket의 Weight 값을 이용한다.
+Straw 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 **Straw**를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 6]은 Straw 알고리즘을 수행하는 straw() 함수를 나타내고 있다. Straw 값은 하위 Bucket들을 Weight순으로 오름차순으로 정렬한 다음, Straw 값을 구하려는 하위 Bucket의 Weight 값과 바로 앞의 하위 Bucket의 Weight 값을 이용하여 구한다. 예를들어 A/1.0, B/3.0, C/2.5 3개의 하위 Bucket들이 있을때 Weight에 따라서 A, C, B 순으로 정렬이된다. 그 후 C Bucket의 Straw값을 구하기 위해서 C Bucket의 Weight 값과 A Bucket의 Weight 값을 이용한다.
 
 하위 Bucket의 Straw 값을 구할때 해당 Bucket의 Weight 뿐만아니라 다른 하위 Bucket의 Weight를 이용한다는 의미는, 하위 Bucket의 추가, 삭제 또는 기존 Bucket의 Weight가 변경될 경우 최대 3개의 Straw 값이 바뀔 수 있다는 의미이다. Straw 알고리즘은 하위 Bucket의 변경에도 Object Rebalancing을 최소화 하기위해서 설계된 알고리즘이지만, Straw 값을 구하는 과정의 Side Effect 때문에 목표를 제대로 달성하지 못하였다. 이러한 문제를 해결하기 위해서 나온 알고리즘이 straw2이다.
 
