@@ -40,17 +40,16 @@ Bucket은 자신의 하위 Bucket을 선택하는 Bucket 알고리즘을 선택�
 #### 2.1. Uniform
 
 {% highlight cpp %}
-uniform(bucket, pg_id, replica) {
-    cbucket = bucket->cbuckets[hash(PG_ID, replica) % length(bucket->cbuckets)];
-    return cbucket;
+cbucket uniform(bucket, pg_id, replica) {
+    return bucket->cbuckets[hash(pg_id, bucket->id, replica) % length(bucket->cbuckets)];
 }
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 1] uniform() 함수</figcaption>
 </figure>
 
+* cbucket - Uniform 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
 * bucket - 상위 Bucket을 나타낸다.
-* cbucket - Hashing을 통해서 선택된 하위 Bucket을 나타낸다.
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
 
@@ -76,42 +75,77 @@ init_sum_weights(cbucket_weights, sum_weights) {
 * cbucket_weights - CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
 * sum_weights - List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
 
-List 알고리즘은 하위 Bucket들을 **Linked-list**를 이용하여 관리한다. Link 알고리즘을 수행하기 위해서는 CRUSH Map에 있는 하위 Bucket의 Weight 정보를 바탕으로 [그림 3]과 같은 Linked List를 준비해 두어야한다. [Code 2]는 [그림 3]의 sum_weights Linked-list를 초기화하는 init_cbucket_weights() 함수를 간략하게 나타내고 있다.
+List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. Link 알고리즘을 수행하기 위해서는 CRUSH Map에 있는 하위 Bucket의 Weight 정보를 바탕으로 [그림 3]과 같은 Linked List를 준비해 두어야한다. [Code 2]는 [그림 3]의 sum_weights Linked List를 초기화하는 init_sum_weights() 함수를 간략하게 나타내고 있다.
 
 {% highlight cpp %}
-list(bucket, pg_id, replica) {
-    for (i = length(bucket->cbuckets) - 1; i >= 0; i--) {
+cbucket list(bucket, pg_id, replica) {
+    for (i = length(bucket->cbuckets) - 1; i > 0; i--) {
         tmp = hash(pg_id, bucket->cbuckets[i]->id, replica)
         if ( tmp < (cbucket_weights[i] / sum_weigths[i]) ) {
-            cbucket = bucket->cbuckets[i];
-            return cbucket;
+            return bucket->cbuckets[i];
         }
     }
 
-    cbucket = bucket->cbuckets[0];
-    return cbucket;
+    return bucket->cbuckets[0];
 }
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 3] list() 함수</figcaption>
 </figure>
 
-* bucket - 상위 Bucket의 구조체를 나타낸다.
-* cbucket - Hashing을 통해서 선택된 하위 Bucket의 구조체를 나타낸다.
+* cbucket - List 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket - 상위 Bucket을 나타낸다.
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
-[Code 3]은 초기화된 cbucket_weights Linked-list와 sum_weigths Linked-list를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked-list의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 Object를 할당한다. Hashing을 Linked-list만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+[Code 3]은 초기화된 cbucket_weights Linked List와 sum_weigths Linked List를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked List의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 PG를 할당한다. Hashing을 Linked List의 길이인 하위 버켓의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
 ![[그림 4] List에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Add.PNG){: width="650px"}
 
-[그림 4]는 Linked-list에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked-list의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
+[그림 4]는 Linked List에 하위 Bucket이 추가되는 경우를 나타내고 있다. 추가된 Bucket은 Linked List의 마지막에 붙어 Link 알고리즘 수행시 가장 먼져 배치여부를 조사하는 Bucket이 된다. PG가 추가된 Bucket에 배치되는경우 해당 PG에 소속되어 있던 Object들은 Rebalancing 된다. **하지만 PG가 추가된 Bucket에 배치되지 않을경우 PG는 반드시 기존의 Bucket에 배치된다.** Bucket이 추가되어도 기존의 sum_weigths 값은 변하지 않기 때문이다. 따라서 Linked 알고리즘은 하위 Bucket이 추가되어도 Object Rebalancing을 최소화 할 수 있다.
 
 ![[그림 5] List에 하위 Bucket이 제거되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_List_Bucket_Remove.PNG){: width="600px"}
 
-[그림 5]는 Linked-list에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 1번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
+[그림 5]는 Linked List에 하위 Bucket이 제거되는 경우를 나타내고 있다. [그림 5]에서는 1번 하위 Bucket이 제거 될때를 나타내고 있다. Bucket이 제거되면 기존의 sum_weigths 값도 바뀌게되어 많은 수의 PG들이 다른 Bucket에 배치되기 때문에, 많은 수의 Object들이 Rebalancing 된다.
 
 #### 2.3. Tree
+
+![[그림 6] Tree 알고리즘에 이용되는 Binary Tree]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree.PNG){: width="750px"}
+
+Tree 알고리즘은 하위 Bucket을 Binary Tree 형태로 관리한다. [그림 6]은 Tree 알고리즘에서 이용되는 Binary Tree를 나타내고 있다. 배열을 이용하여 Tree를 구성하지만 일반적인 Binary Search Tree처럼 구성되지는 않는다. 각 Tree의 Level의 Index는 `(Odd) * (2 ^ Level)`를 갖는다. Tree의 각 Leaf에는 하위 Bucket이 존재한다. 각 Tree의 Node는 자신의 모든 하위 Node에 존재하는 Weight의 합을 저장하고 있다.
+
+{% highlight cpp %}
+cbucket tree(bucket, pg_id, replica) {
+    level = log2(length(array));
+    index = length(array) / 2;
+
+    for(i = 0; i < level - 1; i++) {
+        if (hash(pg_id, bucket->id, index, replica) < 
+            (array[get_left(index)]->weigth/array[index]->weigth)) {
+            index = get_left(index);
+        } else {
+            index = get_rigth(index);
+        }
+    }
+
+    return array[index]->bucket;
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 4] tree() 함수</figcaption>
+</figure>
+
+* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket - 상위 Bucket을 나타낸다.
+* array - 하위 Bucket들을 Binary Tree로 저장한 배열을 나타낸다.
+* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+
+[Code 4]은 초기화된 Binary Tree를 이용하여 Tree 알고리즘을 수행하는 tree() 함수를 나타내고 있다. Root Node를 시작으로 Binaray Tree를 탐색하면서 Weight에 비례하여 PG를 배치한다. Hashing을 Binary Tree의 높이만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(log N) 시간이 걸린다.
+
+![[그림 6] Tree에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="750px"}
+
+[그림 6]은 Binary Tree에 새로운 하위 Bucket이 추가될때를 나타내고 있다. **새로운 Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
 
 #### 2.4. Straw
 
