@@ -28,9 +28,9 @@ CRUSH는 CRUSH Map의 root Bucket부터 시작하여 하위 Bucket을 Replica �
 | | Uniform | List | Tree | Straw | Straw2 |
 |----|----|----|----|----|----|
 | Object 할당 | O(1) | O(n) | O(log n) | O (n) | O (n) |
-| 하위 Bucket 추가 | Poor | Optimal | Good | Optimal | Optimal |
-| 하위 Bucket 삭제 | Poor | Poor | Good | Optimal | Optimal |
-| 하위 Bucket Weight 변경 | X | Poor | Good | Optimal | Optimal |
+| 하위 Bucket 추가 | Poor | Optimal | Good | Good | Optimal |
+| 하위 Bucket 삭제 | Poor | Poor | Good | Good | Optimal |
+| 하위 Bucket Weight 변경 | X | Poor | Good | Good | Optimal |
 
 <figure>
 <figcaption class="caption">[표 1] Bucket 알고리즘 성능 비교</figcaption>
@@ -148,45 +148,18 @@ cbucket tree(bucket, pg_id, replica) {
 
 [그림 6]은 Binary Tree에 하위 Bucket이 추가될때를 나타내고 있다. **Bucket이 Binary Tree에 추가되어도 일부 Node의 Weight만 변경되기 때문에 일부의 PG만 재배치되고 나머지 PG는 기존의 Bucket에 할당된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 하위 Bucket이 삭제되거나 하위 Bucket의 Weight가 변경될때도 일부 Node의 Weight만 변경되기 때문에 적은 수의 Object들만 Rebalancing된다.
 
-#### 2.4. Straw
-
-{% highlight cpp %}
-cbucket straw(bucket, pg_id, replica) {
-    max_index = 0;
-    max_straw = 0;
-
-    for (i = 0; i < length(bucket->cbuckets); i++) {
-        straw = ;
-        if (straw > straw) {
-            max_index = i;
-            max_straw = straw;
-        }
-    }
-
-}
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Code 6] straw() 함수</figcaption>
-</figure>
-
-* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
-
-#### 2.5. Straw2
+#### 2.4. Straw2
 
 {% highlight cpp %}
 cbucket straw2(bucket, pg_id, replica) {
     max_index = 0;
-    max_straw = 0;
+    max_draw = 0;
 
     for (i = 0; i < length(bucket->cbuckets); i++) {
-        straw = hash(pg_id, bucket->cbuckets[i]->id, replica) * 
-            bucket->cbuckets[i]->weight;
-        if (straw > max_straw) {
+        draw = dist(pg_id, bucket->cbuckets[i]->id, replica, bucket->cbuckets[i]->weight);
+        if (draw > max_draw) {
             max_index = i;
-            max_straw = straw;
+            max_draw = draw;
         }
     }
 
@@ -194,7 +167,7 @@ cbucket straw2(bucket, pg_id, replica) {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 7] straw2() 함수</figcaption>
+<figcaption class="caption">[Code 6] straw2() 함수</figcaption>
 </figure>
 
 * cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
@@ -202,13 +175,47 @@ cbucket straw2(bucket, pg_id, replica) {
 * pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
 * replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
-straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 그중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 7]은 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
+straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 **dist()** 함수를 이용하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. dist() 함수는 hash() 함수처럼 Random 값을 생성하지만, Weight 값이 클수록 큰 Random 값이 나올확률이 높아지는 함수이다. [Code 6]은 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
-![[그림 7] Straw2에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree_Add.PNG){: width="600px"}
+![[그림 7] Straw2에 하위 Bucket이 추가되는 경우]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Straw2_Add.PNG){: width="600px"}
 
-[그림 7]은 Straw2에 하위 Bucket이 추가되는 경우를 나타내고 있다. 하위 Bucket이 추가되어도 **PG는 새로운 Bucket에 배치되거나 기존의 Bucket에 그대로 배치된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 기존의 Bucket이 삭제되어도 삭제된 Bucket에 배치되었던 PG들만 재배치되고 기존의 PG는 그대로 유지되기 때문에 적은 수의 Object들만 Rebalancing된다. Bucket의 Weight를 변경하면 Weight를 변경한 Bucket에 배치된 PG가 다른 Bucket으로 재배치되거나, 다른 Bucket에 배치되었던 PG가 Weight를 변경한 PG로 재배치 될 수 있다. 하지만 PG는 Weight를 변경하지 않은 Bucket 사이에서는 재배치 되지 않는다.
+[그림 7]은 Straw2에 하위 Bucket이 추가되는 경우를 나타내고 있다. 하위 Bucket이 추가되어도 **PG는 새로운 Bucket에 배치되거나 기존의 Bucket에 그대로 배치된다.** 따라서 적은 수의 Object들만 Rebalancing된다. 기존의 Bucket이 삭제되어도 삭제된 Bucket에 배치되었던 PG들만 재배치되고 기존의 PG는 그대로 유지되기 때문에 적은 수의 Object들만 Rebalancing된다. Bucket의 Weight를 변경하면 Weight를 변경한 Bucket에 배치된 PG가 다른 Bucket으로 재배치되거나, 다른 Bucket에 배치되었던 PG가 Weight를 변경한 PG로 재배치 될 수 있다. 하지만 PG는 Weight를 변경하지 않은 Bucket 사이에서는 재배치 되지않기 때문에, Bucket의 Weight를 변경하여도 적은 수의 Object들만 Rebalancing된다.
+
+#### 2.5. Straw
+
+{% highlight cpp %}
+cbucket straw(bucket, pg_id, replica) {
+    max_index = 0;
+    max_draw = 0;
+
+    for (i = 0; i < length(bucket->cbuckets); i++) {
+        draw = hash(pg_id, bucket->cbuckets[i]->id, replica) * 
+            bucket->cbuckets[i]->straw;
+        if (draw > max_draw) {
+            max_index = i;
+            max_draw = draw;
+        }
+    }
+
+    return bucket->cbuckets[max_index];
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 7] straw() 함수</figcaption>
+</figure>
+
+* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket - 상위 Bucket을 나타낸다.
+* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+
+Straw 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 **Straw**를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 7]은 Straw 알고리즘을 수행하는 straw() 함수를 나타내고 있다. Straw 값은 하위 Bucket들을 Weight순으로 오름차순으로 정렬한 다음, Straw 값을 구하려는 하위 Bucket의 Weight 값과 바로 앞의 하위 Bucket의 Weight 값을 이용하여 구한다. 예를들어 A/1.0, B/3.0, C/2.5 3개의 하위 Bucket들이 있을때 Weight에 따라서 A, C, B 순으로 정렬이된다. 그 후 C Bucket의 Straw값을 구하기 위해서 C Bucket의 Weight 값과 A Bucket의 Weight 값을 이용한다.
+
+하위 Bucket의 Straw 값을 구할때 해당 Bucket의 Weight 뿐만아니라 다른 하위 Bucket의 Weight를 이용한다는 의미는, 하위 Bucket의 추가, 삭제 또는 기존 Bucket의 Weight가 변경될 경우 최대 3개의 Straw 값이 바뀔 수 있다는 의미이다. Straw 알고리즘은 하위 Bucket의 변경에도 Object Rebalancing을 최소화 하기위해서 설계된 알고리즘이지만, Straw 값을 구하는 과정의 Side Effect 때문에 목표를 제대로 달성하지 못하였다. 이러한 문제를 해결하기 위해서 나온 알고리즘이 straw2이다.
 
 ### 3. 참조
 
 * [http://www.nminoru.jp/~nminoru/unix/ceph/rados-overview.html#mapping](http://www.nminoru.jp/~nminoru/unix/ceph/rados-overview.html#mapping)
+* [https://github.com/ceph/ceph/blob/master/src/crush/mapper.c](https://github.com/ceph/ceph/blob/master/src/crush/mapper.c)
+* [https://github.com/ceph/ceph/blob/master/src/crush/builder.c](https://github.com/ceph/ceph/blob/master/src/crush/builder.c)
 * [https://my.oschina.net/linuxhunter/blog/639016](https://my.oschina.net/linuxhunter/blog/639016)
