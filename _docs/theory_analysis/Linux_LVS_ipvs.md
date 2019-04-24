@@ -31,7 +31,7 @@ IPVS는 Linux의 Netfilter 위에서 동작하는 L4 Load Balancer이다. Linux 
 
 * ip_vs_forward_icmp() - FORWARD Hook에서 호출되는 Hook Function이다. 모든 ICMP Packet을 받아서 적절한 Real Server에게 전달하는 역활을 수행한다. 실제 구현은 in_vs_in_icmp() Function을 실행하는 Wrapper Function으로 되어있다.
 
-IPVS 없이 Netfilter만으로도 충분히 L4 Load Balacner을 구현 할 수 있지만, Packet을 Rule을 따라가면서 처리하는 Chain 방식으로 동작하는 netfilter의 성능에는 한계점이 존재한다. 또한 IPVS에서는 rr (Round Robin), dh (Destition Hash) 등 많이 이용되는 Load Balancing 알고리즘을 쉽게 이용 할 수 있도록 제공하고 있다. 따라서 Linux Kernel Level에서 L4 Load Balancing을 수행하는 경우 IPVS를 이용하는것이 유리하다.
+IPVS 없이 Netfilter만으로도 충분히 L4 Load Balacner을 구현 할 수 있지만, Packet을 Rule을 따라가면서 처리하는 Chain 방식으로 동작하는 netfilter의 성능에는 한계점이 존재한다. 또한 IPVS에서는 rr (Round Robin), dh (Destination Hash) 등 많이 이용되는 Load Balancing 알고리즘을 쉽게 이용 할 수 있도록 제공하고 있다. 따라서 Linux Kernel Level에서 L4 Load Balancing을 수행하는 경우 IPVS를 이용하는것이 유리하다.
 
 ### 3. 참조
 
