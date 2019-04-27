@@ -69,13 +69,19 @@ node.ingest: false
 <figcaption class="caption">[설정 4] Coodinating Node 설정</figcaption>
 </figure>
 
-Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 똔느 Proxy 역활을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
+Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 또는 Proxy 역활을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
 
 ### 3. Logstash
 
+Logstash는 다양한 Data Source로부터 Data를 수집하고 가공하여 Elasticsearch에게 전송하는 역활을 수행한다. Data Source에는 Log 파일, App의 Rest API 호출을 통해 전달되는 Data, Beats를 통해 전달되는 Data가 있다. 
+
 #### 3.1. Beats
 
+beats는 Data 수집기이다. Beats는 다양한 Data 수집을 위하여 다양한 Plugin을 제공하고 있다. 
+
 ### 4. Kibana
+
+Kibana는 Elastic Search를 통해서 분석한 Data를 시각화하는 Tool이다.
 
 ### 5. 참조
 
