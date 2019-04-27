@@ -69,7 +69,7 @@ node.ingest: false
 <figcaption class="caption">[설정 4] Coodinating Node 설정</figcaption>
 </figure>
 
-Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 또는 Proxy 역활을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
+Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고, 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 또는 Proxy 역활을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
 
 ### 3. Logstash
 
