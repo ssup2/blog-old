@@ -1,5 +1,5 @@
 ---
-title: ELK (Elasticsearch, Logstash, Kibana) Stack
+title: ELK Stack
 category: Theory, Analysis
 date: 2019-05-10T12:00:00Z
 lastmod: 2019-05-10T12:00:00Z
@@ -11,11 +11,13 @@ ELK (Elasticsearch, Logstash, Kibana)를 분석한다.
 
 ### 1. ELK Stack
 
-![[그림 1] ELK Stack]({{site.baseurl}}/images/theory_analysis/KVM_QEMU/QEMU_non-iothread.PNG)
+![[그림 1] ELK Stack]({{site.baseurl}}/images/theory_analysis/ELK_Stack/ELK_Stack.PNG)
 
 ELK Stack은 Elasticsearch, Logstash, Kibana를 조합을 의미한다. ELK Stack을 이용하여 Data를 수집하고 분석하는 Platform을 쉽게 구축할 수 있다. [그림 1]은 ELK Stack을 나타내고 있다.
 
 ### 2. Elasticsearch
+
+Elasticsearch는 Document DB로써 
 
 #### 2.1. Master Node
 
