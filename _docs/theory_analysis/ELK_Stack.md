@@ -73,11 +73,11 @@ Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node
 
 ### 3. Logstash
 
-Logstash는 다양한 Data Source로부터 Data를 수집하고 가공하여 Elasticsearch에게 전송하는 역활을 수행한다. Data Source에는 Log 파일, App의 Rest API 호출을 통해 전달되는 Data, Beats를 통해 전달되는 Data가 있다. 
+Logstash는 다양한 Data Source로부터 Data를 수집하고 가공하여 Elasticsearch에게 전송하는 역활을 수행한다. Data Source에는 Log 파일, App의 Rest API 호출을 통해 전달되는 Data, Beats를 통해 전달되는 Data가 있다. Logstash는 기본적으로 Data Source로부터 받은 Data를 In-memory Queue에 넣기 때문에, Logstash 장애 발생시 Data 유실이 발생한다. 이러한 Data 유실을 방지하기 위해서 Logstash는 Persistent Queue를 제공한다. Persistent Queue는 Data를 Disk에 저장하여 Data 손실을 방지한다. Persistent Queue는 Kafka, RabbitMQ와 같은 Message Queue를 대신하여 Data Buffer의 역활로도 이용될 수 있다.
 
 #### 3.1. Beats
 
-beats는 Data 수집기이다. Beats는 다양한 Data 수집을 위하여 다양한 Plugin을 제공하고 있다. 
+beats는 Data 수집기이다. Beats는 다양한 Data 수집을 위하여 다양한 Plugin을 제공하고 있다.
 
 ### 4. Kibana
 
