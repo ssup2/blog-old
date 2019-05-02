@@ -33,8 +33,8 @@ Couchbase의 Replica는 오직 HA를 위해서 존재한다. Replica는 Failover
 
 * Memory - Data가  Memroy에 저장되면 ACK를 전송한다.
 * Memory, Disk - Data가 Primary Node의 Memory 및 Disk에 저장되면 ACK를 전송한다.
-* Memory, Replica - Data가 Primary Node의 Memory 및 Replica Node의 Memory에 저장되면 ACK를 전송한다.
-* Memory, Disk, Replica - Data가 Primary Node의 Memory 및 Disk, Replica Node의 Memory에 저장되면 ACK를 전송한다.
+* Memory, Replica - Data가 Primary Node의 Memory 및 Secondary Node의 Memory에 저장되면 ACK를 전송한다.
+* Memory, Disk, Replica - Data가 Primary Node의 Memory 및 Disk, Secondary Node의 Memory에 저장되면 ACK를 전송한다.
 
 ### 2. 참조
 
