@@ -29,7 +29,15 @@ Bucket은 Couchbase에서 관리하는 Document Group이다. 하나의 CouchBase
 
 #### 1.2. Replication
 
+Couchbase의 Replica는 오직 HA를 위해서 존재한다. Replica는 Failover로 인하여 Active 상태가 되기전까지 다른 Client에게 제공되지 않는다. Couchbase Cluster는 Client의 Write 동작에 대하여 다음과 같은 4가지 ACK 옵션을 제공한다.
+
+* Memory - Data가  Memroy에 저장되면 ACK를 전송한다.
+* Memory, Disk - Data가 Primary Node의 Memory 및 Disk에 저장되면 ACK를 전송한다.
+* Memory, Replica - Data가 Primary Node의 Memory 및 Replica Node의 Memory에 저장되면 ACK를 전송한다.
+* Memory, Disk, Replica - Data가 Primary Node의 Memory 및 Disk, Replica Node의 Memory에 저장되면 ACK를 전송한다.
+
 ### 2. 참조
 
 * [https://docs.couchbase.com/server/5.0/architecture/core-data-access-buckets.html](https://docs.couchbase.com/server/5.0/architecture/core-data-access-buckets.html)
 * [https://docs.couchbase.com/server/6.0/learn/buckets-memory-and-storage/vbuckets.html](https://docs.couchbase.com/server/6.0/learn/buckets-memory-and-storage/vbuckets.html)
+* [https://docs.couchbase.com/server/4.1/concepts/data-management.html](https://docs.couchbase.com/server/4.1/concepts/data-management.html)
