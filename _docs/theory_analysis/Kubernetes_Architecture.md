@@ -29,17 +29,21 @@ Master Node는 Kubernetes Cluster를 관리하는 Node이다. HA (High Availabil
 
 #### 1.2. Worker Node
 
-Worker Node는 Kubernetes 사용자가 배포한 Application이 동작하는 Node이다. Worker Node에는 kubelet, kube-proxy, coredns, Network Daemon이 동작한다.
+Worker Node는 Kubernetes 사용자가 배포한 Application이 동작하는 Node이다. Worker Node에는 kubelet, coredns가 동작한다.
 
-* kubelet - 
+* kubelet - kube-apiserver로부터 명령을 받아 Docker를 통해서 Pod을 생성/삭제하거나 관리하는 역활을 수행한다. 또한 CNI Plugin을 통해서 생성한 Pod의 Network를 설정하는 역활도 수행한다.
 
-* kube-proxy
+* coredns - Pod의 IP는 언제나 바뀔수 있기 때문에 Pod과 통신하기 위해서는 Pod의 IP를 직접 이용하는것 보다는 DNS를 통해서 Pod의 IP를 얻는 방식을 이용하는 것이 좋다. coredns는 Pod안에서 다른 Pod의 IP를 찾을수 있는 DNS 역활을 수행한다. 이와 유사하게 Kubernetes의 Service IP도 언제든지 바뀔수 있기 때문에, coredns는 Pod안에서 Service IP를 찾을수 있는 DNS 역활도 수행한다.
 
-* coredns -
+* CNI Plugin - Pod의 Network를 설정할때 이용한다. CNI (Container Network Interface)를 준수하기 때문에 CNI Plugin이라고 불린다.
 
-* Network Daemon -
+#### 1.3. All Node
 
-* CNI Plugin -
+모든 Node에서 kube-proxy, Network Daemon이 동작한다.
+
+* kube-proxy - Kubernetes의 Service를 Kubernetes Cluster 내부나 외부에 노출시킬 수 있도록 Proxy Server 역활을 수행하거나, iptables를 제어하는 역활을 수행한다.
+
+* Network Daemon - Pod 사이에 통신이 가능하도록 Node (Host)의 Network를 설정한다. Network Daemon은 Host Network Namespace에서 동작하고 Network 설정을 변경할 수 있는 권한을 갖고 있기 때문에, Node의 Network 설정을 자유롭게 변경할 수 있다.
 
 ### 2. 참조
 
