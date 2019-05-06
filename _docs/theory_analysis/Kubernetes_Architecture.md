@@ -13,6 +13,28 @@ Kubernetes Architecture를 분석한다.
 
 ![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Architecture/Kubernetes_Architecture.PNG){: width="700px"}
 
+#### 1.1. Master Node
+
+* kube-apiserver -
+
+* kube-scheduler -
+
+* kube-controller-manager -
+
+* etcd -
+
+#### 1.2. Worker Node
+
+* kubelet - 
+
+* kube-proxy
+
+* coredns -
+
+* Network Daemon -
+
+* CNI Plugin -
+
 ### 2. 참조
 
 * [https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101]
