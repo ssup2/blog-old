@@ -11,7 +11,7 @@ Kubernetes Architecture를 분석한다.
 
 ### 1. Kubernetes Architecture
 
-![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Achitecture/Kubernetes_Achitecture.PNG){: width="700px"}
+![]({{site.baseurl}}/images/theory_analysis/Kubernetes_Architecture/Kubernetes_Architecture.PNG){: width="700px"}
 
 ### 2. 참조
 
