@@ -9,7 +9,15 @@ adsense: true
 
 Kubernetes Service Type별 Network를 분석한다.
 
-### 1. Kubernetes Architecture
+### 1. Kubernetes Service Network
+
+#### 1.1. ClusterIP
+
+#### 1.2. NodePort
+
+#### 1.3. LoadBalancer
+
+#### 1.4. Headless
 
 ### 2. 참조
 
