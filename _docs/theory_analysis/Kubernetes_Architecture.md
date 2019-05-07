@@ -39,7 +39,7 @@ Worker Node는 Kubernetes 사용자가 배포한 Application이 동작하는 Nod
 
 #### 1.3. All Node
 
-모든 Node에서 kube-proxy, Network Daemon이 동작한다.
+모든 Node에서 kube-proxy, Network Daemon이 동작한다. 
 
 * kube-proxy - Kubernetes의 Service를 Kubernetes Cluster 내부나 외부에 노출시킬 수 있도록 Proxy Server 역활을 수행하거나, iptables를 제어하는 역활을 수행한다.
 
