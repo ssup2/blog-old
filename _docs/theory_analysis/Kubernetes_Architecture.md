@@ -43,9 +43,8 @@ Worker Node는 Kubernetes 사용자가 배포한 Application이 동작하는 Nod
 
 * kube-proxy - Kubernetes의 Service를 Kubernetes Cluster 내부나 외부에 노출시킬 수 있도록 Proxy Server 역활을 수행하거나, iptables를 제어하는 역활을 수행한다.
 
-* Network Daemon - Pod 사이에 통신이 가능하도록 Node (Host)의 Network를 설정한다. Network Daemon은 Host Network Namespace에서 동작하고 Network 설정을 변경할 수 있는 권한을 갖고 있기 때문에, Node의 Network 설정을 자유롭게 변경할 수 있다.
+* Network Daemon - Pod 사이에 통신이 가능하도록 Node (Host)의 Network를 설정한다. Network Daemon은 Host Network Namespace에서 동작하고 Network 설정을 변경할 수 있는 권한을 갖고 있기 때문에, Node의 Network 설정을 자유롭게 변경할 수 있다. 어떠한 CNI Plugin을 이용하냐에 따라서 Network Daemon이 결정된다. flannel의 flanneld, calico의 calio-felix, cilium의 cilium-agent가 Network Daemon이라고 할 수 있다.
 
 ### 2. 참조
 
-* [https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101]
-(https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101)
+* [https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101](https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101)
