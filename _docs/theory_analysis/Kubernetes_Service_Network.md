@@ -9,7 +9,7 @@ adsense: true
 
 Kubernetes Service Type별 Network를 분석한다.
 
-### 1. Kubernetes Service Network
+### 1. Proxy Mode - iptables
 
 ![[그림 1] Kubernetes Architecture]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_Service_NAT_Table.PNG){: width="700px"}
 
@@ -75,6 +75,11 @@ Chain KUBE-POSTROUTING (1 references)
 
 #### 1.4. Headless
 
-### 2. 참조
+### 2. Proxy Mode - IPVS
+
+### 3. Proxy Mode - Userspace
+
+### 4. 참조
 
 * [http://www.system-rescue-cd.org/networking/Load-balancing-using-iptables-with-connmark/](http://www.system-rescue-cd.org/networking/Load-balancing-using-iptables-with-connmark/)
+* [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
