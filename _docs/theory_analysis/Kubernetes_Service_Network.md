@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-Kubernetes Service Type별 Network를 분석한다.
+Kubernetes는 iptables, IPVS, Userspace 3 가지 Proxy Mode를 지원하고 있다. 각 Mode에 따른 Service Network를 분석한다.
 
-### 1. Proxy Mode - iptables
+### 1. iptables Proxy Mode
 
-![[그림 1] Kubernetes Architecture]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_Service_NAT_Table.PNG){: width="700px"}
+![[그림 1] iptables Proxy Mode에서 Service Packet의 NAT Table 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_iptables_Service_NAT_Table.PNG){: width="700px"}
 
 {% highlight text %}
 Chain KUBE-SERVICES (2 references)
@@ -67,17 +67,15 @@ Chain KUBE-POSTROUTING (1 references)
 <figcaption class="caption">[Table 5] KUBE-POSTROUTING </figcaption>
 </figure>
 
-#### 1.1. ClusterIP
+iptables Proxy Mode는 Kubernetes가 이용하는 Default Proxy Mode이다. [그림 1]은 Service로 전송되는 Packet이 지나는 NAT Table 경로를 나타내고 있다. [Table 1] ~ [Table 5]는 [그림 1]의 각 NAT Table의 실제 내용을 보여주고 있다. [그림 1]의 NAT Table들은 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service로 Packet을 전송할 수 있다.
 
-#### 1.2. NodePort
+대부분의 Pod에서 전송된 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 Packet은 PREROUTING Table에 의해서 KUBE-SERVICE Table로 전달된다. Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-SERVICE Table로 전달된다. KUBE-SERVICE Table에서 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 Packet은 일치하는 ClusterIP Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. Packet의 Dest가 Localhost인 경우에는 해당 Packet은 KUBE-NODEPORTS Table로 전달된다.
 
-#### 1.3. LoadBalancer
+KUBE-NODEPORTS Table에서 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 Packet은 NodePort Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. KUBE-SVC-XXX Table에서는 iptables의 statistic 기능을 이용하여 Packet은 Service를 구성하는 Pod들로 랜덤하고 균등하게 분배하는 역활을 수행한다. [Table 3]에서는 Service는 3개의 Pod으로 구성되어 있기 때문에 3개의 KUBE-SEP-XXX Table로 Packet이 랜덤하고 균등하게 분배되도록 설정되어 있다. KUBE-SEP-XXX Table에서 Packet은 Container IP로 Service에서 설정한 Port로 DNAT를 수행한다. Container IP로 DNAT를 수행한 Packet은 해당 Container에게 전달된다.
 
-#### 1.4. Headless
+### 2. IPVS Proxy Mode
 
-### 2. Proxy Mode - IPVS
-
-### 3. Proxy Mode - Userspace
+### 3. Userspace Proxy Mode
 
 ### 4. 참조
 
