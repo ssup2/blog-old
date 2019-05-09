@@ -11,7 +11,7 @@ Kubernetes는 iptables, IPVS, Userspace 3 가지 Proxy Mode를 지원하고 있�
 
 ### 1. iptables Proxy Mode
 
-![[그림 1] iptables Proxy Mode에서 Service Packet의 NAT Table 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_iptables_Service_NAT_Table.PNG){: width="700px"}
+![[그림 1] iptables Proxy Mode에서 Service Packet의 NAT Table 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_iptables_Service_NAT_Table.PNG)
 
 {% highlight text %}
 Chain KUBE-SERVICES (2 references)
