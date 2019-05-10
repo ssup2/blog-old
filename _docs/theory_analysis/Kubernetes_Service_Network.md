@@ -71,10 +71,9 @@ iptables Proxy Mode는 Kubernetes가 이용하는 Default Proxy Mode이다. [그
 
 대부분의 Pod에서 전송된 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 Packet은 PREROUTING Table에 의해서 KUBE-SERVICE Table로 전달된다. Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-SERVICE Table로 전달된다. KUBE-SERVICE Table에서 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 Packet은 일치하는 ClusterIP Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. Packet의 Dest IP가 Localhost인 경우에는 해당 Packet은 KUBE-NODEPORTS Table로 전달된다.
 
-KUBE-NODEPORTS Table에서 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 Packet은 NodePort Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. KUBE-SVC-XXX Table에서는 iptables의 statistic 기능을 이용하여 Packet은 Service를 구성하는 Pod들로 랜덤하고 균등하게 분배하는 역활을 수행한다. [Table 3]에서는 Service는 3개의 Pod으로 구성되어 있기 때문에 3개의 KUBE-SEP-XXX Table로 Packet이 랜덤하고 균등하게 분배되도록 설정되어 있다. KUBE-SEP-XXX Table에서 Packet은 Container IP 및 Service에서 설정한 Port로 DNAT를 수행한다. Container IP로 **DNAT**를 수행한 Packet은 해당 CNI Plugin을 통해 구축된 Container Netwokr를 통해서 Container에게 전달된다.
+KUBE-NODEPORTS Table에서 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 Packet은 NodePort Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. KUBE-SVC-XXX Table에서는 iptables의 statistic 기능을 이용하여 Packet은 Service를 구성하는 Pod들로 랜덤하고 균등하게 분배하는 역활을 수행한다. [Table 3]에서는 Service는 3개의 Pod으로 구성되어 있기 때문에 3개의 KUBE-SEP-XXX Table로 Packet이 랜덤하고 균등하게 분배되도록 설정되어 있다. KUBE-SEP-XXX Table에서 Packet은 Container IP 및 Service에서 설정한 Port로 DNAT를 수행한다. Container IP로 **DNAT**를 수행한 Packet은 CNI Plugin을 통해 구축된 Container Netwokr를 통해서 해당 Container에게 전달된다.
 
-Service로 전달되는 Packet은 iptables의 DNAT를 통해서 Pod에게 전달되기 때문에, Pod에서 전송한 응답 Packet의 Src IP는 Pod의 IP가 아닌 Service의 IP로 **SNAT**되어야 한다. iptables에는 Serivce를 위한 SNAT Rule이 명시되어 있지 않다. 하지만 iptables는 Linux Kernel의 **Conntrack** (Connection Tracking)의 TCP Connection 정보를 바탕으로 Service Pod으로부터 전달받은 Packet을 SNAT한다. 
-
+Service로 전달되는 Packet은 iptables의 DNAT를 통해서 Pod에게 전달되기 때문에, Pod에서 전송한 응답 Packet의 Src IP는 Pod의 IP가 아닌 Service의 IP로 **SNAT**되어야 한다. iptables에는 Serivce를 위한 SNAT Rule이 명시되어 있지 않다. 하지만 iptables는 Linux Kernel의 **Conntrack** (Connection Tracking)의 TCP Connection 정보를 바탕으로 Service Pod으로부터 전달받은 Packet을 SNAT한다.
 
 ### 2. IPVS Proxy Mode
 
@@ -82,5 +81,6 @@ Service로 전달되는 Packet은 iptables의 DNAT를 통해서 Pod에게 전달
 
 ### 4. 참조
 
+* [https://www.slideshare.net/Docker/deep-dive-in-container-service-discovery](https://www.slideshare.net/Docker/deep-dive-in-container-service-discovery)
 * [http://www.system-rescue-cd.org/networking/Load-balancing-using-iptables-with-connmark/](http://www.system-rescue-cd.org/networking/Load-balancing-using-iptables-with-connmark/)
 * [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
