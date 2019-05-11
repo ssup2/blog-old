@@ -58,6 +58,9 @@ Chain KUBE-SEP-QQATNRPNVZFKMY6D (1 references)
 </figure>
 
 {% highlight text %}
+Chain KUBE-MARK-MASQ (23 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            MARK or 0x4000 
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Table 5] KUBE-MARK-MASQ </figcaption>
@@ -81,9 +84,13 @@ KUBE-NODEPORTS Table에서 Packet의 Dest Port가 NodePort Service의 Port와 �
 
 Service로 전달되는 Packet은 iptables의 DNAT를 통해서 Pod에게 전달되기 때문에, Pod에서 전송한 응답 Packet의 Src IP는 Pod의 IP가 아닌 Service의 IP로 **SNAT**되어야 한다. iptables에는 Serivce를 위한 SNAT Rule이 명시되어 있지 않다. 하지만 iptables는 Linux Kernel의 **Conntrack** (Connection Tracking)의 TCP Connection 정보를 바탕으로 Service Pod으로부터 전달받은 Packet을 SNAT한다.
 
-KUBE-MARK-MASQ Table은 Packet Masquerade를 위해서 Packet에 Marking을 수행하는 Table이다. Marking된 Packet은 KUBE-POSTROUTING Table에서 Masquerade 된다. 즉 Packet의 Src Address가 Host의 IP로 SNAT 된다. Masquerade가 필요한 경우중 하나는 Pod에서 자신이 소속되어있는 Service의 IP로 Packet을 전송하여 자기 자신에게 Packet이 돌아올 경우이다. Packet은 DNAT되어 Packet의 Src IP와 Dest IP는 모두 Pod의 IP가 된다. 따라서 Pod에서 돌아온 Packet에 대한 응답을 보낼경우, Packet은 Host의 NAT Table을 거치지 않고 Pod안에서 처리되기 때문에 SNAT가 수행되지 않는다.
+#### 1.1. Masquerade
 
-KUBE-SEP-XXX Table에서 Packet의 Src IP가 DNAT 하려는 IP와 동일한 경우, 즉 Pod이 Service로 전송한 Packet을 자기 자신이 받을경우 해당 Packet은 KUBE-MARK-MASQ Table을 거쳐 Marking이 되고 KUBE-POSTROUTING Table에서 Masquerade 된다. Pod이 받은 Packet의 Src IP는 Host의 IP로 설정되어 있기 때문에 Pod의 응답은 Host의 NAT Table 전달되고, 다시 SNAT 되어 Pod에게 전달된다.
+![[그림 2] Masquerade ]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Network/Kubernetes_iptables_Masquerade.PNG){: width="650px"}
+
+KUBE-MARK-MASQ Table은 Packet Masquerade를 위해서 Packet에 Marking을 수행하는 Table이다. Marking된 Packet은 KUBE-POSTROUTING Table에서 Masquerade 된다. 즉 Packet의 Src IP가 Host의 IP로 SNAT 된다. Masquerade가 필요한 경우중 하나는 Pod에서 자신이 소속되어있는 Service의 IP로 Packet을 전송하여 자기 자신에게 Packet이 돌아올 경우이다. [그림 2]는 이러한 경우를 나타내고 있다. Packet은 DNAT되어 Packet의 Src IP와 Dest IP는 모두 Pod의 IP가 된다. 따라서 Pod에서 돌아온 Packet에 대한 응답을 보낼경우, Packet은 Host의 NAT Table을 거치지 않고 Pod안에서 처리되기 때문에 SNAT가 수행되지 않는다.
+
+Masquerade를 이용하면 Pod에게 돌아온 Packet을 Host에게 넘겨 SNAT가 수행되도록 만들 수 있다. KUBE-SEP-XXX Table에서 Packet의 Src IP가 DNAT 하려는 IP와 동일한 경우, 즉 Pod이 Service로 전송한 Packet을 자기 자신이 받을경우 해당 Packet은 KUBE-MARK-MASQ Table을 거쳐 Marking이 되고 KUBE-POSTROUTING Table에서 Masquerade 된다. Pod이 받은 Packet의 Src IP는 Host의 IP로 설정되어 있기 때문에 Pod의 응답은 Host의 NAT Table 전달되고, 다시 SNAT 되어 Pod에게 전달된다.
 
 ### 2. IPVS Proxy Mode
 
