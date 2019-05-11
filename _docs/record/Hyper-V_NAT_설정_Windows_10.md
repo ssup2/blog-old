@@ -22,8 +22,8 @@ adsense: true
 * Powershell 관리자 권한에서 아래의 명령어 수행한다.
 
 ~~~
-> New-VMSwitch -SwitchName "NAT-Swtich" -SwitchType Internal
-> $AdapterName=(Get-NetAdapter -Name "vEthernet (NAT-Swtich)").Name
+> New-VMSwitch -SwitchName "NAT-Switch" -SwitchType Internal
+> $AdapterName=(Get-NetAdapter -Name "vEthernet (NAT-Switch)").Name
 > New-NetIPAddress -IPAddress 172.34.0.1 -PrefixLength 24 -InterfaceAlias $AdapterName
 > New-NetNat -Name NAT-Network -InternalIPInterfaceAddressPrefix 172.34.0.0/24
 ~~~
