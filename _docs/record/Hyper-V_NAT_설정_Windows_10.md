@@ -10,12 +10,12 @@ adsense: true
 ### 1. 설정 환경
 
 * NAT Network
-  * Network - 172.34.0.0/24
-  * Gateway - 172.34.0.1
+  * Network - 172.35.0.0/24
+  * Gateway - 172.35.0.1
   * Switch Name - NAT-Switch
   * Network Name - NAT-Network
 * VM
-  * Address - 172.34.0.100
+  * Address - 172.35.0.100
 
 ### 2. Switch 생성 및 NAT 설정
 
@@ -24,8 +24,8 @@ adsense: true
 ~~~
 > New-VMSwitch -SwitchName "NAT-Switch" -SwitchType Internal
 > $AdapterName=(Get-NetAdapter -Name "vEthernet (NAT-Switch)").Name
-> New-NetIPAddress -IPAddress 172.34.0.1 -PrefixLength 24 -InterfaceAlias $AdapterName
-> New-NetNat -Name NAT-Network -InternalIPInterfaceAddressPrefix 172.34.0.0/24
+> New-NetIPAddress -IPAddress 172.35.0.1 -PrefixLength 24 -InterfaceAlias $AdapterName
+> New-NetNat -Name NAT-Network -InternalIPInterfaceAddressPrefix 172.35.0.0/24
 ~~~
 
 ### 3. VM
@@ -43,9 +43,9 @@ network:
     ethernets:
         eth0:
             addresses:
-                - 172.34.0.100/24
+                - 172.35.0.100/24
             dhcp4: false
-            gateway4: 172.34.0.1
+            gateway4: 172.35.0.1
             nameservers:
                 addresses:
                     - 8.8.8.8
