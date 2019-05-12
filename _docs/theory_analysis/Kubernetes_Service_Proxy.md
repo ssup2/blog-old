@@ -11,7 +11,7 @@ Kubernetes는 iptables, IPVS, Userspace 3가지 Mode의 Service Proxy를 지원�
 
 ### 1. iptables Mode
 
-![[그림 1] iptables Mode에서 Service Packet 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Proxy/iptables_Mode_Service_Packet_Path.PNG)
+![[그림 1] iptables Mode에서 Service Packet 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Proxy/iptables_Mode_Service_Packet_Path.PNG){: width="700px"}
 
 {% highlight text %}
 Chain KUBE-SERVICES (2 references)
@@ -94,7 +94,7 @@ Masquerade를 이용하면 Pod에게 돌아온 Packet을 강제로 Host에게 �
 
 ### 2. Userspace Mode
 
-![[그림 3] Userspace Mode에서 Service Packet 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Proxy/Userspace_Mode_Service_Packet_Path.PNG)
+![[그림 3] Userspace Mode에서 Service Packet 경로]({{site.baseurl}}/images/theory_analysis/Kubernetes_Service_Proxy/Userspace_Mode_Service_Packet_Path.PNG){: width="700px"}
 
 {% highlight text %}
 Chain KUBE-PORTALS-CONTAINER (1 references)
