@@ -138,7 +138,7 @@ Userspace Proxy Mode는 Kubernetes가 처음으로 제공했던 Proxy Mode이다
 
 대부분의 Pod에서 전송된 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 Packet은 PREROUTING Table에 의해서 KUBE-PORTALS-CONTAINER Table로 전달된다. KUBE-PORTALS-CONTAINER Table에서 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 Packet은 kube-proxy로 **Redirect**된다. Packet의 Dest IP가 Localhost인 경우에는 해당 Packet은 KUBE-NODEPORT-CONTAINER Table로 전달된다. KUBE-NODEPORT-CONTAINER Table에서 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 Packet은 kube-proxy로 **Redirect**된다.
 
-Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-PORTALS-HOST Table로 전달된다. 이후의 KUBE-PORTALS-HOST, KUBE-NODEPORT-HOST Table에서의 Packet 처리과정은 KUBE-PORTALS-CONTAINER, KUBE-NODEPORT-CONTAINER Table에서의 Packet 처리와 유사하다. 차이점은 Packet을 Packet을 Redirect하지 않고 **DNAT** 한다는 점이다.
+Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-PORTALS-HOST Table로 전달된다. 이후의 KUBE-PORTALS-HOST, KUBE-NODEPORT-HOST Table에서의 Packet 처리과정은 KUBE-PORTALS-CONTAINER, KUBE-NODEPORT-CONTAINER Table에서의 Packet 처리와 유사하다. 차이점은 Packet을 Packet을 Redirect하지 않고 **DNAT**를 수행한다는 점이다.
 
 **Redirect, DNAT를 통해서 Service로 전송한 모든 Packet은 kube-proxy로 전달된다.** kube-proxy가 받는 Packet의 Dest Port 하나당 하나의 Service가 Mapping 되어있다. 따라서 kube-proxy는 Redirect, NAT된 Packet의 Dest Port를 통해서 해당 Packet이 어느 Service로 전달되어야 하는지 파악할 수 있다. kube-proxy는 전달받은 Packet을 Packet이 전송되어야하는 Service에 속한 다수의 Pod에게 균등하게 Load Balancing 하여 다시 전송한다. kube-proxy는 Host의 Network Namespace에서 동작하기 때문에 kube-proxy가 전송한 Packet 또한 Service NAT Table들을 거친다. 하지만 kube-proxy가 전송한 Packet의 Dest IP는 Pod의 IP이기 때문에 해당 Packet은 Service NAT Table에 의해서 변경되지 않고 Pod에게 직접 전달된다.
 
