@@ -107,22 +107,22 @@ Chain KUBE-PORTALS-CONTAINER (1 references)
 </figure>
 
 {% highlight text %}
+Chain KUBE-NODEPORT-CONTAINER (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/my-nginx-nodeport: */ tcp dpt:30915 redir ports 32847 
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[NAT Table 8] Userspace Mode의 KUBE-NODEPORT-CONTAINER</figcaption>
+</figure>
+
+{% highlight text %}
 Chain KUBE-PORTALS-HOST (1 references)
  pkts bytes target     prot opt in     out     source               destination
     0     0 DNAT       tcp  --  *      *       0.0.0.0/0            10.103.1.234         /* default/my-nginx-cluster: */ tcp dpt:80 to:172.35.0.100:46635
     0     0 DNAT       tcp  --  *      *       0.0.0.0/0            10.97.229.148        /* default/my-nginx-nodeport: */ tcp dpt:80 to:172.35.0.100:32847
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[NAT Table 8] Userspace Mode의 KUBE-PORTALS-HOST</figcaption>
-</figure>
-
-{% highlight text %}
-Chain KUBE-NODEPORT-CONTAINER (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/my-nginx-nodeport: */ tcp dpt:30915 redir ports 32847 
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[NAT Table 9] Userspace Mode의 KUBE-NODEPORT-CONTAINER</figcaption>
+<figcaption class="caption">[NAT Table 9] Userspace Mode의 KUBE-PORTALS-HOST</figcaption>
 </figure>
 
 {% highlight text %}
@@ -135,6 +135,12 @@ Chain KUBE-NODEPORT-HOST (1 references)
 </figure>
 
 Userspace Proxy Mode는 Kubernetes가 처음으로 제공했던 Proxy Mode이다. Userspace에서 동작하는 kube-proxy가 Service Proxy 역활을 수행한다. 현재는 iptables Mode에 비해서 떨어지는 성능 때문에 잘 이용되지 않고 있다. [그림 3]은 Userspace Mode에서 Service로 전송되는 Packet의 경로를 나타내고 있다. [NAT Table 7] ~ [NAT Table 10]은 [그림 3]의 각 NAT Table의 실제 내용을 보여주고 있다. [그림 3]의 NAT Table과 kube-proxy는 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service로 Packet을 전송할 수 있다.
+
+대부분의 Pod에서 전송된 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 Packet은 PREROUTING Table에 의해서 KUBE-PORTALS-CONTAINER Table로 전달된다. KUBE-PORTALS-CONTAINER Table에서 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 Packet은 kube-proxy로 **Redirect**된다. Packet의 Dest IP가 Localhost인 경우에는 해당 Packet은 KUBE-NODEPORT-CONTAINER Table로 전달된다. KUBE-NODEPORT-CONTAINER Table에서 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 Packet은 kube-proxy로 **Redirect**된다.
+
+Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-PORTALS-HOST Table로 전달된다. 이후의 KUBE-PORTALS-HOST, KUBE-NODEPORT-HOST Table에서의 Packet 처리과정은 KUBE-PORTALS-CONTAINER, KUBE-NODEPORT-CONTAINER Table에서의 Packet 처리와 유사하다. 차이점은 Packet을 Packet을 Redirect하지 않고 **DNAT** 한다는 점이다.
+
+**Redirect, DNAT를 통해서 Service로 전송한 모든 Packet은 kube-proxy로 전달된다.** kube-proxy가 받는 Packet의 Dest Port 하나당 하나의 Service가 Mapping 되어있다. 따라서 kube-proxy는 Redirect, NAT된 Packet의 Dest Port를 통해서 해당 Packet이 어느 Service로 전달되어야 하는지 파악할 수 있다. kube-proxy는 전달받은 Packet을 Packet이 전송되어야하는 Service에 속한 다수의 Pod에게 균등하게 Load Balancing 하여 다시 전송한다. kube-proxy는 Host의 Network Namespace에서 동작하기 때문에 kube-proxy가 전송한 Packet 또한 Service NAT Table들을 거친다. 하지만 kube-proxy가 전송한 Packet의 Dest IP는 Pod의 IP이기 때문에 해당 Packet은 Service NAT Table에 의해서 변경되지 않고 Pod에게 직접 전달된다.
 
 ### 3. IPVS Mode
 
