@@ -29,25 +29,63 @@ IPVS 없이 iptables만으로도 충분히 L4 Load Balacner을 구현할 수 있
 
 ##### 2.1.1. ip_vs_remote_request()
 
-ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. 외부의 Client로부터 수신한 요청 Packet의 Dest IP가 Load Balancer IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_remote_request()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 LOCAL_OUT Hook으로 전달된다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
+ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. 외부의 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_remote_request()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 LOCAL_OUT Hook으로 전달된다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.2. ip_vs_local_request()
 
-ip_vs_local_request()는 LOCAL_OUT Hook에서 호출되는 Netfilter Hook Function이다. Client가 IPVS가 적용되어 있는 동일 Node에 있을경우, 해당 Client로부터 수신한 요청 Packet의 Dest IP가 Load Balancer IP라면 ip_vs_local_request()는 LOCAL_OUT Hook을 통해서 호출된다. ip_vs_remote_request()처럼 Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_local_request는() iptables의 Output Mangle Table과 ip_vs_local_reply() 다음으로 호출된다. ip_vs_local_request()의 실제 구현은 ip_vs_remote_request()처럼 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
+ip_vs_local_request()는 LOCAL_OUT Hook에서 호출되는 Netfilter Hook Function이다. Client가 IPVS가 적용되어 있는 동일 Node에 있을경우, 해당 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP라면 ip_vs_local_request()는 LOCAL_OUT Hook을 통해서 호출된다. ip_vs_remote_request()처럼 Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_local_request는() iptables의 Output Mangle Table과 ip_vs_local_reply() 다음으로 호출된다. ip_vs_local_request()의 실제 구현은 ip_vs_remote_request()처럼 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.3. ip_vs_reply()
 
-ip_vs_reply()는 LOCAL_IN Hook 및 FORWARD Hook에서 호출되는 Netfilter Hook Function이다. IPVS를 통해서 Client로부터 받은 요청 Packet을 Load Balancing 및 Server IP로 DNAT를 수행하여 Server에 Packet을 전달할 경우, IPVS는 Server로부터 받은 응답 Packet을 Load Balancer IP로 SNAT하여 IP로 Client로 전송해야 한다. ip_vs_reply()는 Server로부터 받은 응답 Packet을 Load Balancer IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다.
+ip_vs_reply()는 LOCAL_IN Hook 및 FORWARD Hook에서 호출되는 Netfilter Hook Function이다. IPVS를 통해서 Client로부터 받은 요청 Packet을 Load Balancing 및 Server IP로 DNAT를 수행하여 Server에 Packet을 전달할 경우, IPVS는 Server로부터 받은 응답 Packet을 IPVS의 IP로 SNAT하여 IP로 Client로 전송해야 한다. ip_vs_reply()는 Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다.
 
 Server가 외부에 있고 Client가 IPVS가 적용된 동일 Node에 있는경우 LOCAL_IN Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. LOCAL_IN Hook의 ip_vs_reply()은 iptables의 Input Filter Table 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 LOCAL_IN Hook의 ip_vs_reply()에서 처리하지 못한다. Server와 Client가 외부에 있을 경우 FORWARD Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. FORWARD Hook의 ip_vs_reply()는 iptables의 Forward Filter Table과 ip_vs_forward_icmp() 다음으로 호출되기 때문에 Forward Filter Table에서 Filtering된 Packet은 FORWARD Hook의 ip_vs_reply()에서 처리하지 못한다. ip_vs_reply()의 실제 구현은 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.4. ip_vs_local_reply()
 
-ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip_vs_reply()처럼 Server로부터 받은 응답 Packet을 Load Balancer IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다. Client의 위치에 관계없이 Server가 IPVS가 적용되어 있는 동일 Node에 있을 경우 ip_vs_local_reply()를 통해서 SNAT가 수행된다. ip_vs_local_reply()는 ip_vs_local_request() 이전에 호출된다. 실제 구현은 ip_vs_reply()처럼 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
+ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip_vs_reply()처럼 Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다. Client의 위치에 관계없이 Server가 IPVS가 적용되어 있는 동일 Node에 있을 경우 ip_vs_local_reply()를 통해서 SNAT가 수행된다. ip_vs_local_reply()는 ip_vs_local_request() 이전에 호출된다. 실제 구현은 ip_vs_reply()처럼 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.5. ip_vs_forward_icmp()
 
 ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. 모든 ICMP Packet을 받아서 적절한 Real Server에게 전달하는 역활을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
+
+#### 2.2 IPVS Dummpy Interface
+
+{% highlight text %}
+# ipvsadm -ln
+...
+TCP  10.100.15.169:80 rr
+  -> 192.167.1.93:80              Masq    1      0          0
+  -> 192.167.2.88:80              Masq    1      0          0
+  -> 192.167.2.215:80             Masq    1      0          0    
+TCP  10.103.1.234:80 rr
+  -> 192.167.1.93:80              Masq    1      0          0
+  -> 192.167.2.88:80              Masq    1      0          0
+  -> 192.167.2.215:80             Masq    1      0          0   
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 1] IPVS List</figcaption>
+</figure>
+
+{% highlight text %}
+# ip a
+...
+4: ipvs0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default
+    link/ether 72:35:cc:0c:19:b3 brd ff:ff:ff:ff:ff:ff
+    inet 10.100.15.169/32 brd 10.100.15.169 scope global kube-ipvs0
+       valid_lft forever preferred_lft forever
+    inet 10.103.1.234/32 brd 10.103.1.234 scope global kube-ipvs0
+       valid_lft forever preferred_lft forever
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] IPVS Dummy Interface</figcaption>
+</figure>
+
+LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당 Packet이 Process로 전달되기 전에 호출되는 Hook이다. 따라서 Packet의 Dest IP가 Node의 IP가 아닌 IPVS의 IP이면 해당 Packet은 LOCAL_IN Hook이 아니라 FORWARD Hook에서 처리되어야 한다. 하지만 해당 Packet이 LOCAL_IN Hook에서 처리되는 이유는 IPVS가 생성하는 Dummy Interface에 IPVS의 IP가 할당되기 때문이다.
+
+[Shell 1]은 ipvsadm 명령어를 이용하여 IPVS List 정보를 보여주고 있다. Dest IP, Dest Port가 10.100.15.169:80 또는 10.103.1.234:80인 Packet이 Round Robin 알고리즘에 의해서 Load Balancing 되도록 설정되어 있다. [Shell 2]는 IPVS의 Dummy Interface를 나타내고 있다. ipvs0 Interface에 IPVS의 IP인 10.100.15.169와 10.103.1.234가 설정되어 있는것을 확인할 수 있다.
 
 ### 3. 참조
 
