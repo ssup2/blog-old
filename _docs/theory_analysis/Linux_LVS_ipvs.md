@@ -45,7 +45,7 @@ Server가 외부에 있고 Client가 IPVS가 적용된 동일 Node에 있는경�
 
 ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip_vs_reply()처럼 Server로부터 받은 응답 Packet을 Load Balancer IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다. Client의 위치에 관계없이 Server가 IPVS가 적용되어 있는 동일 Node에 있을 경우 ip_vs_local_reply()를 통해서 SNAT가 수행된다. ip_vs_local_reply()는 ip_vs_local_request() 이전에 호출된다. 실제 구현은 ip_vs_reply()처럼 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
 
-##### 2.1.4. ip_vs_forward_icmp()
+##### 2.1.5. ip_vs_forward_icmp()
 
 ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. 모든 ICMP Packet을 받아서 적절한 Real Server에게 전달하는 역활을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
 
