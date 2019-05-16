@@ -244,7 +244,9 @@ Service Proxy의 IPVS Mode는 Linue Kernel에서 제공하는 L4 Load Balacner�
 
 IPVS에서는 Packet의 Dest IP, Dest Port가 ClusterIP Service의 IP와 Port와 일치하거나, Packet의 Dest IP가 LocalHost이고 Packet의 Dest Port가 NodePort Service의 NodePort와 일치하는 경우 해당 Packet을 Load Balancing 및 Pod IP와 Service에서 설정한 Port로 DNAT를 수행한다. Pod IP로 **DNAT**된 Packet은 CNI Plugin을 통해 구축된 Container Network를 통해서 해당 Pod에게 전달된다. [IPVS List]에서 10.97.229.148:80은 ClusterIP Service의 IP, Port이고 127.0.0.1:32238의 32238은 NodePort Service NodePort이다.
 
-#### 1.2. IPVS Mode Hairpinning
+IPVS도 iptables와 동일하게 Linux Kernel의 Contrack의 TCP Connection 정보를 이용한다. 따라서 IPVS로 인하여 DNAT되어 전송된 Service Packet의 응답 Packet은 IPVS가 다시 SNAT하여 Service를 요청한 Pod 또는 Host Process에게 전달된다.
+
+#### 3.2. IPVS Mode Hairpinning
 
 ### 4. 참조
 
