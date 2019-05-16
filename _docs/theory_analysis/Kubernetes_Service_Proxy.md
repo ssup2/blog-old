@@ -140,7 +140,7 @@ Service Proxy의 iptables Mode는 Userspace에서 동작하는 kube-proxy가 Ser
 
 Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 요청 Packet은 OUTPUT Table에 의해서 KUBE-PORTALS-HOST Table로 전달된다. 이후의 KUBE-PORTALS-HOST, KUBE-NODEPORT-HOST Table에서의 요청 Packet 처리과정은 KUBE-PORTALS-CONTAINER, KUBE-NODEPORT-CONTAINER Table에서의 요청 Packet 처리와 유사하다. 차이점은 요청 Packet을 Redirect하지 않고 **DNAT**를 수행한다는 점이다.
 
-**Redirect, DNAT를 통해서 Service로 전송한 모든 요청 Packet은 kube-proxy로 전달된다.** kube-proxy가 받는 요청 Packet의 Dest Port 하나당 하나의 Service가 Mapping 되어있다. 따라서 kube-proxy는 Redirect, NAT된 요청 Packet의 Dest Port를 통해서 해당 요청 Packet이 어느 Service로 전달되어야 하는지 파악할 수 있다. kube-proxy는 전달받은 요청 Packet을 요청 Packet이 전송되어야하는 Service에 속한 다수의 Pod에게 균등하게 Load Balancing 하여 다시 전송한다.
+**Redirect, DNAT를 통해서 Service로 전송한 모든 요청 Packet은 kube-proxy로 전달된다.** kube-proxy가 받는 요청 Packet의 Dest Port 하나당 하나의 Service가 Mapping 되어있다. 따라서 kube-proxy는 Redirect, NAT된 요청 Packet의 Dest Port를 통해서 해당 요청 Packet이 어느 Service로 전달되어야 하는지 파악할 수 있다. kube-proxy는 전달받은 요청 Packet을 요청 Packet이 전송되어야하는 Service에 속한 다수의 Pod에게 균등하게 Load Balancing하여 다시 전송한다.
 
 kube-proxy는 Host의 Network Namespace에서 동작하기 때문에 kube-proxy가 전송한 요청 Packet 또한 Service NAT Table들을 거친다. 하지만 kube-proxy가 전송한 요청 Packet의 Dest IP는 Pod의 IP이기 때문에 해당 요청 Packet은 Service NAT Table에 의해서 변경되지 않고, CNI Plugin을 통해 구축된 Container Network를 통해서 해당 Pod에게 전달된다.
 
