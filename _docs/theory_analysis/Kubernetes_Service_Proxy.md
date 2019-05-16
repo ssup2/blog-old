@@ -179,6 +179,15 @@ Chain KUBE-POSTROUTING (1 references)
 </figure>
 
 {% highlight text %}
+Chain KUBE-MARK-MASQ (3 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   120 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            MARK or 0x4000
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[NAT Table 14] IPVS Mode의 KUBE-MARK-MASQ </figcaption>
+</figure>
+
+{% highlight text %}
 Name: KUBE-CLUSTER-IP
 Type: hash:ip,port
 Revision: 5
@@ -212,7 +221,7 @@ Members:
 32238
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[ipset] IPVS Mode의 ipset 목록 </figcaption>
+<figcaption class="caption">[ipset List] IPVS Mode의 ipset List </figcaption>
 </figure>
 
 {% highlight text %}
@@ -229,7 +238,7 @@ TCP  127.0.0.1:32238 rr
 <figcaption class="caption">[IPVS List] IPVS Mode의 IPVS List </figcaption>
 </figure>
 
-Service Proxy의 IPVS Mode는 Linue Kernel에서 제공하는 L4 Load Balacner인 IPVS가 Service Proxy 역활을 수행하는 Mode이다. iptables를 이용하여 Packet Load Balancing을 수행하는것 보다 IPVS를 이용하여 Packet Load Balancing을 수행하는 것이 더 높은 성능을 보이기 때문에, IPVS Mode는 iptables Mode보다 높은 Packet Load Balancing을 성능을 보여준다. [그림 4]는 IPVS Mode에서 Service로 전송되는 Packet의 경로를 나타내고 있다. [NAT Table 11] ~ [NAT Table 13]은 [그림 4]의 주요 NAT Table의 실제 내용을 보여주고 있다. [ipset]은 IPVS Mode의 주요 ipset 목록을 보여주고 있다. [IPVS List]는 [그림 4]의 IPVS의 실제 내용을 보여주고 있다.
+Service Proxy의 IPVS Mode는 Linue Kernel에서 제공하는 L4 Load Balacner인 IPVS가 Service Proxy 역활을 수행하는 Mode이다. iptables를 이용하여 Packet Load Balancing을 수행하는것 보다 IPVS를 이용하여 Packet Load Balancing을 수행하는 것이 더 높은 성능을 보이기 때문에, IPVS Mode는 iptables Mode보다 높은 Packet Load Balancing을 성능을 보여준다. [그림 4]는 IPVS Mode에서 Service로 전송되는 Packet의 경로를 나타내고 있다. [NAT Table 11] ~ [NAT Table 14]는 [그림 4]의 주요 NAT Table의 실제 내용을 보여주고 있다. [ipset List]는 IPVS Mode의 주요 ipset 목록을 보여주고 있다. [IPVS List]는 [그림 4]의 IPVS의 실제 내용을 보여주고 있다.
 
 대부분의 Pod에서 전송된 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 Packet은 PREROUTING Table에 의해서 KUBE-SERVICES Table로 전달된다. Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 Packet은 OUTPUT Table에 의해서 KUBE-SERVICES Table로 전달된다. KUBE-SERVICES Table에서 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 Packet은 INPUT Table을 거쳐 IPVS로 전달된다. Packet의 Dest IP가 Localhost인 경우에는 해당 Packet은 KUBE-NODE-PORT Table과 INPUT Table을 거쳐 IPVS로 전달된다.
 
