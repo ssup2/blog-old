@@ -1,5 +1,5 @@
 ---
-title: Kubernetes, Helm 설치, 실행 - Ubuntu_18.04
+title: Kubernetes Helm 설치 - Ubuntu_18.04
 category: Record
 date: 2018-12-11T12:00:00Z
 lastmod: 2018-12-11T12:00:00Z
@@ -9,12 +9,9 @@ adsense: true
 
 ### 1. 설치 환경
 
-* VirtualBox 5.0.14r
-  * Master Node - Ubuntu Desktop 18.04.1 64bit - 1대
-  * Worker Node - Ubuntu Server 18.04.1 64bit - 2대
-* PC - Ubuntu 18.04, root User
 * Kubernetes 1.12
   * Network Addon - cilium 이용
+* 
 
 ### 2. Helm 설치
 
