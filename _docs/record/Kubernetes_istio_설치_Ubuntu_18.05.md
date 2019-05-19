@@ -31,7 +31,7 @@ adsense: true
 # helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
 ~~~
 
-* 설치를 확인한다.
+* istio CRD (Custom Resource Definition)을 확인하여 istio 설치를 확인한다.
 
 ~~~
 # kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
