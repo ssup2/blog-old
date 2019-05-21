@@ -62,7 +62,7 @@ configInline:
 ~~~
 # root@kube01:~/charts/stable/metallb# kubectl get service --all-namespaces
 NAMESPACE     NAME                    TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)                           AGE
-default       my-nginx-loadbalancer   LoadBalancer   10.96.98.173     172.35.0.200   80:30781/TCP                      34m
+default       my-nginx-loadbalancer   LoadBalancer   10.96.98.173     10.0.0.200   80:30781/TCP                      34m
 ...                                                                                   
 ~~~
 
