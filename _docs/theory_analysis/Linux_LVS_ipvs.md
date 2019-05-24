@@ -29,7 +29,7 @@ IPVS 없이 iptables만으로도 충분히 L4 Load Balacner을 구현할 수 있
 
 ##### 2.1.1. ip_vs_remote_request()
 
-ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. 외부의 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_remote_request()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 LOCAL_OUT Hook으로 전달된다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
+ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. 외부의 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_remote_request()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 **LOCAL_OUT Hook**으로 전달된다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.2. ip_vs_local_request()
 
