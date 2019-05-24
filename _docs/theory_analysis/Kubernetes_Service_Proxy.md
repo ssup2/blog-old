@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Kubernetes는 iptables, IPVS, Userspace 3가지 Mode의 Service Proxy를 지원하고 있다. 각 Mode에 따른 Service 요청 Packet의 경로를 분석한다.
+Kubernetes는 iptables, IPVS, Userspace 3가지 Mode의 Service Proxy를 지원하고 있다. Service Proxy Mode에 따른 Service 요청 Packet의 경로를 분석한다.
 
 ### 1. Service, Pod Info
 
