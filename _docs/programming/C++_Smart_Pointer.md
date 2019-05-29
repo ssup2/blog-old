@@ -293,7 +293,7 @@ int main()
 
 weak_ptr은 반드시 lock() 함수를 통해서 shared_ptr로 변환 뒤에 Instance를 접근 할 수 있다. lock() 함수 호출시 weak_ptr이 가리키는 Instance가 존재하면 변환된 shared_ptr은 동일한 Instance를 가리키고 있게 된다. weak_ptr이 가리키는 Instance가 존재하지 않으면 변환된 shared_ptr은 NULL값을 갖게 된다. [Code 6]에서 첫번째 lock() 함수를 호출 하였을때는 sp1이 Instance A를 가리고 있기 때문에 Instance A가 존재하고 있는 상태이다. 따라서 sp2는 NULL이 아니이다. 두번째 lock() 함수를 호출 하였을때는 sp1, sp2가 reset() 함수를 호출하여 모두 Instance A를 가리키지 않는 상태이기 때문에 Instance A는 존재하지 않는 상태이다. 따라서 sp3은 NULL값을 갖게 된다.
 
-![[그림 1] Circular Reference]({{site.baseurl}}/images/language/C++_Smart_Pointer/Circular_Reference.PNG){: width="700px"}
+![[그림 1] Circular Reference]({{site.baseurl}}/images/programming/C++_Smart_Pointer/Circular_Reference.PNG){: width="700px"}
 
 weak_ptr를 이용하여 shared_ptr의 **Circular Reference**를 문제를 제거할 수 있다. [그림 1]은 Circular Reference 문제를 나타내고 있다. shared_ptr는 Reference Count 기반으로 Instance를 관리하기 때문에, [그림 1]처럼 shared_ptr을 이용하여 서로의 Instance를 참조하면 Reference Count값이 줄어들지 않아 Instance가 해지되지 않는 문제가 발생한다. shared_ptr중 하나를 weak_ptr로 교체하면 weak_ptr은 Instance의 생명 주기에 영향을 주지 않기 때문에 Circular Reference 문제를 해결 할 수 있다.
 
