@@ -83,7 +83,7 @@
 			<!-- Page Header -->
 			<div class="page-header">
 				<h2>{% if page.category %}{{ page.category }}{% else %}{{ site.title }}{% endif %}</h2>
-				<h2>{% if page.date %}Created {{ page.date | date: "%Y-%m-%d" }}{% endif %}{% if page.lastmod %} / Updated {{ page.lastmod | lastmod: "%Y-%m-%d" }}{% endif %}</h2>
+				<h2>{% if page.date %}Created {{ page.date | date: "%Y-%m-%d" }}{% endif %}{% if page.lastmod %} / Updated {{ page.lastmod | date: "%Y-%m-%d" }}{% endif %}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
 
