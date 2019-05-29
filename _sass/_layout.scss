@@ -193,8 +193,15 @@ header {
 		letter-spacing: -1px;
 	}
 
-	h2 {
+	h1 {
 		font-size: 2rem;
+		margin-left: -1px;
+		color: #888;
+		letter-spacing: 0;
+	}
+
+	h2 {
+		font-size: 1.8rem;
 		margin-left: -1px;
 		color: #888;
 		letter-spacing: 0;
@@ -202,6 +209,7 @@ header {
 
 	h3 {
 		font-size: 3rem;
+		margin-top: 1rem;
 		margin-left: -4px;
 	}
 
