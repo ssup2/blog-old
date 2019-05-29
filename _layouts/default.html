@@ -82,8 +82,8 @@
 		<section class="main">
 			<!-- Page Header -->
 			<div class="page-header">
-				<h1>{% if page.category %}{{ page.category }}{% else %}{{ site.title }}{% endif %}</h1>
-				<h2>Created - {{ page.date | date: "%Y-%m-%d" }} / Updated - {{ page.date | date: "%Y-%m-%d" }}</h2>
+				<h2>{% if page.category %}{{ page.category }}{% else %}{{ site.title }}{% endif %}</h2>
+				<h2>Created {{ page.date | date: "%Y-%m-%d" }} / Updated {{ page.date | date: "%Y-%m-%d" }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
 
