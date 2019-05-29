@@ -2,7 +2,7 @@
 title: C Macro 문법
 category: Language, Framework
 date: 2017-01-20T13:10:00Z
-lastmod: 2016-01-22T13:10:00Z
+lastmod: 2017-01-22T13:10:00Z
 comment: true
 adsense: true
 ---
