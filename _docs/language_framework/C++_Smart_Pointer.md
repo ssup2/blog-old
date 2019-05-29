@@ -1,6 +1,6 @@
 ---
 title: C++ Smart Pointer
-category: Language, Framework
+category: Programming
 date: 2017-11-27T12:00:00Z
 lastmod: 2017-11-27T12:00:00Z
 comment: true

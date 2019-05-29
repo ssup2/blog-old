@@ -1,6 +1,6 @@
 ---
 title: C offsetof Macro
-category: Language, Framework
+category: Programming
 date: 2017-01-20T14:10:00Z
 lastmod: 2017-01-22T14:10:00Z
 comment: true

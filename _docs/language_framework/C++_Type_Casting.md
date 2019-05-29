@@ -1,6 +1,6 @@
 ---
 title: C++ Type Casting
-category: Language, Framework
+category: Programming
 date: 2017-12-03T12:00:00Z
 lastmod: 2017-12-03T12:00:00Z
 comment: true
