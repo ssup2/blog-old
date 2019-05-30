@@ -1,6 +1,6 @@
 ---
 title: Spring Bean Annotation
-category: Language, Framework
+category: Programming
 date: 2018-02-17T12:00:00Z
 lastmod: 2018-02-17T12:00:00Z
 comment: true

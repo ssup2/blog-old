@@ -186,29 +186,7 @@ let g:clang_format#auto_format = 0
 
 ### 4. golang 환경 설치, 설정
 
-#### 4.1. Ubuntu Package 설치
-
-* golang을 설치한다.
-
-~~~
-# add-apt-repository ppa:longsleep/golang-backports
-# apt-get update
-# apt-get install golang-go
-~~~
-
-#### 4.2. Bash Shell 설정
-
-* ~/.bashrc 파일에 golang에 이용하는 환경변수를 설정하고, 어느 Directory에서든 golang을 이용할 수 있도록 한다.
-  * GOPATH : golang의 Home Directory이다.
-  * GOBIN : golang 개발을 도와주는 Binary가 있는 Directory이다.
-
-~~~
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
-~~~
-
-#### 4.3. vim-go Vim Plugin 설치
+#### 4.1. vim-go Vim Plugin 설치
 
 * ~/.vimrc 파일의 Vundle Plugins에 다음의 내용 추가하여 Vundle이 vim-go를 설치하도록 만든다.
 
@@ -223,7 +201,7 @@ Plugin 'fatih/vim-go'
 : PluginInstall
 ~~~
 
-#### 4.4. golang Binary 설치
+#### 4.2. golang Binary 설치
 
 * golang 개발시 필요한 Tool들을 설치한다.
   * Vim의 명령어 Mode에서 실행한다.
@@ -232,7 +210,7 @@ Plugin 'fatih/vim-go'
 : GoInstallBinaries
 ~~~
 
-#### 4.5. YouCompleteMe 재설치
+#### 4.3. YouCompleteMe 재설치
 
 * YouCompleteMe에 golang Option을 추가하여 Compile 및 설치를 수행한다.
 
