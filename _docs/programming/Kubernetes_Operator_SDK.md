@@ -7,16 +7,18 @@ comment: true
 adsense: true
 ---
 
-Kubernetes의 operator-sdk User Guide를 바탕으로 Memcached Operator를 개발하고 operator-sdk를 분석한다.
+Operator SDK를 분석하고 Operator SDK User Guide에 나온 Memcached Operator를 개발한다. 
 
-### 1. 개발 환경
+### 1. Operator SDK
+
+### 2. 개발 환경
 
 * Ubuntu 18.04 LTS
 * Kubernetes 1.12
 * golang 1.12.2
 * root user
 
-### 2. Kubernetes Operator SDK 설치
+### 3. Operator SDK 설치
 
 * Kubernetes Operator SDK CLI를 설치한다.
 
@@ -28,22 +30,25 @@ Kubernetes의 operator-sdk User Guide를 바탕으로 Memcached Operator를 개�
 # chmod +x operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu && sudo cp operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu
 ~~~
 
-### 3. Project 생성
+### 4. Project 생성
 
 * Memcached Operator Project를 생성한다.
+  * `operator-sdk new` 명령어를 통해서 golang Project의 표준 Directory 구조가 생성된다.
 
 ~~~
 # mkdir -p $GOPATH/src/github.com/ssup2 
 # cd $GOPATH/src/github.com/ssup2
 # export GO111MODULE=on
 # operator-sdk new example-k8s-operator-memcached 
-# cd example-k8s-operator-memcached 
+# cd example-k8s-operator-memcached
+# ls 
+build  cmd  deploy  go.mod  go.sum  pkg  README.md  tools.go  vendor  version
 ~~~
 
-### 4. CRD 생성
+### 5. CRD 생성
 
 * CRD (Custom Resource Definition)를 추가한다.
-  * 추가된 CRD는 pkg/apis/cache/v1alpha1 폴더 아래에 정의되어 있다.
+  * 추가된 CRD는 `pkg/apis/cache/v1alpha1` Directory 아래에 정의되어 있다.
 
 ~~~
 # operator-sdk add api --api-version=cache.example.com/v1alpha1 --kind=Memcached
@@ -66,7 +71,7 @@ type MemcachedStatus struct {
 <figcaption class="caption">[Code 1] pkg/apis/cache/v1alpha1/memcached_types.go</figcaption>
 </figure>
 
-### 5. Controller 생성
+### 6. Controller 생성
 
 * Controller를 생성한다.
 
@@ -74,6 +79,18 @@ type MemcachedStatus struct {
 # operator-sdk add controller --api-version=cache.example.com/v1alpha1 --kind=Memcached
 ~~~
 
-### 6. 참조
+### 7. Memcached Operator 배포
+
+* 생성한 Memcached Operator를 Kubernetes Cluster에 배포한다.
+
+~~~
+# 
+~~~
+
+### 8. Memcached CR 생성
+
+* Memcached CR을 생성한다.
+
+### 8. 참조
 
 * [https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md)

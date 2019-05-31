@@ -1,8 +1,8 @@
 ---
 title: C Macro 문법
 category: Programming
-date: 2017-01-20T13:10:00Z
-lastmod: 2017-01-22T13:10:00Z
+date: 2017-01-20T12:00:00Z
+lastmod: 2019-05-30T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -10,12 +10,6 @@ adsense: true
 C언어의 Macro 문법을 정리한다.
 
 ### 1. # - 문자열화 연산자
-
-#### 1.1. 기능
-
-* Macro Parameter를 문자열로 변경 한다. " "를 붙이는 효과와 동일하다.
-
-#### 1.2. 예제
 
 {% highlight c linenos %}
 #include <stdio.h>
@@ -28,23 +22,19 @@ int main()
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 1] C Macro # 예제</figcaption>
+<figcaption class="caption">[Code 1] # Macro 예제</figcaption>
 </figure>
 
 {% highlight text %}
 THIS IS TEST CODE
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] C Macro # 예제의 출력</figcaption>
+<figcaption class="caption">[Shell 1] # Macro 예제의 출력</figcaption>
 </figure>
 
-### 2. ## - 토큰 붙여넣기 연산자
+`#`는 Macro Parameter를 문자열로 변경한다. " "를 붙이는 효과와 동일하다. [Code 1]은 'THIS IS TEST CODE' Macro Parameter가 printf() 함수의 문자열로 넘어가는 예제를 보여주고 있다.
 
-#### 2.1. 기능
-
-* 분리된 토큰을 하나로 합친다.
-
-#### 2.2. 예제
+### 2. ## - Token 붙여넣기 연산자
 
 {% highlight c linenos %}
 #include <stdio.h>
@@ -61,43 +51,35 @@ int main()
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 2] C Macro ## 예제</figcaption>
+<figcaption class="caption">[Code 2] ## Macro 예제</figcaption>
 </figure>
 
 {% highlight text %}
 i0 = 0
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] C Macro ## 예제의 출력</figcaption>
+<figcaption class="caption">[Shell 2] ## Macro 예제의 출력</figcaption>
 </figure>
 
+`##`는 분리된 Token을 하나로 합친다. [Code 2]에서 INT_i() Macro 함수는 'int i0 = 0'으로 치환되고, PRINT() Macro 함수는 'printf("i%d = %d\n", 0, i0)'으로 치환된다.
+
 ### 3. 가변 인자 Macro
-
-#### 3.1. 기능
-
-* Macro에서 가변인자를 나타낸다.
-* 1999년 C 표준에서는 '...'와 '__VA_ARGS__'을 이용하여 가변인자를 나타낸다.
-* GCC에서는 '[name]...'와 '[name]'을 이용하여 가변인자를 나타낸다.
-
-#### 3.2. 예제
-
-##### 3.2.1. 1999년 C 표준
 
 {% highlight c linenos %}
 #define debug(format, ...) fprintf (stderr, format, __VA_ARGS__)
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 3] 표준 C Macro 가변인자</figcaption>
+<figcaption class="caption">[Code 3] 1999년 표준의 가변 인자 Macro</figcaption>
 </figure>
-
-##### 3.2.2. GCC
 
 {% highlight c linenos %}
 #define debug(format, args...) fprintf (stderr, format, args)
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 4] GCC C Macro 가변인자</figcaption>
+<figcaption class="caption">[Code 4] GCC 가변 인자 Macro</figcaption>
 </figure>
+
+1999년 C 표준에서는 `...`와 `__VA_ARGS__`을 이용하여 가변 인자를 나타낸다. [Code 3]은 1999년 C 표준 문법의 가변 인자 Macro의 사용법을 나타내고 있다. GCC에서는 `[name]...`와 `[name]`을 이용하여 가변 인자를 나타낸다. [Code 4]는 GCC 가변 인자 Macro의 사용법을 나타내고 있다.
 
 ### 4. 참조
 
