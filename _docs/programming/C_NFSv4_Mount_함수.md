@@ -9,7 +9,7 @@ adsense: true
 
 Linux와 FreeBSD 환경에서 동작하는 C언어 기반의 NFSv4 Mount 함수를 정리한다.
 
-### 1. Linux
+### 1. Linux NFSv4 Mount 함수
 
 {% highlight c linenos %}
 int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
@@ -38,7 +38,7 @@ int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)
 
 [Code 1]은 Linux 환경에서 mount() 함수를 이용하여 NFSv4 Mount를 수행하는 함수이다. 리눅스 Man Page에도 mount() 함수를 이용한 NFSv4 Mount 수행 방법이 나와있지 않다.
 
-### 2. FreeBSD
+### 2. FreeBSD NFSv4 Mount 함수
 
 {% highlight c linenos %}
 int linux_mount_nfs4(char *mount_point, char *server_ip, char *server_path)

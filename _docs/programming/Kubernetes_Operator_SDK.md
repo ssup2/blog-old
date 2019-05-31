@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Operator SDK를 분석하고 Operator SDK User Guide에 나온 Memcached Operator를 개발한다. 
+Operator SDK User Guide에 나온 Memcached Operator를 실습을 통해 Operator SDK를 이해한다.
 
 ### 1. Operator SDK
 
@@ -33,7 +33,7 @@ Operator SDK를 분석하고 Operator SDK User Guide에 나온 Memcached Operato
 ### 4. Project 생성
 
 * Memcached Operator Project를 생성한다.
-  * `operator-sdk new` 명령어를 통해서 golang Project의 표준 Directory 구조가 생성된다.
+  * **operator-sdk new** 명령어를 통해서 golang Project의 표준 Directory 구조가 생성된다.
 
 ~~~
 # mkdir -p $GOPATH/src/github.com/ssup2 
@@ -48,7 +48,7 @@ build  cmd  deploy  go.mod  go.sum  pkg  README.md  tools.go  vendor  version
 ### 5. CRD 생성
 
 * CRD (Custom Resource Definition)를 추가한다.
-  * 추가된 CRD는 `pkg/apis/cache/v1alpha1` Directory 아래에 정의되어 있다.
+  * 추가된 CRD는 'pkg/apis/cache/v1alpha1' Directory 아래에 정의되어 있다.
 
 ~~~
 # operator-sdk add api --api-version=cache.example.com/v1alpha1 --kind=Memcached
@@ -83,14 +83,11 @@ type MemcachedStatus struct {
 
 * 생성한 Memcached Operator를 Kubernetes Cluster에 배포한다.
 
-~~~
-# 
-~~~
-
 ### 8. Memcached CR 생성
 
 * Memcached CR을 생성한다.
 
-### 8. 참조
+### 9. 참조
 
+* [https://github.com/operator-framework/operator-sdk](https://github.com/operator-framework/operator-sdk)
 * [https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md)
