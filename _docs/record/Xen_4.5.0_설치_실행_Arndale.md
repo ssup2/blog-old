@@ -28,7 +28,6 @@ adsense: true
 ### 2. Cross Compiler 설치
 
 * Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
-
 * /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용을 추가하여 어떤 Directory에서라도 Compiler를 실행 할 수 있도록 만든다.
 
 ~~~
