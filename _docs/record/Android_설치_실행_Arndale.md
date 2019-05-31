@@ -18,6 +18,8 @@ Arndale Board에 Android를 설치하고 실행한다.
 
 ### 1. 설치, 실행 환경
 
+설치, 실행 환경은 다음과 같다.
+
 * PC - Windows 7 64bit
 * VM on PC - Ubuntu 12.04LTS 64bit
 * Android JB mr1 provided from Insignal
@@ -45,7 +47,7 @@ Arndale Board의 USB OTG 단자를 통해 PC와 연결한 다음 Hardware ID 확
 <figcaption class="caption">[파일 1] adt-bundle-windows-x86_64-20xxxxxx\sdk\extras\google\usb_driver\android_winusb.inf</figcaption>
 </figure>
 
-android_winusb.inf (adt-bundle-windows-x86_64-20xxxxxx\sdk\extras\google\usb_driver\android_winusb.inf) 파일 아래에 [파일 1]의 내용을 추가한 다음 Windows의 Device Manager를 통해 ADB USB Driver 설치한다.
+android_winusb.inf 파일 아래에 [파일 1]의 내용을 추가한 다음 Windows의 Device Manager를 통해 ADB USB Driver 설치한다.
 
 ### 3. Ubuntu Package 설치
 
