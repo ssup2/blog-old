@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Operator SDK
+title: Kubernetes Golang Operator
 category: Programming
 date: 2019-05-30T12:00:00Z
 lastmod: 2019-05-30T12:00:00Z
@@ -7,9 +7,9 @@ comment: true
 adsense: true
 ---
 
-Operator SDK User Guide에 나온 Memcached Operator를 실습을 통해 Operator SDK를 이해한다.
+Operator SDK User Guide에 나온 Memcached Golang Operator를 실습을 통해 Golang Operator SDK를 분석한다.
 
-### 1. Operator SDK
+### 1. Golang Operator
 
 ### 2. 개발 환경
 
@@ -79,15 +79,44 @@ type MemcachedStatus struct {
 # operator-sdk add controller --api-version=cache.example.com/v1alpha1 --kind=Memcached
 ~~~
 
-### 7. Memcached Operator 배포
-
-* 생성한 Memcached Operator를 Kubernetes Cluster에 배포한다.
-
-### 8. Memcached CR 생성
+### 7. Memcached CR 생성
 
 * Memcached CR을 생성한다.
 
-### 9. 참조
+~~~
+# kubectl create -f deploy/crds/cache_v1alpha1_memcached_crd.yaml
+~~~
+
+### 8. Memcached Operator 구동
+
+* 생성한 Memcached Operator를 Container Image로 생성한 다음 Docker Registry에 Push한다.
+  * Container Image의 이름은 개인 Repository에 맞도록 변경한다.
+
+~~~
+# go mod vendor
+# operator-sdk build supsup5642/memcached-operator:v0.0.1
+# sed -i 's|REPLACE_IMAGE|supsup5642/memcached-operator:v0.0.1|g' deploy/operator.yaml
+# docker push supsup5642/memcached-operator:v0.0.1
+~~~
+
+* Memcached Opeartor를 구동한다.
+
+~~~
+$ kubectl create -f deploy/service_account.yaml
+$ kubectl create -f deploy/role.yaml
+$ kubectl create -f deploy/role_binding.yaml
+$ kubectl create -f deploy/operator.yaml
+~~~
+
+### 9. Memcached 구동
+
+* Memcached Operator를 이용하여 Memcached를 구동한다.
+
+~~~
+# kubectl apply -f deploy/crds/cache_v1alpha1_memcached_cr.yaml
+~~~
+
+### 10. 참조
 
 * [https://github.com/operator-framework/operator-sdk](https://github.com/operator-framework/operator-sdk)
 * [https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md)

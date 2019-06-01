@@ -85,7 +85,7 @@ adsense: true
 ~~~
 
 * VM이 이용할 기본 tty를 설정한다.
-  * mnt에 Mount된 etc/init/ttyS0.conf 파일을 아래와 같이 수정한다.
+  * mnt에 Mount된 etc/init/ttyS0.conf 파일을 [파일 1]과 같이 수정한다.
 
 {% highlight text %}
 # ttyS0 - getty
@@ -108,7 +108,7 @@ exec /sbin/getty -8 115200 ttyS0
 </figure>
 
 * VM의 Network를 설정한다.
-  * mnt에 Mount된 etc/network/interfaces 파일을 아래와 같이 수정한다.
+  * mnt에 Mount된 etc/network/interfaces 파일을 [파일 2]와 같이 수정한다.
 
 {% highlight text %}
 # interfaces(5) file used by ifup(8) and ifdown(8)
@@ -179,7 +179,7 @@ route add default gw 192.168.77.1
 ~~~
 
 * vhost-scsi를 위한 LIO를 설정한다.
-  * /var/target/fabric/vhost.spec 파일을 아래와 같이 설정한다.
+  * /var/target/fabric/vhost.spec 파일을 [파일 3]과 같이 설정한다.
 
 {% highlight text %}
 # The fabric module feature set
@@ -204,9 +204,6 @@ configfs_group = vhost
 ~~~
 # reboot now
 # targetcli
-~~~
-
-~~~
 (targetcli) /> cd backstores/fileio
 (targetcli) /> create name=file_backend file_or_dev=[Absolute Path of rootfs.img] size=8G
 (targetcli) /> cd /vhost
@@ -218,7 +215,7 @@ configfs_group = vhost
 (targetcli) /> exit
 ~~~
 
-* LIO 설정 결과는 다음과 같다.
+* [그림 1]LIO 설정 결과는 다음과 같다.
 
 ![[그림 1] LIO 설정 결과]({{site.baseurl}}/images/record/KVM_QEMU_Install_Ubuntu_16.04/LIO_targetcli.PNG)
 
