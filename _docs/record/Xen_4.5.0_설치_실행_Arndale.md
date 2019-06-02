@@ -147,7 +147,7 @@ PXE Boot 또는 uSD Card Boot 둘중에 하나를 선택하여 수행한다.
 
 #### 8.1. PXE Boot
 
-#### 8.1.1. tftp Server 설치
+##### 8.1.1. tftp Server 설치
 
 ~~~
 # apt-get install xinetd tftp tftpd
@@ -184,7 +184,7 @@ service tftp
 
 tftp server Directory 생성한다.
 
-#### 8.1.2. tftp Server에 Binary 복사
+##### 8.1.2. tftp Server에 Binary 복사
 
 ~~~
 # cd linux_Dom0
@@ -196,7 +196,7 @@ tftp server Directory 생성한다.
 
 생성한 Binary들을 tfpt Server에 복사한다.
 
-#### 8.1.3 tftp Image 파일 생성
+##### 8.1.3 tftp Image 파일 생성
 
 ~~~
 # cd /tftpboot
@@ -206,11 +206,11 @@ tftp server Directory 생성한다.
 
 Booting을 위한 tfpt Image 파일을 생성한다.
 
-#### 8.1.4. tfpt Image 파일 복사 
+##### 8.1.4. tfpt Image 파일 복사 
 
 load-xen-tftp.img 파일을 uSD Card의 ext2 Partition에 복사한다.
 
-#### 8.1.5. U-boot 설정
+##### 8.1.5. U-boot 설정
 
 ~~~
 -> setenv ipaddr 192.168.0.200
@@ -232,9 +232,9 @@ U-boot를 설정한다.
 * board IP : 192.168.0.200
 * tftp Server (Host PC) : 192.168.0.100
 
-### 8.2. uSD Card Boot
+#### 8.2. uSD Card Boot
 
-#### 8.2.1. load-xen-uSD.scr.txt 파일 생성 및 img 파일 생성 
+##### 8.2.1. load-xen-uSD.scr.txt 파일 생성 및 img 파일 생성 
 
 ~~~
 # wget http://xenbits.xen.org/people/julieng/load-xen-tftp.scr.txt
@@ -263,11 +263,11 @@ load-xen-tftp.scr.txt 파일을 통해서 load-xen-uSD.scr.txt 파일을 생성�
 
 Image 파일을 생성한다.
 
-#### 8.2.2. Kernel Images, dtb, uSD Card Image 파일 복사
+##### 8.2.2. Kernel Images, dtb, uSD Card Image 파일 복사
 
 linux-zImage, exynos5250-arndale.dtb, load-xen-uSD.img 파일을 uSD Card의 ext2 Partition에 복사한다.
 
-#### 8.2.3. U-boot 설정
+##### 8.2.3. U-boot 설정
 
 ~~~
 -> setenv xen_addr_r 0x50000000
