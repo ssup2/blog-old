@@ -99,9 +99,7 @@ Prebuilt Image들을 아래의 URL을 통해서 Download 한다.
 # pv -tpreb emmc_self_installer.img | dd of=/dev/sdb bs=1M
 ~~~
 
-PreBuild Image를 emmc에 Flash 한다.
-
-Android 부팅 후 ODROID-XU Updater 실행 및 위의 URL을 입력한다.
+PreBuild Image를 emmc에 Flash 한다. Android 부팅 후 ODROID-XU Updater 실행 및 아래의 URL을 입력한다.
 * http://dn.odroid.com/ODROID-XU/Firmware/04-07-2014/update.zip
 
 ### 10. Patch 수행
