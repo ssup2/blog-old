@@ -107,7 +107,7 @@ Cross Compiler를 설치한다.
 PATH=/usr/local/arm-2009q3/bin:$PATH
 ~~~
 
-~/.bashrc 파일에 아래의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
+~/.bashrc 파일에 위의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
 
 ### 7. Source Code Download
 

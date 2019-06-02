@@ -14,7 +14,9 @@ adsense: true
 
 ***
 
-### 1. 설치 환경
+### 1. 설치, 실행 환경
+
+설치, 실행 환경은 다음과 같다.
 
 * PC : Windows 7 64bit
 * VM on PC : Ubuntu 12.04LTS 64bit
@@ -23,20 +25,17 @@ adsense: true
 
 ### 2. Windows에 ADB Driver 설치
 
-* Windows의 Device Manager를 통해 ADB USB Driver 설치
-  * http://com.odroid.com/sigong/nf_file_board/nfile_board_view.php?bid=22
-
+Windows의 Device Manager를 통해 ADB USB Driver를 설치한다.
+* http://com.odroid.com/sigong/nf_file_board/nfile_board_view.php?bid=22
 
 ### 3. Ubuntu Package 설치
-
-* Android Build를 위한 Ubuntu Package를 설치한다.
 
 ~~~
 # apt-get install git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 # ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
 ~~~
 
-* Java 6를 설치한다.
+Android Build를 위한 Ubuntu Package를 설치한다.
 
 ~~~
 # add-apt-repository ppa:webupd8team/java
@@ -44,10 +43,9 @@ adsense: true
 # apt-get install oracle-java6-installer
 ~~~
 
-### 5. Ubuntu에 Repo 설치
+Java 6를 설치한다.
 
-* Repo는 Android Build시 이용된다.
-* Android Build시 이용하는 Repo를 설치한다.
+### 5. Ubuntu에 Repo 설치
 
 ~~~
 # mkdir ~/bin
@@ -55,16 +53,15 @@ adsense: true
 # chmod a+x ~/bin/repo
 ~~~
 
-* ~/.bashrc 파일에 아래의 내용을 추가하여 어느 Directory에서든 Repo를 이용할 수 있도록 만든다.
+Repo는 Android Build시 이용된다. Android Build시 이용하는 Repo를 설치한다.
 
 ~~~
 PATH=~/bin:$PATH
 ~~~
 
-### 6. Ubuntu에 Cross Compiler 설치
+~/.bashrc 파일에 위의 내용을 추가하여 어느 Directory에서든 Repo를 이용할 수 있도록 만든다.
 
-* Cross Compiler를 설치한다. 
-  * Download : http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
+### 6. Ubuntu에 Cross Compiler 설치
 
 ~~~
 # mv ./arm-eabi-4.6.tar.gz /usr/local
@@ -72,13 +69,18 @@ PATH=~/bin:$PATH
 # tar zxvf arm-eabi-4.6.tar.gz
 ~~~
 
-* ~/.bashrc 파일에 아래의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
+Cross Compiler를 설치한다. 
+* Download : http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
 
 ~~~
 PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 ~~~
 
+~/.bashrc 파일에 위의의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
+
 ### 7. Prebuilt Images와 Sources Download
+
+Prebuilt Image들을 아래의 URL을 통해서 Download 한다.
 
 * Prebuilt Image
   * http://dn.odroid.com/ODROID-XU/Firmware/01-10-2014/emmc_self_installer.img.zip
@@ -92,39 +94,37 @@ PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 
 ### 8. Prebuilt Image를 emmc에 Flash 및 Android Update
 
-* PreBuild Image를 emmc에 Flash 한다.
-
 ~~~
 # unzip emmc_self_installer.img.zip
 # pv -tpreb emmc_self_installer.img | dd of=/dev/sdb bs=1M
 ~~~
 
-* Android 부팅 후 ODROID-XU Updater 실행 및 아래의 URL을 입력한다.
-  * http://dn.odroid.com/ODROID-XU/Firmware/04-07-2014/update.zip
+PreBuild Image를 emmc에 Flash 한다.
+
+Android 부팅 후 ODROID-XU Updater 실행 및 위의 URL을 입력한다.
+* http://dn.odroid.com/ODROID-XU/Firmware/04-07-2014/update.zip
 
 ### 10. Patch 수행
 
 #### 10.1. kernel
-
-* Kernel Root 폴더에 kernel_Apr_07_2014.patch 파일 복사 및 아래의 명령어를 수행한다.
 
 ~~~
 # chmod +x kernel_Apr_07_2014.patch
 # patch -p1 < kernel_Apr_07_2014.patch
 ~~~
 
-#### 10.2. Android
+Kernel Root 폴더에 kernel_Apr_07_2014.patch 파일 복사 및 위의 명령어를 수행한다.
 
-* Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 아래의 명령어를 수행한다.
+#### 10.2. Android
 
 ~~~
 # chmod +x android_patch.sh
 # ./android_patch.sh
 ~~~
 
-### 11. Build
+Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 위의 명령어를 수행한다.
 
-* Kenrel을 Build 한다.
+### 11. Build
 
 ~~~
 # cd [Kernel root]
@@ -135,7 +135,7 @@ PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 # ARCH=arm CROSS_COMPILE=arm-eabi- INSTALL_MOD_PATH=modules make modules_install
 ~~~
 
-* Android를 Build 한다.
+Kenrel을 Build 한다.
 
 ~~~
 # cd [Android Root]
@@ -149,22 +149,23 @@ PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 # ./build.sh odroidxu platform
 ~~~
 
-### 12. Flash Image
+Android를 Build 한다.
 
-* ODROID-XU의 OTG USB와 PC를 연결한다.
-* u-boot에서 아래의 명령어 수행한다.
+### 12. Flash Image
 
 ~~~
 Exynos5410 # fastboot
 ~~~
 
-* Ubuntu에서 다음의 명령어를 수행한다.
+ODROID-XU의 OTG USB와 PC를 연결한 다음 u-boot에서 위의 명령어 수행한다.
 
 ~~~
 # fastboot flash kernel kernel/arch/arm/boot/zImage
 # fastboot flash system android/out/target/product/odroidxu/system.img
 # fastboot reboot
 ~~~
+
+Ubuntu에서 위의 명령어를 수행한다.
 
 ### 13. 참조
 
