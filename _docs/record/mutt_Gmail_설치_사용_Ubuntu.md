@@ -7,26 +7,26 @@ comment: true
 adsense: true
 ---
 
-### 1. 설치 환경
+### 1. 설치, 사용 환경
 
+설치, 사용 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
 
 ### 2. mutt 설치
-
-* mutt Package를 설치한다.
 
 ~~~
 # sudo apt-get install mutt
 ~~~
 
+mutt Package를 설치한다.
+
 ### 3. Gmail Access 권한 설정
 
-* Guide - [https://support.google.com/accounts/answer/6010255?hl=en](https://support.google.com/accounts/answer/6010255?hl=en)
-* Secure Apps - [https://myaccount.google.com/lesssecureapps](https://myaccount.google.com/lesssecureapps)
+아래의 링크를 통해서 Gmail Access 권한을 설정한다.
+* Guide : [https://support.google.com/accounts/answer/6010255?hl=en](https://support.google.com/accounts/answer/6010255?hl=en)
+* Secure Apps : [https://myaccount.google.com/lesssecureapps](https://myaccount.google.com/lesssecureapps)
 
 ### 4. mutt 설정
-
-* mutt 관련 폴더, 파일을 생성한다.
 
 ~~~
 # mkdir -p ~/Mail
@@ -35,9 +35,9 @@ adsense: true
 # chown root:mail /var/mail/root
 ~~~
 
-* ~/.muttrc 파일을 설정한다.
+mutt 관련 폴더, 파일을 생성한다.
 
-~~~
+{% highlight text %}
 set realname = "<first and last name>"
 set from = "<gmail username>@gmail.com"
 set use_from = yes
@@ -56,19 +56,22 @@ bind index G imap-fetch-mail
 set editor = "vim"
 set charset = "utf-8"
 set record = ''
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] ~/.muttrc</figcaption>
+</figure>
+
+~/.muttrc 파일을 [파일 1]의 내용으로 생성한다.
 
 ### 5. 사용법
-
-* mutt을 실행한다.
 
 ~~~
 # mutt
 ~~~
 
-* 단축키
-  * m : Compose a new mail message.
-  * G : Fetch new messages.
+mutt을 실행한다. 단축키는 아래와 같다.
+* m : Compose a new mail message.
+* G : Fetch new messages.
 
 ### 6. 참조
 

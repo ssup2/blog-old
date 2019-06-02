@@ -9,6 +9,8 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
+
 #### 1.1. Ubuntu
 
 * Ubuntu 18.04.1 LTS
@@ -23,17 +25,15 @@ adsense: true
 
 #### 2.1. Ubuntu
 
-* bpftool Build시 필요한 Library를 설치한다.
-
 ~~~
 # apt-get install build-essential 
 # apt-get install binutils-dev
 # apt-get install libelf-dev
 ~~~
 
-#### 2.2. CentOS
+bpftool Build시 필요한 Library를 설치한다.
 
-* bpftool Build시 필요한 Library를 설치한다.
+#### 2.2. CentOS
 
 ~~~
 # yum groupinstall "Development Tools"
@@ -41,10 +41,9 @@ adsense: true
 # yum install elfutils-libelf-devel
 ~~~
 
-### 3. bpftool Build & 설치
+bpftool Build시 필요한 Library를 설치한다.
 
-* 현재 Ubuntu Package로 제공되지 않고 있기 때문에 Kernel Code를 받아 직접 bpftool Build 수행한다.
-* bfptool의 net, perf Opiton 이용을 위해서 **v4.20 이상의 Kernel Version**이 필요하다.
+### 3. bpftool Build & 설치
 
 ~~~
 # git clone https://github.com/torvalds/linux.git
@@ -52,16 +51,16 @@ adsense: true
 # git checkout v4.20
 ~~~
 
-* bpftool를 Build 한다.
+현재 Ubuntu, CentOS의 Package로 제공되지 않고 있기 때문에 Kernel Code를 받아 직접 bpftool Build 수행한다. bfptool의 net, perf Opiton 이용을 위해서 **v4.20 이상의 Kernel Version**이 필요하다.
 
 ~~~
 # make -C tools/bpf/bpftool/
 # cp tools/bpf/bpftool/bpftool /usr/sbin
 ~~~
 
-#### 3.1. Compile Error 해결
+bpftool를 Build 한다.
 
-* linux/if.h와 net/if.h의 충돌로 인한 Compile Error 발생시 아래와 같은 증상이 나타난다.
+#### 3.1. Compile Error 해결
 
 ~~~
 # make -C tools/bpf/bpftool/
@@ -80,15 +79,20 @@ adsense: true
 ...
 ~~~
 
-* tools/bpf/bpftool/net.c 파일을 아래와 같이 수정한다.
+linux/if.h와 net/if.h의 충돌로 인한 Compile Error 발생시 위와 같은 증상이 나타난다.
 
-~~~
+{% highlight c %}
 ...
 #include <libbpf.h>
 //#include <net/if.h>
 #include <linux/if.h>
 ...
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] tools/bpf/bpftool/net.c</figcaption>
+</figure>
+
+tools/bpf/bpftool/net.c 파일을 [파일 1]과 같이 수정한다.
 
 ### 4. 참조
 

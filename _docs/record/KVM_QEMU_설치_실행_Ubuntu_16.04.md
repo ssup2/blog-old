@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-### 1. 설치 환경
+### 1. 설치, 실행 환경
 
 설치, 실행 환경은 다음과 같다.
 * Hardware : Intel i5-6500, DDR4 8GB
