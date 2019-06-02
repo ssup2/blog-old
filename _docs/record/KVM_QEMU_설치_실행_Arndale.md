@@ -41,7 +41,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 <figcaption class="caption">[파일 1] ~/.bashrc</figcaption>
 </figure>
 
-/usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 [파일 1]의 내용 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
+/usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 [파일 1]의 내용을 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
 
 ### 3. Ubuntu Package 설치
 

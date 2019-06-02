@@ -71,4 +71,4 @@ int main()
 <figcaption class="caption">[파일 1] /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+* QEMU : [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)

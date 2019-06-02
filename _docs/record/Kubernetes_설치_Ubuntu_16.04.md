@@ -178,7 +178,7 @@ source <(kubectl completion bash)
 <figcaption class="caption">[파일 4] Master Node의 ~/.bashrc</figcaption>
 </figure>
 
-kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용 추가
+kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용을 추가한다.
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml

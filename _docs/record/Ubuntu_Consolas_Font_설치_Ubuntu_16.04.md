@@ -9,26 +9,23 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
 * Ubuntu 16.04 LTS 64bit, root user
 
 ### 2. Ubuntu Package 설치
-
-* font-manager를 설치한다.
 
 ~~~
 # apt-get install font-manager
 # apt-get install cabextract
 ~~~
 
-### 3. Consolas Download Script 생성 및 설치
+font-manager를 설치한다.
 
-* consolas.sh 파일을 생성 및 편집한다.
+### 3. Consolas Download Script 생성 및 설치
 
 ~~~
 # vim consolas.sh
 ~~~
-
-* 아래의 내용을 vim consolas.sh에 복사한다.
 
 {% highlight shell %}
 #!/bin/sh
@@ -44,33 +41,35 @@ cabextract ppviewer.cab
 <figcaption class="caption">[파일 1] consolas.sh</figcaption>
 </figure>
 
-* consolas.sh을 실행한다.
+[파일 1]의 내용을 복사하여 consolas.sh 파일을 생성한다.
 
 ~~~
 # chmod +x consolas.sh
 # ./consolas.sh
 ~~~
 
-### 4. Consolas Font 설치
+consolas.sh을 실행한다.
 
-* font-manager 실행한다.
+### 4. Consolas Font 설치
 
 ~~~
 # font-manager
 ~~~
 
-* Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
+font-manager 실행한다.
 
-![]({{site.baseurl}}/images/record/Ubuntu_Consolas_Install_Ubuntu_16.04/Ubuntu_Font_Manager.PNG)
+![[그림 1] Font 파일 선택]({{site.baseurl}}/images/record/Ubuntu_Consolas_Install_Ubuntu_16.04/Ubuntu_Font_Manager.PNG)
+
+Install Fonts를 눌러 temp 폴더 안에 있는 Font 파일들을 선택한다.
 
 ### 5. 파일 삭제
-
-* Font 파일들과 consolas.sh 파일을 지운다.
 
 ~~~
 # rm -r temp
 # rm consolas.sh
 ~~~
+
+Font 파일들과 consolas.sh 파일을 지운다.
 
 ### 6. 참조
 * [http://www.rushis.com/2013/03/consolas-font-on-ubuntu/](http://www.rushis.com/2013/03/consolas-font-on-ubuntu/)
