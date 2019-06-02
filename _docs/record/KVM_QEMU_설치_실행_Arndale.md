@@ -14,8 +14,9 @@ adsense: true
 
 ***
 
-### 1. 설치 환경
+### 1. 설치, 실행 환경
 
+설치, 실행 환경은 다음과 같다.
 * Arndale Board, 8GB uSD
 * PC : Ubuntu 14.04LTS 32bit, root User
 * VM on KVM : Ubuntu 14.04LTS 32bit, root User
@@ -28,41 +29,44 @@ adsense: true
 
 ### 2. Cross Compiler 설치
 
-* Kernel Build를 위한 Cross Compiler를 설치한다.
-  * Download : https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+Kernel Build를 위한 Cross Compiler를 설치한다.
+* Download : https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 
-* /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
 
-~~~
+{% highlight text %}
+...
 PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] ~/.bashrc</figcaption>
+</figure>
+
+/usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 [파일 1]의 내용 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
 
 ### 3. Ubuntu Package 설치
-
-* Kernel Build에 필요한 Ubuntu Package를 설치한다.
 
 ~~~
 # apt-get install gcc-arm-linux-gnueabi
 # apt-get install build-essential git u-boot-tools qemu-user-static libncurses5-dev
 ~~~
 
+Kernel Build에 필요한 Ubuntu Package를 설치한다.
+
 ### 4. Kernel Config Download
 
-* Kernel Config를 Download 한다.
-  * Login in : http://www.virtualopensystems.com/
-  * Guest Kernel Config : http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
+Kernel Config를 Download 한다.
+* Login in : http://www.virtualopensystems.com/
+* Guest Kernel Config : http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
 
 ### 5. Host Kernel, Host dtb Build
-
-* Host Kernel을 Download 한다. 
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
 # tar xvf linux-3.18.3.tar.xz
 # mv Kernel_Host
-~~~ 
+~~~
 
-* Host Kernel을 Build 한다.
+Host Kernel을 Download 한다. 
 
 ~~~
 # cd Kernel_Host
@@ -90,9 +94,9 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=. modules_install
 ~~~
 
-### 6. Guest Kernel, Guest dtb Build
+Host Kernel을 Build 한다.
 
-* Guest Kernel을 Download 한다.
+### 6. Guest Kernel, Guest dtb Build
 
 ~~~
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
@@ -100,7 +104,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mv Kernel_Guest
 ~~~
 
-* Guest Kernel을 Build 한다. 
+Guest Kernel을 Download 한다.
 
 ~~~
 # cd Kernel_Guest
@@ -112,9 +116,9 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # cp arch/arm/boot/dts/armvexpress-v2p-ca15-tc1.dtb arch/arm/boot/dts/guest-vexpress.dtb
 ~~~
 
-### 7. u-boot Build
+Guest Kernel을 Build 한다. 
 
-* u-boot를 Build 한다.
+### 7. u-boot Build
 
 ~~~
 # git clone git://github.com/virtualopensystems/u-boot-arndale.git Arndale_u-boot
@@ -122,9 +126,9 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- arndale5250
 ~~~
 
-### 8. 기본 Root Filesystem Image 생성
+u-boot를 Build 한다.
 
-* Rootfs Img 파일을 생성한다. 
+### 8. 기본 Root Filesystem Image 생성
 
 ~~~
 # mkdir rootfs
@@ -134,14 +138,14 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # mount -o loop rootfs.img /mnt
 ~~~
 
-* debootstrap을 이용하여 기본 Rootfs을 구성한다.
+Rootfs Img 파일을 생성한다. 
 
 ~~~
 # cd /mnt
 # qemu-debootstrap --arch=armhf trusty .
 ~~~
 
-* Rootfs Configuration을 진행한다.
+debootstrap을 이용하여 기본 Rootfs을 구성한다.
 
 ~~~
 # vim etc/apt/sources.list
@@ -161,7 +165,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
       iface eth0 inet dhcp'
 ~~~
 
-* root의 password를 설정한다.
+Rootfs Configuration을 진행한다.
 
 ~~~
 # chroot .
@@ -170,9 +174,9 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # umount /mnt
 ~~~
 
-### 9. Host Root Filesystem 설정 
+root의 password를 설정한다.
 
-* 생성한 기본 Rootfs을 이용하여 Host의 Root Filesystem을 생성한다.
+### 9. Host Root Filesystem 설정 
 
 ~~~
 # cp rootfs.img rootfs_host.img
@@ -183,9 +187,9 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 # umount /mnt
 ~~~
 
-### 10. Guest_01 Root Filesystem 설정 
+생성한 기본 Rootfs을 이용하여 Host의 Root Filesystem을 생성한다.
 
-* 생성한 기본 Rootfs을 이용하여 Guest 01의 Root Filesystem을 생성한다.
+### 10. Guest_01 Root Filesystem 설정 
 
 ~~~
 # cp rootfs.img rootfs_guest_01.img
@@ -201,9 +205,9 @@ dns-nameservers 8.8.8.8
 # umount /mnt
 ~~~
 
-### 11. Guest_02 Root Filesystem 설정
+생성한 기본 Rootfs을 이용하여 Guest 01의 Root Filesystem을 생성한다.
 
-* 생성한 기본 Rootfs을 이용하여 Guest 02의 Root Filesystem을 생성한다.
+### 11. Guest_02 Root Filesystem 설정
 
 ~~~
 # cp rootfs.img rootfs_guest_02.img
@@ -220,9 +224,9 @@ EOF
 # umount /mnt
 ~~~
 
-### 12. QEMU Build
+생성한 기본 Rootfs을 이용하여 Guest 02의 Root Filesystem을 생성한다.
 
-* QEMU를 Build 한다.
+### 12. QEMU Build
 
 ~~~
 # apt-get install xapt
@@ -240,16 +244,16 @@ EOF
 # make
 ~~~
 
+QEMU를 Build 한다.
+
 ### 13. uSD Card Partiton 구성 
 
-* uSD Card의 Partiton을 아래와 같이 구성한다. 
-  * 0 ~ 2M, 2M, No Filesystem: Bootloader (bl1, spl, U-boot)
-  * 2M ~ 18M, 16M, ext2, boot : uImage, exynos5250-arndale.dtb
-  * 18M ~ rest, ext3, root : Root-Filesystem
+uSD Card의 Partiton을 아래와 같이 구성한다. 
+* 0 ~ 2M, 2M, No Filesystem: Bootloader (bl1, spl, U-boot)
+* 2M ~ 18M, 16M, ext2, boot : uImage, exynos5250-arndale.dtb
+* 18M ~ rest, ext3, root : Root-Filesystem
 
 ### 14. uSD Card에 u-boot Fusing
-
-* uSD Card에 u-boot를 Fusing 한다.
 
 ~~~
 # cd Arndale-u-boot
@@ -259,9 +263,9 @@ EOF
 # dd if=u-boot.bin of=/dev/sdb bs=512 seek=49
 ~~~
 
-### 15. Host Root Filesystem 복사 
+uSD Card에 u-boot를 Fusing 한다.
 
-* uSD Card에 Host Root Filesystem을 복사한다.
+### 15. Host Root Filesystem 복사 
 
 ~~~
 # mount -o loop rootfs_host.img /mnt
@@ -270,14 +274,13 @@ EOF
 # sync
 ~~~
 
+uSD Card에 Host Root Filesystem을 복사한다.
+
 ### 16. binary, image, dtb 복사
 
-* Host Kernel uImage, exynos5250-arndale.dtb 파일을 uSD Card boot Partition에 복사한다.
-* Host Guest zImage, qemu-system-arm, rootfs_host.img, rootfs_guest_01.img, rootfs_guest_02.img, guest-vexpress.dtb 파일을 root Partition에 복사한다.
+Host Kernel uImage, exynos5250-arndale.dtb 파일을 uSD Card boot Partition에 복사한다. Host Guest zImage, qemu-system-arm, rootfs_host.img, rootfs_guest_01.img, rootfs_guest_02.img, guest-vexpress.dtb 파일을 root Partition에 복사한다.
 
 ### 17. u-boot 설정
-
-* u-boot를 설정한다.
 
 ~~~
 (u-boot) # setenv kernel_addr_r 0x40007000
@@ -287,17 +290,17 @@ EOF
 (u-boot) # save
 ~~~
 
-### 18. Host Package 설정
+u-boot를 설정한다.
 
-* Arndale Board에서 uSD Card를 넣고 Host Booting 후, Host에서 Guest 구동을 위한 Package를 설치한다. 
+### 18. Host Package 설정
 
 ~~~
 (Host) # apt-get update (Host) # apt-get install gcc make ssh xorg fluxbox tightvncserver (Host) # apt-get install libsdl-dev libfdt-dev bridge-utils uml-utilities
 ~~~
 
-### 19. Host에 Bridge 설정
+Arndale Board에서 uSD Card를 넣고 Host Booting 후, Host에서 Guest 구동을 위한 Package를 설치한다. 
 
-* Host에 Guest를 위한 Bridge를 설정한다.
+### 19. Host에 Bridge 설정
 
 ~~~
 (Host) # brctl addbr br0
@@ -307,19 +310,17 @@ EOF
 (Host) # route add default gw 192.168.0.1
 ~~~
 
-### 20. Host에 VNC를 통해 접속
+Host에 Guest를 위한 Bridge를 설정한다.
 
-* Host에서 VNC Server를 실행한다.
+### 20. Host에 VNC를 통해 접속
 
 ~~~
 (Host) # tightvncserver -nolisten tcp :1
 ~~~
 
-* VNC Client를 통해서 192.168.0.150:1에 접속한다.
+Host에서 VNC Server를 실행한다. VNC Client를 통해서 192.168.0.150:1에 접속한다.
 
 ### 21. Guest 실행
-
-* VNC Shell에서 각 Guest를 실행한다.
 
 ~~~
 (Host) # tunctl -u root
@@ -350,6 +351,8 @@ EOF
 	-drive file=./rootfs_guest_02.img,id=virtio-blk,if=none \
 	-append "earlyprintk console=ttyAMA0 mem=512M root=/dev/vda rw --no-log virtio_mmio.device=1M@0x4e000000:74:0 virtio_mmio.device=1M@0x4e100000:75:1"
 ~~~
+
+VNC Shell에서 각 Guest를 실행한다.
 
 ### 22. 참조
 

@@ -16,6 +16,7 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
 * VirtualBox 5.0.14r
   * Master Node : Ubuntu Desktop 16.04.2 64bit 1대
   * Worker Node : Ubuntu Server 16.04.2 64bit 2대
@@ -34,14 +35,12 @@ adsense: true
 
 ![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu_16.04/Node_Setting.PNG)
 
-* VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
+VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * Hostname : Master Node - ubuntu01, Worker Node1 - ubuntu02, Worker Node2 - ubuntu03
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * Router : 공유기를 이용하여 192.168.77.0/24 Network를 구축한다. (NAT)
 
 #### 2.1. Master Node
-
-* /etc/network/interfaces을 다음과 같이 수정한다.
 
 {% highlight text %}
 source /etc/network/interfaces.d/*
@@ -69,9 +68,9 @@ dns-nameservers 8.8.8.8
 <figcaption class="caption">[파일 1] Master Node의 /etc/network/interfaces</figcaption>
 </figure>
 
-#### 2.2. Worker Node
+/etc/network/interfaces을 [파일 1]과 같이 수정한다.
 
-* Worker Node 01의 /etc/network/interfaces을 다음과 같이 수정한다.
+#### 2.2. Worker Node
 
 {% highlight text %}
 source /etc/network/interfaces.d/*
@@ -92,7 +91,7 @@ dns-nameservers 8.8.8.8
 <figcaption class="caption">[파일 2] Worker Node 01의 /etc/network/interfaces</figcaption>
 </figure>
 
-* Worker Node 02의 /etc/network/interfaces을 다음과 같이 수정한다.
+Worker Node 01의 /etc/network/interfaces을 [파일 2]와 같이 수정한다.
 
 {% highlight text %}
 source /etc/network/interfaces.d/*
@@ -113,11 +112,11 @@ dns-nameservers 8.8.8.8
 <figcaption class="caption">[파일 3] Worker Node 02의 /etc/network/interfaces</figcaption>
 </figure>
 
+Worker Node 02의 /etc/network/interfaces을 [파일 3]과 같이 수정한다.
+
 ### 3. Package 설치
 
 #### 3.1. 모든 Node
-
-* Docker를 설치한다.
 
 ~~~
 # sudo apt-get update
@@ -128,7 +127,7 @@ dns-nameservers 8.8.8.8
 # sudo apt-get install docker.io=1.12.6-0ubuntu1~16.04.1
 ~~~
 
-* kubelet, kubeadm을 설치한다.
+Docker를 설치한다.
 
 ~~~
 # apt-get update && apt-get install -y apt-transport-https curl
@@ -138,21 +137,19 @@ dns-nameservers 8.8.8.8
 # apt-get install -y kubelet kubeadm
 ~~~
 
-#### 3.2. Master Node
+kubelet, kubeadm을 설치한다.
 
-* kubectl를 설치한다.
+#### 3.2. Master Node
 
 ~~~
 # sudo snap install kubectl --classic
 ~~~
 
+kubectl를 설치한다.
+
 ### 4. Cluster 구축
 
 #### 4.1. Master Node
-
-* kubeadm 초기화를 진행한다. (Cluster 생성)
-  * 실행 후 Key 값을 얻을 수 있다.
-  * 10.0.0.11는 Master NAT 네트워크 IP이다.
 
 ~~~
 # kubeadm init --apiserver-advertise-address=10.0.0.11 --pod-network-cidr=10.244.0.0/16
@@ -160,7 +157,7 @@ dns-nameservers 8.8.8.8
 kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
-* kubectl config 설정을 진행한다.
+kubeadm 초기화를 진행한다. 실행 후 Key 값을 얻을 수 있다. 10.0.0.11는 NAT Network의 Master IP이다.
 
 ~~~
 # mkdir -p $HOME/.kube
@@ -168,29 +165,33 @@ kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 # sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ~~~
 
-* kubectl autocomplete 설정을 진행한다.
-  * /root/.bashrc에 다음의 내용 추가
+kubectl config 설정을 진행한다.
 
-~~~
+{% highlight text %}
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
 source <(kubectl completion bash)
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] Master Node의 ~/.bashrc</figcaption>
+</figure>
 
-* Network Addon (flannel)을 설치한다.
+kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용 추가
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ~~~
 
-* Dashboard Addon (Dashboard)을 설치한다.
+* Network Addon (flannel)을 설치한다.
 
 ~~~
 # kubectl create -f https://git.io/kube-dashboard
 ~~~
+
+* Dashboard Addon (Dashboard)을 설치한다.
 
 #### 4.2. Worker Node
 

@@ -9,6 +9,7 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
 * Kubernetes 1.12
   * Network Addon : cilium 이용
 * Helm
@@ -18,21 +19,19 @@ adsense: true
 
 ### 2. istio 설치
 
-* istio를 Download한다.
-
 ~~~
 # curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.7 sh -
 # cd istio-1.1.7
 ~~~
 
-* Helm을 이용하여 istio를 설치한다.
+istio를 Download한다.
 
 ~~~
 # helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
 # helm install install/kubernetes/helm/istio --name istio --namespace istio-system
 ~~~
 
-* istio 설치를 확인한다.
+Helm을 이용하여 istio를 설치한다.
 
 ~~~
 # kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
@@ -60,6 +59,8 @@ istio-sidecar-injector-6895997989-hnd5k   1/1     Running     0          115s
 istio-telemetry-5448cbd995-g6wdt          2/2     Running     3          115s
 prometheus-5977597c75-xgkvz               1/1     Running     0          115s
 ~~~
+
+istio 설치를 확인한다.
 
 ### 3. 참조
 

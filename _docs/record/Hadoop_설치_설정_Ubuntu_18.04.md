@@ -129,7 +129,7 @@ export YARN_NODEMANAGER_USER="root"
 <figcaption class="caption">[파일 5] ~/.bashrc</figcaption>
 </figure>
 
-~/.bashrc 파일에 [파일 5의] 내용을 추가한다.
+~/.bashrc 파일에 [파일 5]의 내용을 추가한다.
 
 ~~~
 # hdfs namenode -format

@@ -74,11 +74,15 @@ Android Build에 필요한 Java 6를 설치한다.
 
 Android Build시 이용하는 Repo를 설치한다.
 
-~~~
+{% highlight text %}
+...
 PATH=~/bin:$PATH
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] ~/.bashrc</figcaption>
+</figure>
 
-~/.bashrc 파일에 위의 내용을 추가하여 어느 Directory에서든 Repo를 이용할 수 있도록 만든다.
+~/.bashrc 파일에 [파일 2]의 내용을 추가하여 어느 Directory에서든 Repo를 이용할 수 있도록 만든다.
 
 ### 5. Ubuntu에 fastboot, adb 설치
 
@@ -102,11 +106,15 @@ fastboot와 adb는 Build한 Android를 Device에 Flash할때 이용된다. fastb
 Cross Compiler를 설치한다.
 * Cross Compiler Download : http://www.arndaleboard.org/wiki/downloads/supports/arm-2009q3.tar
 
-~~~
+{% highlight text %}
+...
 PATH=/usr/local/arm-2009q3/bin:$PATH
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] ~/.bashrc</figcaption>
+</figure>
 
-~/.bashrc 파일에 위의 내용 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
+~/.bashrc 파일에 [파일 3]의 내용을 추가하여 어느 Directory에서든 Compiler를 이용할 수 있도록 만든다.
 
 ### 7. Source Code Download
 

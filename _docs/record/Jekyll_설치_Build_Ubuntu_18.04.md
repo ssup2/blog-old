@@ -37,7 +37,7 @@ Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
 ~~~
 
 Jekyll Blog의 Root 폴더에서 jekyll serve 명령어를 이용하여 Local에서 Jekyll Blog를 구동하고, 동작을 확인한다.
-* 127.0.0.1:4000
+*  http://192.168.0.150:4000
 
 ### 5. 참조
 

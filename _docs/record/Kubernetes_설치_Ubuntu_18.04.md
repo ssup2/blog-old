@@ -16,6 +16,7 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
 * VirtualBox 5.0.14r
   * Master Node : Ubuntu Desktop 18.04.1 64bit : 1대
   * Worker Node : Ubuntu Server 18.04.1 64bit : 2대
@@ -32,14 +33,12 @@ adsense: true
 
 ![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu_18.04/Node_Setting.PNG)
 
-* VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
+VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * Router : 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
 
 #### 2.1. Master Node
-
-* Master Node의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
 {% highlight yaml %}
 network:
@@ -61,9 +60,9 @@ network:
 <figcaption class="caption">[파일 1] Master Node의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-#### 2.2. Worker Node
+Master Node의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 1]과 같이 설정한다.
 
-* Worker Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
+#### 2.2. Worker Node
 
 {% highlight yaml %}
 network:
@@ -80,7 +79,7 @@ network:
 <figcaption class="caption">[파일 2] Worker Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
+Worker Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 2]와 같이 설정한다.
 
 {% highlight yaml %}
 network:
@@ -97,25 +96,18 @@ network:
 <figcaption class="caption">[파일 3] Worker Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
+Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]과 같이 설정한다.
+
 ### 3. Package 설치
 
-* 모든 Node에서 수행 Kubernetes를 위한 Package를 설치한다.
-
-* Swap을 Off한다.
-  * /etc/fstab 파일에서 아래와 같이 swap.img 주석 처리한다.
-
-~~~
-# /swap.img       none    swap    sw      0       0
-~~~
-
-* Docker를 설치한다.
+모든 Node에서 수행 Kubernetes를 위한 Package를 설치한다.
 
 ~~~
 # apt-get update
 # apt-get install -y docker.io
 ~~~
 
-* kubelet, kubeadm를 설치한다.
+Docker를 설치한다.
 
 ~~~
 # apt-get update && apt-get install -y apt-transport-https curl
@@ -125,21 +117,21 @@ network:
 # apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
 ~~~
 
+kubelet, kubeadm를 설치한다.
+
 ### 4. Cluster 구축
 
 #### 4.1. Master Node
 
-* kubeadm를 초기화 한다.
-  * Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
-
 ~~~
 # swapoff -a
+# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 # kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-* kubectl config를 설정한다.
+kubeadm를 초기화 한다. Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
 
 ~~~
 # mkdir -p $HOME/.kube
@@ -147,33 +139,32 @@ kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca
 # sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ~~~
 
-* kubectl autocomplete를 설정한다.
-  * /root/.bashrc에 다음의 내용 추가한다.
+kubectl config를 설정한다.
 
-~~~
+{% highlight text %}
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
 source <(kubectl completion bash)
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] Master Node의 ~/.bashrc</figcaption>
+</figure>
+
+kubectl autocomplete를 설정한다. ~/.bashrc에 [파일 4]의 내용을 추가한다.
 
 #### 4.2. Worker Node
 
-* Cluster를 구성한다.
-  * kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
-  * Docker Version으로 인한 Error가 발생하면 kubeadm join 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
-
 ~~~
 # swapoff -a
+# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 # kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-#### 4.3. 검증
+Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다. Docker Version으로 인한 Error가 발생하면 kubeadm join 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
 
-* Master Node에서 Cluster를 확인한다.
-  * 모든 Node가 List에서 보여야 한다.
-  * Network 설정이 안되어 있기 때문에 NotReady 상태로 유지된다. Network Plugin 설치후 Ready 상태를 확인 가능하다.
+#### 4.3. 검증
 
 ~~~
 # kubectl get nodes
@@ -183,40 +174,39 @@ node2   NotReady   <none>   31s   v1.12.3
 node3   NotReady   <none>   27s   v1.12.3
 ~~~
 
+Master Node에서 Cluster를 확인한다. 모든 Node가 List에서 보여야 한다. Network 설정이 안되어 있기 때문에 NotReady 상태로 유지된다. Network Plugin 설치후 Ready 상태를 확인 가능하다.
+
 ### 5. Network Plugin 설치
 
-* Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다.
-* 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화를 진행한다.
+Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다. 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화를 진행한다.
 
 #### 5.1. Master Node
 
 ##### 5.1.1. Calico 설치
-
-* Calico를 설치한다.
 
 ~~~
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 # kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
-##### 5.1.2. Flannel 설치
+Calico를 설치한다.
 
-* Flannel를 설치한다.
+##### 5.1.2. Flannel 설치
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
-##### 5.1.3. Cilium 설치
+Flannel를 설치한다.
 
-* bpffs mount 및 설정을 진행한다.
+##### 5.1.3. Cilium 설치
 
 ~~~
 # mount bpffs /sys/fs/bpf -t bpf
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
-* Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
+bpffs mount 및 설정을 진행한다.
 
 ~~~
 # wget https://github.com/cilium/cilium/archive/v1.3.0.zip
@@ -224,10 +214,7 @@ node3   NotReady   <none>   27s   v1.12.3
 # kubectl apply -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
 ~~~
 
-* Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다.
-  * prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다.
-  * Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다.
-  * cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 아래와 같이 변경한다.
+Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
 
 {% highlight yaml %}
 ...
@@ -246,38 +233,37 @@ node3   NotReady   <none>   27s   v1.12.3
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
+<figcaption class="caption">[파일 5] cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
 </figure>
 
-* Cilium을 설치한다.
+Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다. prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다. Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다. cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 [파일 5]와 같이 변경한다.
 
 ~~~
 # kubectl apply -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ~~~
 
+Cilium을 설치한다.
+
 #### 5.2. Worker Node
 
 ##### 5.2.1. Cilium 설치
-
-* bpffs mount 및 설정을 진행한다.
 
 ~~~
 # mount bpffs /sys/fs/bpf -t bpf
 # echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
+bpffs mount 및 설정을 진행한다.
+
 ### 6. Web UI (Dashboard) 설치
 
 #### 6.1 Master Node
-
-* Web UI 설치를 진행한다.
 
 ~~~
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ~~~
 
-* kube-apiserver Insecure 설정
-  * /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 아래의 내용을 수정 및 추가한다.
+Web UI 설치를 진행한다.
 
 {% highlight yaml %}
 ...
@@ -290,17 +276,16 @@ spec:
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
+<figcaption class="caption">[파일 6] /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
 </figure>
 
-* kubelet Service를 재시작한다.
+kube-apiserver에 Insecure Option을 설정한다. /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 [파일 6]의 내용으로 수정한다.
 
 ~~~
 # service kubelet restart
 ~~~
 
-* Web UI Privilege 권한을 위한 config 파일을 생성한다.
-  * 아래의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
+kubelet Service를 재시작한다.
 
 {% highlight yaml %}
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -319,19 +304,18 @@ subjects:
   namespace: kube-system
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] ~/dashboard-admin.yaml</figcaption>
+<figcaption class="caption">[파일 7] ~/dashboard-admin.yaml</figcaption>
 </figure>
 
-* Web UI에 Privilege 권한을 적용한다.
+Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
 
 ~~~
 # kubectl create -f ~/dashboard-admin.yaml
 # rm ~/dashboard-admin.yaml
 ~~~
 
-* Web UI 접속
-  * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
-  * 접속 후 Skip Click
+Web UI에 Privilege 권한을 적용하고 접속하여 확인한다. Web UI 접속후 Skip을 누른다.
+* http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
 
 ### 7. 참조
 

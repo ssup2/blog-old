@@ -9,25 +9,25 @@ adsense: true
 
 ### 1. 설치 환경
 
+설치 환경은 다음과 같다.
 * Kubernetes 1.12
   * Network Addon : cilium 이용
-* 
 
 ### 2. Helm 설치
-
-* Helm Package를 설치한다.
 
 ~~~
 # snap install helm --classic
 ~~~
 
-* Helm Tiller를 설치한다.
+Helm Package를 설치한다.
 
 ~~~
 # kubectl create serviceaccount --namespace kube-system tiller
 # kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 # helm init --service-account tiller
 ~~~
+
+Helm Tiller를 설치한다.
 
 ### 3. 참조
 
