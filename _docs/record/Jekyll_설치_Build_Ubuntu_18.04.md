@@ -9,19 +9,18 @@ adsense: true
 
 ### 1. Build 환경
 
+Build 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
 
 ### 2. Ubuntu Package 설치
-
-* Jeykll 구동에 필요한 Ubuntu Package를 설치한다.
 
 ~~~
 # apt install ruby-full build-essential zlib1g-dev
 ~~~
 
-### 3. Ruby Gem, Jekyll 설치
+Jeykll 구동에 필요한 Ubuntu Package를 설치한다.
 
-* Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
+### 3. Ruby Gem, Jekyll 설치
 
 ~~~
 # gem install bundler -v '1.16.1'
@@ -29,15 +28,16 @@ adsense: true
 # gem install jeykll
 ~~~
 
-### 4. Jekyll Build & Serve
+Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
 
-* Jekyll Build & Serve를 통해서 Local에서 Jekyll Blog를 확인한다.
-  * Jekyll Blog의 Root 폴더에서 아래의 명령어를 실행한다.
-  * 명령어 실행 후 **127.0.0.1:4000**으로 접속하여 Jekyll Blog를 확인한다.
+### 4. Jekyll Servce
 
 ~~~
 # jekyll serve
 ~~~
+
+Jekyll Blog의 Root 폴더에서 jekyll serve 명령어를 이용하여 Local에서 Jekyll Blog를 구동하고, 동작을 확인한다.
+* 127.0.0.1:4000
 
 ### 5. 참조
 

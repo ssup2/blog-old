@@ -7,14 +7,13 @@ comment: true
 adsense: true
 ---
 
-### 1. 설치 환경
+### 1. 설치, 실행 환경
 
+설치, 실행 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
 * Node IP : 192.168.0.150
 
 ### 2. Grafana 설치
-
-* /etc/apt/sources.list에 다음의 내용을 추가한다.
 
 {% highlight text %}
 deb https://packagecloud.io/grafana/stable/debian/ stretch main
@@ -23,7 +22,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 <figcaption class="caption">[파일 1] /etc/apt/sources.list</figcaption>
 </figure>
 
-* Grafana를 설치한다.
+/etc/apt/sources.list에 다음의 [파일 1]의 내용을 추가한다.
 
 ~~~
 # curl https://packagecloud.io/gpg.key | sudo apt-key add -
@@ -31,7 +30,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 # apt-get install grafana
 ~~~
 
-* Grafana를 실행한다.
+Grafana를 설치한다.
 
 ~~~
 # systemctl daemon-reload
@@ -40,9 +39,9 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 # systemctl enable grafana-server.service
 ~~~
 
-* 접속을 확인한다.
-  * http://192.168.0.150:3000/login
-  * ID, PW : admin/admin
+Grafana를 실행하고 접속을 확인한다.
+* http://192.168.0.150:3000/login
+* ID, PW : admin/admin
 
 ### 3. 참조
 

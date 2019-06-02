@@ -17,7 +17,6 @@ adsense: true
 ### 1. 설치, 실행 환경
 
 설치, 실행 환경은 다음과 같다.
-
 * PC : Windows 7 64bit
 * VM on PC : Ubuntu 12.04LTS 64bit
 * Android JB mr1 provided from Insignal

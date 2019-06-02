@@ -17,7 +17,6 @@ adsense: true
 ### 1. 설치, 실행 환경
 
 설치, 실행 환경은 다음과 같다.
-
 * PC : Windows 7 64bit
 * VM on PC : Ubuntu 12.04LTS 64bit
 * ODROID-XU, 16GB emmc
@@ -81,7 +80,6 @@ PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 ### 7. Prebuilt Images와 Sources Download
 
 Prebuilt Image들을 아래의 URL을 통해서 Download 한다.
-
 * Prebuilt Image
   * http://dn.odroid.com/ODROID-XU/Firmware/01-10-2014/emmc_self_installer.img.zip
 * Android, Kernel

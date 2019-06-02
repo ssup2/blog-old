@@ -7,13 +7,12 @@ comment: true
 adsense: true
 ---
 
-### 1. 설정 환경
+### 1. 설치, 실행 환경
 
+설정, 실행 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
 
 ### 2. Java 설치
-
-* Java 8를 설치한다.
 
 ~~~
 # add-apt-repository -y ppa:webupd8team/java
@@ -21,9 +20,9 @@ adsense: true
 # apt install -y oracle-java8-installer
 ~~~
 
-### 3. Cassandra 설치
+Java 8를 설치한다.
 
-* Cassandra Package를 설치한다.
+### 3. Cassandra 설치
 
 ~~~
 # echo "deb http://www.apache.org/dist/cassandra/debian 39x main" |  tee /etc/apt/sources.list.d/cassandra.list
@@ -32,7 +31,7 @@ adsense: true
 # apt install cassandra
 ~~~
 
-* Cassandra 구동 및 구동을 확인한다.
+Cassandra Package를 설치한다.
 
 ~~~
 # systemctl enable cassandra
@@ -52,6 +51,8 @@ Oct 23 13:59:47 ubuntu_1804_server_01 systemd[1]: Stopped LSB: distributed stora
 Oct 23 13:59:47 ubuntu_1804_server_01 systemd[1]: Starting LSB: distributed storage system for structured data...
 Oct 23 13:59:47 ubuntu_1804_server_01 systemd[1]: Started LSB: distributed storage system for structured data.
 ~~~
+
+Cassandra 구동 및 구동을 확인한다.
 
 ### 4. 참조
 

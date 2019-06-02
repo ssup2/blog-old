@@ -16,6 +16,7 @@ adsense: true
 
 ### 1. 설정 환경
 
+설치, 실행 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
 * Ceph Luminous Version
 
@@ -23,15 +24,13 @@ adsense: true
 
 ![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_Ubuntu_18.04/Node_Setting.PNG)
 
-* VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
+VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
 * Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * HDD : 각 Node에 Ceph가 이용할 추가 HDD (/dev/sdb)를 생성하고 붙인다.
 * Router : 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
 
 #### 2.1. Ceph Node
-
-* Ceph Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
 
 {% highlight yaml %}
 network:
@@ -53,7 +52,7 @@ network:
 <figcaption class="caption">[파일 1] Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* Ceph Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
+Ceph Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 1]의 내용으로 생성한다.
 
 {% highlight yaml %}
 network:
@@ -70,7 +69,7 @@ network:
 <figcaption class="caption">[파일 2] Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
-* Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 아래와 같이 설정한다.
+Ceph Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 2]의 내용으로 생성한다.
 
 {% highlight yaml %}
 network:
@@ -87,19 +86,18 @@ network:
 <figcaption class="caption">[파일 3] Node 03의 /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
+Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]의 내용으로 생성한다.
+
 ### 3. Package 설치
 
 #### 3.1. Ceph Node
-
-* ntp Package를 설치한다.
 
 ~~~
 # sudo apt install ntp
 # sudo apt install python
 ~~~
 
-* cephnode User를 생성한다. 
-  * Password : cephnode
+ntp, python Package를 설치한다.
 
 ~~~
 # sudo useradd -d /home/cephnode -m cephnode
@@ -112,17 +110,21 @@ passwd: password updated successfully
 # sudo chmod 0440 /etc/sudoers.d/cephnode
 ~~~
 
-#### 3.2. Deploy Node
+cephnode User를 생성한다. 
+* Password : cephnode
 
-* /etc/host 파일에 아래의 내용을 추가한다.
+#### 3.2. Deploy Node
 
 ~~~
 10.0.0.10 node1
 10.0.0.20 node2
 10.0.0.30 node3
 ~~~
+<figure>
+<figcaption class="caption">[파일 4] Deploy Node의 /etc/host</figcaption>
+</figure>
 
-* ceph-deploy Package를 설치한다.
+/etc/host 파일에 [파일 4]의 내용을 추가한다.
 
 ~~~
 # wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
@@ -131,8 +133,7 @@ passwd: password updated successfully
 # sudo apt install ceph-deploy
 ~~~
 
-* cephdeploy User를 생성한다. 
-  * Password : cephdeploy
+ceph-deploy Package를 설치한다.
 
 ~~~
 # sudo useradd -d /home/cephdeploy -m cephdeploy
@@ -145,8 +146,8 @@ passwd: password updated successfully
 # sudo chmod 0440 /etc/sudoers.d/cecephdeployphnode
 ~~~
 
-* SSH Key를 생성 및 복사한다.
-  * passphrases는 Empty 상태로 유지한다.
+cephdeploy User를 생성한다. 
+* Password : cephdeploy
 
 ~~~
 # login cephdeploy
@@ -162,7 +163,8 @@ $ ssh-copy-id cephnode@node2
 $ ssh-copy-id cephnode@node3
 ~~~
 
-* /home/cephdeploy/.ssh/config 파일을 다음과 같이 수정한다.
+SSH Key를 생성 및 복사한다.
+* passphrases는 Empty 상태로 유지한다.
 
 {% highlight text %}
 Host node1
@@ -176,21 +178,21 @@ Host node3
    User cephnode
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
 </figure>
+
+/home/cephdeploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
 
 ### 4. Storage Cluster 구성
 
 #### 4.1. Deploy Node
-
-* Storage Cluster Config 폴더를 생성한다.
 
 ~~~
 # login cephdeploy
 $ mkdir my-cluster
 ~~~
 
-* Storage Cluster를 초기화한다.
+Storage Cluster Config 폴더를 생성한다.
 
 ~~~
 # login cephdeploy
@@ -201,8 +203,7 @@ $ ceph-deploy forgetkeys
 $ rm ceph.*
 ~~~
 
-* Storage Cluster를 구축 및 확인한다.
-  * MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
+Storage Cluster를 초기화한다.
 
 ~~~
 # login cephdeploy
@@ -232,8 +233,7 @@ $ sudo ceph -s
     pgs:   
 ~~~
 
-* MDS (Meta Data Server)를 설치한다.
-  * MDS은 Ceph Node 01에 설치한다.
+Storage Cluster를 구축 및 확인한다. MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
 
 ~~~
 # login cephdeploy
@@ -256,8 +256,7 @@ $ sudo ceph -s
     pgs:  
 ~~~
 
-* RGW (Rados Gateway)를 설치한다.
-  * RGW는 Ceph Node 01에 설치한다.
+MDS (Meta Data Server)를 설치한다. MDS은 Ceph Node 01에 설치한다.
 
 ~~~
 # login cephdeploy
@@ -281,18 +280,18 @@ $ sudo ceph -s
     pgs:     32 active+clean
 ~~~
 
+RGW (Rados Gateway)를 설치한다. RGW는 Ceph Node 01에 설치한다.
+
 ### 5. Block Storage Test
 
 #### 5.1. Ceph Node
-
-* Pool 생성 및 초기화를 진행한다.
 
 ~~~
 # ceph osd pool create rbd 16
 # rbd pool init rbd
 ~~~
 
-* Block Storage을 생성 및 Mapping 한다.
+Pool 생성 및 초기화를 진행한다.
 
 ~~~
 # rbd create foo --size 4096 --image-feature layering
@@ -300,11 +299,11 @@ $ sudo ceph -s
 /dev/rbd0
 ~~~
 
+Block Storage을 생성 및 Mapping 한다.
+
 ### 6. File Storage Test
 
 #### 6.1. Ceph Node
-
-* Pool 생성 및 File Storage를 생성한다.
 
 ~~~
 # ceph osd pool create cephfs_data 16
@@ -312,7 +311,7 @@ $ sudo ceph -s
 # ceph fs new filesystem cephfs_metadata cephfs_data
 ~~~
 
-* admin Key를 확인한다.
+Pool 생성 및 File Storage를 생성한다.
 
 ~~~
 # cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
@@ -324,16 +323,16 @@ $ sudo ceph -s
         caps osd = "allow *"
 ~~~
 
-* 확인한 admin Key를 이용하여 /root/admin.secret 파일을 생성한다.
+admin Key를 확인한다.
 
 {% highlight text %}
 AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] /root/admin.secret</figcaption>
+<figcaption class="caption">[파일 6] /root/admin.secret</figcaption>
 </figure>
 
-* Ceph File Server를 Mount 한다.
+확인한 admin Key를 이용하여 [파일 6]의 내용으로 /root/admin.secret 파일을 생성한다.
 
 ~~~
 # mkdir mnt
@@ -343,16 +342,18 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 10.0.0.10:6789:/ on /root/test/ceph/mnt type ceph (rw,relatime,name=admin,secret=<hidden>,acl,wsize=16777216)
 ~~~
 
+Ceph File Server를 Mount 한다.
+
 ### 7. Object Storage Test
 
 #### 7.1. Ceph Node
-
-* RGW 동작을 확인한다.
 
 ~~~
 # curl 127.0.0.1:7480
 <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
 ~~~
+
+RGW 동작을 확인한다.
 
 ### 8. 참조
 
