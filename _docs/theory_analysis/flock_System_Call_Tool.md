@@ -19,8 +19,8 @@ int flock(int fd, int operation)
 </figure>
 
 파일에 Lock을 걸거나 푸는 System Call이다. 다음과 같은 Parameter를 이용한다.
-* fd - Open한 파일의 File Descriptor를 넣는다.
-* operation - fd에 대한 수행 동작 및 옵션을 명시한다. LOCK_SH, LOCK_EX, LOCK_UN 3가지 Operation을 넣을 수 있다. LOCK_SH은 Read Lock, LOCK_EX은 Write Lock, LOCK_UN은 Unlock 동작을 수행한다. 또한 LOCK_NB 옵션을 통해 Non-blocking System Call로 이용이 가능하다.
+* fd : Open한 파일의 File Descriptor를 넣는다.
+* operation : fd에 대한 수행 동작 및 옵션을 명시한다. LOCK_SH, LOCK_EX, LOCK_UN 3가지 Operation을 넣을 수 있다. LOCK_SH은 Read Lock, LOCK_EX은 Write Lock, LOCK_UN은 Unlock 동작을 수행한다. 또한 LOCK_NB 옵션을 통해 Non-blocking System Call로 이용이 가능하다.
 
 Unlock은 LOCK_UN Operation을 이용하거나, fd가 **Close**되면 자동으로 Unlock된다. fd는 close() System Call을 통해서 Close 되거나, fd를 Open한 Process가 종료되면 Kernel에서 fd를 Close한다. 따라서 대부분의 경우 따라서 대부분의 경우 open(), flock() System Call을 호출한 Process가 비정상적으로 종료되어도 Lock은 자연스럽게 Unlock 된다.
 
@@ -50,4 +50,4 @@ Lock 파일을 안전하게 지우는 방법은 Lock 파일을 tmpfs같은 메�
 
 ### 3. 참조
 
-* inode Check File Lock - [http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition](http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition)
+* inode Check File Lock : [http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition](http://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition)

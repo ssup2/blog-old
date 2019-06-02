@@ -17,7 +17,7 @@ ZooKeeper는 분산 시스템 환경에서 Leader 선출, Node 상태, 분산 Lo
 
 ![[그림 1] ZooKeeper Architecture]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Architecture.PNG)
 
-분산 Coordinator는 분산 시스템의 일부분이 되어 동작하기 때문에 분산 Coordinator의 작동이 멈춘다면 분산 시스템도 정지하게 된다. ZooKeeper는 안전성을 확보하기 위해 다수의 Server를 이용하는 **Server Cluster - Client** 구조를 이용한다. Server Cluster는 하나의 **Leader**와 여러개의 **Follower**로 구성되어 있다. Server Cluster는 홀수 개수로 구성하는 것이 유리하다. Server간의 Consistency가 깨졌:q을 경우 과반수 이상의 Data를 기준으로 Consistency를 맞추기 때문이다.
+분산 Coordinator는 분산 시스템의 일부분이 되어 동작하기 때문에 분산 Coordinator의 작동이 멈춘다면 분산 시스템도 정지하게 된다. ZooKeeper는 안전성을 확보하기 위해 다수의 Server를 이용하는 **Server Cluster : Client** 구조를 이용한다. Server Cluster는 하나의 **Leader**와 여러개의 **Follower**로 구성되어 있다. Server Cluster는 홀수 개수로 구성하는 것이 유리하다. Server간의 Consistency가 깨졌:q을 경우 과반수 이상의 Data를 기준으로 Consistency를 맞추기 때문이다.
 
 각 Server는 Request Processor, Atomic Broadcast, In-memory DB로 구성되어 있다. Request Processor는 Leader Server만 이용한다. Client로 부터 온 모든 ZNode Write 요청은 Leader Server에게 전달된다. Leader Server는 받은 ZNode Write 요청을 Request Processor에서 처리한다. 그 후 Atomic Broadcast를 통해 **Transaction**을 생성 및 전파하여 ZNode Write 과정이 모든 Server에 올바르게 적용되도록 한다. Atomic Broadcast 사이의 Transaction 전파는 Zab(Zookeeper Atomic Broadcast Protocol)을 이용한다. Zab은 DB의 2-phase Commit과 유사한 Protocol이며 Leader-Propose, Follower-Accept, Leader-Commit 단계로 구성된다. 이러한 Zab Protocol를 통한 Transaction 전파는 Zookeeper의 주요 Overhead 중 하나이다.
 

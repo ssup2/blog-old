@@ -60,7 +60,7 @@ Cluster Proxy는 Proxy Client에게 일정한 End-point를 제공한다. Cluster
 ### 3. 참조
 
 * [https://www.letmecompile.com/redis-cluster-sentinel-overview/](https://www.letmecompile.com/redis-cluster-sentinel-overview/)
-* Master-slave - [https://redis.io/topics/replication](https://redis.io/topics/replication)
-* Sentinel - [https://redis.io/topics/sentinel](https://redis.io/topics/sentinel)
-* Cluster - [https://redis.io/topics/cluster-spec](https://redis.io/topics/cluster-spec)
-* Cluster - [http://redisgate.kr/redis/cluster/redis-cli-cluster.php](http://redisgate.kr/redis/cluster/redis-cli-cluster.php)
+* Master-slave : [https://redis.io/topics/replication](https://redis.io/topics/replication)
+* Sentinel : [https://redis.io/topics/sentinel](https://redis.io/topics/sentinel)
+* Cluster : [https://redis.io/topics/cluster-spec](https://redis.io/topics/cluster-spec)
+* Cluster : [http://redisgate.kr/redis/cluster/redis-cli-cluster.php](http://redisgate.kr/redis/cluster/redis-cli-cluster.php)

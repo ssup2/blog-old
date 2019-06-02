@@ -80,7 +80,7 @@ int __init security_init(void)
 
 ### 2. 참조
 
-* Linux Document - [https://www.kernel.org/doc/Documentation/security/LSM.txt](https://www.kernel.org/doc/Documentation/security/LSM.txt)
-* Linux Security Module Framework - [http://www.kroah.com/linux/talks/ols_2002_lsm_paper/lsm.pdf](http://www.kroah.com/linux/talks/ols_2002_lsm_paper/lsm.pdf)
+* Linux Document : [https://www.kernel.org/doc/Documentation/security/LSM.txt](https://www.kernel.org/doc/Documentation/security/LSM.txt)
+* Linux Security Module Framework : [http://www.kroah.com/linux/talks/ols_2002_lsm_paper/lsm.pdf](http://www.kroah.com/linux/talks/ols_2002_lsm_paper/lsm.pdf)
 * Linux Security Modules:
-General Security Support for the Linux Kernel - [http://www.kroah.com/linux/talks/usenix_security_2002_lsm_paper/lsm.pdf](http://www.kroah.com/linux/talks/usenix_security_2002_lsm_paper/lsm.pdf)
+General Security Support for the Linux Kernel : [http://www.kroah.com/linux/talks/usenix_security_2002_lsm_paper/lsm.pdf](http://www.kroah.com/linux/talks/usenix_security_2002_lsm_paper/lsm.pdf)
