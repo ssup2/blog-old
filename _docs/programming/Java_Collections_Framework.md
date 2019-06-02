@@ -114,8 +114,7 @@ Key를 기준으로 **Red-Black Tree**를 이용하여 SortedMap Interface를 �
 
 ### 3. 참조
 
-* Java Collection Cheat Sheet -  [http://pierrchen.blogspot.kr/2014/03/java-collections-framework-cheat-sheet.html](http://pierrchen.blogspot.kr/2014/03/java-collections-framework-cheat-sheet.html)
-
+* Java Collection Cheat Sheet : [http://pierrchen.blogspot.kr/2014/03/java-collections-framework-cheat-sheet.html](http://pierrchen.blogspot.kr/2014/03/java-collections-framework-cheat-sheet.html)
 * [http://java-latte.blogspot.kr/2013/09/java-collection-arraylistvectorlinkedli.html](http://java-latte.blogspot.kr/2013/09/java-collection-arraylistvectorlinkedli.html)
 * [https://docs.oracle.com/javase/tutorial/collections/interfaces/index.html](https://docs.oracle.com/javase/tutorial/collections/interfaces/index.html)
 * [https://stackoverflow.com/questions/12646404/concurrenthashmap-and-hashtable-in-java](https://stackoverflow.com/questions/12646404/concurrenthashmap-and-hashtable-in-java)

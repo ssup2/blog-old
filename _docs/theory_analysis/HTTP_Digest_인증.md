@@ -41,7 +41,7 @@ Password를 MD5로 Encoding하여 Basic 인증의 약점인 보안 부분을 보
 
 ### 2. 참조
 
-* HTTP Digest Authentication Scheme - [https://tools.ietf.org/html/rfc2069](https://tools.ietf.org/html/rfc2069)
+* HTTP Digest Authentication Scheme : [https://tools.ietf.org/html/rfc2069](https://tools.ietf.org/html/rfc2069)
 * [https://msdn.microsoft.com/en-us/library/aa479391.aspx](https://msdn.microsoft.com/en-us/library/aa479391.aspx)
 * [https://technet.microsoft.com/en-us/library/cc780170(v=ws.10).aspx](https://technet.microsoft.com/en-us/library/cc780170(v=ws.10).aspx)
 * [https://lbadri.wordpress.com/2012/08/10/digest-authentication-with-asp-net-web-api-part-1/](https://lbadri.wordpress.com/2012/08/10/digest-authentication-with-asp-net-web-api-part-1/)

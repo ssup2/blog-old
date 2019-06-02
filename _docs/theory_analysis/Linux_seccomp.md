@@ -52,11 +52,11 @@ int main() {
 
 각 System Call별로 수행 동작을 설정할 수 있다. 다음과 같이 5개의 동작을 System Call별로 설정 할 수 있다.
 
-* SECCOMP_RET_KILL - System Call을 수행하지 않고 해당 Process를 즉시 종료 시킨다. 해당 Process의 종료 값은 SIGSYS을 갖게된다. (Not SIGKILL)
-* SECCOMP_RET_TRAP - System Call을 수행하지 않고 해당 Process에게 SIGSYS Signal을 전송한다. SIGSYS Singal을 받은 Process는 System Call을 Emulation 할 수 있다.
-* SECCOMP_RET_ERRNO - System Call을 수행하지 않고 해당 Thread의 errno 값을 설정한다.
-* SECCOMP_RET_TRACE - tracer에게 System Call 이벤트를 전달한다. 만약 tracer가 존재하지 않으면 -ENOSYS를 Return하고 System Call을 수행하지 않는다.
-* SECCOMP_RET_ALLOW - System Call을 수행한다.
+* SECCOMP_RET_KILL : System Call을 수행하지 않고 해당 Process를 즉시 종료 시킨다. 해당 Process의 종료 값은 SIGSYS을 갖게된다. (Not SIGKILL)
+* SECCOMP_RET_TRAP : System Call을 수행하지 않고 해당 Process에게 SIGSYS Signal을 전송한다. SIGSYS Singal을 받은 Process는 System Call을 Emulation 할 수 있다.
+* SECCOMP_RET_ERRNO : System Call을 수행하지 않고 해당 Thread의 errno 값을 설정한다.
+* SECCOMP_RET_TRACE : tracer에게 System Call 이벤트를 전달한다. 만약 tracer가 존재하지 않으면 -ENOSYS를 Return하고 System Call을 수행하지 않는다.
+* SECCOMP_RET_ALLOW : System Call을 수행한다.
 
 {% highlight C %}
 #include <stdio.h>
@@ -101,7 +101,7 @@ int main() {
 
 ### 3. 참조
 
-* seccomp Example - [https://blog.yadutaf.fr/2014/05/29/introduction-to-seccomp-bpf-linux-syscall-filter/](https://blog.yadutaf.fr/2014/05/29/introduction-to-seccomp-bpf-linux-syscall-filter/)
-* seccomp Man - [http://man7.org/linux/man-pages/man2/seccomp.2.html](http://man7.org/linux/man-pages/man2/seccomp.2.html)
-* Linux Document - [https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt](https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt)
-* libseccomp Man - [http://man7.org/linux/man-pages/man3/seccomp_rule_add.3.html](http://man7.org/linux/man-pages/man3/seccomp_rule_add.3.html)
+* seccomp Example : [https://blog.yadutaf.fr/2014/05/29/introduction-to-seccomp-bpf-linux-syscall-filter/](https://blog.yadutaf.fr/2014/05/29/introduction-to-seccomp-bpf-linux-syscall-filter/)
+* seccomp Man : [http://man7.org/linux/man-pages/man2/seccomp.2.html](http://man7.org/linux/man-pages/man2/seccomp.2.html)
+* Linux Document : [https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt](https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt)
+* libseccomp Man : [http://man7.org/linux/man-pages/man3/seccomp_rule_add.3.html](http://man7.org/linux/man-pages/man3/seccomp_rule_add.3.html)

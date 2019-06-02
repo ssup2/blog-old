@@ -17,11 +17,11 @@ adsense: true
 ### 1. 설치 환경
 
 * VirtualBox 5.0.14r
-  * Master Node - Ubuntu Desktop 16.04.2 64bit - 1대
-  * Worker Node - Ubuntu Server 16.04.2 64bit - 2대
+  * Master Node : Ubuntu Desktop 16.04.2 64bit 1대
+  * Worker Node : Ubuntu Server 16.04.2 64bit 2대
 * Kubernetes 1.7.1
-  * Network Addon - flannel 이용
-  * Dashboard Addon - Dashboard 이용
+  * Network Addon : flannel 이용
+  * Dashboard Addon : Dashboard 이용
 * kubeadm
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
 * Docker 1.12.6
@@ -222,6 +222,6 @@ ubuntu03   Ready      55s       v1.7.1
 
 ### 5. 참조
 
-* Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
-* Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
-* flannel Issue -  [https://github.com/coreos/flannel/issues/671](https://github.com/coreos/flannel/issues/671)
+* Kubernetes 설치 : [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
+* Docker 설치 : [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
+* flannel Issue :  [https://github.com/coreos/flannel/issues/671](https://github.com/coreos/flannel/issues/671)

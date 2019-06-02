@@ -31,11 +31,11 @@ App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이�
 
 ![[그림 3] OAuth 2.0 Access Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Access_Token_Flow.PNG)
 
-* 1,2,3 - App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
-* 4,5,6 - User Agent는 인가 URL로 이동하면서 인가 Scope 정보 및 App URL도 같이 전달한다. Auth Server는 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
-* 7 - User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID, Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
-* 8, 9 - User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
-* 10,11,12 - User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
+* 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
+* 4,5,6 : User Agent는 인가 URL로 이동하면서 인가 Scope 정보 및 App URL도 같이 전달한다. Auth Server는 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
+* 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID, Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
+* 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
+* 10,11,12 : User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
 
 ![[그림 4] Google OAuth 2.0 Authorization UI]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 
@@ -45,10 +45,10 @@ App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이�
 
 ![[그림 5] OAuth2.0 Resource 접근]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Resource_Access_Flow.PNG)
 
-* 1,2 - User는 User Agent를 통해서 Resource를 요청한다.
-* 3,4 - App은 발급받은 Access Token을 이용하여 Resource 요청과 함께 Access Token도 같이 전달한다.
-* 5,6 - Resource Server는 Access Token이 유효한지 확인한 후 App에게 Resource를 전달한다.
-* 7,8 - App은 User Agent를 통해서 User에게 Resource를 전달한다.
+* 1,2 : User는 User Agent를 통해서 Resource를 요청한다.
+* 3,4 : App은 발급받은 Access Token을 이용하여 Resource 요청과 함께 Access Token도 같이 전달한다.
+* 5,6 : Resource Server는 Access Token이 유효한지 확인한 후 App에게 Resource를 전달한다.
+* 7,8 : App은 User Agent를 통해서 User에게 Resource를 전달한다.
 
 #### 1.4. Refresh Token 이용
 
@@ -58,10 +58,10 @@ Auth Server는 Access Token을 반드시 전송할 필요 없다. Refresh Token�
 
 ![[그림 6] Refresh Token 이용 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Refresh_Token_Flow.PNG)
 
-* 1,2,3 - App은 User의 요청을 받아 Access Token을 이용하여 Resource Server에게 Resource를 요청한다.
-* 4,5 - Resource Server는 Auth Server에게 Access Token이 유요한지 물어본다.
-* 6,7,8 - App이 Access Token이 Invaild 하다는 결과를 받으면 Auth Server에게 Refresh Token을 이용하여 새로운 Access Token을 받는다.
-* 9 ~ 14 - App은 새로 받은 Access Token을 이용하여 다시 Resource를 요청하고, 받은 Resource를 User Agent를 통해서 Agent에게 전달한다.
+* 1,2,3 : App은 User의 요청을 받아 Access Token을 이용하여 Resource Server에게 Resource를 요청한다.
+* 4,5 : Resource Server는 Auth Server에게 Access Token이 유요한지 물어본다.
+* 6,7,8 : App이 Access Token이 Invaild 하다는 결과를 받으면 Auth Server에게 Refresh Token을 이용하여 새로운 Access Token을 받는다.
+* 9 ~ 14 : App은 새로 받은 Access Token을 이용하여 다시 Resource를 요청하고, 받은 Resource를 User Agent를 통해서 Agent에게 전달한다.
 
 ### 2. 참조
 

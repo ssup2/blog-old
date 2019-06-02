@@ -11,8 +11,8 @@ adsense: true
 
 * Kubernetes 1.12
 * Ceph
-  * Monitor IP - 10.0.0.10:6789
-  * Pool Name - kube
+  * Monitor IP : 10.0.0.10:6789
+  * Pool Name : kube
 
 ### 2. Ceph RDB 연동
 

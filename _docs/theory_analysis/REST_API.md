@@ -41,15 +41,15 @@ REST API의 핵심 요소는 Resource를 나타내는 URI와, Resource를 대상
 
 REST API에서는 다음과 같은 HTTP Method들이 이용된다. 같은 Method라고 해도 대상이 Resource인지 Collection인지에 따라서 동작이 약간씩 달라진다.
 
-* GET Resource - Resource Data를 가져 온다.
-* GET Collection - Collection 하위의 모든 Resource Data를 가지고 온다. Query String을 통해서 가지고 올 Resource를 Filtering 할 수 있다.
-* HEAD Resource - Resource의 Meta Data(HTTP Header)만 가져온다.
-* HEAD Collection - Collection 하위의 모든 Resource의 Meta Data(HTTP Header)만 가져온다.
-* POST Collection - 새로운 Resource를 생성한다. Idempotence 특징을 갖지 않는다.
-* PUT Resource - Resource 전체를 Update한다. Idempotence 특징을 갖는다.
-* PATCH Resource - Resource 일부를 Update한다. idempotence 특징을 갖는다.
-* DELETE Resource - Resource를 삭제한다.
-* OPTION Resource, Collection - 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
+* GET Resource : Resource Data를 가져 온다.
+* GET Collection : Collection 하위의 모든 Resource Data를 가지고 온다. Query String을 통해서 가지고 올 Resource를 Filtering 할 수 있다.
+* HEAD Resource : Resource의 Meta Data(HTTP Header)만 가져온다.
+* HEAD Collection : Collection 하위의 모든 Resource의 Meta Data(HTTP Header)만 가져온다.
+* POST Collection : 새로운 Resource를 생성한다. Idempotence 특징을 갖지 않는다.
+* PUT Resource : Resource 전체를 Update한다. Idempotence 특징을 갖는다.
+* PATCH Resource : Resource 일부를 Update한다. idempotence 특징을 갖는다.
+* DELETE Resource : Resource를 삭제한다.
+* OPTION Resource, Collection : 이용가능한 모든 HTTP Method와 Option 정보를 가져온다.
 
 ##### 1.2.3. URI
 

@@ -67,4 +67,4 @@ Docker Daemon은 현재 AUFS뿐만 아니라 ZFS, OverlayFS 등 다양한 파일
 
 ### 4. 참조
 
-* Container Image Spec - [https://github.com/opencontainers/image-spec](https://github.com/opencontainers/image-spec)
+* Container Image Spec : [https://github.com/opencontainers/image-spec](https://github.com/opencontainers/image-spec)

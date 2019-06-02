@@ -114,11 +114,11 @@ Memory Resource 값은 일반적인 용량단위(Byte, MB, GB)를 이용한다. 
 
 위에서 언급한것 처럼 Kubernetes는 **Guaranteed, Burstable, BestEffort** 3개의 QoS Class를 제공한다. Pod에 속해있는 Container의 Resource 설정에 따라서 하나의 QoS Class로 분류되고, 관리된다.
 
-* Guaranteed - 가장 우선순위가 높은 QoS Class로써 Pod이 사용할 Resource 보장에 초점을 두고 있다. Kubernetes는 Guaranteed Pod의 사용 Resource가 Limit 값 이상으로 커지지 경우에만 해당 Guaranteed Pod을 강제로 죽인다. Pod에 속한 모든 Container들의 CPU Limit, CPU Request 값이 같고 Memory Limit, Memory Request 값이 같으면 해당 Pod은 Guaranteed Class로 설정된다.
+* Guaranteed : 가장 우선순위가 높은 QoS Class로써 Pod이 사용할 Resource 보장에 초점을 두고 있다. Kubernetes는 Guaranteed Pod의 사용 Resource가 Limit 값 이상으로 커지지 경우에만 해당 Guaranteed Pod을 강제로 죽인다. Pod에 속한 모든 Container들의 CPU Limit, CPU Request 값이 같고 Memory Limit, Memory Request 값이 같으면 해당 Pod은 Guaranteed Class로 설정된다.
 
-* Burstable - 중간 우선순위 QoS Class로써 Pod이 사용할 최소한의 Resource 제공에 초점을 두고 있다. Kubernetes는 Node에 Resource가 부족하고, BestEffort Pod이 없는 상태에서 Burstable Pod의 사용 Resource가 Request 값보다 큰 경우 해당 Burstable Pod을 강제로 죽일 수 있다. Resource Limit Guaranteed Class 조건을 만족시키지 않으면서 Pod에 속한 Container중 하나 이상의 Container의 Resource에 Request 값이 존재하면 Burstable 해당 Pod은 Burstable Class로 설정된다.
+* Burstable : 중간 우선순위 QoS Class로써 Pod이 사용할 최소한의 Resource 제공에 초점을 두고 있다. Kubernetes는 Node에 Resource가 부족하고, BestEffort Pod이 없는 상태에서 Burstable Pod의 사용 Resource가 Request 값보다 큰 경우 해당 Burstable Pod을 강제로 죽일 수 있다. Resource Limit Guaranteed Class 조건을 만족시키지 않으면서 Pod에 속한 Container중 하나 이상의 Container의 Resource에 Request 값이 존재하면 Burstable 해당 Pod은 Burstable Class로 설정된다.
 
-* BestEffort - 가장 우선순위가 낮은 QoS Class로써 Pod의 Resource 사용을 관여하지 않는다. 하지만 Kubernetes는 Node에 Resource가 부족한 경우 BestEffort Pod부터 강제로 죽이기 시작한다. Pod에 속한 모든 Container들의 모든 Resource가 설정되어있지 않으면 해당 Pod은 BestEffort Class로 설정된다.
+* BestEffort : 가장 우선순위가 낮은 QoS Class로써 Pod의 Resource 사용을 관여하지 않는다. 하지만 Kubernetes는 Node에 Resource가 부족한 경우 BestEffort Pod부터 강제로 죽이기 시작한다. Pod에 속한 모든 Container들의 모든 Resource가 설정되어있지 않으면 해당 Pod은 BestEffort Class로 설정된다.
 
 #### 1.3. Manage
 
@@ -128,14 +128,14 @@ Kubernetes는 Pod 관리 및 제어를 위한 여러가지 기법을 제공하�
 
 Probe는 Kubernetes에서 Container의 정상 동작을 감시하기 위한 기법이다. 각 Node에 뜨는 kubelet Daemon은 주기적으로 Container마다 정의된 Handler를 호출하여 Container의 정상 동작을 감시한다. Handler는 Exec, TCP Socket, HTTP Get 크게 3가지의 Type이 존재한다.
 
-* Exec - Container안에서 특정 명령어를 실행한다. 실행한 명령어의 Exit Code가 0이면 Container가 정상 상태라고 간주하고, 0이 아니면 정상 상태가 아니라고 간주한다.
-* TCP Socket - Container가 특정 Port 번호를 열고 있으면 Container가 정상 상태라고 간주한다.
-* HTTP Get - Container에게 HTTP Get Request를 날려 정상응답이 오면 Containe가 정상 상태라고 간주한다.
+* Exec : Container안에서 특정 명령어를 실행한다. 실행한 명령어의 Exit Code가 0이면 Container가 정상 상태라고 간주하고, 0이 아니면 정상 상태가 아니라고 간주한다.
+* TCP Socket : Container가 특정 Port 번호를 열고 있으면 Container가 정상 상태라고 간주한다.
+* HTTP Get : Container에게 HTTP Get Request를 날려 정상응답이 오면 Containe가 정상 상태라고 간주한다.
 
 Probe에는 livenessProbe, readinessProbe 2가지 종류의 Probe가 존재한다. 각 Container마다 livenessProbe와 readinessProbe를 정의 할 수 있다.
 
-* livenessProbe - Container가 Running 상태라는걸 감지하기 위한 Probe이다. livenessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 삭제하고 Container의 Restart Policy에 따라서 해당 Container를 재시작하거나 그대로 놔둔다.
-* readinessProbe - Container가 Service 요청을 받을 수 있는 상태인지를 감지하기 위한 Probe이다. readinessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 갖고 있는 Pod의 IP 설정을 제거하여, 해당 Pod이 Service를 제공하지 못하도록 한다.
+* livenessProbe : Container가 Running 상태라는걸 감지하기 위한 Probe이다. livenessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 삭제하고 Container의 Restart Policy에 따라서 해당 Container를 재시작하거나 그대로 놔둔다.
+* readinessProbe : Container가 Service 요청을 받을 수 있는 상태인지를 감지하기 위한 Probe이다. readinessProbe의 결과가 실패라면 Kubernetes는 해당 Container를 갖고 있는 Pod의 IP 설정을 제거하여, 해당 Pod이 Service를 제공하지 못하도록 한다.
 
 <figure>
 {% highlight yaml %}
@@ -222,15 +222,15 @@ spec:
 
 Container Life Cycle Hook은 각 Container의 생명주기 Event에 따라서 특정 동작을 수행할 수 있게 만든다. [파일 4]는 Container Life Cycle Hook을 나타내고 있다. 현재 Kubernetes는 postStart Hook과 preStop Hook을 제공하고 있다. postStart Hook, preStop Hook 둘다 Parameter로 특정 Data를 전달하는 기능은 제공하지 않는다.
 
-* postStart Hook - Container의 Init Process (Command) 및 Namespace를 생성한 뒤 수행하는 Hook이다. Container의 Init Process가 정상동작을 하더라도 Container의 postStart Hook이 제대로 실행 완료되지 않으면, 해당 Container는 Running 상태로 바뀌지 않는다. Container의 postStart Hook이 실패하면 Kubernetes는 해당 Container를 강제로 죽인다.
+* postStart Hook : Container의 Init Process (Command) 및 Namespace를 생성한 뒤 수행하는 Hook이다. Container의 Init Process가 정상동작을 하더라도 Container의 postStart Hook이 제대로 실행 완료되지 않으면, 해당 Container는 Running 상태로 바뀌지 않는다. Container의 postStart Hook이 실패하면 Kubernetes는 해당 Container를 강제로 죽인다.
 
-* preStop Hook - Container를 정지하기전에 수행하는 Hook이다. preStop Hook이 정상적으로 수행완료 된 이후에야 Container 삭제를 시도한다. 따라서 Container의 preStop Script가 종료되지 않으면 해당 Container는 삭제할 수 없다. 이러한 문제를 해결하기 위해서 Kubernetes는 terminationGracePeriodSeconds 옵션을 통해서 preStop Hook의 Timeout 시간을 지정할 수 있다. Container의 preStop Hook이 실패하거나, Timeout으로 인해 강제로 종료되면 Kubernetes는 해당 Container를 강제로 죽인다.
+* preStop Hook : Container를 정지하기전에 수행하는 Hook이다. preStop Hook이 정상적으로 수행완료 된 이후에야 Container 삭제를 시도한다. 따라서 Container의 preStop Script가 종료되지 않으면 해당 Container는 삭제할 수 없다. 이러한 문제를 해결하기 위해서 Kubernetes는 terminationGracePeriodSeconds 옵션을 통해서 preStop Hook의 Timeout 시간을 지정할 수 있다. Container의 preStop Hook이 실패하거나, Timeout으로 인해 강제로 종료되면 Kubernetes는 해당 Container를 강제로 죽인다.
 
 Hook Handler Type에는 Exec, HTTP를 제공한다.
 
-* Exec - Container의 Namespace 안에서 명령어를 수행한다. 명령어의 Exit Code 값이 0인 경우 성공으로 간주하고 0이 아닌경우에는 실패로 간주한다. [파일 4]의 postStart Hook이 Exec Type의 Hook Handler이다.
+* Exec : Container의 Namespace 안에서 명령어를 수행한다. 명령어의 Exit Code 값이 0인 경우 성공으로 간주하고 0이 아닌경우에는 실패로 간주한다. [파일 4]의 postStart Hook이 Exec Type의 Hook Handler이다.
 
-* HTTP - Container에게 HTTP Request를 전달한다. HTTP의 결과가 200번대라면 성공으로 간주하고 아닌 경우에는 실패로 간주한다. [파일 4]의 preStop Hook이 HTTP Type의 Hook Handler이다.
+* HTTP : Container에게 HTTP Request를 전달한다. HTTP의 결과가 200번대라면 성공으로 간주하고 아닌 경우에는 실패로 간주한다. [파일 4]의 preStop Hook이 HTTP Type의 Hook Handler이다.
 
 ### 2. 참조
 

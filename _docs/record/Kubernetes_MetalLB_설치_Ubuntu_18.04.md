@@ -12,13 +12,13 @@ adsense: true
 ![[그림 1] Kubernetes Network]({{site.baseurl}}/images/record/Kubernetes_MetalLB_Install_Ubuntu_18.04/Kubernetes_Network.PNG)
 
 * Network
-  * Node Network - 10.0.0.0/24
-  * LoadBalancer Service IP - 10.0.0.200 ~ 10.0.0.220
+  * Node Network : 10.0.0.0/24
+  * LoadBalancer Service IP : 10.0.0.200 ~ 10.0.0.220
 * Kubernetes 1.12
-  * Network Addon - cilium 이용
+  * Network Addon : cilium 이용
 * Helm
-  * Client - v2.13.1
-  * Server - v2.13.1
+  * Client : v2.13.1
+  * Server : v2.13.1
 * MetalLB 0.7.3
 
 ### 2. MetalLB 설치

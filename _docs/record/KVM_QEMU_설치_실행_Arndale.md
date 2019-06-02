@@ -17,19 +17,19 @@ adsense: true
 ### 1. 설치 환경
 
 * Arndale Board, 8GB uSD
-* PC - Ubuntu 14.04LTS 32bit, root User
-* VM on KVM - Ubuntu 14.04LTS 32bit, root User
-* Cross compiler - arm-linux-gnueabihf-4.9.3
+* PC : Ubuntu 14.04LTS 32bit, root User
+* VM on KVM : Ubuntu 14.04LTS 32bit, root User
+* Cross compiler : arm-linux-gnueabihf-4.9.3
 * Network 192.168.0.xxx (NAT)
-  * HostOS - 192.168.0.150
-  * br0 - 192.168.0.200
-  * GeustOS_01 - 192.168.0.160, GeustOS_02 - 192.168.0.161
-  * tap0 - 192.168.0.201, tap1 - 192.168.0.202
+  * HostOS : 192.168.0.150
+  * br0 : 192.168.0.200
+  * GeustOS_01 : 192.168.0.160, GeustOS_02 : 192.168.0.161
+  * tap0 : 192.168.0.201, tap1 : 192.168.0.202
 
 ### 2. Cross Compiler 설치
 
 * Kernel Build를 위한 Cross Compiler를 설치한다.
-  * Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+  * Download : https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 
 * /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용 추가하여, 어느 Directory에서나 Cross Compiler를 설치 할 수 있도록 한다.
 
@@ -49,8 +49,8 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 ### 4. Kernel Config Download
 
 * Kernel Config를 Download 한다.
-  * Login in - http://www.virtualopensystems.com/
-  * Guest Kernel Config - http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
+  * Login in : http://www.virtualopensystems.com/
+  * Guest Kernel Config : http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/guest-config
 
 ### 5. Host Kernel, Host dtb Build
 

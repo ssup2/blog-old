@@ -16,8 +16,8 @@ adsense: true
 
 ### 1. 설치 환경
 
-* PC - Ubuntu 14.04LTS 64bit, root user
-* VM on Xen - Xen 4.5.0, Dom0 & DomU kernel 3.18.3 in linux upstream, Ubuntu 14.04LTS 32bit
+* PC : Ubuntu 14.04LTS 64bit, root user
+* VM on Xen : Xen 4.5.0, Dom0 & DomU kernel 3.18.3 in linux upstream, Ubuntu 14.04LTS 32bit
 * Network
   * Gateway : 192.168.0.1
   * HostOS(xenbr0) : 192.168.0.150
@@ -27,7 +27,7 @@ adsense: true
 
 ### 2. Cross Compiler 설치
 
-* Download - https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+* Download : https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 * /usr/local Directory에 압축을 풀고 ~/.bashrc 파일에 아래의 내용을 추가하여 어떤 Directory에서라도 Compiler를 실행 할 수 있도록 만든다.
 
 ~~~
@@ -36,14 +36,14 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 3. uSD Card Partiton 구성
 
-* 0 ~ 2M, 2M, No Filesystem: Bootloader (bl1, spl, U-boot)
+* 0 ~ 2M, 2M, No Filesystem : Bootloader (bl1, spl, U-boot)
 * 2M ~ 18M, 16M, ext2, boot : xen-uImage, linux-zImage, exynos5250-arndale.dtb, load-xen-uSD.img
 * 18M ~ rest, ext3, root : Dom0 Root-Filesystem
 
 ### 4. U-boot Fusing
 
 * spl, u-boot Download 및 Build 한다.
-  *  Download bl1 - http://releases.linaro.org/12.12/components/kernel/arndale-bl1/arndale-bl1.bin
+  *  Download bl1 : http://releases.linaro.org/12.12/components/kernel/arndale-bl1/arndale-bl1.bin
 
 ~~~
 # git clone git://git.linaro.org/people/ronynandy/u-boot-arndale.git

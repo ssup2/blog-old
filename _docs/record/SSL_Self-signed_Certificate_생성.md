@@ -32,7 +32,7 @@ adsense: true
 #### 3.1. v3.ext 파일 생성
 
 * v3.ext 파일 생성 및 아래의 내용으로 작성한다.
-  * CN (Common Name) - 192.168.0.100
+  * CN (Common Name) : 192.168.0.100
 
 {% highlight text %}
 authorityKeyIdentifier=keyid,issuer
@@ -50,7 +50,7 @@ IP.1 = 192.168.0.100
 #### 3.2. Server Key, Server Certificate, Server pem 파일 생성
 
 * server.key, server.crt, server.pem 파일을 생성한다.
-  * CN (Common Name) - 192.168.0.100
+  * CN (Common Name) : 192.168.0.100
 
 ~~~
 # openssl req -new -newkey rsa:2048 -sha256 -nodes -keyout server.key -subj /C=KO/ST=None/L=None/O=None/CN=192.168.0.100 -out server.csr

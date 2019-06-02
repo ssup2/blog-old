@@ -10,10 +10,10 @@ adsense: true
 ### 1. 설치 환경
 
 * Kubernetes 1.12
-  * Network Addon - cilium 이용
+  * Network Addon : cilium 이용
 * Helm
-  * Client - v2.13.1
-  * Server - v2.13.1
+  * Client : v2.13.1
+  * Server : v2.13.1
 * istio 1.1.7
 
 ### 2. istio 설치

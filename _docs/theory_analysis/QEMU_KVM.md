@@ -45,4 +45,4 @@ iothread 방식에서 TCG대신 KVM을 이용하여 vCPU를 구동하는 방법�
 
 ### 3. 참조
 
-QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+QEMU : [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)

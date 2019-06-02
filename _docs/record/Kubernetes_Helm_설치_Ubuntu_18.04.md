@@ -10,7 +10,7 @@ adsense: true
 ### 1. 설치 환경
 
 * Kubernetes 1.12
-  * Network Addon - cilium 이용
+  * Network Addon : cilium 이용
 * 
 
 ### 2. Helm 설치
@@ -31,4 +31,4 @@ adsense: true
 
 ### 3. 참조
 
-* Helm Issue - [https://github.com/helm/helm/issues/3055](https://github.com/helm/helm/issues/3055)
+* Helm Issue : [https://github.com/helm/helm/issues/3055](https://github.com/helm/helm/issues/3055)

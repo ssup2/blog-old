@@ -10,9 +10,9 @@ adsense: true
 ### 1. 설치 환경
 
 * Ubuntu 16.04 LTS 64bit, root user
-* NFS Root - NFSv4 Server의 Root Directory 절대 경로를 의미한다.
+* NFS Root : NFSv4 Server의 Root Directory 절대 경로를 의미한다.
   * NFS Root로 /export/nfs_root를 이용한다.
-* NFS share - NFSv4 Server를 통해 실제 공유할 Directory의 절대 경로를 의미한다.
+* NFS share : NFSv4 Server를 통해 실제 공유할 Directory의 절대 경로를 의미한다.
   * NFS share로 /root/nfs_share를 이용한다.
 
 ### 2. NFSv4 Server 설정

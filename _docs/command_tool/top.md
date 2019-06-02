@@ -47,14 +47,14 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
 
 top을 통해서 CPU 사용률을 알 수 있다. **%Cpu(s)** 부분은 모든 CPU Core의 평균 CPU 사용률을 타나내고 있다. 1번 키보드를 누르면 각 CPU Core의 사용률을 볼 수 있다.CPU의 사용률은 us, sy, ni, id, wa, hi, si, st 7개의 부분으로 나타낸다. 7개 부분의 사용률을 모두 더하면 100%가 된다.
 
-* us (user) - nice값이 적용되지 않은 (un-niced, nice = 0) User Process들의 사용률을 나타낸다. 대부분의 User Process들의 사용률을 의미한다.  
-* sy (system) - Kernel의 사용률 중 id, wa, hi, si의 사용률 제외한 사용률을 의미한다.
-* ni (nice) - nice값이 적용된 (niced) User Process들의 사용률을 나타낸다.
-* id (idle) - I/O Wait를 제외한 CPU의 대기율를 나타낸다.
-* wa (wait) - I/O Wait로 인한 CPU 대기율을 나타낸다.
-* hi (hardware interrupt) - 순수 Hardware Interrupt 처리를 위해 사용된 CPU 사용률을 의미한다. 좀더 정확히 설명하면 Kernel의 Interrupt Flag를 Set만 하는 Top Havles 부분을 처리를 위한 CPU 사용률을 의미한다.
-* si (sotware interrupt) - Top Halves에서 Set한 Interrupt Flag에 따라서 실제 Interrupt를 처리하는 Bottom Havles의 CPU 사용률을 의미한다.
-* st (steal) - Kernel이 Hypervisor가 제어하는 가상 머신 안에서 동작할 때, Hypervisor나 다른 가상 머신에 의해서 사용을 뺏긴(steal) CPU 사용률을 의미한다.
+* us (user) : nice값이 적용되지 않은 (un-niced, nice = 0) User Process들의 사용률을 나타낸다. 대부분의 User Process들의 사용률을 의미한다.  
+* sy (system) : Kernel의 사용률 중 id, wa, hi, si의 사용률 제외한 사용률을 의미한다.
+* ni (nice) : nice값이 적용된 (niced) User Process들의 사용률을 나타낸다.
+* id (idle) : I/O Wait를 제외한 CPU의 대기율를 나타낸다.
+* wa (wait) : I/O Wait로 인한 CPU 대기율을 나타낸다.
+* hi (hardware interrupt) : 순수 Hardware Interrupt 처리를 위해 사용된 CPU 사용률을 의미한다. 좀더 정확히 설명하면 Kernel의 Interrupt Flag를 Set만 하는 Top Havles 부분을 처리를 위한 CPU 사용률을 의미한다.
+* si (sotware interrupt) : Top Halves에서 Set한 Interrupt Flag에 따라서 실제 Interrupt를 처리하는 Bottom Havles의 CPU 사용률을 의미한다.
+* st (steal) : Kernel이 Hypervisor가 제어하는 가상 머신 안에서 동작할 때, Hypervisor나 다른 가상 머신에 의해서 사용을 뺏긴(steal) CPU 사용률을 의미한다.
 
 ### 3. 참조
 

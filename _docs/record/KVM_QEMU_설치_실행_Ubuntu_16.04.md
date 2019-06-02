@@ -10,8 +10,8 @@ adsense: true
 ### 1. 설치 환경
 
 * Host
-  * Hardware - Intel i5-6500, DDR4 8GB
-  * OS - Ubuntu 14.04.03 LTS 64bit, root user
+  * Hardware : Intel i5-6500, DDR4 8GB
+  * OS : Ubuntu 14.04.03 LTS 64bit, root user
 
 ### 2. Ubuntu Package 설치
 
@@ -299,7 +299,7 @@ UUID=(UUID of blk) / ext4 errors=remount-ro 0 1
 
 ### 9. 참조
 
-* Kernel Compile - [https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768]( https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768)
-* QEMU Option - [https://wiki.gentoo.org/wiki/QEMU/Options]( https://wiki.gentoo.org/wiki/QEMU/Options)
-* fstab Problem - [ http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove]( http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove)
-* LIO Targetcli - [http://linux-iscsi.org/wiki/Targetcli](http://linux-iscsi.org/wiki/Targetcli)
+* Kernel Compile : [https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768]( https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1460768)
+* QEMU Option : [https://wiki.gentoo.org/wiki/QEMU/Options]( https://wiki.gentoo.org/wiki/QEMU/Options)
+* fstab Problem : [ http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove]( http://askubuntu.com/questions/392720/the-disk-drive-for-tmp-is-not-ready-yet-s-to-skip-mount-or-m-for-manual-recove)
+* LIO Targetcli : [http://linux-iscsi.org/wiki/Targetcli](http://linux-iscsi.org/wiki/Targetcli)

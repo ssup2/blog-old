@@ -67,8 +67,8 @@ set record = ''
 ~~~
 
 * 단축키
-  * m - Compose a new mail message.
-  * G - Fetch new messages.
+  * m : Compose a new mail message.
+  * G : Fetch new messages.
 
 ### 6. 참조
 

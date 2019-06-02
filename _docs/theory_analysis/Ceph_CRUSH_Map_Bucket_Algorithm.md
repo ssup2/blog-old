@@ -49,10 +49,10 @@ cbucket uniform(bucket, pg_id, replica) {
 <figcaption class="caption">[Code 1] uniform() 함수</figcaption>
 </figure>
 
-* cbucket - Uniform 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
+* cbucket : Uniform 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket : 상위 Bucket을 나타낸다.
+* pg_id : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica : Replica를 나타낸다. 0은 Primary Replica를 나타낸다.
 
 Uniform 알고리즘은 하위 Bucket을 **Consistency Hashing**을 이용하여 선택한다. [Code 1]은 Uniform 알고리즘을 이용하여 하위 Bucket을 선택하는 uniform() 함수를 간략하게 나타내고 있다. 한번만 Hashing을 수행하면 되기 때문에 O(1) 시간에 하위 Bucket을 찾을 수 있다. 하지만 Consistency Hashing을 이용하더라도 하위 Bucket이 추가되거나 제거될 경우 많은 수의 PG들이 다른 하위 Bucket에 재배치된다. 따라서 많은 수의 Object들이 Rebalancing된다. Uniform 알고리즘의 모든 하위 Bucket들은 동일한 Weight를 갖는다. 즉 Uniform 알고리즘은 각 하위 Bucket마다 다른 Weight를 적용할 수 없다. Weight 값을 설정하더라도 무시된다. 각 하위 Bucket마다 다른 Weight를 적용하고 싶으면 다른 Bucket 알고리즘을 이용해야 한다.
 
@@ -73,8 +73,8 @@ init_sum_weights(cbucket_weights, sum_weights) {
 <figcaption class="caption">[Code 2] init_sum_weights() 함수</figcaption>
 </figure>
 
-* cbucket_weights - CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
-* sum_weights - List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
+* cbucket_weights : CRUSH Map에 설정된 하위 Bucket의 Weight 값들을 나타낸다.
+* sum_weights : List 알고리즘에 따라서 cbucket_weights의 합들을 나타낸다.
 
 List 알고리즘은 하위 Bucket들을 **Linked List**를 이용하여 관리한다. Link 알고리즘을 수행하기 위해서는 CRUSH Map에 있는 하위 Bucket의 Weight 정보를 바탕으로 [그림 3]과 같은 Linked List를 준비해 두어야한다. [Code 2]는 [그림 3]의 sum_weights Linked List를 초기화하는 init_sum_weights() 함수를 간략하게 나타내고 있다.
 
@@ -94,10 +94,10 @@ cbucket list(bucket, pg_id, replica) {
 <figcaption class="caption">[Code 3] list() 함수</figcaption>
 </figure>
 
-* cbucket - List 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+* cbucket : List 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket : 상위 Bucket을 나타낸다.
+* pg_id : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica : Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
 [Code 3]은 초기화된 cbucket_weights Linked List와 sum_weights Linked List를 이용하여 Link 알고리즘의 수행하는 list() 함수를 나타내고 있다. list() 함수는 Linked List의 마지막부터 처음으로 이동하면서 하위 Bucket의 Weight에 비례하여 PG를 할당한다. Hashing을 Linked List의 길이인 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
@@ -136,11 +136,11 @@ cbucket tree(bucket, pg_id, replica) {
 <figcaption class="caption">[Code 4] tree() 함수</figcaption>
 </figure>
 
-* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* array - 하위 Bucket들을 Binary Tree로 저장한 배열을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+* cbucket : Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket : 상위 Bucket을 나타낸다.
+* array : 하위 Bucket들을 Binary Tree로 저장한 배열을 나타낸다.
+* pg_id : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica : Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
 [Code 4]은 초기화된 Binary Tree를 이용하여 Tree 알고리즘을 수행하는 tree() 함수를 나타내고 있다. Root Node를 시작으로 Binaray Tree를 탐색하면서 Weight에 비례하여 PG를 배치한다. Hashing을 Binary Tree의 높이만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(log N) 시간이 걸린다.
 
@@ -170,10 +170,10 @@ cbucket straw2(bucket, pg_id, replica) {
 <figcaption class="caption">[Code 5] straw2() 함수</figcaption>
 </figure>
 
-* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+* cbucket : Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket : 상위 Bucket을 나타낸다.
+* pg_id : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica : Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
 straw2 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 **dist()** 함수를 이용하여 얻은 값과 하위 Bucket의 Weight를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. dist() 함수는 hash() 함수처럼 Random 값을 생성하지만, Weight 값이 클수록 큰 Random 값이 나올확률이 높아지는 함수이다. [Code 5]는 Straw2 알고리즘을 수행하는 straw2() 함수를 나타내고 있다. Hashing을 하위 Bucket의 개수만큼 수행해야하기 때문에 하위 Bucket을 찾는데 O(N) 시간이 걸린다.
 
@@ -204,10 +204,10 @@ cbucket straw(bucket, pg_id, replica) {
 <figcaption class="caption">[Code 6] straw() 함수</figcaption>
 </figure>
 
-* cbucket - Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
-* bucket - 상위 Bucket을 나타낸다.
-* pg_id - 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
-* replica - Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
+* cbucket : Tree 알고리즘을 통해서 선택된 하위 Bucket을 나타낸다.
+* bucket : 상위 Bucket을 나타낸다.
+* pg_id : 배치할 Object를 갖고있는 PG의 ID를 나타낸다.
+* replica : Replica를 나타낸다. Primary Replica일 경우 0을 넣는다.
 
 Straw 알고리즘은 모든 하위 Bucket을 대상으로 하위 Bucket ID를 Hasing하여 얻은 값과 하위 Bucket의 **Straw**를 곱한 값을 구한다. 구한 값중에서 가장 값이 큰 Bucket에 PG를 할당한다. [Code 6]은 Straw 알고리즘을 수행하는 straw() 함수를 나타내고 있다. Straw 값은 하위 Bucket들을 Weight순으로 오름차순으로 정렬한 다음, Straw 값을 구하려는 하위 Bucket의 Weight 값과 바로 앞의 하위 Bucket의 Weight 값을 이용하여 구한다. 예를들어 A/1.0, B/3.0, C/2.5 3개의 하위 Bucket들이 있을때 Weight에 따라서 A, C, B 순으로 정렬이된다. 그 후 C Bucket의 Straw값을 구하기 위해서 C Bucket의 Weight 값과 A Bucket의 Weight 값을 이용한다.
 

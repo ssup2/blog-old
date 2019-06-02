@@ -38,7 +38,7 @@ journald는 Log 기록시 rsyslogd처럼 Plain Text를 이용하지 않고 Struc
 
 * [https://en.wikipedia.org/wiki/Systemd](https://en.wikipedia.org/wiki/Systemd)
 *[https://www.maketecheasier.com/systemd-what-you-need-to-know-linux/](https://www.maketecheasier.com/systemd-what-you-need-to-know-linux/)
-* journald - [https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/](https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/)
-* journald - [https://askubuntu.com/questions/925440/relationship-of-rsyslog-and-journald-on-ubuntu-16-04](https://askubuntu.com/questions/925440/relationship-of-rsyslog-and-journald-on-ubuntu-16-04)
-* jorunald - [https://www.loggly.com/blog/why-journald/](https://www.loggly.com/blog/why-journald/)
+* journald : [https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/](https://unix.stackexchange.com/questions/205883/understand-logging-in-linux/)
+* journald : [https://askubuntu.com/questions/925440/relationship-of-rsyslog-and-journald-on-ubuntu-16-04](https://askubuntu.com/questions/925440/relationship-of-rsyslog-and-journald-on-ubuntu-16-04)
+* jorunald : [https://www.loggly.com/blog/why-journald/](https://www.loggly.com/blog/why-journald/)
 

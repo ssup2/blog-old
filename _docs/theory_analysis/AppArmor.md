@@ -14,8 +14,8 @@ Linux LSM (Linux Security Module) Framework의 Security Module 중 하나인 App
 AppArmor는 Linux LSM Framework위에서 동작하는 MAC(Mandatory Access Control) 기반 Security Module이다. AppArmor는 **System Call** 제한을 통해 Program(Binary)의 동작을 제한한다. 각 프로그램의 동작 제한 사항은 **AppArmor Profile** 파일을 통해서 AppArmor에게 전달한다.
 
 AppArmor는 Enforcement, Complain 2개의 Mode로 동작한다.
-* Enforcement - Program의 허용되지 않은 동작을 제한하고 Log에 남긴다. 실제 Program을 운영하면서 동작을 제한 할 때 이용하는 Mode이다.
-* Complain - Program의 허용되지 않은 동작을 제한하지는 않고 Log만 남긴다. 특정 Program의 AppArmor Profile을 작성할때 이용하는 Mode이다. Log를 통해서 AppArmor Profile 작성을 도움 받을 수 있다.
+* Enforcement : Program의 허용되지 않은 동작을 제한하고 Log에 남긴다. 실제 Program을 운영하면서 동작을 제한 할 때 이용하는 Mode이다.
+* Complain : Program의 허용되지 않은 동작을 제한하지는 않고 Log만 남긴다. 특정 Program의 AppArmor Profile을 작성할때 이용하는 Mode이다. Log를 통해서 AppArmor Profile 작성을 도움 받을 수 있다.
 
 {% highlight text %}
 # aa-status

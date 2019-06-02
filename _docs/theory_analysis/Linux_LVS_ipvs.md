@@ -89,7 +89,7 @@ LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당
 
 ### 3. 참조
 
-* LVS - [https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso](https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso)
-* ipvs - [http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html](http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html)
-* ipvs - [https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/](https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/)
-* ipvs - [https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c](https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c)
+* LVS : [https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso](https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso)
+* ipvs : [http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html](http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html)
+* ipvs : [https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/](https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/)
+* ipvs : [https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c](https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c)

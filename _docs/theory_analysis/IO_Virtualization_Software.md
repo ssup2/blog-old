@@ -69,4 +69,4 @@ vhost는 QEMU의 Virtio Device Emulation 역활을 수행하는 **Kernel Module*
 [그림 10]은 QEMU+KVM+Virtio+vhost의 x86 가상 머신 안에서 보이는 PCI 장치들과 SCSI 장치들을 나타내고 있다. SCSI 장치에 LIO를 인식하는걸 확인 할 수 있다.
 
 ### 4. 참조
-* QEMU - [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)
+* QEMU : [http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html](http://blog.vmsplice.net/2011/03/qemu-internals-overall-architecture-and.html)

@@ -42,7 +42,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 
 * 접속을 확인한다.
   * http://192.168.0.150:3000/login
-  * ID, PW - admin/admin
+  * ID, PW : admin/admin
 
 ### 3. 참조
 

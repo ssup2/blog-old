@@ -16,8 +16,8 @@ adsense: true
 
 ### 1. 설치 환경
 
-* PC - Windows 7 64bit
-* VM on PC - Ubuntu 12.04LTS 64bit
+* PC : Windows 7 64bit
+* VM on PC : Ubuntu 12.04LTS 64bit
 * ODROID-XU, 16GB emmc
 * Android 4.2.2 Alpha 2.5 Release
 

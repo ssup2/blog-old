@@ -41,15 +41,15 @@ innodb_log_buffer_size는 Log Buffer의 크기를 설정한다. innodb_log_buffe
 
 InnoDB가 Log Buffer의 내용을 Redo Log에 Write 및 Flush 동작을 언제 수행할지 설정한다. 현재 MySQL에서는 0,1,2 3개의 Option만을 제공한다. Default 값은 1로 설정되어 있다. [그림 2]는 Option에 따른 Write, Flush 동작이 언제 수행되는지를 나타내고 있다.
 
-* Option 0 - InnoDB는 Redo Log에 Write 및 Flush 동작을 Commit과 관계없이 1초 간격으로 수행한다. Commit 명령으로 Transaction이 끝나도 Data 변경 내용은 최대 1초동안 Redo Log Buffer에만 반영 되어 있고, Redo Log에 반영되지 않을 수 있다. 따라서 0 Option 이용시 MySQL에 장애 및 MySQL이 동작하는 Node에 장애가 발생 할 경우, 장애 발생전 1초 동안의 Transaction 내용은 유실된다.
+* Option 0 : InnoDB는 Redo Log에 Write 및 Flush 동작을 Commit과 관계없이 1초 간격으로 수행한다. Commit 명령으로 Transaction이 끝나도 Data 변경 내용은 최대 1초동안 Redo Log Buffer에만 반영 되어 있고, Redo Log에 반영되지 않을 수 있다. 따라서 0 Option 이용시 MySQL에 장애 및 MySQL이 동작하는 Node에 장애가 발생 할 경우, 장애 발생전 1초 동안의 Transaction 내용은 유실된다.
 
-* Option 1 - InnoDB는 Redo Log에 Write 및 Flush 동작을 Commit 명령이 수행될 때마다 같이 수행한다. 잦은 Write 및 Flush 동작으로 Disk 접근 횟수가 많아 성능이 느려지지만, 완료된 Transaction은 어떠한 장애가 발생하여도 유실되지 않는다.
+* Option 1 : InnoDB는 Redo Log에 Write 및 Flush 동작을 Commit 명령이 수행될 때마다 같이 수행한다. 잦은 Write 및 Flush 동작으로 Disk 접근 횟수가 많아 성능이 느려지지만, 완료된 Transaction은 어떠한 장애가 발생하여도 유실되지 않는다.
 
-* Option 2 - InnoDB는 Redo Log에 Write 동작은 Commit 명령이 수행될 때마다 같이 수행하지만, Flush 동작은 1초 간격으로 수행한다. Option 0과 Option 1의 중간 형태의 동작을 수행한다. 단순히 MySQL에만 장애가 발생하였다면 OS Cache에 저장된 Transaction 내용은 Redo Log에 반영될 확률이 높다. 하지만 MySQL이 동작하는 Node에 장애가 발생하였을 경우, Node 장애 발생전 1초 동안의 Transaction 내용은 유실된다.
+* Option 2 : InnoDB는 Redo Log에 Write 동작은 Commit 명령이 수행될 때마다 같이 수행하지만, Flush 동작은 1초 간격으로 수행한다. Option 0과 Option 1의 중간 형태의 동작을 수행한다. 단순히 MySQL에만 장애가 발생하였다면 OS Cache에 저장된 Transaction 내용은 Redo Log에 반영될 확률이 높다. 하지만 MySQL이 동작하는 Node에 장애가 발생하였을 경우, Node 장애 발생전 1초 동안의 Transaction 내용은 유실된다.
 
 ### 3. 참조
 
-* Buffer Pool - [http://actimem.com/mysql/innodb/attachment/innodb-2/](http://actimem.com/mysql/innodb/attachment/innodb-2/)
-* Redo Log - [http://majesty76.tistory.com/62](http://majesty76.tistory.com/62)
-* Redo Log - [http://intomysql.blogspot.com/2010/12/redo-log.html](http://intomysql.blogspot.com/2010/12/redo-log.html)
-* Configuration - [https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html)
+* Buffer Pool : [http://actimem.com/mysql/innodb/attachment/innodb-2/](http://actimem.com/mysql/innodb/attachment/innodb-2/)
+* Redo Log : [http://majesty76.tistory.com/62](http://majesty76.tistory.com/62)
+* Redo Log : [http://intomysql.blogspot.com/2010/12/redo-log.html](http://intomysql.blogspot.com/2010/12/redo-log.html)
+* Configuration : [https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html)

@@ -19,5 +19,5 @@ OLAP은 Analytical Processing의 의미처럼, Data의 분석이 주가되는 Da
 
 ### 3. 참조
 
-* OLTP - [https://database.guide/what-is-oltp/](https://database.guide/what-is-oltp/)
-* OLAP - [https://database.guide/what-is-olap/](https://database.guide/what-is-olap/)
+* OLTP : [https://database.guide/what-is-oltp/](https://database.guide/what-is-oltp/)
+* OLAP : [https://database.guide/what-is-olap/](https://database.guide/what-is-olap/)

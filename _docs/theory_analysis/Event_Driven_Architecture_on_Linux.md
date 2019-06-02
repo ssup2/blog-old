@@ -84,7 +84,7 @@ epoll()과 fd Helper Function들을 이용하면 [그림 2]와 같은 Architectu
 
 ### 3. 참조
 
-* timerfd_create man page - [http://man7.org/linux/man-pages/man2/timerfd_create.2.html](http://man7.org/linux/man-pages/man2/timerfd_create.2.html)
-* signalfd man page - [http://man7.org/linux/man-pages/man2/signalfd.2.html](http://man7.org/linux/man-pages/man2/signalfd.2.html)
-* eventfd man page - [http://man7.org/linux/man-pages/man2/eventfd.2.html](http://man7.org/linux/man-pages/man2/eventfd.2.html)
-* eventfd - [http://lethean.github.io/2011/07/07/eventfd/](http://man7.org/linux/man-pages/man2/signalfd.2.html)
+* timerfd_create man page : [http://man7.org/linux/man-pages/man2/timerfd_create.2.html](http://man7.org/linux/man-pages/man2/timerfd_create.2.html)
+* signalfd man page : [http://man7.org/linux/man-pages/man2/signalfd.2.html](http://man7.org/linux/man-pages/man2/signalfd.2.html)
+* eventfd man page : [http://man7.org/linux/man-pages/man2/eventfd.2.html](http://man7.org/linux/man-pages/man2/eventfd.2.html)
+* eventfd : [http://lethean.github.io/2011/07/07/eventfd/](http://man7.org/linux/man-pages/man2/signalfd.2.html)

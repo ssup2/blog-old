@@ -242,6 +242,6 @@ Plugin 'fatih/vim-go'
 
 ### 6. 참조
 
-* Vundle - [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
-* Colorscheme - [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
-* YouCompleteMe Install - [http://neverapple88.tistory.com/26](http://neverapple88.tistory.com/26)
+* Vundle : [https://github.com/gmarik/Vundle.vim](https://github.com/gmarik/Vundle.vim)
+* Colorscheme : [https://github.com/junegunn/seoul256.vim](https://github.com/junegunn/seoul256.vim)
+* YouCompleteMe Install : [http://neverapple88.tistory.com/26](http://neverapple88.tistory.com/26)

@@ -17,11 +17,11 @@ adsense: true
 ### 1. 설치 환경
 
 * VirtualBox 5.0.14r
-  * Master Node - Ubuntu Desktop 18.04.1 64bit - 1대
-  * Worker Node - Ubuntu Server 18.04.1 64bit - 2대
+  * Master Node : Ubuntu Desktop 18.04.1 64bit : 1대
+  * Worker Node : Ubuntu Server 18.04.1 64bit : 2대
 * Kubernetes 1.12
-  * Network Addon - calico or flannel or cilium 이용
-  * Dashboard Addon - Dashboard 이용
+  * Network Addon : calico or flannel or cilium 이용
+  * Dashboard Addon : Dashboard 이용
 * kubeadm 1.12
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
 * Password
@@ -335,7 +335,7 @@ subjects:
 
 ### 7. 참조
 
-* Kubernetes 설치 - [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
-* Docker 설치 - [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
-* Calio, Flannel, Cilium 설치 - [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
-* Web UI 설치 - [https://github.com/kubernetes/dashboard/wiki/Access-control#basic](https://github.com/kubernetes/dashboard/wiki/Access-control#basic)
+* Kubernetes 설치 : [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
+* Docker 설치 : [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
+* Calio, Flannel, Cilium 설치 : [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
+* Web UI 설치 : [https://github.com/kubernetes/dashboard/wiki/Access-control#basic](https://github.com/kubernetes/dashboard/wiki/Access-control#basic)

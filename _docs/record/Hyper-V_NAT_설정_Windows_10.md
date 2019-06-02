@@ -10,12 +10,12 @@ adsense: true
 ### 1. 설정 환경
 
 * NAT Network
-  * Network - 172.35.0.0/24
-  * Gateway - 172.35.0.1
-  * Switch Name - NAT-Switch
-  * Network Name - NAT-Network
+  * Network : 172.35.0.0/24
+  * Gateway : 172.35.0.1
+  * Switch Name : NAT-Switch
+  * Network Name : NAT-Network
 * VM
-  * Address - 172.35.0.100
+  * Address : 172.35.0.100
 
 ### 2. Switch 생성 및 NAT 설정
 

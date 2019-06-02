@@ -43,9 +43,9 @@ Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Que
 
 이러한 문제를 해결하기 위해서 Service를 특징에 따라 분류하고 Service 조합 Logic을 여러 Service에 분류해야 한다. [그림 3]은 Service Type을 Core/Atomic Service, Composite/Integration Service, API/Edge Service로 분류하고 Service Type별 관계도를 나타내고 있다.
 
-* Core/Atomic Service - Core Business Logic이나 Atomic한 Business Logic을 수행하는 Service이다.
-* Composite/Integration Service - Core/Atomic Service를 조합하여 구성한 Service이다.
-* API/Edge Service - Core/Atomic Service, Composite/Integration Service를 조합하여 App에게 노출되는 Service이다. API Gateway의 역활도 수행한다.
+* Core/Atomic Service : Core Business Logic이나 Atomic한 Business Logic을 수행하는 Service이다.
+* Composite/Integration Service : Core/Atomic Service를 조합하여 구성한 Service이다.
+* API/Edge Service : Core/Atomic Service, Composite/Integration Service를 조합하여 App에게 노출되는 Service이다. API Gateway의 역활도 수행한다.
 
 #### 1.3. Transaction
 

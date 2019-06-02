@@ -138,5 +138,5 @@ static int freebsd_mount_nfs4(char *mount_point, char *server_ip, char *server_p
 
 ### 3. 참조
 
-* Linux - [http://stackoverflow.com/questions/28350912/nfs-mount-system-call-in-linux](http://stackoverflow.com/questions/28350912/nfs-mount-system-call-in-linux)
-* FreeBSD - [https://github.com/freebsd/freebsd/blob/master/sbin/mount_nfs/mount_nfs.c](https://github.com/freebsd/freebsd/blob/master/sbin/mount_nfs/mount_nfs.c)
+* Linux : [http://stackoverflow.com/questions/28350912/nfs-mount-system-call-in-linux](http://stackoverflow.com/questions/28350912/nfs-mount-system-call-in-linux)
+* FreeBSD : [https://github.com/freebsd/freebsd/blob/master/sbin/mount_nfs/mount_nfs.c](https://github.com/freebsd/freebsd/blob/master/sbin/mount_nfs/mount_nfs.c)

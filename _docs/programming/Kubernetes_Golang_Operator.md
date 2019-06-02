@@ -55,8 +55,8 @@ build  cmd  deploy  go.mod  go.sum  pkg  README.md  tools.go  vendor  version
 ~~~
 
 * 위의 명령어로 추가된 MemcachedSpec, MemcachedStatus을 수정한다.
-  * size - 배포되어야 하는 Memcached Pod의 개수
-  * nodes - Memcached Pod의 이름
+  * size : 배포되어야 하는 Memcached Pod의 개수
+  * nodes : Memcached Pod의 이름
 
 {% highlight golang linenos %}
 type MemcachedSpec struct {

@@ -25,12 +25,12 @@ Hystrix는 분산된 Service 사이에 **Circuit Breaker**를 삽입하여 Servi
 
 [그림 2]는 Hystrix의 동작과정을 나타내고 있다. HystrixCommand Instance는 **Service 호출 Logic을 감싸고 있는** Instance로써 Service 호출은 HystrixCommand Instance를 통해서 제어된다.
 
-* 1 - Circuit이 Open되어 있는지 확인한다. 만약 Circuit이 Open되어 있다면 Service 호출은 중단되고 Fallback Service를 호출한다.
-* 2 - Circuit이 Open되어 있더라도, Service 호출에 필요한 Thread Pool의 Thread나 남은 Semaphore가 없는 경우 Service 호출은 중단되고 Fallback Service를 호출한다.
-* 3 - Service 호출뒤 제대로 Service가 호출되었는지 확인한다. 만약 Service 호출이 성공하지 못했다면 Fallback Service를 호출한다.
-* 4 - Service 호출은 완료되었지만 Timeout이 발생하였는지 확인한다. 만약 Timeout이 발생하였다면 Fallback Service를 호출한다. 만약 Timeout이 발생하지 않았다면 Service 호출 결과를 Return한다.
-* 5 - 2,3,4 과정의 결과(Metric)를 통해서 Hystrix는 Circuit을 Close할지 Open할지 결정한다. 또한 결과를 모아 개발자에게 보고하여 현재 Hystrix의 상태를 쉽게 파악 할 수 있도록 도와준다.
-* 6 - 2,3,4 과정중 실패하면 Fallback Service를 호출한다. 만약 Fallback Service가 정의되어있지 않거나 Fallback Service 호출이 실패하는 경우 Error를 Return한다. Fallback Service 호출이 성공하는 경우 Fallback Service 결과를 Return한다.
+* 1 : Circuit이 Open되어 있는지 확인한다. 만약 Circuit이 Open되어 있다면 Service 호출은 중단되고 Fallback Service를 호출한다.
+* 2 : Circuit이 Open되어 있더라도, Service 호출에 필요한 Thread Pool의 Thread나 남은 Semaphore가 없는 경우 Service 호출은 중단되고 Fallback Service를 호출한다.
+* 3 : Service 호출뒤 제대로 Service가 호출되었는지 확인한다. 만약 Service 호출이 성공하지 못했다면 Fallback Service를 호출한다.
+* 4 : Service 호출은 완료되었지만 Timeout이 발생하였는지 확인한다. 만약 Timeout이 발생하였다면 Fallback Service를 호출한다. 만약 Timeout이 발생하지 않았다면 Service 호출 결과를 Return한다.
+* 5 : 2,3,4 과정의 결과(Metric)를 통해서 Hystrix는 Circuit을 Close할지 Open할지 결정한다. 또한 결과를 모아 개발자에게 보고하여 현재 Hystrix의 상태를 쉽게 파악 할 수 있도록 도와준다.
+* 6 : 2,3,4 과정중 실패하면 Fallback Service를 호출한다. 만약 Fallback Service가 정의되어있지 않거나 Fallback Service 호출이 실패하는 경우 Error를 Return한다. Fallback Service 호출이 성공하는 경우 Fallback Service 결과를 Return한다.
 
 #### 2.2. Thread
 
@@ -58,9 +58,9 @@ Ribbon은 **Client-side Load Balancer**로써 의미그대로 Client에서 Serve
 
 Rule은 Ribbon에서 이용하는 Load Balancing 알고리즘을 의미한다. Rule은 Ribbon에서 제공하는 Rule을 이용하거나, 개발자가 직접 정의한 Rule을 이용 할 수 있다. 다음의 3가지 Rule은 Ribbon에서 제공해주는 Rule이다.
 
-* RoundRobinRule - Round Robin 알고리즘을 이용하는 방식이다.
-* AvailabilityFilteringRule - 동작하지 않는 Server를 건너뛰는 방식이다. Error가 특정횟수 이상 연속으로 발생한 Server는 일정 시간동안 Load Balancing 대상 Server에서 제외시킨다. Error 발생 횟수, Load Balancing 제외 시간은 개발자가 자유롭게 설정이 가능하다.
-* WeightedResponseTimeRule - Server의 평균응답시간에 반비례하계 Weight를 부여하는 방식이다.
+* RoundRobinRule : Round Robin 알고리즘을 이용하는 방식이다.
+* AvailabilityFilteringRule : 동작하지 않는 Server를 건너뛰는 방식이다. Error가 특정횟수 이상 연속으로 발생한 Server는 일정 시간동안 Load Balancing 대상 Server에서 제외시킨다. Error 발생 횟수, Load Balancing 제외 시간은 개발자가 자유롭게 설정이 가능하다.
+* WeightedResponseTimeRule : Server의 평균응답시간에 반비례하계 Weight를 부여하는 방식이다.
 
 #### 3.2. Ping
 
@@ -70,14 +70,14 @@ Ping은 Server의 생존 유뮤를 판단하는 구성요소이다. Ping은 Ribb
 
 Load Balancing이 수행가능한 Server List를 의미한다. Server List를 얻는 방식은 Ribbon에서 제공하는 이용하거나, 개발자가 직접 정의한 방식을 이용 할 수 있다. 다음의 3가지 방식은 Ribbon에서 제공해주는 방식이다.
 
-* Adhoc static server list - Ribbon을 설정하는 Code에 Server List를 직접넣는 방식이다.
-* ConfigurationBasedServerList - Ribbon을 설정하는 Config 파일에 Server List를 직접넣는 방식이다.
-* DiscoveryEnabledNIWSServerList - Eureka Client로 부터 Server List를 얻는 방식이다. 일반적으로 가장 많이 이용되는 방식이다.
+* Adhoc static server list : Ribbon을 설정하는 Code에 Server List를 직접넣는 방식이다.
+* ConfigurationBasedServerList : Ribbon을 설정하는 Config 파일에 Server List를 직접넣는 방식이다.
+* DiscoveryEnabledNIWSServerList : Eureka Client로 부터 Server List를 얻는 방식이다. 일반적으로 가장 많이 이용되는 방식이다.
 
 또한 Ribbon은 Server List를 Filtering 할 수 있는 기능도 제공한다. Server List Filtering 방식도 Ribbon에서 제공하는 방식을 이용하거나, 개발자가 정의한 방식을 이용 할 수 있다. 다음의 2가지 방식은 Ribbon에서 제공해주는 방식이다.
 
-* ZoneAffinityServerListFilter - Ribbon과 같은 Zone에 있는 Server List만 제공한다.
-* ServerListSubsetFilter - 개발자가 설정한 조건에 맞는 Server List만 제공한다.
+* ZoneAffinityServerListFilter : Ribbon과 같은 Zone에 있는 Server List만 제공한다.
+* ServerListSubsetFilter : 개발자가 설정한 조건에 맞는 Server List만 제공한다.
 
 ### 4. Eureka
 
@@ -103,9 +103,9 @@ Zuul은 API Gateway로써 Service End-point 역활을 수행한다. Zuul에서�
 
 ### 6. 참조
 
-* Spring Cloud - [https://readme.skplanet.com/?p=13782](https://readme.skplanet.com/?p=13782)
-* Hystrix - [https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki)
-* Hystrix - [http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html](http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html)
-* Ribbon - [https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers)
-* Ribbon - [https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon](https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon)
-* Eureka - [https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka](https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka)
+* Spring Cloud : [https://readme.skplanet.com/?p=13782](https://readme.skplanet.com/?p=13782)
+* Hystrix : [https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki)
+* Hystrix : [http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html](http://woowabros.github.io/experience/2017/08/21/hystrix-tunning.html)
+* Ribbon : [https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers)
+* Ribbon : [https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon](https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon)
+* Eureka : [https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka](https://www.todaysoftmag.com/article/1429/micro-service-discovery-using-netflix-eureka)

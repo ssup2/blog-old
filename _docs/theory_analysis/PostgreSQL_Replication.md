@@ -49,7 +49,7 @@ Pgpool-II은 HA를 위해서 다수의 Pgpool-II을 Active-standby로 묶는 기
 
 ### 2. 참조
 
-* Replication - [https://severalnines.com/blog/postgresql-streaming-replication-deep-dive](https://severalnines.com/blog/postgresql-streaming-replication-deep-dive)
-* Replication - [https://blog.2ndquadrant.com/basics-of-tuning-checkpoints/](https://blog.2ndquadrant.com/basics-of-tuning-checkpoints/)
-* Pgpool-II - [https://www.cybertec-postgresql.com/en/connection-pooling-intro-pgbouncer-and-pgpool-ii](https://www.cybertec-postgresql.com/en/connection-pooling-intro-pgbouncer-and-pgpool-ii/)
-* Pgpool-II - [https://boilerbuzzni.wordpress.com/2017/12/22/postgresql-10-logical-replication-pgpool-ii/](https://boilerbuzzni.wordpress.com/2017/12/22/postgresql-10-logical-replication-pgpool-ii/)
+* Replication : [https://severalnines.com/blog/postgresql-streaming-replication-deep-dive](https://severalnines.com/blog/postgresql-streaming-replication-deep-dive)
+* Replication : [https://blog.2ndquadrant.com/basics-of-tuning-checkpoints/](https://blog.2ndquadrant.com/basics-of-tuning-checkpoints/)
+* Pgpool-II : [https://www.cybertec-postgresql.com/en/connection-pooling-intro-pgbouncer-and-pgpool-ii](https://www.cybertec-postgresql.com/en/connection-pooling-intro-pgbouncer-and-pgpool-ii/)
+* Pgpool-II : [https://boilerbuzzni.wordpress.com/2017/12/22/postgresql-10-logical-replication-pgpool-ii/](https://boilerbuzzni.wordpress.com/2017/12/22/postgresql-10-logical-replication-pgpool-ii/)

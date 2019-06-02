@@ -10,7 +10,7 @@ adsense: true
 ### 1. Compile, 설치 환경
 
 * Ubuntu 16.04 LTS 64bit, root user
-* Install Path - /root/lxc_install
+* Install Path : /root/lxc_install
 
 ### 2. Package 설치
 

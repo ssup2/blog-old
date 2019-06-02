@@ -14,7 +14,7 @@ adsense: true
 
 ***
 
-### 1. 환경
+### 1. 설치 환경
 
 * Windows 10 Pro 64bit
   * Hyper-V를 이용하기 위해서는 Pro 이상의 Version이 필요하다.

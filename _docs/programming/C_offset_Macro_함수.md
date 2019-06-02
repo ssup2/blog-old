@@ -40,11 +40,11 @@ struct offset{
 
 int main(void)
 {
-    printf("a - %d\n", offsetof(struct offset, a));
-    printf("b - %d\n", offsetof(struct offset, b));
-    printf("c - %d\n", offsetof(struct offset, c));
-    printf("d - %d\n", offsetof(struct offset, d));
-    printf("e - %d\n", offsetof(struct offset, e));
+    printf("a : %d\n", offsetof(struct offset, a));
+    printf("b : %d\n", offsetof(struct offset, b));
+    printf("c : %d\n", offsetof(struct offset, c));
+    printf("d : %d\n", offsetof(struct offset, d));
+    printf("e : %d\n", offsetof(struct offset, e));
 
     return 0;
 }
@@ -54,11 +54,11 @@ int main(void)
 </figure>
 
 {% highlight text %}
-a - 0
-b - 4
-c - 8
-d - 12
-e - 20
+a : 0
+b : 4
+c : 8
+d : 12
+e : 20
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] offsetof() MACRO 함수의 예제 출력</figcaption>

@@ -49,9 +49,9 @@ Consumer Group은 다수의 Consumer를 묶어 하나의 Topic을 다수의 Cons
 
 Kafka는 Producer를 위한 ACK 관련 Option을 제공한다. Producer는 ACK를 이용하여 자신이 전송한 Message가 Broker에게 잘 전달되었는지 확인할 수 있을 뿐만 아니라 Message 유실도 최소화 할 수 있다. 0, 1, all 3가지 Option을 제공한다. Producer마다 각각 다른 ACK Option을 설정할 수 있다.
 
-* 0 - Producer는 ACK를 확인하지 않는다.
-* 1 - Producer는 ACK를 기다린다. 여기서 ACK는 Message가 하나의 Kafka Broker에게만 전달되었다는 것을 의미한다. 따라서 Producer로부터 Message를 전달받은 Kafka Broker가 Replica 설정에 따라서 Message를 다른 Kafka Broker에게 복사하기전에 죽는다면 Message 손실이 발생할 수 있다. 기본 설정값이다.
-* all (-1) - Procker는 ACK를 기다린다. 여기서 ACK는 Message가 설정한 Replica만큼 여러 Kafka Broker들에게 복사가 완료되었다는 의미이다. 따라서 Producer로부터 Message를 전달받은 Kafka Broker가 죽어도 복사한 Message를 갖고있는 Kafka Broker가 살아있다면 Message는 유지된다.
+* 0 : Producer는 ACK를 확인하지 않는다.
+* 1 : Producer는 ACK를 기다린다. 여기서 ACK는 Message가 하나의 Kafka Broker에게만 전달되었다는 것을 의미한다. 따라서 Producer로부터 Message를 전달받은 Kafka Broker가 Replica 설정에 따라서 Message를 다른 Kafka Broker에게 복사하기전에 죽는다면 Message 손실이 발생할 수 있다. 기본 설정값이다.
+* all (-1) : Procker는 ACK를 기다린다. 여기서 ACK는 Message가 설정한 Replica만큼 여러 Kafka Broker들에게 복사가 완료되었다는 의미이다. 따라서 Producer로부터 Message를 전달받은 Kafka Broker가 죽어도 복사한 Message를 갖고있는 Kafka Broker가 살아있다면 Message는 유지된다.
 
 Kafka는 Consumer를 위한 별도의 ACK Option을 제공하지 않는다. 위에서 언급한것 처럼 Consumer는 처리가 완료된 Message의 Offset을 Kafka Broker에게 전달한다. 즉 Consumer가 전달하는 Message의 Offset이 Kafka Broker에게 ACK의 역활을 수행한다.
 
