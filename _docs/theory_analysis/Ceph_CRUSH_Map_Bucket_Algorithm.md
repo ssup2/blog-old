@@ -113,7 +113,7 @@ cbucket list(bucket, pg_id, replica) {
 
 ![[그림 6] Tree 알고리즘에 이용되는 Binary Tree]({{site.baseurl}}/images/theory_analysis/Ceph_CRUSH_Map_Bucket_Type/CRUSH_Tree.PNG){: width="750px"}
 
-Tree 알고리즘은 하위 Bucket을 Binary Tree 형태로 관리한다. [그림 6]은 Tree 알고리즘에서 이용되는 Binary Tree를 나타내고 있다. 배열을 이용하여 Tree를 구성하지만 일반적인 Binary Search Tree처럼 구성되지는 않는다. 각 Tree의 Level의 Index는 `(Odd) * (2 ^ Level)`를 갖는다. Tree의 각 Leaf에는 하위 Bucket이 존재한다. 각 Tree의 Node는 자신의 모든 하위 Node에 존재하는 Weight의 합을 저장하고 있다.
+Tree 알고리즘은 하위 Bucket을 Binary Tree 형태로 관리한다. [그림 6]은 Tree 알고리즘에서 이용되는 Binary Tree를 나타내고 있다. 배열을 이용하여 Tree를 구성하지만 일반적인 Binary Search Tree처럼 구성되지는 않는다. 각 Tree의 Level의 Index는 **(Odd) * (2 ^ Level)**를 갖는다. Tree의 각 Leaf에는 하위 Bucket이 존재한다. 각 Tree의 Node는 자신의 모든 하위 Node에 존재하는 Weight의 합을 저장하고 있다.
 
 {% highlight cpp %}
 cbucket tree(bucket, pg_id, replica) {
