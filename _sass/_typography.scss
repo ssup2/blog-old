@@ -100,16 +100,13 @@ figure {
 	text-rendering: geometricPrecision;
 }
 
-ul,
 ol,
-dl {
-	margin: 1rem 0 0 0;
-}
-
+dl,
 img {
 	margin: 1rem 0 0 0;
 }
 
+ul,
 figure {
 	margin: 0 0 0 0;
 }
@@ -160,7 +157,7 @@ hr {
 	height: 1px;
 	border: 0;
 	border-top: #eee 1px solid;
-	margin: 0 0;
+	margin: 1rem 0;
 	padding: 0;
 }
 
