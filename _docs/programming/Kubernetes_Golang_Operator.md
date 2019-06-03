@@ -78,7 +78,7 @@ build  cmd  deploy  go.mod  go.sum  pkg  tools.go  vendor  version
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-**operator-sdk new** 명령어를 통해서 Memcached Operator Project를 생성한다. 'operator-sdk new' 명령어를 수행하면 **Standard Go Project Layout**이 생성된다. [Shell 2]에서 조회되는 bulid, cmd, pkg, vendor Directory는 Memcached Operator Project를 위한 Standard Go Project Layout의 일부분이다. deploy Directory에는 Kubernetes에 Memcached Operator 구동하거나, Kubernetes에 CRD (Custom Resource Definition)를 통해서 정의된 Memcached Object를 생성하기 위한 YAML 파일이 위치하게 된다.
+**operator-sdk new** 명령어를 통해서 Memcached Operator Project를 생성한다. 'operator-sdk new' 명령어를 수행하면 **Standard Go Project Layout**이 생성된다. [Shell 2]에서 조회되는 bulid, cmd, pkg, vendor Directory는 Memcached Operator Project를 위한 Standard Go Project Layout의 일부분이다. deploy Directory에는 Kubernetes에 Memcached Operator 구동하거나, Kubernetes의 CRD (Custom Resource Definition)를 통해서 정의된 Memcached Object를 생성하기 위한 YAML 파일이 위치하게 된다.
 
 #### 2.4. Memcached CRD 생성
 
