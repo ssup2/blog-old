@@ -21,9 +21,7 @@ Write Lock이라고도 불리며 Critical Section 진입 후 Write 동작을 수
 
 ### 2. 장점
 
-일반적인 Lock 기법은 무조건 동시에 오직 하나의 Thread만 Critical Section을 접근 할 수 있다. 따라서 Critical Section안에서의 Read 동작도 동시에 오직 하나의 Thread만 수행 할 수 있었다.
-
-Shared Lock, Exclusive Lock 기법은 통해 동시에 여러 Thread가 Critical Section 안에서 Read 동작을 수행 할 수 있기 때문에, Critical Section안에서 Read 동작이 많은 경우 일반 Lock에 비해 좀더 병목현상을 줄일 수 있다.
+일반적인 Lock 기법은 무조건 동시에 오직 하나의 Thread만 Critical Section을 접근 할 수 있다. 따라서 Critical Section안에서의 Read 동작도 동시에 오직 하나의 Thread만 수행 할 수 있었다. Shared Lock, Exclusive Lock 기법은 통해 동시에 여러 Thread가 Critical Section 안에서 Read 동작을 수행 할 수 있기 때문에, Critical Section안에서 Read 동작이 많은 경우 일반 Lock에 비해 좀더 병목현상을 줄일 수 있다.
 
 ### 3. 참조
 
