@@ -93,13 +93,25 @@ p {
 ul,
 ol,
 dl,
-figure ,
+figure
 {
 	-webkit-font-feature-settings: 'liga' 1, 'onum' 1, 'kern' 1;
 	-moz-font-feature-settings: 'liga' 1, 'onum' 1, 'kern' 1;
 	-o-font-feature-settings: 'liga' 1, 'onum' 1, 'kern' 1;
 	margin: 0 0 0 0;
 	text-rendering: geometricPrecision;
+}
+
+ul,
+ol,
+dl
+{
+	margin: 0 0 0 0;
+}
+
+figure {
+	margin: 1rem 0 0 0;
+	
 }
 
 ol,
