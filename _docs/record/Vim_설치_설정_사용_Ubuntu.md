@@ -227,7 +227,7 @@ YouCompleteMe에 golang Option을 추가하여 Compile 및 설치를 수행한�
 
 #### 5.1. YouCompleteMe
 
-C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일 복사한다.
+C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일을 복사한다.
 
 | 단축키 | 동작 |
 |-------|------|
@@ -237,7 +237,7 @@ C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py �
 
 #### 5.2. vim-clang-format
 
-c, cpp 저장 시 자동으로 clang-format 적용한다.
+c, cpp 저장시 자동으로 clang-format이 적용된다.
 
 | 단축키 | 동작 |
 |-------|------|
