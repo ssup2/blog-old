@@ -178,7 +178,7 @@ Master Node에서 Cluster를 확인한다. 모든 Node가 List에서 보여야 �
 
 ### 5. Network Plugin 설치
 
-Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다. 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 초기화를 진행한다.
+Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다. 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 Cluster 구성을 제거후, 다시 Cluster를 구성한 다음 원하는 Network Plugin을 설치한다.
 
 #### 5.1. Master Node
 
