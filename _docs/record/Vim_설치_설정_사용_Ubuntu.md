@@ -185,9 +185,13 @@ YouCompleteMe를 Compile 및 설치한다.
 
 .ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사하여 YouCompleteMe의 Default 설정 값으로 이용한다.
 
-### 4. golang 환경 설치, 설정
+### 4. Golang 환경 설치, 설정
 
-#### 4.1. vim-go Vim Plugin 설치
+#### 4.1. Golang 설치
+
+* Golang 설치 및 Golang 관련 환경변수를 설정한다.
+
+#### 4.2. vim-go Vim Plugin 설치
 
 {% highlight viml %}
 ...
@@ -206,22 +210,22 @@ Plugin 'fatih/vim-go'
 
 vim-go Vim Plugin을 설치한다. Vim의 명령어 Mode에서 실행한다.
 
-#### 4.2. golang Binary 설치
+#### 4.3. Golang Binary 설치
 
 ~~~
 : GoInstallBinaries
 ~~~
 
-golang 개발시 필요한 Tool들을 설치한다. Vim의 명령어 Mode에서 실행한다.
+Golang 개발시 필요한 Tool들을 설치한다. Vim의 명령어 Mode에서 실행한다.
 
-#### 4.3. YouCompleteMe 재설치
+#### 4.4. YouCompleteMe 재설치
 
 ~~~
 # cd ~/.vim/bundle/YouCompleteMe
 # ./install.py --clang-completer --gocode-completer
 ~~~
 
-YouCompleteMe에 golang Option을 추가하여 Compile 및 설치를 수행한다.
+YouCompleteMe에 Golang Option을 추가하여 Compile 및 설치를 수행한다.
 
 ### 5. 사용법
 
