@@ -2,7 +2,7 @@
 title: Kubernetes 설치 - Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
-lastmod: 2018-12-18T12:00:00Z
+lastmod: 2019-06-04T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -123,6 +123,34 @@ kubelet, kubeadm를 설치한다.
 
 #### 4.1. Master Node
 
+Cluster 구축을 위한 kubeadm 명령어의 옵션은 이용할 Network Plugin에 따라 달라진다. 따라서 Cluster 구축전 Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 이용할 Network Plugin을 하나를 선택해야 한다. 선택한 Network Plugin의 명령어와 공통 명령어를 실행하여 Cluster를 구축한다.
+
+##### 4.1.1. Calico 기반 구축
+
+~~~
+# swapoff -a
+# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.12.0
+...
+kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+~~~
+
+kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **192.168.0.0/16**으로 설정해야 한다. Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
+
+##### 4.1.1. Flannel 기반 구축
+
+~~~
+# swapoff -a
+# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
+...
+kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+~~~
+
+kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **10.244.0.0/16**으로 설정해야 한다. Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
+
+##### 4.1.3. Cilium 기반 구축
+
 ~~~
 # swapoff -a
 # sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
@@ -131,7 +159,9 @@ kubelet, kubeadm를 설치한다.
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
-kubeadm를 초기화 한다. Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
+kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복만 되지 않으면 된다. 위에서는 --pod-network-cidr를 192.167.0.0/16으로 설정하였다. Docker Version으로 인한 Error가 발생하면 kubeadm init 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
+
+##### 4.1.4. 공통
 
 ~~~
 # mkdir -p $HOME/.kube
@@ -178,7 +208,7 @@ Master Node에서 Cluster를 확인한다. 모든 Node가 List에서 보여야 �
 
 ### 5. Network Plugin 설치
 
-Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 하나를 선택하여 설치한다. 만약 다른 Network Plugin으로 교체할 경우 모든 Node에서 kubeadm reset 명령어로 Cluster 구성을 제거후, 다시 Cluster를 구성한 다음 원하는 Network Plugin을 설치한다.
+Cluster 구축시 선택했던 Network Plugin만 설치한다.
 
 #### 5.1. Master Node
 
@@ -246,7 +276,11 @@ Cilium을 설치한다.
 
 #### 5.2. Worker Node
 
-##### 5.2.1. Cilium 설치
+##### 5.1.1. Calico, Flannel 설치
+
+Worker Node에서는 작업이 필요없다.
+
+##### 5.2.2. Cilium 설치
 
 ~~~
 # mount bpffs /sys/fs/bpf -t bpf
