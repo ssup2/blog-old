@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 - Ubuntu 16.04
+title: kubeadm을 이용하여 Kubernetes 설치  - Ubuntu 16.04
 category: Record
 date: 2017-07-20T12:00:00Z
 lastmod: 2017-07-20T12:00:00Z
@@ -33,7 +33,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Kubernetes_Install_Ubuntu_16.04/Node_Setting.PNG)
+![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/kubeadm_Kubernetes_Install_Ubuntu_16.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * Hostname : Master Node - ubuntu01, Worker Node1 - ubuntu02, Worker Node2 - ubuntu03
