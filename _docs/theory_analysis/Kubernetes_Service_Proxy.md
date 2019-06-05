@@ -74,7 +74,7 @@ Chain KUBE-FW-TNQCJ2KHUMKABQTD (1 references)
 </figure>
 
 {% highlight text %}
-Chain KUBE-SVC-6JXEEPSEELXY3JZG (2 references)
+Chain KUBE-SVC-TNQCJ2KHUMKABQTD (2 references)
  pkts bytes target     prot opt in     out     source               destination
     0     0 KUBE-SEP-6HM47TA5RTJFOZFJ  all  --  *      *       0.0.0.0/0            0.0.0.0/0            statistic mode random probability 0.33332999982
     0     0 KUBE-SEP-AHRDCNDYGFSFVA64  all  --  *      *       0.0.0.0/0            0.0.0.0/0            statistic mode random probability 0.50000000000
@@ -85,10 +85,10 @@ Chain KUBE-SVC-6JXEEPSEELXY3JZG (2 references)
 </figure>
 
 {% highlight text %}
-Chain KUBE-SEP-QQATNRPNVZFKMY6D (1 references)
+Chain KUBE-SEP-6HM47TA5RTJFOZFJ (1 references)
  pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  all  --  *      *       192.167.1.138        0.0.0.0/0
-    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp to:192.167.1.138:53 
+    0     0 KUBE-MARK-MASQ  all  --  *      *       192.167.2.231        0.0.0.0/0
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp to:192.167.2.231:80 
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[NAT Table 5] iptables Mode의 KUBE-SEP-XXX </figcaption>

@@ -96,7 +96,7 @@ Memcached CRD를 추가한다. 추가된 Memcached CRD는 'pkg/apis/cache/v1alph
 type MemcachedSpec struct {
 	Size int32 `json:"size"`
 }
-
+...
 type MemcachedStatus struct {
 	Nodes []string `json:"nodes"`
 }
@@ -171,4 +171,5 @@ Memcached Operator를 이용하여 Memcached를 구동한다.
 
 * [https://github.com/operator-framework/operator-sdk](https://github.com/operator-framework/operator-sdk)
 * [https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md)
+* [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
 * [https://github.com/golang-standards/project-layout](https://github.com/golang-standards/project-layout)
