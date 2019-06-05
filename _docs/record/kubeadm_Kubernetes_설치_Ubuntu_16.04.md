@@ -21,7 +21,7 @@ adsense: true
   * Master Node : Ubuntu Desktop 16.04.2 64bit 1대
   * Worker Node : Ubuntu Server 16.04.2 64bit 2대
 * Kubernetes 1.7.1
-  * Network Addon : flannel 이용
+  * Network Plugin : flannel 이용
   * Dashboard Addon : Dashboard 이용
 * kubeadm
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
@@ -185,26 +185,23 @@ kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용�
 # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ~~~
 
-* Network Addon (flannel)을 설치한다.
+Network Addon (flannel)을 설치한다.
 
 ~~~
 # kubectl create -f https://git.io/kube-dashboard
 ~~~
 
-* Dashboard Addon (Dashboard)을 설치한다.
+Dashboard Addon (Dashboard)을 설치한다.
 
 #### 4.2. Worker Node
-
-* Cluster를 구성한다.
-  * kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
 
 ~~~
 # kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
-#### 4.3. 검증
+Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
 
-* Master Node에서 Cluster를 확인한다.
+#### 4.3. 검증
 
 ~~~
 # kubectl get nodes
@@ -214,12 +211,13 @@ ubuntu02   Ready      49s       v1.7.1
 ubuntu03   Ready      55s       v1.7.1
 ~~~
 
-* Master Node에서 Dashboard 접속
-  * 아래 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui**에 접속한다.
+Master Node에서 Cluster를 확인한다. 
 
 ~~~
 # kubectl proxy
 ~~~
+
+kubectl proxy 명령어 실행 후 Master Node에서 Web Brower를 통해 **http://localhost:8001/ui**에 접속한다.
 
 ### 5. 참조
 

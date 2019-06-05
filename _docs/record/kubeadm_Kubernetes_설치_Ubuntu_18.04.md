@@ -21,7 +21,7 @@ adsense: true
   * Master Node : Ubuntu Desktop 18.04.1 64bit : 1대
   * Worker Node : Ubuntu Server 18.04.1 64bit : 2대
 * Kubernetes 1.12
-  * Network Addon : calico or flannel or cilium 이용
+  * Network Plugin : calico or flannel or cilium 이용
   * Dashboard Addon : Dashboard 이용
 * kubeadm 1.12
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
@@ -123,13 +123,13 @@ kubelet, kubeadm를 설치한다.
 
 #### 4.1. Master Node
 
-Cluster 구축을 위한 kubeadm 명령어의 옵션은 이용할 Network Plugin에 따라 달라진다. 따라서 Cluster 구축전 Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 이용할 Network Plugin을 하나를 선택해야 한다. 선택한 Network Plugin의 명령어와 공통 명령어를 실행하여 Cluster를 구축한다.
+Cluster 구축을 위한 kubeadm 명령어의 옵션은 이용할 Network Plugin에 따라 달라진다. 따라서 Cluster 구축전 Calico, Flannel, Cilium 3개의 Network Plugin인 중에서 이용할 Network Plugin을 하나를 선택해야 한다. 선택한 Network Plugin 항목에 있는 명령어와 공통 항목 명령어를 실행하여 Cluster를 구축한다.
 
 ##### 4.1.1. Calico 기반 구축
 
 ~~~
 # swapoff -a
-# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# sed -i '/swap.img/s/^/#/' /etc/fstab
 # kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
@@ -141,7 +141,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **192.168.0.0/16**�
 
 ~~~
 # swapoff -a
-# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# sed -i '/swap.img/s/^/#/' /etc/fstab
 # kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
@@ -153,7 +153,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **10.244.0.0/16**�
 
 ~~~
 # swapoff -a
-# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+# sed -i '/swap.img/s/^/#/' /etc/fstab
 # kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
@@ -170,6 +170,12 @@ kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복�
 ~~~
 
 kubectl config를 설정한다.
+
+~~~
+kubectl taint nodes --all node-role.kubernetes.io/master-
+~~~
+
+Master Node에도 Pod이 생성될 수 있도록 설정한다.
 
 {% highlight text %}
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
