@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Golang Operator
+title: Kubernetes Operator SDK를 이용한 Golang Operator 개발
 category: Programming
 date: 2019-05-30T12:00:00Z
 lastmod: 2019-05-30T12:00:00Z
@@ -7,13 +7,17 @@ comment: true
 adsense: true
 ---
 
-Operator SDK User Guide에 나온 Memcached Golang Operator를 실습을 통해 Golang Operator SDK를 분석한다.
+Operator SDK User Guide에 소개된 Memcached Operator 예제를 통해 Operator SDK와 Golang Operator를 분석한다.
 
-### 1. Golang Operator SDK
+### 1. Operator SDK, Golang Operator
+
+Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK이다. Operator SDK를 이용하여 Golang Operator, Ansible Operator, Helm Operator 3가지 Type의 Operator를 개발할 수 있다. Golang Operator는 특정 **Kubernetes CR (Custom Resource)**을 관리하는 Golang 기반의 **Kubernetes Controller**이다. 따라서 Golang Operator를 개발하는 과정은 Kubernetes CR을 정의하는 과정과 Golang을 이용하여 Kubernetes Controller를 개발하는 과정으로 크게 분류할 수 있다.
+
+Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정 만하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Operator SDK는 Standard Golang Project Layout을 준수하는 Kubernetes Controller Project를 생성해준다. Operator SDK가 생성한 Kubernetes Controller Project에는 모든 Kubernetes Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Kubernetes Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Kubernetes Controller를 개발할 수 있다.
 
 ### 2. Memcached Golang Operator
 
-Memcached Golang Operator를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
+Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Kubernetes Controller를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
 * [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
 * [https://github.com/ssup2/example-k8s-operator-memcached](https://github.com/ssup2/example-k8s-operator-memcached)
 
@@ -59,18 +63,20 @@ build  cmd  deploy  go.mod  go.sum  pkg  tools.go  vendor  version
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-**operator-sdk new** 명령어를 통해서 Memcached Operator Project를 생성한다. 'operator-sdk new' 명령어를 수행하면 **Standard Go Project Layout**이 생성된다. [Shell 2]에서 조회되는 bulid, cmd, pkg, vendor Directory는 Memcached Operator Project를 위한 Standard Go Project Layout의 일부분이다. deploy Directory에는 Kubernetes에 Memcached Operator 구동하거나, Kubernetes의 CRD (Custom Resource Definition)를 통해서 정의된 Memcached Object를 생성하기 위한 YAML 파일이 위치하게 된다.
+**operator-sdk new** 명령어를 통해서 Standard Golang Project Layout을 준수하는 Memcached Operator Project를 생성한다. [Shell 2]에서 조회되는 bulid, cmd, pkg, vendor Directory는 Memcached Operator Project를 위한 Standard Go Project Layout의 일부분이다. deploy Directory에는 Kubernetes에 Memcached Operator 구동을 위한 Kubernetes YAML 파일이 생성된다.
 
-#### 2.4. Memcached CRD 생성
+#### 2.4. Memcached CR 정의
 
 {% highlight text %}
 # operator-sdk add api --api-version=cache.example.com/v1alpha1 --kind=Memcached
+# ls deploy/crds/
+cache_v1alpha1_memcached_crd.yaml  cache_v1alpha1_memcached_cr.yaml
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 3] Memcached CRD 생성</figcaption>
 </figure>
 
-**operator-sdk add api** 명령어를 이용하여 Memcached CRD를 추가한다.
+**operator-sdk add api** 명령어를 이용하여 Memcached Operator에서 관리할 Memcached CR을 정의한다. Kubernetes에 정의한 Memcached CR 적용을 위한 Kubernetes YAML 파일들이 deploy/crds Directory 아래에 생성된다.
 
 {% highlight golang linenos %}
 type MemcachedSpec struct {
@@ -99,7 +105,7 @@ type MemcachedList struct {
 <figcaption class="caption">[Code 1] pkg/apis/cache/v1alpha1/memcached_types.go</figcaption>
 </figure>
 
-추가된 Memcached CRD 관련 Struct는 pkg/apis/cache/v1alpha1 Directory 아래의 memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached Object에 저장되어야할 정보를 직접 추가해야 한다. [Code 1]에는 다음의 내용이 추가되었다.
+Memcached CR 관련 Golang Struct는 pkg/apis/cache/v1alpha1 Directory 아래의 memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached Object에 저장되어야할 정보를 직접 추가해야 한다. [Code 1]에는 다음의 내용이 추가되었다.
 * MemcachedSpec Struct Size : 동작해야하는 Memcached Pod의 개수를 나타낸다.
 * MemcachedStatus Struct Nodes : Memcached가 동작하는 Pod의 이름을 나타낸다.
 
@@ -112,7 +118,7 @@ type MemcachedList struct {
 <figcaption class="caption">[Shell 4] Memcached Controller 생성</figcaption>
 </figure>
 
-**operator-sdk add controller** 명령어를 이용하여 Memcached Controller를 생성한다.
+**operator-sdk add controller** 명령어를 이용하여 Memcached Controller 관련 Golang Code를 생성한다.
 
 {% highlight golang linenos %}
 ...
@@ -218,9 +224,9 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
 
-추가된 Memcached Controller는 pkg/controller/memcached Directory 아래의 memcached_controller.go에 정의된다. 
+추가된 Memcached Controller는 pkg/controller/memcached Directory 아래의 memcached_controller.go에 정의된다.
 
-#### 2.6. Memcached CRD 생성
+#### 2.6. Memcached CRD 적용
 
 {% highlight text %}
 # kubectl create -f deploy/crds/cache_v1alpha1_memcached_crd.yaml
@@ -229,7 +235,7 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Shell 5] Memcached CRD 생성</figcaption>
 </figure>
 
-[Shell 2]에서 생성된 Memcached CRD가 정의된 YAML 파일을 이용하여 Memcached CRD를 생성한다.
+정의된 Memcached CR을 Kubernetes에서 생성하기 위해서는 Memcached CR을 정의하는 Memcached CRD (Custom Resource Definition)을 Kubernetes에 적용해야 한다. [Shell 3]에서 생성된 cache_v1alpha1_memcached_crd.yaml을 이용하여 Memcached CRD를 Kubernetes에 적용한다.
 
 #### 2.7. Memcached Operator 구동
 
@@ -256,7 +262,7 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Shell 7] Memcached Operator Image 생성 및 Push</figcaption>
 </figure>
 
-[Shell 2]에서 생성된 Memcached Operator 관련 Object가 정의된 YAML 파일을 이용하여 Memcached Operator를 구동한다.
+[Shell 2]에서 생성된 Memcached Operator 관련 Kubernetes YAML 파일을 이용하여 Kubernetes에 Memcached Operator를 구동한다.
 
 #### 2.8. Memcached CR 생성을 통한 Memcached 구동
 
@@ -267,7 +273,7 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Shell 8] Memcached 구동</figcaption>
 </figure>
 
-Memcached Operator를 이용하여 Memcached를 구동한다.
+[Shell 3]에서 생성된 cache_v1alpha1_memcached_cr.yaml을 이용하여 Kubernetes에 Memcached CR을 생성한다. Memcached Operator는 생성된 Memcached CR의 정보를 바탕으로 Memcached를 구동한다.
 
 {% highlight text %}
 # kubectl get pod
@@ -281,7 +287,7 @@ example-memcached-c88c4dc9f-p87m4                 1/1     Running   0          9
 <figcaption class="caption">[Shell 9] Memcached 구동 확인</figcaption>
 </figure>
 
-Memcached의 동작을 확인한다.
+Pod 정보를 조회하여 Memcached의 동작을 확인한다.
 
 ### 3. 참조
 
