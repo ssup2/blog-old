@@ -118,7 +118,7 @@ Memcached CR 관련 Golang Struct는 pkg/apis/cache/v1alpha1 Directory 아래의
 <figcaption class="caption">[Shell 4] Memcached Controller 생성</figcaption>
 </figure>
 
-**operator-sdk add controller** 명령어를 이용하여 Memcached Controller 관련 Golang Code를 생성한다.
+**operator-sdk add controller** 명령어를 이용하여 Memcached Controller 관련 Golang Code를 생성한다. 생성된 Memcached Controller 관련 Golang Code는 pkg/controller/memcached Directory 아래에 위치한다.
 
 {% highlight golang linenos %}
 ...
@@ -223,8 +223,6 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figure>
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
-
-추가된 Memcached Controller는 pkg/controller/memcached Directory 아래의 memcached_controller.go에 정의된다.
 
 #### 2.6. Memcached CRD 적용
 
