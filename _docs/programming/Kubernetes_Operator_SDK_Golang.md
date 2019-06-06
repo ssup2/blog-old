@@ -273,7 +273,7 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Shell 8] Memcached 구동</figcaption>
 </figure>
 
-[Shell 3]에서 생성된 cache_v1alpha1_memcached_cr.yaml을 이용하여 Kubernetes에 Memcached CR을 생성한다. Memcached Operator는 생성된 Memcached CR의 정보를 바탕으로 Memcached를 구동한다.
+[Shell 3]에서 생성된 cache_v1alpha1_memcached_cr.yaml을 이용하여 Kubernetes에 Memcached CR을 생성한다. Memcached Operator는 생성된 Memcached CR의 내용을 바탕으로 Memcached를 구동한다.
 
 {% highlight text %}
 # kubectl get pod
