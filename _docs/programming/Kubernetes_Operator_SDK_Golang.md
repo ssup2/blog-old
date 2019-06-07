@@ -21,13 +21,13 @@ Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준�
 
 Golang Operator는 내부적으로 Controller와 Reconciler로 구성되어 있다. [그림 1]은 Golang Operator의 Controller와 Reconciler를 나타내고 있다. Controller는 Kubernetes API Server를 통해서 Golang Operator가 관리해야할 CR의 변화를 감지하고 변화한 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Controller는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
 
-Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Manager Client를 이용하여 Kubernetes API Server로부터 Desired (요구되는) CR의 정보를 얻는다. 또한 Reconcile Loop는 Manager Client를 이용하여 Current (현재상태) CR의 정보를 얻은 다음, 이전에 얻은 Desired CR과 Current CR을 비교한다. 두 CR이 다르다면 Recocile Loop는 Current CR을 Desired CR과 동일하도록 제어한다. 이처럼 Reconcile Loop는 **Desired CR의 정보 얻기, Current CR의 정보 얻기, Desired/Current CR 비교, CR 제어** 4가지 동작을 반복한다.
+Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Manager Client를 이용하여 Kubernetes API Server로부터 Desired (요구되는) CR의 정보를 얻는다. 또한 Reconcile Loop는 Manager Client를 이용하여 Current (현재상태) CR의 정보를 얻은 다음, 이전에 얻은 Desired CR과 Current CR을 비교한다. 두 CR이 다르다면 Recocile Loop는 Current CR을 Desired CR과 동일하도록 제어한다. 이처럼 Reconcile Loop는 **Desired CR의 정보 얻기, Current CR의 정보 얻기, Desired/Current CR 비교, Current CR 제어** 4가지 동작을 반복한다.
 
 Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간이 지난이후 Controller가 다시 Recocile Loop를 실행하도록 만든다. Manager Client는 Kubernetes API Server의 부하를 줄이기 위해서 Read 동작 수행시 Kubernetes API Server로부터 직접 Read하지 않고 Controller가 갖고 있는 Cached로부터 Data를 읽는다. Write할 때는 Kubernetes API Server에 직접 Write를 수행한다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
 
 ### 2. Memcached Golang Operator
 
-Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Kubernetes Controller를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
+Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Golang Operator를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
 * [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
 * [https://github.com/ssup2/example-k8s-operator-memcached](https://github.com/ssup2/example-k8s-operator-memcached)
 
