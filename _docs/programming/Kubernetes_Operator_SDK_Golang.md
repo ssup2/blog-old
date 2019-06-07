@@ -11,9 +11,15 @@ Operator SDK User Guide에 소개된 Memcached Operator 예제를 통해 Operato
 
 ### 1. Operator SDK, Golang Operator
 
-Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK이다. Operator SDK를 이용하여 Golang Operator, Ansible Operator, Helm Operator 3가지 Type의 Operator를 개발할 수 있다. Golang Operator는 특정 **Kubernetes CR (Custom Resource)**을 관리하는 Golang 기반의 **Kubernetes Controller**이다. 따라서 Golang Operator를 개발하는 과정은 Kubernetes CR을 정의하는 과정과 Golang을 이용하여 Kubernetes Controller를 개발하는 과정으로 크게 분류할 수 있다.
+Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK이다. Operator SDK를 이용하여 Golang Operator, Ansible Operator, Helm Operator 3가지 Type의 Operator를 개발할 수 있다. Golang Operator는 특정 **Kubernetes CR (Custom Resource)**을 관리하는 Golang 기반의 **Kubernetes Controller**이다. 따라서 Golang Operator를 개발하는 과정은 크게 Kubernetes CR을 정의하는 과정과 Golang을 이용하여 Kubernetes Controller를 개발하는 과정으로 분류할 수 있다.
 
 Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정 만하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Operator SDK는 Standard Golang Project Layout을 준수하는 Kubernetes Controller Project를 생성해준다. Operator SDK가 생성한 Kubernetes Controller Project에는 모든 Kubernetes Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Kubernetes Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Kubernetes Controller를 개발할 수 있다.
+
+#### 1.1. Controller, Reconciler
+
+![[그림 1] Golang Operator의 Controller, Reconciiler]({{site.baseurl}}/images/theory_analysis/Kubernetes_Operator_SDK_Golang/Controller_Reconciler.PNG){: width="700px"}
+
+Golang Operator는 내부적으로 Controller와 Reconciler로 구성되어 있다.
 
 ### 2. Memcached Golang Operator
 
@@ -292,4 +298,11 @@ Pod 정보를 조회하여 Memcached의 동작을 확인한다.
 * [https://github.com/operator-framework/operator-sdk](https://github.com/operator-framework/operator-sdk)
 * [https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md)
 * [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
+* [https://github.com/operator-framework/operator-sdk/blob/master/doc/user/client.md](https://github.com/operator-framework/operator-sdk/blob/master/doc/user/client.md)
+* [https://itnext.io/analyzing-value-of-operator-framework-for-kubernetes-community-5a65abc259ec](https://itnext.io/analyzing-value-of-operator-framework-for-kubernetes-community-5a65abc259ec)
+* [https://weekly-geekly.github.io/articles/446648/index.html](https://weekly-geekly.github.io/articles/446648/index.html)
+* [https://medium.com/@cloudark/kubernetes-custom-controllers-b6c7d0668fdf](https://medium.com/@cloudark/kubernetes-custom-controllers-b6c7d0668fdf)
+* [https://www.slideshare.net/CloudOps2005/operator-sdk-for-k8s-using-go](https://www.slideshare.net/CloudOps2005/operator-sdk-for-k8s-using-go)
+* [https://medium.com/@shubhomoybiswas/writing-kubernetes-operator-using-operator-sdk-c2e7f845163a](https://medium.com/@shubhomoybiswas/writing-kubernetes-operator-using-operator-sdk-c2e7f845163a)
+* [https://itnext.io/how-to-create-a-kubernetes-custom-controller-using-client-go-f36a7a7536cc](https://itnext.io/how-to-create-a-kubernetes-custom-controller-using-client-go-f36a7a7536cc)
 * [https://github.com/golang-standards/project-layout](https://github.com/golang-standards/project-layout)

@@ -48,3 +48,5 @@ kube-proxy, Network Daemon 둘다 Daemonset의 Pod로 동작한다. 따라서 Ku
 ### 2. 참조
 
 * [https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101](https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101)
+* [https://www.slideshare.net/harryzhang735/kubernetes-beyond-a-black-box-part-1](https://www.slideshare.net/harryzhang735/kubernetes-beyond-a-black-box-part-1)
+* [https://www.slideshare.net/harryzhang735/kubernetes-beyond-a-black-box-part-2](https://www.slideshare.net/harryzhang735/kubernetes-beyond-a-black-box-part-2)
