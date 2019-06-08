@@ -244,7 +244,7 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
 
-[Code 2]는 Golang Operator의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 3~6번째 줄은 Memcached Controller를 생성하고 생성한 Memcached Controller를 Manager에 등록하는 부분이다. 8~11번째 줄은 Memcached Controller에게 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Memcached Controller에게 Deployment Resource를 감시하라고 지시하는 부분이다. Controller는 Memecached CR 또는 Deployment Resource가 변경되는 경우 Resource의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
+[Code 2]는 Golang Operator의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 3~6번째 줄은 Memcached Controller를 생성하고 생성한 Memcached Controller를 Manager에 등록하는 부분이다. 8~11번째 줄은 Memcached Controller에게 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Memcached Controller에게 Deployment Resource를 감시하라고 지시하는 부분이다. Controller는 Memecached CR 또는 Deployment Resource가 변경되는 경우 변경된 Resource의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
 
 Reconcile() 함수에 소속된 29~41번째 줄은 Controller로 부터 받은 Resource의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memecached CR을 얻는 부분이다. 여기서 Memcached CR이 Desired CR이 된다. 유사하게 44~60번째 줄은 Controller가 Resource의 Name/Namespace 정보를 바탕으로 Deployment Resource를 얻는 부분이다. 여기서 Deployment Resource은 Current (Custom) Resource가 된다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 Desired/Current CR 얻기, Desired/Current CR 비교, Current CR 제어를 반복한다. 
 
