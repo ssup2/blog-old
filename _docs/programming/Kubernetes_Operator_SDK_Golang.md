@@ -15,15 +15,25 @@ Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK�
 
 Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정 만하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Operator SDK는 Standard Golang Project Layout을 준수하는 Kubernetes Controller Project를 생성해준다. Operator SDK가 생성한 Kubernetes Controller Project에는 모든 Kubernetes Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Kubernetes Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Kubernetes Controller를 개발할 수 있다.
 
-#### 1.1. Controller, Reconciler
+#### 1.1. Golang Operator Component
 
-![[그림 1] Golang Operator의 Controller, Reconciiler]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Controller_Reconciler.PNG){: width="700px"}
+![[그림 1] Golang Operator Component]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Controller_Reconciler.PNG){: width="700px"}
 
-Golang Operator는 내부적으로 Controller와 Reconciler로 구성되어 있다. [그림 1]은 Golang Operator의 Controller와 Reconciler를 나타내고 있다. Controller는 Kubernetes API Server를 통해서 Golang Operator가 관리해야할 CR의 변화를 감지하고 변화한 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Controller는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
+[그림 1]은 Golang Operator 관련 Component를 나타내고 있다. Golang Operator는 내부적으로 Controller, Reconciler로 구성되어 있다. Controller는 Kubernetes API Server를 통해서 Golang Operator가 관리해야할 CR의 변경를 감지하고 변경한 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Controller는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Reconciler의 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
 
-Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Manager Client를 이용하여 Kubernetes API Server로부터 Desired (요구되는) CR의 정보를 얻는다. 또한 Reconcile Loop는 Manager Client를 이용하여 Current (현재상태) CR의 정보를 얻은 다음, 이전에 얻은 Desired CR과 Current CR을 비교한다. 두 CR이 다르다면 Recocile Loop는 Current CR을 Desired CR과 동일하도록 제어한다. 이처럼 Reconcile Loop는 **Desired CR의 정보 얻기, Current CR의 정보 얻기, Desired/Current CR 비교, Current CR 제어** 4가지 동작을 반복한다.
+Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Reconciler의 Manager Client를 이용하여 Kubernetes API Server로부터 Desired (요구되는) CR의 정보를 얻는다. 또한 Reconcile Loop는 Manager Client를 이용하여 Current (현재상태) CR의 정보를 얻은 다음, 이전에 얻은 Desired CR과 Current CR을 비교한다. 두 CR이 다르다면 Recocile Loop는 Current CR을 Desired CR과 동일하도록 제어한다. 이처럼 Reconcile Loop는 **Desired/Current CR 얻기, Desired/Current CR 비교, Current CR 제어** 3가지 동작을 반복한다.
 
-Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간이 지난이후 Controller가 다시 Recocile Loop를 실행하도록 만든다. Manager Client는 Kubernetes API Server의 부하를 줄이기 위해서 Read 동작 수행시 Kubernetes API Server로부터 직접 Read하지 않고 Controller가 갖고 있는 Cached로부터 Data를 읽는다. Write할 때는 Kubernetes API Server에 직접 Write를 수행한다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
+Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다.
+
+Manager는 Controller를 관리하는 역활을 수행한다. Controller가 초기화 되는 과정에서 Controller는 자기 자신을 Manager에게 등록한다. 또한 Manager는 Kubernetes API Server의 Read Cache 역활을 수행하는 Cache를 관리한다. Manager Client는 읽기 동작 수행시 Kubernetes API Server로부터 직접 Data를 읽지 않고 Manager의 Cached로부터 Data를 읽어, Kubernetes API Server의 부하를 줄인다. 반면에 Manager Client는 쓰기 동작 수행시 Kubernetes API Server에 직접 Data를 쓴다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
+
+#### 1.2. Golang Operator HA
+
+Golang Operator도 Kubernetes 위에서 동작하는 App이기 때문에, Golang Operator의 HA를 위해서는 다수의 동일한 Golang Operator를 동시에 구동하는 것이 좋다. 다수의 동일한 Golang Operator를 구동하는 경우 하나의 Golang Operator만 실제로 역활을 수행하고 나머지 Golang Operator는 대기 상태를 유지하는 **Active-standby** 형태로 동작한다. 다수의 동일한 Golang Operator 중에서 Active 상태로 만들 Golang Operator를 선정하는 알고리즘은 Leader-for-life과 Leader-with-lease가 있다. 두 알고리즘 모두 Operator SDK를 이용하여 쉽게 구현이 가능하다.
+
+* Leader-for-life : Active 상태의 Golang Operator가 완전히 죽고나서야 Standby 상태의 Golang Operator를 Active 상태로 만든다. 동시에 하나의 Golang Operator만 동작하는 것이 보장되기 때문에 Split Brain 현상을 방지할 수 있지만, Standby 상태의 Golang Operator가 Active 상태가 되기 전까지의 지연 시간이 길다는 단점을 갖고 있다. Operator SDK가 기본적으로 설정하는 선정 알고리즘이다.
+
+* Leader-with-lease : Active 상태의 Golang Operator가 임차권 (Lease)을 갱신하지 않으면 죽은것으로 간주하고 Standby 상태의 Golang Operator를 Active 상태로 변경한다. Active 상태의 Golang Operator가 완전히 죽지 않아도 Standby 상태의 Golang Operator가 Active 상태로 변경될 수 있기 때문에 변경 지연 시간은 짧지만, 임차권이 갱신이 안된다고 Active 상태의 Golang Operator가 동작을 완전히 멈추었다는걸 보장하는 것은 아니기 때문에 동시에 여러개의 Golang Operator가 동작하여 Split Brain이 발생할 수 있다.
 
 ### 2. Memcached Golang Operator
 
@@ -233,6 +243,12 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figure>
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
+
+[Code 2]는 Golang Operator의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 3~6번째 줄은 Memcached Controller를 생성하고 생성한 Memcached Controller를 Manager에 등록하는 부분이다. 8~11번째 줄은 Memcached Controller에게 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Memcached Controller에게 Deployment Resource를 감시하라고 지시하는 부분이다. Controller는 Memecached CR 또는 Deployment Resource가 변경되는 경우 Resource의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
+
+Reconcile() 함수에 소속된 29~41번째 줄은 Controller로 부터 받은 Resource의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memecached CR을 얻는 부분이다. 여기서 Memcached CR이 Desired CR이 된다. 유사하게 44~60번째 줄은 Controller가 Resource의 Name/Namespace 정보를 바탕으로 Deployment Resource를 얻는 부분이다. 여기서 Deployment Resource은 Current (Custom) Resource가 된다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 Desired/Current CR 얻기, Desired/Current CR 비교, Current CR 제어를 반복한다. 
+
+Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
 #### 2.6. Memcached CRD 적용
 
