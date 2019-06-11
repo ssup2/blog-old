@@ -250,7 +250,7 @@ Reconcile() 함수에 소속된 29~41번째 줄은 Controller로 부터 받은 R
 
 Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
-#### 2.6. Memcached CRD 적용
+#### 2.6. Memcached CRD 생성
 
 {% highlight text %}
 # kubectl create -f deploy/crds/cache_v1alpha1_memcached_crd.yaml
@@ -259,7 +259,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 <figcaption class="caption">[Shell 5] Memcached CRD 생성</figcaption>
 </figure>
 
-정의된 Memcached CR을 Kubernetes에서 생성하기 위해서는 Memcached CR을 정의하는 Memcached CRD (Custom Resource Definition)을 Kubernetes에 적용해야 한다. [Shell 3]에서 생성된 cache_v1alpha1_memcached_crd.yaml을 이용하여 Memcached CRD를 Kubernetes에 적용한다.
+정의된 Memcached CR을 Kubernetes에서 생성하기 위해서는 Memcached CR을 정의하는 Memcached CRD (Custom Resource Definition)을 Kubernetes에 생성해야 한다. [Shell 3]에서 생성된 cache_v1alpha1_memcached_crd.yaml을 이용하여 Memcached CRD를 Kubernetes에 적용한다.
 
 #### 2.7. Memcached Operator 구동
 
@@ -283,7 +283,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 # kubectl create -f deploy/operator.yaml
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 7] Memcached Operator Image 생성 및 Push</figcaption>
+<figcaption class="caption">[Shell 7] Memcached Operator 구동</figcaption>
 </figure>
 
 [Shell 2]에서 생성된 Memcached Operator 관련 Kubernetes YAML 파일을 이용하여 Kubernetes에 Memcached Operator를 구동한다.
