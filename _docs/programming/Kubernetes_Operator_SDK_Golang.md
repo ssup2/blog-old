@@ -39,7 +39,7 @@ Golang Operator도 Kubernetes 위에서 동작하는 App이기 때문에, Golang
 
 Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Golang Operator를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
 * [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
-* [https://github.com/ssup2/example-k8s-operator-memcached](https://github.com/ssup2/example-k8s-operator-memcached)
+* [https://github.com/ssup2/example-k8s-operator-golang](https://github.com/ssup2/example-k8s-operator-golang)
 
 #### 2.1. 개발 환경
 
@@ -75,8 +75,8 @@ Kubernetes Operator SDK CLI를 설치하고 동작을 확인한다.
 # mkdir -p $GOPATH/src/github.com/ssup2 
 # cd $GOPATH/src/github.com/ssup2
 # export GO111MODULE=on
-# operator-sdk new example-k8s-operator-memcached 
-# cd example-k8s-operator-memcached && ls
+# operator-sdk new example-k8s-operator-golang
+# cd example-k8s-operator-golang && ls
 build  cmd  deploy  go.mod  go.sum  pkg  tools.go  vendor  version
 {% endhighlight %}
 <figure>
@@ -267,7 +267,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 # export GO111MODULE=on
 # go mod vendor
 # operator-sdk build supsup5642/memcached-operator:v0.0.1
-# sed -i 's|REPLACE_IMAGE|supsup5642/memcached-operator:v0.0.1|g' deploy/operator.yaml
+# 
 # docker push supsup5642/memcached-operator:v0.0.1
 {% endhighlight %}
 <figure>
@@ -277,6 +277,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 **operator-sdk build** 명령어를 이용하여 및 개발한 Memcached Operator를 기반으로 하는 Container Image로 생성한 다음 Docker Registry에 Push한다. Container Image의 이름은 개인 Repository에 맞도록 변경한다.
 
 {% highlight text %}
+# sed -i 's|REPLACE_IMAGE|supsup5642/memcached-operator:v0.0.1|g' deploy/operator.yaml
 # kubectl create -f deploy/service_account.yaml
 # kubectl create -f deploy/role.yaml
 # kubectl create -f deploy/role_binding.yaml
@@ -302,7 +303,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 {% highlight text %}
 # kubectl get pod
 NAME                                              READY   STATUS    RESTARTS   AGE
-example-k8s-operator-memcached-867bd5754d-pc2m9   1/1     Running   3          2m31s
+example-k8s-operator-golang-867bd5754d-pc2m9      1/1     Running   3          2m31s
 example-memcached-c88c4dc9f-dj7t4                 1/1     Running   0          91s
 example-memcached-c88c4dc9f-hkz9t                 1/1     Running   0          91s
 example-memcached-c88c4dc9f-p87m4                 1/1     Running   0          91s

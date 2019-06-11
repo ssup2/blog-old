@@ -1,8 +1,8 @@
 ---
 title: Kubernetes Operator SDK를 이용한 Helm Operator 개발
-category: Programming
-date: 2019-05-30T12:00:00Z
-lastmod: 2019-05-30T12:00:00Z
+category:
+date: 2019-06-11T12:00:00Z
+lastmod: 2019-06-11T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -47,16 +47,15 @@ Kubernetes Operator SDK CLI를 설치하고 동작을 확인한다.
 #### 2.3. Project 생성
 
 {% highlight text %}
-# export GO111MODULE=on
-# operator-sdk new example-k8s-operator-nginx --api-version=example.com/v1alpha1 --kind=Nginx --type=helm
-# cd example-k8s-operator-nginx && ls
+# operator-sdk new example-k8s-operator-helm --api-version=example.com/v1alpha1 --kind=Nginx --type=helm
+# cd example-k8s-operator-helm && ls
 build  deploy  helm-charts  watches.yaml
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-#### 2.4. Nginx CRD 적용
+#### 2.4. Nginx CRD 생성
 
 {% highlight text %}
 # kubectl create -f deploy/crds/example_v1alpha1_nginx_crd.yaml
@@ -136,9 +135,8 @@ rules:
 
 {% highlight text %}
 # kubectl get pod
-# kubectl get pod
 NAME                                                       READY   STATUS    RESTARTS   AGE
-example-k8s-operator-nginx-66496b4665-zhdzq                1/1     Running   0          16m
+example-k8s-operator-helm-66496b4665-zhdzq                 1/1     Running   0          16m
 example-nginx-2o18v8fiksct1fk0lol9r6yv7-5cc9b7f59f-qh87x   1/1     Running   0          16m
 {% endhighlight %}
 <figure>
