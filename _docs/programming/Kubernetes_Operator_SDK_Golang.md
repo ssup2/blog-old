@@ -267,7 +267,6 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 # export GO111MODULE=on
 # go mod vendor
 # operator-sdk build supsup5642/memcached-operator:v0.0.1
-# 
 # docker push supsup5642/memcached-operator:v0.0.1
 {% endhighlight %}
 <figure>
