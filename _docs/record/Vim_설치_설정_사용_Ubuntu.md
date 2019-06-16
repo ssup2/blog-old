@@ -1,8 +1,8 @@
 ---
 title: Vim 설치, 설정, 사용 - Ubuntu
 category: Record
-date: 2017-01-20T16:41:00Z
-lastmod: 2017-01-22T16:41:00Z
+date: 2017-01-20T12:00:00Z
+lastmod: 2019-06-17T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -140,8 +140,6 @@ let g:tagbar_width = 35
 "" vim-gutentags
 let g:gutentags_project_root = ['.tag_root']
 let g:gutentags_project_info = []
-call add(g:gutentags_project_info, {"type": "go", "glob": "*.go"})
-let g:gutentags_ctags_executable_go = 'gotags'
 
 "" YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
@@ -231,7 +229,7 @@ YouCompleteMe에 Golang Option을 추가하여 Compile 및 설치를 수행한�
 
 #### 5.1. YouCompleteMe
 
-C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py 파일을 복사한다.
+C, Cpp Project의 경우 Project Root 폴더에 ~/.vim/.ycm_extra_conf.py 파일을 복사하여 YouCompleteMe가 동작하도록 설정한다.
 
 | 단축키 | 동작 |
 |-------|------|
@@ -241,12 +239,16 @@ C, Cpp Project의 경우 Project 최상단 폴더에 ~/.vim/.ycm_extra_conf.py �
 
 #### 5.2. vim-clang-format
 
-c, cpp 저장시 자동으로 clang-format이 적용된다.
+Auto Mode는 파일 저장시 저장되는 파일에 clang-format을 자동으로 적용하는 Mode이다.
 
 | 단축키 | 동작 |
 |-------|------|
 | \cf | clang-format 적용 |
-| \C | Auto clang-format 적용 Toggle |
+| \C | Auto Mode Enable/Disable |
+
+#### 5.3. vim-gutentags
+
+vim-gutentags는 .git, .svn 파일이 있는 폴더를 Project Root 폴더로 인식한다. 만약 해당 파일이 존재하지 않는다면 Project Root 폴더에 **.tag_root** 파일을 생성하여 vim-gutentags가 Project Root 폴더를 인식하게 만들수 있다.
 
 ### 6. 참조
 
