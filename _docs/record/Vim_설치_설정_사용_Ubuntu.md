@@ -1,5 +1,5 @@
 ---
-title: Vim 설치, 설정, 사용 - Ubuntu
+title: Vim 설치, 설정, 사용 - Ubuntu, macOS
 category: Record
 date: 2017-01-20T12:00:00Z
 lastmod: 2019-06-17T12:00:00Z
@@ -17,7 +17,9 @@ adsense: true
 ### 1. 설치, 설정 환경
 
 설치, 설정 환경은 다음과 같다.
-* Ubuntu 14.04 / Ubuntu 16.04
+
+* Ubuntu 14.04 / Ubuntu 16.04 (root user)
+* macOS 10.14
 * Vim 8
 
 ### 2. 설정 Plugin 목록
@@ -34,36 +36,50 @@ adsense: true
 
 ### 3. Vim 기본 설치, 설정
 
-#### 3.1. Ubuntu Package 설치
+#### 3.1. Package 설치
+
+##### 3.1.1. Ubuntu 
 
 ~~~
 # add-apt-repository ppa:jonathonf/vim
 # apt-get update
 # apt-get install vim-gnome
-~~~
-
-Vim을 설치한다.
-
-~~~
 # apt-get install ctags
 # apt-get install cscope
-~~~
-
-ctags와 cscope를 설치한다.
-
-~~~
 # apt-get install clang-format
 ~~~
 
-ClangFormat을 설치한다.
+Vim, ctags, cscope, ClangFormat을 설치한다.
+
+##### 3.1.2. macOS
+
+~~~
+$ brew update
+$ brew install vim
+$ brew install ctags
+$ brew install cscope
+$ brew install clang-format
+~~~
+
+Vim, ctags, cscope, ClangFormat, python2를 설치한다.
 
 #### 3.2. Bash Shell 설정
+
+##### 3.2.1. Ubuntu
 
 ~~~
 source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 ~~~
 
-Vim의 gruvbox Theme를 위해서 ~/.bashrc 파일에 다음의 내용을 추가한다.
+Vim의 gruvbox Theme를 위해서 ~/.bashrc 파일에 위의 내용을 추가한다.
+
+##### 3.2.2. macOS
+
+~~~
+source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
+~~~
+
+Vim의 gruvbox Theme를 위해서 ~/.bash_profile 파일에 위의 내용을 추가한다.
 
 #### 3.3. Vundle Plugin 설치
 
@@ -77,7 +93,7 @@ git을 이용하여 Vundle 설치한다.
 
 {% highlight viml %}
 "
-" supsup's .vimrc
+" ssup2's .vimrc
 "
 " Version 1.21 for Ubuntu
 "
@@ -168,11 +184,30 @@ let g:clang_format#auto_format = 0
 
 #### 3.6. YouCompleteMe 설치
 
+##### 3.6.1. Ubuntu
+
 ~~~
 # apt-get install build-essential cmake
 # apt-get install python-dev python3-dev
 # cd ~/.vim/bundle/YouCompleteMe
 # ./install.py --clang-completer
+~~~
+
+YouCompleteMe를 Compile 및 설치한다.
+
+~~~
+# wget https://raw.githubusercontent.com/Valloric/ycmd/3ad0300e94edc13799e8bf7b831de8b57153c5aa/cpp/ycm/.ycm_extra_conf.py -O ~/.vim/.ycm_extra_conf.py
+~~~
+
+.ycm_extra_conf.py 파일 Download 및 ~/.vim/.ycm_extra_conf.py에 복사하여 YouCompleteMe의 Default 설정 값으로 이용한다.
+
+##### 3.6.2. macOS
+
+~~~
+$ brew install cmake
+$ brew install python2
+$ cd ~/.vim/bundle/YouCompleteMe
+$ ./install.py --clang-completer
 ~~~
 
 YouCompleteMe를 Compile 및 설치한다.
