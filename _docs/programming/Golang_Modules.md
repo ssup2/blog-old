@@ -98,6 +98,7 @@ Module Version은 반드시 **v[Major].[Minor].[Patch]** 형태로 구성되어�
 #
 # export GO111MODULE=on
 # vim main.go
+# go clean --cache
 # go build
 # ./example-golang-module-main
 test - v1.1.0
@@ -138,6 +139,7 @@ Module을 이용하는 가장 쉬운 방법은 go.mod 파일에 이용할 module
 {% highlight text %}
 # export GO111MODULE=on
 # vim main.go
+# go clean --cache
 # go build
 # ./example-golang-module-main
 test - v2.2.0
@@ -175,6 +177,46 @@ require (
 </figure>
 
 [Code 4]의 내용처럼 main.go에서 v2.2.0 Version의 Module을 이용하도록 변경한 다음 Golang Binary를 다시 생성하면, Golang Binary는 v2.2.0 Version의 Module을 이용하게 된다. [파일 4]에는 생성한 v2.2.0 Version의 Module이 필요하다는 내용이 추가된것을 확인할 수 있다.
+
+{% highlight text %}
+# git push --delete origin v1.1.0 
+# git push --delete origin v2.2.0 
+#
+# export GO111MODULE=on
+# vim main.go
+# go clean --cache
+# go build
+# ./example-golang-module-main
+test - v2.2.0
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] Module 이용 - No Git Tag</figcaption>
+</figure>
+
+{% highlight go %}
+package main
+
+//import module "github.com/ssup2/example-golang-module-module"
+import module "github.com/ssup2/example-golang-module-module/v2"
+
+func main() {
+    module.TestPrint()
+}  
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 5] main.go - No Git Tag</figcaption>
+</figure>
+
+{% highlight text %}
+module github.com/ssup2/example-golang-module-main
+
+go 1.12
+
+require github.com/ssup2/example-golang-module-module/v2 v2.0.0-20190619154850-26e77b71335f
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] Main의 go.mod - No Git Tag</figcaption>
+</figure>
 
 ##### 1.2.2. go get 명령어를 이용한 Module 이용법
 
