@@ -153,7 +153,7 @@ Golang의 Module 관리 기능은 **Git Tag**를 이용하여 Module Version을 
 
 #### 1.2. Module 이용
 
-##### 1.2.1. Module을 이용하지 않지만 가져올 경우
+##### 1.2.1. Module을 이용하지 않지만 가져오기만 하는 경우
 
 {% highlight text %}
 # export GO111MODULE=on
@@ -199,7 +199,7 @@ go 1.12
 
 **go mod tidy** 명령어는 사용하지 않고 있는 Module 정보를 go.mod 파일에서 삭제하는 기능이다. Golang의 Module 관리기능은 새로운 Module이 추가될때는 자동으로 go.mod 파일에 추가하지만, 사용하지 않는 Module을 자동으로 go.mod 파일에서 제거하지는 않는다. 개발자가 go mod tidy 명령어로 이용하지 않는 Module을 관리해야 한다. [Shell 3], [파일 6]은 go mod tidy 명령어를 통해서 이용하지 않는 Module 정보가 go.mod 파일에서 삭제되는 과정을 나타내고 있다.
 
-##### 1.2.2. Git Tag로 등록되어 있는 Module을 이용할 경우
+##### 1.2.2. Git Tag로 Module의 Version이 등록되어 있는 Module을 이용할 경우
 
 {% highlight text %}
 # export GO111MODULE=on
@@ -311,7 +311,7 @@ require (
 
 [Shell 6]는 v2.2.0 Version의 Module을 이용하도록 설정하는 과정을 나타내고 있다. go get 명령어를 통해서 go.mod를 수정할 수 있다. [파일 9]에서 v2의 Version이 v2.2.0으로 변경 된것을 확인 할 수 있다. go.mod 파일을 직접 수정하여도 관계없다.
 
-##### 1.2.3. Git Tag로 등록되어 있지 않은 Module을 이용할 경우
+##### 1.2.3. Git Tag로 Module의 Version이 등록되어 있지 않은 Module을 이용할 경우
 
 {% highlight text %}
 # export GO111MODULE=on
