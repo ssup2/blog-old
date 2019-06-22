@@ -31,6 +31,7 @@ tmux 사용법을 정리한다.
 
 * ctrl + b, % : 횡 분활
 * ctrl + b, " : 종 분활
+* ctrl + b, 방향키 : Pane 이동
 
 #### 1.4. ETC
 
