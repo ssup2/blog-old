@@ -11,7 +11,7 @@ SSL (Secure Socket Layer), TLS (Transport Layer Security)를 분석한다.
 
 ### 1. SSL (Secure Socket Layer), TLS (Transport Layer Security)
 
-SSL (Secure Socket Layer), TLS (Transport Layer Security)는 TCP위에서 동작하는 표준 보안 Protocol이다. HTTPS가 SSL,TLS 위에서 동작하는 대표적인 Protocol이다. SSL/TLS는 비대칭키에 이용되는 알고리즘인 **RSA**의 Overhead를 줄이기 위해 대칭키와 비대칭키 둘다 이용한다. Client는 Data 암호화에 이용할 대칭키를 Server의 비대칭 Public Key로 암호화 한뒤 Server에게 전달한다. 그 후 Server는 비대칭 Private Key로 대칭키를 얻어낸뒤 Client와 통신한다. 대칭키를 암호화/복호화 할 때만 비대칭키를 이용하고 Data는 대칭키를 이용하는 방식으로 비대칭키 연산 Overhead를 줄인다.
+SSL (Secure Socket Layer), TLS (Transport Layer Security)는 TCP위에서 동작하는 표준 보안 Protocol이다. HTTPS가 SSL,TLS 위에서 동작하는 대표적인 Protocol이다. SSL/TLS는 비대칭키에 이용되는 알고리즘인 **RSA**의 Overhead를 줄이기 위해 대칭키와 비대칭키 둘다 이용한다. Client는 Data 암호화에 이용할 대칭키를 Server의 비대칭 Public Key로 암호화 한뒤 Server에게 전달한다. 그 후 Server는 비대칭 Private Key로 대칭키를 얻어낸뒤 얻어낸 대칭키를 이용하여 Client와 Data를 주고 받는다. 비대칭키는 대칭키를 암호화/복호화 할 때만 이용하기 때문에 비대칭키 이용해 따른 RSA의 Overhead를 최소화 할 수 있다.
 
 #### 1.1. Handshake
 
