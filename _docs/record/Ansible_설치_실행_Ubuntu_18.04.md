@@ -58,7 +58,7 @@ Contorl Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 �
 # ssh-copy-id root@172.35.0.102
 ~~~
 
-ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 모든 Managed Node에 복사한다. 
+ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 모든 Managed Node의 ~/.ssh/authorized_keys 파일에 복사한다. 
 
 ### 4. Ansible 구동
 
