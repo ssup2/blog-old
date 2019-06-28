@@ -13,9 +13,7 @@ adsense: true
 
 ![[그림 1] Legacy Auth]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="700px"}
 
-OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. [그림 1]은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다.
-
-먼저 App이 User의 ID, Password를 이용하여 악의적 동작을 수행하더라도 User나 Server에서 App의 악의적 동작을 감지하기 어렵다. Server에서는 ID, Password를 가지고 Resource 요청이 오기 때문에 어떤 요청이 악의적 동작을 위한 요청인지 판별하기 어렵다. 또한 ID, Password만 있으면 User의 모든 Resource를 자유롭게 접근할 수 있기 때문에 App의 Resource 요청을 제한하는 방법도 존재하지 않는다.
+OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. [그림 1]은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다. 먼저 App이 User의 ID, Password를 이용하여 악의적 동작을 수행하더라도 User나 Server에서 App의 악의적 동작을 감지하기 어렵다. 또한 ID, Password만 있으면 User의 모든 Resource를 자유롭게 접근할 수 있기 때문에 App의 Resource 요청을 제한하는 방법도 존재하지 않는다.
 
 OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발행한 **Access Token**을 이용한다. Access Token에는 **Scope(인가 범위), Timeout(인가 허용 시간)** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있다.
 
@@ -23,9 +21,7 @@ OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발�
 
 ![[그림 2] OAuth 2.0 Component]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="700px"}
 
-[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역활을 수행한다.
-
-App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Auth Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
+[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역활을 수행한다. App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Auth Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
 
 #### 1.2. Access Token 발급
 
@@ -52,9 +48,7 @@ App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이�
 
 #### 1.4. Refresh Token 이용
 
-Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상태가 되었을경우 **새로운 Access Token**을 발급받기 위해 이용되는 Token이다. Auth Server는 App에게 Access Token을 **처음** 발급 할 때만 Refresh Token을 같이 전달한다. 따라서 App은 Refresh Token을 저장하고 이용해야 한다.
-
-Auth Server는 Access Token을 반드시 전송할 필요 없다. Refresh Token이 없는 App은 Access Token이 Invaild한 상태가 되면 User에게 요청하여 다시 Access Token을 발급 받아야 한다. Refresh Token은 **Bearer Token**이라고도 불린다. [그림 6]은 App이 Refresh Token을 이용하는 과정을 나타낸다.
+Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상태가 되었을경우 **새로운 Access Token**을 발급받기 위해 이용되는 Token이다. Auth Server는 App에게 Access Token을 **처음** 발급 할 때만 Refresh Token을 같이 전달한다. 따라서 App은 Refresh Token을 저장하고 이용해야 한다. Auth Server는 Access Token을 반드시 전송할 필요 없다. Refresh Token이 없는 App은 Access Token이 Invaild한 상태가 되면 User에게 요청하여 다시 Access Token을 발급 받아야 한다. Refresh Token은 **Bearer Token**이라고도 불린다. [그림 6]은 App이 Refresh Token을 이용하는 과정을 나타낸다.
 
 ![[그림 6] Refresh Token 이용 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Refresh_Token_Flow.PNG)
 
