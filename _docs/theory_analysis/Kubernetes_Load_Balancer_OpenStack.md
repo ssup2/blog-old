@@ -12,4 +12,3 @@ adsense: true
 * [http://henriquetruta.github.io/openstack-cloud-provider/](http://henriquetruta.github.io/openstack-cloud-provider/)
 * [https://docs.openstack.org/kuryr-kubernetes/pike/installation/services.html](https://docs.openstack.org/kuryr-kubernetes/pike/installation/services.html)
 * [https://github.com/kubernetes/cloud-provider-openstack/tree/master/examples/loadbalancers](https://github.com/kubernetes/cloud-provider-openstack/tree/master/examples/loadbalancers)
-
