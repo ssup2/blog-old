@@ -35,7 +35,7 @@ OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발�
 
 ![[그림 4] Google OAuth 2.0 Authorization UI]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 
-[그림 4]은 Google의 Authorization UI를 이용하여 User 인증 및 Resource 인가를 수행하는 과정을 나타내고 있다. Login을 수행하고 App이 요청한 인가 Scope 정보를 User에게 물어봐 동의를 구한다.
+[그림 4]는 Google의 Authorization UI를 이용하여 User 인증 및 Resource 인가를 수행하는 과정을 나타내고 있다. Login을 수행하고 App이 요청한 인가 Scope 정보를 User에게 물어봐 동의를 구한다.
 
 #### 1.3. Resource 접근
 
