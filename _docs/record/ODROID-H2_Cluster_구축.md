@@ -11,7 +11,7 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 ### 1. ODROID-H2 Cluster
 
-![[그림 1] ODROID-H2 Cluster 구성]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Cluster.PNG){: width="700px"}
+![[그림 1] ODROID-H2 Cluster 구성]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Cluster.PNG)
 
 [사진 1]은 ODROID-H2 Cluster의 실제 모습을 보여주고 있다. [그림 1]은 ODROID Cluster를 나타내고 있다. 모든 ODROID-H2의 Spec은 동일하며 아래와 같다.
 
@@ -26,11 +26,11 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 #### 1.1. Ceph
 
-![[그림 2] Ceph 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Ceph.PNG){: width="700px"}
+![[그림 2] Ceph 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Ceph.PNG)
 
 #### 1.2. OpenStack
 
-![[그림 3] OpenStack 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/OpenStack.PNG){: width="700px"}
+![[그림 3] OpenStack 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/OpenStack.PNG)
 
 ### 2. 참조
 
