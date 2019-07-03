@@ -13,8 +13,9 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 ![[그림 1] ODROID-H2 Cluster 구성]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Cluster.PNG)
 
-[사진 1]은 ODROID-H2 Cluster의 실제 모습을 보여주고 있다. [그림 1]은 ODROID Cluster를 나타내고 있다. 모든 ODROID-H2의 Spec은 동일하며 아래와 같다.
+[사진 1]은 ODROID-H2 Cluster의 실제 모습을 보여주고 있다. [그림 1]은 ODROID Cluster를 나타내고 있다. 모든 ODROID-H2의 Spec은 동일하다. ODROID-H2 Cluster의 주요사양은 아래와 같다.
 
+* Node : ODROID-H2 * 3
 * CPU : Intel Celeron J4105 Processor
 * Memory : SAMSUNG DDR4 8G PC4-19200 * 2
 * Network : 1Gbps NIC * 2
