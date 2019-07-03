@@ -14,6 +14,7 @@ adsense: true
 * golang 1.12.2
 
 ### 2. Ubuntu Package 설치
+
 ~~~
 # wget https://dl.google.com/go/go1.12.2.linux-amd64.tar.gz
 # tar -xvf go1.12.2.linux-amd64.tar.gz
