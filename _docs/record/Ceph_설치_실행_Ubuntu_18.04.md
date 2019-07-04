@@ -25,7 +25,7 @@ adsense: true
 ![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_Ubuntu_18.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
-* Hostname : Master Node - node01, Worker node01 - node02, Worker node02 - node03
+* Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * HDD : 각 Node에 Ceph가 이용할 추가 HDD (/dev/sdb)를 생성하고 붙인다.
 * Router : 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
@@ -100,25 +100,25 @@ Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]의 내용�
 ntp, python Package를 설치한다.
 
 ~~~
-# sudo useradd -d /home/ceph -m ceph
-# sudo passwd ceph
+# sudo useradd -d /home/cephnode -m cephnode
+# sudo passwd cephnode
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
-# echo "ceph ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ceph
-# sudo chmod 0440 /etc/sudoers.d/ceph
+# echo "cephnode ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephnode
+# sudo chmod 0440 /etc/sudoers.d/cephnode
 ~~~
 
-ceph User를 생성한다. 
-* Password : ceph
+cephnode User를 생성한다. 
+* Password : cephnode
 
 #### 3.2. Deploy Node
 
 ~~~
-10.0.0.10 node01
-10.0.0.20 node02
-10.0.0.30 node03
+10.0.0.10 node1
+10.0.0.20 node2
+10.0.0.30 node3
 ~~~
 <figure>
 <figcaption class="caption">[파일 4] Deploy Node의 /etc/hosts</figcaption>
@@ -136,21 +136,21 @@ ceph User를 생성한다.
 ceph-deploy Package를 설치한다.
 
 ~~~
-# sudo useradd -d /home/deploy -m deploy
-# sudo passwd deploy
+# sudo useradd -d /home/cephdeploy -m cephdeploy
+# sudo passwd cephdeploy
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
-# echo "deploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/deploy
-# sudo chmod 0440 /etc/sudoers.d/deploy
+# echo "cephdeploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephdeploy
+# sudo chmod 0440 /etc/sudoers.d/cephdeploy
 ~~~
 
-deploy User를 생성한다. 
-* Password : deploy
+cephdeploy User를 생성한다.
+* Password : cephdeploy
 
 ~~~
-# login deploy
+# login cephdeploy
 $ ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -158,47 +158,47 @@ Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 ...
 
-$ ssh-copy-id ceph@node01
-$ ssh-copy-id ceph@node02
-$ ssh-copy-id ceph@node03
+$ ssh-copy-id cephnode@node1
+$ ssh-copy-id cephnode@node2
+$ ssh-copy-id cephnode@node3
 ~~~
 
 SSH Key를 생성 및 복사한다.
 * passphrases는 Empty 상태로 유지한다.
 
 {% highlight text %}
-Host node01
-   Hostname node01
-   User ceph
-Host node02
-   Hostname node02
-   User ceph
-Host node03
-   Hostname node03
-   User ceph
+Host node1
+   Hostname node1
+   User cephnode
+Host node2
+   Hostname node2
+   User cephnode
+Host node3
+   Hostname node3
+   User cephnode
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node의 /home/deploy/.ssh/config</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
 </figure>
 
-/home/deploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
+/home/cephdeploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
 
 ### 4. Storage Cluster 구성
 
 #### 4.1. Deploy Node
 
 ~~~
-# login deploy
+# login cephdeploy
 $ mkdir my-cluster
 ~~~
 
 Storage Cluster Config 폴더를 생성한다.
 
 ~~~
-# login deploy
+# login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy purge node01 node02 node03
-$ ceph-deploy purgedata node01 node02 node03
+$ ceph-deploy purge node1 node2 node3
+$ ceph-deploy purgedata node1 node2 node3
 $ ceph-deploy forgetkeys
 $ rm ceph.*
 ~~~
@@ -206,24 +206,24 @@ $ rm ceph.*
 Storage Cluster를 초기화한다.
 
 ~~~
-# login deploy
+# login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy new node01
-$ ceph-deploy install node01 node02 node03
+$ ceph-deploy new node1
+$ ceph-deploy install node1 node2 node3
 $ ceph-deploy mon create-initial
-$ ceph-deploy admin node01 node02 node03
-$ ceph-deploy mgr create node01
-$ ceph-deploy osd create --data /dev/sdb node01
-$ ceph-deploy osd create --data /dev/sdb node02
-$ ceph-deploy osd create --data /dev/sdb node03
+$ ceph-deploy admin node1 node2 node3
+$ ceph-deploy mgr create node1
+$ ceph-deploy osd create --data /dev/sdb node1
+$ ceph-deploy osd create --data /dev/sdb node2
+$ ceph-deploy osd create --data /dev/sdb node3
 $ sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node01
-    mgr: node01(active)
+    mon: 1 daemons, quorum node1
+    mgr: node1(active)
     osd: 3 osds: 3 up, 3 in
 
   data:
@@ -236,17 +236,17 @@ $ sudo ceph -s
 Storage Cluster를 구축 및 확인한다. MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
 
 ~~~
-# login deploy
+# login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy mds create node01
+$ ceph-deploy mds create node1
 $ sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node01
-    mgr: node01(active)
+    mon: 1 daemons, quorum node1
+    mgr: node1(active)
     osd: 3 osds: 3 up, 3 in
 
   data:
@@ -259,17 +259,17 @@ $ sudo ceph -s
 MDS (Meta Data Server)를 설치한다. MDS은 Ceph Node 01에 설치한다.
 
 ~~~
-# login deploy
+# login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy rgw create node01
+$ ceph-deploy rgw create node1
 $ sudo ceph -s 
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node01
-    mgr: node01(active)
+    mon: 1 daemons, quorum node1
+    mgr: node1(active)
     osd: 3 osds: 3 up, 3 in
     rgw: 1 daemon active
 
@@ -314,7 +314,7 @@ Block Storage을 생성 및 Mapping 한다.
 Pool 생성 및 File Storage를 생성한다.
 
 ~~~
-# cat /home/deploy/my-cluster/ceph.client.admin.keyring
+# cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
 [client.admin]
         key = AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
         caps mds = "allow *"
