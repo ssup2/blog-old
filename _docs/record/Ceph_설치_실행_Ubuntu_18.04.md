@@ -143,7 +143,7 @@ Retype new UNIX password:
 passwd: password updated successfully
 
 # echo "deploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/deploy
-# sudo chmod 0440 /etc/sudoers.d/cedeployphnode
+# sudo chmod 0440 /etc/sudoers.d/deploy
 ~~~
 
 deploy User를 생성한다. 
