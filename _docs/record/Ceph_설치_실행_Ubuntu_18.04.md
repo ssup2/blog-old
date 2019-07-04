@@ -121,10 +121,10 @@ ceph User를 생성한다.
 10.0.0.30 node03
 ~~~
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node의 /etc/host</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node의 /etc/hosts</figcaption>
 </figure>
 
-/etc/host 파일에 [파일 4]의 내용을 추가한다.
+/etc/hosts 파일에 [파일 4]의 내용을 추가한다.
 
 ~~~
 # wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
