@@ -25,7 +25,7 @@ adsense: true
 ![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_Ubuntu_18.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
-* Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
+* Hostname : Master Node - node01, Worker node01 - node02, Worker node02 - node03
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0.0/24 Network를 구축한다.
 * HDD : 각 Node에 Ceph가 이용할 추가 HDD (/dev/sdb)를 생성하고 붙인다.
 * Router : 공유기를 이용하여 192.168.0.0/24 Network를 구축한다. (NAT)
@@ -116,9 +116,9 @@ cephnode User를 생성한다.
 #### 3.2. Deploy Node
 
 ~~~
-10.0.0.10 node1
-10.0.0.20 node2
-10.0.0.30 node3
+10.0.0.10 node01
+10.0.0.20 node02
+10.0.0.30 node03
 ~~~
 <figure>
 <figcaption class="caption">[파일 4] Deploy Node의 /etc/hosts</figcaption>
@@ -158,23 +158,23 @@ Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 ...
 
-$ ssh-copy-id cephnode@node1
-$ ssh-copy-id cephnode@node2
-$ ssh-copy-id cephnode@node3
+$ ssh-copy-id cephnode@node01
+$ ssh-copy-id cephnode@node02
+$ ssh-copy-id cephnode@node03
 ~~~
 
 SSH Key를 생성 및 복사한다.
 * passphrases는 Empty 상태로 유지한다.
 
 {% highlight text %}
-Host node1
-   Hostname node1
+Host node01
+   Hostname node01
    User cephnode
-Host node2
-   Hostname node2
+Host node02
+   Hostname node02
    User cephnode
-Host node3
-   Hostname node3
+Host node03
+   Hostname node03
    User cephnode
 {% endhighlight %}
 <figure>
@@ -197,8 +197,8 @@ Storage Cluster Config 폴더를 생성한다.
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy purge node1 node2 node3
-$ ceph-deploy purgedata node1 node2 node3
+$ ceph-deploy purge node01 node02 node03
+$ ceph-deploy purgedata node01 node02 node03
 $ ceph-deploy forgetkeys
 $ rm ceph.*
 ~~~
@@ -208,22 +208,22 @@ Storage Cluster를 초기화한다.
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy new node1
-$ ceph-deploy install node1 node2 node3
+$ ceph-deploy new node01
+$ ceph-deploy install node01 node02 node03
 $ ceph-deploy mon create-initial
-$ ceph-deploy admin node1 node2 node3
-$ ceph-deploy mgr create node1
-$ ceph-deploy osd create --data /dev/sdb node1
-$ ceph-deploy osd create --data /dev/sdb node2
-$ ceph-deploy osd create --data /dev/sdb node3
+$ ceph-deploy admin node01 node02 node03
+$ ceph-deploy mgr create node01
+$ ceph-deploy osd create --data /dev/sdb node01
+$ ceph-deploy osd create --data /dev/sdb node02
+$ ceph-deploy osd create --data /dev/sdb node03
 $ sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node1
-    mgr: node1(active)
+    mon: 1 daemons, quorum node01
+    mgr: node01(active)
     osd: 3 osds: 3 up, 3 in
 
   data:
@@ -238,15 +238,15 @@ Storage Cluster를 구축 및 확인한다. MON (Monitor Daemon)은 Ceph Node 01
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy mds create node1
+$ ceph-deploy mds create node01
 $ sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node1
-    mgr: node1(active)
+    mon: 1 daemons, quorum node01
+    mgr: node01(active)
     osd: 3 osds: 3 up, 3 in
 
   data:
@@ -261,15 +261,15 @@ MDS (Meta Data Server)를 설치한다. MDS은 Ceph Node 01에 설치한다.
 ~~~
 # login cephdeploy
 $ cd ~/my-cluster
-$ ceph-deploy rgw create node1
+$ ceph-deploy rgw create node01
 $ sudo ceph -s 
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
 
   services:
-    mon: 1 daemons, quorum node1
-    mgr: node1(active)
+    mon: 1 daemons, quorum node01
+    mgr: node01(active)
     osd: 3 osds: 3 up, 3 in
     rgw: 1 daemon active
 
