@@ -136,21 +136,21 @@ ceph User를 생성한다.
 ceph-deploy Package를 설치한다.
 
 ~~~
-# sudo useradd -d /home/cephdeploy -m cephdeploy
-# sudo passwd cephdeploy
+# sudo useradd -d /home/deploy -m deploy
+# sudo passwd deploy
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
-# echo "cephdeploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephdeploy
-# sudo chmod 0440 /etc/sudoers.d/cecephdeployphnode
+# echo "deploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/deploy
+# sudo chmod 0440 /etc/sudoers.d/cedeployphnode
 ~~~
 
-cephdeploy User를 생성한다. 
-* Password : cephdeploy
+deploy User를 생성한다. 
+* Password : deploy
 
 ~~~
-# login cephdeploy
+# login deploy
 $ ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -178,24 +178,24 @@ Host node03
    User ceph
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node의 /home/deploy/.ssh/config</figcaption>
 </figure>
 
-/home/cephdeploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
+/home/deploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
 
 ### 4. Storage Cluster 구성
 
 #### 4.1. Deploy Node
 
 ~~~
-# login cephdeploy
+# login deploy
 $ mkdir my-cluster
 ~~~
 
 Storage Cluster Config 폴더를 생성한다.
 
 ~~~
-# login cephdeploy
+# login deploy
 $ cd ~/my-cluster
 $ ceph-deploy purge node01 node02 node03
 $ ceph-deploy purgedata node01 node02 node03
@@ -206,7 +206,7 @@ $ rm ceph.*
 Storage Cluster를 초기화한다.
 
 ~~~
-# login cephdeploy
+# login deploy
 $ cd ~/my-cluster
 $ ceph-deploy new node01
 $ ceph-deploy install node01 node02 node03
@@ -236,7 +236,7 @@ $ sudo ceph -s
 Storage Cluster를 구축 및 확인한다. MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
 
 ~~~
-# login cephdeploy
+# login deploy
 $ cd ~/my-cluster
 $ ceph-deploy mds create node01
 $ sudo ceph -s
@@ -259,7 +259,7 @@ $ sudo ceph -s
 MDS (Meta Data Server)를 설치한다. MDS은 Ceph Node 01에 설치한다.
 
 ~~~
-# login cephdeploy
+# login deploy
 $ cd ~/my-cluster
 $ ceph-deploy rgw create node01
 $ sudo ceph -s 
@@ -314,7 +314,7 @@ Block Storage을 생성 및 Mapping 한다.
 Pool 생성 및 File Storage를 생성한다.
 
 ~~~
-# cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
+# cat /home/deploy/my-cluster/ceph.client.admin.keyring
 [client.admin]
         key = AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
         caps mds = "allow *"
