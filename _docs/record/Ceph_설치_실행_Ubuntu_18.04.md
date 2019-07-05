@@ -183,7 +183,7 @@ Host node03
 
 /home/cephdeploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
 
-### 4. Storage Cluster 구성
+### 4. Ceph Cluster 구성
 
 #### 4.1. Deploy Node
 
@@ -192,7 +192,7 @@ Host node03
 $ mkdir my-cluster
 ~~~
 
-Storage Cluster Config 폴더를 생성한다.
+Ceph Cluster Config 폴더를 생성한다.
 
 ~~~
 # login cephdeploy
@@ -203,7 +203,7 @@ $ ceph-deploy forgetkeys
 $ rm ceph.*
 ~~~
 
-Storage Cluster를 초기화한다.
+Ceph Cluster를 초기화한다.
 
 ~~~
 # login cephdeploy
@@ -217,6 +217,11 @@ $ ceph-deploy osd create --data /dev/sdb node01
 $ ceph-deploy osd create --data /dev/sdb node02
 $ ceph-deploy osd create --data /dev/sdb node03
 $ exit
+~~~
+
+Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 Ceph Node 01에 설치한다. 만약 다른 Node에도 MON와 MGR를 설치하고 싶으면 "ceph-deploy new" 명령어와 "ceph-deploy mgr create" 명령어 수행시 node01 뿐만 아니라 설치할 다른 Node 정보도 같이 넣는다.
+
+~~~
 # sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
@@ -234,7 +239,7 @@ $ exit
     pgs:   
 ~~~
 
-Storage Cluster를 구축 및 확인한다. MON (Monitor Daemon)은 Ceph Node 01에 설치한다.
+Ceph Cluster가 정상적으로 구축되었는지 확인한다.
 
 ~~~
 # login cephdeploy
@@ -257,7 +262,7 @@ $ sudo ceph -s
     pgs:  
 ~~~
 
-MDS (Meta Data Server)를 설치한다. MDS은 Ceph Node 01에 설치한다.
+MDS (Meta Data Server)를 설치한다. MDS (Meta Data Server)는 Ceph Node 01에 설치한다. 만약 다른 Node에도 MDS를 설치하고 싶다면 "ceph-deploy mds create" 명령어 수행시 MDS를 설치할 다른 Node 정보도 같이 넣는다.
 
 ~~~
 # login cephdeploy
