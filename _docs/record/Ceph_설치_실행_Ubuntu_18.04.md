@@ -216,7 +216,8 @@ $ ceph-deploy mgr create node01
 $ ceph-deploy osd create --data /dev/sdb node01
 $ ceph-deploy osd create --data /dev/sdb node02
 $ ceph-deploy osd create --data /dev/sdb node03
-$ sudo ceph -s
+$ exit
+# sudo ceph -s
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
     health: HEALTH_OK
