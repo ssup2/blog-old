@@ -14,7 +14,7 @@ adsense: true
 
 ***
 
-### 1. 설정 환경
+### 1. 설치 환경
 
 설치, 실행 환경은 다음과 같다.
 * Ubuntu 18.04 LTS 64bit, root user
@@ -216,7 +216,6 @@ $ ceph-deploy mgr create node01
 $ ceph-deploy osd create --data /dev/sdb node01
 $ ceph-deploy osd create --data /dev/sdb node02
 $ ceph-deploy osd create --data /dev/sdb node03
-$ exit
 ~~~
 
 Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 Ceph Node 01에 설치한다. 만약 다른 Node에도 MON와 MGR를 설치하고 싶으면 "ceph-deploy new" 명령어와 "ceph-deploy mgr create" 명령어 수행시 node01 뿐만 아니라 설치할 다른 Node 정보도 같이 넣는다.
@@ -365,4 +364,3 @@ RGW 동작을 확인한다.
 
 * [http://docs.ceph.com/docs/master/start/](http://docs.ceph.com/docs/master/start/)
 * [https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd](https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd)
-* [https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd](https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd)

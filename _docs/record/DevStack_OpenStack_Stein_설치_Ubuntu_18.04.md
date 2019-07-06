@@ -14,7 +14,10 @@ adsense: true
 [그림 1]은 DevStack 설치 환경인 ODROID-H2 Cluster를 나타내고 있다. 상세한 환경 정보는 아래와 같다.
 
 * DevStack, OpenStack : Stein Version
-* Node : Ubuntu 18.04, root user
+* Node : Ubuntu 18.04
+  * Node 01 : Controller Node, Network Node
+  * Node 02 : Compute Node 01
+  * Node 03 : Compute Node 02
 * Network
   * NAT Network : External Network (Provider Network), 192.168.0.0/24
       * Floating IP Range : 192.168.0.200 ~ 224
@@ -22,6 +25,12 @@ adsense: true
 * Ceph
 
 ### 2. DevStack 설정 및 설치
+
+#### 2.1. Controller, Network Node
+
+#### 2.2. Compute Node 01
+
+#### 2.3. Compute Node 02
 
 ### 3. 참조
 
