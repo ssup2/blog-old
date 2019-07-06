@@ -1,5 +1,5 @@
 ---
-title: Kubernetes MetalLB 설치 / Ubuntu_18.04
+title: Kubernetes MetalLB 설치 / Ubuntu 18.04 환경
 category: Record
 date: 2019-05-21T12:00:00Z
 lastmod: 2019-05-21T12:00:00Z

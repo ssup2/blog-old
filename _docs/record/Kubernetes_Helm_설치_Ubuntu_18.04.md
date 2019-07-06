@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Helm 설치 / Ubuntu_18.04
+title: Kubernetes Helm 설치 / Ubuntu 18.04 환경
 category: Record
 date: 2018-12-11T12:00:00Z
 lastmod: 2018-12-11T12:00:00Z

@@ -1,5 +1,5 @@
 ---
-title: Hyper-V NAT 설정 / Windows 10
+title: Hyper-V NAT 설정 / Windows 10 환경
 category: Record
 date: 2019-03-14T12:00:00Z
 lastmod: 2019-03-15T12:00:00Z

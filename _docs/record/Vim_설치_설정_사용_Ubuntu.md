@@ -1,5 +1,5 @@
 ---
-title: Vim 설치, 설정, 사용 / Ubuntu, macOS
+title: Vim 설치, 설정, 사용 / Ubuntu, macOS 환경
 category: Record
 date: 2017-01-20T12:00:00Z
 lastmod: 2019-06-17T12:00:00Z

@@ -1,5 +1,5 @@
 ---
-title: Ubuntu Consolas Font 설치 / Ubuntu 16.04
+title: Ubuntu Consolas Font 설치 / Ubuntu 16.04 환경
 category: Record
 date: 2017-02-14T15:27:00Z
 lastmod: 2017-02-14T15:27:00Z

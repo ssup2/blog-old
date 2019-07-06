@@ -1,5 +1,5 @@
 ---
-title: Hadoop 설치, 설정 / Ubuntu 18.04
+title: Hadoop 설치, 설정 / Ubuntu 18.04 환경
 category: Record
 date: 2018-06-20T12:00:00Z
 lastmod: 2018-06-20T12:00:00Z

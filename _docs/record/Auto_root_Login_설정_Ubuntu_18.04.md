@@ -1,5 +1,5 @@
 ---
-title: Auto root Login 설정 / Ubuntu 18.04
+title: Auto root Login 설정 / Ubuntu 18.04 환경
 category: Record
 date: 2018-04-28T16:10:00Z
 lastmod: 2018-04-28T16:10:00Z

@@ -1,5 +1,5 @@
 ---
-title: Ceph 설치, 실행 / ceph-deploy / Ubuntu 18.04
+title: Ceph 설치, 실행 / ceph-deploy 이용 / Ubuntu 18.04 환경
 category: Record
 date: 2019-01-10T12:00:00Z
 lastmod: 2019-01-10T12:00:00Z

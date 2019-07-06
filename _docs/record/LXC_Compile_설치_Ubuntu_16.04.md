@@ -1,5 +1,5 @@
 ---
-title: LXC Compile, 설치 / Ubuntu 18.04
+title: LXC Compile, 설치 / Ubuntu 18.04 환경
 category: Record
 date: 2017-01-14T12:00:00Z
 lastmod: 2017-01-15T12:00:00Z

@@ -1,5 +1,5 @@
 ---
-title: KVM, QEMU 설치, 실행 / Arndale
+title: KVM, QEMU 설치, 실행 / Arndale 환경
 category: Record
 date: 2015-07-22T12:00:00Z
 lastmod: 2015-07-22T12:00:00Z
