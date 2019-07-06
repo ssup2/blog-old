@@ -15,9 +15,10 @@ adsense: true
 
 * Ansible, OpenStack : Rocky Version
 * Node : Ubuntu 18.04
-  * Node 01 : Deploy Node, Controller Node, Network Node
+  * Node 01 : Controller Node, Network Node
   * Node 02 : Compute Node 01
   * Node 03 : Compute Node 02
+  * Node 04 : Deploy Node
 * Network
   * NAT Network : External Network (Provider Network), 192.168.0.0/24
       * Floating IP Range : 192.168.0.200 ~ 224
