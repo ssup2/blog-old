@@ -29,7 +29,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![[그림 1] Openstack 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/OpenStack_Newton_Install_Ubuntu_16.04/Node_Setting.PNG)
+![[그림 1] Openstack Newton 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/OpenStack_Newton_Install_Ubuntu_16.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Controller, Compute, Storage Node (VM)을 생성한다.
 * NAT : Virtual Box에서 제공하는 "NAT 네트워크" 이용하여 10.0.0/24 Network를 구축한다.

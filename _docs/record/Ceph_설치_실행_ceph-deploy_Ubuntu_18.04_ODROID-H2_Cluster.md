@@ -14,11 +14,11 @@ adsense: true
 
 ***
 
-### 1. 설치  환경
+### 1. 설치 환경
 
-![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_ceph-deploy_Ubuntu_18.04_ODROID-H2_Cluster/Environment.PNG)
+![[그림 1] Ceph 설치 환경 (ODROID-H2 Cluster) ]({{site.baseurl}}/images/record/Ceph_Install_ceph-deploy_Ubuntu_18.04_ODROID-H2_Cluster/Environment.PNG)
 
-[그림 1] ODROID-H2 Cluster로 Ceph 설치 환경을 나타내고 있다. 자세한 부분은 다음과 같다. ODROID-H2 Cluster의 주요 사양은 아래와 같다. Ceph를 File Storage와 Object Storage로는 이용하지 않을 예정이기 때문에 MDS (Meta Data Server)와 radosgw는 설치하지 않는다.
+[그림 1]은 ODROID-H2 Cluster로 Ceph 설치 환경을 나타내고 있다. 자세한 부분은 다음과 같다. ODROID-H2 Cluster의 주요 사양은 아래와 같다. Ceph를 File Storage와 Object Storage로는 이용하지 않을 예정이기 때문에 MDS (Meta Data Server)와 radosgw는 설치하지 않는다.
 
 * Node : ODROID-H2 * 3
   * Node 1 : Deploy, Monitor, OSD
