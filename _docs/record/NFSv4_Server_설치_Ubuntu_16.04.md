@@ -1,5 +1,5 @@
 ---
-title: Ubuntu NFSv4 Server/Client 설치 - Ubuntu 16.04
+title: Ubuntu NFSv4 Server, Client 설치 / Ubuntu 16.04
 category: Record
 date: 2017-02-14T17:27:00Z
 lastmod: 2017-02-14T17:27:00Z

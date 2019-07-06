@@ -1,5 +1,5 @@
 ---
-title: Ansible 설치, 실행 - Ubuntu 18.04
+title: Ansible 설치, 실행 / Ubuntu 18.04
 category: Record
 date: 2019-06-23T12:00:00Z
 lastmod: 2019-06-23T12:00:00Z

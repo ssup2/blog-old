@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Ceph RBD 연동 - Ubuntu 18.04
+title: Kubernetes Ceph RBD 연동 / Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
 lastmod: 2019-05-21T12:00:00Z

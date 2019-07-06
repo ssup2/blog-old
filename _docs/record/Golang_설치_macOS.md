@@ -1,5 +1,5 @@
 ---
-title: Golang 설치 - macOS
+title: Golang 설치 / macOS
 category: Record
 date: 2019-05-30T12:00:00Z
 lastmod: 2019-05-30T12:00:00Z

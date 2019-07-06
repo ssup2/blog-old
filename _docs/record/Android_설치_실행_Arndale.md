@@ -1,5 +1,5 @@
 ---
-title: Android 설치, 실행 - Arndale Broad
+title: Android 설치, 실행 / Arndale Broad
 category: Record
 date: 2014-10-02T12:00:00Z
 lastmod: 2014-10-02T12:00:00Z

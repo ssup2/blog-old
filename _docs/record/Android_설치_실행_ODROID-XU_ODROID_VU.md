@@ -1,5 +1,5 @@
 ---
-title: Android 설치, 실행 - ODROID XU Broad with ODROID-VU
+title: Android 설치, 실행 / ODROID-XU, ODROID-VU
 category: Record
 date: 2014-10-24T12:00:00Z
 lastmod: 2014-10-24T12:00:00Z

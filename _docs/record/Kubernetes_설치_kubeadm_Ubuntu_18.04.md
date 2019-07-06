@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 with kubeadm - Ubuntu 18.04
+title: Kubernetes 설치 / kubeadm / Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
 lastmod: 2019-06-04T12:00:00Z

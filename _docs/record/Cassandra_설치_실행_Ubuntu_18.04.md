@@ -1,5 +1,5 @@
 ---
-title: Cassandra 설치, 설정 - Ubuntu 18.04
+title: Cassandra 설치, 설정 / Ubuntu 18.04
 category: Record
 date: 2018-10-23T12:00:00Z
 lastmod: 2018-10-23T12:00:00Z

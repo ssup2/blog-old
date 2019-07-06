@@ -1,5 +1,5 @@
 ---
-title: Ceph 설치, 실행 with ceph-deploy - Ubuntu 18.04, ODROID-H2 Cluster
+title: Ceph 설치, 실행 / ceph-deploy / Ubuntu 18.04, ODROID-H2 Cluster
 category: Record
 date: 2019-07-06T12:00:00Z
 lastmod: 2019-07-06T12:00:00Z

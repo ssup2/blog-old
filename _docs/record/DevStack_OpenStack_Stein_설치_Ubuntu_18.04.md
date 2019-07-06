@@ -1,5 +1,5 @@
 ---
-title: DevStack을 이용하여 OpenStack Stein 설치 - Ubuntu 18.04
+title: DevStack을 이용하여 OpenStack Stein 설치 / Ubuntu 18.04
 category: Record
 date: 2019-07-01T12:00:00Z
 lastmod: 2019-07-01T12:00:00Z

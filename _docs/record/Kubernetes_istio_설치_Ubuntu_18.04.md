@@ -1,5 +1,5 @@
 ---
-title: Kubernetes istio 설치 - Ubuntu_18.04
+title: Kubernetes istio 설치 / Ubuntu_18.04
 category: Record
 date: 2019-05-19T12:00:00Z
 lastmod: 2019-05-19T12:00:00Z

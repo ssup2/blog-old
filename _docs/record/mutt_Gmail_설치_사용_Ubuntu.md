@@ -1,5 +1,5 @@
 ---
-title: mutt Gmail 설치, 사용 - Ubuntu
+title: mutt Gmail 설치, 사용 / Ubuntu 18.04
 category: Record
 date: 2018-05-28T00:00:00Z
 lastmod: 2018-05-28T00:00:00Z

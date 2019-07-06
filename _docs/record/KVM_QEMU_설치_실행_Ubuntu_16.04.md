@@ -1,5 +1,5 @@
 ---
-title: KVM, QEMU 설치, 실행 - Ubuntu 14.04
+title: KVM, QEMU 설치, 실행 / Ubuntu 14.04
 category: Record
 date: 2017-10-22T12:00:00Z
 lastmod: 2017-10-22T12:00:00Z

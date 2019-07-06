@@ -1,5 +1,5 @@
 ---
-title: Ubuntu 한글 입력 설정 - Ubuntu 16.04
+title: Ubuntu 한글 입력 설정 / Ubuntu 16.04
 category: Record
 date: 2017-01-23T13:13:00Z
 lastmod: 2017-01-23T13:13:00Z
