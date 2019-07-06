@@ -1,5 +1,5 @@
 ---
-title: Ceph 설치, 실행 - Ubuntu 18.04
+title: Ceph 설치, 실행 with ceph-deploy - Ubuntu 18.04
 category: Record
 date: 2019-01-10T12:00:00Z
 lastmod: 2019-01-10T12:00:00Z
@@ -22,7 +22,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_Ubuntu_18.04/Node_Setting.PNG)
+![[그림 1] Ceph 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Ceph_Install_ceph-deploy_Ubuntu_18.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Node (VM)을 생성한다.
 * Hostname : Master Node - node01, Worker node01 - node02, Worker node02 - node03

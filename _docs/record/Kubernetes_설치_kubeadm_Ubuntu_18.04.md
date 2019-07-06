@@ -1,5 +1,5 @@
 ---
-title: kubeadm을 이용하여 Kubernetes 설치 - Ubuntu 18.04
+title: Kubernetes 설치 with kubeadm - Ubuntu 18.04
 category: Record
 date: 2018-07-15T12:00:00Z
 lastmod: 2019-06-04T12:00:00Z
@@ -31,7 +31,7 @@ adsense: true
 
 ### 2. Node 설정
 
-![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/kubeadm_Kubernetes_Install_Ubuntu_18.04/Node_Setting.PNG)
+![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Kubernetes_kubeadm_Install_Ubuntu_18.04/Node_Setting.PNG)
 
 VirtualBox를 이용하여 [그림 1]과 같이 가상의 Master, Worker Node (VM)을 생성한다.
 * Hostname : Master Node - node1, Worker Node1 - node2, Worker Node2 - node3
