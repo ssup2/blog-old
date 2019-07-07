@@ -25,6 +25,9 @@ adsense: true
   * NAT Network : External Network (Provider Network), 192.168.0.0/24
       * Floating IP Range : 192.168.0.200 ~ 224
   * Private Network : Guest Network (Tanant Network), Management Network 10.0.0.0/24
+* Storage
+  * /dev/mmcblk0 : Root Filesystem
+  * /dev/nvme0n1 : Ceph
 
 ### 3. 참조
 

@@ -30,8 +30,8 @@ adsense: true
   * NAT Network (External Network) : 192.168.0.0/24
   * Private Network (Ceph Network) : 10.0.0.0/24
 * Storage
-  * Root : eMMC 64GB
-  * Ceph : SAMSUNG PM981 M.2 2280 256GB
+  * /dev/mmcblk0 : Root Filesystem
+  * /dev/nvme0n1 : Ceph
 
 ### 2. Package 설치
 
