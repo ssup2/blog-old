@@ -20,9 +20,12 @@ adsense: true
 
 [그림 1]은 ODROID-H2 Cluster로 Ceph 설치 환경을 나타내고 있다. 자세한 부분은 다음과 같다. ODROID-H2 Cluster의 주요 사양은 아래와 같다. Ceph를 File Storage와 Object Storage로는 이용하지 않을 예정이기 때문에 MDS (Meta Data Server)와 radosgw는 설치하지 않는다.
 
-* Node : ODROID-H2 * 3
-  * Node 1 : Deploy, Monitor, OSD
-  * Node 2,3 : Monitor, OSD
+* Node : Ubuntu 18.04
+  * ODROID-H2
+    * Node 1 : Monitor, OSD
+    * Node 2,3 : Monitor, OSD
+  * VM
+    * Node 4 : Deploy
 * Network
   * NAT Network (External Network) : 192.168.0.0/24
   * Private Network (Ceph Network) : 10.0.0.0/24

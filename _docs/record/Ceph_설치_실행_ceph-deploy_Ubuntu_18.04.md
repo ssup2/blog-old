@@ -287,9 +287,9 @@ $ sudo ceph -s
 
 RGW (Rados Gateway)를 설치한다. RGW는 Ceph Node 01에 설치한다.
 
-### 5. Block Storage Test
+### 5. 동작 확인
 
-#### 5.1. Ceph Node
+#### 5.1. Block Storage
 
 ~~~
 # ceph osd pool create rbd 16
@@ -306,9 +306,7 @@ Pool 생성 및 초기화를 진행한다.
 
 Block Storage을 생성 및 Mapping 한다.
 
-### 6. File Storage Test
-
-#### 6.1. Ceph Node
+#### 5.2. File Storage
 
 ~~~
 # ceph osd pool create cephfs_data 16
@@ -349,18 +347,16 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 
 Ceph File Server를 Mount 한다.
 
-### 7. Object Storage Test
-
-#### 7.1. Ceph Node
+#### 5.3. Object Storage
 
 ~~~
-# curl 127.0.0.1:7480
+# curl 10.0.0.10:7480
 <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
 ~~~
 
 RGW 동작을 확인한다.
 
-### 8. 참조
+### 6. 참조
 
 * [http://docs.ceph.com/docs/master/start/](http://docs.ceph.com/docs/master/start/)
 * [https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd](https://kubernetes.io/docs/concepts/storage/storage-classes/#ceph-rbd)

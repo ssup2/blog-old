@@ -15,9 +15,9 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 ![[그림 1] ODROID-H2 Cluster 구성]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Cluster.PNG)
 
-[사진 1]은 ODROID-H2 Cluster의 실제 모습을 보여주고 있다. [그림 1]은 ODROID Cluster를 나타내고 있다. 모든 ODROID-H2의 Spec은 동일하다. ODROID-H2 Cluster의 주요 사양은 아래와 같다.
+[사진 1]은 ODROID-H2 Cluster의 실제 모습을 보여주고 있다. [그림 1]은 ODROID Cluster를 나타내고 있다. 모든 ODROID-H2의 Spec은 동일하다. ODROID-H2 Cluster의 주요 사양은 아래와 같다. Node 04는 VM이며 Deploy Node 용도로만 이용한다.
 
-* Node : ODROID-H2 * 3
+* Node : ODROID-H2 * 3, VM * 1
 * CPU : Intel Celeron J4105 Processor
 * Memory : SAMSUNG DDR4 8G PC4-19200 * 2
 * Network : 1Gbps NIC * 2
@@ -31,7 +31,7 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 ![[그림 2] Ceph 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/Ceph.PNG)
 
-[그림 2]는 Ceph 구성시 필요한 구성 요소를 나타내고 있다. 모든 Node는 Ceph의 Monitor Node와 OSD Node로 이용한다. 각 Node의 M.2 Storage를 OSD의 Block Storage로 이용한다. Ceph의 File Storage는 Openstack에서 이용하지 않기 때문에 Ceph의 MDS (Meta Data Server)는 설치하지 않는다. Ceph Network로 Private Network를 이용한다.
+[그림 2]는 Ceph 구성시 필요한 구성 요소를 나타내고 있다. 모든 Node는 Ceph의 Monitor Node와 OSD Node로 이용한다. 각 Node의 M.2 Storage를 OSD의 Block Storage로 이용한다. Ceph의 File Storage와 Object Storage는 이용하지 않을 예정이기 때문에 Ceph의 MDS (Meta Data Server)와 radosgw는 설치하지 않는다. Ceph Network로 Private Network를 이용한다.
 
 #### 1.2. OpenStack
 
