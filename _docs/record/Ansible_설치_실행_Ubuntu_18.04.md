@@ -18,7 +18,7 @@ adsense: true
 
 ~~~
 # apt-get install software-properties-common 
-# apt-add-repository ppa:ansible/ansibl
+# apt-add-repository ppa:ansible/ansible
 # apt-get update 
 # apt-get install ansible
 ~~~

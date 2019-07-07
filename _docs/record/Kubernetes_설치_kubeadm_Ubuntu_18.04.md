@@ -103,18 +103,18 @@ Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]과 같이
 모든 Node에서 수행 Kubernetes를 위한 Package를 설치한다.
 
 ~~~
-# apt-get update
-# apt-get install -y docker.io
+(All)# apt-get update
+(All)# apt-get install -y docker.io
 ~~~
 
 Docker를 설치한다.
 
 ~~~
-# apt-get update && apt-get install -y apt-transport-https curl
-# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
-# apt-get update
-# apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
+(All)# apt-get update && apt-get install -y apt-transport-https curl
+(All)# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+(All)# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
+(All)# apt-get update
+(All)# apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
 ~~~
 
 kubelet, kubeadm를 설치한다.
@@ -128,9 +128,9 @@ Cluster 구축을 위한 kubeadm 명령어의 옵션은 이용할 Network Plugin
 ##### 4.1.1. Calico 기반 구축
 
 ~~~
-# swapoff -a
-# sed -i '/swap.img/s/^/#/' /etc/fstab
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.12.0
+(Master)# swapoff -a
+(Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
+(Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -140,9 +140,9 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **192.168.0.0/16**�
 ##### 4.1.1. Flannel 기반 구축
 
 ~~~
-# swapoff -a
-# sed -i '/swap.img/s/^/#/' /etc/fstab
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
+(Master)# swapoff -a
+(Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
+(Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -152,9 +152,9 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **10.244.0.0/16**�
 ##### 4.1.3. Cilium 기반 구축
 
 ~~~
-# swapoff -a
-# sed -i '/swap.img/s/^/#/' /etc/fstab
-# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
+(Master)# swapoff -a
+(Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
+(Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
 ...
 kubeadm join 10.0.0.10:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -164,15 +164,15 @@ kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복�
 ##### 4.1.4. 공통
 
 ~~~
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+(Master)# mkdir -p $HOME/.kube
+(Master)# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+(Master)# sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ~~~
 
 kubectl config를 설정한다.
 
 ~~~
-kubectl taint nodes --all node-role.kubernetes.io/master-
+(Master)# kubectl taint nodes --all node-role.kubernetes.io/master-
 ~~~
 
 Master Node에도 Pod이 생성될 수 있도록 설정한다.
@@ -193,9 +193,9 @@ kubectl autocomplete를 설정한다. ~/.bashrc에 [파일 4]의 내용을 추�
 #### 4.2. Worker Node
 
 ~~~
-# swapoff -a
-# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+(Worker)# swapoff -a
+(Worker)# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+(Worker)# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
 
 Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다. Docker Version으로 인한 Error가 발생하면 kubeadm join 마지막에 '--ignore-preflight-errors=SystemVerification'를 붙인다.
@@ -203,7 +203,7 @@ Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명�
 #### 4.3. 검증
 
 ~~~
-# kubectl get nodes
+(Master)# kubectl get nodes
 NAME    STATUS     ROLES    AGE   VERSION
 node1   NotReady   master   84s   v1.12.3
 node2   NotReady   <none>   31s   v1.12.3
@@ -221,8 +221,8 @@ Cluster 구축시 선택했던 Network Plugin만 설치한다.
 ##### 5.1.1. Calico 설치
 
 ~~~
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
-# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+(Master)# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+(Master)# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
 
 Calico를 설치한다.
@@ -230,7 +230,7 @@ Calico를 설치한다.
 ##### 5.1.2. Flannel 설치
 
 ~~~
-# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+(Master)# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
 Flannel를 설치한다.
@@ -238,16 +238,16 @@ Flannel를 설치한다.
 ##### 5.1.3. Cilium 설치
 
 ~~~
-# mount bpffs /sys/fs/bpf -t bpf
-# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
+(Master)# mount bpffs /sys/fs/bpf -t bpf
+(Master)# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
 bpffs mount 및 설정을 진행한다.
 
 ~~~
-# wget https://github.com/cilium/cilium/archive/v1.3.0.zip
-# unzip v1.3.0.zip
-# kubectl apply -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
+(Master)# wget https://github.com/cilium/cilium/archive/v1.3.0.zip
+(Master)# unzip v1.3.0.zip
+(Master)# kubectl apply -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
 ~~~
 
 Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
@@ -275,7 +275,7 @@ Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
 Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다. prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다. Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다. cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 [파일 5]와 같이 변경한다.
 
 ~~~
-# kubectl apply -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
+(Master)# kubectl apply -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ~~~
 
 Cilium을 설치한다.
@@ -289,8 +289,8 @@ Worker Node에서는 작업이 필요없다.
 ##### 5.2.2. Cilium 설치
 
 ~~~
-# mount bpffs /sys/fs/bpf -t bpf
-# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
+(Worker)# mount bpffs /sys/fs/bpf -t bpf
+(Worker)# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
 bpffs mount 및 설정을 진행한다.
@@ -300,7 +300,7 @@ bpffs mount 및 설정을 진행한다.
 #### 6.1 Master Node
 
 ~~~
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+(Master)# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ~~~
 
 Web UI 설치를 진행한다.
@@ -322,7 +322,7 @@ spec:
 kube-apiserver에 Insecure Option을 설정한다. /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 [파일 6]의 내용으로 수정한다.
 
 ~~~
-# service kubelet restart
+(Master)# service kubelet restart
 ~~~
 
 kubelet Service를 재시작한다.
@@ -350,8 +350,8 @@ subjects:
 Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
 
 ~~~
-# kubectl create -f ~/dashboard-admin.yaml
-# rm ~/dashboard-admin.yaml
+(Master)# kubectl create -f ~/dashboard-admin.yaml
+(Master)# rm ~/dashboard-admin.yaml
 ~~~
 
 Web UI에 Privilege 권한을 적용하고 접속하여 확인한다. Web UI 접속후 Skip을 누른다.

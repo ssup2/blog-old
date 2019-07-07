@@ -38,21 +38,21 @@ adsense: true
 #### 2.1. Ceph Node
 
 ~~~
-# sudo apt install ntp
-# sudo apt install python
+(Ceph)# sudo apt install ntp
+(Ceph)# sudo apt install python
 ~~~
 
 ntp, python Package를 설치한다.
 
 ~~~
-# sudo useradd -d /home/cephnode -m cephnode
-# sudo passwd cephnode
+(Ceph)# sudo useradd -d /home/cephnode -m cephnode
+(Ceph)# sudo passwd cephnode
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
-# echo "cephnode ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephnode
-# sudo chmod 0440 /etc/sudoers.d/cephnode
+(Ceph)# echo "cephnode ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephnode
+(Ceph)# sudo chmod 0440 /etc/sudoers.d/cephnode
 ~~~
 
 cephnode User를 생성한다. 
@@ -72,40 +72,40 @@ cephnode User를 생성한다.
 /etc/hosts 파일에 [파일 1]의 내용을 추가한다.
 
 ~~~
-# wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
-# echo deb https://download.ceph.com/debian-luminous/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
-# sudo apt update
-# sudo apt install ceph-deploy
+(Deploy)# wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
+(Deploy)# echo deb https://download.ceph.com/debian-luminous/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
+(Deploy)# sudo apt update
+(Deploy)# sudo apt install ceph-deploy
 ~~~
 
 ceph-deploy Package를 설치한다.
 
 ~~~
-# sudo useradd -d /home/cephdeploy -m cephdeploy
-# sudo passwd cephdeploy
+(Deploy)# sudo useradd -d /home/cephdeploy -m cephdeploy
+(Deploy)# sudo passwd cephdeploy
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
-# echo "cephdeploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephdeploy
-# sudo chmod 0440 /etc/sudoers.d/cephdeploy
+(Deploy)# echo "cephdeploy ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/cephdeploy
+(Deploy)# sudo chmod 0440 /etc/sudoers.d/cephdeploy
 ~~~
 
 cephdeploy User를 생성한다.
 * Password : cephdeploy
 
 ~~~
-# login cephdeploy
-$ ssh-keygen
+(Deploy)# login cephdeploy
+(Deploy)$ ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 ...
 
-$ ssh-copy-id cephnode@node01
-$ ssh-copy-id cephnode@node02
-$ ssh-copy-id cephnode@node03
+(Deploy)$ ssh-copy-id cephnode@node01
+(Deploy)$ ssh-copy-id cephnode@node02
+(Deploy)$ ssh-copy-id cephnode@node03
 ~~~
 
 SSH Key를 생성 및 복사한다.
@@ -133,40 +133,42 @@ Host node03
 #### 3.1. Deploy Node
 
 ~~~
-# login cephdeploy
-$ mkdir my-cluster
+(Deploy)# login cephdeploy
+(Deploy)$ mkdir my-cluster
 ~~~
 
 Ceph Cluster Config 폴더를 생성한다.
 
 ~~~
-# login cephdeploy
-$ cd ~/my-cluster
-$ ceph-deploy purge node01 node02 node03
-$ ceph-deploy purgedata node01 node02 node03
-$ ceph-deploy forgetkeys
-$ rm ceph.*
+(Deploy)# login cephdeploy
+(Deploy)$ cd ~/my-cluster
+(Deploy)$ ceph-deploy purge node01 node02 node03
+(Deploy)$ ceph-deploy purgedata node01 node02 node03
+(Deploy)$ ceph-deploy forgetkeys
+(Deploy)$ rm ceph.*
 ~~~
 
 Ceph Cluster를 초기화한다.
 
 ~~~
-# login cephdeploy
-$ cd ~/my-cluster
-$ ceph-deploy new node01 node02 node03
-$ ceph-deploy install node01 node02 node03
-$ ceph-deploy mon create-initial
-$ ceph-deploy admin node01 node02 node03
-$ ceph-deploy mgr create node01 node02 node03
-$ ceph-deploy osd create --data /dev/nvme0n1 node01
-$ ceph-deploy osd create --data /dev/nvme0n1 node02
-$ ceph-deploy osd create --data /dev/nvme0n1 node03
+(Deploy)# login cephdeploy
+(Deploy)$ cd ~/my-cluster
+(Deploy)$ ceph-deploy new node01 node02 node03
+(Deploy)$ ceph-deploy install node01 node02 node03
+(Deploy)$ ceph-deploy mon create-initial
+(Deploy)$ ceph-deploy admin node01 node02 node03
+(Deploy)$ ceph-deploy mgr create node01 node02 node03
+(Deploy)$ ceph-deploy osd create --data /dev/nvme0n1 node01
+(Deploy)$ ceph-deploy osd create --data /dev/nvme0n1 node02
+(Deploy)$ ceph-deploy osd create --data /dev/nvme0n1 node03
 ~~~
 
 Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 Ceph Node 01에 설치한다.
 
+### 4. 동작 확인
+
 ~~~
-$ sudo ceph -s
+(Ceph)# ceph -s
   cluster:
     id:     f2aeccb9-dac1-4271-8b06-19141d26e4cb
     health: HEALTH_OK
@@ -185,20 +187,18 @@ $ sudo ceph -s
 
 Ceph Cluster가 정상적으로 구축되었는지 확인한다.
 
-### 4. Block Storage Test
-
-#### 4.1. Ceph Node
+#### 4.1. Block Storage
 
 ~~~
-# ceph osd pool create rbd 16
-# rbd pool init rbd
+(Ceph)# ceph osd pool create rbd 16
+(Ceph)# rbd pool init rbd
 ~~~
 
 Pool 생성 및 초기화를 진행한다.
 
 ~~~
-# rbd create foo --size 4096 --image-feature layering
-# rbd map foo --name client.admin
+(Ceph)# rbd create foo --size 4096 --image-feature layering
+(Ceph)# rbd map foo --name client.admin
 /dev/rbd0
 ~~~
 
