@@ -51,7 +51,7 @@ VirtualBox를 이용하여 [그림 1]과 같이 가상의 Controller, Compute, S
 10.0.0.41       block1
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Node의 /etc/hosts</figcaption>
+<figcaption class="caption">[파일 1] All Node - /etc/hosts</figcaption>
 </figure>
 
 /etc/hosts에 [파일 1]의 내용으로 파일을 생성한다.
@@ -99,7 +99,7 @@ gateway 192.168.77.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Controller Node의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 2] Controller Node - /etc/network/interfaces</figcaption>
 </figure>
 
 /etc/network/interfaces을 [파일 2]과 같이 수정한다.
@@ -122,7 +122,7 @@ server 3.asia.pool.ntp.org
 allow 10.0.0.0/24
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Controller Node의 /etc/chrony/chrony.conf</figcaption>
+<figcaption class="caption">[파일 3] Controller Node - /etc/chrony/chrony.conf</figcaption>
 </figure>
 
  /etc/chrony/chrony.conf에 [파일 3]의 내용을 추가한다.
@@ -153,7 +153,7 @@ collation-server = utf8_general_ci
 character-set-server = utf8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Controller Node의 /etc/mysql/mariadb.conf.d/99-openstack.cnf</figcaption>
+<figcaption class="caption">[파일 4] Controller Node - /etc/mysql/mariadb.conf.d/99-openstack.cnf</figcaption>
 </figure>
 
 /etc/mysql/mariadb.conf.d/99-openstack.cnf 생성 및 [파일 4]와 같이 수정한다.
@@ -192,7 +192,7 @@ Memcached Package를 설치한다.
 -l 10.0.0.11
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Controller Node의 /etc/memcached.conf</figcaption>
+<figcaption class="caption">[파일 5] Controller Node - /etc/memcached.conf</figcaption>
 </figure>
 
 /etc/memcached.conf에 [파일 5]의 내용을 추가한다.
@@ -210,7 +210,7 @@ export OS_IDENTITY_API_VERSION=3
 export OS_IMAGE_API_VERSION=2
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] Controller Node의 /root/admin-openrc</figcaption>
+<figcaption class="caption">[파일 6] Controller Node - /root/admin-openrc</figcaption>
 </figure>
 
 /root/admin-openrc 생성 및 [파일 6]와 같이 수정한다.
@@ -226,7 +226,7 @@ export OS_IDENTITY_API_VERSION=3
 export OS_IMAGE_API_VERSION=2
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 7] Controller Node의 /root/demo-openrc</figcaption>
+<figcaption class="caption">[파일 7] Controller Node - /root/demo-openrc</figcaption>
 </figure>
 
 /root/demo-openrc 생성 및 [파일 7]과 같이 수정한다.
@@ -258,7 +258,7 @@ gateway 192.168.77.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 8] Compute Node의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 8] Compute Node - /etc/network/interfaces</figcaption>
 </figure>
 
 /etc/network/interfaces을 [파일 8]과 같이 수정한다.
@@ -276,7 +276,7 @@ chrony Package를 설치한다.
 server controller iburst
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 9] Compute Node의 /etc/chrony/chrony.conf</figcaption>
+<figcaption class="caption">[파일 9] Compute Node - /etc/chrony/chrony.conf</figcaption>
 </figure>
 
 /etc/chrony/chrony.conf에 [파일 9]의 내용을 추가한다.
@@ -307,7 +307,7 @@ gateway 10.0.0.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 10] Storage Node의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 10] Storage Node - /etc/network/interfaces</figcaption>
 </figure>
 
 /etc/network/interfaces을 [파일 10]과 같이 수정한다.
@@ -325,7 +325,7 @@ chrony Package를 설치한다.
 server controller iburst
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 11] Storage Node의 /etc/chrony/chrony.conf</figcaption>
+<figcaption class="caption">[파일 11] Storage Node - /etc/chrony/chrony.conf</figcaption>
 </figure>
 
 /etc/chrony/chrony.conf에 [파일 11]의 내용을 추가한다.
@@ -365,7 +365,7 @@ connection = mysql+pymysql://keystone:root@controller/keystone
 provider = fernet
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 12] Controller Node의 /etc/keystone/keystone.conf</figcaption>
+<figcaption class="caption">[파일 12] Controller Node - /etc/keystone/keystone.conf</figcaption>
 </figure>
 
 /etc/keystone/keystone.conf에 [파일 12]의 내용을 추가한다.
@@ -384,7 +384,7 @@ Keystone을 설정한다.
 ServerName controller
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 13] Controller Node의 /etc/apache2/apache2.conf</figcaption>
+<figcaption class="caption">[파일 13] Controller Node - /etc/apache2/apache2.conf</figcaption>
 </figure>
 
 /etc/apache2/apache2.conf에 [파일 13]의 내용을 추가한다.
@@ -512,7 +512,7 @@ default_store = file
 filesystem_store_datadir = /var/lib/glance/images/
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 14] Controller Node의 /etc/glance/glance-api.conf</figcaption>
+<figcaption class="caption">[파일 14] Controller Node - /etc/glance/glance-api.conf</figcaption>
 </figure>
 
 /etc/glance/glance-api.conf에 [파일 14]의 내용을 추가한다.
@@ -537,7 +537,7 @@ password = root
 flavor = keystone
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 15] Controller Node의 /etc/glance/glance-api.conf</figcaption>
+<figcaption class="caption">[파일 15] Controller Node - /etc/glance/glance-api.conf</figcaption>
 </figure>
 
 /etc/glance/glance-registry.conf에 [파일 15]의 내용을 추가한다.
@@ -644,7 +644,7 @@ api_servers = http://controller:9292
 lock_path = /var/lib/nova/tmp
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 16] Controller Node의 /etc/nova/nova.conf</figcaption>
+<figcaption class="caption">[파일 16] Controller Node - /etc/nova/nova.conf</figcaption>
 </figure>
 
 /etc/nova/nova.conf에 [파일 16]의 내용을 추가한다.
@@ -703,7 +703,7 @@ api_servers = http://controller:9292
 lock_path = /var/lib/nova/tmp
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 17] Compute Node의 /etc/nova/nova.conf</figcaption>
+<figcaption class="caption">[파일 17] Compute Node - /etc/nova/nova.conf</figcaption>
 </figure>
 
 /etc/nova/nova.conf에 [파일 17]의 내용을 추가한다.
@@ -716,7 +716,7 @@ compute_driver=libvirt.LibvirtDriver
 virt_type=qemu
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 18] Compute Node의 /etc/nova/nova-compute.conf</figcaption>
+<figcaption class="caption">[파일 18] Compute Node - /etc/nova/nova-compute.conf</figcaption>
 </figure>
 
 현재 VirtualBox의 VM은 CPU의 Intel의 VT-X같은 Virtualization Extension을 이용하지 못한다. 따라서 Compute Node는 KVM+QEMU 조합의 가상 머신을 이용하지 못하고 QEMU만을 이용하여 가상 머신을 구동한다. /etc/nova/nova-compute.conf을 [파일 18]과 같이 수정한다.
@@ -817,7 +817,7 @@ username = nova
 password = root
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 19] Controller Node의 /etc/neutron/neutron.conf</figcaption>
+<figcaption class="caption">[파일 19] Controller Node - /etc/neutron/neutron.conf</figcaption>
 </figure>
 
 /etc/neutron/neutron.conf에 [파일 19]의 내용을 추가한다.
@@ -840,7 +840,7 @@ vni_ranges = 1:1000
 enable_ipset = True
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 20] Controller Node의 /etc/neutron/plugins/ml2/ml2_conf.ini</figcaption>
+<figcaption class="caption">[파일 20] Controller Node - /etc/neutron/plugins/ml2/ml2_conf.ini</figcaption>
 </figure>
 
 /etc/neutron/plugins/ml2/ml2_conf.ini에 [파일 20]의 내용을 추가한다.
@@ -860,7 +860,7 @@ enable_security_group = True
 firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 21] Controller Node의 /etc/neutron/plugins/ml2/linuxbridge_agent.ini</figcaption>
+<figcaption class="caption">[파일 21] Controller Node - /etc/neutron/plugins/ml2/linuxbridge_agent.ini</figcaption>
 </figure>
 
 /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 [파일 21]의 내용을 추가한다.
@@ -871,7 +871,7 @@ firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 22] Controller Node의 /etc/neutron/l3_agent.ini</figcaption>
+<figcaption class="caption">[파일 22] Controller Node - /etc/neutron/l3_agent.ini</figcaption>
 </figure>
 
 /etc/neutron/l3_agent.ini에 [파일 22]의 내용을 추가한다.
@@ -884,7 +884,7 @@ dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
 enable_isolated_metadata = True
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 23] Controller Node의 /etc/neutron/dhcp_agent.ini</figcaption>
+<figcaption class="caption">[파일 23] Controller Node - /etc/neutron/dhcp_agent.ini</figcaption>
 </figure>
 
 /etc/neutron/dhcp_agent.ini에 [파일 23]의 내용을 추가한다.
@@ -896,7 +896,7 @@ nova_metadata_ip = controller
 metadata_proxy_shared_secret = root
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 24] Controller Node의 /etc/neutron/metadata_agent.ini</figcaption>
+<figcaption class="caption">[파일 24] Controller Node - /etc/neutron/metadata_agent.ini</figcaption>
 </figure>
 
 /etc/neutron/metadata_agent.ini에 [파일 24]의 내용을 추가한다.
@@ -917,7 +917,7 @@ service_metadata_proxy = True
 metadata_proxy_shared_secret = root
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 25] Controller Node의 /etc/nova/nova.conf</figcaption>
+<figcaption class="caption">[파일 25] Controller Node - /etc/nova/nova.conf</figcaption>
 </figure>
 
 /etc/nova/nova.conf에 [파일 25]의 내용을 추가한다.
@@ -960,7 +960,7 @@ username = neutron
 password = root
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 26] Compute Node의 /etc/neutron/neutron.conf</figcaption>
+<figcaption class="caption">[파일 26] Compute Node - /etc/neutron/neutron.conf</figcaption>
 </figure>
 
 /etc/neutron/neutron.conf에 [파일 26]의 내용을 추가한다.
@@ -980,7 +980,7 @@ enable_security_group = True
 firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 27] Compute Node의 /etc/neutron/plugins/ml2/linuxbridge_agent.ini</figcaption>
+<figcaption class="caption">[파일 27] Compute Node - /etc/neutron/plugins/ml2/linuxbridge_agent.ini</figcaption>
 </figure>
 
 /etc/neutron/plugins/ml2/linuxbridge_agent.ini에 [파일 27의] 내용을 추가한다.
@@ -999,7 +999,7 @@ username = neutron
 password = root
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 28] Compute Node의 /etc/nova/nova.conf</figcaption>
+<figcaption class="caption">[파일 28] Compute Node - /etc/nova/nova.conf</figcaption>
 </figure>
 
 /etc/nova/nova.conf에 [파일 28]의 내용을 추가한다.
@@ -1094,7 +1094,7 @@ OPENSTACK_API_VERSIONS = {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 29] Controller Node의 /etc/openstack-dashboard/local_settings.py</figcaption>
+<figcaption class="caption">[파일 29] Controller Node - /etc/openstack-dashboard/local_settings.py</figcaption>
 </figure>
 
 /etc/openstack-dashboard/local_settings.py에 [파일 29]와 같이 수정한다.
@@ -1121,7 +1121,7 @@ Web Brower를 통해 Horizon에 접속한다.
 os_region_name = RegionOne
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 30] Compute Node의 /etc/nova.nova.conf</figcaption>
+<figcaption class="caption">[파일 30] Compute Node - /etc/nova.nova.conf</figcaption>
 </figure>
 
 /etc/nova.nova.conf에 [파일 30]의 내용을 추가한다.
@@ -1191,7 +1191,7 @@ password = root
 lock_path = /var/lib/cinder/tmp
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 31] Controller Node의 /etc/cinder/cinder.conf</figcaption>
+<figcaption class="caption">[파일 31] Controller Node - /etc/cinder/cinder.conf</figcaption>
 </figure>
 
 /etc/cinder/cinder.conf에 [파일 31]의 내용을 추가한다.
@@ -1222,7 +1222,7 @@ filter = [ "a/sdb/", "r/.*/"]
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 32] Storage Node의 /etc/lvm/lvm.conf</figcaption>
+<figcaption class="caption">[파일 32] Storage Node - /etc/lvm/lvm.conf</figcaption>
 </figure>
 
 /etc/lvm/lvm.conf에 [파일 32]의 내용을 추가한다.
@@ -1266,7 +1266,7 @@ iscsi_helper = tgtadm
 lock_path = /var/lib/cinder/tmp
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 33] Storage Node의 /etc/cinder/cinder.conf</figcaption>
+<figcaption class="caption">[파일 33] Storage Node - /etc/cinder/cinder.conf</figcaption>
 </figure>
 
 /etc/cinder/cinder.conf에 [파일 33]의 내용을 추가한다.

@@ -35,11 +35,12 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
 * Nova : VM을 관리한다.
 * Neutron : Network를 관리한다.
+* Octavia : Load Balacner를 관리한다.
 * Keystone : Authentication, Authorization를 관리한다.
 * Glance : VM Image를 관리한다.
 * Cinder : VM Block Storage를 관리한다.
 * Horizon : Web Dashboard를 제공한다.
-* Ceilometer : Telemetry를 관리한다.
+* Ceph : Glance, Cinder의 Backend Storage 역활을 수행한다.
 
 ### 3. Package 설치
 
@@ -57,7 +58,6 @@ Deploy Node에 필요한 Ubuntu Package들을 설치한다.
 Deploy Node에서 다른 Node에게 Password 없이 SSH로 접근할 수 있도록 설정한다.
 
 ~~~
--- Deploy Node --
 (Deploy)# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -84,7 +84,6 @@ The key's randomart image is:
 Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Deploy Node에서 다른 Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
 ~~~
--- Deploy Node --
 (Deploy)# ssh-copy-id root@10.0.0.10
 (Deploy)# ssh-copy-id root@10.0.0.11
 (Deploy)# ssh-copy-id root@10.0.0.12
@@ -92,11 +91,152 @@ Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 �
 
 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node의 ~/.ssh/authorized_keys 파일에 복사한다.
 
+{% highlight text linenos %}
+...
+10.0.0.10 node01
+10.0.0.11 node02
+10.0.0.12 node03
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
+</figure>
+
+Deploy Node의 /etc/hosts 파일 내용을 [파일 1]과 같이 수정한다.
+
+{% highlight text linenos %}
+[defaults]
+host_key_checking=False
+pipelining=True
+forks=100
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
+</figure>
+
+Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 생성한다.
+
 ### 5. Kolla-Ansible 설정
+
+~~~
+# cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
+~~~
+
+Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있는 passwords.yml 파일을 복사한다.
 
 #### 5.1. Ansible Inventory 설정
 
-#### 5.2. Kolla-Ansible Config 설정
+{% highlight text linenos %}
+[control]
+node01
+
+[network]
+node01
+
+[monitoring]
+node01
+
+[compute]
+node02
+node03
+
+[ceph]
+node01
+node02
+node03
+
+[nova:children]
+control
+
+[neutron:children]
+network
+
+[octavia:children]
+control
+
+[keystone:children]
+control
+
+[glance:children]
+control
+
+[cinder:children]
+control
+
+[horizon:children]
+control
+
+[prometheus-node-exporter:children]
+monitoring
+control
+compute
+network
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] Deploy Node - ~/kolla-ansible/inventory</figcaption>
+</figure>
+
+Deploy Node에 ~/kolla-ansible/inventory 파일을 [파일 3]의 내용으로 생성한다.
+
+#### 5.2. Kolla-Ansible Password 설정
+
+{% highlight yaml linenos %}
+---
+# Database
+database_password: admin
+
+# OpenStack
+keystone_admin_password: admin
+keystone_database_password: admin
+
+glance_database_password: admin
+glance_keystone_password: admin
+
+nova_database_password: admin
+nova_api_database_password: admin
+nova_keystone_password: admin
+
+neutron_database_password: admin
+neutron_keystone_password: admin
+metadata_secret: admin
+
+cinder_database_password: admin
+cinder_keystone_password: admin
+
+octavia_database_password: admin
+octavia_keystone_password: admin
+octavia_ca_password: admin
+
+memcache_secret_key: admin
+
+# RabbitMQ
+rabbitmq_password: admin
+rabbitmq_monitoring_password: admin
+rabbitmq_cluster_cookie: admin
+outward_rabbitmq_password: admin
+outward_rabbitmq_cluster_cookie: admin
+
+# Redis
+redis_master_password: admin 
+
+# Ceph
+ceph_cluster_fsid: b5168ed4-a98f-4ff0-a39f-51f59a3d64d0
+ceph_rgw_keystone_password: 3c4f1800-a518-4efc-b98d-339665bfa810
+rbd_secret_uuid: 867a11a1-aa92-40d0-8910-32df2281193e
+cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
+
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] Deploy Node - /root/kolla-ansible/password.yaml</figcaption>
+</figure>
+
+#### 5.3. Kolla-Ansible Config 설정
+
+{% highlight text linenos %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] Deploy Node - /root/kolla-ansible/globals.yaml</figcaption>
+</figure>
 
 ### 6. 참조
 

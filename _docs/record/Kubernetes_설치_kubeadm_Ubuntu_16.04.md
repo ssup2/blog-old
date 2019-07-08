@@ -65,7 +65,7 @@ gateway 192.168.77.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Master Node의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 1] Master Node - /etc/network/interfaces</figcaption>
 </figure>
 
 /etc/network/interfaces을 [파일 1]과 같이 수정한다.
@@ -88,7 +88,7 @@ gateway 10.0.0.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Worker Node 01의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 2] Worker Node 01 - /etc/network/interfaces</figcaption>
 </figure>
 
 Worker Node 01의 /etc/network/interfaces을 [파일 2]와 같이 수정한다.
@@ -109,7 +109,7 @@ gateway 10.0.0.1
 dns-nameservers 8.8.8.8
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Worker Node 02의 /etc/network/interfaces</figcaption>
+<figcaption class="caption">[파일 3] Worker Node 02 - /etc/network/interfaces</figcaption>
 </figure>
 
 Worker Node 02의 /etc/network/interfaces을 [파일 3]과 같이 수정한다.
@@ -175,7 +175,7 @@ fi
 source <(kubectl completion bash)
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Master Node의 ~/.bashrc</figcaption>
+<figcaption class="caption">[파일 4] Master Node - ~/.bashrc</figcaption>
 </figure>
 
 kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용을 추가한다.

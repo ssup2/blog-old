@@ -16,7 +16,7 @@ adsense: true
 
 ### 1. 설치 환경
 
-![[그림 1] Ceph 설치 환경 (ODROID-H2 Cluster) ]({{site.baseurl}}/images/record/Ceph_Install_ceph-deploy_Ubuntu_18.04_ODROID-H2_Cluster/Environment.PNG)
+![[그림 1] Ceph 설치 환경 (ODROID-H2 Cluster)]({{site.baseurl}}/images/record/Ceph_Install_ceph-deploy_Ubuntu_18.04_ODROID-H2_Cluster/Environment.PNG)
 
 [그림 1]은 ODROID-H2 Cluster로 Ceph 설치 환경을 나타내고 있다. 자세한 부분은 다음과 같다. ODROID-H2 Cluster의 주요 사양은 아래와 같다. Ceph를 File Storage와 Object Storage로는 이용하지 않을 예정이기 때문에 MDS (Meta Data Server)와 radosgw는 설치하지 않는다.
 
@@ -66,7 +66,7 @@ cephnode User를 생성한다.
 10.0.0.30 node03
 ~~~
 <figure>
-<figcaption class="caption">[파일 1] Deploy Node의 /etc/hosts</figcaption>
+<figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
 /etc/hosts 파일에 [파일 1]의 내용을 추가한다.
@@ -123,7 +123,7 @@ Host node03
    User cephnode
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
+<figcaption class="caption">[파일 2] Deploy Node - /home/cephdeploy/.ssh/config</figcaption>
 </figure>
 
 /home/cephdeploy/.ssh/config 파일을 [파일 2]와 같이 수정한다.

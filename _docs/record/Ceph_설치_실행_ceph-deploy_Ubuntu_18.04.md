@@ -49,7 +49,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 1] Node 01 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Ceph Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 1]의 내용으로 생성한다.
@@ -66,7 +66,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 2] Node 02 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Ceph Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 2]의 내용으로 생성한다.
@@ -83,7 +83,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Node 03의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 3] Node 03 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]의 내용으로 생성한다.
@@ -121,7 +121,7 @@ cephnode User를 생성한다.
 10.0.0.30 node03
 ~~~
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node의 /etc/hosts</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
 /etc/hosts 파일에 [파일 4]의 내용을 추가한다.
@@ -178,7 +178,7 @@ Host node03
    User cephnode
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node의 /home/cephdeploy/.ssh/config</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - /home/cephdeploy/.ssh/config</figcaption>
 </figure>
 
 /home/cephdeploy/.ssh/config 파일을 [파일 5]와 같이 수정한다.
@@ -302,7 +302,7 @@ admin Key를 확인한다.
 AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] /root/admin.secret</figcaption>
+<figcaption class="caption">[파일 6] Ceph Node - /root/admin.secret</figcaption>
 </figure>
 
 확인한 admin Key를 이용하여 [파일 6]의 내용으로 /root/admin.secret 파일을 생성한다.

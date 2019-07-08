@@ -17,10 +17,10 @@ adsense: true
 ### 2. Ansible 설치
 
 ~~~
-# apt-get install software-properties-common 
-# apt-add-repository ppa:ansible/ansible
-# apt-get update 
-# apt-get install ansible
+(Control)# apt-get install software-properties-common
+(Control)# apt-add-repository ppa:ansible/ansible
+(Control)# apt-get update
+(Control)# apt-get install ansible
 ~~~
 
 Control Node에 Ansible을 설치한다.
@@ -33,7 +33,7 @@ Control Node에 Ansible을 설치한다.
 172.35.0.102
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] /etc/ansible/hosts</figcaption>
+<figcaption class="caption">[파일 1] Control Node - /etc/ansible/hosts</figcaption>
 </figure>
 
 Control Node의 /etc/ansible/hosts 파일에 [파일 1]과 같이 Managed Node의 IP 정보를 저장한다.
@@ -41,7 +41,7 @@ Control Node의 /etc/ansible/hosts 파일에 [파일 1]과 같이 Managed Node�
 ### 4. SSH Key 생성 및 설정
 
 ~~~
-# ssh-keygen -t rsa
+(Control)# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
@@ -67,8 +67,8 @@ The key's randomart image is:
 Contorl Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Control Node에서 Managed Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
 ~~~
-# ssh-copy-id root@172.35.0.101 
-# ssh-copy-id root@172.35.0.102
+(Control)# ssh-copy-id root@172.35.0.101 
+(Control)# ssh-copy-id root@172.35.0.102
 ~~~
 
 Control Node에서 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 모든 Managed Node의 ~/.ssh/authorized_keys 파일에 복사한다. 
@@ -76,7 +76,7 @@ Control Node에서 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Ke
 ### 5. Ansible 구동
 
 ~~~
-# ansible all -m ping
+(Control)# ansible all -m ping
 172.35.0.101 | SUCCESS => {
     "changed": false,
     "ping": "pong"

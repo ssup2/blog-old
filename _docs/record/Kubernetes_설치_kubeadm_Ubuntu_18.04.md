@@ -57,7 +57,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Master Node의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 1] Master Node - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Master Node의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 1]과 같이 설정한다.
@@ -76,7 +76,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Worker Node 01의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 2] Worker Node 01 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Worker Node 01의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 2]와 같이 설정한다.
@@ -93,7 +93,7 @@ network:
                 addresses: [8.8.8.8]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Worker Node 02의 /etc/netplan/50-cloud-init.yaml</figcaption>
+<figcaption class="caption">[파일 3] Worker Node 02 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
 Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]과 같이 설정한다.
@@ -185,7 +185,7 @@ fi
 source <(kubectl completion bash)
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Master Node의 ~/.bashrc</figcaption>
+<figcaption class="caption">[파일 4] Master Node - ~/.bashrc</figcaption>
 </figure>
 
 kubectl autocomplete를 설정한다. ~/.bashrc에 [파일 4]의 내용을 추가한다.
@@ -269,7 +269,7 @@ Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
+<figcaption class="caption">[파일 5] Master Node - cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml</figcaption>
 </figure>
 
 Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다. prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다. Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다. cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 [파일 5]와 같이 변경한다.
@@ -316,7 +316,7 @@ spec:
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
+<figcaption class="caption">[파일 6] Master Node - /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
 </figure>
 
 kube-apiserver에 Insecure Option을 설정한다. /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 [파일 6]의 내용으로 수정한다.
@@ -344,10 +344,10 @@ subjects:
   namespace: kube-system
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 7] ~/dashboard-admin.yaml</figcaption>
+<figcaption class="caption">[파일 7] Master Node - ~/dashboard-admin.yaml</figcaption>
 </figure>
 
-Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다. 
+Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다.
 
 ~~~
 (Master)# kubectl create -f ~/dashboard-admin.yaml
