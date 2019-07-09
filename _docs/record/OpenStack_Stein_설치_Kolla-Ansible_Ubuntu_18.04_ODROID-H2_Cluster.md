@@ -20,14 +20,14 @@ adsense: true
     * Node 01 : Controller Node, Network Node
     * Node 02,03 : Compute Node
   * VM
-    * Node 9 : Monitoring Node, Deploy Node
+    * Node 9 : Monitoring Node, Registry Node, Deploy Node
 * Network
   * NAT Network : External Network (Provider Network), 192.168.0.0/24
       * Floating IP Range : 192.168.0.200 ~ 224
   * Private Network : Guest Network (Tanant Network), Management Network 10.0.0.0/24
 * Storage
-  * /dev/mmcblk0 : Root Filesystem
-  * /dev/nvme0n1 : Ceph
+  * /dev/mmcblk0 : Root Filesystem, 64GB
+  * /dev/nvme0n1 : Ceph, 256GB
 
 ### 2. OpenStack 구성
 
@@ -44,8 +44,10 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
 ### 3. Package 설치
 
+#### 3.1. Deploy Node
+
 ~~~
-(Deploy)# apt-get install software-properties-common 
+(Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
 (Deploy)# apt-get install python3-dev libffi-dev gcc libssl-dev python3-selinux python3-setuptools ansible
@@ -53,7 +55,43 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
 Deploy Node에 필요한 Ubuntu Package들을 설치한다.
 
-### 4. Ansible 설정
+#### 3.2. Registry, Controller, Compute Node
+
+~~~
+(Registry, Controller, Compute)# apt-get update
+(Registry, Controller, Compute)# apt-get install docker.io
+~~~
+
+Registry, Controller, Compute Node에 필요한 Ubuntu Package를 설치한다.
+
+### 4. Docker 설정
+
+#### 4.1. Registry Node
+
+~~~
+(Registry)# docker run -d -p 5000:5000 --restart=always --name registry registry:2
+~~~
+
+Registry Node에 Docker Registry를 구동시킨다.
+
+#### 4.2. Controller, Compute, Network Node
+
+{% highlight text linenos %}
+{
+  "insecure-registries" : ["10.0.0.19:5000"]
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] Controller, Compute, Network Node - /etc/docker/daemon.json</figcaption>
+</figure>
+
+~~~
+(Controller, Compute, Network)# service docker restart
+~~~
+
+Controller, Compute, Network Node에서 동작한는 Docker Daemon에게 Registry Node에 구동시킨 Docker Registry를 Insecure Registry로 등록한다. Controller, Compute, Network Node의 /etc/docker/daemon.json 파일을 [파일 1]의 내용으로 생성한 다음, Docker를 재시작한다.
+
+### 5. Ansible 설정
 
 Deploy Node에서 다른 Node에게 Password 없이 SSH로 접근할 수 있도록 설정한다.
 
@@ -101,10 +139,10 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
+<figcaption class="caption">[파일 2] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
-Deploy Node의 /etc/hosts 파일 내용을 [파일 1]과 같이 수정한다.
+Deploy Node의 /etc/hosts 파일 내용을 [파일 2]과 같이 수정한다.
 
 {% highlight text linenos %}
 ...
@@ -116,20 +154,28 @@ forks=100
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
+<figcaption class="caption">[파일 3] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
 </figure>
 
-Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 수정한다.
+Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 3]와 같이 수정한다.
 
-### 5. Kolla-Ansible 설정
+### 6. Ceph 설정
 
 ~~~
-# cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
+(Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
+~~~
+
+모든 Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP이 붙은 Block Device를 이용하도록 설정한다.
+
+### 7. Kolla-Ansible 설정
+
+~~~
+(Deploy)# cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
 ~~~
 
 Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있는 passwords.yml 파일을 복사한다.
 
-#### 5.1. Ansible Inventory 설정
+#### 7.1. Ansible Inventory 설정
 
 {% highlight text linenos %}
 [control]
@@ -185,12 +231,12 @@ compute
 network
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Deploy Node - ~/kolla-ansible/inventory</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node - ~/kolla-ansible/inventory</figcaption>
 </figure>
 
-Deploy Node에 ~/kolla-ansible/inventory 파일을 [파일 3]의 내용으로 생성한다.
+Deploy Node에 ~/kolla-ansible/inventory 파일을 [파일 4]의 내용으로 생성한다.
 
-#### 5.2. Kolla-Ansible Password 설정
+#### 7.2. Kolla-Ansible Password 설정
 
 {% highlight yaml linenos %}
 # Database
@@ -240,10 +286,12 @@ rbd_secret_uuid: 867a11a1-aa92-40d0-8910-32df2281193e
 cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node - /etc/kolla/passwords.yml</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
-#### 5.3. Kolla-Ansible Config 설정
+Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다.
+
+#### 7.3. Kolla-Ansible Config 설정
 
 {% highlight yaml linenos %}
 # Kolla
@@ -252,7 +300,7 @@ openstack_release: "stein"
 # Neutron
 network_interface: "enp0s3"
 neutron_external_interface : "enp0s2"
-neutron_plugin_agent: "openvswitch"
+neutron_plugin_agent: "opendaylight"
 neutron_ipam_driver: "internal"
 
 # Nova
@@ -288,14 +336,19 @@ enable_openvswitch: "yes"
 # Glance
 glance_backend_ceph: "yes"
 
+# Ceph
+ceph_enable_cache: "no"
+
 # Prometheus
 enable_prometheus_node_exporter: "yes"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/globals.yaml</figcaption>
+<figcaption class="caption">[파일 6] Deploy Node - /etc/kolla/globals.yaml</figcaption>
 </figure>
 
-#### 5.4. Openstack 설치
+Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수정한다.
+
+#### 7.4. Openstack 설치
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/inventory bootstrap-servers
@@ -305,6 +358,6 @@ enable_prometheus_node_exporter: "yes"
 
 Kolla Ansible을 이용하여 Openstack을 설치한다.
 
-### 6. 참조
+### 7. 참조
 
 * [https://docs.openstack.org/kolla-ansible/stein/](https://docs.openstack.org/kolla-ansible/stein)
