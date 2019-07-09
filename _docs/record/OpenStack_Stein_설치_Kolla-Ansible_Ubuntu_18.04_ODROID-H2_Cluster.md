@@ -59,10 +59,11 @@ Deploy Node에 필요한 Ubuntu Package들을 설치한다.
 
 ~~~
 (Registry, Controller, Compute)# apt-get update
-(Registry, Controller, Compute)# apt-get install docker.io
+(Registry, Controller, Compute)# apt-get install python3-dev python-pip docker.io 
+(Registry, Controller, Compute)# pip install docker
 ~~~
 
-Registry, Controller, Compute Node에 필요한 Ubuntu Package를 설치한다.
+Registry, Controller, Compute Node에 필요한 Ubuntu, Python Package를 설치한다.
 
 ### 4. Docker 설정
 
@@ -147,7 +148,6 @@ Deploy Node의 /etc/hosts 파일 내용을 [파일 2]과 같이 수정한다.
 {% highlight text linenos %}
 ...
 [defaults]
-deprecation_warnings=False
 host_key_checking=False
 pipelining=True
 forks=100
@@ -178,6 +178,15 @@ Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있�
 #### 7.1. Ansible Inventory 설정
 
 {% highlight text linenos %}
+[deployment]
+node01
+node02
+node03
+node09
+
+[deployment:vars]
+ansible_python_interpreter=/usr/bin/python3
+
 [control]
 node01
 
@@ -195,6 +204,11 @@ node03
 node01
 node02
 node03
+
+[baremetal:children]
+control
+network
+compute
 
 [nova:children]
 control
@@ -223,6 +237,9 @@ compute
 
 [opendaylight:children]
 network
+
+[prometheus:children]
+monitoring
 
 [prometheus-node-exporter:children]
 monitoring
@@ -332,6 +349,7 @@ enable_nova_ssh: "yes"
 enable_octavia: "yes"
 enable_opendaylight: "yes"
 enable_openvswitch: "yes"
+enable_prometheus: "yes"
 
 # Glance
 glance_backend_ceph: "yes"
@@ -351,9 +369,9 @@ Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수�
 #### 7.4. Openstack 설치
 
 ~~~
-(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory bootstrap-servers
-(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory prechecks
-(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory deploy
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory bootstrap-servers -e 'ansible_python_interpreter=/usr/bin/python3'
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory prechecks -e 'ansible_python_interpreter=/usr/bin/python3'
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory deploy -e 'ansible_python_interpreter=/usr/bin/python3'
 ~~~
 
 Kolla Ansible을 이용하여 Openstack을 설치한다.
