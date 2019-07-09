@@ -33,13 +33,13 @@ adsense: true
 
 OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
-* Nova : VM을 관리한다.
-* Neutron : Network를 관리한다.
-* Octavia : Load Balacner를 관리한다.
-* Keystone : Authentication, Authorization를 관리한다.
-* Glance : VM Image를 관리한다.
-* Cinder : VM Block Storage를 관리한다.
-* Horizon : Web Dashboard를 제공한다.
+* Nova : VM Service를 제공한다.
+* Neutron : Network Service를 제공한다.
+* Octavia : Load Balacner Service를 제공한다.
+* Keystone : Authentication, Authorization Service를 제공한다.
+* Glance : VM Image Service를 제공한다.
+* Cinder : VM Block Storage Service를 제공한다.
+* Horizon : Web Dashboard Service를 제공한다.
 * Ceph : Glance, Cinder의 Backend Storage 역활을 수행한다.
 
 ### 3. Package 설치
@@ -166,6 +166,13 @@ control
 [horizon:children]
 control
 
+[openvswitch:children]
+network
+compute
+
+[opendaylight:children]
+network
+
 [prometheus-node-exporter:children]
 monitoring
 control
@@ -217,7 +224,10 @@ outward_rabbitmq_password: admin
 outward_rabbitmq_cluster_cookie: admin
 
 # Redis
-redis_master_password: admin 
+redis_master_password: admin
+
+# OpenDaylight
+opendaylight_password: admin
 
 # Ceph
 ceph_cluster_fsid: b5168ed4-a98f-4ff0-a39f-51f59a3d64d0
@@ -232,11 +242,65 @@ cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
 
 #### 5.3. Kolla-Ansible Config 설정
 
-{% highlight text linenos %}
+{% highlight yaml linenos %}
+# Kolla
+openstack_release: "stein"
+
+# Neutron
+network_interface: "enp0s3"
+neutron_external_interface : "enp0s2"
+neutron_plugin_agent: "openvswitch"
+neutron_ipam_driver: "internal"
+
+# Nova
+nova_console: "novnc"
+
+# OpenDayligth
+enable_opendaylight_l3: "yes"
+
+# OpenStack
+enable_glance: "yes"
+enable_haproxy: "no"
+enable_keystone: "yes"
+enable_mariadb: "yes"
+enable_memcached: "yes"
+enable_neutron: "yes"
+enable_nova: "yes"
+
+enable_ceph: "yes"
+enable_ceph_mds: "no"
+enable_ceph_rgw: "no"
+enable_ceph_nfs: "no"
+enable_ceph_dashboard: "yes"
+enable_chrony: "yes"
+enable_cinder: "yes"
+enable_fluentd: "no"
+enable_horizon: "yes"
+enable_nova_fake: "no"
+enable_nova_ssh: "yes"
+enable_octavia: "yes"
+enable_opendaylight: "yes"
+enable_openvswitch: "yes"
+
+# Glance
+glance_backend_ceph: "yes"
+
+# Prometheus
+enable_prometheus_node_exporter: "yes"
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 5] Deploy Node - /root/kolla-ansible/globals.yaml</figcaption>
 </figure>
+
+#### 5.4. Openstack 설치
+
+~~~
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory bootstrap-servers
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory prechecks
+(Deploy)# kolla-ansible -i ~/kolla-ansible/inventory deploy
+~~~
+
+Kolla Ansible을 이용하여 Openstack을 설치한다.
 
 ### 6. 참조
 
