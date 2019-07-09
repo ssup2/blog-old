@@ -17,10 +17,10 @@ adsense: true
 * Kolla-Ansible : 8.0.0.0rc2.dev124
 * Node : Ubuntu 18.04, root user
   * ODROID-H2
-    * Node 1 : Controller Node, Network Node
-    * Node 2,3 : Compute Node
+    * Node 01 : Controller Node, Network Node
+    * Node 02,03 : Compute Node
   * VM
-    * Node 4 : Deploy Node
+    * Node 9 : Monitoring Node, Deploy Node
 * Network
   * NAT Network : External Network (Provider Network), 192.168.0.0/24
       * Floating IP Range : 192.168.0.200 ~ 224
@@ -87,6 +87,7 @@ Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 �
 (Deploy)# ssh-copy-id root@10.0.0.10
 (Deploy)# ssh-copy-id root@10.0.0.11
 (Deploy)# ssh-copy-id root@10.0.0.12
+(Deploy)# ssh-copy-id root@10.0.0.19
 ~~~
 
 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node의 ~/.ssh/authorized_keys 파일에 복사한다.
@@ -96,6 +97,7 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 10.0.0.10 node01
 10.0.0.11 node02
 10.0.0.12 node03
+10.0.0.19 node09
 ...
 {% endhighlight %}
 <figure>
@@ -105,16 +107,19 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 Deploy Node의 /etc/hosts 파일 내용을 [파일 1]과 같이 수정한다.
 
 {% highlight text linenos %}
+...
 [defaults]
+deprecation_warnings=False
 host_key_checking=False
 pipelining=True
 forks=100
+...
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
 </figure>
 
-Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 생성한다.
+Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 수정한다.
 
 ### 5. Kolla-Ansible 설정
 
@@ -134,7 +139,7 @@ node01
 node01
 
 [monitoring]
-node01
+node09
 
 [compute]
 node02
@@ -188,7 +193,6 @@ Deploy Node에 ~/kolla-ansible/inventory 파일을 [파일 3]의 내용으로 �
 #### 5.2. Kolla-Ansible Password 설정
 
 {% highlight yaml linenos %}
----
 # Database
 database_password: admin
 
@@ -234,10 +238,9 @@ ceph_cluster_fsid: b5168ed4-a98f-4ff0-a39f-51f59a3d64d0
 ceph_rgw_keystone_password: 3c4f1800-a518-4efc-b98d-339665bfa810
 rbd_secret_uuid: 867a11a1-aa92-40d0-8910-32df2281193e
 cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
-
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node - /root/kolla-ansible/password.yaml</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
 #### 5.3. Kolla-Ansible Config 설정
@@ -289,7 +292,7 @@ glance_backend_ceph: "yes"
 enable_prometheus_node_exporter: "yes"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node - /root/kolla-ansible/globals.yaml</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/globals.yaml</figcaption>
 </figure>
 
 #### 5.4. Openstack 설치

@@ -116,15 +116,17 @@ cephnode User를 생성한다.
 #### 3.2. Deploy Node
 
 ~~~
+...
 10.0.0.10 node01
 10.0.0.20 node02
 10.0.0.30 node03
+...
 ~~~
 <figure>
 <figcaption class="caption">[파일 4] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
-/etc/hosts 파일에 [파일 4]의 내용을 추가한다.
+/etc/hosts 파일을 [파일 4]의 내용처럼 수정한다.
 
 ~~~
 (Deploy)# wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
