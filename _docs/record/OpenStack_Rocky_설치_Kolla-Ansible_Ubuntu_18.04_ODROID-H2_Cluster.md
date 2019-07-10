@@ -57,7 +57,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
-(Deploy)# apt-get install python3-dev libffi-dev gcc libssl-dev python3-selinux python3-setuptools ansible 
+(Deploy)# apt-get install python3-dev libffi-dev gcc libssl-dev python3-selinux python3-setuptools ansible python-oslo.config
 (Deploy)# pip3 install kolla-ansible
 ~~~
 
