@@ -41,7 +41,7 @@ IOMMU릍 이용하여 가상 머신과 I/O Device간의 I/O Data 전달을 Hyper
 
 ![[그림 4] SR-IOV]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/SR-IOV.PNG){: width="450px"}
 
-하나의 I/O Device를 Host에게 **여러개의 I/O Device**처럼 보이게 하는 가상화 기법이다. [그림 4]는 SR-IOV Device의 구성도를 간략하게 나타내고 있다. SR-IOV Device는 하나의 PF(Physical Function)와 여러개의 VF(Virtual Function)로 구성되어 있다. 일반적인 Device의 경우 PF만 존재하고 VF는 존재하지 않는다. 각 VF를 Hypervisor 입장에서는 여러개의 I/O Device처럼 이용할 수 있다.
+하나의 I/O Device를 Host에게 **여러개의 I/O Device**처럼 보이게 하는 가상화 기법이다. [그림 4]는 SR-IOV Device의 구성도를 간략하게 나타내고 있다. SR-IOV Device는 하나의 PF(Physical Function)와 여러개의 VF(Virtual Function)로 구성되어 있다. 일반적인 Device의 경우 PF만 존재하고 VF는 존재하지 않는다. 각 VF를 Hypervisor 입장에서는 하나의 I/O Device처럼 이용할 수 있다.
 
 ### 4. IOMMU + SR-IOV Device
 
