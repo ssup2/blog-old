@@ -1033,7 +1033,7 @@ cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
 <figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
-Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다.
+Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
 
 #### 8.3. Kolla-Ansible Config 설정
 
