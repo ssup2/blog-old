@@ -18,7 +18,7 @@ adsense: true
 
 ![[그림 1] OpenStack Rocky 설치 환경 (ODROID-H2 Cluster)]({{site.baseurl}}/images/record/OpenStack_Rocky_Install_Kolla-Ansible_Ubuntu_18.04_ODROID-H2_Cluster/Environment.PNG)
 
-[그림 1]은 ODROID-H2 Cluster로 OpenStack 설치 환경을 나타내고 있다. 상세한 환경 정보는 아래와 같다.
+[그림 1]은 ODROID-H2 Cluster로 OpenStack 설치 환경을 나타내고 있다. 상세한 환경 정보는 다음과 같다.
 
 * OpenStack : Rocky Version
 * Kolla-Ansible : 7.1.1
@@ -58,7 +58,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
 (Deploy)# apt-get install python3-dev libffi-dev gcc libssl-dev python3-selinux python3-setuptools ansible python-oslo.config
-(Deploy)# pip3 install kolla-ansible
+(Deploy)# pip3 install kolla kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
 ~~~
 
 Deploy Node에 필요한 Ubuntu Package들을 설치한다.
@@ -78,10 +78,12 @@ Registry, Controller, Compute Node에 필요한 Ubuntu, Python Package를 설치
 #### 4.1. Registry Node
 
 ~~~
-(Registry)# docker run -d -p 5000:5000 --restart=always --name registry registry:2
+(Registry)# mkdir ~/auth
+(Registry)# docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/auth/htpasswd
+(Registry)# docker run -d -p 5000:5000 --restart=always --name registry_private -v ~/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd" registry:2
 ~~~
 
-Registry Node에 Docker Registry를 구동시킨다.
+Registry Node에 Docker Registry를 구동시킨다. ID/Password는 admin/admin으로 설정한다.
 
 #### 4.2. Network Node
 
@@ -95,7 +97,9 @@ EOF
 (Network)# systemctl restart docker
 ~~~
 
-#### 4.3. Controller, Compute, Network Node
+Network Node에서 동작하는 Docker에 shared Mount Flag를 추가하고, Docker를 재시작 한다.
+
+#### 4.3. Registry, Controller, Compute, Network Node
 
 {% highlight text linenos %}
 {
@@ -202,7 +206,19 @@ Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP Label을 붙�
 
 Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 
-### 8. Kolla-Ansible 설정
+### 8. Kolla Container Image 생성 및 Push
+
+~~~
+(Deploy)# git clone -b stable/rocky --single-branch https://github.com/openstack/kolla.git
+(Deploy)# cd kolla
+(Deploy)# tox -e genconfig
+(Deploy)# docker login 10.0.0.19:5000
+(Deploy)# kolla-build -b ubuntu --registry 10.0.0.19:5000 --push
+~~~
+
+Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
+
+### 9. Kolla-Ansible을 이용하여 OpenStack 설치
 
 ~~~
 (Deploy)# cp /usr/local/share/kolla-ansible/ansible/inventory/* ~/kolla-ansible/
@@ -210,8 +226,6 @@ Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 ~~~
 
 Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있는 passwords.yml 파일을 복사한다.
-
-#### 8.1. Ansible Inventory 설정
 
 {% highlight text linenos %}
 # These initial groups are the only groups required to be modified. The
@@ -255,19 +269,17 @@ node09 neutron_external_interface=eth0 api_interface=eth1
 #compute01 neutron_external_interface=eth0 api_interface=em1 storage_interface=em1 tunnel_interface=em1
 
 [storage]
-
-[deployment]
-node09
-
-[deployment:vars]
-ansible_python_interpreter=/usr/bin/python3
-
-[ceph]
 node01
 node02
 node03
 
-[ceph:vars]
+[storage:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[deployment]
+node09                                     
+
+[deployment:vars]
 ansible_python_interpreter=/usr/bin/python3
 
 [baremetal:children]
@@ -276,711 +288,15 @@ ansible_python_interpreter=/usr/bin/python3
 # groups in the sections below. Common services are grouped together.
 [chrony-server:children]
 haproxy
-
-[chrony:children]
-control
-network
-compute
-storage
-monitoring
-
-[collectd:children]
-compute
-
-[grafana:children]
-monitoring
-
-[etcd:children]
-control
-compute
-
-[influxdb:children]
-monitoring
-
-[prometheus:children]
-monitoring
-
-[kafka:children]
-control
-
-[karbor:children]
-control
-
-[kibana:children]
-control
-
-[telegraf:children]
-compute
-control
-monitoring
-network
-storage
-
-[elasticsearch:children]
-control
-
-[haproxy:children]
-network
-
-[hyperv]
-#hyperv_host
-
-[hyperv:vars]
-#ansible_user=user
-#ansible_password=password
-#ansible_port=5986
-#ansible_connection=winrm
-#ansible_winrm_server_cert_validation=ignore
-
-[mariadb:children]
-control
-
-[rabbitmq:children]
-control
-
-[outward-rabbitmq:children]
-control
-
-[qdrouterd:children]
-control
-
-[monasca-agent:children]
-compute
-control
-monitoring
-network
-storage
-
-[monasca:children]
-monitoring
-
-[storm:children]
-monitoring
-
-[mongodb:children]
-control
-
-[keystone:children]
-control
-
-[glance:children]
-control
-
-[nova:children]
-control
-
-[neutron:children]
-network
-
-[openvswitch:children]
-network
-compute
-manila-share
-
-[opendaylight:children]
-network
-
-[cinder:children]
-control
-
-[cloudkitty:children]
-control
-
-[freezer:children]
-control
-
-[memcached:children]
-control
-
-[horizon:children]
-control
-
-[swift:children]
-control
-
-[barbican:children]
-control
-
-[heat:children]
-control
-
-[murano:children]
-control
-
-[solum:children]
-control
-
-[ironic:children]
-control
-
-[magnum:children]
-control
-
-[sahara:children]
-control
-
-[mistral:children]
-control
-
-[manila:children]
-control
-
-[ceilometer:children]
-control
-
-[aodh:children]
-control
-
-[congress:children]
-control
-
-[panko:children]
-control
-
-[gnocchi:children]
-control
-
-[tacker:children]
-control
-
-[trove:children]
-control
-
-# Tempest
-[tempest:children]
-control
-
-[senlin:children]
-control
-
-[vmtp:children]
-control
-
-[vitrage:children]
-control
-
-[watcher:children]
-control
-
-[rally:children]
-control
-
-[searchlight:children]
-control
-
-[octavia:children]
-control
-
-[designate:children]
-control
-
-[placement:children]
-control
-
-[bifrost:children]
-deployment
-
-[zookeeper:children]
-control
-
-[zun:children]
-control
-
-[skydive:children]
-monitoring
-
-[redis:children]
-control
-
-[blazar:children]
-control
-
-# Additional control implemented here. These groups allow you to control which
-# services run on which hosts at a per-service level.
-#
-# Word of caution: Some services are required to run on the same host to
-# function appropriately. For example, neutron-metadata-agent must run on the
-# same host as the l3-agent and (depending on configuration) the dhcp-agent.
-
-# Glance
-[glance-api:children]
-glance
-
-[glance-registry:children]
-glance
-
-# Nova
-[nova-api:children]
-nova
-
-[nova-conductor:children]
-nova
-
-[nova-consoleauth:children]
-nova
-
-[nova-novncproxy:children]
-nova
-
-[nova-scheduler:children]
-nova
-
-[nova-spicehtml5proxy:children]
-nova
-
-[nova-compute-ironic:children]
-nova
-
-[nova-serialproxy:children]
-nova
-
-# Neutron
-[neutron-server:children]
-control
-
-[neutron-dhcp-agent:children]
-neutron
-
-[neutron-l3-agent:children]
-neutron
-
-[neutron-lbaas-agent:children]
-neutron
-
-[neutron-metadata-agent:children]
-neutron
-
-[neutron-bgp-dragent:children]
-neutron
-
-[neutron-infoblox-ipam-agent:children]
-neutron
-
-[ironic-neutron-agent:children]
-neutron
-
-# Ceph
-[ceph-mds:children]
-ceph
-
-[ceph-mgr:children]
-ceph
-
-[ceph-nfs:children]
-ceph
-
-[ceph-mon:children]
-ceph
-
-[ceph-rgw:children]
-ceph
-
-[ceph-osd:children]
-storage
-
-# Cinder
-[cinder-api:children]
-cinder
-
-[cinder-backup:children]
-storage
-
-[cinder-scheduler:children]
-cinder
-
-[cinder-volume:children]
-storage
-
-# Cloudkitty
-[cloudkitty-api:children]
-cloudkitty
-
-[cloudkitty-processor:children]
-cloudkitty
-
-# Freezer
-[freezer-api:children]
-freezer
-
-[freezer-scheduler:children]
-freezer
-
-# iSCSI
-[iscsid:children]
-compute
-storage
-ironic
-
-[tgtd:children]
-storage
-
-# Karbor
-[karbor-api:children]
-karbor
-
-[karbor-protection:children]
-karbor
-
-[karbor-operationengine:children]
-karbor
-
-# Manila
-[manila-api:children]
-manila
-
-[manila-scheduler:children]
-manila
-
-[manila-share:children]
-network
-
-[manila-data:children]
-manila
-
-# Swift
-[swift-proxy-server:children]
-swift
-
-[swift-account-server:children]
-storage
-
-[swift-container-server:children]
-storage
-
-[swift-object-server:children]
-storage
-
-# Barbican
-[barbican-api:children]
-barbican
-
-[barbican-keystone-listener:children]
-barbican
-
-[barbican-worker:children]
-barbican
-
-# Heat
-[heat-api:children]
-heat
-
-[heat-api-cfn:children]
-heat
-
-[heat-engine:children]
-heat
-
-# Murano
-[murano-api:children]
-murano
-
-[murano-engine:children]
-murano
-
-# Monasca
-[monasca-agent-collector:children]
-monasca-agent
-
-[monasca-agent-forwarder:children]
-monasca-agent
-
-[monasca-agent-statsd:children]
-monasca-agent
-
-[monasca-api:children]
-monasca
-
-[monasca-grafana:children]
-monasca
-
-[monasca-log-api:children]
-monasca
-
-[monasca-log-transformer:children]
-monasca
-
-[monasca-log-persister:children]
-monasca
-
-[monasca-log-metrics:children]
-monasca
-
-[monasca-thresh:children]
-monasca
-
-[monasca-notification:children]
-monasca
-
-[monasca-persister:children]
-monasca
-
-# Storm
-[storm-worker:children]
-storm
-
-[storm-nimbus:children]
-storm
-
-# Ironic
-[ironic-api:children]
-ironic
-
-[ironic-conductor:children]
-ironic
-
-[ironic-inspector:children]
-ironic
-
-[ironic-pxe:children]
-ironic
-
-[ironic-ipxe:children]
-ironic
-
-# Magnum
-[magnum-api:children]
-magnum
-
-[magnum-conductor:children]
-magnum
-
-# Sahara
-[sahara-api:children]
-sahara
-
-[sahara-engine:children]
-sahara
-
-# Solum
-[solum-api:children]
-solum
-
-[solum-worker:children]
-solum
-
-[solum-deployer:children]
-solum
-
-[solum-conductor:children]
-solum
-
-# Mistral
-[mistral-api:children]
-mistral
-
-[mistral-executor:children]
-mistral
-
-[mistral-engine:children]
-mistral
-
-# Ceilometer
-[ceilometer-central:children]
-ceilometer
-
-[ceilometer-notification:children]
-ceilometer
-
-[ceilometer-compute:children]
-compute
-
-# Aodh
-[aodh-api:children]
-aodh
-
-[aodh-evaluator:children]
-aodh
-
-[aodh-listener:children]
-aodh
-
-[aodh-notifier:children]
-aodh
-
-# Congress
-[congress-api:children]
-congress
-
-[congress-datasource:children]
-congress
-
-[congress-policy-engine:children]
-congress
-
-# Panko
-[panko-api:children]
-panko
-
-# Gnocchi
-[gnocchi-api:children]
-gnocchi
-
-[gnocchi-statsd:children]
-gnocchi
-
-[gnocchi-metricd:children]
-gnocchi
-
-# Trove
-[trove-api:children]
-trove
-
-[trove-conductor:children]
-trove
-
-[trove-taskmanager:children]
-trove
-
-# Multipathd
-[multipathd:children]
-compute
-storage
-
-# Watcher
-[watcher-api:children]
-watcher
-
-[watcher-engine:children]
-watcher
-
-[watcher-applier:children]
-watcher
-
-# Senlin
-[senlin-api:children]
-senlin
-
-[senlin-engine:children]
-senlin
-
-# Searchlight
-[searchlight-api:children]
-searchlight
-
-[searchlight-listener:children]
-searchlight
-
-# Octavia
-[octavia-api:children]
-octavia
-
-[octavia-health-manager:children]
-octavia
-
-[octavia-housekeeping:children]
-octavia
-
-[octavia-worker:children]
-octavia
-
-# Designate
-[designate-api:children]
-designate
-
-[designate-central:children]
-designate
-
-[designate-producer:children]
-designate
-
-[designate-mdns:children]
-network
-
-[designate-worker:children]
-designate
-
-[designate-sink:children]
-designate
-
-[designate-backend-bind9:children]
-designate
-
-# Placement
-[placement-api:children]
-placement
-
-# Zun
-[zun-api:children]
-zun
-
-[zun-wsproxy:children]
-zun
-
-[zun-compute:children]
-compute
-
-# Skydive
-[skydive-analyzer:children]
-skydive
-
-[skydive-agent:children]
-compute
-network
-
-# Tacker
-[tacker-server:children]
-tacker
-
-[tacker-conductor:children]
-tacker
-
-# Vitrage
-[vitrage-api:children]
-vitrage
-
-[vitrage-notifier:children]
-vitrage
-
-[vitrage-graph:children]
-vitrage
-
-[vitrage-collector:children]
-vitrage
-
-[vitrage-ml:children]
-vitrage
-
-# Blazar
-[blazar-api:children]
-blazar
-
-[blazar-manager:children]
-blazar
-
-# Prometheus
-[prometheus-node-exporter:children]
-monitoring
-control
-compute
-network
-storage
-
-[prometheus-mysqld-exporter:children]
-mariadb
-
-[prometheus-haproxy-exporter:children]
-haproxy
-
-[prometheus-memcached-exporter:children]
-memcached
-
-[prometheus-cadvisor:children]
-monitoring
-control
-compute
-network
-storage
-
-[prometheus-alertmanager:children]
-monitoring
+...
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 4] Deploy Node - ~/kolla-ansible/multinode</figcaption>
 </figure>
 
-Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 4]의 내용으로 생성한다. multinode 파일에서 [control], [network], [external-compute], [monitoring], [storage], [deployment], [ceph], [baremetal] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 값들은 기본 설정값을 그대로 유지한다.
+Ansible Inventory를 설정한다. Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 4]의 내용으로 변경한다. ~/kolla-ansible/multinode 파일의 윗부분에 있는 [control], [network], [external-compute], [monitoring], [storage], [deployment], [baremetal] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 파일의 아랫부분은 기본 설정값을 그대로 유지한다.
 
-#### 8.2. Kolla-Ansible Password 설정
+#### 9.2. Kolla-Ansible Password 설정
 
 {% highlight yaml linenos %}
 # Database
@@ -1033,9 +349,7 @@ cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
 <figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
-Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
-
-#### 8.3. Kolla-Ansible Config 설정
+OpenStack에서 이용하는 Password 정보를 입력한다. Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
 
 {% highlight yaml linenos %}
 # Kolla
@@ -1091,9 +405,7 @@ enable_prometheus_node_exporter: "yes"
 <figcaption class="caption">[파일 6] Deploy Node - /etc/kolla/globals.yaml</figcaption>
 </figure>
 
-Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수정한다.
-
-#### 8.4. Openstack 설치
+Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수정한다.
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers
@@ -1103,7 +415,7 @@ Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수�
 
 Kolla Ansible을 이용하여 Openstack을 설치한다.
 
-### 9. 참조
+### 10. 참조
 
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
