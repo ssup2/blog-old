@@ -213,7 +213,7 @@ Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 (Deploy)# cd kolla
 (Deploy)# tox -e genconfig
 (Deploy)# docker login 10.0.0.19:5000
-(Deploy)# kolla-build -b ubuntu --registry 10.0.0.19:5000 --push
+(Deploy)# kolla-build -b ubuntu --skip-parents --registry 10.0.0.19:5000 --push 
 ~~~
 
 Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
