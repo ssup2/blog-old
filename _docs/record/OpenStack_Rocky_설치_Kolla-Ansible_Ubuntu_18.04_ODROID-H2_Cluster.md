@@ -57,8 +57,8 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
-(Deploy)# apt-get install python3-dev libffi-dev gcc libssl-dev python3-selinux python3-setuptools ansible python-oslo.config
-(Deploy)# pip3 install kolla kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
+(Deploy)# apt-get install libffi-dev gcc libssl-dev python3-dev python3-selinux python3-setuptools python-oslo.config ansible 
+(Deploy)# pip3 install kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
 ~~~
 
 Deploy Node에 필요한 Ubuntu Package들을 설치한다.
@@ -213,7 +213,8 @@ Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 (Deploy)# cd kolla
 (Deploy)# tox -e genconfig
 (Deploy)# docker login 10.0.0.19:5000
-(Deploy)# kolla-build -b ubuntu --skip-parents --registry 10.0.0.19:5000 --push 
+(Deploy)# mkdir -p logs
+(Deploy)# python3 tools/build.py -b ubuntu --tag rocky --skip-parents --skip-existing --type source --registry 10.0.0.19:5000 --push --logs-dir logs
 ~~~
 
 Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
