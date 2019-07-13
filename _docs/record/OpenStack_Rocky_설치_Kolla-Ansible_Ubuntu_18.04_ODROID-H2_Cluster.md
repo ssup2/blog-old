@@ -57,8 +57,9 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
-(Deploy)# apt-get install libffi-dev gcc libssl-dev python3-dev python3-selinux python3-setuptools python-oslo.config ansible 
-(Deploy)# pip3 install kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
+(Deploy)# apt-get install libffi-dev gcc libssl-dev python3-dev python3-selinux python3-setuptools python-oslo.config ansible
+(Deploy)# apt remove golang-docker-credential-helpers
+(Deploy)# pip install kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
 ~~~
 
 Deploy Node에 필요한 Ubuntu Package들을 설치한다.
@@ -67,8 +68,9 @@ Deploy Node에 필요한 Ubuntu Package들을 설치한다.
 
 ~~~
 (Registry, Controller, Compute)# apt-get update
-(Registry, Controller, Compute)# apt-get install python3-dev python3-pip docker.io 
-(Registry, Controller, Compute)# pip3 install docker
+(Registry, Controller, Compute)# apt-get install python3-dev python3-pip docker.io
+(Registry, Controller, Compute)# apt remove golang-docker-credential-helpers
+(Registry, Controller, Compute)# pip install docker==3.0.0
 ~~~
 
 Registry, Controller, Compute Node에 필요한 Ubuntu, Python Package를 설치한다.
@@ -112,6 +114,7 @@ Network Node에서 동작하는 Docker에 shared Mount Flag를 추가하고, Doc
 
 ~~~
 (Controller, Compute, Network)# service docker restart
+(Controller, Compute, Network)# docker login 10.0.0.19:5000
 ~~~
 
 Controller, Compute, Network Node에서 동작한는 Docker Daemon에게 Registry Node에 구동시킨 Docker Registry를 Insecure Registry로 등록한다. Controller, Compute, Network Node의 /etc/docker/daemon.json 파일을 [파일 1]의 내용으로 생성한 다음, Docker를 재시작한다.
