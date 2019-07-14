@@ -61,9 +61,10 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-get update
 (Deploy)# apt-get install ansible python-pip python3-pip
 (Deploy)# pip install kolla-ansible==7.1.1 tox gitpython pbr requests jinja2 oslo_config
+(Deploy)# pip install python-openstackclient python-glanceclient python-neutronclient
 ~~~
 
-Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다.
+Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다. 또한 OpenSTack CLI Client도 설치한다.
 
 #### 3.2. Registry Node
 
@@ -612,11 +613,19 @@ Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. 
 
 OpenStack을 설치한다.
 
-### 11. Floating IP Range 설정
+### 11. OpenStack CLI Client 설치, 설정
 
-### 12. Glance에 Ubuntu Image 등록
+~~~
+(Deploy)# kolla-ansible post-deploy
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# . /usr/local/share/kolla-ansible/init-runonce
+~~~
 
-### 13. 참조
+### 12. Floating IP Range 설정
+
+### 13. Glance에 Ubuntu Image 등록
+
+### 14. 참조
 
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
