@@ -1,8 +1,8 @@
 ---
 title: OpenStack Rocky 설치 / Kolla-Ansible 이용 / Ubuntu 18.04, ODROID-H2 Cluster 환경
 category: Record
-date: 2019-07-06T12:00:00Z
-lastmod: 2019-07-06T12:00:00Z
+date: 2019-07-14T12:00:00Z
+lastmod: 2019-07-14T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -24,14 +24,15 @@ adsense: true
 * Kolla-Ansible : 7.1.1
 * Node : Ubuntu 18.04, root user
   * ODROID-H2
-    * Node 01 : Controller Node, Network Node
-    * Node 02,03 : Compute Node
+    * Node 01 : Controller Node, Network Node, Ceph Node (MON, MGR, OSD)
+    * Node 02, 03 : Compute Node, Ceph Node (OSD)
   * VM
-    * Node 9 : Monitoring Node, Registry Node, Deploy Node
+    * Node 09 : Monitoring Node, Registry Node, Deploy Node
 * Network
-  * NAT Network : External Network (Provider Network), 192.168.0.0/24
-      * Floating IP Range : 192.168.0.200 ~ 224
-  * Private Network : Guest Network (Tanant Network), Management Network 10.0.0.0/24
+  * Outter NAT Network : External Network (Provider Network), 192.168.0.0/24
+    * Floating IP Range : 192.168.0.200 ~ 224
+  * Inner NAT Network : Guest Network (Tanant Network), Management Network, 10.0.0.0/24
+    * Node Default Gateway
 * Storage
   * /dev/mmcblk0 : Root Filesystem, 64GB
   * /dev/nvme0n1 : Ceph, 256GB
@@ -72,11 +73,13 @@ Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위�
 
 Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
 
-#### 3.3. Control, Compute, Network, Storage Node
+#### 3.3. Network, Compute Node
 
 ~~~
-(Control, Compute, Network, Storage)# apt-get install docker-ce
+(Network, Compute)# apt-get install bridge-utils
 ~~~
+
+Bridge 제어를 위한 bridge-utils를 설치한다.
 
 ### 4. Ansible 설정
 
@@ -609,7 +612,12 @@ Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. 
 
 OpenStack을 설치한다.
 
-### 11. 참조
+### 11. Floating IP Range 설정
+
+### 12. Glance에 Ubuntu Image 등록
+
+### 13. 참조
 
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
+* [https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html](https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html)
