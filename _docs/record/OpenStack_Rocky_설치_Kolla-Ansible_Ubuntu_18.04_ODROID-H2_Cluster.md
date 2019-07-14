@@ -569,7 +569,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 ### 7. Octavia 설정
 
 ~~~
-(network)# git clone https://review.openstack.org/p/openstack/octavia
+(network)# git clone -b 4.0.1 https://review.openstack.org/p/openstack/octavia
 (network)# cd octavia
 (network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
 (network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
@@ -585,16 +585,15 @@ Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 
 ~~~
 (Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
-(Ceph)# ln -s /dev/nvme0n1p1 /dev/nvme0n11
-(Ceph)# ln -s /dev/nvme0n1p2 /dev/nvme0n12
+(Ceph)# printf 'KERNEL=="nvme0n1p1", SYMLINK+="nvme0n11"\nKERNEL=="nvme0n1p2", SYMLINK+="nvme0n12"' > /etc/udev/rules.d/local.rules
 ~~~
 
-Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP_BS 붙은 Block Device를 이용하도록 설정한다. Kolla-Ansible의 Role의 오류로 인해서 NVME를 Ceph의 Storage로 이용할 경우 잘못된 Partition 이름을 참조하는 버그가 있다. 이러한 문제를 해결하기 위해서 Partiton Symbolic Link를 생성한다.
+Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP_BS 붙은 Block Device를 이용하도록 설정한다. Kolla-Ansible의 Role의 오류로 인해서 NVME를 Ceph의 Storage로 이용할 경우 잘못된 Partition 이름을 참조하는 버그가 있다. 이러한 문제를 해결하기 위해서 Partiton Symbolic Link를 udev를 통해서 생성한다.
 
 ### 9. Kolla Container Image 생성 및 Push
 
 ~~~
-(Deploy)# git clone -b stable/rocky --single-branch https://github.com/openstack/kolla.git
+(Deploy)# git clone -b 7.0.3 https://github.com/openstack/kolla.git
 (Deploy)# cd kolla
 (Deploy)# tox -e genconfig
 (Deploy)# docker login 10.0.0.19:5000
@@ -616,6 +615,7 @@ OpenStack을 설치한다.
 ### 11. OpenStack CLI Client 설치, 설정
 
 ~~~
+(Deploy)# cd kolla-ansible
 (Deploy)# kolla-ansible post-deploy
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
