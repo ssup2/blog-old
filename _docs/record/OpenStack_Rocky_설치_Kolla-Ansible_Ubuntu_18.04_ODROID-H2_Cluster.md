@@ -43,6 +43,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 * Nova : VM Service를 제공한다.
 * Neutron : Network Service를 제공한다.
 * Octavia : Load Balacner Service를 제공한다.
+* OpendayLight : SDN Controller 역활을 수행한다.
 * Keystone : Authentication, Authorization Service를 제공한다.
 * Glance : VM Image Service를 제공한다.
 * Cinder : VM Block Storage Service를 제공한다.
@@ -57,69 +58,27 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
-(Deploy)# apt-get install libffi-dev gcc libssl-dev python3-dev python3-selinux python3-setuptools python-oslo.config ansible
-(Deploy)# apt remove golang-docker-credential-helpers
-(Deploy)# pip install kolla-ansible tox pbr requests docker gitpython jinja2 oslo_config
+(Deploy)# apt-get install ansible python-pip python3-pip
+(Deploy)# pip install kolla-ansible==7.1.1 tox gitpython pbr requests jinja2 oslo_config
 ~~~
 
-Deploy Node에 필요한 Ubuntu Package들을 설치한다.
+Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다.
 
-#### 3.2. Registry, Controller, Compute Node
-
-~~~
-(Registry, Controller, Compute)# apt-get update
-(Registry, Controller, Compute)# apt-get install python3-dev python3-pip docker.io
-(Registry, Controller, Compute)# apt remove golang-docker-credential-helpers
-(Registry, Controller, Compute)# pip install docker==3.0.0
-~~~
-
-Registry, Controller, Compute Node에 필요한 Ubuntu, Python Package를 설치한다.
-
-### 4. Docker 설정
-
-#### 4.1. Registry Node
+#### 3.2. Registry Node
 
 ~~~
-(Registry)# mkdir ~/auth
-(Registry)# docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/auth/htpasswd
-(Registry)# docker run -d -p 5000:5000 --restart=always --name registry_private -v ~/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd" registry:2
+(Registry)# apt-get install docker-ce
 ~~~
 
-Registry Node에 Docker Registry를 구동시킨다. ID/Password는 admin/admin으로 설정한다.
+Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
 
-#### 4.2. Network Node
-
-~~~
-(Network)# mkdir -p /etc/systemd/system/docker.service.d
-(Network)# tee /etc/systemd/system/docker.service.d/kolla.conf <<-'EOF'
-[Service]
-MountFlags=shared
-EOF
-(Network)# systemctl daemon-reload
-(Network)# systemctl restart docker
-~~~
-
-Network Node에서 동작하는 Docker에 shared Mount Flag를 추가하고, Docker를 재시작 한다.
-
-#### 4.3. Registry, Controller, Compute, Network Node
-
-{% highlight text linenos %}
-{
-  "insecure-registries" : ["10.0.0.19:5000"]
-}
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[파일 1] Controller, Compute, Network Node - /etc/docker/daemon.json</figcaption>
-</figure>
+#### 3.3. Control, Compute, Network, Storage Node
 
 ~~~
-(Controller, Compute, Network)# service docker restart
-(Controller, Compute, Network)# docker login 10.0.0.19:5000
+(Control, Compute, Network, Storage)# apt-get install docker-ce
 ~~~
 
-Controller, Compute, Network Node에서 동작한는 Docker Daemon에게 Registry Node에 구동시킨 Docker Registry를 Insecure Registry로 등록한다. Controller, Compute, Network Node의 /etc/docker/daemon.json 파일을 [파일 1]의 내용으로 생성한 다음, Docker를 재시작한다.
-
-### 5. Ansible 설정
+### 4. Ansible 설정
 
 Deploy Node에서 다른 Node에게 Password 없이 SSH로 접근할 수 있도록 설정한다.
 
@@ -167,10 +126,10 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Deploy Node - /etc/hosts</figcaption>
+<figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
-Deploy Node의 /etc/hosts 파일 내용을 [파일 2]과 같이 수정한다.
+Deploy Node의 /etc/hosts 파일 내용을 [파일 1]과 같이 수정한다.
 
 {% highlight text linenos %}
 ...
@@ -181,55 +140,21 @@ forks=100
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
+<figcaption class="caption">[파일 2] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
 </figure>
 
-Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 3]와 같이 수정한다.
+Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 수정한다.
 
-### 6. Ceph 설정
-
-~~~
-(Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
-~~~
-
-Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP이 붙은 Block Device를 이용하도록 설정한다.
-
-### 7. Octavia 설정
+### 5. Kolla-Ansible 설정
 
 ~~~
-(network)# git clone https://review.openstack.org/p/openstack/octavia
-(network)# cd octavia
-(network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
-(network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
-(network)# mkdir -p /etc/kolla/config/octavia
-(network)# cp cert/private/cakey.pem /etc/kolla/config/octavia/
-(network)# cp cert/ca_01.pem /etc/kolla/config/octavia/
-(network)# cp cert/client.pem /etc/kolla/config/octavia/
-~~~
-
-Network Node에 Octavia에서 이용하는 인증서를 생성한다.
-
-### 8. Kolla Container Image 생성 및 Push
-
-~~~
-(Deploy)# git clone -b stable/rocky --single-branch https://github.com/openstack/kolla.git
-(Deploy)# cd kolla
-(Deploy)# tox -e genconfig
-(Deploy)# docker login 10.0.0.19:5000
-(Deploy)# mkdir -p logs
-(Deploy)# python3 tools/build.py -b ubuntu --tag rocky --skip-parents --skip-existing --type source --registry 10.0.0.19:5000 --push --logs-dir logs
-~~~
-
-Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
-
-### 9. Kolla-Ansible을 이용하여 OpenStack 설치
-
-~~~
+(Deploy)# mkdir -p ~/kolla-ansible
 (Deploy)# cp /usr/local/share/kolla-ansible/ansible/inventory/* ~/kolla-ansible/
+(Deploy)# mkdir -p /etc/kolla
 (Deploy)# cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
 ~~~
 
-Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있는 passwords.yml 파일을 복사한다.
+Inventory 파일들을 복사한다. 또한 Config 파일인 **global.yaml** 파일과 Password 정보가 포함되어 있는 **passwords.yml** 파일을 복사한다.
 
 {% highlight text linenos %}
 # These initial groups are the only groups required to be modified. The
@@ -277,16 +202,15 @@ node01
 node02
 node03
 
-[storage:vars]
-ansible_python_interpreter=/usr/bin/python3
-
 [deployment]
-node09                                     
-
-[deployment:vars]
-ansible_python_interpreter=/usr/bin/python3
+node09
 
 [baremetal:children]
+control
+network
+compute
+storage
+monitoring
 
 # You can explicitly specify which hosts run each project by updating the
 # groups in the sections below. Common services are grouped together.
@@ -295,16 +219,17 @@ haproxy
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node - ~/kolla-ansible/multinode</figcaption>
+<figcaption class="caption">[파일 3] Deploy Node - ~/kolla-ansible/multinode</figcaption>
 </figure>
 
-Ansible Inventory를 설정한다. Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 4]의 내용으로 변경한다. ~/kolla-ansible/multinode 파일의 윗부분에 있는 [control], [network], [external-compute], [monitoring], [storage], [deployment], [baremetal] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 파일의 아랫부분은 기본 설정값을 그대로 유지한다.
-
-#### 9.2. Kolla-Ansible Password 설정
+Ansible Inventory를 설정한다. Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 3]의 내용으로 변경한다. ~/kolla-ansible/multinode 파일의 윗부분에 있는 [control], [network], [external-compute], [monitoring], [storage], [deployment] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 파일의 아랫부분은 기본 설정값을 그대로 유지한다.
 
 {% highlight yaml linenos %}
 # Database
 database_password: admin
+
+# Registry
+docker_registry_password: admin
 
 # OpenStack
 keystone_admin_password: admin
@@ -317,6 +242,8 @@ nova_database_password: admin
 nova_api_database_password: admin
 nova_keystone_password: admin
 
+placement_keystone_password: admin
+
 neutron_database_password: admin
 neutron_keystone_password: admin
 metadata_secret: admin
@@ -328,7 +255,178 @@ octavia_database_password: admin
 octavia_keystone_password: admin
 octavia_ca_password: admin
 
+horizon_secret_key: admin
+horizon_database_password: admin
+
 memcache_secret_key: admin
+
+nova_ssh_key:
+  private_key: |
+    -----BEGIN PRIVATE KEY-----
+    MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQDZqI3UF+5q/Sal
+    hTdUz3I/G7/Yg58oeL1FLOciC7j8Gpf/3P0q3g+0k7Ftj0KVtD+QTwrDj+agIyu+
+    MTnqNt+9qHS5F8ib3MXkK27QArwT94HDWwPLKX9+CCtUYjyJh96AH0gvwEjBATo0
+    g05xeBmeZ2/5IfVPwSDL/hGOBJtea/2prUf13PN8JjKP4qlzbJJX9fRuv2xT8vUd
+    cAvLXpbqzMaHB71N4LmDkNMjh3k4m4Rs04TQx9q0OcsJczcSgCT6qwO4Y+k+5xBa
+    vpb5lGv9KaM7klTaK8DojrXBuJa7YloAOo5EDEq32Xa0mc2eb8HqlPf4Z8E8IQZA
+    RUtnVN7WzUraSqBsjQm1PpC5WMd39yzcYs2whNQCIpSNx0v+z+2n3/s8rR5jXe3S
+    pCCPnXi7FnjF6aXHmA5RLYxzP6ihs5rg0lm66vEVRIoHGPknEvwAmnBEB1wms9Hx
+    /V540Vl2fVb5TGWFq/6dUjxYiA/Px0Yk5cqui18UKqZrSV5VhjqAuEUzcVIRyVnR
+    lM4X23MshiSVVfBZuiJnyK2PvOTzlonBkOv4z1WxLNnJvjohnRuKIOL+M8twp0ZG
+    pbRHfGfGz6ZE/iYTjOzqCEi8gXi0EooolzGb3abpQLBnkYSrx9KLhFDwYNgyQX3v
+    TryAGPUTOa0Un5OU7DU584/RoHoPOwIDAQABAoICABrcimRab7oUc+iJgEKfN2JC
+    cnKuC75a6EDZQc0Z1UKHpaqWA0h/D0Eh2QvEWltPW2jb2GA6KiQpMwTN3m/hRcuK
+    Np2BKejSXjnCgnJ5Y+yy5vjNCrLP9EQBjhdj6ESw1+zH74i1GkV3eU9xxQSL5d1+
+    tnrwje3Bz+JdAJ2eQ+5rNWrzT6YwFnyD2kmXl4H/LDBe0kO4rA3QNh/j7BC1I7rm
+    erm/YsVxrnNmNCh2V6d8yeMEV6fMglkrqLsJ1QobdnTZFiRzcB2rNoF8c/VpM8qS
+    kOqRLJegPrZ0pkm6FiAaCzFsCJKtUatO0y+Gq7GZ6TyiFdg6NcbN7I+R/bRK7RUq
+    4nHoAbV2ZCBpPYUg71657HHl/RsbuTotWft5G51486Q5CiblJegzqHoo0fCV/vXr
+    AqoLr4O0CBBokt5v2z0ID4wIwjmGbY5Hz3AxRpwS8aPr2BlN52MPETijOfOLurkN
+    MUnILkOA0O9C9tC1G5f9ldhEpWZ41ts6c2fk55FYSGQO2mvbT2fZwUSjXrdrg8CK
+    0eSDmPIYv/eqU1UgekWDhpKBE4Ywtrky1bgdNVRmnQnPCo8AVjA5a1t+EYdoGEMB
+    cVxArXhq288MaRexsm3S36SgighS3dbLR4+WEH2R4H3UkXI7Y4k0nx+VEjUHeQfm
+    gaYysj69J8Kjf6ZanbsBAoIBAQD+oE/e6ZtCXSAVzFUKCcSKS1RPgRyh2aKGOYjQ
+    3VldOZSYmcE7Pdi9cpyF0YFJSyY/kjqm66JHkaZUQtcuJ+AGqIsxxSH5Fv8lECOl
+    Q+nlapKooodzseMkoDIjssE241IVQ8uulw2MUxcToNu2NdrfBzmQmw2LYTO+ZN70
+    vB3N8LYi1NEW4tUc3JzF7H7y9wiqtm0KM5zs1JYoWLkPzId1X/JpY1jW1AkdvHK8
+    RF01naZivSxzaCXMpqcTcHbFkUmxNtclVPxz8SjlhB0l7Jbx9cqSz1OjT/ebVnHS
+    S17AXHq5JUnH/s6zDwp7RRGZ/LCx2J12Cq0ljbr+foc7itnLAoIBAQDa1S6t8SMT
+    rSCCuU1QXwJjKJBavLeQSvZRhovUBh0S8/mOVROmI/sBMBNjDa6dn+kY+J2LWbC5
+    Mtdk9VILHpuWxaObkj8Iasayaa7Cv7RkloeZTfQYExB1e/Ndg360F0nijoazlN92
+    43t8c96wi0x7bpdwm2ZPVRthaTqITnWCTHB2mE5rzZYFldGnhtuvqhjCypoRlAr9
+    2xl3eA2AzUf9VKoyOyoXfxBViuNy+YO1sITpTyfAuuMMZLjZAY2PmZ59QKhGZ3cO
+    NvJApJZoJA7HhzdE/v6j/QALMh1S2HU3IH0CZOpOOLSUf/q5E1hpwvn3s6bh3Gu4
+    RL+tVdpm1LJRAoIBAQDHTfB2yV/v6DjPFyuROegPX7tUp/kjbtjaO3quEjR61jFL
+    6T3pAxX95BJEZKLQHfSIWgty0IorfwQ0fEU2KZwfWhnqESXwdWGtPx7Ho4sXOf4l
+    5WIk2x6ycnoMm0TFk9WSM4jg1feS2Q79HDIeQ7VYUa1rVRKbALCh3Q7vfbfOlRXb
+    2bz4LwElIEHOYrlTsK2mAjkDfTbd4eDPH/NrPGrjIwD6IPtO3JVuIy2j09cpuoac
+    TvrWMrUzpVatzqAJMRn/jq+E1yrsDd43GNw/7RqRthSkKYiMEnH7swRQ2RIHe9vL
+    xDYmR3q/iYxoxL1sTPB5pNZLqTuyY2f1AFEV+C9VAoIBAF547FcRpEgJVOC6qMMK
+    0VgHmhJiKIk1o5Ncl58oKIMXKuSkm//8xo8jtyrrLDhGYfZy1mjjhqTdaxndwtak
+    Fx2HI3O1Nlsm5bL+ZwESjAlk5xNrEPcXu+JMaas0ao3LBA235DVBDxwfZx86Uqg6
+    6wDapKxrmkajgleSez9/R8HByEeaxzhJH/w3SrSdRthWgawOlWcDV59yaFMoVAQI
+    G40lcPiQjEJqi52ygTEQwSi+FRM4JfxRclXWYerlfbzB4CdIs5z5a++KDxmTNI+v
+    CWZgXJ7/yuT3A37R2tD6O9hZwT44XOL6HhOCELa3wFKgZxPlziTx6Ns7atilGM2O
+    A5ECggEARGZjVe91MomFGkhOR8B3aMAQTX9nakcMqtYPy4YSwcOdHbLQovkCWld8
+    gntsMA3spOhQON8GIcxpEGR5UyG2HNQH9bR79KbXr8nhj149XNW5Dce7jjezm+Tj
+    dFS/8wB8SsgVoM32AwyQxHcvWzUlES/KDqRoeGkGG7lsoplAbWUGBuaPb6J2V5XJ
+    AMfZq3aKcDBC8aPgn0nxl3wwdEVAkWsp1z7wmO39hVikYXXBon/O6C0lAg37p0EA
+    4Z2j1a+gsctEGbF1+mXtHq2zB5o6vJpV8VuXIUpKbh1DqnxPJY8ka+026xr0WZhd
+    IF1ExGI4cbSuAWSAN5kYhY6yiOf4uA==
+    -----END PRIVATE KEY-----
+  public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDZqI3UF+5q/SalhTdUz3I/G7/Yg58oeL1FLOciC7j8Gpf/3P0q3g+0k7Ftj0KVtD+QTwrDj+agIyu+MTnqNt+9qHS5F8ib3MXkK27QArwT94HDWwPLKX9+CCtUYjyJh96AH0gvwEjBATo0g05xeBmeZ2/5IfVPwSDL/hGOBJtea/2prUf13PN8JjKP4qlzbJJX9fRuv2xT8vUdcAvLXpbqzMaHB71N4LmDkNMjh3k4m4Rs04TQx9q0OcsJczcSgCT6qwO4Y+k+5xBavpb5lGv9KaM7klTaK8DojrXBuJa7YloAOo5EDEq32Xa0mc2eb8HqlPf4Z8E8IQZARUtnVN7WzUraSqBsjQm1PpC5WMd39yzcYs2whNQCIpSNx0v+z+2n3/s8rR5jXe3SpCCPnXi7FnjF6aXHmA5RLYxzP6ihs5rg0lm66vEVRIoHGPknEvwAmnBEB1wms9Hx/V540Vl2fVb5TGWFq/6dUjxYiA/Px0Yk5cqui18UKqZrSV5VhjqAuEUzcVIRyVnRlM4X23MshiSVVfBZuiJnyK2PvOTzlonBkOv4z1WxLNnJvjohnRuKIOL+M8twp0ZGpbRHfGfGz6ZE/iYTjOzqCEi8gXi0EooolzGb3abpQLBnkYSrx9KLhFDwYNgyQX3vTryAGPUTOa0Un5OU7DU584/RoHoPOw==
+
+keystone_ssh_key:
+  private_key: |
+    -----BEGIN PRIVATE KEY-----
+    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
+    rSP+fx+AovIkyL3UybeH0FRf+p59NYI=
+    -----END PRIVATE KEY-----
+  public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC65KILqRN8m7hHTThOhmnRsp7Cj9WmF1TrPXlbtEQodIy6EFcxwKWdgSCCGqF0VSN/yfq382WO1/lviNd98gB2NmGusZ1CcI9BMgAb07TXqyHphvglHvTZ3Ls7pU6pgxRc9tPOsAVsVbNJvGlSfu/WUsxvimMunR8STuSgxRZpPlOT41jHe6tXC1TbRbtlAIECs+rl9gMDp6FvbiMy9eoPnb7ukEDDJRrdq+LVoczd+1If4dNhx46EXUH0IM+VR5+GUtsBC01haNRSSaNR39+cXua7CL8vsl9unpbP0Dvf64uDvqU9OAxbFHZO4+rdUoZeqPZY1i4fJMSt+vIeZtnUYNzLT6cNKNJJbtZDbnjwsvLeaM8segF/WSquAdyZoJJHAnA29l57YWSK8H0Y3QVyCXEvUyRSyE43UL2ziEOYBHsn4PAecIaSm6um0fdXgeMdizhO1SJ1yT3drkxyOghYEaFEBBrVDIT78ZbHqcRS+xBPvIUobNHkfriUSVUVDKnK1cqffTh/gSA+LVYn9IktAlBv5ws+knuH4wzL/81xa8axQYEFJ7TbfvZZubK97yxFPLQbK20ogOMjr30K+Znn00DHSlqQxOsTFPWWBkzIcCAeU4MREKb4BbXJlCHBeJucyZg+EsEVC5IJKsKyY80WciByhRgP3XJ9wXTgYJRZ0w==
+
+kolla_ssh_key:
+  private_key: |
+    -----BEGIN PRIVATE KEY-----
+    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
+    SGFlm9DOlGgUTBJZnAcFBXFVbBn9BA==
+    -----END PRIVATE KEY-----
+  public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCiG/gEHogaHk1TaRB2R37gsSMMAsO73D9lMpDdgViYOG/QHFhXwsdpdE/TWxW1rilK6OnqPjMah5ASf2cqtPB/jVbTtwccp6WEk1L2mfHBHgo5yVVLLmQQjff/1qZXjjnWRJ134qaUr3Fw9NnuX5fJ3k+dYCuMmWV02ZvAyq2wxG1YepRnG71Cgs5En2uHPTSWkkUc1WM5S3ZMgC/JXChiALzCFFiOeVFXfYz0Jslmm77HNB9fFgBBL71L7hy+PlJx+3O5rtC5Zxi+zcALdcOJtn4eXt2uKii5gaY3DB9q+RMrBjqanASdA808rok4jr9AiYMRW1lWNjO1uZxEZMWhaWgUCpoW8JYoEkJfjQQJRpFXImJBOzxZFGv/IDt8MFw/NOyY1Kuob5BNfbOTpYgkdAJrErcy0aEyteiSWo4k/bvdEk/tPRGZFm3dDVIYeiEl9iowgyl5QcSL1jsNdpfLXpYp9W8oL15q6xb50yOUPGn/Z3CtWqtyYMW6u2TIfpCiO/G3PX1D/82LdvxPha/tZcCN0ewTe95bVclazIMyTTBk4YHNda0WWjlHXPsBnYrgj49/dgOltcaRblSOPp2wlnDarHMuwUu8khCepP9sf6camPhCuPen9jtGOxIR8LI82FcLOU8KkCPQOz2N1+zq8of6APcJMNSdobTYFZQISQ==
 
 # RabbitMQ
 rabbitmq_password: admin
@@ -336,6 +434,10 @@ rabbitmq_monitoring_password: admin
 rabbitmq_cluster_cookie: admin
 outward_rabbitmq_password: admin
 outward_rabbitmq_cluster_cookie: admin
+
+# HAProxy
+haproxy_password: admin
+keepalived_password: admin
 
 # Redis
 redis_master_password: admin
@@ -348,19 +450,36 @@ ceph_cluster_fsid: b5168ed4-a98f-4ff0-a39f-51f59a3d64d0
 ceph_rgw_keystone_password: 3c4f1800-a518-4efc-b98d-339665bfa810
 rbd_secret_uuid: 867a11a1-aa92-40d0-8910-32df2281193e
 cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
+
+# Prometheus
+prometheus_mysql_exporter_database_password: admin
+prometheus_alertmanager_password: admin
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/passwords.yml</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
-OpenStack에서 이용하는 Password 정보를 입력한다. Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 5]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
+OpenStack에서 이용하는 Password 정보를 입력한다. Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 4]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
 
 {% highlight yaml linenos %}
 # Kolla
 openstack_release: "rocky"
 
+kolla_base_distro: "ubuntu"
+kolla_install_type: "source"
+
+kolla_internal_vip_address: "10.0.0.20"
+kolla_external_vip_address: "192.168.0.40"
+
+# Docker
+docker_registry: "10.0.0.19:5000"
+docker_namespace: "kolla"
+docker_registry_insecure: "yes"
+docker_registry_username: "admin"
+docker_registry_password: "admin"
+
 # Neutron
-network_interface: "enp3s0
+network_interface: "enp3s0"
 neutron_external_interface : "enp2s0"
 neutron_plugin_agent: "opendaylight"
 neutron_ipam_driver: "internal"
@@ -373,12 +492,10 @@ enable_opendaylight_l3: "yes"
 
 # OpenStack
 enable_glance: "yes"
-enable_haproxy: "no"
+enable_haproxy: "yes"
 enable_keystone: "yes"
 enable_mariadb: "yes"
 enable_memcached: "yes"
-enable_neutron: "yes"
-enable_nova: "yes"
 
 enable_ceph: "yes"
 enable_ceph_mds: "no"
@@ -394,6 +511,7 @@ enable_nova_ssh: "yes"
 enable_octavia: "yes"
 enable_opendaylight: "yes"
 enable_openvswitch: "yes"
+enable_heat: "no"
 enable_prometheus: "yes"
 
 # Glance
@@ -401,25 +519,97 @@ glance_backend_ceph: "yes"
 
 # Ceph
 ceph_enable_cache: "no"
-
-# Prometheus
-enable_prometheus_node_exporter: "yes"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] Deploy Node - /etc/kolla/globals.yaml</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/globals.yaml</figcaption>
 </figure>
 
-Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 6]의 내용처럼 수정한다.
+Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 5]의 내용처럼 수정한다.
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers
+~~~
+
+Kolla Ansible bootstrap-servers을 각 Node에 필요한 Ubuntu, Python Package를 설치한다.
+
+### 6. Docker 설정
+
+#### 6.1. Registry Node
+
+~~~
+(Registry)# mkdir ~/auth
+(Registry)# docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/auth/htpasswd
+(Registry)# docker run -d -p 5000:5000 --restart=always --name registry_private -v ~/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd" registry:2
+~~~
+
+Registry Node에 Docker Registry를 구동시킨다. ID/Password는 admin/admin으로 설정한다.
+
+#### 6.2. All Node
+
+{% highlight text linenos %}
+[Service]
+MountFlags=shared
+ExecStart=
+ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file=5 --log-opt max-size=50m
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 6] All Node - /etc/systemd/system/docker.service.d/kolla.conf</figcaption>
+</figure>
+
+~~~
+(All)# service docker restart
+~~~
+
+모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 6]의 내용으로 생성한 다음, Docker를 재시작한다.
+
+### 7. Octavia 설정
+
+~~~
+(network)# git clone https://review.openstack.org/p/openstack/octavia
+(network)# cd octavia
+(network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
+(network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
+(network)# mkdir -p /etc/kolla/config/octavia
+(network)# cp cert/private/cakey.pem /etc/kolla/config/octavia/
+(network)# cp cert/ca_01.pem /etc/kolla/config/octavia/
+(network)# cp cert/client.pem /etc/kolla/config/octavia/
+~~~
+
+Network Node에 Octavia에서 이용하는 인증서를 생성한다.
+
+### 8. Ceph 설정
+
+~~~
+(Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
+(Ceph)# ln -s /dev/nvme0n1p1 /dev/nvme0n11
+(Ceph)# ln -s /dev/nvme0n1p2 /dev/nvme0n12
+~~~
+
+Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP_BS 붙은 Block Device를 이용하도록 설정한다. Kolla-Ansible의 Role의 오류로 인해서 NVME를 Ceph의 Storage로 이용할 경우 잘못된 Partition 이름을 참조하는 버그가 있다. 이러한 문제를 해결하기 위해서 Partiton Symbolic Link를 생성한다.
+
+### 9. Kolla Container Image 생성 및 Push
+
+~~~
+(Deploy)# git clone -b stable/rocky --single-branch https://github.com/openstack/kolla.git
+(Deploy)# cd kolla
+(Deploy)# tox -e genconfig
+(Deploy)# docker login 10.0.0.19:5000
+(Deploy)# mkdir -p logs
+(Deploy)# python tools/build.py -b ubuntu --tag rocky --skip-parents --skip-existing --type source --registry 10.0.0.19:5000 --push --logs-dir logs
+~~~
+
+Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
+
+### 10. Kolla-Ansible을 이용하여 OpenStack 설치
+
+~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode prechecks
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy
 ~~~
 
-Kolla Ansible을 이용하여 Openstack을 설치한다.
+OpenStack을 설치한다.
 
-### 10. 참조
+### 11. 참조
 
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
