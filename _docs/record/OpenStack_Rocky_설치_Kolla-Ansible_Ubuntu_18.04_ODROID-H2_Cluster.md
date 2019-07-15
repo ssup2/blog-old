@@ -20,7 +20,8 @@ adsense: true
 
 [그림 1]은 ODROID-H2 Cluster로 OpenStack 설치 환경을 나타내고 있다. 상세한 환경 정보는 다음과 같다.
 
-* OpenStack : Rocky Version
+* OpenStack : Rocky
+* Kolla : 7.0.3
 * Kolla-Ansible : 7.1.1
 * Node : Ubuntu 18.04, root user
   * ODROID-H2
@@ -29,9 +30,9 @@ adsense: true
   * VM
     * Node 09 : Monitoring Node, Registry Node, Deploy Node
 * Network
-  * Outter NAT Network : External Network (Provider Network), 192.168.0.0/24
+  * NAT Network : External Network (Provider Network), 192.168.0.0/24
     * Floating IP Range : 192.168.0.200 ~ 224
-  * Inner NAT Network : Guest Network (Tanant Network), Management Network, 10.0.0.0/24
+  * Private Network : Guest Network (Tanant Network), Management Network, 10.0.0.0/24
     * Node Default Gateway
 * Storage
   * /dev/mmcblk0 : Root Filesystem, 64GB
@@ -44,7 +45,6 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 * Nova : VM Service를 제공한다.
 * Neutron : Network Service를 제공한다.
 * Octavia : Load Balacner Service를 제공한다.
-* OpendayLight : SDN Controller 역활을 수행한다.
 * Keystone : Authentication, Authorization Service를 제공한다.
 * Glance : VM Image Service를 제공한다.
 * Cinder : VM Block Storage Service를 제공한다.
@@ -60,7 +60,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
 (Deploy)# apt-get install ansible python-pip python3-pip
-(Deploy)# pip install kolla-ansible==7.1.1 tox gitpython pbr requests jinja2 oslo_config
+(Deploy)# pip install kolla==7.0.3 kolla-ansible==7.1.1 tox gitpython pbr requests jinja2 oslo_config
 (Deploy)# pip install python-openstackclient python-glanceclient python-neutronclient
 ~~~
 
@@ -73,14 +73,6 @@ Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위�
 ~~~
 
 Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
-
-#### 3.3. Network, Compute Node
-
-~~~
-(Network, Compute)# apt-get install bridge-utils
-~~~
-
-Bridge 제어를 위한 bridge-utils를 설치한다.
 
 ### 4. Ansible 설정
 
@@ -436,8 +428,6 @@ kolla_ssh_key:
 rabbitmq_password: admin
 rabbitmq_monitoring_password: admin
 rabbitmq_cluster_cookie: admin
-outward_rabbitmq_password: admin
-outward_rabbitmq_cluster_cookie: admin
 
 # HAProxy
 haproxy_password: admin
@@ -445,9 +435,6 @@ keepalived_password: admin
 
 # Redis
 redis_master_password: admin
-
-# OpenDaylight
-opendaylight_password: admin
 
 # Ceph
 ceph_cluster_fsid: b5168ed4-a98f-4ff0-a39f-51f59a3d64d0
@@ -473,7 +460,6 @@ kolla_base_distro: "ubuntu"
 kolla_install_type: "source"
 
 kolla_internal_vip_address: "10.0.0.20"
-kolla_external_vip_address: "192.168.0.40"
 
 # Docker
 docker_registry: "10.0.0.19:5000"
@@ -485,14 +471,11 @@ docker_registry_password: "admin"
 # Neutron
 network_interface: "enp3s0"
 neutron_external_interface : "enp2s0"
-neutron_plugin_agent: "opendaylight"
+neutron_plugin_agent: "openvswitch"
 neutron_ipam_driver: "internal"
 
 # Nova
 nova_console: "novnc"
-
-# OpenDayligth
-enable_opendaylight_l3: "yes"
 
 # OpenStack
 enable_glance: "yes"
@@ -513,8 +496,6 @@ enable_horizon: "yes"
 enable_nova_fake: "no"
 enable_nova_ssh: "yes"
 enable_octavia: "yes"
-enable_opendaylight: "yes"
-enable_openvswitch: "yes"
 enable_heat: "no"
 enable_prometheus: "yes"
 
@@ -612,7 +593,7 @@ Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. 
 
 OpenStack을 설치한다.
 
-### 11. OpenStack CLI Client 설치, 설정
+### 11. OpenStack CLI Client 설치, OpenStack 초기화 수행
 
 ~~~
 (Deploy)# cd kolla-ansible
@@ -621,12 +602,21 @@ OpenStack을 설치한다.
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
 ~~~
 
-### 12. Floating IP Range 설정
+Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
+
+### 12. External Network 생성
 
 ### 13. Glance에 Ubuntu Image 등록
 
-### 14. 참조
+### 14. URL
 
+### 15. Debugging
+
+각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 남는다.
+
+### 16. 참조
+
+* [https://docs.openstack.org/kolla/rocky/](https://docs.openstack.org/kolla/rocky/)
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
 * [https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html](https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html)

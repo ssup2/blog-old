@@ -24,8 +24,8 @@ adsense: true
   * ODROID-H2 : Node 01, 02, 03 - Monitor, OSD, Manager
   * VM : Node 04 - Deploy
 * Network
-  * Outter NAT Network : 192.168.0.0/24
-  * Inner NAT Network : 10.0.0.0/24
+  * NAT Network : 192.168.0.0/24
+  * Private Network : 10.0.0.0/24
 * Storage
   * /dev/mmcblk0 : Root Filesystem
   * /dev/nvme0n1 : Ceph
