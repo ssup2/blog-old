@@ -49,6 +49,8 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 * Glance : VM Image Service를 제공한다.
 * Cinder : VM Block Storage Service를 제공한다.
 * Horizon : Web Dashboard Service를 제공한다.
+* Prometheus : Metric 정보를 저장한다.
+* Grafana : Prometheus에 저장된 Metric 정보를 다양한 Graph로 시각화한다.
 * Ceph : Glance, Cinder의 Backend Storage 역활을 수행한다.
 
 ### 3. Package 설치
@@ -105,9 +107,9 @@ The key's randomart image is:
 Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Deploy Node에서 다른 Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
 ~~~
-(Deploy)# ssh-copy-id root@10.0.0.10
 (Deploy)# ssh-copy-id root@10.0.0.11
 (Deploy)# ssh-copy-id root@10.0.0.12
+(Deploy)# ssh-copy-id root@10.0.0.13
 (Deploy)# ssh-copy-id root@10.0.0.19
 ~~~
 
@@ -115,9 +117,9 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 
 {% highlight text linenos %}
 ...
-10.0.0.10 node01
-10.0.0.11 node02
-10.0.0.12 node03
+10.0.0.11 node01
+10.0.0.12 node02
+10.0.0.13 node03
 10.0.0.19 node09
 ...
 {% endhighlight %}
@@ -186,7 +188,7 @@ inner-compute
 external-compute
 
 [monitoring]
-node09 neutron_external_interface=eth0 api_interface=eth1
+node09 api_interface=eth1
 
 # When compute nodes and control nodes use different interfaces,
 # you need to comment out "api_interface" and other interfaces from the globals.yml
@@ -445,6 +447,10 @@ cinder_rbd_secret_uuid: cf2898a9-2fda-4ad3-94f7-f61fe06eb829
 # Prometheus
 prometheus_mysql_exporter_database_password: admin
 prometheus_alertmanager_password: admin
+
+# Grafana
+grafana_database_password: admin
+grafana_admin_password: admin
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 4] Deploy Node - /etc/kolla/passwords.yml</figcaption>
@@ -470,7 +476,7 @@ docker_registry_password: "admin"
 
 # Neutron
 network_interface: "enp3s0"
-neutron_external_interface : "enp2s0"
+neutron_external_interface : "enx88366cf9f9ed"
 neutron_plugin_agent: "openvswitch"
 neutron_ipam_driver: "internal"
 
@@ -498,6 +504,7 @@ enable_nova_ssh: "yes"
 enable_octavia: "yes"
 enable_heat: "no"
 enable_prometheus: "yes"
+enable_grafana: "yes"
 
 # Glance
 glance_backend_ceph: "yes"
@@ -545,7 +552,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 (All)# service docker restart
 ~~~
 
-모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 6]의 내용으로 생성한 다음, Docker를 재시작한다.
+모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 6]의 내용으로 생성한 다음, Docker를 재시작한다.
 
 ### 7. Octavia 설정
 
@@ -596,7 +603,7 @@ OpenStack을 설치한다.
 ### 11. OpenStack CLI Client 설치, OpenStack 초기화 수행
 
 ~~~
-(Deploy)# cd kolla-ansible
+(Deploy)# cd ~/kolla-ansible
 (Deploy)# kolla-ansible post-deploy
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
@@ -606,15 +613,57 @@ Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
 
 ### 12. External Network 생성
 
+~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# neutron net-create external --shared --external --provider:physical_network physnet1 --provider:network_type flat
+(Deploy)# neutron subnet-create external 192.168.0.0/24 --name external --allocation-pool start=192.168.0.200,end=192.168.0.224 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1
+~~~
+
+init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤에 External Network와 External Subnet을 생성한다.
+
 ### 13. Glance에 Ubuntu Image 등록
 
-### 14. URL
+~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# cd ~/kolla-ansible
+(Deploy)# wget https://cloud-images.ubuntu.com/releases/18.04/release/ubuntu-18.04-server-cloudimg-amd64.img
+(Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./ubuntu-18.04-server-cloudimg-amd64.img --disk-format raw --container-format bare --visibility public --progress
+~~~
 
-### 15. Debugging
+### 14. Dashboard 정보
+
+접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
+
+* Horizon : http://10.0.0.20:80, admin, admin
+* RabbitMQ : http://10.0.0.20:15672, openstack, admin
+* Prometheus : http://10.0.0.20:9091
+* Grafana : http://10.0.0.20:3000, admin, admin
+* Alertmanager : http://10.0.0.20:9093, admin, admin
+
+### 15. 초기화
+
+~~~
+(Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy
+~~~
+
+모든 OpenStack Container를 삭제한다.
+
+~~~
+(Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
+~~~
+
+모든 Ceph Node의 OSD Block을 초기화 한다.
+
+### 16. Debugging
+
+~~~
+(Node01)# ls /var/log/kolla
+ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  nova  octavia  openvswitch  prometheus  rabbitmq
+~~~
 
 각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 남는다.
 
-### 16. 참조
+### 17. 참조
 
 * [https://docs.openstack.org/kolla/rocky/](https://docs.openstack.org/kolla/rocky/)
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
