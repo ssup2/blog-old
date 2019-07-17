@@ -102,6 +102,8 @@ network:
 <figcaption class="caption">[파일 2] Node02 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
+Node02 Interface의 IP를 설정한다.
+
 #### 3.3. Node03
 
 {% highlight yaml linenos %}
@@ -123,6 +125,8 @@ network:
 <figcaption class="caption">[파일 3] Node03 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
 
+Node03 Interface의 IP를 설정한다.
+
 #### 3.4. Node09
 
 {% highlight yaml linenos %}
@@ -143,6 +147,8 @@ network:
 <figure>
 <figcaption class="caption">[파일 4] Node09 - /etc/netplan/50-cloud-init.yaml</figcaption>
 </figure>
+
+Node04 Interface의 IP를 설정한다.
 
 ### 4. Package 설치
 
