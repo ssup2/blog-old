@@ -55,7 +55,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
 ### 3. Network 설정
 
-#### 3.1. Node01
+#### 3.1. Node01 Node
 
 {% highlight yaml linenos %}
 network:
@@ -81,7 +81,7 @@ network:
 
 Node01 Interface의 IP를 설정한다.
 
-#### 3.2. Node02
+#### 3.2. Node02 Node
 
 {% highlight yaml linenos %}
 network:
@@ -104,7 +104,7 @@ network:
 
 Node02 Interface의 IP를 설정한다.
 
-#### 3.3. Node03
+#### 3.3. Node03 Node
 
 {% highlight yaml linenos %}
 network:
@@ -127,7 +127,7 @@ network:
 
 Node03 Interface의 IP를 설정한다.
 
-#### 3.4. Node09
+#### 3.4. Node09 Node
 
 {% highlight yaml linenos %}
 network:
