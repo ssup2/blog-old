@@ -53,9 +53,100 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 * Grafana : Prometheus에 저장된 Metric 정보를 다양한 Graph로 시각화한다.
 * Ceph : Glance, Cinder의 Backend Storage 역활을 수행한다.
 
-### 3. Package 설치
+### 3. Network 설정
 
-#### 3.1. Deploy Node
+#### 3.1. Node01
+
+{% highlight yaml linenos %}
+network:
+    ethernets:
+        enx88366cf9f9ed:
+            addresses:
+            - 0.0.0.0/8
+        enp2s0:
+            addresses:
+            - 192.168.0.31/24
+            gateway4: 192.168.0.1
+            nameservers:
+                addresses:
+                - 8.8.8.8
+        enp3s0:
+            addresses:
+            - 10.0.0.11/24
+    version: 2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] Node01 - /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
+Node01 Interface의 IP를 설정한다.
+
+#### 3.2. Node02
+
+{% highlight yaml linenos %}
+network:
+    ethernets:
+        enp2s0:
+            addresses:
+            - 192.168.0.32/24
+            gateway4: 192.168.0.1
+            nameservers:
+                addresses:
+                - 8.8.8.8
+        enp3s0:
+            addresses:
+            - 10.0.0.12/24
+    version: 2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] Node02 - /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
+#### 3.3. Node03
+
+{% highlight text linenos %}
+network:
+    ethernets:
+        enp2s0:
+            addresses:
+            - 192.168.0.33/24
+            gateway4: 192.168.0.1
+            nameservers:
+                addresses:
+                - 8.8.8.8
+        enp3s0:
+            addresses:
+            - 10.0.0.13/24
+    version: 2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] Node03 - /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
+#### 3.4. Node09
+
+{% highlight text linenos %}
+network:
+    ethernets:
+        eth0:
+            addresses:
+            - 192.168.0.39/24
+            gateway4: 192.168.0.1
+            nameservers:
+                addresses:
+                - 8.8.8.8
+        eth1:
+            addresses:
+            - 10.0.0.19/24
+    version: 2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] Node09 - /etc/netplan/50-cloud-init.yaml</figcaption>
+</figure>
+
+### 4. Package 설치
+
+#### 4.1. Deploy Node
 
 ~~~
 (Deploy)# apt-get install software-properties-common
@@ -68,7 +159,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 
 Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다. 또한 OpenSTack CLI Client도 설치한다.
 
-#### 3.2. Registry Node
+#### 4.2. Registry Node
 
 ~~~
 (Registry)# apt-get install docker-ce
@@ -76,7 +167,25 @@ Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위�
 
 Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
 
-### 4. Ansible 설정
+
+#### 4.3. Network, Compute Node
+
+~~~
+(Network, Compute)# apt-get remove --purge openvswitch-switch
+~~~
+
+Open vSwitch Package가 설치되어 있다면 해당 Package를 지워서 Host에서 동작하는 Open vSwitch를 제거해야 한다. Open vSwitch 관련 Daemon은 Container에서 동작해야 한다. Host, Container 동시에 Open vSwitch 관련 Daemon을 구동하면 제대로 동작하지 않는다.
+
+#### 4.4. All Node
+
+~~~
+(All Node)# apt-get install ifupdown
+(All Node)# apt-get remove --purge netplan.io
+~~~
+
+ifupdown을 설치하고 netplan을 삭제한다.
+
+### 5. Ansible 설정
 
 Deploy Node에서 다른 Node에게 Password 없이 SSH로 접근할 수 있도록 설정한다.
 
@@ -124,10 +233,10 @@ ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - /etc/hosts</figcaption>
 </figure>
 
-Deploy Node의 /etc/hosts 파일 내용을 [파일 1]과 같이 수정한다.
+Deploy Node의 /etc/hosts 파일 내용을 [파일 5]과 같이 수정한다.
 
 {% highlight text linenos %}
 ...
@@ -138,12 +247,12 @@ forks=100
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
+<figcaption class="caption">[파일 6] Deploy Node - /etc/ansible/ansible.cfg:</figcaption>
 </figure>
 
-Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 2]와 같이 수정한다.
+Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 6]와 같이 수정한다.
 
-### 5. Kolla-Ansible 설정
+### 6. Kolla-Ansible 설정
 
 ~~~
 (Deploy)# mkdir -p ~/kolla-ansible
@@ -217,10 +326,10 @@ haproxy
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Deploy Node - ~/kolla-ansible/multinode</figcaption>
+<figcaption class="caption">[파일 7] Deploy Node - ~/kolla-ansible/multinode</figcaption>
 </figure>
 
-Ansible Inventory를 설정한다. Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 3]의 내용으로 변경한다. ~/kolla-ansible/multinode 파일의 윗부분에 있는 [control], [network], [external-compute], [monitoring], [storage], [deployment] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 파일의 아랫부분은 기본 설정값을 그대로 유지한다.
+Ansible Inventory를 설정한다. Deploy Node에 ~/kolla-ansible/multinode 파일을 [파일 7]의 내용으로 변경한다. ~/kolla-ansible/multinode 파일의 윗부분에 있는 [control], [network], [external-compute], [monitoring], [storage], [deployment] 부분만 ODROID-H2 Cluster 환경에 맞게 번경하였고 나머지 파일의 아랫부분은 기본 설정값을 그대로 유지한다.
 
 {% highlight yaml linenos %}
 # Database
@@ -453,10 +562,10 @@ grafana_database_password: admin
 grafana_admin_password: admin
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node - /etc/kolla/passwords.yml</figcaption>
+<figcaption class="caption">[파일 8] Deploy Node - /etc/kolla/passwords.yml</figcaption>
 </figure>
 
-OpenStack에서 이용하는 Password 정보를 입력한다. Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 4]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
+OpenStack에서 이용하는 Password 정보를 입력한다. Deploy Node의 /etc/kolla/passwords.yml 파일을 [파일 8]의 내용처럼 수정한다. 대부분의 password는 **admin**으로 설정한다.
 
 {% highlight yaml linenos %}
 # Kolla
@@ -466,6 +575,7 @@ kolla_base_distro: "ubuntu"
 kolla_install_type: "source"
 
 kolla_internal_vip_address: "10.0.0.20"
+kolla_external_vip_address: "192.168.0.40"
 
 # Docker
 docker_registry: "10.0.0.19:5000"
@@ -476,6 +586,7 @@ docker_registry_password: "admin"
 
 # Neutron
 network_interface: "enp3s0"
+kolla_external_vip_interface: "enp2s0"
 neutron_external_interface : "enx88366cf9f9ed"
 neutron_plugin_agent: "openvswitch"
 neutron_ipam_driver: "internal"
@@ -513,10 +624,10 @@ glance_backend_ceph: "yes"
 ceph_enable_cache: "no"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node - /etc/kolla/globals.yaml</figcaption>
+<figcaption class="caption">[파일 9] Deploy Node - /etc/kolla/globals.yaml</figcaption>
 </figure>
 
-Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 5]의 내용처럼 수정한다.
+Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 9]의 내용처럼 수정한다.
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers
@@ -524,9 +635,9 @@ Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 
 
 Kolla Ansible bootstrap-servers을 각 Node에 필요한 Ubuntu, Python Package를 설치한다.
 
-### 6. Docker 설정
+### 7. Docker 설정
 
-#### 6.1. Registry Node
+#### 7.1. Registry Node
 
 ~~~
 (Registry)# mkdir ~/auth
@@ -536,7 +647,7 @@ Kolla Ansible bootstrap-servers을 각 Node에 필요한 Ubuntu, Python Package�
 
 Registry Node에 Docker Registry를 구동시킨다. ID/Password는 admin/admin으로 설정한다.
 
-#### 6.2. All Node
+#### 7.2. All Node
 
 {% highlight text linenos %}
 [Service]
@@ -545,16 +656,16 @@ ExecStart=
 ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file=5 --log-opt max-size=50m
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] All Node - /etc/systemd/system/docker.service.d/kolla.conf</figcaption>
+<figcaption class="caption">[파일 10] All Node - /etc/systemd/system/docker.service.d/kolla.conf</figcaption>
 </figure>
 
 ~~~
 (All)# service docker restart
 ~~~
 
-모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 6]의 내용으로 생성한 다음, Docker를 재시작한다.
+모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 10]의 내용으로 생성한 다음, Docker를 재시작한다.
 
-### 7. Octavia 설정
+### 8. Octavia 설정
 
 ~~~
 (network)# git clone -b 4.0.1 https://review.openstack.org/p/openstack/octavia
@@ -569,7 +680,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 
 Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 
-### 8. Ceph 설정
+### 9. Ceph 설정
 
 ~~~
 (Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
@@ -578,7 +689,7 @@ Network Node에 Octavia에서 이용하는 인증서를 생성한다.
 
 Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 붙인다. Kolla-Ansible은 OSD가 KOLLA_CEPH_OSD_BOOTSTRAP_BS 붙은 Block Device를 이용하도록 설정한다. Kolla-Ansible의 Role의 오류로 인해서 NVME를 Ceph의 Storage로 이용할 경우 잘못된 Partition 이름을 참조하는 버그가 있다. 이러한 문제를 해결하기 위해서 Partiton Symbolic Link를 udev를 통해서 생성한다.
 
-### 9. Kolla Container Image 생성 및 Push
+### 10. Kolla Container Image 생성 및 Push
 
 ~~~
 (Deploy)# git clone -b 7.0.3 https://github.com/openstack/kolla.git
@@ -591,7 +702,7 @@ Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 �
 
 Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
 
-### 10. Kolla-Ansible을 이용하여 OpenStack 설치
+### 11. Kolla-Ansible을 이용하여 OpenStack 설치
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode prechecks
@@ -600,7 +711,7 @@ Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. 
 
 OpenStack을 설치한다.
 
-### 11. OpenStack CLI Client 설치, OpenStack 초기화 수행
+### 12. OpenStack CLI Client 설치, OpenStack 초기화 수행
 
 ~~~
 (Deploy)# cd ~/kolla-ansible
@@ -611,7 +722,7 @@ OpenStack을 설치한다.
 
 Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
 
-### 12. External Network 생성
+### 13. External Network 생성
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
@@ -621,7 +732,7 @@ Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
 
 init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤에 External Network와 External Subnet을 생성한다.
 
-### 13. Glance에 Ubuntu Image 등록
+### 14. Glance에 Ubuntu Image 등록
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
@@ -630,7 +741,7 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 (Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./ubuntu-18.04-server-cloudimg-amd64.img --disk-format raw --container-format bare --visibility public --progress
 ~~~
 
-### 14. Dashboard 정보
+### 15. Dashboard 정보
 
 접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
 
@@ -640,21 +751,24 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 * Grafana : http://10.0.0.20:3000, admin, admin
 * Alertmanager : http://10.0.0.20:9093, admin, admin
 
-### 15. 초기화
+### 16. 재설치를 위한 초기화
 
 ~~~
-(Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy
+(Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy --yes-i-really-really-mean-it 
 ~~~
 
 모든 OpenStack Container를 삭제한다.
 
 ~~~
+(Ceph)# parted /dev/nvme0n1 rm 1
+(Ceph)# parted /dev/nvme0n1 rm 2
+(Ceph)# reboot now
 (Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
 ~~~
 
 모든 Ceph Node의 OSD Block을 초기화 한다.
 
-### 16. Debugging
+### 17. Debugging
 
 ~~~
 (Node01)# ls /var/log/kolla
@@ -663,9 +777,10 @@ ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  
 
 각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 남는다.
 
-### 17. 참조
+### 18. 참조
 
 * [https://docs.openstack.org/kolla/rocky/](https://docs.openstack.org/kolla/rocky/)
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
 * [https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html](https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html)
+* [https://github.com/osrg/openvswitch/blob/master/debian/openvswitch-switch.README.Debian](https://github.com/osrg/openvswitch/blob/master/debian/openvswitch-switch.README.Debian)
