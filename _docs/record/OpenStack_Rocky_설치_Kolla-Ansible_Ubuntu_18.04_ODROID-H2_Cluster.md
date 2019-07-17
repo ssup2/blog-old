@@ -104,7 +104,7 @@ network:
 
 #### 3.3. Node03
 
-{% highlight text linenos %}
+{% highlight yaml linenos %}
 network:
     ethernets:
         enp2s0:
@@ -125,7 +125,7 @@ network:
 
 #### 3.4. Node09
 
-{% highlight text linenos %}
+{% highlight yaml linenos %}
 network:
     ethernets:
         eth0:
