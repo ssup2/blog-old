@@ -732,7 +732,7 @@ Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
-(Deploy)# neutron net-create external --shared --external --provider:physical_network physnet1 --provider:network_type flat
+(Deploy)# neutron net-create external --shared --router:external=true --provider:physical_network physnet1 --provider:network_type flat
 (Deploy)# neutron subnet-create external 192.168.0.0/24 --name external --allocation-pool start=192.168.0.200,end=192.168.0.224 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1
 ~~~
 
@@ -743,8 +743,8 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
-(Deploy)# wget https://cloud-images.ubuntu.com/releases/18.04/release/ubuntu-18.04-server-cloudimg-amd64.img
-(Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./ubuntu-18.04-server-cloudimg-amd64.img --disk-format raw --container-format bare --visibility public --progress
+(Deploy)# wget http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+(Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./bionic-server-cloudimg-amd64.img --disk-format qcow2 --container-format bare --visibility public --progress
 ~~~
 
 ### 15. Dashboard 정보
