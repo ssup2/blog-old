@@ -81,16 +81,34 @@ kubespray를 설치하고 기본설정을 진행한다.
 
 {% highlight text %}
 ...
+## There are some changes specific to the cloud providers
+## for instance we need to encapsulate packets with some network plugins
+## If set the possible values are either 'gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci', or 'external'
+## When openstack is used make sure to source in the openstack credentials
+## like you would do when using openstack-client before starting the playbook.
+## Note: The 'external' cloud provider is not supported.
+## TODO(riverzhang): https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/#running-cloud-controller-manager
+cloud_provider: openstack
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] Deploy Node - inventory/mycluster/group_vars/all/all.yml</figcaption>
+</figure>
+
+Deploy Node의 inventory/mycluster/group_vars/all/all.yml 파일에 Cloud Provider를 OpenStack으로 설정한다.
+
+{% highlight text %}
+...
 kube_network_plugin: cilium
 ...
 persistent_volumes_enabled: true
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Deploy Node - inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml</figcaption>
+<figcaption class="caption">[파일 2] Deploy Node - inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml</figcaption>
 </figure>
 
-Deploy Node의 inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml 파일을 변경하여 CNI Plugin으로 cilium을 이용하도록 설정하고, Persistent Volume을 Enable 설정하여 Kubernetes가 OpenStack의 Cinder를 이용하도록 설정한다.
+Deploy Node의 inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml 파일에 CNI Plugin으로 cilium을 이용하도록 설정하고, Persistent Volume을 Enable 설정하여 Kubernetes가 OpenStack의 Cinder를 이용하도록 설정한다.
 
 ~~~
 # ansible-playbook -i inventory/mycluster/hosts.yml --become --become-user=root cluster.yml
