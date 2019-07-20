@@ -110,7 +110,27 @@ persistent_volumes_enabled: true
 
 Deploy Node의 inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml 파일에 CNI Plugin으로 cilium을 이용하도록 설정하고, Persistent Volume을 Enable 설정하여 Kubernetes가 OpenStack의 Cinder를 이용하도록 설정한다.
 
+{% highlight text %}
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_TENANT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=admin
+export OS_AUTH_URL=http://10.0.0.20:35357/v3
+export OS_INTERFACE=internal
+export OS_IDENTITY_API_VERSION=3
+export OS_REGION_NAME=RegionOne
+export OS_AUTH_PLUGIN=password
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] Deploy Node - openstack-rc</figcaption>
+</figure>
+
+OpenStack 환경에 맞는 openstack-rc 파일을 생성한다.
+
 ~~~
+# source openstack-rc
 # ansible-playbook -i inventory/mycluster/hosts.yml --become --become-user=root cluster.yml
 ~~~
 
@@ -129,3 +149,4 @@ Kubernetes Cluster를 초기화한다.
 ### 7. 참고
 
 * [https://kubespray.io/#/](https://kubespray.io/#/)
+* [https://github.com/kubernetes-sigs/kubespray/blob/master/docs/openstack.md](https://github.com/kubernetes-sigs/kubespray/blob/master/docs/openstack.md)
