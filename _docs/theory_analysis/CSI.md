@@ -1,6 +1,6 @@
 ---
 title: CSI (Container Storage Interface)
-category: Theory, Analysis
+category:
 date: 2019-07-21T12:00:00Z
 lastmod: 2019-07-21T12:00:00Z
 comment: true
