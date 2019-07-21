@@ -22,11 +22,11 @@ adsense: true
 ### 2. Ubuntu Package 설치
 
 ~~~
-(Deploy)# apt-get update
-(Deploy)# apt-get install python3-pip
+(All)# apt-get update
+(All)# apt-get install python-pip python3-pip
 ~~~
 
-Deploy Node에 Python을 설치한다.
+모든 Node에 Python을 설치한다.
 
 ### 3. Ansible 설정
 
@@ -132,7 +132,7 @@ OpenStack 환경에 맞는 openstack-rc 파일을 생성한다.
 (Deploy)# ansible-playbook -i inventory/mycluster/hosts.yml --become --become-user=root cluster.yml
 ~~~
 
-Kubernets Cluster를 구성한다.
+Deploy Node에서 Kubernets Cluster를 구성한다.
 
 ### 5. Octavia 연동
 
@@ -143,7 +143,7 @@ Kubernets Cluster를 구성한다.
 (Deploy)# ansible-playbook -i inventory/mycluster/hosts.yml --become --become-user=root reset.yml
 ~~~
 
-Kubernetes Cluster를 초기화한다.
+Deploy Node에서 Kubernetes Cluster를 초기화한다.
 
 ### 7. 참고
 
