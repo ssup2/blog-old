@@ -76,6 +76,6 @@ Plugin이 잘 수행되어 Container의 Network Interface 조작이 성공했다
 
 ### 2. 참조
 
-* [https://github.com/containernetworking/cni](https://github.com/containernetworking/cni)
 * [https://github.com/containernetworking/cni/blob/master/SPEC.md](https://github.com/containernetworking/cni/blob/master/SPEC.md)
+* [https://kubernetes-csi.github.io/docs/](https://kubernetes-csi.github.io/docs/)
 * [https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/)
