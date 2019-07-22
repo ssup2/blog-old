@@ -85,23 +85,23 @@ kubespray를 설치하고 Sample Inventory를 복사한다.
 
 {% highlight text %}
 [all]
-node01 ansible_host=20.0.0.5 ip=20.0.0.5 etcd_member_name=etcd1
-node02 ansible_host=20.0.0.7 ip=20.0.0.7 etcd_member_name=etcd2
-node03 ansible_host=20.0.0.8 ip=20.0.0.8 etcd_member_name=etcd3
+vm01 ansible_host=20.0.0.5 ip=20.0.0.5 etcd_member_name=etcd1
+vm02 ansible_host=20.0.0.7 ip=20.0.0.7 etcd_member_name=etcd2
+vm03 ansible_host=20.0.0.8 ip=20.0.0.8 etcd_member_name=etcd3
 
 [kube-master]
-node01
-node02
+vm01
+vm02
 
 [etcd]
-node01
-node02
-node03
+vm01
+vm02
+vm03
 
 [kube-node]
-node01
-node02
-node03
+vm01
+vm02
+vm03
 
 [k8s-cluster:children]
 kube-master
