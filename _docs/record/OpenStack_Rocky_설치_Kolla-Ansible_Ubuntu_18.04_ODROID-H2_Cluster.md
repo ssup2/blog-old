@@ -23,6 +23,7 @@ adsense: true
 * OpenStack : Rocky
 * Kolla : 7.0.3
 * Kolla-Ansible : 7.1.1
+* Octiava : 3.1.1
 * Node : Ubuntu 18.04, root user
   * ODROID-H2
     * Node 01 : Controller Node, Network Node, Ceph Node (MON, MGR, OSD)
@@ -628,12 +629,18 @@ glance_backend_ceph: "yes"
 
 # Ceph
 ceph_enable_cache: "no"
+
+# Octavia
+#octavia_loadbalancer_topology: "ACTIVE_STANDBY"
+#octavia_amp_boot_network_list:
+#octavia_amp_secgroup_list:
+#octavia_amp_flavor_id: "100"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 9] Deploy Node - /etc/kolla/globals.yaml</figcaption>
+<figcaption class="caption">[파일 9] Deploy Node - /etc/kolla/globals.yml</figcaption>
 </figure>
 
-Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yaml 파일을 [파일 9]의 내용처럼 수정한다.
+Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 9]의 내용처럼 수정한다. Octavia는 OpenStack을 한번이상 구동한 뒤에야 설정할 수 있기 때문에, Octavia 설정은 주석처리 상태로 놔둔다.
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers
@@ -674,7 +681,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 ### 8. Octavia 설정
 
 ~~~
-(network)# git clone -b 4.0.1 https://review.openstack.org/p/openstack/octavia
+(network)# git clone -b 3.1.1 https://github.com/openstack/octavia.git
 (network)# cd octavia
 (network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
 (network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
@@ -698,6 +705,7 @@ Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 �
 ### 10. Kolla Container Image 생성 및 Push
 
 ~~~
+(Deploy)# cd ~
 (Deploy)# git clone -b 7.0.3 https://github.com/openstack/kolla.git
 (Deploy)# cd kolla
 (Deploy)# tox -e genconfig
@@ -715,9 +723,9 @@ Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. 
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy
 ~~~
 
-OpenStack을 설치한다.
+Deploy Node에서 OpenStack을 설치한다.
 
-### 12. OpenStack CLI Client 설치, OpenStack 초기화 수행
+### 12. OpenStack 초기화 수행
 
 ~~~
 (Deploy)# cd ~/kolla-ansible
@@ -726,7 +734,7 @@ OpenStack을 설치한다.
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
 ~~~
 
-Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
+Deploy Node에서 OpenStack 초기화를 수행한다. 초기화가 완료되면 Network, Image, Flavor 등의 Service들이 초기화된다.
 
 ### 13. External Network 생성
 
@@ -736,7 +744,7 @@ Openstack CLI Client를 설치하고, OpenStack 초기화를 수행한다.
 (Deploy)# neutron subnet-create external 192.168.0.0/24 --name external --allocation-pool start=192.168.0.200,end=192.168.0.224 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1
 ~~~
 
-init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤에 External Network와 External Subnet을 생성한다.
+init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한 뒤에 External Network와 External Subnet을 생성한다.
 
 ### 14. Glance에 Ubuntu Image 등록
 
@@ -747,7 +755,21 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 (Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./bionic-server-cloudimg-amd64.img --disk-format qcow2 --container-format bare --visibility public --progress
 ~~~
 
-### 15. Dashboard 정보
+Deploy Node에서 Glance에 Ubuntu Image를 등록한다.
+
+### 15. Glance에 Octavia Amphora Image 등록, Octavia Amphora Flavor 생성
+
+~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# cd ~/kolla-ansible
+(Deploy)# wget https://tarballs.openstack.org/octavia/test-images/test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2
+(Deploy)# glance image-create --name "ubuntu-18.04-x86_64-amphora" --file ./test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2 --disk-format qcow2 --container-format bare --visibility public --progress --tag amphora
+(Deploy)# openstack flavor create --id 100 --vcpus 2 --ram 2048 --disk 10 "m1.amphora" --public
+~~~
+
+Deploy Node에서 Glance에 Octavia Amphora Image를 등록하고, Octavia Amphora VM의 Flavor도 생성한다. 생성한 Flavor의 ID는 [파일 9]의 Octavia 설정에 **100**으로 명시할 예정이기 때문에 반드시 100으로 설정해야 한다.
+
+### 16. Dashboard 정보
 
 접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
 
@@ -757,7 +779,29 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 * Grafana : http://10.0.0.20:3000, admin, admin
 * Alertmanager : http://10.0.0.20:9093, admin, admin
 
-### 16. 재설치를 위한 초기화
+### 17. Octavia 설정, 배포
+
+{% highlight yaml linenos %}
+...
+# Octavia
+octavia_loadbalancer_topology: "ACTIVE_STANDBY"
+octavia_amp_boot_network_list: "[Security Group ID]"
+octavia_amp_secgroup_list: "[Network ID]"
+octavia_amp_flavor_id: "100"
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 11] Deploy Node - /etc/kolla/globals.yml</figcaption>
+</figure>
+
+Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 11]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다.
+
+~~~
+(Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy -t octavia
+~~~
+
+Octavia만 다시 배포한다.
+
+### 18. 재설치를 위한 초기화
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy --yes-i-really-really-mean-it 
@@ -774,7 +818,7 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한뒤
 
 모든 Ceph Node의 OSD Block을 초기화 한다.
 
-### 17. Debugging
+### 19. Debugging
 
 ~~~
 (Node01)# ls /var/log/kolla
@@ -783,10 +827,12 @@ ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  
 
 각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 남는다.
 
-### 18. 참조
+### 20. 참조
 
 * [https://docs.openstack.org/kolla/rocky/](https://docs.openstack.org/kolla/rocky/)
 * [https://docs.openstack.org/kolla-ansible/rocky/](https://docs.openstack.org/kolla-ansible/rocky)
 * [https://shreddedbacon.com/post/openstack-kolla/](https://shreddedbacon.com/post/openstack-kolla/)
 * [https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html](https://docs.oracle.com/cd/E90981_01/E90982/html/kolla-openstack-network.html)
 * [https://github.com/osrg/openvswitch/blob/master/debian/openvswitch-switch.README.Debian](https://github.com/osrg/openvswitch/blob/master/debian/openvswitch-switch.README.Debian)
+* [https://blog.zufardhiyaulhaq.com/manual-instalation-octavia-openstack-queens/](https://blog.zufardhiyaulhaq.com/manual-instalation-octavia-openstack-queens/)
+* [http://www.panticz.de/openstack-octavia-loadbalancer](http://www.panticz.de/openstack-octavia-loadbalancer)

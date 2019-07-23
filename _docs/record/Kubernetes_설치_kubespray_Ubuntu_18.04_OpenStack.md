@@ -148,10 +148,10 @@ openstack_lbaas_monitor_timeout: "30s"
 openstack_lbaas_monitor_max_retries: "3"     
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Deploy Node - inventory/mycluster/group_vars/all/all.yml</figcaption>
+<figcaption class="caption">[파일 3] Deploy Node - inventory/mycluster/group_vars/all/openstack.yml</figcaption>
 </figure>
 
-Deploy Node의 inventory/mycluster/group_vars/all/all.yml 파일에 Kubernetes LoadBalancer Service를 위하여 Octavia Load Balancer를 설정한다. External Network의 ID와 External Network의 Subnet ID를 확인하여 설정한다.
+Deploy Node의 inventory/mycluster/group_vars/all/openstack.yml 파일에 Kubernetes LoadBalancer Service를 위하여 Octavia Load Balancer를 설정한다. External Network의 ID와 External Network의 Subnet ID를 확인하여 설정한다.
 
 {% highlight text %}
 ...
