@@ -676,7 +676,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 (All)# service docker restart
 ~~~
 
-모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 10]의 내용으로 생성한 다음, Docker를 재시작한다.
+Node에서 동작하는 모든 Docker Daemon에 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 10]의 내용으로 생성한 다음, Docker를 재시작한다.
 
 ### 8. Octavia 설정
 
