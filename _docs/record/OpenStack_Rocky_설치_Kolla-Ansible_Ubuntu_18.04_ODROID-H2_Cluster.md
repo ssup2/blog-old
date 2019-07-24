@@ -757,16 +757,16 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한 �
 
 Deploy Node에서 Glance에 Ubuntu Image를 등록한다.
 
-### 15. Glance에 Octavia Amphora Image 등록
+### 15. Octavia Amphora Image 생성 및 Glance에 Octavia Amphora Image 등록
 
 ~~~
-(Deploy)# . /etc/kolla/admin-openrc.sh
-(Deploy)# cd ~/kolla-ansible
-(Deploy)# wget https://tarballs.openstack.org/octavia/test-images/test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2
-(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2 ubuntu-18.04-x86_64
+(Deploy)# git clone -b 3.1.1 https://github.com/openstack/octavia.git
+(Deploy)# cd octavia/diskimage-create
+(Deploy)# ./diskimage-create.sh -r root
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-amphora-x86_64
 ~~~
 
-Deploy Node에서 Glance에 Octavia Amphora Image를 등록하고, Octavia Amphora VM의 Flavor도 생성한다.
+Deploy Node에서 Octavia Amphora Image를 생성하고 Glance에 등록한다.
 
 ### 16. Octavia Flavor, Keypair 설정 및 Octavia 배포
 
