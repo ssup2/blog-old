@@ -678,20 +678,20 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 
 모든 Node에서 동작한는 Docker Daemon에게 Registry Node에서 동작하는 Docker Registry를 Insecure Registry로 등록한다. 모든 Node의 /etc/systemd/system/docker.service.d/kolla.conf 파일을 [파일 10]의 내용으로 생성한 다음, Docker를 재시작한다.
 
-### 8. Octavia 설정
+### 8. Octavia 인증서 설정
 
 ~~~
-(network)# git clone -b 3.1.1 https://github.com/openstack/octavia.git
-(network)# cd octavia
-(network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
-(network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
-(network)# mkdir -p /etc/kolla/config/octavia
-(network)# cp cert/private/cakey.pem /etc/kolla/config/octavia/
-(network)# cp cert/ca_01.pem /etc/kolla/config/octavia/
-(network)# cp cert/client.pem /etc/kolla/config/octavia/
+(Network)# git clone -b 3.1.1 https://github.com/openstack/octavia.git
+(Network)# cd octavia
+(Network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
+(Network)# ./bin/create_certificates.sh cert $(pwd)/etc/certificates/openssl.cnf
+(Network)# mkdir -p /etc/kolla/config/octavia
+(Network)# cp cert/private/cakey.pem /etc/kolla/config/octavia/
+(Network)# cp cert/ca_01.pem /etc/kolla/config/octavia/
+(Network)# cp cert/client.pem /etc/kolla/config/octavia/
 ~~~
 
-Network Node에 Octavia에서 이용하는 인증서를 생성한다.
+Network Node에서 Octavia에서 이용하는 인증서를 생성한다.
 
 ### 9. Ceph 설정
 
@@ -716,14 +716,14 @@ Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 �
 
 Deploy Node에서 Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Image를 Base로하여 생성한다.
 
-### 11. Kolla-Ansible을 이용하여 OpenStack 설치
+### 11. Kolla-Ansible을 이용하여 OpenStack 배포
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode prechecks
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy
 ~~~
 
-Deploy Node에서 OpenStack을 설치한다.
+Deploy Node에서 OpenStack 배포하여 OpenStack을 구동한다.
 
 ### 12. OpenStack 초기화 수행
 
@@ -740,8 +740,8 @@ Deploy Node에서 OpenStack 초기화를 수행한다. 초기화가 완료되면
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
-(Deploy)# neutron net-create external --shared --router:external=true --provider:physical_network physnet1 --provider:network_type flat
-(Deploy)# neutron subnet-create external 192.168.0.0/24 --name external --allocation-pool start=192.168.0.200,end=192.168.0.224 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1
+(Deploy)# openstack network create --share --external --provider-physical-network physnet1 --provider-network-type flat external
+(Deploy)# openstack subnet create --network external --allocation-pool start=192.168.0.200,end=192.168.0.224 --dns-nameserver 8.8.8.8 --gateway 192.168.0.1 --subnet-range 192.168.0.0/24 external
 ~~~
 
 init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한 뒤에 External Network와 External Subnet을 생성한다.
@@ -752,56 +752,60 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한 �
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
 (Deploy)# wget http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
-(Deploy)# glance image-create --name "ubuntu-18.04-x86_64" --file ./bionic-server-cloudimg-amd64.img --disk-format qcow2 --container-format bare --visibility public --progress
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --file ./bionic-server-cloudimg-amd64.img ubuntu-18.04-x86_64
 ~~~
 
 Deploy Node에서 Glance에 Ubuntu Image를 등록한다.
 
-### 15. Glance에 Octavia Amphora Image 등록, Octavia Amphora Flavor 생성
+### 15. Glance에 Octavia Amphora Image 등록
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
 (Deploy)# wget https://tarballs.openstack.org/octavia/test-images/test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2
-(Deploy)# glance image-create --name "ubuntu-18.04-x86_64-amphora" --file ./test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2 --disk-format qcow2 --container-format bare --visibility public --progress --tag amphora
-(Deploy)# openstack flavor create --id 100 --vcpus 2 --ram 2048 --disk 10 "m1.amphora" --public
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./test-only-amphora-x64-haproxy-ubuntu-bionic.qcow2 ubuntu-18.04-x86_64
 ~~~
 
-Deploy Node에서 Glance에 Octavia Amphora Image를 등록하고, Octavia Amphora VM의 Flavor도 생성한다. 생성한 Flavor의 ID는 [파일 9]의 Octavia 설정에 **100**으로 명시할 예정이기 때문에 반드시 100으로 설정해야 한다.
+Deploy Node에서 Glance에 Octavia Amphora Image를 등록하고, Octavia Amphora VM의 Flavor도 생성한다.
 
-### 16. Dashboard 정보
-
-접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
-
-* Horizon : http://10.0.0.20:80, admin, admin
-* RabbitMQ : http://10.0.0.20:15672, openstack, admin
-* Prometheus : http://10.0.0.20:9091
-* Grafana : http://10.0.0.20:3000, admin, admin
-* Alertmanager : http://10.0.0.20:9093, admin, admin
-
-### 17. Octavia 설정, 배포
+### 16. Octavia Flavor, Keypair 설정 및 Octavia 배포
 
 {% highlight yaml linenos %}
 ...
 # Octavia
 octavia_loadbalancer_topology: "ACTIVE_STANDBY"
-octavia_amp_boot_network_list: "[Security Group ID]"
-octavia_amp_secgroup_list: "[Network ID]"
+octavia_amp_boot_network_list: "[Security Group ID List]"
+octavia_amp_secgroup_list: "[Network ID List]"
 octavia_amp_flavor_id: "100"
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 11] Deploy Node - /etc/kolla/globals.yml</figcaption>
 </figure>
 
-Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 11]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다.
+Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 11]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다. octavia_amp_boot_network_list에는 Octavia Amphora VM이 붙을 Network ID를 쉼표를 이용하여 List 형태로 설정한다. octavia_amp_secgroup_list는 Octavia Amphora VM에 적용할 Security Group ID를 쉼표를 이용하여 List 형태로 설정한다.
+
+~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# openstack flavor create --id 100 --vcpus 2 --ram 4096 --disk 10 "m1.amphora" --public
+~~~
+
+Octavia Amphora VM을 위해서 Flavor의 ID는 [파일 11]의 Octavia 설정에 **100**으로 명시되어 있기 때문에 Flavor ID는 반드시 100으로 설정해야 한다.
+
+~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
+(Deploy)# export OS_USERNAME=octavia
+(Deploy)# openstack keypair create -- octavia_ssh_key 
+~~~
+
+octavia User로 octavia_ssh_key Keypair를 생성한다.
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy -t octavia
 ~~~
 
-Octavia만 다시 배포한다.
+octavia_ssh_key Keypair를 생성하고 Octavia만 배포한다.
 
-### 18. 재설치를 위한 초기화
+### 17. 재설치를 위한 초기화
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy --yes-i-really-really-mean-it 
@@ -817,6 +821,16 @@ Octavia만 다시 배포한다.
 ~~~
 
 모든 Ceph Node의 OSD Block을 초기화 한다.
+
+### 18. Dashboard 정보
+
+접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
+
+* Horizon : http://10.0.0.20:80, admin, admin
+* RabbitMQ : http://10.0.0.20:15672, openstack, admin
+* Prometheus : http://10.0.0.20:9091
+* Grafana : http://10.0.0.20:3000, admin, admin
+* Alertmanager : http://10.0.0.20:9093, admin, admin
 
 ### 19. Debugging
 
