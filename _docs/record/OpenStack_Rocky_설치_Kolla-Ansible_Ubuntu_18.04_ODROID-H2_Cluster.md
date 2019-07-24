@@ -763,7 +763,7 @@ Deploy Node에서 Glance에 Ubuntu Image를 등록한다.
 (Deploy)# git clone -b 3.1.1 https://github.com/openstack/octavia.git
 (Deploy)# cd octavia/diskimage-create
 (Deploy)# ./diskimage-create.sh -r root
-(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-amphora-x86_64
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-x86_64-amphora
 ~~~
 
 Deploy Node에서 Octavia Amphora Image를 생성하고 Glance에 등록한다.
@@ -839,7 +839,7 @@ octavia_ssh_key Keypair를 생성하고 Octavia만 배포한다.
 ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  nova  octavia  openvswitch  prometheus  rabbitmq
 ~~~
 
-각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 남는다.
+각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 저장된다.
 
 ### 20. 참조
 
