@@ -756,6 +756,8 @@ Octavia Network와 Octvia Subnet을 생성하고 External Network를 연결한�
 
 ~~~
 (Controller)# route add -net 20.0.0.0/24 gw 192.168.0.225
+(Controller)# printf '#!/bin/bash\nroute add -net 20.0.0.0/24 gw 192.168.0.225' > /etc/rc.local
+(Controller)# chmod +x /etc/rc.local
 ~~~
 
 Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있는 Packet 전송시, 해당 Packet이 External Router로 전송하도록 Controller Node에 Routing Rule을 추가한다.
