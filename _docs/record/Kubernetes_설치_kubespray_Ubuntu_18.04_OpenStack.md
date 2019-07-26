@@ -19,8 +19,9 @@ adsense: true
   * Deploy Node * 1
 * Network
   * NAT Network : 192.168.0.0/24
-  * Tenant Network : 20.0.0.0/24
-* OpenStack : Rocky
+  * Octavia Network : 20.0.0.0/24
+  * Tenant Network : 30.0.0.0/24
+* OpenStack : Stein
   * API Server : 192.168.0.40:5000
   * Octavia
 * Kubernetes
@@ -65,9 +66,9 @@ The key's randomart image is:
 Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Deploy Node에서 Managed Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
 ~~~
-(Deploy)# ssh-copy-id root@20.0.0.5
-(Deploy)# ssh-copy-id root@20.0.0.7
-(Deploy)# ssh-copy-id root@20.0.0.8
+(Deploy)# ssh-copy-id root@30.0.0.11
+(Deploy)# ssh-copy-id root@30.0.0.12
+(Deploy)# ssh-copy-id root@30.0.0.13
 ~~~
 
 Deploy Node에서 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key를 나머지 Node의 ~/.ssh/authorized_keys 파일에 복사한다.
@@ -75,6 +76,7 @@ Deploy Node에서 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key
 ### 4. kubespray 설정, 구동
 
 ~~~
+(Deploy)# ~
 (Deploy)# git clone -b v2.10.4 https://github.com/kubernetes-sigs/kubespray.git
 (Deploy)# cd kubespray
 (Deploy)# pip3 install -r requirements.txt
@@ -85,9 +87,9 @@ kubespray를 설치하고 Sample Inventory를 복사한다.
 
 {% highlight text %}
 [all]
-vm01 ansible_host=20.0.0.5 ip=20.0.0.5 etcd_member_name=etcd1
-vm02 ansible_host=20.0.0.7 ip=20.0.0.7 etcd_member_name=etcd2
-vm03 ansible_host=20.0.0.8 ip=20.0.0.8 etcd_member_name=etcd3
+vm01 ansible_host=30.0.0.11 ip=30.0.0.11 etcd_member_name=etcd1
+vm02 ansible_host=30.0.0.12 ip=30.0.0.12 etcd_member_name=etcd2
+vm03 ansible_host=30.0.0.13 ip=30.0.0.13 etcd_member_name=etcd3
 
 [kube-master]
 vm01
@@ -108,7 +110,7 @@ kube-master
 kube-node   
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] Deploy Node - inventory/mycluster/inventory.ini</figcaption>
+<figcaption class="caption">[파일 1] Deploy Node - ~/kubespray/inventory/mycluster/inventory.ini</figcaption>
 </figure>
 
 Deploy Node의 inventory/mycluster/inventory.ini 파일에 각 VM의 정보 및 역활을 저장한다.
@@ -126,7 +128,7 @@ cloud_provider: openstack
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] Deploy Node - inventory/mycluster/group_vars/all/all.yml</figcaption>
+<figcaption class="caption">[파일 2] Deploy Node - ~/kubespray/inventory/mycluster/group_vars/all/all.yml</figcaption>
 </figure>
 
 Deploy Node의 inventory/mycluster/group_vars/all/all.yml 파일에 Cloud Provider를 OpenStack으로 설정한다.
@@ -135,20 +137,20 @@ Deploy Node의 inventory/mycluster/group_vars/all/all.yml 파일에 Cloud Provid
 ...
 # # When OpenStack is used, if LBaaSv2 is available you can enable it with the following 2 variables.
 openstack_lbaas_enabled: True
-openstack_lbaas_subnet_id: "23c37532-9030-4240-a39d-24769ba25257"
+openstack_lbaas_subnet_id: [Tenant Network Subnet ID]
 # To enable automatic floating ip provisioning, specify a subnet.
-openstack_lbaas_floating_network_id: "62891ec3-5acb-4459-a162-e76215c009d3"
+openstack_lbaas_floating_network_id: [NAT (External) Network ID]
 # # Override default LBaaS behavior
 openstack_lbaas_use_octavia: True
 openstack_lbaas_method: "ROUND_ROBIN"
-openstack_lbaas_provider: "haproxy"
+#openstack_lbaas_provider: "haproxy"
 openstack_lbaas_create_monitor: "yes"
 openstack_lbaas_monitor_delay: "1m"
 openstack_lbaas_monitor_timeout: "30s"
 openstack_lbaas_monitor_max_retries: "3"     
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] Deploy Node - inventory/mycluster/group_vars/all/openstack.yml</figcaption>
+<figcaption class="caption">[파일 3] Deploy Node - ~/kubespray/inventory/mycluster/group_vars/all/openstack.yml</figcaption>
 </figure>
 
 Deploy Node의 inventory/mycluster/group_vars/all/openstack.yml 파일에 Kubernetes LoadBalancer Service를 위하여 Octavia Load Balancer를 설정한다. External Network의 ID와 External Network의 Subnet ID를 확인하여 설정한다.
@@ -161,7 +163,7 @@ persistent_volumes_enabled: true
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] Deploy Node - inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml</figcaption>
+<figcaption class="caption">[파일 4] Deploy Node - ~/kubespray/inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml</figcaption>
 </figure>
 
 Deploy Node의 inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml 파일에 CNI Plugin으로 cilium을 이용하도록 설정하고, Persistent Volume을 Enable 설정하여 Kubernetes가 OpenStack의 Cinder를 이용하도록 설정한다.
@@ -173,7 +175,7 @@ Deploy Node의 inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml 파일
 override_system_hostname: false
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] Deploy Node - roles/bootstrap-os/defaults/main.yml</figcaption>
+<figcaption class="caption">[파일 5] Deploy Node - ~/kubespray/roles/bootstrap-os/defaults/main.yml</figcaption>
 </figure>
 
 Deploy Node의 roles/bootstrap-os/defaults/main.yml 파일에 Kubernetes가 설치되는 Hostname을 Override하지 않도록 설정한다.
@@ -190,14 +192,14 @@ export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 6] Deploy Node - openstack-rc</figcaption>
+<figcaption class="caption">[파일 6] Deploy Node - ~/kubespray/openstack-rc</figcaption>
 </figure>
 
 OpenStack RC 파일의 정보를 바탕으로 openstack-rc 파일을 생성한다.
 
 ~~~
-(Deploy)# source openstack-rc
-(Deploy)# ansible-playbook -i inventory/mycluster/inventory.ini --become --become-user=root cluster.yml 
+(Deploy)# source ~/kubespray/openstack-rc
+(Deploy)# ansible-playbook -i ~/kubespray/inventory/mycluster/inventory.ini --become --become-user=root cluster.yml
 ~~~
 
 Deploy Node에서 Kubernets Cluster를 구성한다.
@@ -206,7 +208,7 @@ Deploy Node에서 Kubernets Cluster를 구성한다.
 
 ~~~
 (Deploy)# source openstack-rc
-(Deploy)# ansible-playbook -i inventory/mycluster/inventory.ini --become --become-user=root reset.yml 
+(Deploy)# ansible-playbook -i ~/kubespray/inventory/mycluster/inventory.ini --become --become-user=root reset.yml
 ~~~
 
 Deploy Node에서 Kubernetes Cluster를 초기화한다.
