@@ -744,7 +744,7 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한다
 (Deploy)# openstack router set --external-gateway external-net --enable-snat --fixed-ip subnet=external-sub,ip-address=192.168.0.225 external-router
 ~~~
 
-External Router, External Network, External Subnet를 생성하고 External Router에 External Network를 연결한다.
+External Router, External Network, External Subnet를 생성하고 External Router에 External Network를 연결한다. External Router는 SNAT를 수행하도록 설정한다.
 
 ~~~
 (Deploy)# openstack network create --share --provider-network-type vxlan octavia-net
@@ -753,6 +753,12 @@ External Router, External Network, External Subnet를 생성하고 External Rout
 ~~~
 
 Octavia Network와 Octvia Subnet을 생성하고 External Network를 연결한다.
+
+~~~
+(Controller)# route add -net 20.0.0.0/24 gw 192.168.0.225
+~~~
+
+Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있는 Packet 전송시, 해당 Packet이 External Router로 전송하도록 Controller Node에 Routing Rule을 추가한다.
 
 ### 14. Glance에 VM Image 등록
 
