@@ -716,7 +716,6 @@ OpenStack을 배포하여 OpenStack을 구동한다.
 ### 12. OpenStack 초기화 수행
 
 ~~~
-(Deploy)# cd ~/kolla-ansible
 (Deploy)# kolla-ansible post-deploy
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
@@ -727,6 +726,7 @@ OpenStack 초기화를 수행한다. 초기화가 완료되면 Network, Image, F
 ### 13. External Network, Octavia Network 생성
 
 ~~~
+(Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# openstack port list
 (Deploy)# openstack router remove port demo-router [Port ID]
 (Deploy)# openstack router delete demo-router
@@ -772,7 +772,7 @@ Glance에 Ubuntu Image를 등록한다.
 (Deploy)# git clone -b 4.0.1 https://github.com/openstack/octavia.git
 (Deploy)# cd octavia/diskimage-create
 (Deploy)# ./diskimage-create.sh -r root
-(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-x86_64-amphora
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-16.04-x86_64-amphora
 ~~~
 
 octavia User로 Octavia Amphora Image를 생성하고 Glance에 등록한다. tag는 반드시 amphora라고 설정해야 한다.
@@ -804,7 +804,7 @@ octavia User로 octavia_ssh_key Keypair를 생성한다. Keypair 이름은 반�
 (Deploy)# openstack security group rule create --protocol tcp --dst-port 9443 --ingress octavia-sec
 ~~~
 
-octavia User로
+octavia User로 octavia-sec Security Group을 생성한다.
 
 {% highlight yaml linenos %}
 ...
