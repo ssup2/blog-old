@@ -808,8 +808,9 @@ octavia User로 octavia_ssh_key Keypair를 생성한다. Keypair 이름은 반�
 (Deploy)# export OS_USERNAME=octavia
 (Deploy)# openstack security group create octavia-sec
 (Deploy)# openstack security group rule create --protocol icmp octavia-sec
-(Deploy)# openstack security group rule create --protocol tcp --dst-port 5555 --egress octavia-sec
-(Deploy)# openstack security group rule create --protocol tcp --dst-port 9443 --ingress octavia-sec
+(Deploy)# openstack security group rule create --protocol tcp --dst-port 22 octavia-sec
+(Deploy)# openstack security group rule create --protocol tcp --dst-port 9443 octavia-sec
+(Deploy)# openstack security group rule create --protocol udp --dst-port 5555 octavia-sec
 ~~~
 
 octavia User로 octavia-sec Security Group을 생성한다.
