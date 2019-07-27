@@ -810,7 +810,6 @@ octavia User로 octavia_ssh_key Keypair를 생성한다. Keypair 이름은 반�
 (Deploy)# openstack security group rule create --protocol icmp octavia-sec
 (Deploy)# openstack security group rule create --protocol tcp --dst-port 22 octavia-sec
 (Deploy)# openstack security group rule create --protocol tcp --dst-port 9443 octavia-sec
-(Deploy)# openstack security group rule create --protocol udp --dst-port 5555 octavia-sec
 ~~~
 
 octavia User로 octavia-sec Security Group을 생성한다.
@@ -835,7 +834,7 @@ octavia_amp_secgroup_list: "[octavia-sec Security Group ID]"
 
 Octavia만 배포한다.
 
-### 17. 재설치를 위한 초기화
+### 16. 재설치를 위한 초기화
 
 ~~~
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy --yes-i-really-really-mean-it 
@@ -852,7 +851,7 @@ Octavia만 배포한다.
 
 모든 Ceph Node의 OSD Block을 초기화 한다.
 
-### 18. Dashboard 정보
+### 17. Dashboard 정보
 
 접속할 수 있는 Dashboard 정보는 아래와 같다. URL, ID, Password 순서로 나열하였다.
 
@@ -862,7 +861,7 @@ Octavia만 배포한다.
 * Grafana : http://10.0.0.20:3000, admin, admin
 * Alertmanager : http://10.0.0.20:9093, admin, admin
 
-### 19. Debugging
+### 18. Debugging
 
 ~~~
 (Node01)# ls /var/log/kolla
@@ -871,7 +870,7 @@ ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  
 
 각 Node의 **/var/log/kolla** Directory에 OpenStack Service들의 Log가 저장된다.
 
-### 20. 참조
+### 19. 참조
 
 * [https://docs.openstack.org/kolla/stein/](https://docs.openstack.org/kolla/stein/)
 * [https://docs.openstack.org/kolla-ansible/stein/](https://docs.openstack.org/kolla-ansible/stein)
