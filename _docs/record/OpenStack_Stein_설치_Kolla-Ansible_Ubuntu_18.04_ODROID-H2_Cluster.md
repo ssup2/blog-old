@@ -159,9 +159,10 @@ Node04 Interface의 IP를 설정한다.
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
-(Deploy)# apt-get install ansible python-pip python3-pip
+(Deploy)# apt-get install ansible python-pip python3-pip libguestfs-tools
 (Deploy)# pip install kolla==8.0.0 kolla-ansible==8.0.0 tox gitpython pbr requests jinja2 oslo_config
 (Deploy)# pip install python-openstackclient python-glanceclient python-neutronclient
+
 ~~~
 
 Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다. 또한 OpenSTack CLI Client도 설치한다.
@@ -768,10 +769,16 @@ Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
 (Deploy)# wget http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+(Deploy)# guestmount -a ubuntu-18.04-server-cloudimg-amd64.img -m /dev/sda1 /mnt
+(Deploy)# chroot /mnt
+(Deploy / chroot)# passwd root
+(Deploy / chroot)# sed -i -e 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+(Deploy / chroot)# sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+(Deploy / chroot)# exit
 (Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --file ./bionic-server-cloudimg-amd64.img ubuntu-18.04-x86_64
 ~~~
 
-Glance에 Ubuntu Image를 등록한다.
+Ubuntu Image를 Download 받은 후 root 계정 설정, SSHD 설정을 진행한다. 설정이 완료된 Ubuntu Image를 Glance에 등록한다.
 
 ~~~
 (Deploy)# . /etc/kolla/admin-openrc.sh
