@@ -769,12 +769,14 @@ Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
 (Deploy)# wget http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
-(Deploy)# guestmount -a ubuntu-18.04-server-cloudimg-amd64.img -m /dev/sda1 /mnt
+(Deploy)# guestmount -a bionic-server-cloudimg-amd64.img -m /dev/sda1 /mnt
 (Deploy)# chroot /mnt
 (Deploy / chroot)# passwd root
 (Deploy / chroot)# sed -i -e 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 (Deploy / chroot)# sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+(Deploy / chroot)# sync
 (Deploy / chroot)# exit
+(Deploy)# umount /mnt
 (Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --file ./bionic-server-cloudimg-amd64.img ubuntu-18.04-x86_64
 ~~~
 
