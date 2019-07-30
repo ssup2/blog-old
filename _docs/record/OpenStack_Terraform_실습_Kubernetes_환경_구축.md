@@ -32,6 +32,8 @@ adsense: true
 (Deploy)# unzip ./terraform_0.12.5_linux_amd64.zip -d /usr/local/bin/
 ~~~
 
+Terraform을 설치한다.
+
 ### 3. Terraform 설정
 
 {% highlight tf linenos %}
@@ -120,7 +122,6 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_udp" {
 <figure>
 <figcaption class="caption">[파일 5] ~/terraform/030-secgroup.tf</figcaption>
 </figure>
-
 
 {% highlight tf linenos %}
 resource "openstack_networking_floatingip_v2" "fip" {
