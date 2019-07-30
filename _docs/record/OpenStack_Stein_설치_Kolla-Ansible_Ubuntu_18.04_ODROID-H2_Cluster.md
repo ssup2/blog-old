@@ -20,7 +20,7 @@ adsense: true
 
 [그림 1]은 ODROID-H2 Cluster로 OpenStack 설치 환경을 나타내고 있다. 상세한 환경 정보는 다음과 같다.
 
-* OpenStack : Rocky
+* OpenStack : Stein
 * Kolla : 8.0.0
 * Kolla-Ansible : 8.0.0
 * Octiava : 4.0.1
