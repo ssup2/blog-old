@@ -135,41 +135,73 @@ resource "openstack_networking_floatingip_v2" "fip" {
 {% highlight tf linenos %}
 resource "openstack_compute_instance_v2" "vm01" {
   name  = "vm01"
-  image_id = "${var.image-ubuntu}"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
-    name = "internal-net"
+    name = "${openstack_networking_network_v2.network.name}"
+  }
+
+  block_device {
+    uuid                  = "${var.image-ubuntu}"
+    source_type           = "image"
+    volume_size           = 30
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
   }
 }
 
 resource "openstack_compute_instance_v2" "vm02" {
   name  = "vm02"
-  image_id = "${var.image-ubuntu}"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
-    name = "internal-net"
+    name = "${openstack_networking_network_v2.network.name}"
+  }
+
+  block_device {
+    uuid                  = "${var.image-ubuntu}"
+    source_type           = "image"
+    volume_size           = 30
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
   }
 }
 
 resource "openstack_compute_instance_v2" "vm03" {
   name  = "vm03"
-  image_id = "${var.image-ubuntu}"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
-    name = "internal-net"
+    name = "${openstack_networking_network_v2.network.name}"
+  }
+
+  block_device {
+    uuid                  = "${var.image-ubuntu}"
+    source_type           = "image"
+    volume_size           = 30
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
   }
 }
 
 resource "openstack_compute_instance_v2" "vm09" {
   name  = "vm09"
-  image_id = "${var.image-ubuntu}"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
-    name = "internal-net"
+    name = "${openstack_networking_network_v2.network.name}"
+  }
+
+  block_device {
+    uuid                  = "${var.image-ubuntu}"
+    source_type           = "image"
+    volume_size           = 30
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
   }
 }
 

@@ -182,7 +182,7 @@ Deploy Node의 roles/bootstrap-os/defaults/main.yml 파일에 Kubernetes가 설�
 
 {% highlight text %}
 export OS_AUTH_URL=http://192.168.0.40:5000/v3
-export OS_PROJECT_ID=efcea95b7538459b8d91ac87c319246c
+export OS_PROJECT_ID=[Project ID]
 export OS_PROJECT_NAME="admin"
 export OS_USER_DOMAIN_NAME="Default"
 export OS_USERNAME="admin"
