@@ -203,3 +203,4 @@ Terraform을 초기화 한다.
 ### 5. 참조
 
 * [https://github.com/diodonfrost/terraform-openstack-examples](https://github.com/diodonfrost/terraform-openstack-examples)
+* [https://github.com/ssup2/example-openstack-terraform-k8s](https://github.com/ssup2/example-openstack-terraform-k8s)
