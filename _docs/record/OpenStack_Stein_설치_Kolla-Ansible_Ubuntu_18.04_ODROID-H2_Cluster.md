@@ -777,7 +777,7 @@ Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있
 (Deploy / chroot)# sync
 (Deploy / chroot)# exit
 (Deploy)# umount /mnt
-(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --file ./bionic-server-cloudimg-amd64.img ubuntu-18.04-x86_64
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --file ./bionic-server-cloudimg-amd64.img ubuntu-18.04
 ~~~
 
 Ubuntu Image를 Download 받은 후 root 계정 설정, SSHD 설정을 진행한다. 설정이 완료된 Ubuntu Image를 Glance에 등록한다.
@@ -789,7 +789,7 @@ Ubuntu Image를 Download 받은 후 root 계정 설정, SSHD 설정을 진행한
 (Deploy)# git clone -b 4.0.1 https://github.com/openstack/octavia.git
 (Deploy)# cd octavia/diskimage-create
 (Deploy)# ./diskimage-create.sh -r root
-(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-16.04-x86_64-amphora
+(Deploy)# openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file ./amphora-x64-haproxy.qcow2 ubuntu-16.04-amphora
 ~~~
 
 octavia User로 Octavia Amphora Image를 생성하고 Glance에 등록한다. tag는 반드시 amphora라고 설정해야 한다.
