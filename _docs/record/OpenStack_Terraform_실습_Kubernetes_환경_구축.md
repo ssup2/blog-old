@@ -134,7 +134,8 @@ resource "openstack_networking_floatingip_v2" "fip" {
 
 {% highlight tf linenos %}
 resource "openstack_compute_instance_v2" "vm01" {
-  name  = "vm01"
+  depends_on = ["openstack_networking_subnet_v2.subnet"]
+  name = "vm01"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
@@ -152,7 +153,8 @@ resource "openstack_compute_instance_v2" "vm01" {
 }
 
 resource "openstack_compute_instance_v2" "vm02" {
-  name  = "vm02"
+  depends_on = ["openstack_networking_subnet_v2.subnet"]
+  name = "vm02"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
@@ -170,7 +172,8 @@ resource "openstack_compute_instance_v2" "vm02" {
 }
 
 resource "openstack_compute_instance_v2" "vm03" {
-  name  = "vm03"
+  depends_on = ["openstack_networking_subnet_v2.subnet"]
+  name = "vm03"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
@@ -188,7 +191,8 @@ resource "openstack_compute_instance_v2" "vm03" {
 }
 
 resource "openstack_compute_instance_v2" "vm09" {
-  name  = "vm09"
+  depends_on = ["openstack_networking_subnet_v2.subnet"]
+  name = "vm09"
   flavor_id = "${openstack_compute_flavor_v2.flavor.id}"
 
   network {
