@@ -134,7 +134,6 @@ cloud_provider: openstack
 Deploy Node의 inventory/mycluster/group_vars/all/all.yml 파일에 Cloud Provider를 OpenStack으로 설정한다.
 
 {% highlight text %}
-...
 # # When OpenStack is used, if LBaaSv2 is available you can enable it with the following 2 variables.
 openstack_lbaas_enabled: True
 openstack_lbaas_subnet_id: [Tenant Network Subnet ID]
