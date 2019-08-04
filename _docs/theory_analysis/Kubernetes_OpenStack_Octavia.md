@@ -25,7 +25,7 @@ Agent는 Octavia Network를 통해서 LB VM의 Health 정보를 Octavia Service�
 
 Active 상태의 LB VM에 장애가 발생한다면 HAProxy는 VRRP Protocol을 이용하여 Standby 상태의 HAProxy를 Active 상태로 변경하고 Load Balancing 동작을 지속한다. Octavia Service는 Agent의 Health 정보를 통해서 LB VM의 장애를 파악한뒤, 장애가 발생한 LB VM의 상태를 Error 상태로 변경하고, Standby 상태의 LB VM을 Active 상태로 변경한다. Octavia Member VM에 장애가 발생한다면 Octavia Service는 Agent의 Health 정보를 통해서 Octavia Member VM의 장애를 파악한뒤, 장애가 발생한 Octavia Member VM을 Member Pool에서 제외시킨다.
 
-[그림 1]에서는 Octavia Service와 Agent가 Octavia Network와 External Network를 통하도록 구성되어 있지만, 반드시 External Network를 이용할 필요는 없다. Octavia Service와 Agent가 Octavia Network를 통해서 통신을 할 수 있는 환경만 구성되면 된다. [그림 1]에서 모든 LB VM은 Active-Standby 형태로 동작하도록 표현되어 있지만 설정에 따라서 Standalone으로 동작하도록 설정할 수 있다.
+[그림 1]에서는 Octavia Service와 Agent가 Octavia Network와 External Network를 동시에 이용하도록 구성되어 있지만, 반드시 External Network를 같이 이용할 필요는 없다. Octavia Service와 Agent가 LB VM에 연결되어 있는 Octavia Network를 통해서 통신을 할 수 있는 환경만 구성되면 된다. [그림 1]에서 모든 LB VM은 Active-Standby 형태로 동작하도록 표현되어 있지만 설정에 따라서 Standalone으로 동작하도록 설정할 수 있다.
 
 #### 1.2. Kubernetes
 
