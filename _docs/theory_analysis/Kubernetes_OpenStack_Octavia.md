@@ -57,7 +57,7 @@ monitor-max-retries=3
 
 Kubernetes API Server가 Octavia Service에게 Load Balancer를 요청하기 위해서는 Octavia Service의 URL, Octavia Service를 위한 User ID/PW, Kubernetes VM이 소속된 OpenStack의 Tanant ID, Kubernetes Network의 Subnet ID, Load Balancer Option 등의 다양한 정보가 필요한데, 이러한 필요한 정보들은 모두 Kubernetes Master VM의 cloud_config 파일에 저장되어 있다. [파일 1]은 실제 cloud_config 파일을 나타내고 있다.
 
-[파일 1]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balacner 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM을 어떻게 Monitoring 할지를 설정한다.
+[파일 1]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balacner 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM Monitoring 정책을 결정한다.
 
 Kubernetes API Server는 [파일 1]의 Global 영역에 있는 auth-url를 통해서 인증/인가를 수행하고, Octavia Service의 URL을 알아내어 Octavia Service에게 Load Balancer 요청을 전송한다. 따라서 Kubernetes API Server가 있는 Kubernetes Master VM은 auth-url을 통해서 Octavia Service에 접근할 수 있도록 Network가 설정되어야 한다. [그림 1]에서 Kubernetes Master VM은 Kubernetes Network와 External Network를 통해서 Octavia Service에 접근할 수 있도록 설정된 상태를 나타고 있다. 하지만 반드시 Kubernetes Network와 External Network를 이용할 필요는 없다. Kubernetes Master VM에서 auth-url을 통해서 Octavia Service에 접근할 수 있는 Network 환경만 있으면 된다.
 
