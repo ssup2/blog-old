@@ -61,9 +61,11 @@ Kubernetes API Server가 Octavia Service에게 Load Balancer를 요청하기 위
 
 Kubernetes API Server는 [파일 1]의 Global 영역에 있는 auth-url를 통해서 인증/인가를 수행하고, Octavia Service의 URL을 알아내어 Octavia Service에게 Load Balancer 요청을 전송한다. 따라서 Kubernetes API Server가 있는 Kubernetes Master VM은 auth-url을 통해서 Octavia Service에 접근할 수 있도록 Network가 설정되어야 한다. [그림 1]에서 Kubernetes Master VM은 Kubernetes Network와 External Network를 통해서 Octavia Service에 접근할 수 있도록 설정된 상태를 나타고 있다. 하지만 반드시 Kubernetes Network와 External Network를 이용할 필요는 없다. Kubernetes Master VM에서 auth-url을 통해서 Octavia Service에 접근할 수 있는 Network 환경만 있으면 된다.
 
-Kubernetes는 LoadBalancer Service 생성시 NodePort를 반드시 생성하고, Kubernetes Cluster를 구성하는 모든 VM (Master, Slave)에 NodePort를 Dest Port로 갖고 있는 Packet을 수신시 LoadBalancer Service로 Packet을 전달하도록 IPTables를 설정한다. NodePort 생성 및 IPTables 설정이 끝난뒤 Kubernetes API Server는 Octvia Service에게 cloud_config 파일을 바탕으로 Load Balancer 생성을 요청한다. 이때 Kubernetes API Server는 Octvia Member VM으로 Master Role이 할당된 Master VM은 제외하고 Slave VM만 포함시킨다. Load Balancer 생성이 완료되면 Kubernetes API Server는 생성한 Load Balancer의 External Network IP를 받아 설정한다.
+Kubernetes는 LoadBalancer Service 생성시 NodePort를 반드시 생성하고, Kubernetes Cluster를 구성하는 모든 VM (Master, Slave)에 NodePort를 Dest Port로 갖고 있는 Packet을 수신시 LoadBalancer Service로 Packet을 전달하도록 IPTables/IPVS를 설정한다. NodePort 생성 및 IPTables/IPVS 설정이 끝난뒤 Kubernetes API Server는 Octvia Service에게 생성한 NodePort와 cloud_config 파일을 바탕으로 Load Balancer 생성을 요청한다. 이때 Kubernetes API Server는 Octvia Member VM으로 Master Role이 할당된 Master VM은 제외하고 Slave VM만 포함시킨다. Load Balancer 생성이 완료되면 Kubernetes API Server는 생성된 Load Balancer의 External Network IP를 받아 저장한다.
 
 #### 1.3. LoadBalancer Service의 Packet Flow
+
+Dest IP가 LoadBalancer Service의 IP인 Packet이 External Network에 전달되면, OpenStack Network Node에 있는 Virtual Router는 해당 Packet을 DNAT하여 Kubernetes Network로 Routing한다. Packet은 Active 상태의 LB VM에게 전달되고, HAProxy에 의해서 Packet은 SlaveIP:NodePort로 DNAT되어 Octavia Member인 임의의 Kubernetes Slave VM에게 전달된다. Kubernetes Slave VM은 IPTables/IPVS Rule에 따라서 다시한번 DNAT 및 Load Balancing되어 LoadBalancer Service에 소속된 Pod에 Packet을 전달한다.
 
 ### 2. 참조
 

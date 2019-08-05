@@ -221,7 +221,7 @@ Chain KUBE-NODE-PORT (1 references)
     6   360 KUBE-MARK-MASQ  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* Kubernetes nodeport TCP port for masquerade purpose */ match-set KUBE-NODE-PORT-TCP dst
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[NAT Table 12] IPVS Mode의 KUBE-POSTROUTING </figcaption>
+<figcaption class="caption">[NAT Table 12] IPVS Mode의 KUBE-NODE-PORT </figcaption>
 </figure>
 
 {% highlight text %}
