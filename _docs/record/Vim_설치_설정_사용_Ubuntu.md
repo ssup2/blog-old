@@ -56,7 +56,7 @@ Vim, ctags, cscope, ClangFormat을 설치한다.
 ~~~
 $ brew update
 $ brew install vim
-$ brew install ctags
+$ brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 $ brew install cscope
 $ brew install clang-format
 ~~~
