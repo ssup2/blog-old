@@ -100,7 +100,7 @@ Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]과 같이
 
 ### 3. Package 설치
 
-모든 Node에서 수행 Kubernetes를 위한 Package를 설치한다.
+모든 Node에서 Kubernetes를 위한 Package를 설치한다.
 
 ~~~
 (All)# apt-get update
