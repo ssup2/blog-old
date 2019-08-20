@@ -65,9 +65,37 @@ Environment="KUBELET_KUBECONFIG_ARGS=--cloud-provider=external --bootstrap-kubec
 <figcaption class="caption">[파일 1] All Node - /etc/systemd/system/kubelet.service.d/10-kubeadm.conf</figcaption>
 </figure>
 
-모든 Node에서 [파일 1]의 내용처럼 수정하여 kubelet이 External Provider를 이용하도록 설정한다.
+모든 Node에서 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf 파일의 내용을 [파일 1]의 내용처럼 수정하여 kubelet이 External Provider를 이용하도록 설정한다.
 
 #### 3.2. Master Node
+
+~~~
+(Master)# kubeadm init --apiserver-advertise-address=30.0.0.11 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.14.0
+...
+kubeadm join 30.0.0.11:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+~~~
+
+kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복만 되지 않으면 된다. 위에서는 --pod-network-cidr를 192.167.0.0/16으로 설정하였다.
+
+~~~
+(Master)# mkdir -p $HOME/.kube 
+(Master)# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+(Master)# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+~~~
+
+kubernetes config 파일을 설정한다.
+
+#### 3.3. Worker Node
+
+~~~
+(Worker)# kubeadm join 30.0.0.11:6443 --token v40peg.uyrgkkmiu1rl6dmn --discovery-token-ca-cert-hash sha256:1474a36cdae4b45da503fd48b4a516e72040ad35fa8f0456edfcacf9cd954522
+~~~
+
+kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
+
+### 4. Kubernetes Cluster 설정
+
+#### 4.1. Master Node
 
 {% highlight text %}
 [Global]
@@ -93,35 +121,50 @@ monitor-max-retries=3
 <figcaption class="caption">[파일 2] Master Node - /etc/kubernetes/cloud-config</figcaption>
 </figure>
 
-Master Node에 [파일 2]를 생성하여 Kubernetes가 cloud-config를 이용하도록 만든다. [파일 2]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balancer 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM Monitoring 정책을 결정한다.
+Master Node에 /etc/kubernetes/cloud-config 파일을 [파일 2]의 내용으로 생성한다. [파일 2]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balancer 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM Monitoring 정책을 결정한다.
 
-~~~
-(Master)# kubeadm init --apiserver-advertise-address=30.0.0.11 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.14.0
+{% highlight yaml %}
 ...
-kubeadm join 30.0.0.11:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
+    volumeMounts:
+    - mountPath: /etc/kubernetes/cloud-config
+      name: cloud-config
+      readOnly: true
+...
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/cloud-config
+      type: FileOrCreate
+    name: cloud-config
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] Master Node - /etc/kubernetes/manifests/kube-controller-manager.yaml</figcaption>
+</figure>
+
+Master Node의 /etc/kubernetes/manifests/kube-controller-manager.yaml 파일을 [파일 3]의 내용으로 수정하여 Kubernetes Controller Manager가 cloud-config 파일을 이용할 수 있도록 설정한다. kube-controller-manager.yaml 파일을 수정하면 Kubernetes는 자동으로 Controller Manager를 재시작한다.
+
+~~~
+(Master)# kubectl create secret -n kube-system generic cloud-config --from-literal=cloud.conf="$(cat /etc/kubernetes/cloud-config)" --dry-run -o yaml > cloud-config-secret.yaml
+(Master)# kubectl -f cloud-config-secret.yaml apply
 ~~~
 
-kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복만 되지 않으면 된다. 위에서는 --pod-network-cidr를 192.167.0.0/16으로 설정하였다.
+cloud-config 파일을 secret으로 생성하여 cloud-controller-manager가 cloud-config를 이용할 수 있도록 설정한다.
+
+### 5. OpenStack External Cloud Provider 설치
+
+#### 5.1. Master Node
 
 ~~~
-(Master)# mkdir -p $HOME/.kube 
-(Master)# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-(Master)# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+(Master)# kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/cluster/addons/rbac/cloud-controller-manager-roles.yaml
+(Master)# kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/cluster/addons/rbac/cloud-controller-manager-role-bindings.yaml
+(Master)# kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
 ~~~
 
-kubernetes config 파일을 설정한다.
+OpenStack External Cloud Provider를 설치한다.
 
-#### 3.3. Worker Node
+### 6. Cilium 설치
 
-~~~
-(Worker)# kubeadm join 30.0.0.34:6443 --token v40peg.uyrgkkmiu1rl6dmn --discovery-token-ca-cert-hash sha256:1474a36cdae4b45da503fd48b4a516e72040ad35fa8f0456edfcacf9cd954522
-~~~
-
-kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Node에서 수행한다.
-
-### 4. Cilium 설치
-
-#### 4.1. All Node
+#### 6.1. All Node
 
 ~~~
 (All)# mount bpffs /sys/fs/bpf -t bpf
@@ -130,17 +173,17 @@ kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Nod
 
 모든 Node에서 bpffs를 Mount하도록 설정한다. 
 
+#### 6.2. Master Node
+
 ~~~
 (Master)# wget https://github.com/cilium/cilium/archive/v1.5.6.zip
 (Master)# unzip v1.5.6.zip
 (Master)# kubectl apply -f cilium-1.5.6/examples/kubernetes/1.14/cilium.yaml
 ~~~
 
-#### 4.2. Master Node
+Cilium을 설치한다.
 
-### 5. OpenStack External Cloud Provider 설치
-
-### 6. 참조
+### 7. 참조
 
 * [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
