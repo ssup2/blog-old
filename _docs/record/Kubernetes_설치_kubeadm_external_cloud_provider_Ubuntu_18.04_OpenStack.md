@@ -23,13 +23,15 @@ adsense: true
 * OpenStack : Stein
   * API Server : 192.168.0.40:5000
   * Octavia
-* Kubernetes : 1.40 
+* Kubernetes : 1.15.3
   * CNI : Cilium 1.5.6 Plugin
 * External Cloud Provider
   * Octavia 연동 O
   * Cinder 연동 X
 
 ### 2. Ubuntu Package 설치
+
+#### 2.1. All Node
 
 모든 Node에서 Kubernetes를 위한 Package를 설치한다.
 
@@ -46,7 +48,7 @@ Docker를 설치한다.
 (All)# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 (All)# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
 (All)# apt-get update
-(All)# apt-get install -y kubeadm=1.14.0-00 kubelet=1.14.0-00
+(All)# apt-get install -y kubeadm=1.15.3-00 kubelet=1.15.3-00
 ~~~
 
 kubelet, kubeadm를 설치한다.
@@ -70,7 +72,7 @@ Environment="KUBELET_KUBECONFIG_ARGS=--cloud-provider=external --bootstrap-kubec
 #### 3.2. Master Node
 
 ~~~
-(Master)# kubeadm init --apiserver-advertise-address=30.0.0.11 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.14.0
+(Master)# kubeadm init --apiserver-advertise-address=30.0.0.11 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.15.3
 ...
 kubeadm join 30.0.0.11:6443 --token x7tk20.4hp9x2x43g46ara5 --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
 ~~~
@@ -178,7 +180,7 @@ OpenStack External Cloud Provider를 설치한다.
 ~~~
 (Master)# wget https://github.com/cilium/cilium/archive/v1.5.6.zip
 (Master)# unzip v1.5.6.zip
-(Master)# kubectl apply -f cilium-1.5.6/examples/kubernetes/1.14/cilium.yaml
+(Master)# kubectl apply -f cilium-1.5.6/examples/kubernetes/1.15/cilium.yaml
 ~~~
 
 Cilium을 설치한다.
