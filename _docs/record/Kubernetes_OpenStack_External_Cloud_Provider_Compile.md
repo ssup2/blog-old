@@ -1,5 +1,5 @@
 ---
-title: Kubernetes OpenStack External Cloud Provider Compile,실행 / Ubuntu 18.04 환경
+title: Kubernetes OpenStack External Cloud Provider Compile / Ubuntu 18.04 환경
 category: Record
 date: 2019-08-22T12:00:00Z
 lastmod: 2019-08-22T12:00:00Z
