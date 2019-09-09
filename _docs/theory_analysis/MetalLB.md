@@ -1,5 +1,5 @@
 ---
-title: istio Architecture
+title: MetalLB
 category: Theory, Analysis
 date: 2019-09-09T12:00:00Z
 lastmod: 2019-09-09T12:00:00Z
