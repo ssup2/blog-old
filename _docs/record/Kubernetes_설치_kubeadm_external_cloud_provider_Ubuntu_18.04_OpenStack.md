@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. 설치 환경
 
-![[그림 1] Kubernetes 설치 환경]({{site.baseurl}}/images/record/Kubernetes_kubeadm_External_Cloud_Provider_Ubuntu_18.04_OpenStack/Environment.PNG)
+![[그림 1] Kubernetes 설치 환경]({{site.baseurl}}/images/record/Kubernetes_Install_kubeadm_External_Cloud_Provider_Ubuntu_18.04_OpenStack/Environment.PNG)
 
 [그림 1]은 Kubernetes 설치 환경을 나타내고 있다. 설치 환경은 다음과 같다.
 * VM : Ubuntu 18.04 (Cloud Version), 4 vCPU, 4GB Memory
