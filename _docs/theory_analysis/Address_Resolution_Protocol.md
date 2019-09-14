@@ -27,7 +27,7 @@ ARP Packet을 받은 Host는 자신의 논리적 주소가 Target protocol addre
 
 #### 1.3. ARP Caching, Table
 
-{% highlight text %}
+{% highlight console %}
 # arp
 Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.0.1              ether   90:9f:33:b2:ef:08   C                     eth0

@@ -50,7 +50,7 @@ Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의�
 
 #### 2.2. Operator SDK 설치
 
-{% highlight text %}
+{% highlight console %}
 # mkdir -p ~/operator-sdk
 # cd ~/operator-sdk
 # RELEASE_VERSION=v0.8.0
@@ -71,7 +71,7 @@ Kubernetes Operator SDK CLI를 설치하고 동작을 확인한다.
 
 #### 2.3. Project 생성
 
-{% highlight text %}
+{% highlight console %}
 # mkdir -p $GOPATH/src/github.com/ssup2 
 # cd $GOPATH/src/github.com/ssup2
 # export GO111MODULE=on
@@ -87,7 +87,7 @@ build  cmd  deploy  go.mod  go.sum  pkg  tools.go  vendor  version
 
 #### 2.4. Memcached CR 정의
 
-{% highlight text %}
+{% highlight console %}
 # operator-sdk add api --api-version=cache.example.com/v1alpha1 --kind=Memcached
 # ls deploy/crds/
 cache_v1alpha1_memcached_crd.yaml  cache_v1alpha1_memcached_cr.yaml
@@ -131,7 +131,7 @@ Memcached CR 관련 Golang Struct는 pkg/apis/cache/v1alpha1 Directory 아래의
 
 #### 2.5. Memcached Controller 생성
 
-{% highlight text %}
+{% highlight console %}
 # operator-sdk add controller --api-version=cache.example.com/v1alpha1 --kind=Memcached
 {% endhighlight %}
 <figure>
@@ -252,7 +252,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 
 #### 2.6. Memcached CRD 생성
 
-{% highlight text %}
+{% highlight console %}
 # kubectl create -f deploy/crds/cache_v1alpha1_memcached_crd.yaml
 {% endhighlight %}
 <figure>
@@ -263,7 +263,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 
 #### 2.7. Memcached Operator 구동
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 # go mod vendor
 # operator-sdk build supsup5642/memcached-operator:v0.0.1
@@ -275,7 +275,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 
 **operator-sdk build** 명령어를 이용하여 및 개발한 Memcached Operator를 기반으로 하는 Container Image로 생성한 다음 Docker Registry에 Push한다. Container Image의 이름은 개인 Repository에 맞도록 변경한다.
 
-{% highlight text %}
+{% highlight console %}
 # sed -i 's|REPLACE_IMAGE|supsup5642/memcached-operator:v0.0.1|g' deploy/operator.yaml
 # kubectl create -f deploy/service_account.yaml
 # kubectl create -f deploy/role.yaml
@@ -290,7 +290,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 
 #### 2.8. Memcached CR 생성을 통한 Memcached 구동
 
-{% highlight text %}
+{% highlight console %}
 # kubectl apply -f deploy/crds/cache_v1alpha1_memcached_cr.yaml
 {% endhighlight %}
 <figure>
@@ -299,7 +299,7 @@ Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경�
 
 [Shell 3]에서 생성된 cache_v1alpha1_memcached_cr.yaml을 이용하여 Kubernetes에 Memcached CR을 생성한다. Memcached Operator는 생성된 Memcached CR의 내용을 바탕으로 Memcached를 구동한다.
 
-{% highlight text %}
+{% highlight console %}
 # kubectl get pod
 NAME                                              READY   STATUS    RESTARTS   AGE
 example-k8s-operator-golang-867bd5754d-pc2m9      1/1     Running   3          2m31s

@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-systemd가 관리하는 Service Log를 확인하는 Tool인 journalctl 사용법을 정리한다.
+systemd-journald가 관리하는 Log를 확인하는 Tool인 journalctl 사용법을 정리한다.
 
 ### 1. journalctl
 

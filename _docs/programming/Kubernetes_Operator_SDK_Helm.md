@@ -25,7 +25,7 @@ Operator SDK User Guide에 소개된 Nginx Operator 예제를 통해 Operator SD
 
 #### 2.2. Operator SDK 설치
 
-{% highlight text %}
+{% highlight console %}
 # mkdir -p ~/operator-sdk
 # cd ~/operator-sdk
 # RELEASE_VERSION=v0.8.0
@@ -46,7 +46,7 @@ Kubernetes Operator SDK CLI를 설치하고 동작을 확인한다.
 
 #### 2.3. Project 생성
 
-{% highlight text %}
+{% highlight console %}
 # operator-sdk new example-k8s-operator-helm --api-version=example.com/v1alpha1 --kind=Nginx --type=helm
 # cd example-k8s-operator-helm && ls
 build  deploy  helm-charts  watches.yaml
@@ -57,7 +57,7 @@ build  deploy  helm-charts  watches.yaml
 
 #### 2.4. Nginx CRD 생성
 
-{% highlight text %}
+{% highlight console %}
 # kubectl create -f deploy/crds/example_v1alpha1_nginx_crd.yaml
 {% endhighlight %}
 <figure>
@@ -66,7 +66,7 @@ build  deploy  helm-charts  watches.yaml
 
 #### 2.5. Nginx Operator 구동
 
-{% highlight text %}
+{% highlight console %}
 # operator-sdk build supsup5642/nginx-operator:v0.0.1
 # sed -i 's|REPLACE_IMAGE|supsup5642/nginx-operator:v0.0.1|g' deploy/operator.yaml
 # docker push supsup5642/nginx-operator:v0.0.1
@@ -114,7 +114,7 @@ rules:
 <figcaption class="caption">[파일 1] deploy/role.yaml</figcaption>
 </figure>
 
-{% highlight text %}
+{% highlight console %}
 # kubectl create -f deploy/service_account.yaml
 # kubectl create -f deploy/role.yaml
 # kubectl create -f deploy/role_binding.yaml
@@ -126,14 +126,14 @@ rules:
 
 #### 2.6. Nginx CR 생성을 통한 Nginx 구동
 
-{% highlight text %}
+{% highlight console %}
 # kubectl apply -f deploy/crds/example_v1alpha1_nginx_cr.yaml
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 6] Nginx 구동</figcaption>
 </figure>
 
-{% highlight text %}
+{% highlight console %}
 # kubectl get pod
 NAME                                                       READY   STATUS    RESTARTS   AGE
 example-k8s-operator-helm-66496b4665-zhdzq                 1/1     Running   0          16m

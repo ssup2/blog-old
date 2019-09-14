@@ -50,7 +50,7 @@ public class BlogMain {
 <figcaption class="caption">[Code 1] Java 다형형 예제</figcaption>
 </figure>
 
-{% highlight text %}
+{% highlight console %}
 Parent
 Child
 {% endhighlight %}

@@ -17,7 +17,7 @@ AppArmor는 Enforcement, Complain 2개의 Mode로 동작한다.
 * Enforcement : Program의 허용되지 않은 동작을 제한하고 Log에 남긴다. 실제 Program을 운영하면서 동작을 제한 할 때 이용하는 Mode이다.
 * Complain : Program의 허용되지 않은 동작을 제한하지는 않고 Log만 남긴다. 특정 Program의 AppArmor Profile을 작성할때 이용하는 Mode이다. Log를 통해서 AppArmor Profile 작성을 도움 받을 수 있다.
 
-{% highlight text %}
+{% highlight console %}
 # aa-status
 apparmor module is loaded.
 29 profiles are loaded.
@@ -111,7 +111,7 @@ profile apparmor-example {
 * /root/test.sh 파일을 읽고, 쓰고, 실행 할 수 있다.
 * tcp Protocol만을 이용 할 수 있다.
 
-{% highlight text %}
+{% highlight console %}
 # apparmor_parser /etc/apparmor.d/test/apparmor-example
 # aa-status
 apparmor module is loaded.

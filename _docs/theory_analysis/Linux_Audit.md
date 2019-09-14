@@ -60,7 +60,7 @@ Audit 관련 여러개의 User Level Tool/Process가 존재한다. auditd는 kau
 
 #### 1.3. Example
 
-{% highlight text %}
+{% highlight console %}
 # auditctl -w /usr/bin/passwd -p x
 # auditctl -w /etc/shadow -p r
 # passwd root

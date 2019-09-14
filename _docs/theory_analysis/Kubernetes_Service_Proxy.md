@@ -11,7 +11,7 @@ Kubernetes는 iptables, IPVS, Userspace 3가지 Mode의 Service Proxy를 지원�
 
 ### 1. Service, Pod Info
 
-{% highlight text %}
+{% highlight console %}
 # kubectl get pod -o wide
 NAME                              READY   STATUS    RESTARTS   AGE   IP              NODE     NOMINATED NODE
 my-nginx-756f645cd7-gh7sq         1/1     Running   14         15d   192.167.2.231   kube03   <none>

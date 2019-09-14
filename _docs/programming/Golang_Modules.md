@@ -15,7 +15,7 @@ Module은 Package의 집합을 의미한다. 이러한 Module을 관리하는 �
 
 #### 1.1. Module 생성
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=off
 # go get github.com/ssup2/example-golang-module-module
 # cd $GOPATH/src/github.com/ssup2/example-golang-module-module
@@ -155,7 +155,7 @@ Golang의 Module 관리 기능은 **Git Tag**를 이용하여 Module Version을 
 
 ##### 1.2.1. Module을 이용하지 않지만 가져오기만 하는 경우
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # go mod init module-main
@@ -179,7 +179,7 @@ require github.com/ssup2/example-golang-module-module v1.1.0 // indirect
 
 [Shell 2]는 임의의 Directory안에서 **go mod init** 명령어를 이용하여 go.mod 파일을 생성한 다음, [Shell 1]에서 생성한 v1.1.0 Version의 Module을 가져오는 과정을 나타내고 있다. [파일 5]의 내용으로 go.mod 파일이 생성된다. 가져온 Module과 Version이 명시되어 있는걸 확인할 수 있다. 마지막에 **indirect** 주석이 써있는데 go get 명령어를 통해서 Module을 가져왔지만 실제 이용하고 있지는 않기 때문에 indirect 주석이 달린것이다.
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # go mod tidy
@@ -201,7 +201,7 @@ go 1.12
 
 ##### 1.2.2. Git Tag로 Module의 Version이 등록되어 있는 Module을 이용할 경우
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # vim main.go
@@ -240,7 +240,7 @@ require github.com/ssup2/example-golang-module-module v1.1.5
 
 [Shell 4]는 생성한 Module을 호출하는 main() 함수를 생성하고 구동하는 과정을 나타내고 있다. [Code 6]에 나타낸 main.go에서 생성한 Module의 TestPrint() 함수를 호출하는 것을 확인할 수 있다. main.go를 생성하고 나면 [파일 7]의 내용을 갖는 go.mod 파일이 생성된다. [파일 7]에는 생성한 v1.1.5 Version의 Module을 이용한다는 내용이 명시되어 있는것을 확인할 수 있다. [Code 6]에서는 Module Version을 명시하지 않았기 때문에 Major Version이 v0, v1인 Module 중에서 가장 높은 Version의 Module이 선택되는데, v1.1.5 Version이 가장 높은 v0, v1의 Version의 이기 때문에 v1.1.5를 이용하도록 자동으로 설정되는 것이다.
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # vim main.go
@@ -282,7 +282,7 @@ require (
 
 [Shell 4]는 [Code 7]처럼 main.go에서 Module Version v2를 이용하도록 변경한 다음, 다시 main() 함수를 구동하는 과정을 나타내고 있다. v2 Version의 Module 중에서 v2.2.7 Version이 가장 높은 Version이기 때문에 v2.2.7를 이용하도록 자동으로 설정되는 것이다. [파일 8]에는 v2.2.7 Version의 Module을 이용한다는 내용이 추가되어 있는걸 확인할 수 있다. v1.1.5 Version의 Module 정보는 남아 있지만 실제로는 이용되지는 않는다. go mod tidy 명령어를 이용하면 v1.1.5 Version의 Module 정보는 사라진다.
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # go get github.com/ssup2/example-golang-module-module/v2@v2.2.0
@@ -313,7 +313,7 @@ require (
 
 ##### 1.2.3. Git Tag로 Module의 Version이 등록되어 있지 않은 Module을 이용할 경우
 
-{% highlight text %}
+{% highlight console %}
 # export GO111MODULE=on
 #
 # go get github.com/ssup2/example-golang-module-module/v3@master

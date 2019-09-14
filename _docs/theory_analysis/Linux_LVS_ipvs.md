@@ -51,7 +51,7 @@ ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. 모
 
 #### 2.2 IPVS Dummpy Interface
 
-{% highlight text %}
+{% highlight console %}
 # ipvsadm -ln
 ...
 TCP  10.100.15.169:80 rr
@@ -68,7 +68,7 @@ TCP  10.103.1.234:80 rr
 <figcaption class="caption">[Shell 1] IPVS List</figcaption>
 </figure>
 
-{% highlight text %}
+{% highlight console %}
 # ip a
 ...
 4: ipvs0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default

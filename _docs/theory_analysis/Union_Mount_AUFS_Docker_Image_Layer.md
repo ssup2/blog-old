@@ -19,7 +19,7 @@ Union이란 이름에서도 알 수 있듯이, 여러개의 폴더를 동시에 
 
 AUFS (Advanced Multi Layered Unification Filesystem)은 리눅스 환경에서 Union Mount를 제공하는 기법이다. AUFS는 현재 Linux Kernel의 Main Stream에 포함되어 있지 않다. 하지만 Docker Image Layer의 기본 Filesystem으로 이용되고 있기 때문에 현재 많은 곳에서 AUFS를 이용하고 있다. 대부분의 리눅스 배포판에서는 별도의 Package 설치를 통해 AUFS를 쉽게 설치 할 수 있다.
 
-{% highlight text %}
+{% highlight console %}
 # mount -t aufs -o br=/layer_rw=rw:/layer_01=ro+wh:/layer_02=ro+wh:/layer_03=ro+wh none /mnt
 {% endhighlight %}
 <figure>
@@ -50,7 +50,7 @@ AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있�
 
 ### 3. Docker Image Layer
 
-{% highlight text %}
+{% highlight console %}
 # mount -t aufs -o br=/container_rw=rw:/ubuntu_base01=ro+wh:/ubuntu_base02=ro+wh:/ubuntu_base03=ro+wh none /container_root
 {% endhighlight %}
 <figure>

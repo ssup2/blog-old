@@ -49,7 +49,7 @@ Plugin은 Conf 파일에 정의된 Container Network에 특정 Container를 붙�
 * CNI_NETNS : Target Container의 Network Namespace File의 위치
 * CNI_IFNAME : Network Interface 이름
 
-{% highlight text %}
+{% highlight console %}
 # export CNI_COMMAND=ADD; export CNI_CONTAINERID=...
 # /opt/cni/bin/bridge < ~/test_cni/mynet.conf
 {
