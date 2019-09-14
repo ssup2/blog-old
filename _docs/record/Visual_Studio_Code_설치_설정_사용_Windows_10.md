@@ -35,7 +35,7 @@ Visual Studio Code의 Terminal에서 Docker 이용을 위한 Docker for Windows�
 
 [그림 2]와 같이 WSL Ubuntu에서 Docker에 접근할 수 있도록 Docker Daemon을 2375 Port로 개방한다.
 
-~~~
+~~~console
 > route add  172.17.0.0 MASK 255.255.0.0 10.0.75.2
 ~~~
 
@@ -55,7 +55,7 @@ WSL (Windows Subsystem for Linux) Bash를 활성화한다. 개발자 기능 사�
 
 WSL Ubuntu 설치한다. [그림 6]과 같이 Store에서 Ubuntu를 검색하여 설치하고 재부팅한다.
 
-~~~
+~~~console
 $ sudo passwd root
 Enter new UNIX password:
 Retype new UNIX password:
@@ -64,13 +64,13 @@ passwd: password updated successfully
 
 WSL Ubuntu의 root 계정을 생성한다. WSL Ubuntu를 설치 후 처음으로 실행하면 WSL Ubuntu에서 이용할 User와 Password를 입력 받는다. WSL Ubuntu에서 위의 명령를 실행한다.
 
-~~~
+~~~console
 > ubuntu config --default-user root
 ~~~
 
 WSL Ubuntu가 Default 계정으로 root를 이용하도록 설정한다. WSL Ubuntu를 종료한 다음, PowerShell을 관리자 권한으로 실행하여 위의 명령어를 실행한다.
 
-~~~
+~~~console
 # apt update
 # apt install docker.io
 # apt install docker-compose
@@ -79,7 +79,7 @@ WSL Ubuntu가 Default 계정으로 root를 이용하도록 설정한다. WSL Ubu
 
 Docker, Docker Compose 설치 및 설정한다. WSL Ubuntu를 실행하여 Docker Client를 위해서 Docker Package를 설치한다. Docker for Windows의 Docker와 연결하기 위해서 Bash에 Docker Host를 지정한다. WSL Ubuntu에서 위의 명령어를 입력한다.
 
-~~~
+~~~console
 # apt install git
 # git config --global core.autocrlf input
 ~~~

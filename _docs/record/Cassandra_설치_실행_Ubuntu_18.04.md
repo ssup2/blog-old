@@ -14,7 +14,7 @@ adsense: true
 
 ### 2. Java 설치
 
-~~~
+~~~console
 # add-apt-repository -y ppa:webupd8team/java
 # apt update
 # apt install -y oracle-java8-installer
@@ -24,7 +24,7 @@ Java 8를 설치한다.
 
 ### 3. Cassandra 설치
 
-~~~
+~~~console
 # echo "deb http://www.apache.org/dist/cassandra/debian 39x main" |  tee /etc/apt/sources.list.d/cassandra.list
 # curl https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add -
 # apt update
@@ -33,7 +33,7 @@ Java 8를 설치한다.
 
 Cassandra Package를 설치한다.
 
-~~~
+~~~console
 # systemctl enable cassandra
 # systemctl start cassandra
 # systemctl -l status cassandra

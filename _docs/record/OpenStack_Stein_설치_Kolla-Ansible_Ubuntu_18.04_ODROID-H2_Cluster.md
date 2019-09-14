@@ -155,7 +155,7 @@ Node04 Interface의 IP를 설정한다.
 
 #### 4.1. Deploy Node
 
-~~~
+~~~console
 (Deploy)# apt-get install software-properties-common
 (Deploy)# apt-add-repository ppa:ansible/ansible
 (Deploy)# apt-get update
@@ -163,13 +163,13 @@ Node04 Interface의 IP를 설정한다.
 (Deploy)# pip install kolla==8.0.0 kolla-ansible==8.0.0 tox gitpython pbr requests jinja2 oslo_config
 (Deploy)# pip install python-openstackclient python-glanceclient python-neutronclient
 
-~~~
+~~~console
 
 Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다. 또한 OpenSTack CLI Client도 설치한다.
 
 #### 4.2. Registry Node
 
-~~~
+~~~console
 (Registry)# apt-get install docker-ce
 ~~~
 
@@ -178,7 +178,7 @@ Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
 
 #### 4.3. Network, Compute Node
 
-~~~
+~~~console
 (Network, Compute)# apt-get remove --purge openvswitch-switch
 ~~~
 
@@ -186,7 +186,7 @@ Open vSwitch Package가 설치되어 있다면 해당 Package를 지워서 Host�
 
 #### 4.4. All Node
 
-~~~
+~~~console
 (All Node)# apt-get install ifupdown
 (All Node)# apt-get remove --purge netplan.io
 ~~~
@@ -197,7 +197,7 @@ ifupdown을 설치하고 netplan을 삭제한다.
 
 Deploy Node에서 다른 Node에게 Password 없이 SSH로 접근할 수 있도록 설정한다.
 
-~~~
+~~~console
 (Deploy)# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -223,7 +223,7 @@ The key's randomart image is:
 
 Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Deploy Node에서 다른 Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
-~~~
+~~~console
 (Deploy)# ssh-copy-id root@10.0.0.11
 (Deploy)# ssh-copy-id root@10.0.0.12
 (Deploy)# ssh-copy-id root@10.0.0.13
@@ -262,7 +262,7 @@ Deploy Node의 /etc/ansible/ansible.cfg 파일을 [파일 6]와 같이 수정한
 
 ### 6. Kolla-Ansible 설정
 
-~~~
+~~~console
 (Deploy)# mkdir -p ~/kolla-ansible
 (Deploy)# cp /usr/local/share/kolla-ansible/ansible/inventory/* ~/kolla-ansible/
 (Deploy)# mkdir -p /etc/kolla
@@ -631,7 +631,7 @@ ceph_enable_cache: "no"
 
 Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 9]의 내용처럼 수정한다. Octavia는 OpenStack을 한번이상 구동한 뒤에야 설정할 수 있기 때문에, Octavia 설정은 주석처리 상태로 놔둔다.
 
-~~~
+~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers
 ~~~
 
@@ -641,7 +641,7 @@ Kolla Ansible bootstrap-servers을 각 Node에 필요한 Ubuntu, Python Package�
 
 #### 7.1. Registry Node
 
-~~~
+~~~console
 (Registry)# mkdir ~/auth
 (Registry)# docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/auth/htpasswd
 (Registry)# docker run -d -p 5000:5000 --restart=always --name registry_private -v ~/auth:/auth -e "REGISTRY_AUTH=htpasswd" -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd" registry:2
@@ -661,7 +661,7 @@ ExecStart=/usr/bin/dockerd --insecure-registry 10.0.0.19:5000 --log-opt max-file
 <figcaption class="caption">[파일 10] All Node - /etc/systemd/system/docker.service.d/kolla.conf</figcaption>
 </figure>
 
-~~~
+~~~console
 (All)# service docker restart
 ~~~
 
@@ -669,7 +669,7 @@ Node에서 동작하는 모든 Docker Daemon에 Registry Node에서 동작하는
 
 ### 8. Octavia 인증서 설정
 
-~~~
+~~~console
 (Network)# git clone -b 4.0.1 https://github.com/openstack/octavia.git
 (Network)# cd octavia
 (Network)# sed -i 's/foobar/admin/g' bin/create_certificates.sh
@@ -684,7 +684,7 @@ Network Node에서 Octavia에서 이용하는 인증서를 생성한다.
 
 ### 9. Ceph 설정
 
-~~~
+~~~console
 (Ceph)# parted /dev/nvme0n1 -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
 (Ceph)# printf 'KERNEL=="nvme0n1p1", SYMLINK+="nvme0n11"\nKERNEL=="nvme0n1p2", SYMLINK+="nvme0n12"' > /etc/udev/rules.d/local.rules
 ~~~
@@ -693,7 +693,7 @@ Ceph Node의 /dev/nvme0n1 Block Device에 KOLLA_CEPH_OSD_BOOTSTRAP_BS Label을 �
 
 ### 10. Kolla Container Image 생성 및 Push
 
-~~~
+~~~console
 (Deploy)# cd ~
 (Deploy)# git clone -b 8.0.0 https://github.com/openstack/kolla.git
 (Deploy)# cd kolla
@@ -707,7 +707,7 @@ Kolla Container Image를 생성하고 Registry에 Push한다. Image는 Ubuntu Im
 
 ### 11. Kolla-Ansible을 이용하여 OpenStack 배포
 
-~~~
+~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode prechecks
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy
 ~~~
@@ -716,7 +716,7 @@ OpenStack을 배포하여 OpenStack을 구동한다.
 
 ### 12. OpenStack 초기화 수행
 
-~~~
+~~~console
 (Deploy)# kolla-ansible post-deploy
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# . /usr/local/share/kolla-ansible/init-runonce
@@ -726,7 +726,7 @@ OpenStack 초기화를 수행한다. 초기화가 완료되면 Network, Image, F
 
 ### 13. External Network, Octavia Network 생성
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# openstack port list
 (Deploy)# openstack router remove port demo-router [Port ID]
@@ -737,7 +737,7 @@ OpenStack 초기화를 수행한다. 초기화가 완료되면 Network, Image, F
 
 init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한다.
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# openstack router create external-router
 (Deploy)# openstack network create --share --external --provider-physical-network physnet1 --provider-network-type flat external-net
@@ -747,7 +747,7 @@ init-runonce Script로 인해서 생긴 모든 Network와 Router를 삭제한다
 
 External Router, External Network, External Subnet를 생성하고 External Router에 External Network를 연결한다. External Router는 SNAT를 수행하도록 설정한다.
 
-~~~
+~~~console
 (Deploy)# openstack network create --share --provider-network-type vxlan octavia-net
 (Deploy)# openstack subnet create --network octavia-net --dns-nameserver 8.8.8.8 --gateway 20.0.0.1 --subnet-range 20.0.0.0/24 octavia-sub
 (Deploy)# openstack router add subnet external-router octavia-sub
@@ -755,7 +755,7 @@ External Router, External Network, External Subnet를 생성하고 External Rout
 
 Octavia Network와 Octvia Subnet을 생성하고 External Network를 연결한다.
 
-~~~
+~~~console
 (Controller)# route add -net 20.0.0.0/24 gw 192.168.0.225
 (Controller)# printf '#!/bin/bash\nroute add -net 20.0.0.0/24 gw 192.168.0.225' > /etc/rc.local
 (Controller)# chmod +x /etc/rc.local
@@ -765,7 +765,7 @@ Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있
 
 ### 14. Glance에 VM Image 등록
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# cd ~/kolla-ansible
 (Deploy)# wget http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
@@ -782,7 +782,7 @@ Controller Node에서 Nat Network로 Octavia Network IP를 Dest IP로 갖고 있
 
 Ubuntu Image를 Download 받은 후 root 계정 설정, SSHD 설정을 진행한다. 설정이 완료된 Ubuntu Image를 Glance에 등록한다.
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# export OS_USERNAME=octavia
 (Deploy)# cd ~
@@ -796,7 +796,7 @@ octavia User로 Octavia Amphora Image를 생성하고 Glance에 등록한다. ta
 
 ### 15. Octavia Flavor, Keypair, Security Group 설정 및 Octavia 배포
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# export OS_USERNAME=octavia
 (Deploy)# openstack flavor create --id 100 --vcpus 2 --ram 2048 --disk 10 "m1.amphora" --public
@@ -804,7 +804,7 @@ octavia User로 Octavia Amphora Image를 생성하고 Glance에 등록한다. ta
 
 octavia User로 Octavia Amphora VM을 위해서 Flavor를 생성한다. Flavor ID는 100으로 설정할 예정이기 때문에 Flavor ID는 반드시 100으로 생성해야 한다.
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# export OS_USERNAME=octavia
 (Deploy)# openstack keypair create -- octavia_ssh_key 
@@ -812,7 +812,7 @@ octavia User로 Octavia Amphora VM을 위해서 Flavor를 생성한다. Flavor I
 
 octavia User로 octavia_ssh_key Keypair를 생성한다. Keypair 이름은 반드시 octavia_ssh_key로 생성해야 한다.
 
-~~~
+~~~console
 (Deploy)# . /etc/kolla/admin-openrc.sh
 (Deploy)# export OS_USERNAME=octavia
 (Deploy)# openstack security group create octavia-sec
@@ -837,7 +837,7 @@ octavia_amp_secgroup_list: "[octavia-sec Security Group ID]"
 
 /etc/kolla/globals.yml 파일을 [파일 11]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다. octavia_amp_boot_network_list에는 위에서 생성한 octavia-net Network의 ID를 넣는다. octavia_amp_secgroup_list에는 위에서 생성한 octavia-sec Security Group의 ID를 넣는다.
 
-~~~
+~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy -t octavia
 ~~~
 
@@ -845,13 +845,13 @@ Octavia만 배포한다.
 
 ### 16. 재설치를 위한 초기화
 
-~~~
+~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode destroy --yes-i-really-really-mean-it 
 ~~~
 
 모든 OpenStack Container를 삭제한다.
 
-~~~
+~~~console
 (Ceph)# parted /dev/nvme0n1 rm 1
 (Ceph)# parted /dev/nvme0n1 rm 2
 (Ceph)# reboot now
@@ -872,7 +872,7 @@ Octavia만 배포한다.
 
 ### 18. Debugging
 
-~~~
+~~~console
 (Node01)# ls /var/log/kolla
 ansible.log  ceph  chrony  cinder  glance  horizon  keystone  mariadb  neutron  nova  octavia  openvswitch  prometheus  rabbitmq
 ~~~

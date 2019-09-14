@@ -34,14 +34,14 @@ adsense: true
 
 #### 2.1. Ceph Node
 
-~~~
+~~~console
 (Ceph)# sudo apt install ntp
 (Ceph)# sudo apt install python
 ~~~
 
 ntp, python Package를 설치한다.
 
-~~~
+~~~console
 (Ceph)# sudo useradd -d /home/cephnode -m cephnode
 (Ceph)# sudo passwd cephnode
 Enter new UNIX password:
@@ -57,7 +57,7 @@ cephnode User를 생성한다.
 
 #### 2.2. Deploy Node
 
-~~~
+~~~console
 ...
 10.0.0.11 node01
 10.0.0.12 node02
@@ -71,7 +71,7 @@ cephnode User를 생성한다.
 
 /etc/hosts 파일을 [파일 1]의 내용처럼 수정한다.
 
-~~~
+~~~console
 (Deploy)# wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
 (Deploy)# echo deb https://download.ceph.com/debian-luminous/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
 (Deploy)# sudo apt update
@@ -80,7 +80,7 @@ cephnode User를 생성한다.
 
 ceph-deploy Package를 설치한다.
 
-~~~
+~~~console
 (Deploy)# sudo useradd -d /home/cephdeploy -m cephdeploy
 (Deploy)# sudo passwd cephdeploy
 Enter new UNIX password:
@@ -94,7 +94,7 @@ passwd: password updated successfully
 cephdeploy User를 생성한다.
 * Password : cephdeploy
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ ssh-keygen
 Generating public/private rsa key pair.
@@ -132,14 +132,14 @@ Host node03
 
 #### 3.1. Deploy Node
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ mkdir my-cluster
 ~~~
 
 Ceph Cluster Config 폴더를 생성한다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy purge node01 node02 node03
@@ -150,7 +150,7 @@ Ceph Cluster Config 폴더를 생성한다.
 
 Ceph Cluster를 초기화한다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy new node01 node02 node03
@@ -167,7 +167,7 @@ Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 N
 
 ### 4. 동작 확인
 
-~~~
+~~~console
 (Ceph)# ceph -s
   cluster:
     id:     f2aeccb9-dac1-4271-8b06-19141d26e4cb
@@ -189,14 +189,14 @@ Ceph Cluster가 정상적으로 구축되었는지 확인한다.
 
 #### 4.1. Block Storage
 
-~~~
+~~~console
 (Ceph)# ceph osd pool create rbd 16
 (Ceph)# rbd pool init rbd
 ~~~
 
 Pool 생성 및 초기화를 진행한다.
 
-~~~
+~~~console
 (Ceph)# rbd create foo --size 4096 --image-feature layering
 (Ceph)# rbd map foo --name client.admin
 /dev/rbd0

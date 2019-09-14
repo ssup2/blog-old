@@ -30,7 +30,7 @@ adsense: true
 
 ### 2. Ubuntu Package 설치
 
-~~~
+~~~console
 (All)# apt-get update
 (All)# apt-get install python-pip python3-pip
 ~~~
@@ -39,7 +39,7 @@ adsense: true
 
 ### 3. Ansible 설정
 
-~~~
+~~~console
 (Deploy)# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -65,7 +65,7 @@ The key's randomart image is:
 
 Deploy Node에서 ssh key를 생성한다. passphrase (Password)는 공백을 입력하여 설정하지 않는다. 설정하게 되면 Deploy Node에서 Managed Node로 SSH를 통해서 접근 할때마다 passphrase를 입력해야 한다.
 
-~~~
+~~~console
 (Deploy)# ssh-copy-id root@30.0.0.11
 (Deploy)# ssh-copy-id root@30.0.0.12
 (Deploy)# ssh-copy-id root@30.0.0.13
@@ -75,7 +75,7 @@ Deploy Node에서 ssh-copy-id 명령어를 이용하여 생성한 ssh Public Key
 
 ### 4. kubespray 설정, 구동
 
-~~~
+~~~console
 (Deploy)# ~
 (Deploy)# git clone -b v2.10.4 https://github.com/kubernetes-sigs/kubespray.git
 (Deploy)# cd kubespray
@@ -196,7 +196,7 @@ export OS_IDENTITY_API_VERSION=3
 
 OpenStack RC 파일의 정보를 바탕으로 openstack-rc 파일을 생성한다.
 
-~~~
+~~~console
 (Deploy)# source ~/kubespray/openstack-rc
 (Deploy)# ansible-playbook -i ~/kubespray/inventory/mycluster/inventory.ini --become --become-user=root cluster.yml
 ~~~
@@ -205,7 +205,7 @@ Deploy Node에서 Kubernets Cluster를 구성한다.
 
 ### 5. Kubernetes Cluster 초기화
 
-~~~
+~~~console
 (Deploy)# source openstack-rc
 (Deploy)# ansible-playbook -i ~/kubespray/inventory/mycluster/inventory.ini --become --become-user=root reset.yml
 ~~~

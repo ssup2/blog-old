@@ -27,7 +27,7 @@ Network는 다음과 같다.
 
 ### 3. MetalLB 설치
 
-~~~
+~~~console
 # git clone https://github.com/helm/charts.git
 # cd charts/stable/metallb
 ~~~
@@ -50,7 +50,7 @@ configInline:
 
 MetalLB를 설정한다.MetalLB Chart의 value.yaml 파일을 [파일 1]과 같이 수정한다. MetalLB를 ARP Mode로 설정하고, LoadBalancer Service IP의 범위를 설정한다.
 
-~~~
+~~~console
 # helm install --name metallb --namespace metallb .
 ~~~
 
@@ -58,7 +58,7 @@ MetalLB를 설치한다.
 
 ### 4. MetalLB 검증
 
-~~~
+~~~console
 # root@kube01:~/charts/stable/metallb# kubectl get service --all-namespaces
 NAMESPACE     NAME                    TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)                           AGE
 default       my-nginx-loadbalancer   LoadBalancer   10.96.98.173     10.0.0.200   80:30781/TCP                      34m

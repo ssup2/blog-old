@@ -118,7 +118,7 @@ Project Root 폴더에 **.clang-format** 파일을 [파일 1] 내용으로 생�
 
 ### 2. Style 적용
 
-~~~
+~~~console
 # find -name '*.c' -o -name '*.cc' -o -name '*.h' | xargs clang-format
 ~~~
 

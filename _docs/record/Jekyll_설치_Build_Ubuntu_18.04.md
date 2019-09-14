@@ -14,7 +14,7 @@ Build 환경은 다음과 같다.
 
 ### 2. Ubuntu Package 설치
 
-~~~
+~~~console
 # apt install ruby-full build-essential zlib1g-dev
 ~~~
 
@@ -22,7 +22,7 @@ Jeykll 구동에 필요한 Ubuntu Package를 설치한다.
 
 ### 3. Ruby Gem, Jekyll 설치
 
-~~~
+~~~console
 # gem install bundler -v '1.16.1'
 # bundle install
 # gem install jeykll
@@ -32,7 +32,7 @@ Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
 
 ### 4. Jekyll Servce
 
-~~~
+~~~console
 # jekyll serve
 ~~~
 

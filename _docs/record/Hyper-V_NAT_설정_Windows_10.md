@@ -20,7 +20,7 @@ adsense: true
 
 ### 2. Switch 생성 및 NAT 설정
 
-~~~
+~~~console
 > New-VMSwitch -SwitchName "NAT-Switch" -SwitchType Internal
 > $AdapterName=(Get-NetAdapter -Name "vEthernet (NAT-Switch)").Name
 > New-NetIPAddress -IPAddress 172.35.0.1 -PrefixLength 24 -InterfaceAlias $AdapterName
@@ -56,7 +56,7 @@ network:
 
 /etc/netplan/50-cloud-init.yaml 파일을 [파일 1]과 같이 설정한다. NAT로 구성한 Network 안에는 DHCP Server가 없기 때문에 수동으로 IP 설정이 필요하다.
 
-~~~
+~~~console
 # netplan apply
 ~~~
 

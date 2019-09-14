@@ -14,7 +14,7 @@ adsense: true
 
 ### 2. mutt 설치
 
-~~~
+~~~console
 # sudo apt-get install mutt
 ~~~
 
@@ -28,7 +28,7 @@ mutt Package를 설치한다.
 
 ### 4. mutt 설정
 
-~~~
+~~~console
 # mkdir -p ~/Mail
 # touch /var/mail/root
 # chmod 660 /var/mail/root
@@ -65,7 +65,7 @@ set record = ''
 
 ### 5. 사용법
 
-~~~
+~~~console
 # mutt
 ~~~
 

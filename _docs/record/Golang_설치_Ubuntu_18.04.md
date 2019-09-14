@@ -15,7 +15,7 @@ adsense: true
 
 ### 2. Ubuntu Package 설치
 
-~~~
+~~~console
 # wget https://dl.google.com/go/go1.12.2.linux-amd64.tar.gz
 # tar -xvf go1.12.2.linux-amd64.tar.gz
 # mv go /usr/local

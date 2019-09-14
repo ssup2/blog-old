@@ -45,7 +45,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 
 ### 3. Ubuntu Package 설치
 
-~~~
+~~~console
 # apt-get install gcc-arm-linux-gnueabi
 # apt-get install build-essential git u-boot-tools qemu-user-static libncurses5-dev
 ~~~
@@ -60,7 +60,7 @@ Kernel Config를 Download 한다.
 
 ### 5. Host Kernel, Host dtb Build
 
-~~~
+~~~console
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
 # tar xvf linux-3.18.3.tar.xz
 # mv Kernel_Host
@@ -68,7 +68,7 @@ Kernel Config를 Download 한다.
 
 Host Kernel을 Download 한다. 
 
-~~~
+~~~console
 # cd Kernel_Host
 # make ARCH=arm exynos_defconfig
 # make ARCH=arm menuconfig
@@ -98,7 +98,7 @@ Host Kernel을 Build 한다.
 
 ### 6. Guest Kernel, Guest dtb Build
 
-~~~
+~~~console
 # wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.18.3.tar.xz
 # tar xvf linux-3.18.3.tar.xz
 # mv Kernel_Guest
@@ -106,7 +106,7 @@ Host Kernel을 Build 한다.
 
 Guest Kernel을 Download 한다.
 
-~~~
+~~~console
 # cd Kernel_Guest
 # cp ../guest-config .config
 # make ARCH=arm menuconfig
@@ -120,7 +120,7 @@ Guest Kernel을 Build 한다.
 
 ### 7. u-boot Build
 
-~~~
+~~~console
 # git clone git://github.com/virtualopensystems/u-boot-arndale.git Arndale_u-boot
 # cd Arndale_u-boot
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- arndale5250
@@ -130,7 +130,7 @@ u-boot를 Build 한다.
 
 ### 8. 기본 Root Filesystem Image 생성
 
-~~~
+~~~console
 # mkdir rootfs
 # cd rootfs
 # dd if=/dev/zero bs=1M count=700 of=rootfs.img
@@ -140,14 +140,14 @@ u-boot를 Build 한다.
 
 Rootfs Img 파일을 생성한다. 
 
-~~~
+~~~console
 # cd /mnt
 # qemu-debootstrap --arch=armhf trusty .
 ~~~
 
 debootstrap을 이용하여 기본 Rootfs을 구성한다.
 
-~~~
+~~~console
 # vim etc/apt/sources.list
   -> deb http://ports.ubuntu.com/ trusty main restricted universe
   -> deb-src http://ports.ubuntu.com/ trusty main restricted universe
@@ -167,7 +167,7 @@ debootstrap을 이용하여 기본 Rootfs을 구성한다.
 
 Rootfs Configuration을 진행한다.
 
-~~~
+~~~console
 # chroot .
 (chroot) # passwd
 (chroot) # exit
@@ -178,7 +178,7 @@ root의 password를 설정한다.
 
 ### 9. Host Root Filesystem 설정 
 
-~~~
+~~~console
 # cp rootfs.img rootfs_host.img
 # mount -o loop rootfs_host.img /mnt
 # vi /mnt/etc/hostname
@@ -191,7 +191,7 @@ root의 password를 설정한다.
 
 ### 10. Guest_01 Root Filesystem 설정 
 
-~~~
+~~~console
 # cp rootfs.img rootfs_guest_01.img
 # mount -o loop rootfs_guest_01.img /mnt
 # echo guest01 > /mnt/etc/hostname
@@ -209,7 +209,7 @@ dns-nameservers 8.8.8.8
 
 ### 11. Guest_02 Root Filesystem 설정
 
-~~~
+~~~console
 # cp rootfs.img rootfs_guest_02.img
 # mount -o loop rootfs_guest_02.img /mnt
 # echo guest02 > /mnt/etc/hostname
@@ -228,7 +228,7 @@ EOF
 
 ### 12. QEMU Build
 
-~~~
+~~~console
 # apt-get install xapt
 # cat << EOF >> /etc/apt/sources.list.d/armel-precise.list
 deb [arch=armel] http://ports.ubuntu.com/ubuntu-ports precise main restricted universe multiverse
@@ -255,7 +255,7 @@ uSD Card의 Partiton을 아래와 같이 구성한다.
 
 ### 14. uSD Card에 u-boot Fusing
 
-~~~
+~~~console
 # cd Arndale-u-boot
 # wget http://www.virtualopensystems.com/downloads/guides/kvm_virtualization_on_arndale/arndale-bl1.bin
 # dd if=arndale-bl1.bin of=/dev/sdb bs=512 seek=1
@@ -267,7 +267,7 @@ uSD Card에 u-boot를 Fusing 한다.
 
 ### 15. Host Root Filesystem 복사 
 
-~~~
+~~~console
 # mount -o loop rootfs_host.img /mnt
 # cd /mnt
 # cp -a * (MicroSD root Partition)
@@ -282,7 +282,7 @@ Host Kernel uImage, exynos5250-arndale.dtb 파일을 uSD Card boot Partition에 
 
 ### 17. u-boot 설정
 
-~~~
+~~~console
 (u-boot) # setenv kernel_addr_r 0x40007000
 (u-boot) # setenv dtb_addr_r 0x42000000
 (u-boot) # setenv bootcmd 'ext2load mmc 0:1 $kernel_addr_r /uImage; ext2load mmc 0:1 $dtb_addr_r /exynos5250-arndale.dtb; bootm $kernel_addr_r - $dtb_addr_r'
@@ -294,7 +294,7 @@ u-boot를 설정한다.
 
 ### 18. Host Package 설정
 
-~~~
+~~~console
 (Host) # apt-get update (Host) # apt-get install gcc make ssh xorg fluxbox tightvncserver (Host) # apt-get install libsdl-dev libfdt-dev bridge-utils uml-utilities
 ~~~
 
@@ -302,7 +302,7 @@ Arndale Board에서 uSD Card를 넣고 Host Booting 후, Host에서 Guest 구동
 
 ### 19. Host에 Bridge 설정
 
-~~~
+~~~console
 (Host) # brctl addbr br0
 (Host) # brctl addif br0 eth0
 (Host) # ifconfig br0 192.168.0.150 up
@@ -314,7 +314,7 @@ Host에 Guest를 위한 Bridge를 설정한다.
 
 ### 20. Host에 VNC를 통해 접속
 
-~~~
+~~~console
 (Host) # tightvncserver -nolisten tcp :1
 ~~~
 
@@ -322,7 +322,7 @@ Host에서 VNC Server를 실행한다. VNC Client를 통해서 192.168.0.150:1�
 
 ### 21. Guest 실행
 
-~~~
+~~~console
 (Host) # tunctl -u root
 (Host) # ifconfig tap0 192.168.0.200 up
 (Host) # brctl addif br0 tap0
@@ -337,7 +337,7 @@ Host에서 VNC Server를 실행한다. VNC Client를 통해서 192.168.0.150:1�
 	-append "earlyprintk console=ttyAMA0 mem=512M root=/dev/vda rw --no-log virtio_mmio.device=1M@0x4e000000:74:0 virtio_mmio.device=1M@0x4e100000:75:1"
 ~~~
 
-~~~
+~~~console
  (Host) # tunctl -u root
  (Host) # ifconfig tap1 192.168.0.201 up
  (Host) # brctl addif br0 tap1

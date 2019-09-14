@@ -16,7 +16,7 @@ adsense: true
 
 ### 2. sshd 설치, 설정
 
-~~~
+~~~console
 # apt update
 # apt install -y openssh-server
 # apt install -y pdsh
@@ -37,7 +37,7 @@ PermitRootLogin yes
 
 /etc/ssh/sshd_config 파일을 [파일 1]의 내용으로 수정한다.
 
-~~~
+~~~console
 # service sshd restart
 # ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 # cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
@@ -53,7 +53,7 @@ sshd 재시작 및 ssh 접속시 password가 불필요하도록 설정한다.
 
 ### 3. Java 설치 
 
-~~~
+~~~console
 # apt update
 # apt install -y openjdk-8-jdk
 ~~~
@@ -62,7 +62,7 @@ Java Package를 설치한다.
 
 ### 4. Hadoop 설치, 설정
 
-~~~
+~~~console
 # cd ~
 # wget http://mirror.navercorp.com/apache/hadoop/common/hadoop-3.0.3/hadoop-3.0.3.tar.gz
 # tar zxvf hadoop-3.0.3.tar.gz
@@ -131,7 +131,7 @@ export YARN_NODEMANAGER_USER="root"
 
 ~/.bashrc 파일에 [파일 5]의 내용을 추가한다.
 
-~~~
+~~~console
 # hdfs namenode -format
 # start-dfs.sh
 ~~~
@@ -141,7 +141,7 @@ HDFS Format 및 HDFS을 시작하고 HDFS 동작을 확인한다.
 
 ### 5. YARN 설치, 설정
 
-~~~
+~~~console
 # cd ~/hadoop-3.0.
 # bin/hdfs dfs -mkdir /user
 # bin/hdfs dfs -mkdir /user/root
@@ -193,7 +193,7 @@ root user 폴더를 생성한다.
 
 ~/hadoop-3.0.3/etc/hadoop/yarn-site.xml 파일을 [파일 7]과 같이 수정한다.
 
-~~~
+~~~console
 # start-yarn.sh
 ~~~
 
@@ -202,7 +202,7 @@ YARN을 시작하고 YARN의 동작을 확인한다.
 
 ### 6. 동작 확인
 
-~~~
+~~~console
 # jps
 3988 NameNode
 5707 Jps
@@ -214,7 +214,7 @@ YARN을 시작하고 YARN의 동작을 확인한다.
 
 6개의 JVM 동작을 확인한다.
 
-~~~
+~~~console
 # cd ~/hadoop-3.0.3
 # yarn jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.3.jar pi 16 1000
 ...
@@ -225,7 +225,7 @@ Example을 구동한다.
 
 ### 7. Issue 해결
 
-~~~
+~~~console
 # stop-yarn.sh
 # stop-dfs.sh
 # rm -rf /tmp/*

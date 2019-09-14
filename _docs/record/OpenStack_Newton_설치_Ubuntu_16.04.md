@@ -58,14 +58,14 @@ VirtualBox를 이용하여 [그림 1]과 같이 가상의 Controller, Compute, S
 
 ##### 2.1.1. OpenStack Package 설치
 
-~~~
+~~~console
 (All)# apt install software-properties-common
 (All)# add-apt-repository cloud-archive:newton
 ~~~
 
 OpenStack Package 저장소를 추가한다.
 
-~~~
+~~~console
 (All)# apt update && apt dist-upgrade
 (All)# apt install python-openstackclient
 ~~~
@@ -106,7 +106,7 @@ dns-nameservers 8.8.8.8
 
 ##### 2.2.2. NTP (Network Time Protocol) 설정
 
-~~~
+~~~console
 (Controller)# apt install chrony
 ~~~
 
@@ -127,7 +127,7 @@ allow 10.0.0.0/24
 
  /etc/chrony/chrony.conf에 [파일 3]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# service chrony restart
 ~~~
 
@@ -135,7 +135,7 @@ chrony를 재시작한다.
 
 ##### 2.2.3. SQL Database 설치
 
-~~~
+~~~console
 (Controller)# apt install mariadb-server python-pymysql
 ~~~
 
@@ -158,7 +158,7 @@ character-set-server = utf8
 
 /etc/mysql/mariadb.conf.d/99-openstack.cnf 생성 및 [파일 4]와 같이 수정한다.
 
-~~~
+~~~console
 (Controller)# service mysql restart
 ~~~
 
@@ -166,13 +166,13 @@ MariaDB를 재시작한다.
 
 ##### 2.2.4. Message Queue 설치
 
-~~~
+~~~console
 (Controller)# apt install rabbitmq-server
 ~~~
 
 RabbitMQ Package를 설치한다.
 
-~~~
+~~~console
 (Controller)# rabbitmqctl add_user openstack root
 (Controller)# rabbitmqctl set_permissions openstack ".\*" ".\*" ".\*"
 ~~~
@@ -181,7 +181,7 @@ RabbitMQ를 설정한다.
 
 ##### 2.2.5. Memcached 설치
 
-~~~
+~~~console
 (Controller)# apt install memcached python-memcache
 ~~~
 
@@ -265,7 +265,7 @@ dns-nameservers 8.8.8.8
 
 ##### 2.3.2. NTP (Network Time Protocol) 설정
 
-~~~
+~~~console
 (Compute)# apt install chrony
 ~~~
 
@@ -281,7 +281,7 @@ server controller iburst
 
 /etc/chrony/chrony.conf에 [파일 9]의 내용을 추가한다.
 
-~~~
+~~~console
 (Compute)# service chrony restart
 ~~~
 
@@ -314,7 +314,7 @@ dns-nameservers 8.8.8.8
 
 ##### 2.4.2. NTP (Network Time Protocol) 설정
 
-~~~
+~~~console
 (Storage)# apt install chrony
 ~~~
 
@@ -330,7 +330,7 @@ server controller iburst
 
 /etc/chrony/chrony.conf에 [파일 11]의 내용을 추가한다.
 
-~~~
+~~~console
 (Storage)# service chrony restart
 ~~~
 
@@ -340,7 +340,7 @@ chrony를 재시작한다.
 
 #### 3.1. Controller Node
 
-~~~
+~~~console
 (Controller)# mysql -u root -p
 mysql> CREATE DATABASE keystone;
 mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'root';
@@ -350,7 +350,7 @@ mysql> exit;
 
 Keystone DB를 초기화한다.
 
-~~~
+~~~console
 (Controller)# apt install keystone
 ~~~
 
@@ -370,7 +370,7 @@ provider = fernet
 
 /etc/keystone/keystone.conf에 [파일 12]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# su -s /bin/sh -c "keystone-manage db_sync" keystone
 (Controller)# keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 (Controller)# keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
@@ -389,14 +389,14 @@ ServerName controller
 
 /etc/apache2/apache2.conf에 [파일 13]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# service apache2 restart
 (Controller)# rm -f /var/lib/keystone/keystone.db
 ~~~
 
 Apache HTTP Server 재시작 및 DB 제거한다.
 
-~~~
+~~~console
 (Controller)# export OS_USERNAME=admin
 (Controller)# export OS_PASSWORD=root
 (Controller)# export OS_PROJECT_NAME=admin
@@ -408,7 +408,7 @@ Apache HTTP Server 재시작 및 DB 제거한다.
 
 환경 변수를 설정한다.
 
-~~~
+~~~console
 (Controller)# openstack project create --domain default --description "Service Project" service
 (Controller)# openstack project create --domain default --description "Demo Project" demo
 (Controller)# openstack user create --domain default --password-prompt demo
@@ -420,7 +420,7 @@ Project, User, Role 생성 및 설정한다.
 
 #### 3.2. 검증
 
-~~~
+~~~console
 # openstack --os-auth-url http://controller:35357/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin token issue
 +------------+-----------------------------------------------------------------+
 | Field      | Value                                                           |
@@ -434,7 +434,7 @@ Project, User, Role 생성 및 설정한다.
 +------------+-----------------------------------------------------------------+
 ~~~
 
-~~~
+~~~console
 # openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name demo --os-username demo token issue
 +------------+-----------------------------------------------------------------+
 | Field      | Value                                                           |
@@ -454,7 +454,7 @@ Controller Node에서 Keystone의 동작 확인한다.
 
 #### 4.1. Controller Node
 
-~~~
+~~~console
 (Controller)# mysql -u root -p
 mysql> CREATE DATABASE glance;
 mysql> GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'root';
@@ -464,7 +464,7 @@ mysql> exit;
 
 Glance DB를 초기화한다.
 
-~~~
+~~~console
 (Controller)# . /root/admin-openrc
 (Controller)# openstack user create --domain default --password-prompt glance
 (Controller)# openstack role add --project service --user glance admin
@@ -473,7 +473,7 @@ Glance DB를 초기화한다.
 
 Glance User 생성 및 설정한다.
 
-~~~
+~~~console
 (Controller)# openstack endpoint create --region RegionOne image public http://controller:9292
 (Controller)# openstack endpoint create --region RegionOne image internal http://controller:9292
 (Controller)# openstack endpoint create --region RegionOne image admin http://controller:9292
@@ -481,7 +481,7 @@ Glance User 생성 및 설정한다.
 
 Glance Service API Endpoint를 생성한다.
 
-~~~
+~~~console
 (Controller)# apt install glance
 ~~~
 
@@ -542,7 +542,7 @@ flavor = keystone
 
 /etc/glance/glance-registry.conf에 [파일 15]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# su -s /bin/sh -c "glance-manage db_sync" glance
 (Controller)# service glance-registry restart
 (Controller)# service glance-api restart
@@ -552,7 +552,7 @@ Glance를 설정 및 시작한다.
 
 #### 4.2. 검증
 
-~~~
+~~~console
 (Controller)# . /root/admin-openrc
 (Controller)# wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
 (Controller)# openstack image create "cirros" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --public
@@ -570,7 +570,7 @@ Controller Node에서 Glance의 동작을 확인한다.
 
 #### 5.1. Controller Node
 
-~~~
+~~~console
 (Controller)# mysql -u root -p
 mysql> CREATE DATABASE nova_api;
 mysql> CREATE DATABASE nova;
@@ -583,7 +583,7 @@ mysql> exit;
 
 Nova DB를 초기화 한다.
 
-~~~
+~~~console
 (Controller)# . /root/admin-openrc
 (Controller)# openstack user create --domain default --password-prompt nova
 (Controller)# openstack role add --project service --user nova admin
@@ -592,7 +592,7 @@ Nova DB를 초기화 한다.
 
 Nova User를 생성 및 설정한다.
 
-~~~
+~~~console
 (Controller)# openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1/%\(tenant_id\)s
 (Controller)# openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1/%\(tenant_id\)s
 (Controller)# openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1/%\(tenant_id\)s
@@ -600,7 +600,7 @@ Nova User를 생성 및 설정한다.
 
 Nova Service API Endpoint를 생성한다.
 
-~~~
+~~~console
 (Controller)# apt install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 (Controller)# mkdir /usr/lib/python2.7/dist-packages/keys
 ~~~
@@ -649,7 +649,7 @@ lock_path = /var/lib/nova/tmp
 
 /etc/nova/nova.conf에 [파일 16]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# su -s /bin/sh -c "nova-manage api_db sync" nova
 (Controller)# su -s /bin/sh -c "nova-manage db sync" nova
 (Controller)# service nova-api restart
@@ -663,7 +663,7 @@ Nova를 설정 및 시작한다.
 
 #### 5.2. Compute Node
 
-~~~
+~~~console
 (Compute)# apt install nova-compute
 ~~~
 
@@ -721,7 +721,7 @@ virt_type=qemu
 
 현재 VirtualBox의 VM은 CPU의 Intel의 VT-X같은 Virtualization Extension을 이용하지 못한다. 따라서 Compute Node는 KVM+QEMU 조합의 가상 머신을 이용하지 못하고 QEMU만을 이용하여 가상 머신을 구동한다. /etc/nova/nova-compute.conf을 [파일 18]과 같이 수정한다.
 
-~~~
+~~~console
 (Compute)# service nova-compute restart
 ~~~
 
@@ -729,7 +729,7 @@ Nova를 시작한다.
 
 #### 5.3. 검증
 
-~~~
+~~~console
 (Contorller)# . /root/admin-openrc
 (Contorller)# openstack compute service list
 +----+--------------------+------------+----------+---------+-------+----------------------------+
@@ -748,7 +748,7 @@ Controller Node에서 Nova의 동작을 확인한다.
 
 #### 6.1. Controller Node
 
-~~~
+~~~console
 (Contorller)# mysql -u root -p
 mysql> CREATE DATABASE neutron;
 mysql> GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'root';
@@ -758,7 +758,7 @@ mysql> exit;
 
 Neutron DB를 초기화 한다.
 
-~~~
+~~~console
 (Contorller)# . /root/admin-openrc
 (Contorller)# openstack user create --domain default --password-prompt neutron
 (Contorller)# openstack role add --project service --user neutron admin
@@ -767,7 +767,7 @@ Neutron DB를 초기화 한다.
 
 Neutron User를 생성 및 설정한다.
 
-~~~
+~~~console
 (Contorller)# openstack endpoint create --region RegionOne network public http://controller:9696
 (Contorller)# openstack endpoint create --region RegionOne network internal http://controller:9696
 (Contorller)# openstack endpoint create --region RegionOne network admin http://controller:9696
@@ -775,7 +775,7 @@ Neutron User를 생성 및 설정한다.
 
 Neutron Service API Endpoint를 생성한다.
 
-~~~
+~~~console
 (Contorller)# apt install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
 ~~~
 
@@ -922,7 +922,7 @@ metadata_proxy_shared_secret = root
 
 /etc/nova/nova.conf에 [파일 25]의 내용을 추가한다.
 
-~~~
+~~~console
 (Contorller)# su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 (Contorller)# service nova-api restart
 (Contorller)# service neutron-server restart
@@ -936,7 +936,7 @@ Neutron를 시작한다.
 
 #### 6.2. Compute Node
 
-~~~
+~~~console
 (Compute)# apt install neutron-linuxbridge-agent
 ~~~
 
@@ -1004,7 +1004,7 @@ password = root
 
 /etc/nova/nova.conf에 [파일 28]의 내용을 추가한다.
 
-~~~
+~~~console
 (Compute)# service nova-compute restart
 (Compute)# service neutron-linuxbridge-agent restart
 ~~~
@@ -1013,7 +1013,7 @@ Neutron를 시작한다.
 
 #### 6.3. 검증
 
-~~~
+~~~console
 (Compute)# . /root/admin-openrc
 (Compute)# neutron ext-list
 +---------------------------+-----------------------------------------------+
@@ -1060,7 +1060,7 @@ Compute Node에서 Neutron의 동작을 확인한다.
 
 #### 7.1. Controller Node
 
-~~~
+~~~console
 (Controller)# apt install openstack-dashboard
 ~~~
 
@@ -1099,7 +1099,7 @@ OPENSTACK_API_VERSIONS = {
 
 /etc/openstack-dashboard/local_settings.py에 [파일 29]와 같이 수정한다.
 
-~~~
+~~~console
 (Controller)# service apache2 reload
 ~~~
 
@@ -1128,7 +1128,7 @@ os_region_name = RegionOne
 
 #### 8.2. Controller Node
 
-~~~
+~~~console
 (Controller)# mysql -u root -p
 mysql> CREATE DATABASE cinder;
 mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' IDENTIFIED BY 'root';
@@ -1138,7 +1138,7 @@ mysql> GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'root';
 
 Cinder DB를 초기화한다.
 
-~~~
+~~~console
 (Controller)# . admin-openrc
 (Controller)# openstack user create --domain default --password-prompt cinder
 (Controller)# openstack role add --project service --user cinder admin
@@ -1148,7 +1148,7 @@ Cinder DB를 초기화한다.
 
 Cinder User를 생성 및 설정한다.
 
-~~~
+~~~console
 (Controller)# openstack endpoint create --region RegionOne volume public http://controller:8776/v1/%\(tenant_id\)s
 (Controller)# openstack endpoint create --region RegionOne volume internal http://controller:8776/v1/%\(tenant_id\)s
 (Controller)# openstack endpoint create --region RegionOne volume admin http://controller:8776/v1/%\(tenant_id\)s
@@ -1159,7 +1159,7 @@ Cinder User를 생성 및 설정한다.
 
 Cinder Service API Endpoint를 생성한다.
 
-~~~
+~~~console
 (Controller)# su -s /bin/sh -c "cinder-manage db sync" cinder
 (Controller)# apt install cinder-api cinder-scheduler
 ~~~
@@ -1196,7 +1196,7 @@ lock_path = /var/lib/cinder/tmp
 
 /etc/cinder/cinder.conf에 [파일 31]의 내용을 추가한다.
 
-~~~
+~~~console
 (Controller)# service nova-api restart
 (Controller)# service cinder-scheduler restart
 (Controller)# service cinder-api restart
@@ -1206,7 +1206,7 @@ Cinder를 시작한다.
 
 #### 8.3. Storage Node
 
-~~~
+~~~console
 (Storage)# apt install lvm2
 (Storage)# pvcreate /dev/sdb
 (Storage)# vgcreate cinder-volumes /dev/sdb
@@ -1227,7 +1227,7 @@ filter = [ "a/sdb/", "r/.*/"]
 
 /etc/lvm/lvm.conf에 [파일 32]의 내용을 추가한다.
 
-~~~
+~~~console
 (Storage)# apt install cinder-volume
 ~~~
 
@@ -1271,7 +1271,7 @@ lock_path = /var/lib/cinder/tmp
 
 /etc/cinder/cinder.conf에 [파일 33]의 내용을 추가한다.
 
-~~~
+~~~console
 (Storage)# service tgt restart
 (Storage)# service cinder-volume restart
 ~~~
@@ -1280,7 +1280,7 @@ Cinder를 시작한다.
 
 #### 8.4. 검증
 
-~~~
+~~~console
 (Controller)# . admin-openrc
 (Controller)# openstack volume service list
 +------------------+------------+------+---------+-------+----------------------------+

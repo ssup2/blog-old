@@ -40,7 +40,7 @@ adsense: true
 
 ##### 3.1.1. Ubuntu 
 
-~~~
+~~~console
 # add-apt-repository ppa:jonathonf/vim
 # apt-get update
 # apt-get install vim-gnome
@@ -53,7 +53,7 @@ Vim, ctags, cscope, ClangFormat을 설치한다.
 
 ##### 3.1.2. macOS
 
-~~~
+~~~console
 $ brew update
 $ brew install vim
 $ brew install --HEAD universal-ctags/universal-ctags/universal-ctags
@@ -67,7 +67,7 @@ Vim, ctags, cscope, ClangFormat, python2를 설치한다.
 
 ##### 3.2.1. Ubuntu
 
-~~~
+~~~console
 source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 ~~~
 
@@ -75,7 +75,7 @@ Vim의 gruvbox Theme를 위해서 ~/.bashrc 파일에 위의 내용을 추가한
 
 ##### 3.2.2. macOS
 
-~~~
+~~~console
 source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
 ~~~
 
@@ -83,7 +83,7 @@ Vim의 gruvbox Theme를 위해서 ~/.bash_profile 파일에 위의 내용을 추
 
 #### 3.3. Vundle Plugin 설치
 
-~~~
+~~~console
 # git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ~~~
 
@@ -176,7 +176,7 @@ let g:clang_format#auto_format = 0
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치
 
-~~~
+~~~console
 : PluginInstall
 ~~~
 
@@ -186,7 +186,7 @@ let g:clang_format#auto_format = 0
 
 ##### 3.6.1. Ubuntu
 
-~~~
+~~~console
 # apt-get install build-essential cmake
 # apt-get install python-dev python3-dev
 # cd ~/.vim/bundle/YouCompleteMe
@@ -195,7 +195,7 @@ let g:clang_format#auto_format = 0
 
 YouCompleteMe를 Compile 및 설치한다.
 
-~~~
+~~~console
 # wget https://raw.githubusercontent.com/Valloric/ycmd/3ad0300e94edc13799e8bf7b831de8b57153c5aa/cpp/ycm/.ycm_extra_conf.py -O ~/.vim/.ycm_extra_conf.py
 ~~~
 
@@ -203,7 +203,7 @@ YouCompleteMe를 Compile 및 설치한다.
 
 ##### 3.6.2. macOS
 
-~~~
+~~~console
 $ brew install cmake
 $ brew install python2
 $ cd ~/.vim/bundle/YouCompleteMe
@@ -212,7 +212,7 @@ $ ./install.py --clang-completer
 
 YouCompleteMe를 Compile 및 설치한다.
 
-~~~
+~~~console
 # wget https://raw.githubusercontent.com/Valloric/ycmd/3ad0300e94edc13799e8bf7b831de8b57153c5aa/cpp/ycm/.ycm_extra_conf.py -O ~/.vim/.ycm_extra_conf.py
 ~~~
 
@@ -237,7 +237,7 @@ Plugin 'fatih/vim-go'
 
 ~/.vimrc 파일의 Vundle Plugins에 [파일 2]내용을 추가하여 Vundle이 vim-go를 설치하도록 설정한다.
 
-~~~
+~~~console
 : PluginInstall
 ~~~
 
@@ -245,7 +245,7 @@ vim-go Vim Plugin을 설치한다. Vim의 명령어 Mode에서 실행한다.
 
 #### 4.3. Golang Binary 설치
 
-~~~
+~~~console
 : GoInstallBinaries
 ~~~
 
@@ -253,7 +253,7 @@ Golang 개발시 필요한 Tool들을 설치한다. Vim의 명령어 Mode에서 
 
 #### 4.4. YouCompleteMe 재설치
 
-~~~
+~~~console
 # cd ~/.vim/bundle/YouCompleteMe
 # ./install.py --clang-completer --gocode-completer
 ~~~

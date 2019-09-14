@@ -43,7 +43,7 @@ adsense: true
 
 #### 2.1. ARM
 
-~~~
+~~~console
 # ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- make menuconfig
 # ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- make zImage
 # ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- make uImage

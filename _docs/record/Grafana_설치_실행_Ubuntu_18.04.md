@@ -24,7 +24,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 
 /etc/apt/sources.list에 다음의 [파일 1]의 내용을 추가한다.
 
-~~~
+~~~console
 # curl https://packagecloud.io/gpg.key | sudo apt-key add -
 # apt-get update
 # apt-get install grafana
@@ -32,7 +32,7 @@ deb https://packagecloud.io/grafana/stable/debian/ stretch main
 
 Grafana를 설치한다.
 
-~~~
+~~~console
 # systemctl daemon-reload
 # systemctl start grafana-server
 # systemctl status grafana-server

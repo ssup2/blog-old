@@ -25,7 +25,7 @@ adsense: true
 
 ### 2. Terraform 설치
 
-~~~
+~~~console
 (Deploy)# apt-get update
 (Deploy)# apt-get install wget unzip
 (Deploy)# wget https://releases.hashicorp.com/terraform/0.12.5/terraform_0.12.5_linux_amd64.zip
@@ -222,7 +222,7 @@ resource "openstack_compute_floatingip_associate_v2" "fip" {
 
 ### 4. Terraform 적용, 초기화
 
-~~~
+~~~console
 (Deploy)# cd ~/terraform
 (Deploy)# terraform init
 (Deploy)# terraform apply
@@ -230,7 +230,7 @@ resource "openstack_compute_floatingip_associate_v2" "fip" {
 
 Terraform을 적용한다.
 
-~~~
+~~~console
 (Deploy)# cd ~/terraform
 (Deploy)# terraform destroy
 ~~~

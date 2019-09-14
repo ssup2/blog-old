@@ -15,7 +15,7 @@ Compile, 설치 환경은 다음과 같다.
 
 ### 2. Package 설치
 
-~~~
+~~~console
 # apt-get install libtool m4 automake
 # apt-get install libcap-dev
 # apt-get install pkgconf
@@ -26,7 +26,7 @@ LXC Build에 필요한 Package를 설치한다.
 
 ### 3. Compile, 설치
 
-~~~
+~~~console
 # git clone https://github.com/lxc/lxc.git
 # cd lxc
 # ./autogen.sh

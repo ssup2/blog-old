@@ -15,7 +15,7 @@ adsense: true
 
 ### 2. Ubuntu Package 설치
 
-~~~
+~~~console
 # apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils uml-utilities qemu-system qemu-user-static virt-manager libncurses-dev targetcli
 ~~~
 
@@ -23,21 +23,21 @@ KVM, QEMU 구동 관련 Ubuntu Package를 설치한다.
 
 ### 3. VM Kernel Build
 
-~~~
+~~~console
 # mkdir kernel
 # cd kernel
 ~~~
 
 Kernel Directory 생성한다.
 
-~~~
+~~~console
 # apt-get source linux-image-$(uname -r)
 # apt-get build-dep linux-image-$(uname -r)
 ~~~
 
 Kernel Download 및 Kernel Build 관련 Package를 설치한다.
 
-~~~
+~~~console
 # cd linux-lts-vivid-3.19.0
 # cp /boot/config-3.19.0-25-generic .config
 # make ARCH=x86_64 menuconfig
@@ -46,7 +46,7 @@ Kernel Download 및 Kernel Build 관련 Package를 설치한다.
 
 Kernel Configuration 수정을 통해서 virtio-scsi를 활성화 한다.
 
-~~~
+~~~console
 # cd linux-lts-vivid-3.19.0/ubuntu/vbox/vboxguest
 # ln -s ../include/
 # ln -s ../r0drv/
@@ -62,21 +62,21 @@ Kernel을 Build한다.
 
 ### 4. VM Rootfs 생성
 
-~~~
+~~~console
 # mkdir rootfs
 # cd rootfs
 ~~~
 
 VM의 Rootfs Directory를 생성한다.
 
-~~~
+~~~console
 # dd if=/dev/zero bs=1M count=8092 of=rootfs.img
 # /sbin/mkfs.ext4 rootfs.img (Proceed anyway? (y,n) y)
 ~~~
 
 rootfs.img 파일을 생성한다.
 
-~~~
+~~~console
 # mount -o loop rootfs.img /mnt
 # cd /mnt
 # qemu-debootstrap --arch=amd64 trusty .
@@ -123,7 +123,7 @@ iface eth0 inet dhcp
 
 VM의 Network를 설정한다. mnt에 Mount된 etc/network/interfaces 파일을 [파일 2]와 같이 수정한다.
 
-~~~
+~~~console
 # /mnt
 # chroot .
 (chroot) # passwd
@@ -132,14 +132,14 @@ VM의 Network를 설정한다. mnt에 Mount된 etc/network/interfaces 파일을 
 
 VM의 root Password를 설정한다. 
 
-~~~
+~~~console
 # cd kernel/linux-lts-vivid-3.19.0
 # make ARCH=x86_64 INSTALL_MOD_PATH=/mnt modules_install
 ~~~
 
 rootfs.img에 Kernel module을 설치한다.
 
-~~~
+~~~console
 # umount /mnt
 ~~~
 
@@ -147,7 +147,7 @@ Unmount를 수행하여 rootfs.img 생성을 마무리한다.
 
 ### 5. Bridge 설정
 
-~~~
+~~~console
 # mkdir VM
 # cd VM
 # vim set_bridge.sh
@@ -165,7 +165,7 @@ PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 <figcaption class="caption">[파일 1] ~/VM/set_bridge.sh</figcaption>
 </figure>
 
-~~~
+~~~console
 # chmod +x set_bridge.sh
 ~~~
 
@@ -173,7 +173,7 @@ Bridge 설정을 위한 ~/VM/set_bridge.sh Script 파일을 [파일 1]의 내용
 
 ### 6. LIO 설정
 
-~~~
+~~~console
 # apt-get install targetcli
 # vim /var/target/fabric/vhost.spec
 ~~~
@@ -200,7 +200,7 @@ configfs_group = vhost
 
 vhost-scsi를 위한 LIO를 설정한다. /var/target/fabric/vhost.spec 파일을 [파일 3]과 같이 설정한다.
 
-~~~
+~~~console
 # reboot now
 # targetcli
 (targetcli) /> cd backstores/fileio
@@ -222,7 +222,7 @@ LIO CLI를 이용하여 LIO를 설정한다.
 
 ### 7. VM 실행
 
-~~~
+~~~console
 # cd VM
 # cp ../../kernel/linux-lts-vivid-3.19.0/arch/x86_64/boot/bzImage
 # cp ../../rootfs/rootfs.img
@@ -232,7 +232,7 @@ VM을 위해서 생성한 rootfs.img, bzImage를 복사한다.
 
 #### 7.1. KVM + QEMU
 
-~~~
+~~~console
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -hda rootfs.img -net nic -net user -append "earlyprintk root=/dev/sda console=ttyS0"
 ~~~
 
@@ -240,26 +240,26 @@ User Networking (SLIRP)을 이용하여 VM을 생성한다.
 
 #### 7.2. KVM + QEMU + VirtIO
 
-~~~
+~~~console
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -device virtio-blk-pci,scsi=off,drive=blk0 -device virtio-net-pci,netdev=net0 -drive file=rootfs.img,if=none,id=blk0 -netdev user,id=net0 -append "earlyprintk root=/dev/vda console=ttyS0"
 ~~~
 
 User Networking (SLIRP), virtio-net, virtio-blk을 이용하여 VM을 생성한다.
 
-~~~
+~~~console
 # ./set_bridge.sh
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -device virtio-blk-pci,scsi=off,drive=blk0 -device virtio-net-pci,netdev=net0 -drive file=rootfs.img,if=none,id=blk0 -netdev tap,id=net0,ifname=tap0 -append "earlyprintk root=/dev/vda console=ttyS0"
 ~~~
 
 TAP, virtio-net, virtio-blk을 이용하여 VM을 생성한다.
 
-~~~
+~~~console
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -device virtio-scsi-pci -device scsi-hd,drive=root -device virtio-net-pci,netdev=net0 -drive file=rootfs.img,if=none,format=raw,id=root -netdev user,id=net0 -append "earlyprintk root=/dev/sda console=ttyS0"
 ~~~
 
 User Networking (SLIRP), virtio-net, virtio-scsi을 이용하여 VM을 생성한다.
 
-~~~
+~~~console
 # ./set_bridge.sh
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -device virtio-scsi-pci -device scsi-hd,drive=root -device virtio-net-pci,netdev=net0 -drive file=rootfs.img,if=none,format=raw,id=root -netdev tap,id=net0,ifname=tap0 -append "earlyprintk root=/dev/sda console=ttyS0"
 ~~~
@@ -268,7 +268,7 @@ TAP, virtio-net, virtio-scsi을 이용하여 VM을 생성한다.
 
 #### 7.3. KVM + QEMU + VirtIO + vhost
 
-~~~
+~~~console
 # ./set_bridge.sh
 # qemu-system-x86_64 -enable-kvm -kernel bzImage -m 1024 -nographic -device vhost-scsi-pci,wwpn=naa.60014052cc816bf4 -device virtio-net-pci,netdev=net0 -netdev tap,id=net0,vhost=on,ifname=tap0 -append "earlyprintk root=/dev/sda console=ttyS0"
 ~~~
@@ -277,7 +277,7 @@ TAP, virtio-net+vhost, virtio-scsi+vhost-scsi을 이용하여 VM을 생성한다
 
 ### 8. fstab 설정
 
-~~~
+~~~console
 * Stopping log initial device creation                                  [ OK ]
 The disk drive for / is not ready yet or not present.
 keys:Continue to wait, or Press S to skip mounting or M for manual recovery (Push M)
@@ -285,7 +285,7 @@ keys:Continue to wait, or Press S to skip mounting or M for manual recovery (Pus
 
 VM Booting 후 Rootfs Mount Issue를 해결하기 위해서 다음과 같은 방법으로 Shell에 접근한다. 
 
-~~~
+~~~console
 (VM) # mount -o remount,rw /
 (VM) # blkid
 (VM) /dev/sda: UUID="(UUID of blk)" TYPE="ext4"

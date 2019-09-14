@@ -19,21 +19,21 @@ adsense: true
 
 ### 2. istio 설치
 
-~~~
+~~~console
 # curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.7 sh -
 # cd istio-1.1.7
 ~~~
 
 istio를 Download한다.
 
-~~~
+~~~console
 # helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
 # helm install install/kubernetes/helm/istio --name istio --namespace istio-system
 ~~~
 
 Helm을 이용하여 istio를 설치한다.
 
-~~~
+~~~console
 # kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
 53
 # kubectl get svc -n istio-system

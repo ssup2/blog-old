@@ -29,14 +29,14 @@ Windows의 Device Manager를 통해 ADB USB Driver를 설치한다.
 
 ### 3. Ubuntu Package 설치
 
-~~~
+~~~console
 # apt-get install git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 # ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
 ~~~
 
 Android Build를 위한 Ubuntu Package를 설치한다.
 
-~~~
+~~~console
 # add-apt-repository ppa:webupd8team/java
 # apt-get update
 # apt-get install oracle-java6-installer
@@ -46,7 +46,7 @@ Java 6를 설치한다.
 
 ### 5. Ubuntu에 Repo 설치
 
-~~~
+~~~console
 # mkdir ~/bin
 # curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 # chmod a+x ~/bin/repo
@@ -66,7 +66,7 @@ PATH=~/bin:$PATH
 
 ### 6. Ubuntu에 Cross Compiler 설치
 
-~~~
+~~~console
 # mv ./arm-eabi-4.6.tar.gz /usr/local
 # cd /usr/local
 # tar zxvf arm-eabi-4.6.tar.gz
@@ -100,7 +100,7 @@ Prebuilt Image들을 아래의 URL을 통해서 Download 한다.
 
 ### 8. Prebuilt Image를 emmc에 Flash 및 Android Update
 
-~~~
+~~~console
 # unzip emmc_self_installer.img.zip
 # pv -tpreb emmc_self_installer.img | dd of=/dev/sdb bs=1M
 ~~~
@@ -112,7 +112,7 @@ PreBuild Image를 emmc에 Flash 한다. Android 부팅 후 ODROID-XU Updater 실
 
 #### 10.1. kernel
 
-~~~
+~~~console
 # chmod +x kernel_Apr_07_2014.patch
 # patch -p1 < kernel_Apr_07_2014.patch
 ~~~
@@ -121,7 +121,7 @@ Kernel Root 폴더에 kernel_Apr_07_2014.patch 파일 복사 및 위의 명령�
 
 #### 10.2. Android
 
-~~~
+~~~console
 # chmod +x android_patch.sh
 # ./android_patch.sh
 ~~~
@@ -130,7 +130,7 @@ Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 위
 
 ### 11. Build
 
-~~~
+~~~console
 # cd [Kernel root]
 # ARCH=arm CROSS_COMPILE=arm-eabi- make odroidxu_android_defconfig
 # ARCH=arm CROSS_COMPILE=arm-eabi- make zImage -j4
@@ -141,7 +141,7 @@ Android Root 폴더에 android_patch.sh, android_patch.zip 파일 복사 및 위
 
 Kenrel을 Build 한다.
 
-~~~
+~~~console
 # cd [Android Root]
 # cp ../kernel/modules/lib/modules/3.4.5/kernel/drivers/net/usb/ax88179_178a.ko device/hardkernel/proprietary/bin
 # cp ../kernel/modules/lib/modules/3.4.5/kernel/drivers/net/usb/smsc95xx.ko device/hardkernel/proprietary/bin
@@ -157,13 +157,13 @@ Android를 Build 한다.
 
 ### 12. Flash Image
 
-~~~
+~~~console
 Exynos5410 # fastboot
 ~~~
 
 ODROID-XU의 OTG USB와 PC를 연결한 다음 u-boot에서 위의 명령어 수행한다.
 
-~~~
+~~~console
 # fastboot flash kernel kernel/arch/arm/boot/zImage
 # fastboot flash system android/out/target/product/odroidxu/system.img
 # fastboot reboot

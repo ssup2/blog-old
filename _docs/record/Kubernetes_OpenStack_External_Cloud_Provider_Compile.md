@@ -16,7 +16,7 @@ Compile 환경은 다음과 같다.
 
 ### 2. OpenStack External Cloud Provider Download
 
-~~~
+~~~console
 # mkdir -p $GOPATH/src/k8s.io/
 # cd $GOPATH/src/k8s.io/
 # git clone https://github.com/kubernetes/cloud-provider-openstack.git
@@ -27,7 +27,7 @@ OpenStack External Cloud Provider를 Download 한다.
 
 ### 3. Binary Compile & Test
 
-~~~
+~~~console
 # cd $GOPATH/src/k8s.io/cloud-provider-openstack
 # make build
 # make test
@@ -37,7 +37,7 @@ OpenStack External Cloud Provider를 Compile하여 Binary를 생성하고 Test�
 
 ### 4. Docker Image Build & Push
 
-~~~
+~~~console
 # export REGISTRY=ssup2
 # export DOCKER_USERNAME=ssup2
 # export DOCKER_PASSWORD=ssup2

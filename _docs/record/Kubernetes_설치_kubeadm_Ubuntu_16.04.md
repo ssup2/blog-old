@@ -118,7 +118,7 @@ Worker Node 02의 /etc/network/interfaces을 [파일 3]과 같이 수정한다.
 
 #### 3.1. 모든 Node
 
-~~~
+~~~console
 (All)# sudo apt-get update
 (All)# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
 (All)# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -129,7 +129,7 @@ Worker Node 02의 /etc/network/interfaces을 [파일 3]과 같이 수정한다.
 
 Docker를 설치한다.
 
-~~~
+~~~console
 (All)# apt-get update && apt-get install -y apt-transport-https curl
 (All)# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 (All)# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
@@ -141,7 +141,7 @@ kubelet, kubeadm을 설치한다.
 
 #### 3.2. Master Node
 
-~~~
+~~~console
 (Master)# sudo snap install kubectl --classic
 ~~~
 
@@ -151,7 +151,7 @@ kubectl를 설치한다.
 
 #### 4.1. Master Node
 
-~~~
+~~~console
 (Master)# kubeadm init --apiserver-advertise-address=10.0.0.11 --pod-network-cidr=10.244.0.0/16
 ...
 kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
@@ -159,7 +159,7 @@ kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 
 kubeadm 초기화를 진행한다. 실행 후 Key 값을 얻을 수 있다. 10.0.0.11는 NAT Network의 Master IP이다.
 
-~~~
+~~~console
 (Master)# mkdir -p $HOME/.kube
 (Master)# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 (Master)# sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -180,14 +180,14 @@ source <(kubectl completion bash)
 
 kubectl autocomplete 설정을 진행한다. ~/.bashrc에 [파일 4]의 내용을 추가한다.
 
-~~~
+~~~console
 (Master)# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 (Master)# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ~~~
 
 Network Addon (flannel)을 설치한다.
 
-~~~
+~~~console
 (Master)# kubectl create -f https://git.io/kube-dashboard
 ~~~
 
@@ -195,7 +195,7 @@ Dashboard Addon (Dashboard)을 설치한다.
 
 #### 4.2. Worker Node
 
-~~~
+~~~console
 (Worker)# kubeadm join --token 76f75a.6fbcc5e0e6e74c89 10.0.0.11:6443
 ~~~
 
@@ -203,7 +203,7 @@ Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명�
 
 #### 4.3. 검증
 
-~~~
+~~~console
 (Master)# kubectl get nodes
 NAME       STATUS     AGE       VERSION
 ubuntu01   Ready      41m       v1.7.1
@@ -213,7 +213,7 @@ ubuntu03   Ready      55s       v1.7.1
 
 Master Node에서 Cluster를 확인한다. 
 
-~~~
+~~~console
 (Master)# kubectl proxy
 ~~~
 

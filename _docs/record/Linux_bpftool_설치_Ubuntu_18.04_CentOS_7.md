@@ -25,7 +25,7 @@ adsense: true
 
 #### 2.1. Ubuntu
 
-~~~
+~~~console
 # apt-get install build-essential 
 # apt-get install binutils-dev
 # apt-get install libelf-dev
@@ -35,7 +35,7 @@ bpftool Build시 필요한 Library를 설치한다.
 
 #### 2.2. CentOS
 
-~~~
+~~~console
 # yum groupinstall "Development Tools"
 # yum install binutils-devel
 # yum install elfutils-libelf-devel
@@ -45,7 +45,7 @@ bpftool Build시 필요한 Library를 설치한다.
 
 ### 3. bpftool Build & 설치
 
-~~~
+~~~console
 # git clone https://github.com/torvalds/linux.git
 # cd linux
 # git checkout v4.20
@@ -53,7 +53,7 @@ bpftool Build시 필요한 Library를 설치한다.
 
 현재 Ubuntu, CentOS의 Package로 제공되지 않고 있기 때문에 Kernel Code를 받아 직접 bpftool Build 수행한다. bfptool의 net, perf Opiton 이용을 위해서 **v4.20 이상의 Kernel Version**이 필요하다.
 
-~~~
+~~~console
 # make -C tools/bpf/bpftool/
 # cp tools/bpf/bpftool/bpftool /usr/sbin
 ~~~
@@ -62,7 +62,7 @@ bpftool를 Build 한다.
 
 #### 3.1. Compile Error 해결
 
-~~~
+~~~console
 # make -C tools/bpf/bpftool/
 ...
 /usr/include/linux/if.h:76:2: error: redeclaration of enumerator [01mIFF_NOTRAILERS

@@ -17,14 +17,14 @@ adsense: true
 
 ### 2. Ceph RDB 연동
 
-~~~
+~~~console
 # ceph auth get client.admin 2>&1 |grep "key = " |awk '{print  $3'} |xargs echo -n > /tmp/secret
 # kubectl create secret generic ceph-admin-secret --from-file=/tmp/secret --namespace=kube-system
 ~~~
 
 Ceph Admin secret을 생성한다.
 
-~~~
+~~~console
 # ceph osd pool create kube 8 8
 # ceph auth add client.kube mon 'allow r' osd 'allow rwx pool=kube'
 # ceph auth get-key client.kube > /tmp/secret
@@ -33,7 +33,7 @@ Ceph Admin secret을 생성한다.
 
 Ceph Pool 및 User secret을 생성한다.
 
-~~~
+~~~console
 # git clone https://github.com/kubernetes-incubator/external-storage.git
 # cd external-storage/ceph/rbd/deploy
 ~~~
@@ -52,7 +52,7 @@ rbd-provisioner, role, cluster role yaml을 Download 한다.
 
 rbac/clusterrole.yaml 파일에 [파일 7]의 내용을 추가한다. (Secret Role)
 
-~~~
+~~~console
 # NAMESPACE=default
 # sed -r -i "s/namespace: [^ ]+/namespace: $NAMESPACE/g" ./rbac/clusterrolebinding.yaml ./rbac/rolebinding.yaml
 # kubectl -n $NAMESPACE apply -f ./rbac 
@@ -86,7 +86,7 @@ parameters:
 
 storage_class.yaml 파일 생성 및 [파일 8]의 내용으로 저장한다.
 
-~~~
+~~~console
 # kubectl create -f ./storage_class.yaml
 # kubectl get storageclasses.storage.k8s.io
 NAME            PROVISIONER    AGE

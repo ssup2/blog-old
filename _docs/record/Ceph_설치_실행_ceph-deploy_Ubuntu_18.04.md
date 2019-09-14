@@ -92,14 +92,14 @@ Ceph Node 03의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]의 내용�
 
 #### 3.1. Ceph Node
 
-~~~
+~~~console
 (Ceph)# sudo apt install ntp
 (Ceph)# sudo apt install python
 ~~~
 
 ntp, python Package를 설치한다.
 
-~~~
+~~~console
 (Ceph)# sudo useradd -d /home/cephnode -m cephnode
 (Ceph)# sudo passwd cephnode
 Enter new UNIX password:
@@ -115,7 +115,7 @@ cephnode User를 생성한다.
 
 #### 3.2. Deploy Node
 
-~~~
+~~~console
 ...
 10.0.0.10 node01
 10.0.0.20 node02
@@ -128,7 +128,7 @@ cephnode User를 생성한다.
 
 /etc/hosts 파일을 [파일 4]의 내용처럼 수정한다.
 
-~~~
+~~~console
 (Deploy)# wget -q -O- 'https://download.ceph.com/keys/release.asc' | sudo apt-key add -
 (Deploy)# echo deb https://download.ceph.com/debian-luminous/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
 (Deploy)# sudo apt update
@@ -137,7 +137,7 @@ cephnode User를 생성한다.
 
 ceph-deploy Package를 설치한다.
 
-~~~
+~~~console
 (Deploy)# sudo useradd -d /home/cephdeploy -m cephdeploy
 (Deploy)# sudo passwd cephdeploy
 Enter new UNIX password:
@@ -151,7 +151,7 @@ passwd: password updated successfully
 cephdeploy User를 생성한다.
 * Password : cephdeploy
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ ssh-keygen
 Generating public/private rsa key pair.
@@ -189,14 +189,14 @@ Host node03
 
 #### 4.1. Deploy Node
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ mkdir my-cluster
 ~~~
 
 Ceph Cluster Config 폴더를 생성한다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy purge node01 node02 node03
@@ -207,7 +207,7 @@ Ceph Cluster Config 폴더를 생성한다.
 
 Ceph Cluster를 초기화한다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy new node01
@@ -222,7 +222,7 @@ Ceph Cluster를 초기화한다.
 
 Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 Ceph Node 01에 설치한다. 만약 다른 Node에도 MON와 MGR를 설치하고 싶으면 "ceph-deploy new" 명령어와 "ceph-deploy mgr create" 명령어 수행시 node01 뿐만 아니라 설치할 다른 Node 정보도 같이 넣는다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy mds create node01
@@ -230,7 +230,7 @@ Ceph Cluster를 구축한다. MON (Monitor Daemon) 및 MGR (Manager Daemon)을 C
 
 MDS (Meta Data Server)를 설치한다. MDS (Meta Data Server)는 Ceph Node 01에 설치한다. 만약 다른 Node에도 MDS를 설치하고 싶다면 "ceph-deploy mds create" 명령어 수행시 MDS를 설치할 다른 Node 정보도 같이 넣는다.
 
-~~~
+~~~console
 (Deploy)# login cephdeploy
 (Deploy)$ cd ~/my-cluster
 (Deploy)$ ceph-deploy rgw create node01
@@ -240,7 +240,7 @@ RGW (Rados Gateway)를 설치한다. RGW는 Ceph Node 01에 설치한다.
 
 ### 5. 동작 확인
 
-~~~
+~~~console
 (Ceph)# ceph -s 
   cluster:
     id:     20261612-97fc-4a45-bd81-0d9c9b445e00
@@ -263,14 +263,14 @@ Ceph Cluster가 정상적으로 구축되었는지 확인한다.
 
 #### 5.1. Block Storage
 
-~~~
+~~~console
 (Ceph)# ceph osd pool create rbd 16
 (Ceph)# rbd pool init rbd
 ~~~
 
 Pool 생성 및 초기화를 진행한다.
 
-~~~
+~~~console
 (Ceph)# rbd create foo --size 4096 --image-feature layering
 (Ceph)# rbd map foo --name client.admin
 /dev/rbd0
@@ -280,7 +280,7 @@ Block Storage을 생성 및 Mapping 한다.
 
 #### 5.2. File Storage
 
-~~~
+~~~console
 (Ceph)# ceph osd pool create cephfs_data 16
 (Ceph)# ceph osd pool create cephfs_metadata 16
 (Ceph)# ceph fs new filesystem cephfs_metadata cephfs_data
@@ -288,7 +288,7 @@ Block Storage을 생성 및 Mapping 한다.
 
 Pool 생성 및 File Storage를 생성한다.
 
-~~~
+~~~console
 (Ceph)# cat /home/cephdeploy/my-cluster/ceph.client.admin.keyring
 [client.admin]
         key = AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
@@ -309,7 +309,7 @@ AQAk1SxcbTz/IBAAHCPTQ5x1SHFcA0fn2tTW7w==
 
 확인한 admin Key를 이용하여 [파일 6]의 내용으로 /root/admin.secret 파일을 생성한다.
 
-~~~
+~~~console
 (Ceph)# mkdir mnt
 (Ceph)# mount -t ceph 10.0.0.10:6789:/ mnt/ -o name=admin,secretfile=/root/admin.secret
 (Ceph)# mount
@@ -321,7 +321,7 @@ Ceph File Server를 Mount 한다.
 
 #### 5.3. Object Storage
 
-~~~
+~~~console
 (Ceph)# curl 10.0.0.10:7480
 <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
 ~~~

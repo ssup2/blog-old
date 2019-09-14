@@ -20,7 +20,7 @@ adsense: true
 
 #### 2.1. Ubuntu Package 설치
 
-~~~
+~~~console
 # sudo apt-get install nfs-kernel-server nfs-common rpcbind
 ~~~
 
@@ -28,7 +28,7 @@ NFSv4 Server Package를 설치한다.
 
 #### 2.2. 공유 폴더 생성 및 Bind Mount 설정
 
-~~~
+~~~console
 # mkdir -p /export/nfs_root
 # mkdir -p /root/nfs_share
 # chmod 777 /root/nfs_share
@@ -61,7 +61,7 @@ NFSv4 Server Package를 설치한다.
 
 #### 2.4. Restart
 
-~~~
+~~~console
 # /etc/init.d/nfs-kernel-server restart
 ~~~
 
@@ -69,13 +69,13 @@ NFSv4 Server를 재시작한다.
 
 ### 3. NFSv4 Client 설정
 
-~~~
+~~~console
 # apt-get install nfs-common
 ~~~
 
 NFSv4 Client Package를 설치한다.
 
-~~~
+~~~console
 # mount -t nfs4 localhost:/nfs_root /mnt
 ~~~
 

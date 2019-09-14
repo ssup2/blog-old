@@ -15,13 +15,13 @@ adsense: true
 
 ### 2. Helm 설치
 
-~~~
+~~~console
 # snap install helm --classic
 ~~~
 
 Helm Package를 설치한다.
 
-~~~
+~~~console
 # kubectl create serviceaccount --namespace kube-system tiller
 # kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 # helm init --service-account tiller

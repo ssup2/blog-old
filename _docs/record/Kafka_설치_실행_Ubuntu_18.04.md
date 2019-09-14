@@ -14,7 +14,7 @@ adsense: true
 
 ### 2. Java, Zookeeper 설치
 
-~~~
+~~~console
 # apt install openjdk-8-jdk -y
 # apt install zookeeperd -y
 ~~~
@@ -23,7 +23,7 @@ Java, Zookeeper Package를 설치한다.
 
 ### 3. Kafka 설치
 
-~~~
+~~~console
 # useradd -d /opt/kafka -s /bin/bash kafka
 # passwd kafka
 Enter new UNIX password: kafka
@@ -33,7 +33,7 @@ Retype new UNIX password: kafka
 kafka 계정을 생성한다.
 * Password : kafka
 
-~~~
+~~~console
 # cd /opt
 # wget http://www-eu.apache.org/dist/kafka/2.0.0/kafka_2.11-2.0.0.tgz
 # mkdir -p /opt/kafka
@@ -97,7 +97,7 @@ WantedBy=multi-user.target
 
 /lib/systemd/system/kafka.service에 [파일 3]의 내용을 저장한다.
 
-~~~
+~~~console
 # systemctl daemon-reload
 # systemctl start zookeeper
 # systemctl enable zookeeper
@@ -107,7 +107,7 @@ WantedBy=multi-user.target
 
 Zookeeper, Kafka를 시작한다.
 
-~~~
+~~~console
 # netstat -plntu
 ...
 tcp6       0      0 :::9092                 :::*                    LISTEN      3005/java
@@ -120,7 +120,7 @@ Zookeeper, Kafka 구동을 확인한다.
 
 ### 4. Kafka Test
 
-~~~
+~~~console
 # su - kafka
 $ cd bin/
 $ ./kafka-topics.sh --create --zookeeper localhost:2181 \
@@ -130,7 +130,7 @@ $ ./kafka-topics.sh --create --zookeeper localhost:2181 \
 
 HakaseTesting Topic을 생성한다.
 
-~~~
+~~~console
 # su - kafka
 $ cd bin/
 $ ./kafka-console-producer.sh --broker-list localhost:9092 \
@@ -140,7 +140,7 @@ $ ./kafka-console-producer.sh --broker-list localhost:9092 \
 
 새로운 Terminal을 띄워 Producer를 실행한다.
 
-~~~
+~~~console
 # su - kafka
 $ cd bin/
 $ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 \

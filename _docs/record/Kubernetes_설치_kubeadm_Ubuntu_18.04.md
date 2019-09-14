@@ -102,14 +102,14 @@ Worker Node 02의 /etc/netplan/50-cloud-init.yaml 파일을 [파일 3]과 같이
 
 모든 Node에서 Kubernetes를 위한 Package를 설치한다.
 
-~~~
+~~~console
 (All)# apt-get update
 (All)# apt-get install -y docker.io
 ~~~
 
 Docker를 설치한다.
 
-~~~
+~~~console
 (All)# apt-get update && apt-get install -y apt-transport-https curl
 (All)# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 (All)# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
@@ -127,7 +127,7 @@ Cluster 구축을 위한 kubeadm 명령어의 옵션은 이용할 Network Plugin
 
 ##### 4.1.1. Calico 기반 구축
 
-~~~
+~~~console
 (Master)# swapoff -a
 (Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
 (Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.168.0.0/16 --kubernetes-version=v1.12.0
@@ -139,7 +139,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **192.168.0.0/16**�
 
 ##### 4.1.1. Flannel 기반 구축
 
-~~~
+~~~console
 (Master)# swapoff -a
 (Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
 (Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.12.0
@@ -151,7 +151,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 반드시 **10.244.0.0/16**�
 
 ##### 4.1.3. Cilium 기반 구축
 
-~~~
+~~~console
 (Master)# swapoff -a
 (Master)# sed -i '/swap.img/s/^/#/' /etc/fstab
 (Master)# kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.12.0
@@ -163,7 +163,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복�
 
 ##### 4.1.4. 공통
 
-~~~
+~~~console
 (Master)# mkdir -p $HOME/.kube
 (Master)# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 (Master)# sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -171,7 +171,7 @@ kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복�
 
 kubectl config를 설정한다.
 
-~~~
+~~~console
 (Master)# kubectl taint nodes --all node-role.kubernetes.io/master-
 ~~~
 
@@ -192,7 +192,7 @@ kubectl autocomplete를 설정한다. ~/.bashrc에 [파일 4]의 내용을 추�
 
 #### 4.2. Worker Node
 
-~~~
+~~~console
 (Worker)# swapoff -a
 (Worker)# sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 (Worker)# kubeadm join 10.0.0.10:6443 --token 46i2fg.yoidccf4k485z74u --discovery-token-ca-cert-hash sha256:cab2cc0a4912164f45f502ad31f5d038974cf98ed10a6064d6632a07097fad79
@@ -202,7 +202,7 @@ Cluster를 구성한다. kubeadm init 결과로 나온 **kubeadm join ~~** 명�
 
 #### 4.3. 검증
 
-~~~
+~~~console
 (Master)# kubectl get nodes
 NAME    STATUS     ROLES    AGE   VERSION
 node1   NotReady   master   84s   v1.12.3
@@ -220,7 +220,7 @@ Cluster 구축시 선택했던 Network Plugin만 설치한다.
 
 ##### 5.1.1. Calico 설치
 
-~~~
+~~~console
 (Master)# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 (Master)# kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 ~~~
@@ -229,7 +229,7 @@ Calico를 설치한다.
 
 ##### 5.1.2. Flannel 설치
 
-~~~
+~~~console
 (Master)# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
 ~~~
 
@@ -237,14 +237,14 @@ Flannel를 설치한다.
 
 ##### 5.1.3. Cilium 설치
 
-~~~
+~~~console
 (Master)# mount bpffs /sys/fs/bpf -t bpf
 (Master)# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
 
 bpffs mount 및 설정을 진행한다.
 
-~~~
+~~~console
 (Master)# wget https://github.com/cilium/cilium/archive/v1.3.0.zip
 (Master)# unzip v1.3.0.zip
 (Master)# kubectl apply -f cilium-1.3.0/examples/kubernetes/addons/etcd/standalone-etcd.yaml
@@ -274,7 +274,7 @@ Cilium Download 및 Cilium 구동을 위한 etcd를 설치한다.
 
 Cilium 설정을 변경하여 Prefilter 기능을 활성화 한다. prefilter Interface는 Kubernets Cluster Network를 구성하는 NIC의 Interface를 지정해야한다. Kubernets Cluster Network를 구성하는 NIC의 Device Driver가 XDP를 지원하지 않으면 --prefilter-mode에 generic 설정을 추가해야 한다. cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml 파일을 [파일 5]와 같이 변경한다.
 
-~~~
+~~~console
 (Master)# kubectl apply -f cilium-1.3.0/examples/kubernetes/1.12/cilium.yaml
 ~~~
 
@@ -288,7 +288,7 @@ Worker Node에서는 작업이 필요없다.
 
 ##### 5.2.2. Cilium 설치
 
-~~~
+~~~console
 (Worker)# mount bpffs /sys/fs/bpf -t bpf
 (Worker)# echo "bpffs                      /sys/fs/bpf             bpf     defaults 0 0" >> /etc/fstab
 ~~~
@@ -299,7 +299,7 @@ bpffs mount 및 설정을 진행한다.
 
 #### 6.1 Master Node
 
-~~~
+~~~console
 (Master)# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ~~~
 
@@ -321,7 +321,7 @@ spec:
 
 kube-apiserver에 Insecure Option을 설정한다. /etc/kubernetes/manifests/kube-apiserver.yaml 파일의 command에 [파일 6]의 내용으로 수정한다.
 
-~~~
+~~~console
 (Master)# service kubelet restart
 ~~~
 
@@ -349,7 +349,7 @@ subjects:
 
 Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 내용으로 ~/dashboard-admin.yaml 파일을 생성한다.
 
-~~~
+~~~console
 (Master)# kubectl create -f ~/dashboard-admin.yaml
 (Master)# rm ~/dashboard-admin.yaml
 ~~~

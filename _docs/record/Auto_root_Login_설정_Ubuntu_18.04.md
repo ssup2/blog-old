@@ -14,7 +14,7 @@ adsense: true
 
 ### 2. root Password 설정
 
-~~~
+~~~console
 # sudo passwd root
 Enter new UNIX password:
 Retype new UNIX password:
