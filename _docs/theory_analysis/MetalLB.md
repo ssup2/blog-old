@@ -1,6 +1,6 @@
 ---
 title: MetalLB
-category: Theory, Analysis
+category:
 date: 2019-09-09T12:00:00Z
 lastmod: 2019-09-09T12:00:00Z
 comment: true
@@ -17,3 +17,4 @@ adsense: true
 
 * [https://metallb.universe.tf/concepts/layer2/](https://metallb.universe.tf/concepts/layer2/)
 * [https://metallb.universe.tf/concepts/bgp/](https://metallb.universe.tf/concepts/bgp/)
+* []

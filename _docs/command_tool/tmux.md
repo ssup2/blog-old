@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-tmux 사용법을 정리한다.
+Terminal Multiplexer인 tmux 사용법을 정리한다.
 
 ### 1. tmux
 
