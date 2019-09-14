@@ -54,7 +54,7 @@ Java 6를 설치한다.
 
 Repo는 Android Build시 이용된다. Android Build시 이용하는 Repo를 설치한다.
 
-{% highlight text %}
+{% highlight shell %}
 ...
 PATH=~/bin:$PATH
 {% endhighlight %}
@@ -75,7 +75,7 @@ PATH=~/bin:$PATH
 Cross Compiler를 설치한다. 
 * Download : http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
 
-{% highlight text %}
+{% highlight shell %}
 ...
 PATH=/usr/local/arm-eabi-4.6/bin:$PATH
 {% endhighlight %}

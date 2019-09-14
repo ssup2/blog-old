@@ -31,7 +31,7 @@ adsense: true
 Cross Compiler를 설치한다.
 * Download : https://releases.linaro.org/15.02/components/toolchain/binaries/arm-linux-gnueabihf/gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
 
-{% highlight text %}
+{% highlight shell %}
 ...
 PATH=$PATH:/usr/local/gcc-linaro-arm-linux-gnueabihf-4.8/bin
 {% endhighlight %}
