@@ -49,10 +49,10 @@ android_winusb.inf 파일 아래에 [파일 1]의 내용을 추가한 다음 Win
 
 ### 3. Ubuntu Package 설치
 
-```console
+~~~sh-session
 # apt-get install git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 # ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
-```
+~~~
 
 Android Build에 필요한 Ubuntu Package 설치한다.
 
