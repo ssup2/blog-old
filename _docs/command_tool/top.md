@@ -43,7 +43,7 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
 
 [Shell 1]은 top 명령을 통해서 확인할 수 있는 Terminal의 모습을 나타내고 있다.
 
-### 2. CPU 사용률
+### 1.2. CPU 사용률
 
 top을 통해서 CPU 사용률을 알 수 있다. **%Cpu(s)** 부분은 모든 CPU Core의 평균 CPU 사용률을 타나내고 있다. 1번 키보드를 누르면 각 CPU Core의 사용률을 볼 수 있다.CPU의 사용률은 us, sy, ni, id, wa, hi, si, st 7개의 부분으로 나타낸다. 7개 부분의 사용률을 모두 더하면 100%가 된다.
 
@@ -56,7 +56,7 @@ top을 통해서 CPU 사용률을 알 수 있다. **%Cpu(s)** 부분은 모든 C
 * si (sotware interrupt) : Top Halves에서 Set한 Interrupt Flag에 따라서 실제 Interrupt를 처리하는 Bottom Havles의 CPU 사용률을 의미한다.
 * st (steal) : Kernel이 Hypervisor가 제어하는 가상 머신 안에서 동작할 때, Hypervisor나 다른 가상 머신에 의해서 사용을 뺏긴(steal) CPU 사용률을 의미한다.
 
-### 3. 참조
+### 2. 참조
 
 * [https://kldp.org/node/65018](https://kldp.org/node/65018)
 * [http://serverfault.com/questions/230495/what-does-st-mean-in-top](http://serverfault.com/questions/230495/what-does-st-mean-in-top)
