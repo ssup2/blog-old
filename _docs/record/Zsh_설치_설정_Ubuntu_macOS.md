@@ -18,6 +18,14 @@ adsense: true
 
 #### 1.1. Ubuntu
 
+~~~console
+# apt install zsh
+# curl -L http://install.ohmyz.sh | sh
+# chsh -s `which zsh`
+~~~
+
+zsh, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다.
+
 #### 1.2. macOS
 
 ~~~console
@@ -31,9 +39,16 @@ zsh, zsh-completions, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한
 
 ### 2. 설정
 
+~~~console
+# git clone https://github.com/dracula/zsh.git
+# cp zsh/dracula.zsh-theme ~/.oh-my-zsh/themes/
+# cp -R zsh/lib ~/.oh-my-zsh/themes/
+# rm -rf zsh/lib
+~~~
+
 {% highlight viml %}
 ...
-ZSH_THEME="wezm"
+ZSH_THEME="dracula"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 ...
