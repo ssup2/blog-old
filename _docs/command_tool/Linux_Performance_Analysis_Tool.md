@@ -166,7 +166,7 @@ Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
 
 iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 iotop을 이용하여 Block I/O의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.9 slabtop
+#### 1.9. slabtop
 
 {% highlight console %}
 # slabtop
