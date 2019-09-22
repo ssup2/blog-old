@@ -108,7 +108,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
-Plugin 'morhetz/gruvbox'
+Plugin 'dracula/vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
@@ -129,9 +129,6 @@ set sw=4                        " Shift Width
 set hlsearch                    " highlight all search matches
 colorscheme gruvbox
 syntax on
-
-"" gruvbox
-set background=dark
 
 "" cscope Setting
 set csprg=/usr/bin/cscope         " cscope Which
