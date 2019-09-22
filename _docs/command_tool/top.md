@@ -41,7 +41,7 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
 <figcaption class="caption">[Shell 1] top Display</figcaption>
 </figure>
 
-[Shell 1]은 top 명령을 통해서 확인할 수 있는 Terminal의 모습을 나타내고 있다.
+[Shell 1]은 top 명령어를 통해서 확인할 수 있는 Shell의 모습을 나타내고 있다.
 
 ### 1.2. CPU 사용률
 

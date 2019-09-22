@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-process별 Resource 사용률을 출력하는 pidstat의 사용법을 정리한다.
+process별 Resource 사용량을 출력하는 pidstat의 사용법을 정리한다.
 
 ### 1. pidstat
 
