@@ -7,6 +7,13 @@ comment: true
 adsense: true
 ---
 
+***
+
+* TOC
+{:toc}
+
+***
+
 Linux에서 성능 측정시 이용되는 Tool들을 정리한다.
 
 ### 1. Linux Performance Analysis Tool
@@ -73,7 +80,25 @@ Linux 4.15.0-60-generic (node09)        09/22/19        _x86_64_        (2 CPU)
 
 mpstat은 CPU Core별 사용량을 출력하는 Tool이다. [Shell 4]는 mpstat을 이용하여 1초 간격으로 모든 CPU Core의 CPU 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.5. iostat
+#### 1.5. vmstat
+
+{% highlight console %}
+# vmstat 1
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 2  1      0 2659952 815660 3469920    0    0    40  5839  197  477 17  3 32 48  0
+ 0  1      0 2675016 815676 3454768    0    0    20  4180  390 2881  7  3 55 36  0
+ 2  0      0 2684728 815716 3445176    0    0    32 12040  367 3019 21  2 33 44  0
+ 0  1      0 2675900 815740 3455176    0    0    28 10324  521 2906 13  3 66 19  0
+ 2  3      0 2661392 815768 3469476    0    0    28 13628  347 3175 14  2 44 40  0
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 5] vmstat Shell</figcaption>
+</figure>
+
+vmstat은 Virtual Memory와 관련된 사용량을 출력하는 Tool이다. [Shell 5]는 vmstat을 이용하여 1초 간격으로 Virtual Memory 정보를 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.6. iostat
 
 {% highlight console %}
 # iostat -x 1
@@ -92,10 +117,78 @@ sda              8.65   53.40     80.75  15987.95     0.90   101.52   9.43  65.5
 sdb              0.03    0.00      0.75      0.00     0.00     0.00   0.00   0.00   22.65    0.00   0.00    28.86     0.00  16.74   0.04
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 5] iostat Shell</figcaption>
+<figcaption class="caption">[Shell 6] iostat Shell</figcaption>
 </figure>
 
-iostat은 Block Device별 사용량을 출력하는 Tool이다. [Shell 5]는 iostat을 이용하여 1초 간격으로 모든 Block Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다. iostat은 평균 CPU 사용률도 출력한다.
+iostat은 Block Device별 사용량을 출력하는 Tool이다. [Shell 6]는 iostat을 이용하여 1초 간격으로 모든 Block Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다. iostat은 평균 CPU 사용률도 출력한다.
+
+#### 1.7. top
+
+{% highlight console %}
+# top
+top - 12:32:20 up  9:49,  1 user,  load average: 3.02, 2.97, 3.10
+Tasks: 132 total,   1 running,  85 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 15.5 us,  3.5 sy,  0.0 ni, 24.3 id, 56.4 wa,  0.0 hi,  0.2 si,  0.0 st
+KiB Mem :  8168940 total,  2694252 free,  1223500 used,  4251188 buff/cache
+KiB Swap:  4194300 total,  4194300 free,        0 used.  6637292 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+ 2912 42472     20   0  861416 783804  21324 S  22.7  9.6 204:23.28 prometheus
+26030 42472     20   0     212      4      0 S   5.7  0.0   0:00.17 dumb-init
+ 3335 root      20   0 1352800  91740  17476 S   3.0  1.1  19:55.28 cadvisor
+ 1529 root      20   0 1290564  82076  37524 S   1.0  1.0   1:55.27 dockerd
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 7] top Shell</figcaption>
+</figure>
+
+top은 CPU 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 7]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.8. iotop
+
+{% highlight console %}
+# iotop
+Total DISK READ :      46.79 K/s | Total DISK WRITE :       5.48 M/s
+Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
+  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
+  355 be/3 root        0.00 B/s   27.29 K/s  0.00 % 40.92 % [jbd2/sda2-8]
+ 3771 be/4 42472      35.09 K/s    0.00 B/s  0.00 %  8.91 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 3769 be/4 42472       3.90 K/s    0.00 B/s  0.00 %  4.53 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 5297 be/4 42472       3.90 K/s    2.30 M/s  0.00 %  4.37 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 3768 be/4 42472       3.90 K/s    3.15 M/s  0.00 %  2.68 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+10129 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.05 % [kworker/u4:4]
+    1 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % systemd --system --deserialize 40
+    2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]            
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 8] iotop Shell</figcaption>
+</figure>
+
+iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 iotop을 이용하여 Block I/O의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.9 slabtop
+
+{% highlight console %}
+# slabtop
+ Active / Total Objects (% used)    : 2581763 / 2731476 (94.5%)
+ Active / Total Slabs (% used)      : 101112 / 101112 (100.0%)
+ Active / Total Caches (% used)     : 85 / 122 (69.7%)
+ Active / Total Size (% used)       : 577381.30K / 706488.91K (81.7%)
+ Minimum / Average / Maximum Object : 0.01K / 0.26K / 8.00K
+
+  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ/SLAB CACHE SIZE NAME
+656136 651319   0%    0.10K  16824       39     67296K buffer_head
+639009 623453   0%    0.19K  30429       21    121716K dentry
+329460 328843   0%    0.13K  10982       30     43928K kernfs_node_cache
+300870 188228   0%    1.06K  20058       15    320928K ext4_inode_cache
+252246 252246 100%    0.04K   2473      102      9892K ext4_extent_status
+123776 122174   0%    0.06K   1934       64      7736K kmalloc-64
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 9] slabtop Shell</figcaption>
+</figure>
+
+slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 9]은 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
 
 ### 2. 참조
 
