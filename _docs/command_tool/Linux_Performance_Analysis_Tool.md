@@ -122,7 +122,24 @@ sdb              0.03    0.00      0.75      0.00     0.00     0.00   0.00   0.0
 
 iostat은 Block Device별 사용량을 출력하는 Tool이다. [Shell 6]는 iostat을 이용하여 1초 간격으로 모든 Block Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다. iostat은 평균 CPU 사용률도 출력한다.
 
-#### 1.7. top
+#### 1.7. nicstat
+
+{% highlight console %}
+# nicstat 1
+    Time      Int   rKB/s   wKB/s   rPk/s   wPk/s    rAvs    wAvs %Util    Sat
+15:41:38  docker0    0.00    0.00    0.00    0.00    0.00   73.56  0.00   0.00
+15:41:38     eth0    6.21    0.12    4.77    1.81  1332.9   69.11  0.01   0.00
+15:41:38       lo    0.85    0.85    1.05    1.05   834.9   834.9  0.00   0.00
+15:41:38 veth3673f81    0.00    0.00    0.00    0.00    0.00   73.62  0.00   0.00
+15:41:38     eth1    7.32    0.55   12.19    5.00   614.8   111.7  0.01   0.00
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 7] nicstat Shell</figcaption>
+</figure>
+
+nicstat은 Network Device별 사용량을 출력하는 Tool이다. [Shell 7]은 nicstat을 이용하여 1초 간격으로 모든 Network Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.8. top
 
 {% highlight console %}
 # top
@@ -139,12 +156,12 @@ KiB Swap:  4194300 total,  4194300 free,        0 used.  6637292 avail Mem
  1529 root      20   0 1290564  82076  37524 S   1.0  1.0   1:55.27 dockerd
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 7] top Shell</figcaption>
+<figcaption class="caption">[Shell 8] top Shell</figcaption>
 </figure>
 
-top은 CPU 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 7]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+top은 CPU 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.8. iotop
+#### 1.9. iotop
 
 {% highlight console %}
 # iotop
@@ -161,12 +178,12 @@ Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
     2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]            
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 8] iotop Shell</figcaption>
+<figcaption class="caption">[Shell 9] iotop Shell</figcaption>
 </figure>
 
-iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 iotop을 이용하여 Block I/O의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 9]는 iotop을 이용하여 Block I/O의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.9. slabtop
+#### 1.10. slabtop
 
 {% highlight console %}
 # slabtop
@@ -185,10 +202,10 @@ iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보
 123776 122174   0%    0.06K   1934       64      7736K kmalloc-64
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 9] slabtop Shell</figcaption>
+<figcaption class="caption">[Shell 10] slabtop Shell</figcaption>
 </figure>
 
-slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 9]은 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
+slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 10]은 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
 
 ### 2. 참조
 
