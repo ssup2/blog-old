@@ -21,4 +21,4 @@ Open File List를 출력하는 lsof의 사용법을 정리한다.
 * `lsof -i TCP:[Port]` : TCP, [Port]를 이용하고 있는 Process의 정보를 출력한다.
 * `lsof -i TCP:[Port Start]-[Port End]` : [Port Start] - [Port End] 사이의 Port를 이용하고 있는 Process의 정보를 출력한다. 
 * `lsof -i UDP` : UDP를 이용하고 있는 Process의 정보를 출력한다.
-* `sof -i UDP:[Port]` : UDP, [Port]를 이용하고 있는 Process의 정보를 출력한다.
+* `lsof -i UDP:[Port]` : UDP, [Port]를 이용하고 있는 Process의 정보를 출력한다.
