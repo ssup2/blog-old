@@ -67,7 +67,7 @@ Aug  1 06:26:03 node09 dockerd[1772]: time="2019-08-01T06:26:03.088304486Z" leve
 <figcaption class="caption">[Shell 3] /var/log/syslog Shell</figcaption>
 </figure>
 
-rsyslogd 또는 systemd-journald는 Service (Daemon) Log를 /var/log/syslog에 저장한다. [그림 3]은 /var/log/syslog에 저장되어 있는 Service Log를 출력하는 Shell의 모습을 나타내고 있다.
+rsyslogd 또는 systemd-journald는 Service (Daemon) Log를 /var/log/syslog에 저장한다. [Shell 3]은 /var/log/syslog에 저장되어 있는 Service Log를 출력하는 Shell의 모습을 나타내고 있다.
 
 #### 1.4. journalctl
 
