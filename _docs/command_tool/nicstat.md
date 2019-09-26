@@ -1,5 +1,5 @@
 ---
-title: ethtool
+title: nicstat
 category: Command, Tool
 date: 2019-09-16T12:00:00Z
 lastmod: 2019-09-16T12:00:00Z
