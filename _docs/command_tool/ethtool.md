@@ -7,11 +7,18 @@ comment: true
 adsense: true
 ---
 
+***
+
+* TOC
+{:toc}
+
+***
+
 NIC을 제어하는 ethtool 사용법을 정리한다.
 
 ### 1. ethtool
 
-#### 1.1. ethtool [Interface]
+##### 1.1. ethtool [Interface]
 
 {% highlight console %}
 # ethtool eth0
@@ -39,6 +46,6 @@ Settings for eth0:
 
 [Interface] NIC 정보를 출력한다.
 
-#### 1.2. ethtool [Interface] [speed 10|100|1000] [duplex half|full]
+##### 1.2. ethtool [Interface] [speed 10|100|1000] [duplex half|full]
 
 [Interface] NIC의 Speed (Bandwidth)와 Duplex Mode를 설정한다.
