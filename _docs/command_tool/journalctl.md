@@ -81,6 +81,7 @@ Jul 13 18:32:30 localhost.localdomain kernel:   Intel GenuineIntel
 Jul 13 18:32:30 localhost.localdomain kernel:   AMD AuthenticAMD
 Jul 13 18:32:30 localhost.localdomain kernel:   Centaur CentaurHauls
 Jul 13 18:32:30 localhost.localdomain kernel: x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+{% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 3] journalctl -t kernel </figcaption>
 </figure>
