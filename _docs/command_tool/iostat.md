@@ -37,7 +37,7 @@ sdb               0.01         0.29         0.00      25400          0
 <figcaption class="caption">[Shell 1] iostat</figcaption>
 </figure>
 
-Block Device의 I/O 통계 정보와 CPU 통계 정보를 출력한다. [Shell 1]은 iostat을 이용하여 Block Device의 I/O 통계 정보와 CPU 통계 정보를 출력하는 Shell의 모습을 나타내고 있다. 윗부분에는 CPU 통계 정보가 출력된다. 출력 내용은 아래와 같다.
+Block Device의 I/O 통계 정보와 CPU 통계 정보를 출력한다. [Shell 1]은 "iostat"을 이용하여 Block Device의 I/O 통계 정보와 CPU 통계 정보를 출력하는 Shell의 모습을 나타내고 있다. 윗부분에는 CPU 통계 정보가 출력된다. 출력 내용은 아래와 같다.
 
 * user : nice 값이 적용되지 않은 Process들의 User Level 사용률을 나타낸다.
 * nice : nice 값이 적용된 Process들의 User Level 사용률을 나타낸다.
