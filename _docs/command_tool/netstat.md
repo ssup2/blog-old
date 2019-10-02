@@ -70,11 +70,11 @@ lo       65536   126777      0      0 0        126777      0      0      0 LRU
 
 각 Network Interface가 주고받은 Packet 정보를 출력한다. [Shell 2]는 "netstat -i"를 이용하여 각 Network Interface가 주고받은 Packet 정보를 출력하는 Shell의 모습을 나타내고 있다. 각 행의 의미는 다음과 같다.
 * RX-OK : 올바르게 수신된 Packet의 개수 
-* RX-ERR : 수신에는 성공하였지만 Connection이 불안하여 Checksum Error가 발생한 수신 Packet의 개수
+* RX-ERR : 수신에는 성공하였지만 Error가 발생하여 처리하지 않은 수신 Packet의 개수
 * RX-DRP : 수신 Buffer가 가득차 Drop된 수신 Packet의 개수
 * RX-OVR : Kernel이 너무 바빠서 수신에 실패한 Packet의 개수
 * TX-OK : 올바르게 송신한 Packet의 개수
-* TX-ERR : 송신에는 성공하였지만 Connection이 불안하여 Checksum Error가 발생한 수신 Packet의 개수
+* TX-ERR : 송신전에 Error가 발생하여 송신하지 않은 Packet의 개수
 * TX-DRP : 송신 Buffer가 가득차 Drop된 송신 Packet의 개수
 * TX-OVR : Kernel이 너무 바빠서 송신에 실패한 Packet의 개수
 
