@@ -30,7 +30,14 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 1] pidstat</figcaption>
 </figure>
 
-CPU 사용량을 출력한다.
+Process별 CPU 사용량을 출력한다. [Shell 1]은 "pidstat"을 이용하여 Process별 사용량을 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* %usr : 해당 Process의 User Level CPU 사용률을 나타낸다.
+* %system : 해당 Process의 Kernel Level CPU 사용률을 나타낸다.
+* %guest : 해당 Process가 Hypervisor일 경우 vCPU를 구동하기 위한 CPU 사용률을 나타낸다.
+* %wait : 해당 Process를 구동하기 위한 CPU 대기률을 나타낸다.
+* %CPU : 해당 Process의 전체 CPU 사용률을 나타낸다.
+* CPU : 해당 Process가 동작하는 CPU Core를 나타낸다.
 
 #### 1.2. # pidstat -t
 
@@ -38,25 +45,26 @@ CPU 사용량을 출력한다.
 # pidstat -t
 Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 
-15:31:32      UID      TGID       TID    %usr %system  %guest   %wait    %CPU   CPU  Command
-15:31:32        0         1         -    0.02    0.01    0.00    0.00    0.03     1  systemd
-15:31:32        0         -         1    0.02    0.01    0.00    0.00    0.03     1  |__systemd
-15:31:32        0         2         -    0.00    0.00    0.00    0.00    0.00     0  kthreadd
-15:31:32        0         -         2    0.00    0.00    0.00    0.00    0.00     0  |__kthreadd
-15:31:32        0         7         -    0.00    0.02    0.00    0.01    0.02     0  ksoftirqd/0
-15:31:32        0         -         7    0.00    0.02    0.00    0.01    0.02     0  |__ksoftirqd/0
-15:31:32        0         8         -    0.00    0.17    0.00    0.15    0.17     0  rcu_sched
-15:31:32        0         -         8    0.00    0.17    0.00    0.15    0.17     0  |__rcu_sched
-15:31:32        0        10         -    0.00    0.00    0.00    0.00    0.00     0  migration/0
-15:31:32        0         -        10    0.00    0.00    0.00    0.00    0.00     0  |__migration/0
-15:31:32        0        11         -    0.00    0.00    0.00    0.00    0.00     0  watchdog/0
-15:31:32        0         -        11    0.00    0.00    0.00    0.00    0.00     0  |__watchdog/0
-15:31:32        0        14         -    0.00    0.00    0.00    0.00    0.00     1  watchdog/1
-15:31:32        0         -        14    0.00    0.00    0.00    0.00    0.00     1  |__watchdog/1
+15:12:35    42472      3361         -    0.03    0.06    0.00    0.01    0.09     0  alertmanager
+15:12:35    42472         -      3361    0.00    0.01    0.00    0.01    0.01     0  |__alertmanager
+15:12:35    42472         -      3554    0.01    0.02    0.00    0.04    0.02     0  |__alertmanager
+15:12:35    42472         -      3581    0.01    0.01    0.00    0.01    0.01     1  |__alertmanager
+15:12:35    42472         -      3651    0.01    0.01    0.00    0.01    0.01     0  |__alertmanager
+15:12:35    42472         -      3652    0.00    0.01    0.00    0.01    0.01     0  |__alertmanager
+15:12:35    42472         -     24745    0.00    0.01    0.00    0.01    0.01     0  |__alertmanager
+15:12:35    42472         -     26621    0.00    0.01    0.00    0.01    0.01     1  |__alertmanager 
+15:12:35        0      3373         -    0.00    0.00    0.00    0.00    0.00     1  containerd-shim
+15:12:35        0         -      3374    0.00    0.00    0.00    0.00    0.00     1  |__containerd-shim
+15:12:35        0         -      3376    0.00    0.00    0.00    0.00    0.00     1  |__containerd-shim
+15:12:35        0         -      3381    0.00    0.00    0.00    0.00    0.00     0  |__containerd-shim
+15:12:35        0         -      3431    0.00    0.00    0.00    0.00    0.00     1  |__containerd-shim
+15:12:35        0         -      4355    0.00    0.00    0.00    0.00    0.00     0  |__containerd-shim 
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 2] pidstat -t</figcaption>
 </figure>
+
+Process, Thread별 CPU 사용량을 출력한다. [Shell 2]은 "pidstat -t"를 이용하여 Process, Thread별 사용량을 출력하는 Shell의 모습을 나타내고 있다. Process의 사용량이 출력되고, 아래에 Thread별 사용량이 출력되는것을 확인할 수 있다.
 
 #### 1.3. # pidstat [Interval] [Count]
 
@@ -83,7 +91,12 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 3] pidstat -d</figcaption>
 </figure>
 
-Disk I/O 사용량을 출력한다.
+Process별 Disk I/O 사용량을 출력한다. [Shell 3]은 "pidstat -d"를 이용하여 Process별 Disk I/O 사용량을 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* kB_rd/s : 
+* kB_wr/s :
+* kB_ccwr/s :
+* iodelay :
 
 #### 1.6. # pidstat -r
 
@@ -102,7 +115,12 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 4] pidstat -r</figcaption>
 </figure>
 
-Memory 사용량을 출력한다.
+Process별 Memory 사용량을 출력한다. [Shell 4]는 "pidstat -r"을 이용하여 Process별 Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* minflt/s :
+* majflt/s :
+* VSZ :
+* RSS :
 
 #### 1.7. # pidstat -s
 
@@ -121,7 +139,10 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 5] pidstat -s</figcaption>
 </figure>
 
-Stack 사용량을 출력한다.
+Process별 Stack 사용량을 출력한다. [Shell 5]는 "pidstat -s"을 이용하여 Process별 Stack 사용량을 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* StkSize :
+* StkRef :
 
 #### 1.8. # pidstat -v
 
@@ -140,7 +161,10 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 6] pidstat -v</figcaption>
 </figure>
 
-Kernel Table (User, Thread Count, FD Count) 정보를 출력한다.
+Process별 Thread Count, FD (File Descriptor) Count 정보를 출력한다. [Shell 6]는 "pidstat -v"을 이용하여 Process별 Thread Count, FD Count 정보를 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* threads : 
+* fd-nr :
 
 #### 1.9. # pidstat -w
 
@@ -159,4 +183,7 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 <figcaption class="caption">[Shell 7] pidstat -w</figcaption>
 </figure>
 
-Context Switch 정보를 출력한다.
+Process별 Context Switch 정보를 출력한다. [Shell 7]는 "pidstat -w"을 이용하여 Process별 Context Switch 정보를 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
+
+* cswch/s :
+* nvcswch/s :
