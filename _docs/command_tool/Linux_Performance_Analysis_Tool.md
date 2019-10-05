@@ -21,7 +21,7 @@ Linux에서 성능 측정시 이용되는 Tool들을 정리한다.
 <figcaption class="caption">[Shell 1] uptime Shell</figcaption>
 </figure>
 
-uptime은 Linux의 구동 시간 및 평균 CPU 부하를 보여주는 Tool이다. [Shell 1]은 uptime Tool을 통해서 확인할 수 있는 Shell의 모습을 나타내고 있다. 현재 시각 / Linux 구동 시간 / 현재 Login 상태의 User 수 / 1분, 5분, 15분 동안의 평균 CPU 부하(%)를 나타낸다.
+uptime은 Linux의 구동 시간 및 평균 CPU 부하를 보여주는 Tool이다. [Shell 1]은 uptime Tool을 통해서 확인할 수 있는 Shell의 모습을 나타내고 있다. 현재 시각 / Linux 구동 시간 / 현재 Login 상태의 User 수 / 1분, 5분, 15분 동안의 평균 Load를 나타낸다. Load는 대기 상태로 존재하는 Process의 개수를 의미한다.
 
 #### 1.2. free
 

@@ -9,6 +9,13 @@ adsense: true
 
 NIC의 통계 정보를 출력하는 nicstat의 사용법을 정리한다.
 
+***
+
+* TOC
+{:toc}
+
+***
+
 ### 1. nicstat
 
 #### 1.1. # nicstat
