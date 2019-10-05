@@ -16,7 +16,7 @@ Packet을 Dump하는 tcpdump의 사용법을 정리한다.
 
 ***
 
-### 1. tcmpdump
+### 1. tcpdump
 
 #### 1.1. # tcpdump -i [Interface] tcp port [Port]
 
