@@ -89,7 +89,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 <figcaption class="caption">[Shell 5] vmstat Shell</figcaption>
 </figure>
 
-vmstat은 Virtual Memory와 관련된 사용량을 출력하는 Tool이다. [Shell 5]는 vmstat을 이용하여 1초 간격으로 Virtual Memory 정보를 출력하는 Shell의 모습을 나타내고 있다.
+vmstat은 CPU, Memory, Disk등 System의 전반적인 사용량을 출력하는 Tool이다. [Shell 5]는 vmstat을 이용하여 1초 간격으로 System의 전반적인 사용량를 출력하는 Shell의 모습을 나타내고 있다.
 
 #### 1.6. iostat
 
