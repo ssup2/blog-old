@@ -46,7 +46,21 @@ Slab 사용량을 출력하는 slabtop의 사용법을 정리한다.
 <figcaption class="caption">[Shell 1] slabtop</figcaption>
 </figure>
 
-Slab Object가 많은 순서대로 Slab 사용량을 출력한다. [Shell 1]은 "slabtop"을 이용하여 Slab Object가 많은 순서대로 Slab 사용량을 출력한다. Cache는 다수의 Slab의 조합으로 구성되고, 각 Slab은 Slab Object의 조합으로 구성된다.
+Slab Object가 많은 순서대로 Slab 사용량을 출력한다. [Shell 1]은 "slabtop"을 이용하여 Slab Object가 많은 순서대로 Slab 사용량을 출력한다. [Shell 1]에서 각 열을 아래의 의미를 나타낸다.
+
+* OBJS : 전체 Slab Object의 개수를 나타낸다.
+* ACTIVE : Active 상태의 Slab Object의 개수를 나타낸다.
+* USE : Cache 이용률을 나타낸다.
+* OBJ SIZE : Slab Object의 개수를 나타낸다.
+* SLABS : Slab의 개수를 나타낸다.
+* OBJ/SLAB : Slab당 Slab Object의 개수를 나타낸다.
+* CACHE SIZE : Cache의 크기를 나타낸다.
+* NAME : Slab의 이름을 나타낸다.
+
+Cache는 다수의 Slab의 집합으로 구성되고, 각 Slab은 Slab Object의 집합으로 구성된다. 각 Slab은 Page Size 크기를 갖는다. 일반적으로 Page Size는 4KB이기 때문에 아래와 같은 공식이 성립한다.
+
+* 4KB * SLABS = CACHE SIZE
+* OBJ/SLAB * OBJ SIZE < 4KB
 
 #### 1.2. # slabtop [-s a|b|c|l|v|n|p|s|u ]
 
@@ -64,3 +78,4 @@ Slab Object가 많은 순서대로 Slab 사용량을 출력한다. [Shell 1]은 
 ### 2. 참고
 
 * [http://books.gigatux.nl/mirror/kerneldevelopment/0672327201/ch11lev1sec6.html](http://books.gigatux.nl/mirror/kerneldevelopment/0672327201/ch11lev1sec6.html)
+* [https://lascrea.tistory.com/66](https://lascrea.tistory.com/66)
