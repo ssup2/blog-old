@@ -62,7 +62,7 @@ Slab Object가 많은 순서대로 Slab 사용량을 출력한다. [Shell 1]은 
 * SLABS : Slab의 개수를 나타낸다.
 * OBJ/SLAB : Slab당 Slab Object의 개수를 나타낸다.
 * CACHE SIZE : Cache의 크기를 나타낸다.
-* NAME : Slab의 이름을 나타낸다.
+* NAME : Cache의 이름을 나타낸다.
 
 Cache는 다수의 Slab의 집합으로 구성되고, 각 Slab은 Slab Object의 집합으로 구성된다. 각 Slab은 Page Size 크기를 갖는다. 일반적으로 Page Size는 4KB이기 때문에 아래와 같은 공식이 성립한다.
 
