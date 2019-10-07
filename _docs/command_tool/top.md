@@ -9,6 +9,13 @@ adsense: true
 
 top 명령어는 Linux에서 실시간으로 Process들을 보여주는 Tool이다. top은 proc Filesystem의 Process 관련 내용을 Parsing 및 계산을 통해 Linux 사용자가 쉽게 Process들의 상태를 파악할 수 있도록 도와준다.
 
+***
+
+* TOC
+{:toc}
+
+***
+
 ### 1. top
 
 #### 1.1. # top
