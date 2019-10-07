@@ -50,8 +50,8 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
   * in : 초당 Clock을 포함하여 받은 Interrupt의 개수를 나타낸다.
   * cs : 초당 발생한 Context Switch의 개수를 나타낸다.
 * cpu
-  * us : User Level CPU 사용률을 나타낸다.
-  * sy : Kernel Level CPU 사용률을 나타낸다.
+  * us : App Code를 구동하는데 이용하는 CPU 사용률을 나타낸다.
+  * sy : Kernel Code를 구동하는데 이용하는 CPU 사용률을 나타낸다.
   * id : I/O Wait를 제외한 CPU의 대기율를 나타낸다.
   * wa : I/O Wait로 인한 CPU 대기율을 나타낸다.
   * st : Kernel이 Hypervisor가 제어하는 가상 머신 안에서 동작할 때, Hypervisor나 다른 가상 머신에 의해서 사용을 뺏긴 CPU 사용률을 의미한다.

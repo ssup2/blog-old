@@ -16,7 +16,7 @@ Terminal Multiplexer인 tmux의 사용법을 정리한다.
 * tmux new -s [session-name] : Session 생성
 * tmux ls : Session 목록
 * tmux attach -t [session-name or session-number] : Session Attach
-* ctrl + b, d: Session Detach
+* ctrl + b, d : Session Detach
 
 #### 1.2. Window 단축키
 

@@ -39,8 +39,8 @@ Linux 4.15.0-60-generic (node09)        10/02/19        _x86_64_        (2 CPU)
 
 Process별 CPU 사용량을 출력한다. [Shell 1]은 "pidstat"을 이용하여 Process별 사용량을 출력하는 Shell의 모습을 나타내고 있다. 각 열은 다음과 같은 의미를 나타낸다.
 
-* %usr : 해당 Process의 User Level CPU 사용률을 나타낸다.
-* %system : 해당 Process의 Kernel Level CPU 사용률을 나타낸다.
+* %usr : 해당 Process의 App Code를 구동하는데 이용한 CPU 사용률을 나타낸다.
+* %system : 해당 Process의 Kernel Code를 구동하는데 이용한 CPU 사용률을 나타낸다.
 * %guest : 해당 Process가 Hypervisor일 경우 vCPU를 구동하기 위한 CPU 사용률을 나타낸다.
 * %wait : 해당 Process를 구동하기 위한 CPU 대기률을 나타낸다.
 * %CPU : 해당 Process의 전체 CPU 사용률을 나타낸다.
