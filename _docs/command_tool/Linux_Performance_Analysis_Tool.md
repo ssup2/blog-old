@@ -37,7 +37,25 @@ Swap:          4095           0        4095
 
 free는 Memory 및 Swap 사용량을 출력하는 Tool이다. [Shell 2]는 Memory 사용량 및 Swap 사용량을 MB 단위로 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.3. pidstat
+#### 1.3. vmstat
+
+{% highlight console %}
+# vmstat 1
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 2  1      0 2659952 815660 3469920    0    0    40  5839  197  477 17  3 32 48  0
+ 0  1      0 2675016 815676 3454768    0    0    20  4180  390 2881  7  3 55 36  0
+ 2  0      0 2684728 815716 3445176    0    0    32 12040  367 3019 21  2 33 44  0
+ 0  1      0 2675900 815740 3455176    0    0    28 10324  521 2906 13  3 66 19  0
+ 2  3      0 2661392 815768 3469476    0    0    28 13628  347 3175 14  2 44 40  0
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 3] vmstat Shell</figcaption>
+</figure>
+
+vmstat은 CPU, Memory, Disk등 System의 전반적인 사용량을 출력하는 Tool이다. [Shell 3]은 vmstat을 이용하여 1초 간격으로 System의 전반적인 사용량를 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.4. pidstat
 
 {% highlight console %}
 # pidstat 1
@@ -51,12 +69,12 @@ Average:        0      3968    0.00    0.99    0.00    0.00    0.99     -  kwork
 Average:        0      7361    0.00    0.99    0.00    0.00    0.99     -  pidstat
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 3] pidstat Shell</figcaption>
+<figcaption class="caption">[Shell 4] pidstat Shell</figcaption>
 </figure>
 
-pidstat은 process별 Resource 사용량을 출력하는 Tool이다. [Shell 3]은 pidstat을 이용하여 1초 간격으로 각 Process의 CPU 사용량을 출력하는 Shell의 모습을 나타내고 있다. pidstat은 CPU 사용량뿐만 아니라 Memory, Stack, Block I/O, Kernel 사용량 정보도 출력할 수 있다.
+pidstat은 process별 Resource 사용량을 출력하는 Tool이다. [Shell 4]는 pidstat을 이용하여 1초 간격으로 각 Process의 CPU 사용량을 출력하는 Shell의 모습을 나타내고 있다. pidstat은 CPU 사용량뿐만 아니라 Memory, Stack, Block I/O, Kernel 사용량 정보도 출력할 수 있다.
 
-#### 1.4. mpstat
+#### 1.5. mpstat
 
 {% highlight console %}
 # mpstat -P ALL 1
@@ -68,28 +86,10 @@ Linux 4.15.0-60-generic (node09)        09/22/19        _x86_64_        (2 CPU)
 11:25:07       1    3.06    0.00    2.04   48.98    0.00    0.00    0.00    0.00    0.00   45.92
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 4] mpstat Shell</figcaption>
+<figcaption class="caption">[Shell 5] mpstat Shell</figcaption>
 </figure>
 
-mpstat은 CPU Core별 사용량을 출력하는 Tool이다. [Shell 4]는 mpstat을 이용하여 1초 간격으로 모든 CPU Core의 CPU 사용량을 출력하는 Shell의 모습을 나타내고 있다.
-
-#### 1.5. vmstat
-
-{% highlight console %}
-# vmstat 1
-procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
- r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
- 2  1      0 2659952 815660 3469920    0    0    40  5839  197  477 17  3 32 48  0
- 0  1      0 2675016 815676 3454768    0    0    20  4180  390 2881  7  3 55 36  0
- 2  0      0 2684728 815716 3445176    0    0    32 12040  367 3019 21  2 33 44  0
- 0  1      0 2675900 815740 3455176    0    0    28 10324  521 2906 13  3 66 19  0
- 2  3      0 2661392 815768 3469476    0    0    28 13628  347 3175 14  2 44 40  0
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Shell 5] vmstat Shell</figcaption>
-</figure>
-
-vmstat은 CPU, Memory, Disk등 System의 전반적인 사용량을 출력하는 Tool이다. [Shell 5]는 vmstat을 이용하여 1초 간격으로 System의 전반적인 사용량를 출력하는 Shell의 모습을 나타내고 있다.
+mpstat은 CPU Core별 사용량을 출력하는 Tool이다. [Shell 5]는 mpstat을 이용하여 1초 간격으로 모든 CPU Core의 CPU 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
 #### 1.6. iostat
 
@@ -152,31 +152,9 @@ KiB Swap:  4194300 total,  4194300 free,        0 used.  6637292 avail Mem
 <figcaption class="caption">[Shell 8] top Shell</figcaption>
 </figure>
 
-top은 CPU 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+top은 CPU 사용률 또는 Memory 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.9. iotop
-
-{% highlight console %}
-# iotop
-Total DISK READ :      46.79 K/s | Total DISK WRITE :       5.48 M/s
-Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
-  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
-  355 be/3 root        0.00 B/s   27.29 K/s  0.00 % 40.92 % [jbd2/sda2-8]
- 3771 be/4 42472      35.09 K/s    0.00 B/s  0.00 %  8.91 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
- 3769 be/4 42472       3.90 K/s    0.00 B/s  0.00 %  4.53 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
- 5297 be/4 42472       3.90 K/s    2.30 M/s  0.00 %  4.37 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
- 3768 be/4 42472       3.90 K/s    3.15 M/s  0.00 %  2.68 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
-10129 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.05 % [kworker/u4:4]
-    1 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % systemd --system --deserialize 40
-    2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]            
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Shell 9] iotop Shell</figcaption>
-</figure>
-
-iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 9]는 iotop을 이용하여 Block I/O의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
-
-#### 1.10. slabtop
+#### 1.9. slabtop
 
 {% highlight console %}
 # slabtop
@@ -195,10 +173,82 @@ iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 보
 123776 122174   0%    0.06K   1934       64      7736K kmalloc-64
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 10] slabtop Shell</figcaption>
+<figcaption class="caption">[Shell 9] slabtop Shell</figcaption>
 </figure>
 
-slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 10]은 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
+slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 9]는 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
+
+#### 1.10. iotop
+
+{% highlight console %}
+# iotop
+Total DISK READ :      46.79 K/s | Total DISK WRITE :       5.48 M/s
+Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
+  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
+  355 be/3 root        0.00 B/s   27.29 K/s  0.00 % 40.92 % [jbd2/sda2-8]
+ 3771 be/4 42472      35.09 K/s    0.00 B/s  0.00 %  8.91 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 3769 be/4 42472       3.90 K/s    0.00 B/s  0.00 %  4.53 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 5297 be/4 42472       3.90 K/s    2.30 M/s  0.00 %  4.37 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+ 3768 be/4 42472       3.90 K/s    3.15 M/s  0.00 %  2.68 % prometheus -config.file /etc/prometheus/prometheus.yml -web.liste~-log.format logger:stdout -storage.local.path /var/lib/prometheus
+10129 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.05 % [kworker/u4:4]
+    1 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % systemd --system --deserialize 40
+    2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]            
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 10] iotop Shell</figcaption>
+</figure>
+
+iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 출력하는 Tool이다. [Shell 10]은 iotop을 이용하여 Block I/O 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.11. iftop
+
+{% highlight console %}
+# iftop
+                                  12.5Kb                             25.0Kb                             37.5Kb                             50.0Kb                       62.5Kb
+└─┴─┴─┴─┴──
+node09                                                                    => 192.168.0.40                                                                 0b   3.64Kb   931b
+                                                                          <=                                                                              0b   13.3Kb  3.33Kb
+node09                                                                    => dns.google                                                                 672b    917b    857b
+                                                                          <=                                                                            672b    917b    903b
+239.255.255.250                                                           => 192.168.0.4                                                                  0b      0b      0b
+                                                                          <=                                                                              0b      0b    161b
+255.255.255.255                                                           => 0.0.0.0                                                                      0b      0b      0b
+                                                                          <=                                                                              0b      0b    115b
+
+──
+TX:             cum:   11.9KB   peak:   20.0Kb                                                                                                rates:    672b   4.53Kb  1.75Kb
+RX:    25.8KB 68.      86.0KB           6.54Kb                                                                                                          672b   14.2Kb  4.48Kb
+TOTAL:                 37.8KB           88.4Kb                                                                                                         1.31Kb  18.7Kb  6.22Kb
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 11] iftop Shell</figcaption>
+</figure>
+
+iftop은 특정 Interface의 Network 사용량을 Src IP/Dst IP로 분류한 다음, 샤용량이 높은 순서에 따라서 출력하는 Tool이다. [Shell 11]은 iftop을 이용하여 Network의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+
+#### 1.12. nethogs
+
+{% highlight console %}
+# nethogs
+NetHogs version 0.8.5-2
+
+    PID USER     PROGRAM DEV SENT      RECEIVED
+      ? root     10.0.0.19:3000-10.0.0.11:56170                                                                                                       0.058       0.109 KB/sec
+      ? root     10.0.0.19:9093-10.0.0.11:39550                                                                                                       0.058       0.109 KB/sec
+  31723 root     sshd: root@pts/0                                                                                                         eth1        0.342       0.084 KB/sec
+      ? root     10.0.0.19:9091-10.0.0.11:55972                                                                                                       0.029       0.055 KB/sec
+  27860 42417    /usr/sbin/grafana-server                                                                                                 eth1        0.013       0.013 KB/sec
+      ? root     10.0.0.19:36076-10.0.0.11:9150                                                                                                       0.000       0.000 KB/sec
+   2912 42472    /opt/prometheus/prometheus                                                                                               eth1        0.000       0.000 KB/sec
+      ? root     unknown TCP                                                                                                                          0.000       0.000 KB/sec
+
+  TOTAL 0.000 0.000 KB/sec                                                                                                                            0.500       0.371
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 12] nethogs Shell</figcaption>
+</figure>
+
+nethogs는 Network 사용률이 높은 순서대로 Process를 출력하는 Tool이다. [Shell 12]은 nethogs를 이용하여 Network 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
 ### 2. 참조
 
