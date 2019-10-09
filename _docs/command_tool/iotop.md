@@ -40,3 +40,7 @@ Actual DISK READ:       3.92 K/s | Actual DISK WRITE:      16.82 M/s
 </figure>
 
 [Shell 1]은 iotop 명령어를 통해서 확인할 수 있는 Shell의 모습을 나타내고 있다. 윗 부분은 평균 Block I/O Bandwidth를 출력하고, 아랫 부분은 Process별 Block I/O Bandwidth를 출력한다. 윗 부분의 Total은 Kernel의 Block Device Subsystem의 Kernel Thread들과 나머지 Process/Thread들 사이에 주고 받는 Data를 의미한다. Actual은 Kernel의 Block Device Subsystem의 Kernel Thread들과 실제 Block Disk들 사이에 주고 받은 Data를 의미한다.
+
+#### 1.2. # iotop -d [Interval] -n [Count]
+
+[Interval] 간격으로 [Count] 횟수만큼 출력한다.
