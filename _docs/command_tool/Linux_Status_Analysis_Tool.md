@@ -31,7 +31,7 @@ tcp        0      0 10.0.0.19:9091          0.0.0.0:*               LISTEN      
 tcp        0      0 10.0.0.19:9093          0.0.0.0:*               LISTEN      3361/alertmanager   
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] uptime Shell</figcaption>
+<figcaption class="caption">[Shell 1] uptime</figcaption>
 </figure>
 
 netstat은 Linux Kernel이 갖고있는 대부분의 Network 정보를 출력하는 Tool이다. [Shell 1]은 netstat을 이용하여 현재 Listen 상태의 Server Process와 Port를 출력하는 Shell의 모습을 나타내고 있다.
@@ -51,7 +51,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 13:30:19.355673 IP node09.55226 > a184-28-153-161.deploy.static.akamaitechnologies.com.http: Flags [.], ack 301, win 237, options [nop,nop,TS val 2368590461 ecr 2709703644], length 0
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] tcpdump Shell</figcaption>
+<figcaption class="caption">[Shell 2] tcpdump</figcaption>
 </figure>
 
 tcpdump은 특정 Network Interface의 Inbound/Outbound Packet 정보를 출력하는 Tool이다. [Shell 2]는 tcpdump를 이용하여 eth0 Interface의 Src/Dest Port가 80인 Inbound/Outbound Packet 정보를 출력하는 Shell의 모습을 나타내고 있다.
@@ -72,10 +72,10 @@ systemd       1 root  mem       REG                8,2    34872    2103003 /usr/
 systemd       1 root  mem       REG                8,2   432640   11534609 /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] uptime Shell</figcaption>
+<figcaption class="caption">[Shell 3] uptime</figcaption>
 </figure>
 
-lsof는 Open 상태의 File List를 출력하는 Tool이다. [Shell 1]은 lsof를 이용하여 root User가 Open한 File List를 출력하는 Shell을 나타내고 있다. User 단위의 Filter뿐만 아니라 Directory, Binary 단위의 Filter도 가능하다. 또한 lsof를 이용하여 TCP, UDP의 특정 Port를 이용하는 Process를 찾는것도 가능하다.
+lsof는 Open 상태의 File List를 출력하는 Tool이다. [Shell 3]은 lsof를 이용하여 root User가 Open한 File List를 출력하는 Shell을 나타내고 있다. User 단위의 Filter뿐만 아니라 Directory, Binary 단위의 Filter도 가능하다. 또한 lsof를 이용하여 TCP, UDP의 특정 Port를 이용하는 Process를 찾는것도 가능하다.
 
 ### 2. 참조
 

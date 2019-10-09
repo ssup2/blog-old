@@ -28,7 +28,7 @@ Linux Log 관련 Command, Tool들을 정리한다.
 [  +0.000000] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR'
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] dmesg Shell</figcaption>
+<figcaption class="caption">[Shell 1] dmesg</figcaption>
 </figure>
 
 dmesg는 Linux Kernel의 Log Ring Buffer에 저장되어 있는 Kernel Log의 내용을 보여주는 Tool이다. [Shell 1]은 dmesg를 이용하여 Kernel Log를 출력하는 Shell의 모습을 나타내고 있다. Linux Kernel에서 printk() 함수로 출력한 내용은 Log Ring Buffer에 저장된다. Log Ring Buffer는 Kernel Memory공간에 위치하고 있기 때문에, 재부팅이 된다면 사라지게 된다. 또한 Log Ring Buffer의 크기보다 많은양의 Log가 저장되면 이전의 Log 내용은 덮어 씌워지면서 사라지게 된다.
@@ -50,7 +50,7 @@ Sep 20 14:33:10 vm kernel: [    0.000000] x86/fpu: Supporting XSAVE feature 0x00
 Sep 20 14:33:10 vm kernel: [    0.000000] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR' 
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] /var/log/kern.log Shell</figcaption>
+<figcaption class="caption">[Shell 2] /var/log/kern.log</figcaption>
 </figure>
 
 rsyslogd 또는 systemd-journald는 Linux Kernel의 Log Ring Buffer에 저장되어 있는 Kernel Log를 /var/log/kern.log에 복사하여 저장한다. [Shell 2]는 /var/log/kern.log의 내용을 출력하는 Shell의 모습을 나타내고 있다. /var/log/kern.log은 파일이기 때문에 재부팅 이후에도 /var/log/kern.log에는 Kernel Log 내용이 남게 되고, 이전의 Log 내용은 덮어 씌워지지 않는다.
@@ -64,7 +64,7 @@ Aug  1 06:25:59 node09 dockerd[1772]: time="2019-08-01T06:25:59.825852795Z" leve
 Aug  1 06:26:03 node09 dockerd[1772]: time="2019-08-01T06:26:03.088304486Z" level=info msg="shim containerd-shim started" address="/containerd-shim/moby/
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 3] /var/log/syslog Shell</figcaption>
+<figcaption class="caption">[Shell 3] /var/log/syslog</figcaption>
 </figure>
 
 rsyslogd 또는 systemd-journald는 Service (Daemon) Log를 /var/log/syslog에 저장한다. [Shell 3]은 /var/log/syslog에 저장되어 있는 Service Log를 출력하는 Shell의 모습을 나타내고 있다.
@@ -84,7 +84,7 @@ Jul 13 19:06:29 node09 sshd[2675]: Server listening on 0.0.0.0 port 22.
 Jul 13 19:06:29 node09 sshd[2675]: Server listening on :: port 22.
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 4] /var/log/kern.log Shell</figcaption>
+<figcaption class="caption">[Shell 4] /var/log/kern.log</figcaption>
 </figure>
 
 journalctl은 systemd-journald가 기록한 각종 Log들의 내용을 출력하는 Tool이다. Log는 Kernel Log, Service (Daemon) Log, App Log등이 존재하며, /var/log/journal에 저장된다. [Shell 4]는 journalctl을 이용하여 ssh Service의 Log 내용을 출력하는 Shell의 모습을 나타내고 있다.
