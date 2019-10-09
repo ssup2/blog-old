@@ -204,21 +204,27 @@ iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 출
 
 {% highlight console %}
 # iftop
-                                  12.5Kb                             25.0Kb                             37.5Kb                             50.0Kb                       62.5Kb
+ Press H or ? for help            25.0Kb            37.5Kb           50.0Kb      62.5Kb
 └─┴─┴─┴─┴──
-node09                                                                    => 192.168.0.40                                                                 0b   3.64Kb   931b
-                                                                          <=                                                                              0b   13.3Kb  3.33Kb
-node09                                                                    => dns.google                                                                 672b    917b    857b
-                                                                          <=                                                                            672b    917b    903b
-239.255.255.250                                                           => 192.168.0.4                                                                  0b      0b      0b
-                                                                          <=                                                                              0b      0b    161b
-255.255.255.255                                                           => 0.0.0.0                                                                      0b      0b      0b
-                                                                          <=                                                                              0b      0b    115b
+node09                        => dns.google                      672b   1.11Kb  1.05Kb
+                              <=                                 672b   1.00Kb  1.04Kb
+node09                        => 192.168.0.40 cast.net             0b      0b    931b
+                              <=                                   0b      0b   3.33Kb
+_gateway                      => all-systems.mcast.net             0b      0b     34b
+                              <=                                   0b      0b      0b
+node09                        => 106.247.248.106                   0b      0b     15b
+                              <=                                   0b      0b     15b
+node09                        => dadns.cdnetworks.co.kr            0b      0b     15b
+                              <=                                   0b      0b     15b
+node09                        => ch-ntp01.10g.ch                   0b      0b     15b
+                              <=                                   0b      0b     15b
+node09                        => ec2-13-209-84-50.ap-northeas      0b      0b     15b
+                              <=                                   0b      0b     15b
 
 ──
-TX:             cum:   11.9KB   peak:   20.0Kb                                                                                                rates:    672b   4.53Kb  1.75Kb
-RX:    25.8KB 68.      86.0KB           6.54Kb                                                                                                          672b   14.2Kb  4.48Kb
-TOTAL:                 37.8KB           88.4Kb                                                                                                         1.31Kb  18.7Kb  6.22Kb
+TX:             cum:   11.2KB   peak:   19.1Kb         rates:    672b   1.11Kb  2.02Kb
+RX:                    23.8KB           67.5Kb                   672b   1.00Kb  4.46Kb
+TOTAL:                 35.0KB           86.6Kb                  1.31Kb  2.11Kb  6.48Kb 
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 11] iftop Shell</figcaption>
