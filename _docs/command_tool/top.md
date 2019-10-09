@@ -59,7 +59,7 @@ KiB Swap:  8265724 total,        0 used,  8265724 free.   541164 cached Mem
 
 * us (user) : nice값이 적용되지 않은 (un-niced, nice = 0) Process들의 User Code를 구동하는데 이용한 CPU 사용률을 나타낸다. 대부분의 User Process들의 사용률을 의미한다.
 * sy (system) : Kernel Code를 구동하는데 이용한 CPU 사용률 중에서 id, wa, hi, si의 사용률/대기율 제외한 사용률을 의미한다.
-* ni (nice) : nice값이 적용된 (niced) User Process들의 User Code들을 구동하는데 이용한 CPU 사용률을 나타낸다.
+* ni (nice) : nice값이 적용된 (niced) Process들의 User Code들을 구동하는데 이용한 CPU 사용률을 나타낸다.
 * id (idle) : I/O Wait를 제외한 CPU의 대기율를 나타낸다.
 * wa (wait) : I/O Wait로 인한 CPU 대기율을 나타낸다.
 * hi (hardware interrupt) : 순수 Hardware Interrupt 처리를 위해 사용된 CPU 사용률을 나타낸다. Kernel의 Interrupt Flag를 Set만 하는 Top Havles 부분을 처리를 위한 CPU 사용률을 의미한다.
