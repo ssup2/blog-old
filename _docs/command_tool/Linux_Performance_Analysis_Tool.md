@@ -230,7 +230,7 @@ TOTAL:                 35.0KB           86.6Kb                  1.31Kb  2.11Kb  
 <figcaption class="caption">[Shell 11] iftop</figcaption>
 </figure>
 
-iftop은 특정 Interface의 Network 사용량을 Src IP/Dst IP로 분류한 다음, 샤용량이 높은 순서에 따라서 출력하는 Tool이다. [Shell 11]은 iftop을 이용하여 Network의 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+iftop은 특정 Interface의 Network Bandwidth 사용량을 Src IP/Dst IP로 분류한 다음, 샤용량이 높은 순서에 따라서 출력하는 Tool이다. [Shell 11]은 iftop을 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
 #### 1.12. nethogs
 
@@ -254,7 +254,7 @@ NetHogs version 0.8.5-2
 <figcaption class="caption">[Shell 12] nethogs</figcaption>
 </figure>
 
-nethogs는 Network 사용률이 높은 순서대로 Process를 출력하는 Tool이다. [Shell 12]은 nethogs를 이용하여 Network 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+nethogs는 Network Bandwidth 사용률이 높은 순서대로 Process를 출력하는 Tool이다. [Shell 12]은 nethogs를 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
 ### 2. 참조
 
