@@ -35,7 +35,6 @@ NetHogs version 0.8.5-2
       ? root     unknown TCP                                                0.000       0.000 KB/sec
 
   TOTAL 0.000 0.000 KB/sec                                                  0.337       0.329
-     
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] nethogs</figcaption>
