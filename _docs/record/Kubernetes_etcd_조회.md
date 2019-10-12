@@ -1,8 +1,8 @@
 ---
 title: Kubernetes etcd 조회, Backup
 category: Record
-date: 2019-05-19T12:00:00Z
-lastmod: 2019-05-19T12:00:00Z
+date: 2019-10-12T12:00:00Z
+lastmod: 2019-10-12T12:00:00Z
 comment: true
 adsense: true
 ---
