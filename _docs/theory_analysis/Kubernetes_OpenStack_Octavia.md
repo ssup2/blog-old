@@ -11,7 +11,7 @@ OpenStack의 LBaaS (Load Balancer as a Service)인 Octavia와 같이 동작하�
 
 ### 1. Kubernetes with OpenStack Octavia
 
-![[그림 1] Kubernetes with OpenStack Octavia 구성요소]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Octavia/Components.PNG)
+![[그림 1] Kubernetes with OpenStack Octavia]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Octavia/Kubernetes_OpenStack_Octavia.PNG)
 
 [그림 1]은 OpenStack Octavia와 동작하는 Kubernetes를 나타내고 있다. [그림 1]에는 1개의 OpenStack Controller Node, 1개의 OpenStack Controller Node, 2개의 OpenStack Compute Node로 구성된 OpenStack이 위치한다. OpenStack 위에는 1개의 Kubernetes Master VM, 3개의 Kubernetes Slave VM으로 구성된 하나의 Kubernetes Cluster가 위치한다. Kubernetes Cluster에는 Service A,B 2개의 LoadBalancer Service가 설정되어 있다. 따라서 각 Service를 위한 Active-Standby 형태의 LB VM (Amphora VM)이 2 Set가 존재하게 된다.
 
@@ -67,7 +67,13 @@ Kubernetes는 LoadBalancer Service 생성시 NodePort를 반드시 생성하고,
 
 Dest IP가 LoadBalancer Service의 IP인 Packet이 External Network에 전달되면, OpenStack Network Node에 있는 Virtual Router는 해당 Packet을 DNAT하여 Kubernetes Network로 Routing한다. Packet은 Active 상태의 LB VM에게 전달되고, HAProxy에 의해서 Packet은 SlaveIP:NodePort로 DNAT되어 Octavia Member인 임의의 Kubernetes Slave VM에게 전달된다. Kubernetes Slave VM은 IPTables/IPVS Rule에 따라서 다시한번 DNAT 및 Load Balancing되어 LoadBalancer Service에 소속된 Pod에 Packet을 전달한다.
 
-### 2. 참조
+### 2. Kubernetes with OpenStack Octavia and OpenStack CCM
+
+![[그림 2] Kubernetes with OpenStack Octavia and OpenStack CCM]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Octavia/Kubernetes_OpenStack_Octavia_CCM.PNG)
+
+현재 Kubernetes는 기존의 Cloud Provider에 종속적인 부분들을 별도의 Controller로 분리하는 작업을 진행중이다. Openstack에 종속적인 부분들은 Openstack CCM(Cloud Controller Manager)를 이용하도록 Kubernetes를 설정할 수 있다. [그림 2]는 OpenStack CCM을 이용할 경우 Octavia와 동작하는 Kubernetes를 나타내고 있다. Kubernetes API Server대신 OpenStack CCM이 대신 Octavia Service에게 Load Balancer를 요청한다는 부분을 제외하고는 [그림 1]과 동일하다.
+
+### 3. 참조
 
 * [https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/](https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/)
 * [https://github.com/kubernetes/cloud-provider](https://github.com/kubernetes/cloud-provider)

@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Container Storage 설정시 이용되는 CNI (Container Storage Interface)를 분석한다.
+Container Storage 설정시 이용되는 CSI (Container Storage Interface)를 분석한다.
 
 ### 1. CSI (Container Storage Interface)
 

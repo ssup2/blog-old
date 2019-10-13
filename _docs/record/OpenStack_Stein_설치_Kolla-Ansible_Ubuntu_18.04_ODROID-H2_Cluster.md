@@ -162,8 +162,7 @@ Node04 Interface의 IP를 설정한다.
 (Deploy)# apt-get install ansible python-pip python3-pip libguestfs-tools
 (Deploy)# pip install kolla==8.0.0 kolla-ansible==8.0.0 tox gitpython pbr requests jinja2 oslo_config
 (Deploy)# pip install python-openstackclient python-glanceclient python-neutronclient
-
-~~~console
+~~~
 
 Deploy Node에 Ansible과 Kolla-ansible 및 Kolla Container Image Build를 위한 Ubuntu, Python Package를 설치한다. 또한 OpenSTack CLI Client도 설치한다.
 
@@ -182,7 +181,7 @@ Registry Node에 Registry Node 구동을 위한 Docker를 설치한다.
 (Network, Compute)# apt-get remove --purge openvswitch-switch
 ~~~
 
-Open vSwitch Package가 설치되어 있다면 해당 Package를 지워서 Host에서 동작하는 Open vSwitch를 제거해야 한다. Open vSwitch 관련 Daemon은 Container에서 동작해야 한다. Host, Container 동시에 Open vSwitch 관련 Daemon을 구동하면 제대로 동작하지 않는다.
+Open vSwitch Package가 설치되어 있다면 해당 Package를 지워서 Host에서 동작하는 Open vSwitch를 제거해야 한다. Open vSwitch 관련 Daemon은 오직 Container에서 동작해야 한다. Host와 Container에서 동시에 Open vSwitch 관련 Daemon을 구동하면 제대로 동작하지 않는다.
 
 #### 4.4. All Node
 
