@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 / kubeadm, External Cloud Provider 이용 / Ubuntu 18.04, OpenStack 환경
+title: Kubernetes 설치 / kubeadm, External Cloud Provider, CSI 이용 / Ubuntu 18.04, OpenStack 환경
 category: Record
 date: 2019-08-19T12:00:00Z
 lastmod: 2019-08-19T12:00:00Z
@@ -25,9 +25,6 @@ adsense: true
   * Octavia
 * Kubernetes : 1.15.3
   * CNI : Cilium 1.5.6 Plugin
-* External Cloud Provider
-  * Octavia 연동 O
-  * Cinder 연동 X
 
 ### 2. Ubuntu Package 설치
 
@@ -114,7 +111,7 @@ kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Nod
 (Master)# kubectl apply -f cilium-1.5.6/examples/kubernetes/1.15/cilium.yaml
 ~~~
 
-Cilium을 설치한다.
+Cilium을 설치한다. **External Cloud Provider가 정상적으로 설치되기 전까지 모든 Node에는 taint가 설정되어 있다.** 따라서 Cilium은 External Cloud Provider가 완전히 설치된 이후에 동작하게 된다.
 
 ### 5. cloud-config 파일 작성
 
@@ -149,16 +146,16 @@ monitor-max-retries=3
 
 모든 Master Node에 /etc/kubernetes/cloud-config 파일을 [파일 2]의 내용으로 생성한다. [파일 2]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balancer 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM Monitoring 정책을 결정한다.
 
-### 6. Kubernetes Cluster 설정
-
-#### 6.1. Master Node
-
 ~~~console
-(Master)# kubectl create secret -n kube-system generic cloud-config-kube --from-literal="$(cat /etc/kubernetes/cloud-config)" --dry-run -o yaml > cloud-config-kube-secret.yaml
+(Master)# kubectl create secret -n kube-system generic cloud-config --from-literal=cloud.conf="$(cat /etc/kubernetes/cloud-config)" --dry-run -o yaml > cloud-config-secret.yaml
 (Master)# kubectl -f cloud-config-secret.yaml apply
 ~~~
 
-Kubernetes Contorller Manager가 이용할 cloud-config-kube secret을 생성한다.
+Openstack Cloud Controller Manager와 Cinder CSI Plugin이 이용할 cloud-config secret을 생성한다.
+
+### 6. Kubernetes Cluster 설정
+
+#### 6.1. Master Node
 
 {% highlight yaml %}
 ...
@@ -178,16 +175,26 @@ Kubernetes Contorller Manager가 이용할 cloud-config-kube secret을 생성한
 <figcaption class="caption">[파일 3] Master Node - /etc/kubernetes/manifests/kube-controller-manager.yaml</figcaption>
 </figure>
 
-모든 Master Node의 /etc/kubernetes/manifests/kube-controller-manager.yaml 파일을 [파일 3]의 내용으로 수정하여 Kubernetes Controller Manager가 cloud-config 파일을 이용할 수 있도록 설정한다. kube-controller-manager.yaml 파일을 수정하면 Kubernetes는 자동으로 Controller Manager를 재시작한다.
+모든 Master Node의 /etc/kubernetes/manifests/kube-controller-manager.yaml 파일을 [파일 3]의 내용으로 수정하여 Kubernetes Controller Manager가 cloud-config 파일을 이용할 수 있도록 설정한다. kube-controller-manager.yaml 파일을 수정하면 Kubernetes는 자동으로 Kubernetes Controller Manager를 재시작한다.
 
-~~~console
-(Master)# kubectl create secret -n kube-system generic cloud-config --from-literal=cloud.conf="$(cat /etc/kubernetes/cloud-config)" --dry-run -o yaml > cloud-config-secret.yaml
-(Master)# kubectl -f cloud-config-secret.yaml apply
-~~~
+{% highlight yaml %}
+...
+spec:
+  containers:
+  - command:
+    - kube-apiserver
+    - --advertise-address=30.0.0.34
+...
+    - --runtime-config=storage.k8s.io/v1=true
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] Master Node - /etc/kubernetes/manifests/kube-apiserver.yaml</figcaption>
+</figure>
 
-Openstack Cloud Controller Manager와 Cinder CSI Plugin이 이용할 cloud-config secret을 생성한다.
+모든 Master Node의 /etc/kubernetes/manifests/kube-apiserver.yaml 파일을 [파일 4]의 내용으로 수정하여 Kubernetes API Server가 Storage API를 제공하도록 설정한다. kube-apiserver.yaml 파일을 수정하면 Kubernetes는 자동으로 Kubernetes API Server를 재시작한다.
 
-### 7. Openstack Cloud Controller Manager & Cinder CSI Plugin 설치
+### 7. Openstack Cloud Controller Manager 설치
 
 #### 7.1. Master Node
 
@@ -201,6 +208,10 @@ Openstack Cloud Controller Manager와 Cinder CSI Plugin이 이용할 cloud-confi
 
 Openstack Cloud Controller Manager를 설치한다.
 
+### 8. Cinder CSI Plugin 설치
+
+#### 8.1. Master Node
+
 ~~~console
 (Master)# rm manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
 (Master)# kubectl -f manifests/cinder-csi-plugin apply
@@ -208,7 +219,7 @@ Openstack Cloud Controller Manager를 설치한다.
 
 csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-secret-cinderplugin.yaml을 삭제하고, Cinder CSI Plugin을 설치한다.
 
-### 8. 참조
+### 9. 참조
 
 * [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
