@@ -184,6 +184,7 @@ spec:
   - command:
     - kube-apiserver
     - --advertise-address=30.0.0.34
+    - --allow-privileged=true
 ...
     - --runtime-config=storage.k8s.io/v1=true
 ...
@@ -213,11 +214,12 @@ Openstack Cloud Controller Manager를 설치한다.
 #### 8.1. Master Node
 
 ~~~console
+(Master)# cd cloud-provider-openstack && git checkout v1.16.0
 (Master)# rm manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
 (Master)# kubectl -f manifests/cinder-csi-plugin apply
 ~~~
 
-csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-secret-cinderplugin.yaml을 삭제하고, Cinder CSI Plugin을 설치한다.
+csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-secret-cinderplugin.yaml을 삭제하고, Cinder CSI Plugin을 설치한다. Cinder CSI Plugin v1.15.0 Version은 동작하지 않기 때문에 v1.16.0 Version으로 변경하여 설치한다.
 
 ### 9. 참조
 
