@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 / kubeadm, External Cloud Provider, CSI 이용 / Ubuntu 18.04, OpenStack 환경
+title: Kubernetes 설치 / kubeadm, External Cloud Provider (CCM, CSI Plugin) 이용 / Ubuntu 18.04, OpenStack 환경
 category: Record
 date: 2019-08-19T12:00:00Z
 lastmod: 2019-08-19T12:00:00Z
@@ -64,7 +64,7 @@ Environment="KUBELET_KUBECONFIG_ARGS=--cloud-provider=external --bootstrap-kubec
 <figcaption class="caption">[파일 1] All Node - /etc/systemd/system/kubelet.service.d/10-kubeadm.conf</figcaption>
 </figure>
 
-모든 Node에서 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf 파일의 내용을 [파일 1]의 내용처럼 수정하여 kubelet이 External Provider를 이용하도록 설정한다.
+모든 Node에서 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf 파일의 내용을 [파일 1]의 내용처럼 수정하여 kubelet이 External Cloud Provider를 이용하도록 설정한다.
 
 #### 3.2. Master Node
 
@@ -111,7 +111,7 @@ kubeadm init 결과로 나온 **kubeadm join ~~** 명령어를 모든 Worker Nod
 (Master)# kubectl apply -f cilium-1.5.6/examples/kubernetes/1.15/cilium.yaml
 ~~~
 
-Cilium을 설치한다. **External Cloud Provider가 정상적으로 설치되기 전까지 모든 Node에는 taint가 설정되어 있다.** 따라서 Cilium은 External Cloud Provider가 완전히 설치된 이후에 동작하게 된다.
+Cilium을 설치한다. **External Cloud Provider (OpenStack CCM)가 정상적으로 설치되기 전까지 모든 Node에는 taint가 설정되어 있다.** 따라서 Cilium은 External Cloud Provider가 완전히 설치된 이후에 동작하게 된다.
 
 ### 5. cloud-config 파일 작성
 
@@ -127,7 +127,7 @@ tenant-id="b21b68637237488bbb5f33ac8d86b848"
 domain-name="Default"
 
 [BlockStorage]
-bs-version=v2
+bs-version=v3
 
 [LoadBalancer]
 subnet-id=67ca5cfd-0c3f-434d-a16c-c709d1ab37fb
@@ -194,7 +194,7 @@ spec:
 
 모든 Master Node의 /etc/kubernetes/manifests/kube-apiserver.yaml 파일을 [파일 4]의 내용으로 수정하여 Kubernetes API Server가 Storage API를 제공하도록 설정한다. kube-apiserver.yaml 파일을 수정하면 Kubernetes는 자동으로 Kubernetes API Server를 재시작한다.
 
-### 7. Openstack Cloud Controller Manager 설치
+### 7. Openstack CCM(Cloud Controller Manager) 설치
 
 #### 7.1. Master Node
 
@@ -224,6 +224,8 @@ csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-
 * [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 * [https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#pod-network)
+* [https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/openstack-kubernetes-integration-options.md](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/openstack-kubernetes-integration-options.md)
 * [https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/using-controller-manager-with-kubeadm.md](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/using-controller-manager-with-kubeadm.md)
 * [https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/using-cinder-csi-plugin.md](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/using-cinder-csi-plugin.md)
+* [https://github.com/kubernetes/cloud-provider-openstack/issues/758](https://github.com/kubernetes/cloud-provider-openstack/issues/758)
 * [https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/](https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/)
