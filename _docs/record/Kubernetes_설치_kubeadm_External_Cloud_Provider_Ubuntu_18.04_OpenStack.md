@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 / kubeadm, External Cloud Provider (CCM, CSI Plugin) 이용 / Ubuntu 18.04, OpenStack 환경
+title: Kubernetes 설치 / kubeadm, External Cloud Provider 이용 / Ubuntu 18.04, OpenStack 환경
 category: Record
 date: 2019-08-19T12:00:00Z
 lastmod: 2019-08-19T12:00:00Z
@@ -25,6 +25,9 @@ adsense: true
   * Octavia
 * Kubernetes : 1.15.3
   * CNI : Cilium 1.5.6 Plugin
+* External Cloud Provider
+  * OpenStack Cloud Controller Manager : v1.15.0
+  * CSI Plugin : v1.16.0
 
 ### 2. Ubuntu Package 설치
 
