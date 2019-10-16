@@ -628,7 +628,7 @@ ceph_enable_cache: "no"
 <figcaption class="caption">[파일 9] Deploy Node - /etc/kolla/globals.yml</figcaption>
 </figure>
 
-Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 9]의 내용처럼 수정한다. Octavia는 OpenStack을 한번이상 구동한 뒤에야 설정할 수 있기 때문에, Octavia 설정은 주석처리 상태로 놔둔다.
+Kolla-Ansible을 설정한다. Deploy Node의 /etc/kolla/globals.yml 파일을 [파일 9]의 내용처럼 수정한다. Octavia는 OpenStack을 한번이상 구동한 다음에 설정할 수 있기 때문에, Octavia 설정은 주석처리 상태로 놔둔다.
 
 ~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode bootstrap-servers

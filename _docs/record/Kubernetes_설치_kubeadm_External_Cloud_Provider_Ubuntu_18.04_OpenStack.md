@@ -220,9 +220,29 @@ Openstack Cloud Controller Manager를 설치한다.
 (Master)# cd cloud-provider-openstack && git checkout v1.16.0
 (Master)# rm manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
 (Master)# kubectl -f manifests/cinder-csi-plugin apply
+(Master)# kubectl get csidrivers.storage.k8s.io
+NAME                       CREATED AT
+cinder.csi.openstack.org   2019-10-16T15:36:27Z
 ~~~
 
-csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-secret-cinderplugin.yaml을 삭제하고, Cinder CSI Plugin을 설치한다. Cinder CSI Plugin v1.15.0 Version은 동작하지 않기 때문에 v1.16.0 Version으로 변경하여 설치한다.
+csi-secret은 cloud-config-secret으로 대체하기 때문에 불필요한 csi-secret-cinderplugin.yaml을 삭제하고, Cinder CSI Plugin을 설치한다. Cinder CSI Plugin v1.15.0 Version은 동작하지 않기 때문에 v1.16.0 Version으로 변경하여 설치한다. Cinder CSI Plugin이 정상적으로 설치되었다면 "cinder.csi.openstack.org" Object 조회가 가능하다.
+
+{% highlight yaml %}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-sc-cinderplugin
+provisioner: cinder.csi.openstack.org
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] Master Node - ~/storageclass.yaml</figcaption>
+</figure>
+
+~~~console
+(Master)# kubectl apply -f ~/storageclass.yaml
+~~~
+
+[파일 5]의 내용으로 Storage Class를 생성한 다음 설정한다.
 
 ### 9. 참조
 
