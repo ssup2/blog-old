@@ -1,5 +1,5 @@
 ---
-title: MSA (Micro Service Architecture)
+title: Micro Service Architecture (MSA)
 category: Theory, Analysis
 date: 2018-04-04T12:00:00Z
 lastmod: 2018-04-04T12:00:00Z
@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-MSA (Micro Service Architecture)를 분석한다.
+Micro Service Architecture (MSA)를 분석한다.
 
 ### 1. Micro Service Architecture (MSA)
 
-MSA(Micro Service Architecture)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 복잡한 App을 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
+Micro Service Architecture (MSA)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 복잡한 App을 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
 
 #### 1.1. Monolithic vs MSA
 
@@ -23,7 +23,7 @@ Monolithic Architecture는 Service들의 경계가 모호하고 DB도 공유하�
 
 하지만 단순한 구조로 인하여 빠른 개발과, 쉬운 배포가 가능하다는 특징을 갖고 있다. 또한 하나의 DB를 공유하기 때문에 DB Transaction 기능을 이용하여 Race Condition 방지, Service Rollback 등을 쉽게 처리 할 수 있는 장점을 가지고 있다. 따라서 큰 큐모의 Service 개발이 아닌 경우에는 Monolithic Architecture가 유리하다.
 
-![[그림 2] MSA Architecture]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture.PNG){: width="600px"}
+![[그림 2] MSA Architecture]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/MSA_Architecture.PNG){: width="600px"}
 
 [그림 2]는 MSA를 나타내고 있다. 각 Service들은 독립된 Server와 DB에서 동작한다. Service는 Service가 가지고 있는 Business Logic만을 이용하여 구성될 수 있지만, 필요에 따라 여러 Service들을 조합으로도 구성 될 수도 있다. Service 사이의 통신은 일반적으로 RabbitMQ 같은 Message Queue를 이용한다. Message Queue는 개발 언어 및 환경에 비교적 덜 의존적이면서도 안전하게 Message를 송수신 할 수 있는 수단이다. Message Queue를 통해 Service 개발자는 Service 사이의 통신에 많은 신경을 쓸 필요 없이 Business Logic에 집중 할 수 있게 된다.
 
@@ -39,7 +39,7 @@ Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Que
 
 위에서 언급한것 처럼 MSA는 Service 제공시 다수의 Service를 조합하여 새로운 Service를 제공하는 형태도 가능하다. 이러한 Service의 조합은 대부분 API Gateway에서 이루어진다. 문제는 Service의 개수가 많아지고 조합이 다양해질수록 Service의 조합을 위한 Logic이 복잡해진다는 점이다. 그렇지 않아도 많은 기능을 수행하는 API Gateway에 과도한 Service 조합 기능까지 수행하면 API Gateway가 Monolithic Architecture가 된다는 문제가있다.
 
-![[그림 3] Service Type]({{site.baseurl}}/images/theory_analysis/MSA/Service_Type.PNG){: width="700px"}
+![[그림 3] Service Type]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/Service_Type.PNG){: width="700px"}
 
 이러한 문제를 해결하기 위해서 Service를 특징에 따라 분류하고 Service 조합 Logic을 여러 Service에 분류해야 한다. [그림 3]은 Service Type을 Core/Atomic Service, Composite/Integration Service, API/Edge Service로 분류하고 Service Type별 관계도를 나타내고 있다.
 

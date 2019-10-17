@@ -9,11 +9,11 @@ adsense: true
 
 Container Network 설정시 이용되는 CNI (Container Network Interface)를 분석한다.
 
-### 1. CNI (Container Network Interface)
+### 1. Container Network Interface (CNI)
 
-![[그림 1] CNI]({{site.baseurl}}/images/theory_analysis/CNI/CNI.PNG){: width="700px"}
+![[그림 1] CNI]({{site.baseurl}}/images/theory_analysis/Container_Network_Interface/CNI.PNG){: width="700px"}
 
-CNI는 **Linux Container의 Network 설정 Spec**을 의미한다. Kubernetes, rkt, Openshift같은 많은 **Container Runtime**들은 CNI를 이용하여 Network 정의 및 Container를 해당 Network에 연결하거나 분리하는 작업을 수행한다. Container Runtime은 CNI에 맞추어 Container에 설정할 Network 정보를 **Conf (Configuration) 파일**에 정의한다. 그 후 **CNI Plugin**을 실행하여 Container를 Configuration 파일에 정의한 Network에 연결하거나 분리하는 작업을 수행한다. Container Runtime은 CNI Plugin의 교체만으로 다양한 형태의 Container Network를 쉽게 구축 할 수 있다.
+Container Network Interface (CNI)는 **Linux Container의 Network 설정 Spec**을 의미한다. Kubernetes, rkt, Openshift같은 많은 **Container Runtime**들은 CNI를 이용하여 Network 정의 및 Container를 해당 Network에 연결하거나 분리하는 작업을 수행한다. Container Runtime은 CNI에 맞추어 Container에 설정할 Network 정보를 **Conf (Configuration) 파일**에 정의한다. 그 후 **CNI Plugin**을 실행하여 Container를 Configuration 파일에 정의한 Network에 연결하거나 분리하는 작업을 수행한다. Container Runtime은 CNI Plugin의 교체만으로 다양한 형태의 Container Network를 쉽게 구축 할 수 있다.
 
 #### 1.1 Conf (Configuration) 파일
 
