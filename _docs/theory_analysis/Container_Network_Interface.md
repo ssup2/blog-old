@@ -1,5 +1,5 @@
 ---
-title: CNI (Container Network Interface)
+title: Container Network Interface (CNI) 
 category: Theory, Analysis
 date: 2018-06-20T12:00:00Z
 lastmod: 2018-06-20T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Container Network 설정시 이용되는 CNI (Container Network Interface)를 분석한다.
+Container Network 설정시 이용되는 Container Network Interface (CNI)를 분석한다.
 
 ### 1. Container Network Interface (CNI)
 
