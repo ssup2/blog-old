@@ -15,7 +15,7 @@ Micro Service Architecture (MSA)는 **여러개의 작고, 독립적인 Service(
 
 #### 1.1. Monolithic vs MSA
 
-![[그림 1] Monolithic Architecture]({{site.baseurl}}/images/theory_analysis/MSA/Monolithic_Architecture.PNG){: width="700px"}
+![[그림 1] Monolithic Architecture]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/Monolithic_Architecture.PNG){: width="700px"}
 
 [그림 1]은 기존의 Monolithi Architecture를 나타내고 있다. Monolithic Architecture는 여러개의 Service들이 하나의 WAR 파일에 들어가 WAR 파일 단위로 WAS에 배포되어 동작한다. 또한 모든 Service들이 하나의 DB를 공유한다.
 
