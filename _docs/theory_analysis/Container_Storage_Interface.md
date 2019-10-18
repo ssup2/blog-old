@@ -27,7 +27,7 @@ CSI에서 Controller Plugin과 Node Plugin의 구성 및 배치는 비교적 자
 
 #### 1.2. Volume(Storage) Lifecycle
 
-![[그림 2] CSI Volume Lifecycle]({{site.baseurl}}/images/theory_analysis/Container_Storage_Interface/CSI_Volume_Life_Cycle.PNG){: width="400px"}
+![[그림 2] CSI Volume Lifecycle]({{site.baseurl}}/images/theory_analysis/Container_Storage_Interface/CSI_Volume_Lifecycle.PNG){: width="400px"}
 
 CSI는 Storage의 Lifecycle을 정의하고 있다. CSI에서는 Storage Lifecycle이란 단어 대신 Volume Lifecycle이란 단어를 이용하고 있다. CSI는 하나의 Volume Lifecycle만을 정의하지 않고 다수의 Life Cycle을 정의하고 있는데, 다양한 Storage의 특성 및 구성 환경을 충족시키기 위해서이다. [그림 2]는 CSI에서 정의하는 Volume Lifecycle중 가장 긴 Lifecycle을 나타내고 있다.
 
