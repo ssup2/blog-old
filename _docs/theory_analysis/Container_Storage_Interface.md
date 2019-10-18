@@ -33,7 +33,7 @@ CSI는 Storage의 Lifecycle을 정의하고 있다. CSI에서는 Storage Lifecyc
 
 #### 1.3. Interface
 
-CSI는 정의한 Plugin과 Volume Lifecycle을 바탕으로 CO와 Plugin 사이의 Interface를 정의한다. Inteface는 gRPC를 기반으로 구성되어 있다. Interface는 **Identity Service**, **Controller Service**, **Node Service**로 구분되어 있다. Identity Service는 Controller Plugin과 Node Plugin이 공통으로 이용하는 Interface이다. Controller Service는 Controller Plugin이 이용하는 Interface이고, Node Service는 Node Plugin이 이용하는 Interface이다. Interface 목차는 아래와 같다.
+CSI는 정의한 Plugin과 Volume Lifecycle을 바탕으로 CO와 Plugin 사이의 Interface를 정의한다. Inteface는 gRPC를 기반으로 구성되어 있다. Interface는 **Identity Service**, **Controller Service**, **Node Service**로 구분되어 있다. Identity Service는 Controller Plugin과 Node Plugin이 공통으로 이용하는 Interface이다. Controller Service는 Controller Plugin이 이용하는 Interface이고, Node Service는 Node Plugin이 이용하는 Interface이다. Interface 목차는 다음과 같다.
 
 * Identity Service
   * GetPluginInfo
