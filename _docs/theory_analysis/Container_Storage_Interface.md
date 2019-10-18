@@ -64,7 +64,7 @@ CSI는 정의한 Plugin과 Volume Lifecycle을 바탕으로 CO와 Plugin 사이�
   * NodeGetCapabilities 
   * NodeGetInfo 
 
-Interface 목차를 통해서 Identiy Service는 Plug 관련 Interface, Controller Service는 Volume 관리 및 Snapshot 관리 Interface, Node Service는 Node 관리 Interface인걸 알 수 있다.
+Interface 목차를 통해서 Identiy Service는 Plug 관련 Interface, Controller Service는 Volume 관리 및 Snapshot 관리 Interface, Node Service는 Node 관리 Interface인걸 알 수 있다. 각 Interface는 Request/Response를 정의하는 형태로 구성되어 있다. 또한 CSI는 Error Code 및 Sercet 규칙도 정의하고 있다.
 
 ### 2. 참조
 
