@@ -106,7 +106,7 @@ lsof는 Open 상태의 File List를 출력하는 Tool이다. [Shell 3]은 lsof�
 <figcaption class="caption">[Shell 4] sysdig</figcaption>
 </figure>
 
-sysdig는 Process, CPU, Memory, Disk, Network등과 연관된 다양한 Kernel의 동작 상태를 보여주는 Tool이다. Container 단위로 Kernel의 동작 상태를 볼수도 있다. 또한 동작 상태 정보를 바탕으로 CPU, Memory, Network, Disk의 성능 측정도 가능하다.
+sysdig는 Process, CPU, Disk, Network등과 연관된 다양한 Kernel의 동작 상태를 보여주는 Tool이다. Container 단위로 Kernel의 동작 상태를 볼수도 있다. 또한 동작 상태 정보를 바탕으로 CPU, Memory, Network, Disk의 성능 측정도 가능하다.
 
 ### 2. 참조
 

@@ -37,16 +37,17 @@ zsh, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다. 이후 진�
 # zsh
 ~~~
 
-zsh, zsh-completions, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다. 이후 진행은 **Zsh**에서 진행한다. 
+zsh, zsh-completions, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다. 이후 진행은 **Zsh**에서 진행한다.
 
 ### 2. Zsh Plugin 설치
 
 ~~~console
 # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 # git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+# git clone https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
 ~~~
 
-zsh-syntax-highlighting, zsh-autosuggestions을 설치한다.
+zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions을 설치한다.
 
 ### 3. Zsh 설정
 
@@ -57,9 +58,12 @@ zsh-syntax-highlighting, zsh-autosuggestions을 설치한다.
 ZSH_THEME="clean"
 ...
 plugins=(
-  git
   zsh-syntax-highlighting
   zsh-autosuggestions
+  zsh-completions
+  git
+  docker
+  kubectl
 )
 ...
 {% endhighlight %}
