@@ -77,6 +77,37 @@ systemd       1 root  mem       REG                8,2   432640   11534609 /lib/
 
 lsof는 Open 상태의 File List를 출력하는 Tool이다. [Shell 3]은 lsof를 이용하여 root User가 Open한 File List를 출력하는 Shell을 나타내고 있다. User 단위의 Filter뿐만 아니라 Directory, Binary 단위의 Filter도 가능하다. 또한 lsof를 이용하여 TCP, UDP의 특정 Port를 이용하는 Process를 찾는것도 가능하다.
 
+#### 1.4. sysdig
+
+{% highlight console %}
+8464 01:23:53.859656137 1 sshd (30637) < read res=2 data=..
+8465 01:23:53.859656937 1 sshd (30637) > getpid
+8466 01:23:53.859657037 1 sshd (30637) < getpid
+8467 01:23:53.859658137 1 sshd (30637) > clock_gettime
+8468 01:23:53.859658337 1 sshd (30637) < clock_gettime
+8469 01:23:53.859658837 1 sshd (30637) > select
+8470 01:23:53.859659637 1 sshd (30637) < select res=1
+8471 01:23:53.859660037 1 sshd (30637) > clock_gettime
+8472 01:23:53.859660237 1 sshd (30637) < clock_gettime
+8473 01:23:53.859660737 1 sshd (30637) > rt_sigprocmask
+8474 01:23:53.859660937 1 sshd (30637) < rt_sigprocmask
+8475 01:23:53.859661337 1 sshd (30637) > rt_sigprocmask
+8476 01:23:53.859661537 1 sshd (30637) < rt_sigprocmask
+8477 01:23:53.859662037 1 sshd (30637) > clock_gettime
+8478 01:23:53.859662237 1 sshd (30637) < clock_gettime
+8479 01:23:53.859662737 1 sshd (30637) > write fd=3(<4t>10.0.0.10:12403->10.0.0.19:22) size=36
+8480 01:23:53.859663337 1 sshd (30637) < write res=36 data=.)r...GId....mG.e..._.~..h}....K.{..
+8481 01:23:53.859663937 1 sshd (30637) > clock_gettime
+8482 01:23:53.859664137 1 sshd (30637) < clock_gettime
+8483 01:23:53.859664737 1 sshd (30637) > select
+8484 01:23:53.859665937 1 sshd (30637) > switch next=3591(sysdig) pgft_maj=3 pgft_min=452 vm_size=72356 vm_rss=6396 vm_swap=0
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] sysdig</figcaption>
+</figure>
+
+sysdig는 Process, CPU, Memory, Disk, Network등과 연관된 다양한 Kernel의 동작 상태를 보여주는 Tool이다. Container 단위로 Kernel의 동작 상태를 볼수도 있다. 또한 동작 상태 정보를 바탕으로 CPU, Memory, Network, Disk의 성능 측정도 가능하다.
+
 ### 2. 참조
 
 * [https://github.com/nicolaka/netshoot](https://github.com/nicolaka/netshoot)
