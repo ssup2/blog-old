@@ -11,7 +11,7 @@ Linux의 Mount Propagation을 분석한다.
 
 ### 1. Linux Mount Propagation
 
-Mount Propagation은 Linux Kernel의 Mount NS(Namespace)으로 인해 발생하는 관리의 불편함을 해결하기 위해 나온 기법이다. Mount Propagation을 이용하지 않는다면 다수의 Mount NS가 존재하는 상태에서 모든 Process들이 Mount되어 있지 않는 Block Device를 이용하기 위해서는, Mount NS의 개수만큼 해당 Block Device를 Mount 해야 한다. 하지만 Mount Propagation을 적절히 이용하면 한번의 Block Device Mount로 모든 Mount NS에서 Block Device Mount를 수행할 수 있게 된다.
+Mount Propagation은 Linux Kernel의 Mount NS(Namespace)으로 인해 발생하는 관리의 불편함을 해결하기 위해 나온 기법이다. Mount Propagation을 이용하지 않는다면 다수의 Mount NS가 존재하는 상태에서 모든 Process들이 Mount되어 있지 않는 Block Device를 이용하기 위해서는, Mount NS의 개수만큼 Block Device Mount를 수행 해야 한다. 하지만 Mount Propagation을 적절히 이용하면 한번의 Block Device Mount로 모든 Mount NS에서 Block Device Mount를 수행할 수 있게 된다.
 
 #### 1.1. Shared Subtree
 
