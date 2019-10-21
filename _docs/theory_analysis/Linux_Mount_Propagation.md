@@ -1,6 +1,6 @@
 ---
-title: Linux Bind Mount / Mount Propagation
-category:
+title: Linux Mount Propagation
+category: Theory, Analysis
 date: 2019-10-20T12:00:00Z
 lastmod: 2019-10-20T12:00:00Z
 comment: true
