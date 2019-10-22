@@ -47,9 +47,130 @@ Mount Propagation은 의미 그대로 변경된 Mount 정보를 전파하는 기
 
 #### 1.3. Mount Option
 
+{% highlight console %}
+--- Prepare Test ---
+(Shell 1)# mkdir ~/A
+(Shell 1)# mount --make-shared /dev/sda ~/A
+(Shell 1)# ls ~/A
+B  C
+(Shell 2)# unshare -m --propagation unchanged bash
+(Shell 2)# ls ~/A
+B  C
+
+--- Forward Propagation O ---
+(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# ls ~/A/B
+b
+(Shell 2)# ls ~/A/B
+b
+
+--- Receive Propagation O ---
+(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# ls ~/A/C
+c
+(Shell 1)# ls ~/A/C
+c
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 1] Shared Mount - Mount NS Clone</figcaption>
+</figure>
+
+{% highlight console %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] Shared Mount - Bind Mount</figcaption>
+</figure>
+
+Forward/Receive Propagation를 제어하기 위해서는 **Shared Mount, Slave Mount, Private Mount, Unbindable Mount** 4가지 Propagation Mount Option을 활용해야 한다. Shared Mount는 Forward/Receive Propagation 둘다 허용하는 Option이다. [Shell 1]과 [Shell 2]를 통해서 Shared Mount의 Forward/Receive Propagation 동작을 확인할 수 있다.
+
+{% highlight console %}
+--- Prepare Test ---
+(Shell 1)# mkdir ~/A
+(Shell 1)# mount --make-slave /dev/sda ~/A
+(Shell 1)# ls ~/A
+B  C
+(Shell 2)# unshare -m --propagation unchanged bash
+(Shell 2)# ls ~/A
+B  C
+
+--- Forward Propagation O ---
+(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# ls ~/A/B
+b
+(Shell 2)# ls ~/A/B
+b
+
+--- Receive Propagation X ---
+(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# ls ~/A/C
+c
+(Shell 1)# ls ~/A/C
+
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 3] Slave Mount - Mount NS Clone</figcaption>
+</figure>
+
+{% highlight console %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] Slave Mount - Bind Mount</figcaption>
+</figure>
+
+Slave Mount는 Forward Propagation만 허용하고 Receive Propagation은 허용하지 않는 Option이다. [Shell 3]과 [Shell 4]를 통해서 Slave Mount는 Forward Propagation만 적용되는것을 확인할 수 있다.
+
+{% highlight console %}
+--- Prepare Test ---
+(Shell 1)# mkdir ~/A
+(Shell 1)# mount --make-private /dev/sda ~/A
+(Shell 1)# ls ~/A
+B  C
+(Shell 2)# unshare -m --propagation unchanged bash
+(Shell 2)# ls ~/A
+B  C
+
+--- Forward Propagation X ---
+(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# ls ~/A/B
+b
+(Shell 2)# ls ~/A/B
+
+
+--- Receive Propagation X ---
+(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# ls ~/A/C
+c
+(Shell 1)# ls ~/A/C
+
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 5] Private Mount - Mount NS Clone</figcaption>
+</figure>
+
+{% highlight console %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 6] Private Mount - Bind Mount</figcaption>
+</figure>
+
+Private Mount는 Forward/Receive Propagation 둘다 허용하지 않는 Option이다. Mount시 Propagation Mount Option을 명시하지 않으면 Private Mount이 Default Option이다. [Shell 5]와 [Shell 6]을 통해서 Slave Mount는 Forward Propagation만 적용되는것을 확인할 수 있다.
+
+{% highlight console %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 7] Unbindable Mount - Mount NS Clone</figcaption>
+</figure>
+
+{% highlight console %}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 8] Unbindable Mount - Bind Mount</figcaption>
+</figure>
+
+Unbindable Mount는 Private Mount처럼 Forward/Receive Propagation 둘다 허용하지 않을뿐만 아니라 Bind Mount도 허용하지 않는다.
+
 ### 2. 참조
 
-* [https://unix.stackexchange.com/questions/198590/what-is-a-bind-mount](https://unix.stackexchange.com/questions/198590/what-is-a-bind-mount)
-* [https://lwn.net/Articles/689856/](https://lwn.net/Articles/689856/)
 * [https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
 * [https://docs.docker.com/storage/bind-mounts/](https://docs.docker.com/storage/bind-mounts/)
+* [https://lwn.net/Articles/689856/](https://lwn.net/Articles/689856/)
