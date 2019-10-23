@@ -260,7 +260,7 @@ mount: /root/A/C: wrong fs type, bad option, bad superblock on /root/A/B, missin
 <figcaption class="caption">[Shell 8] Unbindable Mount - Bind Mount</figcaption>
 </figure>
 
-Unbindable Mount는 Private Mount처럼 Forward/Receive Propagation 둘다 허용하지 않을뿐만 아니라 Bind Mount도 허용하지 않는다. [Shell 7]과 [Shell 8]을 통해서 Unbindable Mount는 Forward/Receive Propagation 둘다 허용하지 않고, Bind Mount를 수행하지 못하도록 막는걸 확인할 수 있다.
+Unbindable Mount는 Private Mount처럼 Forward/Receive Propagation 둘다 허용하지 않을뿐만 아니라 Bind Mount도 허용하지 않는다. [Shell 7]과 [Shell 8]을 통해서 Unbindable Mount는 Forward/Receive Propagation 둘다 허용하지 않고, Bind Mount를 수행할 경우 Error가 발생하여 Mount를 수행하지 못하도록 막는걸 확인할 수 있다.
 
 ### 2. 참조
 
