@@ -50,7 +50,7 @@ Mount Propagation은 의미 그대로 변경된 Mount 정보를 전파하는 기
 {% highlight console %}
 --- Prepare Test ---
 (Shell 1)# mkdir ~/A
-(Shell 1)# mount --make-shared /dev/sda ~/A
+(Shell 1)# mount --make-shared /dev/sdb ~/A
 (Shell 1)# ls ~/A
 B  C
 (Shell 2)# unshare -m --propagation unchanged bash
@@ -58,14 +58,14 @@ B  C
 B  C
 
 --- Forward Propagation O ---
-(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# mount /dev/sdc ~/A/B
 (Shell 1)# ls ~/A/B
 b
 (Shell 2)# ls ~/A/B
 b
 
 --- Receive Propagation O ---
-(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# mount /dev/sdd ~/A/C
 (Shell 2)# ls ~/A/C
 c
 (Shell 1)# ls ~/A/C
@@ -76,6 +76,29 @@ c
 </figure>
 
 {% highlight console %}
+--- Prepare Test ---
+# mkdir -p ~/A/B ~/A/C
+# mount --make-shared /dev/sdb ~/A/B
+# mkdir -p ~/A/B/D ~/A/B/E
+# mount --bind ~/A/B ~/A/C
+# ls ~/A/B
+D  E
+# ls ~/A/C
+D  E
+
+--- Forward Propagation O ---
+# mount /dev/sdc ~/A/B/D
+# ls ~/A/B/D
+b
+# ls ~/A/C/D
+b
+
+--- Forward Propagation O ---
+# mount /dev/sdd ~/A/C/E
+# ls ~/A/C/E
+c
+# ls ~/A/B/E
+c
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 2] Shared Mount - Bind Mount</figcaption>
@@ -86,7 +109,7 @@ Forward/Receive Propagation를 제어하기 위해서는 **Shared Mount, Slave M
 {% highlight console %}
 --- Prepare Test ---
 (Shell 1)# mkdir ~/A
-(Shell 1)# mount --make-shared /dev/sda ~/A
+(Shell 1)# mount --make-shared /dev/sdb ~/A
 (Shell 1)# ls ~/A
 B  C
 (Shell 2)# unshare -m --propagation unchanged bash
@@ -96,14 +119,14 @@ B  C
 (Shell 2#) make ~/
 
 --- Forward Propagation O ---
-(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# mount /dev/sdc ~/A/B
 (Shell 1)# ls ~/A/B
 b
 (Shell 2)# ls ~/A/B
 b
 
 --- Receive Propagation X ---
-(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# mount /dev/sdd ~/A/C
 (Shell 2)# ls ~/A/C
 c
 (Shell 1)# ls ~/A/C
@@ -113,6 +136,29 @@ c
 </figure>
 
 {% highlight console %}
+--- Prepare Test ---
+# mkdir -p ~/A/B ~/A/C
+# mount --make-shared /dev/sdb ~/A/B
+# mkdir -p ~/A/B/D ~/A/B/E
+# mount --bind ~/A/B ~/A/C
+# mount --make-slave ~/A/C
+# ls ~/A/B
+D  E
+# ls ~/A/C
+D  E
+
+--- Forward Propagation O ---
+# mount /dev/sdc ~/A/B/D
+# ls ~/A/B/D
+b
+# ls ~/A/C/D
+b
+
+--- Forward Propagation X ---
+# mount /dev/sdd ~/A/C/E
+# ls ~/A/C/E
+c
+# ls ~/A/B/E
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 4] Slave Mount - Bind Mount</figcaption>
@@ -123,7 +169,7 @@ Slave Mount는 Forward Propagation만 허용하고 Receive Propagation은 허용
 {% highlight console %}
 --- Prepare Test ---
 (Shell 1)# mkdir ~/A
-(Shell 1)# mount --make-private /dev/sda ~/A
+(Shell 1)# mount --make-private /dev/sdb ~/A
 (Shell 1)# ls ~/A
 B  C
 (Shell 2)# unshare -m --propagation unchanged bash
@@ -131,14 +177,13 @@ B  C
 B  C
 
 --- Forward Propagation X ---
-(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# mount /dev/sdc ~/A/B
 (Shell 1)# ls ~/A/B
 b
 (Shell 2)# ls ~/A/B
 
-
 --- Receive Propagation X ---
-(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# mount /dev/sdd ~/A/C
 (Shell 2)# ls ~/A/C
 c
 (Shell 1)# ls ~/A/C
@@ -148,6 +193,27 @@ c
 </figure>
 
 {% highlight console %}
+--- Prepare Test ---
+# mkdir -p ~/A/B ~/A/C
+# mount --make-private /dev/sdb ~/A/B
+# mkdir -p ~/A/B/D ~/A/B/E
+# mount --bind ~/A/B ~/A/C
+# ls ~/A/B
+D  E
+# ls ~/A/C
+D  E
+
+--- Forward Propagation X ---
+# mount /dev/sdc ~/A/B/D
+# ls ~/A/B/D
+b
+# ls ~/A/C/D
+
+--- Forward Propagation X ---
+# mount /dev/sdd ~/A/C/E
+# ls ~/A/C/E
+c
+# ls ~/A/B/E
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 6] Private Mount - Bind Mount</figcaption>
@@ -158,7 +224,7 @@ Private Mount는 Forward/Receive Propagation 둘다 허용하지 않는 Option�
 {% highlight console %}
 --- Prepare Test ---
 (Shell 1)# mkdir ~/A
-(Shell 1)# mount --make-private /dev/sda ~/A
+(Shell 1)# mount --make-unbindable /dev/sdb ~/A
 (Shell 1)# ls ~/A
 B  C
 (Shell 2)# unshare -m --propagation unchanged bash
@@ -166,14 +232,14 @@ B  C
 B  C
 
 --- Forward Propagation X ---
-(Shell 1)# mount /dev/sdb ~/A/B
+(Shell 1)# mount /dev/sdc ~/A/B
 (Shell 1)# ls ~/A/B
 b
 (Shell 2)# ls ~/A/B
 
 
 --- Receive Propagation X ---
-(Shell 2)# mount /dev/sdc ~/A/C
+(Shell 2)# mount /dev/sdd ~/A/C
 (Shell 2)# ls ~/A/C
 c
 (Shell 1)# ls ~/A/C
@@ -183,6 +249,12 @@ c
 </figure>
 
 {% highlight console %}
+--- Prepare Test ---
+# mkdir -p ~/A/B ~/A/C
+# mount --make-unbindable /dev/sdb ~/A/B
+# mkdir -p ~/A/B/D ~/A/B/E
+# mount --bind ~/A/B ~/A/C
+mount: /root/A/C: wrong fs type, bad option, bad superblock on /root/A/B, missing codepage or helper program, or other error.
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 8] Unbindable Mount - Bind Mount</figcaption>
