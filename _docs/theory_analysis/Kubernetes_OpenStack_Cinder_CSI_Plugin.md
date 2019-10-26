@@ -1,5 +1,5 @@
 ---
-title: Kubernetes OpenStack Cinder CSI
+title: Kubernetes with OpenStack Cinder CSI Plugin
 category: Theory, Analysis
 date: 2019-10-27T12:00:00Z
 lastmod: 2019-10-27T12:00:00Z
@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-Kubernetes OpenStack Cinder CSI(Container Storage Interface)를 분석한다.
+Kubernetes와 동작하는 OpenStack Cinder CSI(Container Storage Interface Plugin을 분석한다.
 
-### 1. Kubernetes OpenStack Cinder CSI(Container Storage Interface)
+### 1. Kubernetes OpenStack Cinder CSI(Container Storage Interface) Plugin
 
-![[그림 1] Kubernetes OpenStack Cinder CSI]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI/OpenStack_Cinder_CSI.PNG)
+![[그림 1] Kubernetes OpenStack Cinder CSI Plugin]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI_Plugin/OpenStack_Cinder_CSI_Plugin.PNG)
 
 ### 2. 참조
 
