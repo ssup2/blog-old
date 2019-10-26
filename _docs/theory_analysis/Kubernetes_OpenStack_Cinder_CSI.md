@@ -1,5 +1,5 @@
 ---
-title: Kubernetes OpenStack CSI
+title: Kubernetes OpenStack Cinder CSI
 category: Theory, Analysis
 date: 2019-10-27T12:00:00Z
 lastmod: 2019-10-27T12:00:00Z
@@ -7,9 +7,11 @@ comment: true
 adsense: true
 ---
 
-Kubernetes OpenStack CSI(Container Storage Interface)를 분석한다.
+Kubernetes OpenStack Cinder CSI(Container Storage Interface)를 분석한다.
 
-### 1. Kubernetes OpenStack CSI(Container Storage Interface)
+### 1. Kubernetes OpenStack Cinder CSI(Container Storage Interface)
+
+![[그림 1] Kubernetes OpenStack Cinder CSI]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI/OpenStack_Cinder_CSI.PNG)
 
 ### 2. 참조
 
