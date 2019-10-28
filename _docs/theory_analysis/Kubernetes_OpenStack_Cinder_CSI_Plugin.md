@@ -15,7 +15,7 @@ Kubernetes와 동작하는 OpenStack Cinder CSI(Container Storage Interface Plug
 
 [그림 1]은 Kubernetes와 동작하는 OpenStack Cinder CSI Plugin을 나타내고 있다. **Cinder CSI Plugin은 CSI Spec의 Controller Plugin 역활과 Node Plugin 역활 모두 수행가능하다.** 따라서 Cinder CSI Plugin은 CSI Spec의 Identity Service, Controller Service, Node Service 3가지 Interface를 지원한다. Cinder CSI Plugin중에서 Controller Plugin으로 동작하는 것은 Controller Plugin Pod에서 동작하고, Node Plugin으로 동작하는 것은 Node Plugin Pod에서 동작한다. Controller Plugin Pod은 K8s의 Deployment 또는 Statefulset에 소속되어 있고, Node Plugin Pod은 K8s의 Daemonset에 소속되어 모든 Worker Node에서 동작한다.
 
-Controller Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, csi-provisioner, csi-attacher, csi-snapshotter, csi-resizer가 있으며 각각의 Container 안에서 동작한다. HA (High Availability)를 위해서 Controller Plugin Pod이 다수가 동작하는 경우, Controller Plugin Pod의 cinder-csi-plugin App을 제외한 App의 경우 Active-Standby 형태로 동작한다. 각 App의 역활은 다음과 같다.
+Controller Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, csi-provisioner, csi-attacher, csi-snapshotter, csi-resizer가 있으며 각각의 Container 안에서 동작한다. HA (High Availability)를 위해서 Controller Plugin Pod이 다수가 동작하는 경우, cinder-csi-plugin App을 제외한 나머지 App의 경우 Active-Standby 형태로 동작한다. 각 App의 역활은 다음과 같다.
 
 * cinder-csi-plugin : **Controller Plugin** 역활을 수행하는 Cinder CSI Plugin을 나타낸다. cinder-csi-plugin은 csi.sock 파일을 생성하고, 생성한 csi.sock Domain Socket을 통해서 전달되는 Controller Plugin Pod의 다른 App의 요청에 따라서 Cinder를 제어하는 역활을 수행한다. 요청은 CSI의 Identity Service와 Controller Service Interface를 통해서 이루어진다.
 * csi-provisioner : Kubernetes API Server로부터 PersistentVolumeClaim Object의 변화를 Watch하여 CSI Plugin에게 CSI CreateVolume/DeleteVolume 요청을 전송한다.
