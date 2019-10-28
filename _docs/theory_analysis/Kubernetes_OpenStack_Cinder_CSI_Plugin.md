@@ -17,7 +17,7 @@ Kubernetes와 동작하는 OpenStack Cinder CSI(Container Storage Interface Plug
 
 Controller Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, csi-provisioner, csi-attacher, csi-snapshotter, csi-resizer가 있으며 각각의 Container 안에서 동작한다. HA (High Availability)를 위해서 Controller Plugin Pod이 다수가 동작하는 경우, cinder-csi-plugin App을 제외한 나머지 App의 경우 Active-Standby 형태로 동작한다. 각 App의 역활은 다음과 같다.
 
-* cinder-csi-plugin : **Controller Plugin** 역활을 수행하는 Cinder CSI Plugin을 나타낸다. cinder-csi-plugin은 csi.sock 파일을 생성하고, 생성한 csi.sock Domain Socket을 통해서 전달되는 Controller Plugin Pod의 다른 App의 요청에 따라서 Cinder를 제어하는 역활을 수행한다. 요청은 CSI의 Identity Service와 Controller Service Interface를 통해서 이루어진다.
+* cinder-csi-plugin : **Controller Plugin** 역활을 수행하는 Cinder CSI Plugin을 나타낸다. cinder-csi-plugin은 csi.sock 파일을 생성하고, 생성한 csi.sock 파일을 통해서 전달되는 Controller Plugin Pod의 다른 App의 요청에 따라서 Cinder를 제어하는 역활을 수행한다. 요청은 CSI의 Identity Service와 Controller Service Interface를 통해서 이루어진다.
 * csi-provisioner : Kubernetes API Server로부터 PersistentVolumeClaim Object의 변화를 Watch하여 CSI Plugin에게 CSI CreateVolume/DeleteVolume 요청을 전송한다.
 * csi-attacher : Kubernetes API Server로부터 VolumeAttachment Object의 변화를 Watch하여 CSI Plugin에게 CSI ControllerPublish/ControllerUnpublish 요청을 전송한다.
 * csi-snapshotter : Kubernetes API Server로부터 Snapshot CRD (Custom Resource Definition)의 변화를 Watch하여 CSI Plugin에게 CSI CreateSnapshot/DeleteSnapshot 요청을 전송한다.
@@ -25,8 +25,8 @@ Controller Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, csi-provis
 
 Node Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, node-driver-register가 있으며 각각의 Container 안에서 동작한다. 각 App의 역활은 다음과 같다.
 
-* cinder-csi-plugin : **Node Plugin** 역활을 수행하는 Cinder CSI Plugin을 나타낸다. cinder-csi-plugin은 csi.sock 파일을 생성하고, 생성한 csi.sock Domain Socket을 통해서 전달되는 kubelet의 요청에 따라서 Cinder를 제어하는 역활을 수행한다. 요청은 CSI의 Identity Service과 Node Service Interface를 통해서 이루어진다. kubelet은 Cinder Plugin에게 CSI NodeStageVolume/NodeUnstageVolume, CSI NodePublishVolume/NodeUnpublishVolume 4개의 요청을 전송한다.
-* node-driver-register : 
+* cinder-csi-plugin : **Node Plugin** 역활을 수행하는 Cinder CSI Plugin을 나타낸다. cinder-csi-plugin은 csi.sock 파일을 생성하고, 생성한 csi.sock 파일을 통해서 전달되는 kubelet의 요청에 따라서 Cinder를 제어하는 역활을 수행한다. 요청은 CSI의 Identity Service과 Node Service Interface를 통해서 이루어진다. kubelet은 cinder-csi-plugin에게 CSI NodeStageVolume/NodeUnstageVolume, CSI NodePublishVolume/NodeUnpublishVolume 4개의 요청을 전송한다.
+* node-driver-register : **kubelet의 Plugin Registration**을 이용하여 cinder-csi-plugin을 kubelet에 등록한다. 등록 정보에는 cinder-csi-plugin의 csi.sock 파일의 경로도 포함되어 있다. kubelet은 csi.sock 파일의 경로 정보를 바탕으로 cinder-csi-plugin에게 CSI 요청을 전송한다. regi.sock 파일은 node-driver-register가 생성하며, cinder-csi-plugin을 kubelet에 등록할때만 이용한다.
 
 cinder-csi-plugin은 OpenStack Provider Project에 소속되있고 나머지 App들은 Kubernetes CSI Project에 소속되어 있다. 다른 CSI Plugin을 이용할 경우 cinder-csi-plugin만 원하는 CSI Plugin으로 교체하면 된다.
 
