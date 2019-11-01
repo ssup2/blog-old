@@ -27,9 +27,11 @@ Netfilter는 5개의 Hook Point를 제공한다.
 
 ![[그림 1] Netfilter Packet 경로]({{site.baseurl}}/images/theory_analysis/Linux_Netfilter_iptables/Netfilter_Packet_Routine.PNG){: width="700px"}
 
-[그림 1]은 Netfilter의 Packet의 경로를 나타내고 있다. 외부에서 온 Packet의 목적지가 자신인 경우 NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> Process로 전달된다. Process에서 전송하는 Packet은 NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING Hook을 거쳐 Network로 전달된다. 외부에서 온 Packet의 목적지가 자신이 아닌경우 NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING Hook을 거쳐 Network로 전달된다.
+[그림 1]은 Netfilter의 Packet의 경로를 나타내고 있다. Routing1은 Network Interface에서 전달받은 Packet이 자신이 받아야하는 Packet인지 아니면 다른 Host가 받아야하는 Packet인지 구분하여 Routing하는 과정을 나타낸다. Routing2는 Process에서 전송한 Packet이 NF_IP_LOCAL_OUT에서 DNAT될 경우 다시 Routing하는 과정을 나타낸다. Packet 경로는 아래의 3가지로 구분할 수 있다. 
 
-Routing : Forwarding은 전달받은 Packet이 자신이 받아야하는 Packet인지 아니면 다른 Host가 받아야하는 Packet인지 구분하여 Routing하는 과정을 나타낸다. Routing -Interface는 Packet을 어느 Network Interface에 전달해야할지 결정하는 과정을 나타낸다.
+* 외부에서 온 Packet의 목적지가 자신인 경우 : NF_IP_PRE_ROUTING -> NF_IP_LOCAL_IN -> Process
+* 외부에서 온 Packet의 목적지가 자신이 아닌 경우 : NF_IP_PRE_ROUTING -> NF_IP_FORWARD -> NF_IP_POST_ROUTING -> Network Interface
+* Process에서 전송하는 Packet의 경우 : NF_IP_LOCAL_OUT -> NF_IP_POST_ROUTING -> Network Interface
 
 ### 2. iptables
 
