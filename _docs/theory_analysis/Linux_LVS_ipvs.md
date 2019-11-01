@@ -25,29 +25,29 @@ IPVS 없이 iptables만으로도 충분히 L4 Load Balacner을 구현할 수 있
 
 ![[그림 2] IPVS Netfilter Hook Function]({{site.baseurl}}/images/theory_analysis/Linux_LVS_IPVS/IPVS_Netfilter_Hook_Function.PNG)
 
-[그림 2]는 IPVS의 Netfilter Hook Function들을 나타내고 있다. IPVS의 Netfilter Hook Function들은 IPVS를 이용하는 Server/Client가 외부의 Node에서 구동되는 경우뿐만 아니라, IPVS가 적용된 동일 Node에서 구동되어도 문제가 없도록 구성되어 있다. IPVS는 다음과 같은 6개의 Netfilter Hook Function을 이용한다.
+[그림 2]는 IPVS의 Netfilter Hook Function들을 나타내고 있다. IPVS의 Netfilter Hook Function들은 IPVS를 이용하는 Real Server/Client가 외부의 Node에서 구동되는 경우뿐만 아니라, IPVS가 적용된 Node에서 구동되어도 문제가 없도록 구성되어 있다. IPVS는 다음과 같은 6개의 Netfilter Hook Function을 이용한다.
 
 ##### 2.1.1. ip_vs_remote_request()
 
-ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. 외부의 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_remote_request()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 **LOCAL_OUT Hook**으로 전달된다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
+ip_vs_remote_request()는 LOCAL_IN Hook에서 호출되는 Netfilter Hook Function이다. **외부의 Client**로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP (VIP)라면 ip_vs_remote_request()는 LOCAL_IN Hook을 통해서 호출된다. Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Real Server에 전달한다. ip_vs_remote_request()는 iptables의 Input Filter Table과 ip_vs_reply() 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 ip_vs_remote_request()에서 처리하지 못한다. ip_vs_remote_request()의 실제 구현은 ip_vs_in()을 단순히 호출하는 형태로 되어있다. ip_vs_in()를 통해서 처리가 완료된 Packet은 Local Process로 전달되지 않고 **POSTROUTING Table**로 바로 전달된다.
 
 ##### 2.1.2. ip_vs_local_request()
 
-ip_vs_local_request()는 LOCAL_OUT Hook에서 호출되는 Netfilter Hook Function이다. Client가 IPVS가 적용되어 있는 동일 Node에 있을경우, 해당 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP라면 ip_vs_local_request()는 LOCAL_OUT Hook을 통해서 호출된다. ip_vs_remote_request()처럼 Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Server에 전달한다. ip_vs_local_request는() iptables의 Output Mangle Table과 ip_vs_local_reply() 다음으로 호출된다. ip_vs_local_request()의 실제 구현은 ip_vs_remote_request()처럼 ip_vs_in()을 단순히 호출하는 형태로 되어있다.
+ip_vs_local_request()는 LOCAL_OUT Hook에서 호출되는 Netfilter Hook Function이다. **Client가 IPVS가 적용되어 있는 Node**에 있을경우, 해당 Client로부터 수신한 요청 Packet의 Dest IP가 IPVS의 IP라면 ip_vs_local_request()는 LOCAL_OUT Hook을 통해서 호출된다. ip_vs_remote_request()처럼 Load Balancing 및 필요에 따라서 해당 요청 Packet을 **DR, DNAT, IPIP Tunning**하여 Real Server에 전달한다. ip_vs_local_request는() iptables의 Output Mangle Table과 ip_vs_local_reply() 다음으로 호출된다. ip_vs_local_request()의 실제 구현은 ip_vs_remote_request()처럼 ip_vs_in()을 단순히 호출하는 형태로 되어있다. ip_vs_in()를 통해서 처리가 완료된 Packet은 **POSTROUTING Table**로 바로 전달된다.
 
 ##### 2.1.3. ip_vs_reply()
 
-ip_vs_reply()는 LOCAL_IN Hook 및 FORWARD Hook에서 호출되는 Netfilter Hook Function이다. IPVS를 통해서 Client로부터 받은 요청 Packet을 Load Balancing 및 Server IP로 DNAT를 수행하여 Server에 Packet을 전달할 경우, IPVS는 Server로부터 받은 응답 Packet을 IPVS의 IP로 SNAT하여 IP로 Client로 전송해야 한다. ip_vs_reply()는 Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다.
+ip_vs_reply()는 LOCAL_IN Hook 및 FORWARD Hook에서 호출되는 Netfilter Hook Function이다. IPVS를 통해서 Client로부터 받은 요청 Packet을 Load Balancing 및 Real Server IP로 DNAT를 수행하여 Real Server에 Packet을 전달할 경우, IPVS는 Real Server로부터 받은 응답 Packet을 IPVS의 IP로 SNAT하여 IP로 Client로 전송해야 한다. ip_vs_reply()는 Real Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다.
 
-Server가 외부에 있고 Client가 IPVS가 적용된 동일 Node에 있는경우 LOCAL_IN Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. LOCAL_IN Hook의 ip_vs_reply()은 iptables의 Input Filter Table 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 LOCAL_IN Hook의 ip_vs_reply()에서 처리하지 못한다. Server와 Client가 외부에 있을 경우 FORWARD Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. FORWARD Hook의 ip_vs_reply()는 iptables의 Forward Filter Table과 ip_vs_forward_icmp() 다음으로 호출되기 때문에 Forward Filter Table에서 Filtering된 Packet은 FORWARD Hook의 ip_vs_reply()에서 처리하지 못한다. ip_vs_reply()의 실제 구현은 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
+Real Server가 외부에 있고 Client가 IPVS가 적용된 Node에 있는경우 LOCAL_IN Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. LOCAL_IN Hook의 ip_vs_reply()은 iptables의 Input Filter Table 다음으로 호출되기 때문에 Input Filter Table에서 Filtering된 Packet은 LOCAL_IN Hook의 ip_vs_reply()에서 처리하지 못한다. Real Server와 Client가 외부에 있을 경우 FORWARD Hook의 ip_vs_reply()를 통해서 SNAT가 수행된다. FORWARD Hook의 ip_vs_reply()는 iptables의 Forward Filter Table과 ip_vs_forward_icmp() 다음으로 호출되기 때문에 Forward Filter Table에서 Filtering된 Packet은 FORWARD Hook의 ip_vs_reply()에서 처리하지 못한다. ip_vs_reply()의 실제 구현은 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.4. ip_vs_local_reply()
 
-ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip_vs_reply()처럼 Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다. Client의 위치에 관계없이 Server가 IPVS가 적용되어 있는 동일 Node에 있을 경우 ip_vs_local_reply()를 통해서 SNAT가 수행된다. ip_vs_local_reply()는 ip_vs_local_request() 이전에 호출된다. 실제 구현은 ip_vs_reply()처럼 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
+ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip_vs_reply()처럼 Real Server로부터 받은 응답 Packet을 IPVS의 IP로 **SNAT**를 수행하는 Netfilter Hook Funciton이다. Client의 위치에 관계없이 Real Server가 IPVS가 적용되어 있는 Node에 있을 경우 ip_vs_local_reply()를 통해서 SNAT가 수행된다. ip_vs_local_reply()는 ip_vs_local_request() 이전에 호출된다. 실제 구현은 ip_vs_reply()처럼 ip_vs_out()을 단순히 호출하는 형태로 되어있다.
 
 ##### 2.1.5. ip_vs_forward_icmp()
 
-ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. 모든 ICMP Packet을 받아서 적절한 Real Server에게 전달하는 역활을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
+ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. Dest가 0.0.0.0/0(모든 IP)인 ICMP Packet은 LOCAL_IN Table이 아니라 FORWARD Table로 전달되는데, 이러한 ICMP Packet을 받아서 Real Server에게 전달하는 역활을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
 
 #### 2.2 IPVS Dummpy Interface
 
@@ -90,6 +90,8 @@ LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당
 ### 3. 참조
 
 * LVS : [https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso](https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/5/html/cluster_suite_overview/s1-lvs-overview-cso)
+* LVS : [http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.fwmark.html](http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.fwmark.html)
 * ipvs : [http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html](http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.filter_rules.html)
 * ipvs : [https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/](https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/)
 * ipvs : [https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c](https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c)
+* ipvs : [http://helloweishi.github.io/network/stack/2015/06/27/L3-IP-stack/](http://helloweishi.github.io/network/stack/2015/06/27/L3-IP-stack/)
