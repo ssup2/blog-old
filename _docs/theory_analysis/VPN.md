@@ -11,6 +11,8 @@ VPN (Virtual Private Network)을 분석한다.
 
 ### 1. VPN (Virtual Private Network)
 
+![[그림 1] VPN Architecture]({{site.baseurl}}/images/theory_analysis/VPN/VPN_Achitecture.PNG){: width="700px"}
+
 ### 2. 참조
 
 * [https://www.slideshare.net/Kajal_Thakkar/vpn-14074779](https://www.slideshare.net/Kajal_Thakkar/vpn-14074779)
