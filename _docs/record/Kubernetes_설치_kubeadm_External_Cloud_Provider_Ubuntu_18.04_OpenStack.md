@@ -186,7 +186,7 @@ spec:
   containers:
   - command:
     - kube-apiserver
-    - --advertise-address=30.0.0.34
+    - --advertise-address=30.0.0.11
     - --allow-privileged=true
 ...
     - --runtime-config=storage.k8s.io/v1=true
