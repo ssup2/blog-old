@@ -1,6 +1,6 @@
 ---
 title: VPN (Virtual Private Network)
-category: 
+category: Theory, Analysis
 date: 2019-11-01T12:00:00Z
 lastmod: 2019-11-01T12:00:00Z
 comment: true
