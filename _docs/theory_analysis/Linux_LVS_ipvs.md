@@ -95,3 +95,4 @@ LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당
 * ipvs : [https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/](https://www.valinux.co.jp/technologylibrary/document/load_balancing/lvs0001/)
 * ipvs : [https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c](https://github.com/torvalds/linux/blob/master/net/netfilter/ipvs/ip_vs_core.c)
 * ipvs : [http://helloweishi.github.io/network/stack/2015/06/27/L3-IP-stack/](http://helloweishi.github.io/network/stack/2015/06/27/L3-IP-stack/)
+* ipvs : [http://www.linuxvirtualserver.org/VS-NAT.html](http://www.linuxvirtualserver.org/VS-NAT.html)
