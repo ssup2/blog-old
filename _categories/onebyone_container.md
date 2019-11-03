@@ -4,7 +4,7 @@ category: E.T.C
 ---
 
 * [1. 시작하며]({{site.baseurl}}/onebyone_container/1.시작하며)
-* [2. Linux Container]({{site.baseurl}}/onebyone_container/2.Linux Container)
+* [2. Linux Container]({{site.baseurl}}/onebyone_container/2.Linux_Container)
 * 3\. Namespace
   * 3.1\. PID Namespace
   * 3.2\. Network Namespace
