@@ -15,6 +15,6 @@ Kubebuilder는 Kubernetes Operator 개발을 도와주는 SDK이다.
 
 ### 2. 참조
 
+* [https://github.com/dev4devs-com/memcached-kubebuilder](https://github.com/dev4devs-com/memcached-kubebuilder)
 * [https://book.kubebuilder.io/quick-start.html](https://book.kubebuilder.io/quick-start.html)
 * [https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html](https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html)
-* [https://github.com/dev4devs-com/memcached-kubebuilder](https://github.com/dev4devs-com/memcached-kubebuilder)
