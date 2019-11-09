@@ -203,8 +203,10 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 </figure>
 
 {% highlight golang linenos %}
+...
 # Image URL to use all building/pushing image targets
 IMG ?= supsup5642/memcached-controller:latest
+...
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 4] Makefile</figcaption>
@@ -213,8 +215,8 @@ IMG ?= supsup5642/memcached-controller:latest
 #### 2.5. Memcached Controller Image 생성 및 Push
 
 {% highlight console %}
+# docker login
 # make docker-build
-# docker login supsup5642
 # make docker-push
 {% endhighlight %}
 <figure>
@@ -230,7 +232,65 @@ IMG ?= supsup5642/memcached-controller:latest
 <figcaption class="caption">[Shell 4] Memcached CRD 생성</figcaption>
 </figure>
 
-#### 2.6. 
+#### 2.7. Memcached Controller Deploy
+
+{% highlight yaml linenos %}
+...
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - pods
+  verbs:
+  - "*"
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - "*"
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 4] config/rbac/role.yaml</figcaption>
+</figure>
+
+{% highlight console %}
+# cd config/manager && kustomize edit set image controller=supsup5642/memcached-controller:latest && cd -
+# kustomize build config/default | kubectl apply -f -
+# kubectl -n example-k8s-kubebuilder-system get pod
+NAME                                                         READY   STATUS    RESTARTS   AGE
+example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0          3d
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 5] Memcached Controller Deploy</figcaption>
+</figure>
+
+#### 2.8. Memcached CR 생성을 통한 Memcached 구동
+
+{% highlight yaml linenos %}
+apiVersion: memcached.cache.example.com/v1
+kind: Memcached
+metadata:
+  name: memcached-sample
+spec:
+  size: 3
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 5] config/samples/memcached_v1_memcached.yaml</figcaption>
+</figure>
+
+{% highlight console %}
+# kubectl apply -f config/samples/memcached_v1_memcached.yaml
+# kubectl get pod
+NAME                                READY   STATUS    RESTARTS   AGE
+memcached-sample-79ccbbbbcb-8w2l7   1/1     Running   0          3m15s
+memcached-sample-79ccbbbbcb-vrkmk   1/1     Running   0          3m15s
+memcached-sample-79ccbbbbcb-wpgzz   1/1     Running   0          3m15s
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 6] Memcached Controller Deploy</figcaption>
+</figure>
 
 ### 3. 참조
 
