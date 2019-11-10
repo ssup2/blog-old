@@ -223,16 +223,7 @@ IMG ?= supsup5642/memcached-controller:latest
 <figcaption class="caption">[Shell 3] Memcached CRD 생성</figcaption>
 </figure>
 
-#### 2.6. Memcached CRD 생성
-
-{% highlight console %}
-# make install
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Shell 4] Memcached CRD 생성</figcaption>
-</figure>
-
-#### 2.7. Memcached Controller Deploy
+#### 2.6. Memcached CRD 생성 및 Memcached Controller Deploy
 
 {% highlight yaml linenos %}
 ...
@@ -266,7 +257,7 @@ example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0
 <figcaption class="caption">[Shell 5] Memcached Controller Deploy</figcaption>
 </figure>
 
-#### 2.8. Memcached CR 생성을 통한 Memcached 구동
+#### 2.7. Memcached CR 생성을 통한 Memcached 구동
 
 {% highlight yaml linenos %}
 apiVersion: memcached.cache.example.com/v1
