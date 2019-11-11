@@ -222,8 +222,6 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 <figcaption class="caption">[Code 2] controllers/memcached_controller.go</figcaption>
 </figure>
 
-
-
 {% highlight golang linenos %}
 ...
     if err = (&controllers.MemcachedReconciler{
