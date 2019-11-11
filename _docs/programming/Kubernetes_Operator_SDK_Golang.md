@@ -125,9 +125,7 @@ type MemcachedList struct {
 <figcaption class="caption">[Code 1] pkg/apis/cache/v1alpha1/memcached_types.go</figcaption>
 </figure>
 
-Memcached CR 관련 Golang Struct는 pkg/apis/cache/v1alpha1 Directory 아래의 memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached Object에 저장되어야할 정보를 직접 추가해야 한다. [Code 1]에는 다음의 내용이 추가되었다.
-* MemcachedSpec Struct Size : 동작해야하는 Memcached Pod의 개수를 나타낸다.
-* MemcachedStatus Struct Nodes : Memcached가 동작하는 Pod의 이름을 나타낸다.
+Memcached CR 관련 Golang Struct는 pkg/apis/cache/v1alpha1 Directory 아래의 memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached CR 관련 정보를 직접 추가해야 한다. Spec의 Size는 동작해야하는 Memcached Pod의 개수를 나타내고. Status의 Nodes는 Memcached가 동작하는 Pod의 이름을 나타낸다.
 
 #### 2.5. Memcached Controller 생성
 
