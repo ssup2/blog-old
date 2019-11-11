@@ -25,7 +25,7 @@ Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Reconciler의 Man
 
 Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다.
 
-Manager는 Controller를 관리하는 역활을 수행한다. Controller가 초기화 되는 과정에서 Controller는 자기 자신을 Manager에게 등록한다. 또한 Manager는 Kubernetes API Server의 Read Cache 역활을 수행하는 Cache를 관리한다. Manager Client는 읽기 동작 수행시 Kubernetes API Server로부터 직접 Data를 읽지 않고 Manager의 Cached로부터 Data를 읽어, Kubernetes API Server의 부하를 줄인다. 반면에 Manager Client는 쓰기 동작 수행시 Kubernetes API Server에 직접 Data를 쓴다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
+Manager는 Controller를 관리하는 역활을 수행한다. Controller가 초기화 되는 과정에서 Controller는 자기 자신을 Manager에게 등록한다. 또한 Manager는 Kubernetes API Server의 Read Cache 역활을 수행하는 Cache를 관리한다. Manager Client는 읽기 동작 수행시 Kubernetes API Server로부터 직접 Data를 읽지 않고 Manager의 Cache로부터 Data를 읽어, Kubernetes API Server의 부하를 줄인다. 반면에 Manager Client는 쓰기 동작 수행시 Kubernetes API Server에 직접 Data를 쓴다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
 
 #### 1.2. Golang Operator HA
 
