@@ -11,21 +11,23 @@ Operator SDK User Guide에 소개된 Memcached Operator 예제를 통해 Operato
 
 ### 1. Operator SDK, Golang Operator
 
-Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK이다. Operator SDK를 이용하여 Golang Operator, Ansible Operator, Helm Operator 3가지 Type의 Operator를 개발할 수 있다. Golang Operator는 특정 **Kubernetes CR (Custom Resource)**을 관리하는 Golang 기반의 **Kubernetes Controller**이다. 따라서 Golang Operator를 개발하는 과정은 크게 Kubernetes CR을 정의하는 과정과 Golang을 이용하여 Kubernetes Controller를 개발하는 과정으로 분류할 수 있다.
+Operator SDK는 의미 그대로 Kubernetes Operator 개발을 도와주는 SDK이다. Operator SDK를 이용하여 Golang Operator, Ansible Operator, Helm Operator 3가지 Type의 Operator를 개발할 수 있다. Golang Operator는 특정 **Kubernetes CR (Custom Resource)**을 관리하는 Golang으로 개발된 **Kubernetes Controller들의 집합**을 의미한다. 따라서 Golang Operator를 개발하는 과정은 크게 Kubernetes CR을 정의하는 과정과 Golang을 이용하여 Kubernetes Controller를 개발하는 과정으로 분류할 수 있다.
 
-Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정 만하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Operator SDK는 Standard Golang Project Layout을 준수하는 Kubernetes Controller Project를 생성해준다. Operator SDK가 생성한 Kubernetes Controller Project에는 모든 Kubernetes Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Kubernetes Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Kubernetes Controller를 개발할 수 있다.
+Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정만 하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Operator SDK는 Standard Golang Project Layout을 준수하는 Kubernetes Controller Project를 생성해준다. Operator SDK가 생성한 Kubernetes Controller Project에는 모든 Kubernetes Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Kubernetes Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Kubernetes Controller를 개발할 수 있다.
 
-#### 1.1. Golang Operator Component
+#### 1.1. Kubernetes Controller Package
 
-![[그림 1] Golang Operator Component]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Controller_Reconciler.PNG){: width="700px"}
+![[그림 1] Kubernetes Controller Package]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Kubernetes_Controller_Component.PNG){: width="700px"}
 
-[그림 1]은 Golang Operator 관련 Component를 나타내고 있다. Golang Operator는 내부적으로 Controller, Reconciler로 구성되어 있다. Controller는 Kubernetes API Server를 통해서 Golang Operator가 관리해야할 CR의 변경를 감지하고 변경한 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Controller는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Reconciler의 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
+[그림 1]은 Golang Operator로 구현한 Kubernetes Controller의 주요 Package를 나타내고 있다. Kubernetes Controller는 크게 SDK Controller Package, Runtime Controller Package, Runtime Manager Package로 구성되어 있다. SDK Controller Package는 Operator SDK를 이용하여 Kubernetes Controller를 개발하는 개발자가 생성하는 Package이다. **Runtime**은 Kubernetes Controller 개발을 도와주는 Library 역활을 수행하는 Package를 의미하며 Runtime Controller Package, Runtime Manager Package는 모두 Runtime의 하위 Package를 의미한다.
 
-Reconcile Loop는 전달받은 CR의 Name, Namespace 정보와 Reconciler의 Manager Client를 이용하여 Kubernetes API Server로부터 Desired CR의 정보를 얻는다. 또한 Reconcile Loop는 Manager Client를 이용하여 Current (Custom) Resource의 정보를 얻은 다음, 이전에 얻은 Desired CR과 Current Resource를 비교한다. 두 Resource가 다르다면 Recocile Loop는 Current Resource를 Desired Resource과 동일해지도록 제어한다. 이처럼 Reconcile Loop는 **Desired CR/Current Resource 얻기, Desired CR/Current Resource 비교, Current CR 제어** 3가지 동작을 반복한다.
+Runtime Controller Package는 Kubernetes API Server를 통해서 Kubernetes Controller가 관리 해야할 CR의 변경를 감지하고, 변경된 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Runtime Controller Package는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 SDK Controller Package의 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
 
-Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다.
+Runtime Manager Package는 Kubernetes Controller가 이용하는 Kubernetes Client 및 Kubernetes Client가 이용하는 Cache를 초기화 하고, 초기화된 Kubernetes Client를 SDK Controller Package에게 전달한다. SDK Controller Package에서 Kubernetes Client를 이용하여 Kubernetes API Server에 Write 요청을 수행하는 경우 Kubernetes Client는 해당 Write 요청을 바로 Kubernetes API Server에 전달하지만, Read 요청을 수행하는 경우에는 Kubernetes API Server의 부하를 줄이기 위해서 Kubernetes API Server에서 직접 Read를 수행하지 않고 Runtime Manager Package의 Cache에서 Read한다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
 
-Manager는 Controller를 관리하는 역활을 수행한다. Controller가 초기화 되는 과정에서 Controller는 자기 자신을 Manager에게 등록한다. 또한 Manager는 Kubernetes API Server의 Read Cache 역활을 수행하는 Cache를 관리한다. Manager Client는 읽기 동작 수행시 Kubernetes API Server로부터 직접 Data를 읽지 않고 Manager의 Cache로부터 Data를 읽어, Kubernetes API Server의 부하를 줄인다. 반면에 Manager Client는 쓰기 동작 수행시 Kubernetes API Server에 직접 Data를 쓴다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
+SDK Controller Package는 실제 Controller Logic을 수행하는 Reconcile Loop와 Runtime Manager Package로부터 전달 받은 Kubernetes Client를 갖고 있다. Reconcile Loop는 Kubernetes Client를 이용하여 Runtime Controller Package로부터 전달받은 CR의 Name/Namespace 정보를 바탕으로 전체 CR 정보를 얻는다. 또한 CR과 연관된 현재 상태의 Resource 정보도 얻는다. **이후 Reconcile Loop는 현재 상태의 Resource가 CR과 일치하는지 확인한다. 일치하지 않는다면 Reconcile Loop는 Resource를 생성/삭제하여 CR과 일치하도록 만든다.**
+
+Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Runtime Controller Package의 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다.
 
 #### 1.2. Golang Operator HA
 
@@ -37,7 +39,7 @@ Golang Operator도 Kubernetes 위에서 동작하는 App이기 때문에, Golang
 
 ### 2. Memcached Golang Operator
 
-Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Golang Operator를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
+Memcached Golang Operator 예제에서는 Memcached CR을 정의하고, 정의한 Memcached CR을 관리하는 Kubernetes Controller인 Memcached Controller를 개발한다. Memcached Golang Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
 * [https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator](https://github.com/operator-framework/operator-sdk-samples/tree/master/memcached-operator)
 * [https://github.com/ssup2/example-k8s-operator-golang](https://github.com/ssup2/example-k8s-operator-golang)
 
@@ -242,9 +244,9 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
 
-[Code 2]는 Golang Operator의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 3~6번째 줄은 Memcached Controller를 생성하고 생성한 Memcached Controller를 Manager에 등록하는 부분이다. 8~11번째 줄은 Memcached Controller에게 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Memcached Controller에게 Deployment Resource를 감시하라고 지시하는 부분이다. Controller는 Memecached CR 또는 Deployment Resource가 변경되는 경우 변경된 Resource의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
+[Code 2]는 Memcached Controller의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 8~11번째 줄은 Runtime Controller Package를 이용하여 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Runtime Controller Package를 이용하여 Deployment Resource를 감시하라고 지시하는 부분이다. Runtime Controller Package는 Memecached CR 또는 Deployment Resource가 변경되는 경우, 변경된 Resource의 Name/Namespace 정보는 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달된다.
 
-Reconcile() 함수에 소속된 29~41번째 줄은 Controller로 부터 받은 Resource의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memecached CR을 얻는 부분이다. 여기서 Memcached CR이 Desired CR이 된다. 유사하게 44~60번째 줄은 Controller가 Resource의 Name/Namespace 정보를 바탕으로 Deployment Resource를 얻는 부분이다. 여기서 Deployment Resource은 Current Resource가 된다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 Desired CR/Current Resource 얻기, Desired CR/Current Resource 비교, Current CR 제어 제어를 반복한다.
+Reconcile() 함수에 소속된 29~41번째 줄은 Runtime Controller Package로부터 받은 Memecached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memecached CR을 얻는 부분이다. 유사하게 44~60번째 줄은 Runtime Controller Package로부터 받은 Memecached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 변경된 Memecached CR을 얻고, 얻은 Memecached CR을 바탕으로 Deployment Resource를 제어하는 동작을 반복한다.
 
 Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
