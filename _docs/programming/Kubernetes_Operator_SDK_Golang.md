@@ -17,7 +17,7 @@ Operator SDK는 Kubernetes CR과 관련된 대부분의 파일을 생성해준�
 
 #### 1.1. Kubernetes Controller Package
 
-![[그림 1] Kubernetes Controller Package]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Kubernetes_Controller_Component.PNG){: width="700px"}
+![[그림 1] Kubernetes Controller Package]({{site.baseurl}}/images/programming/Kubernetes_Operator_SDK_Golang/Kubernetes_Controller_Package.PNG){: width="700px"}
 
 [그림 1]은 Golang Operator로 구현한 Kubernetes Controller의 주요 Package를 나타내고 있다. Kubernetes Controller는 크게 SDK Controller Package, Runtime Controller Package, Runtime Manager Package로 구성되어 있다. SDK Controller Package는 Operator SDK를 이용하여 Kubernetes Controller를 개발하는 개발자가 생성하는 Package이다. **Runtime**은 Kubernetes Controller 개발을 도와주는 Library 역활을 수행하는 Package를 의미하며 Runtime Controller Package, Runtime Manager Package는 모두 Runtime의 하위 Package를 의미한다.
 
