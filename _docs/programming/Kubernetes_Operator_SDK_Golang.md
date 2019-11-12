@@ -244,9 +244,9 @@ func (r *ReconcileMemcached) Reconcile(request reconcile.Request) (reconcile.Res
 <figcaption class="caption">[Code 2] pkg/controller/memcached/memcached_controller.go</figcaption>
 </figure>
 
-[Code 2]는 Memcached Controller의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 8~11번째 줄은 Runtime Controller Package를 이용하여 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Runtime Controller Package를 이용하여 Deployment Resource를 감시하라고 지시하는 부분이다. Runtime Controller Package는 Memecached CR 또는 Deployment Resource가 변경되는 경우, 변경된 Resource의 Name/Namespace 정보는 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달된다.
+[Code 2]는 Memcached Controller의 핵심 부분을 나타내고 있다. 2번째 줄의 add() 함수는 Memcached Controller를 초기화하는 함수이다. 8~11번째 줄은 Runtime Controller Package를 이용하여 Memcached CR을 감시하라고 지시하는 부분이다. 13~19번째 줄은 Runtime Controller Package를 이용하여 Deployment Resource를 감시하라고 지시하는 부분이다. Runtime Controller Package는 Memcached CR 또는 Deployment Resource가 변경되는 경우, 변경된 Resource의 Name/Namespace 정보는 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달된다.
 
-Reconcile() 함수에 소속된 29~41번째 줄은 Runtime Controller Package로부터 받은 Memecached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memecached CR을 얻는 부분이다. 유사하게 44~60번째 줄은 Runtime Controller Package로부터 받은 Memecached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 변경된 Memecached CR을 얻고, 얻은 Memecached CR을 바탕으로 Deployment Resource를 제어하는 동작을 반복한다.
+Reconcile() 함수에 소속된 29~41번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memcached CR을 얻는 부분이다. 유사하게 44~60번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 62~71번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Resource를 제어하는 동작을 반복한다.
 
 Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
