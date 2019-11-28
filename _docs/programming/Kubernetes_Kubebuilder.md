@@ -25,11 +25,15 @@ Runtime Manager Package는 Controller가 이용하는 Kubernetes Client 및 Kube
 
 Kubebuilder Controller Package는 실제 Controller Logic을 수행하는 Reconcile Loop와 Runtime Manager Package로부터 전달 받은 Kubernetes Client를 갖고 있다. Reconcile Loop는 Kubernetes Client를 이용하여 Runtime Controller Package로부터 전달받은 CR의 Name/Namespace 정보를 바탕으로 전체 CR 정보를 얻는다. 또한 CR과 연관된 현재 상태의 Resource 정보도 얻는다. **이후 Reconcile Loop는 현재 상태의 Resource가 CR과 일치하는지 확인한다. 일치하지 않는다면 Reconcile Loop는 Resource를 생성/삭제하여 CR과 일치하도록 만든다.**
 
-Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Runtime Controller Package의 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다. Controller Metric 정보는 Controller Pod안에서 같이 동작하는 kube-rbac-proxy가 허용한 대상만 접근이 가능하다.
+Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Runtime Controller Package의 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다.
 
 #### 1.2. Controller HA
 
 Controller도 Kubernetes 위에서 동작하는 App이기 때문에, Controller의 HA를 위해서는 다수의 동일한 Controller를 동시에 구동하는 것이 좋다. 다수의 동일한 Controller를 구동하는 경우 하나의 Controller만 실제로 역활을 수행하고 나머지 Controller는 대기 상태를 유지하는 **Active-standby** 형태로 동작한다. Controller 수행시 'enable-leader-election' 옵션을 설정하면 Controller HA 기능을 적용할 수 있다.
+
+#### 1.3. Controller Metric, kube-rback-proxy
+
+Controller는 자기 자신의 Metric 정보인 Controller Metric 정보를 제공한다. Controller Metric 정보의 접근 권한은 Controller Pod안에서 같이 동작하는 Proxy Server인 kube-rbac-proxy에 의해서 결정된다. [그림 1]에서 Controller Metric 정보가 kube-rback-proxy를 통해서 전송되는 과정을 나타내고 있다.
 
 ### 2. Memcached Operator
 
@@ -131,13 +135,35 @@ type Memcached struct {
 
 {% highlight golang linenos %}
 ...
+    if err = (&controllers.MemcachedReconciler{
+        Client: mgr.GetClient(),
+        Log:    ctrl.Log.WithName("controllers").WithName("Memcached"),
+        Scheme: mgr.GetScheme(),
+    }).SetupWithManager(mgr); err != nil {
+        setupLog.Error(err, "unable to create controller", "controller", "Memcached")
+        os.Exit(1)
+    }
+    // +kubebuilder:scaffold:builder
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 2] main.go</figcaption>
+</figure>
+
+[Code 2]는 Controller의 main() 함수의 일부분을 나타내고 있다. 3번째 줄은 mgr(Runtime Manager Pkg)에 의해서 Cache 설정이 완료된 Kubernetes Client를 Controller의 Reconcile Loop에게 넘기는 부분이다. Reconcile Loop에서는 mgr로부터 받은 Kubernetes Client를 이용하여 Kubernetes API Server와 통신한다.
+
+{% highlight golang linenos %}
+...
 // MemcachedReconciler reconciles a Memcached object
 type MemcachedReconciler struct {
     client.Client
     Log logr.Logger
     *runtime.Scheme
 }
-...
+
+// +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds/status,verbs=get;update;patch
+
 func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
 	reqLogger := r.Log.WithValues("req.Namespace", req.Namespace, "req.Name", req.Name)
@@ -236,27 +262,18 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	return ctrl.Result{}, nil
 }
+
+func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
+    return ctrl.NewControllerManagedBy(mgr).
+        For(&memcachedv1.Memcached{}).
+        Complete(r)
+}  
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 2] controllers/memcached_controller.go</figcaption>
+<figcaption class="caption">[Code 3] controllers/memcached_controller.go</figcaption>
 </figure>
 
-{% highlight golang linenos %}
-...
-    if err = (&controllers.MemcachedReconciler{
-        Client: mgr.GetClient(),
-        Log:    ctrl.Log.WithName("controllers").WithName("Memcached"),
-        Scheme: mgr.GetScheme(),
-    }).SetupWithManager(mgr); err != nil {
-        setupLog.Error(err, "unable to create controller", "controller", "Memcached")
-        os.Exit(1)
-    }
-    // +kubebuilder:scaffold:builder
-...
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Code 3] main.go</figcaption>
-</figure>
+[Code 3]는 Memcached Controller인 Reconcile Loop를 나타내고 있다. Runtime Controller Package는 Memcached CR 또는 Deployment Resource가 변경되는 경우, 변경된 Resource의 Name/Namespace 정보는 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달된다.
 
 {% highlight golang linenos %}
 ...
