@@ -11,11 +11,30 @@ Memcached 예제를 통해서 Kubebuilder와 Operator를 분석한다.
 
 ### 1. Kubebuilder
 
-Kubebuilder는 Kubernetes Operator 개발을 도와주는 SDK이다. **Kubernetes CR (Custom Resource)**을 정의하고, 정의한 Kubernetes CR을 관리하는 **Kubernetes Controller** 개발을 쉽게 할 수 있도록 도와준다. 
+Kubebuilder는 Kubernetes Operator 개발을 도와주는 SDK이다. **Kubernetes CR (Custom Resource)**을 정의하고, 정의한 Kubernetes CR을 관리하는 **Controller** 개발을 쉽게 할 수 있도록 도와준다. Kubebuilder는 Kubernetes CR과 관련된 대부분의 파일을 생성해준다. 개발자는 생성된 Kubernetes CR 관련 파일을 수정만 하면 되기 때문에 쉽게 Kubernetes CR을 정의할 수 있다. 또한 Kubebuilder는 Standard Golang Project Layout을 준수하는 Controller Project를 생성해준다. Kubebuilder가 생성한 Controller Project에는 모든 Controller가 수행 해야하는 공통 기능이 Golang으로 구현되어 포함되어 있다. 개발자는 Controller의 핵심 기능 개발에만 집중할 수 있기 때문에 쉽게 Controller를 개발할 수 있다.
+
+#### 1.1. Controller Package
+
+![[그림 1] Controller Package]({{site.baseurl}}/images/programming/Kubernetes_Kubebuilder/Controller_Package.PNG){: width="700px"}
+
+[그림 1]은 Kubebuilder로 구현한 Controller의 주요 Package를 나타내고 있다. Controller는 크게 Kubebuilder Controller Package, Runtime Controller Package, Runtime Manager Package로 구성되어 있다. Kubebuilder Controller Package는 Kubebuilder를 이용하여 Controller를 개발하는 개발자가 생성하는 Package이다. **Runtime**은 Controller 개발을 도와주는 Library 역활을 수행하는 Package를 의미하며 Runtime Controller Package, Runtime Manager Package는 모두 Runtime의 하위 Package를 의미한다.
+
+Runtime Controller Package는 Kubernetes API Server를 통해서 Controller가 관리 해야할 CR의 변경를 감지하고, 변경된 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Runtime Controller Package는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Kubebuilder Controller Package의 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
+
+Runtime Manager Package는 Controller가 이용하는 Kubernetes Client 및 Kubernetes Client가 이용하는 Cache를 초기화 하고, 초기화된 Kubernetes Client를 Kubebuilder Controller Package에게 전달한다. Kubebuilder Controller Package에서 Kubernetes Client를 이용하여 Kubernetes API Server에 Write 요청을 수행하는 경우 Kubernetes Client는 해당 Write 요청을 바로 Kubernetes API Server에 전달하지만, Read 요청을 수행하는 경우에는 Kubernetes API Server의 부하를 줄이기 위해서 Kubernetes API Server에서 직접 Read를 수행하지 않고 Runtime Manager Package의 Cache에서 Read한다. Kubernetes API Server와 Cache 사이의 동기화는 주기적으로 이루어진다.
+
+Kubebuilder Controller Package는 실제 Controller Logic을 수행하는 Reconcile Loop와 Runtime Manager Package로부터 전달 받은 Kubernetes Client를 갖고 있다. Reconcile Loop는 Kubernetes Client를 이용하여 Runtime Controller Package로부터 전달받은 CR의 Name/Namespace 정보를 바탕으로 전체 CR 정보를 얻는다. 또한 CR과 연관된 현재 상태의 Resource 정보도 얻는다. **이후 Reconcile Loop는 현재 상태의 Resource가 CR과 일치하는지 확인한다. 일치하지 않는다면 Reconcile Loop는 Resource를 생성/삭제하여 CR과 일치하도록 만든다.**
+
+Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기가 필요한 경우, Recocile Loop는 Runtime Controller Package의 Worker Queue에 CR의 Name, Namespace 정보를 Requeue하여 일정 시간을 대기한 이후에 다시 Controller가 Recocile Loop를 실행하도록 만든다. Controller가 Recocile Loop를 다시 실행시키기 위해서 대기하는 시간은 Exponentially하게 증가한다. Controller Metric 정보는 Controller Pod안에서 같이 동작하는 kube-rbac-proxy가 허용한 대상만 접근이 가능하다.
+
+#### 1.2. Controller HA
+
+Controller도 Kubernetes 위에서 동작하는 App이기 때문에, Controller의 HA를 위해서는 다수의 동일한 Controller를 동시에 구동하는 것이 좋다. 다수의 동일한 Controller를 구동하는 경우 하나의 Controller만 실제로 역활을 수행하고 나머지 Controller는 대기 상태를 유지하는 **Active-standby** 형태로 동작한다. Controller 수행시 'enable-leader-election' 옵션을 설정하면 Controller HA 기능을 적용할 수 있다.
 
 ### 2. Memcached Operator
 
 Kubebuilder를 이용하여 Memcached CR을 정의하고, Memcached CR을 제어하는 Memcached Controller를 개발한다. Memcached Operator 전체 Code는 아래의 링크에서 확인할 수 있다.
+
 * [https://github.com/ssup2/example-k8s-kubebuilder](https://github.com/ssup2/example-k8s-kubebuilder)
 
 #### 2.1. 개발 환경
