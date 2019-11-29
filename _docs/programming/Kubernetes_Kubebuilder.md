@@ -266,6 +266,7 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
     return ctrl.NewControllerManagedBy(mgr).
         For(&memcachedv1.Memcached{}).
+		Owns(&appsv1.Deployment{}).
         Complete(r)
 }  
 {% endhighlight %}
@@ -273,7 +274,13 @@ func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
 <figcaption class="caption">[Code 3] controllers/memcached_controller.go</figcaption>
 </figure>
 
-[Code 3]는 Memcached Controller인 Reconcile Loop를 나타내고 있다. Runtime Controller Package는 Memcached CR 또는 Deployment Resource가 변경되는 경우, 변경된 Resource의 Name/Namespace 정보는 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달된다.
+[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 8,9번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다. 111~115번째 줄은 Runtime Controller Package를 통하여 Memcached CR 또는 Memcached CR이 소유하고 있는 Deployment Resource의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, Runtime Controller Package는 해당 Memcached CR의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
+
+Reconcile() 함수에 소속된 18~31번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memcached CR을 얻는 부분이다. 34~52번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 
+
+67~81 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 74~94번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다. 이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Resource를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
+
+#### 2.6. Memcached Controller Image 생성 및 Push
 
 {% highlight golang linenos %}
 ...
@@ -285,8 +292,6 @@ IMG ?= supsup5642/memcached-controller:latest
 <figcaption class="caption">[Code 4] Makefile</figcaption>
 </figure>
 
-#### 2.6. Memcached Controller Image 생성 및 Push
-
 {% highlight console %}
 # docker login
 # make docker-build
@@ -295,6 +300,8 @@ IMG ?= supsup5642/memcached-controller:latest
 <figure>
 <figcaption class="caption">[Shell 4] Memcached CRD 생성</figcaption>
 </figure>
+
+[Code 4]의 내용처럼 Makefile에 IMG 파일이름을 지정하고 [Shell 4]의 명령어들을 통해서 Memcached Controller Image 생성 및 생성한 Image를 Docker Hub에 Push한다.
 
 #### 2.7. Memcached CRD 생성 및 Memcached Controller Deploy
 
@@ -316,7 +323,7 @@ IMG ?= supsup5642/memcached-controller:latest
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 4] config/rbac/role.yaml</figcaption>
+<figcaption class="caption">[Code 5] config/rbac/role.yaml</figcaption>
 </figure>
 
 {% highlight console %}
@@ -329,6 +336,8 @@ example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0
 <figure>
 <figcaption class="caption">[Shell 5] Memcached Controller Deploy</figcaption>
 </figure>
+
+[Code 5]의 내용처럼 Memcached Controller에 적용할 Role을 수정하고, [Shell 5]의 내용처럼 kustomize를 이용하여 Memcached CRD를 생성하고 Memcached Controller를 구동한다.
 
 #### 2.8. Memcached CR 생성을 통한 Memcached 구동
 
@@ -355,6 +364,8 @@ memcached-sample-79ccbbbbcb-wpgzz   1/1     Running   0          3m15s
 <figure>
 <figcaption class="caption">[Shell 6] Memcached Controller Deploy</figcaption>
 </figure>
+
+[Code 5]의 내용처럼 Memecached CR을 생성하여 Memcached를 구동한다.
 
 ### 3. 참조
 
