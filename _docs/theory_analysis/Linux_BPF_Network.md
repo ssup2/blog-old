@@ -9,11 +9,11 @@ adsense: true
 
 Network Type의 BPF를 분석한다.
 
-### 1. Network Type
+### 1. Network Type BPF
 
-![[그림 4] Network BPF Program Type]({{site.baseurl}}/images/theory_analysis/Linux_BPF_Network/BPF_Net_Type.PNG){: width="450px"}
+![[그림 1] Network BPF Program Type]({{site.baseurl}}/images/theory_analysis/Linux_BPF_Network/BPF_Net_Type.PNG){: width="450px"}
 
-[그림 4]는 Linux에서 제공하는 BPF Program Type 중에서 Network과 연관된 Type을 Kernel의 Network Stack과 함께 나타내고 있다. Network과 연관된 BPF Program Type에는 XDP, SCHED_CLS, SCHED_ACT, SOCKET_FILTER 4가지가 존재한다.
+[그림 1]는 Linux에서 제공하는 BPF Program Type 중에서 Network과 연관된 Type을 Kernel의 Network Stack과 함께 나타내고 있다. Network과 연관된 BPF Program Type에는 XDP, SCHED_CLS, SCHED_ACT, SOCKET_FILTER 4가지가 존재한다.
 
 #### 1.1. XDP (eXpress Data Path)
 
