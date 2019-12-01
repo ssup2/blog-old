@@ -42,7 +42,7 @@ SCHED_CLS, SCHED_ACT BPF Program의 Input Type은 Socket Buffer (\_\_sk_buff)이
 
 #### 1.3. cgroup
 
-cgroup BPF는 Socket Layer Hook에서 각 cgroup마다 존재하는 BPF이며, cgroup에 포함되어 있는 Process들만 이용하는 BPF이다. 따라서 cgroup BPF Program은 오직 해당 cgroup에 포함되어 있는 Process들에게만 영향을 준다. 특정 Process Group에게만 BPF Program을 적용하고 싶으면 cgroup BPF와 cgroup을 이용하면 된다. cgroup BPF Program Type은 다음과 같이 존재한다.
+cgroup eBPF는 Socket Layer Hook에서 각 cgroup마다 존재하는 eBPF이며, cgroup에 포함되어 있는 Process들만 이용하는 eBPF이다. 따라서 cgroup eBPF Program은 오직 해당 cgroup에 포함되어 있는 Process들에게만 영향을 준다. 특정 Process Group에게만 eBPF Program을 적용하고 싶으면 cgroup eBPF와 cgroup을 이용하면 된다. cgroup eBPF Program Type은 다음과 같이 존재한다.
 
 * CGROUP_SKB : CGROUP_SOCK_ADDR BPF Program은 cgroup에 포함되어 있는 Process의 Ingress/Egress Packet을 Filtering하는 역활을 수행한다.
 * CGROUP_SOCK : CGROUP_SOCK BPF Program은 cgroup에 포함되어 있는 Procees가 Socket을 Open하는 경우 구동되어 Socket의 Option을 변경하는 역활을 수행한다. Socket의 Option을 변경하여 Socket Security를 보안하는 목적으로 이용이 가능하다.
@@ -50,7 +50,11 @@ cgroup BPF는 Socket Layer Hook에서 각 cgroup마다 존재하는 BPF이며, c
 
 #### 1.4. SOCK_OPS
 
+SOCK_OPS eBPF Program은 Connection Life Cycle중 여러번 호출되는 eBPF에 적재되어 구동되는 특징을 갖는다. 따라서 SOCK_OPS eBPF Program은 Connection의 상태 파악 및 상태에 따라서 Connection을 제어하는 역활을 수행한다.
+
 #### 1.5. SOCK_REUSEPORT
+
+SOCK_REUSEPORT eBPF Program은 Kernel에서 Port를 Binding할때 호출되는 eBPF에 적재되어 구동된다. SOCK_REUSEPORT eBPF Program의 구현에 따라서 다수의 Process가 하나의 Port를 Binding하여 이용하는 것도 가능하다.
 
 #### 1.6. SOCKET_FILTER
 
