@@ -1,5 +1,5 @@
 ---
-title: Linux BPF (Berkeley Packet Filter) Network
+title: Linux BPF (Berkeley Packet Filter) Network Program Type
 category: Theory, Analysis
 date: 2018-12-30T12:00:00Z
 lastmod: 2018-12-30T12:00:00Z
@@ -7,13 +7,13 @@ comment: true
 adsense: true
 ---
 
-Network Type의 BPF를 분석한다.
+Network BPF Program Type의 BPF를 분석한다.
 
-### 1. Network Type BPF
+### 1. Network BPF Program Type
 
 ![[그림 1] Network BPF Program Type]({{site.baseurl}}/images/theory_analysis/Linux_BPF_Network/BPF_Net_Type.PNG){: width="450px"}
 
-[그림 1]는 Linux에서 제공하는 BPF Program Type 중에서 Network과 연관된 Type을 Kernel의 Network Stack과 함께 나타내고 있다. Network과 연관된 BPF Program Type에는 XDP, SCHED_CLS, SCHED_ACT, SOCKET_FILTER 4가지가 존재한다.
+[그림 1]는 Linux에서 제공하는 BPF Program Type 중에서 Network과 연관된 Type을 Kernel의 Network Stack과 함께 나타내고 있다. Network과 연관된 BPF Program Type에는 XDP, SCHED_CLS, SCHED_ACT, CGROUP_SKB, CGROUP_SOCK, CGROUP_SOCK_ADDR, SOCK_OPS, SOCK_REUSEPORT, SOCKET_FILTER 등 다양한 Type이 존재한다.
 
 #### 1.1. XDP (eXpress Data Path)
 
@@ -40,17 +40,19 @@ SCHED_CLS, SCHED_ACT BPF Program의 Input Type은 Socket Buffer (\_\_sk_buff)이
 * TC_ACT_OK : Ingress에서는 해당 Packet을 통과시켜 Network Stack으로 넘기고, Egress에서는 해당 Packet을 Network Device에게 넘긴다.
 * TC_ACT_REDIRECT : 해당 Packet을 동일 또는 다른 Network Device의 Ingress나 Engress로 전달한다.
 
-#### 1.3. CGROUP_SOCK_ADDR
+#### 1.3. cgroup
 
-#### 1.4. CGROUP_SOCK
+cgroup BPF는 Socket Layer Hook에서 각 cgroup마다 존재하는 BPF이며, cgroup에 포함되어 있는 Process들만 이용하는 BPF이다. 따라서 cgroup BPF Program은 오직 해당 cgroup에 포함되어 있는 Process들에게만 영향을 준다. 특정 Process Group에게만 BPF Program을 적용하고 싶으면 cgroup BPF와 cgroup을 이용하면 된다. cgroup BPF Program Type은 다음과 같이 존재한다.
 
-#### 1.5. CGROUP_SKB
+* CGROUP_SKB : CGROUP_SOCK_ADDR BPF Program은 cgroup에 포함되어 있는 Process의 Ingress/Egress Packet을 Filtering하는 역활을 수행한다.
+* CGROUP_SOCK : CGROUP_SOCK BPF Program은 cgroup에 포함되어 있는 Procees가 Socket을 Open하는 경우 구동되어 Socket의 Option을 변경하는 역활을 수행한다. Socket의 Option을 변경하여 Socket Security를 보안하는 목적으로 이용이 가능하다.
+* CGROUP_SOCK_ADDR : Process의 Ingress/Egress Packet의 IP, Port를 변경하는 역활을 수행한다.
 
-#### 1.6. SOCK_REUSEPORT
+#### 1.4. SOCK_OPS
 
-#### 1.7. SOCK_OPS
+#### 1.5. SOCK_REUSEPORT
 
-#### 1.8. SOCKET_FILTER
+#### 1.6. SOCKET_FILTER
 
 SOCKET_FILTER BPF Program은 Socket Layer Hook에서 실행되는 BPF에 적재되어 구동된다. SOCKET_FILTER BPF Program은 Socket으로 들어오는 Packet을 필터링, 분류, 파싱하는 역활을 수행한다. 위에서 언급했던것 처럼 cBPF (SO_ATTACH_FILTER), eBPF (SO_ATTACH_BPF) 둘다 지원한다. SOCKET_FILTER BPF Program의 Input Type은 Socket Buffer (__sk_buff)이다. SOCKET_FILTER BPF Program의 실행결과는 기존의 cBPF Program의 반환값을 그대로 이용한다.
 
