@@ -49,11 +49,11 @@ Router는 Host Network Routing Rule뿐만 아니라 Pod Network 관련 Routing R
 
 ##### 1.2.1. with VXLAN
 
-![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_VXLAN.PNG)
+![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
 
 ##### 1.2.2. with Host L3
 
-![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_VXLAN.PNG)
+![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
 
 #### 1.3. Prefilter
 
