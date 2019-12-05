@@ -39,7 +39,7 @@ bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용
 
 ![[그림 3] eBPF Program Type]({{site.baseurl}}/images/theory_analysis/Linux_BPF/eBPF_Program_Type.PNG){: width="600px"}
 
-**BPF Program Type은 BPF Program이 어느 Hook에서 실행 될지를 결정한다.** 따라서 BPF Program Type은 BPF Program의 Input Type과 Input Data를 결정한다. 또한 BPF Program Type은 BPF Program이 호출할 수 있는 Kernel Helper Function을 결정한다. [그림 3]은 eBPF Program Type을 나타내고 있다. 앞으로 Kernel에 더욱 많은 Hook이 추가되는 만큼 eBPF Program Type도 추가될 예정이다.
+**BPF Program Type은 BPF Program이 실행될 수 있는 Hook을 결정한다.** 따라서 BPF Program Type은 BPF Program의 Input Type과 Input Data를 결정한다. 또한 BPF Program Type은 BPF Program이 호출할 수 있는 Kernel Helper Function을 결정한다. [그림 3]은 eBPF Program Type을 나타내고 있다. 앞으로 Kernel에 더욱 많은 Hook이 추가되는 만큼 eBPF Program Type도 추가될 예정이다.
 
 ### 2. 참조
 
@@ -55,3 +55,4 @@ bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용
 * [http://man7.org/linux/man-pages/man2/bpf.2.html](http://man7.org/linux/man-pages/man2/bpf.2.html)
 * [https://lwn.net/Articles/701162/](https://lwn.net/Articles/701162/)
 * [https://kccncna19.sched.com/event/Uae7](https://kccncna19.sched.com/event/Uae7)
+* [https://docs.cilium.io/en/v1.6/gettingstarted/host-services/](https://docs.cilium.io/en/v1.6/gettingstarted/host-services/)
