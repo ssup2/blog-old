@@ -92,7 +92,7 @@ ID   Frontend           Backend
 <figcaption class="caption">[Shell 2] Cilium Endpoint</figcaption>
 </figure>
 
-Cilium의 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 2]는 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service와 연결되어 있는 Pod의 IP를 의미한다. BPF는 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우 해당 Packet을 DNAT를 이용하여 Load Balancing한다.
+Cilium의 추가적인 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 2]는 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service와 연결되어 있는 Pod의 IP를 의미한다. BPF는 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우 해당 Packet을 DNAT를 이용하여 Load Balancing한다.
 
 ##### 1.2.1. with VXLAN
 
@@ -104,13 +104,54 @@ Cilium의 기능중 하나는 Service Load Balancing을 지원한다는 점이�
 
 #### 1.4. Filtering
 
-##### 1.4.1. Policy
+##### 1.4.1. Network Policy
+
+{% highlight text %}
+# cilium policy get
+[
+  {
+    "endpointSelector": {
+      "matchLabels": {
+        "any:org": "ssup2",
+        "k8s:io.kubernetes.pod.namespace": "default"
+      }
+    },
+    "ingress": [
+      {
+        "fromEndpoints": [
+          {
+            "matchLabels": {
+              "any:org": "ssup2",
+              "k8s:io.kubernetes.pod.namespace": "default"
+            }
+          }
+        ],
+        "toPorts": [
+          {
+            "ports": [
+              {
+                "port": "80",
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+...  
+]
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 3] Cilium Network Policy</figcaption>
+</figure>
+
+CiliumNetworkPolicy
 
 ##### 1.4.2. Prefilter
 
 ![[그림 5] Cilium Prefilter]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Prefilter.PNG)
 
-Cilium은 XDP (eXpress Data Path)를 이용한 Packet Filteirng 기능도 제공한다. Cilium에서는 Prefilter라고 호칭한다. Kubernets Cluster Network를 구성하는 NIC의 Interface에 XDP BPF를 삽입시켜 동작한다. Generic XDP, Native XDP 2가지 방식 모두 제공한다. prefilter를 통해서 CIDR로 설정한 특정 Network의 Packet만 받도록 설정할 수 있다.
+Cilium은 XDP (eXpress Data Path)를 이용한 Packet Filteirng 기능도 제공한다. Cilium에서는 Prefilter라고 호칭한다. Kubernets Cluster Network를 구성하는 NIC의 Interface에 XDP BPF를 삽입시켜 동작한다. Generic XDP, Native XDP 2가지 방식 모두 제공한다. prefilter를 통해서 CIDR로 설정한 특정 Network의 Packet만 받도록 설정할 수 있다. prefilter 설정은 cilium-agent의 Config를 통해서 진행이 가능하다.
 
 ### 2. 참조
 
