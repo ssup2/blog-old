@@ -81,7 +81,7 @@ Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 tc ac
 
 ##### 1.2.2. with Host L3
 
-![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
+![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_Host.PNG)
 
 #### 1.4. Filtering
 
