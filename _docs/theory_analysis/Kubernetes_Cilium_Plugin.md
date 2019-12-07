@@ -75,6 +75,25 @@ Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 tc ac
 
 #### 1.2. Service Load Balancing
 
+{% highlight text %}
+# cilium service list
+ID   Frontend           Backend
+1    10.96.0.10:53      1 => 192.167.2.194:53
+                        2 => 192.167.2.32:53
+2    10.96.0.10:9153    1 => 192.167.2.194:9153
+                        2 => 192.167.2.32:9153
+3    10.96.0.1:443      1 => 30.0.0.34:6443
+4    10.97.188.211:80   1 => 192.167.1.139:80
+                        2 => 192.167.2.176:80
+5    10.109.68.251:80   1 => 30.0.0.160:80
+                        2 => 30.0.0.79:80  
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] Cilium Endpoint</figcaption>
+</figure>
+
+Cilium의 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 2]는 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service와 연결되어 있는 Pod의 IP를 의미한다. BPF는 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우 해당 Packet을 DNAT를 이용하여 Load Balancing한다.
+
 ##### 1.2.1. with VXLAN
 
 ![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
@@ -86,8 +105,6 @@ Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 tc ac
 #### 1.4. Filtering
 
 ##### 1.4.1. Policy
-
-VXLAN Interface에 붙는 tc action ingress BPF은 cilium-agent가 BPF Map에 저장한 Pod의 IP, MAC 주소 정보를 Packet과 함께 L3 Network Stack에 넘겨, L3 Network Stack에서 Packet이 Pod으로 바로 Routing 되도록 한다. Pod의 veth Interface에 붙는 tc action ingress BPF는 Pod으로 전달되는 Packet을 Filtering한다. L3, L4, L7 Filtering을 지원한다. Cilium에서는 Pod이 특정 Pod으로부터온 Packet만을 받을 수 있도록 설정하거나, Pod이 특정 URL로 오는 요청만 받도록 설정 할 수 있다.
 
 ##### 1.4.2. Prefilter
 
