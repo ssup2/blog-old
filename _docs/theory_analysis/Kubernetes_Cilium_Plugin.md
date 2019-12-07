@@ -69,7 +69,7 @@ Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 tc ac
 
 ![[그림 3] Cilium Host L3 Pod Network]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_Host.PNG)
 
-[그림 3]은 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 VXLAN 기법의 예제와 동일하다. VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 tc action ingress BPF가 존재하지 않는다. Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있다. [그림 3]에서 Host 1의 Routing Table에는 Host 1에 할당된 Pod Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Pod Network인 192.167.3.0/24 관련 Rule은 없다. 마지막으로 Host 사이에는 반드시 L3 Router가 존재한다. L3 Router는 각 Host에 할당된 Pod Network 정보를 바탕으로 Pod으로 전달해야할 Packet을 적절한 Host로 Routing 해야한다.
+[그림 3]은 Cilium과 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 VXLAN 기법의 예제와 동일하다. VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 tc action ingress BPF가 존재하지 않는다. Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있다. [그림 3]에서 Host 1의 Routing Table에는 Host 1에 할당된 Pod Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Pod Network인 192.167.3.0/24 관련 Rule은 없다. 마지막으로 Host 사이에는 반드시 L3 Router가 존재한다. L3 Router는 각 Host에 할당된 Pod Network 정보를 바탕으로 Pod으로 전달해야할 Packet을 적절한 Host로 Routing 해야한다.
 
 특정 Pod에서 같은 Host에 있는 Pod으로 Packet을 전송하는 경우에는 VXLAN을 이용할 경우와 동일하다. 특정 Pod에서 다른 Host에 있는 Pod에 Packet을 전송하는 경우, Packet은 Routing Table에 따라서 외부의 L3 Router에 전달된다. L3 Router는 Packet을 Pod이 존재하는 Host로 전송하고, Packet을 받은 Host는 Routing Table에 따라서 해당 Pod으로 전달한다. [그림 2]의 Pod A/B와 Pod C/D의 경로가 예가 될 수 있다. Pod Network NS에 존재하는 Process가 아닌 Host의 Network NS에 존재하는 Process도 Pod의 IP로 Packet을 전달할 경우에도 VXLAN을 이용할 경우와 동일하다.
 
@@ -89,20 +89,28 @@ ID   Frontend           Backend
                         2 => 30.0.0.79:80  
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] Cilium Endpoint</figcaption>
+<figcaption class="caption">[Shell 2] Cilium Service</figcaption>
 </figure>
 
-Cilium의 추가적인 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 2]는 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service와 연결되어 있는 Pod의 IP를 의미한다. BPF는 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우 해당 Packet을 DNAT를 이용하여 Load Balancing한다.
+Cilium에서 제공하는 추가적인 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 2]는 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service와 연결되어 있는 Pod의 IP를 의미한다. BPF는 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우 해당 Packet을 **DNAT**를 이용하여 Load Balancing한다. 또한 BPF는 Service IP로 전송한 Packet의 응답 Packet이 올 경우 **SNAT**를 수행하여 Reverse NAT를 수행한다. SNAT는 DNAT를 수행하면서 BPF Map에 저장하는 DNAT 정보와 Linux Kernel의 Conntrack을 이용하여 수행된다.
 
 ##### 1.2.1. with VXLAN
 
 ![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
 
+[그림 3]은 VXLAN을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Pod에서 전송한 Packet은 Pod의 veth Interface에 붙는 tc action ingress BPF에서 DNAT되고, 이에 대한 응답은 응답을 준 Pod의 위치에 따라서 veth Interface의 tc action ingress BPF 또는 cilium_vxlan의 tc action ingress BPF에서 SNAT 된다.
+
+cilium 16.xx 이전 Version의 경우에 Host Process의 경우 BPF를 이용하지 않고, kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT/SNAT를 수행한다. cilium 16.xx 이후 Version에서는 cgroup BPF를 이용하여 DNAT/SNAT를 수행할 수 있는 기능이 추가 되었다. 물론 cgroup BPF를 지원하는 Kernel Version에서만 이용할 수 있다.
+
 ##### 1.2.2. with Host L3
 
 ![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_Host.PNG)
 
+[그림 4]는 Host L3 Network을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Service와 연결된 Pod이 외부에 있을경우 SNAT가 cilium_host의 tc action engress BPF에서 수행된다는점을 제외하고는 VXLAN을 이용할때와 크게 다르지 않다.
+
 #### 1.4. Filtering
+
+Cilium에서 제공하는 추가적인 기능중 하나는 Packet Filtering이다. Cilium의 Filtering 기법은 Cilium에서 제공하는 CiliumNetworkPolicy CRD를 통해서 정의하는 Network Policy 기법과 XDP를 이용하는 Prefileter 기법 두가지가 존재한다.
 
 ##### 1.4.1. Network Policy
 
@@ -132,12 +140,6 @@ Cilium의 추가적인 기능중 하나는 Service Load Balancing을 지원한�
               {
                 "port": "80",
                 "protocol": "TCP"
-              }
-            ]
-          }
-        ]
-      }
-    ],
 ...  
 ]
 {% endhighlight %}
@@ -145,7 +147,7 @@ Cilium의 추가적인 기능중 하나는 Service Load Balancing을 지원한�
 <figcaption class="caption">[Shell 3] Cilium Network Policy</figcaption>
 </figure>
 
-CiliumNetworkPolicy
+Cilium이 설치되면 **CiliumNetworkPolicy** CRD를 이용하여 Network Policy를 정의할 수 있다. Network Policy을 통해서 L3, L4, L7 Level Packet Filtering Rule을 정의할 수 있다. [Shell 3]은 정의된 Network Policy를 'cilium policy get' 명령어를 통해서 확인하는 Shell의 모습을 나타내고 있다. 정의된 Network Policy는 [그림 1] 또는 [그림 2]에 나타난 모든 BPF에서 Packet을 전송할때 적용된다.
 
 ##### 1.4.2. Prefilter
 
