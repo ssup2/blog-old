@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Linux에서 Connection을 Tracking하는 모듈인 conntrack을 분석한다.
+Linux에서 Connection을 Tracking하는 Module인 conntrack을 분석한다.
 
 ### 1. Linux conntrack Module
 
@@ -25,6 +25,10 @@ Linux conntrack Module은 Connection State를 다음과 같이 정의한다.
 #### 1.2. Connection Tracking Helper
 
 Connection Tracking Helper는 **Stateful Application Layer Protocol**을 파악하여 새로운 Connection을 예상하고, 예상된 Connection이 생성될 경우 해당 Connection을 RELATED Connection으로 분류하는 역활을 수행한다. 지원하는 Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. HTTP와 같은 Stateless Application Layer Protocol은 지원하지 않는다.
+
+#### 1.3. Max Connection Count
+
+conntrack Module은 Connection 정보를 Kernel Memory에 저장하기 때문에, 저장할 수 있는 Connection의 개수는 한정되어 있다. '/proc/sys/net/nf_conntrack_max' 또는 '/proc/sys/net/ipv4/netfilter/ip_conntrack_max' 값을 설정하여 conntrack Module이 저장할 수 있는 최대 Connection의 개수를 설정할 수 있다. 일반적으로 기본값은 '262144'이다.
 
 ### 2. conntrack Tool
 
@@ -56,4 +60,4 @@ tcp      6 28 TIME_WAIT src=10.0.0.19 dst=10.0.0.19 sport=34306 dport=18080 src=
 * [https://en.wikipedia.org/wiki/Netfilter](https://en.wikipedia.org/wiki/Netfilter)
 * [http://people.netfilter.org/pablo/docs/login.pdf](http://people.netfilter.org/pablo/docs/login.pdf)
 * [https://www.projectcalico.org/when-linux-conntrack-is-no-longer-your-friend/](https://www.projectcalico.org/when-linux-conntrack-is-no-longer-your-friend/)
-* [https://tech.kakao.com/2016/04/21/closewait-timewait/]
+* [https://tech.kakao.com/2016/04/21/closewait-timewait/](https://tech.kakao.com/2016/04/21/closewait-timewait/)
