@@ -11,7 +11,7 @@ Linux에서 Connection을 Tracking하는 Module인 conntrack을 분석한다.
 
 ### 1. Linux conntrack Module
 
-conntrack은 Linux Netfilter Framework에서 Connection을 관리하는 **Stateful Module**이다. 수신한 Packet의 Header 정보만을 이용하여 Packet을 Filtering하는 기법은 DDos 같은 Traffic 기반 공격을 방어할 수 없다. conntrack Module은 Connection 정보를 저장하여 다양한 Filtering 기법을 가능하도록 만든다. iptables에서 NAT Rule을 설정하면 이와 반대대는 Reverse NAT는 iptables에 Reverse NAT Rule이 없어도 자동으로 수행되는데, iptables는 conntrack Module의 Connection 정보를 바탕으로 암묵적으로 Reverse NAT를 수행하기 때문이다. 
+conntrack은 Linux Netfilter Framework에서 Connection을 관리하는 **Stateful Module**이다. 수신한 Packet의 Header 정보만을 이용하여 Packet을 Filtering하는 기법은 DDoS 같은 Traffic 기반 공격을 방어할 수 없다. conntrack Module은 Connection 정보를 저장하여 다양한 Filtering 기법을 가능하도록 만든다. iptables에서 NAT Rule을 설정하면 이와 반대대는 Reverse NAT는 iptables에 Reverse NAT Rule이 없어도 자동으로 수행되는데, iptables는 conntrack Module의 Connection 정보를 바탕으로 암묵적으로 Reverse NAT를 수행하기 때문이다. 
 
 #### 1.1. Connection State
 
@@ -20,7 +20,7 @@ Linux conntrack Module은 Connection State를 다음과 같이 정의한다.
 * NEW : 새로운 Connection을 생성하려는 상태를 의미한다.
 * ESTABLISHED : 현재 존재하는 Connection을 의미한다.
 * RELATED : Connection Tracking Helper에 의해서 **예상된** 새로운 Connection을 생성하려는 상태를 의미한다.
-* INVALID : 예상된 Connection 동작을 수행하지 않는 상태를 의미한다.
+* INVALID : 정의된 Connection 동작을 수행하지 않는 상태를 의미한다.
 
 #### 1.2. Connection Tracking Helper
 
