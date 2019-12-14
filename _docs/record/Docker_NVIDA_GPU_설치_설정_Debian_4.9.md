@@ -41,7 +41,7 @@ Server: Docker Engine - Community
 NVIDIA Driver를 설치한다.
 
 ~~~
-# apt-get install nvidia-driver
+# apt-get install nvidia-driver nvidia-smi
 ~~~
 
 ### 4. NVIDIA Container Toolkit 설치
