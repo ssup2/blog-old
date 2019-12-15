@@ -1,5 +1,5 @@
 ---
-title: Docker NVIDIA GPU 설치, 실행 / Debian 9 환경
+title: Docker NVIDIA CUDA GPU 설치, 실행 / Debian 9 환경
 category: Record
 date: 2019-12-15T12:00:00Z
 lastmod: 2019-12-15T12:00:00Z
