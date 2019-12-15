@@ -13,16 +13,16 @@ adsense: true
 * OS : Debian 9, 4.9.0 Kernel, root User
 * Software
   * Docker 19.03
-  * NVIDIA Drvier 390.116
+  * NVIDIA Drvier 440.44
 
 ### 2. Docker 설치
 
 Docker를 설치한다. 19.03 Version 이상의 Docker를 설치해야 한다.
 
 ~~~
-# sudo apt-get update
-# sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
-# curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+# apt-get update
+# apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+# curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 # apt-key fingerprint 0EBFCD88
 # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 # apt-get update
@@ -39,10 +39,17 @@ Server: Docker Engine - Community
 
 ### 3. NVIDIA Driver 설치
 
-NVIDIA Driver를 설치한다.
+NVIDIA Driver 설치를 위한 Linux Header Package를 설치한다.
 
 ~~~
-# apt-get install nvidia-driver nvidia-smi
+# apt-get install linux-headers-$(uname -r)
+~~~
+
+https://www.nvidia.com/en-us/drivers/unix/에서 Stable NVIDIA Driver를 Download 한다. Download한 파일을 이용하여 NVIDIA Driver를 설치한다.
+
+~~~
+# chmod +x NVIDIA-Linux-x86_64-440.44.run 
+# ./NVIDIA-Linux-x86_64-440.44.run
 ~~~
 
 ### 4. NVIDIA Container Toolkit 설치
@@ -51,15 +58,15 @@ NVIDIA Container Toolkit Package를 설치하여 nvidia-container-runtime-hook, 
 
 ~~~
 # distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-# curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-# curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+# curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+# curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list
 # apt-get update && apt-get install -y nvidia-container-toolkit
 ~~~
 
 Docker를 재시작하여 Docker에서 Nvida Container Toolkit을 이용하도록 설정한다.
 
 ~~~
-# sudo systemctl restart docker
+# systemctl restart docker
 ~~~
 
 ### 5. 동작 확인
