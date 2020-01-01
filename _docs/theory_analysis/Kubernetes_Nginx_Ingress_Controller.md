@@ -55,7 +55,7 @@ Nginx Ingress Controller의 Store는 Kubernetes Client인 client-go를 이용하
 
 Nginx Config 중에서 Backend 부분이 변경되었다면 변경된 내용은 nginx.conf 파일과 Nginx의 /configuration/backends URL을 통해서 Nginx의 Shared Memory에 저장된다. Nginx Config 중에서 Ceritificate가 변경되었다면 변경 내용은 /configuration/servers URL을 통해서 Nginx의 Shared Memory에 저장된다. Kubernetes Cluster의 Ingress Object의 변경으로 인해서 Nginx의 Backend가 변경되는 경우, nginx.conf 파일의 내용도 변경되어야 하기 때문에 Nginx는 nginx.conf Reload 해야한다. 하지만 단순히 Ingress Object에 Mapping 되어 있는 Service의 Pod의 개수가 변경되는 경우에는 nginx.conf의 변경이 필요없고 Shared Memory에 저장되어 있는 Backend의 Endpoint만 변경하면 되기 때문에, Nginx는 nginx.conf Reload를 수행하지 않는다.
 
-이와 유사하게 Ingress Object의 변경으로 인해서 Nginx의 Ceritificate만 변경되야하는 경우에도 Shared Memory에 저장되어 있는 Certificate만 변경하면 되기 때문에, Nginx는 nginx.conf Reload를 수행하지 않는다. 이처럼 Nginx는 Lua Module을 이용하여 Nginx의 nginx.conf Reload를 최소화 하도록 구현되어 있다. Nginx Ingress Controller의 **Configuration changes detected, backend reload required.** Log는 Ingress Sync가 기존에 적용된 Nginx Config와 새롭게 구성한 Nginx Config를 비교한 다음 Reload가 필요하다고 판단한걸 의미하고, **Backend successfully reloaded.** Log는 Nginx Reload 성공을 나타낸다.
+이와 유사하게 Ingress Object의 변경으로 인해서 Nginx의 Ceritificate만 변경되야하는 경우에도 Shared Memory에 저장되어 있는 Certificate만 변경하면 되기 때문에, Nginx는 nginx.conf Reload를 수행하지 않는다. 이처럼 Nginx는 Lua Module을 이용하여 Nginx의 nginx.conf Reload를 최소화 하도록 구현되어 있다. Nginx Ingress Controller의 `Configuration changes detected, backend reload required.` Log는 Ingress Sync가 기존에 적용된 Nginx Config와 새롭게 구성한 Nginx Config를 비교한 다음 Reload가 필요하다고 판단한걸 의미하고, `Backend successfully reloaded.` Log는 Nginx Reload 성공을 나타낸다.
 
 , **Backend successfully reloaded.**
 
