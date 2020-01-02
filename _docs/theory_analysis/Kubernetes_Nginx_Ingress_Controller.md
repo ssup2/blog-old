@@ -57,8 +57,6 @@ Nginx Config 중에서 Backend 부분이 변경되었다면 변경된 내용은 
 
 이와 유사하게 Ingress Object의 변경으로 인해서 Nginx의 Ceritificate만 변경되야하는 경우에도 Shared Memory에 저장되어 있는 Certificate만 변경하면 되기 때문에, Nginx는 nginx.conf Reload를 수행하지 않는다. 이처럼 Nginx는 Lua Module을 이용하여 Nginx의 nginx.conf Reload를 최소화 하도록 구현되어 있다. Nginx Ingress Controller의 `Configuration changes detected, backend reload required.` Log는 Ingress Sync가 기존에 적용된 Nginx Config와 새롭게 구성한 Nginx Config를 비교한 다음 Reload가 필요하다고 판단한걸 의미하고, `Backend successfully reloaded.` Log는 Nginx Reload 성공을 나타낸다.
 
-, **Backend successfully reloaded.**
-
 #### 1.2. Metric Collector
 
 Nginx Ingress Controller의 Metric Collector는 Metric 정보를 수집하여 Prometheus에게 전송하는 역활을 수행한다. [그림 1]에는 Metric Collector로 전송되는 Metric의 경로도 포함하고 있다. Metric Collector는 3가지 경로를 통해서 Metric 정보를 수집한다. 첫번째로 Nginx 내부의 HTTP Stub Status Module이 제공하는 Metric 정보를 Nginx의 /nginx_status URL을 통해서 얻어온다. 두번째로 Nginx의 Monitor Lua Module을 통해서 Metric 정보를 얻어온다. Client가 Nginx를 통해서 App에게 Packet을 전송할때 마다 관련 Metric 정보는 Monitor Lua Module로 전송된다. Monitor Lua Module은 받은 Metirc 정보를 모아 한꺼번에 주기적으로 Domain Socket을 이용하여 Metric Collector로 전송한다.
