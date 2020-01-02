@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Kubernetes에서 Nginx Ingress를 제어하는 Nginx Ingress Controller를 분석한다.
+Kubernetes에서 Nginx Ingress를 제어하는 Nginx Ingress Controller를 분석한다. 분석한 Nginx Ingress Controller의 Version은 0.26.1이다.
 
 ### 1. Kubernetes Nginx Ingress Controller
 
