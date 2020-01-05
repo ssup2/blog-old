@@ -17,6 +17,8 @@ Prometheus의 Architecture를 분석한다.
 
 Exporter가 수집하고 Aggregate한 Metric정보는 Exporter에 의해서 먼져 Server에게 Push하는 방식이 아닌, Server에서 먼져 Exporter로부터 **Pull**하는 방식을 이용한다. 즉 모든 Metric 정보는 Exporter가 아닌 Server가 중심이 되어 수집된다. 이러한 Server 중심의 Metric 수집 방식은 Server 스스로 Metric 수집에 의한 부하를 조절할 수 있는 큰 장점을 갖게 된다. Exporter의 개수가 많아져 수집할 Metric의 양이 증가할 경우, Server가 각 Exporter의 Metric을 Pull하는 주기를 능동적으로 늘릴 수 있기 때문이다. 하지만 Pull 방식은 Event를 기록하기에는 적합한 방식은 아니다. Event가 발생하여 Exporter에 저장되어도 Server에 전달되는 시점은 Event와 관계없는 Server의 Metric 수집 주기에 의해서 결정되기 때문이다.
 
+Pushgateway는 의미 그대로 Server가 수행하지 못하는 Push 방식으로 Metric 정보를 수집하여 Server에게 전달하는 역활을 수행한다. Batch Job과 같이 Short-lived Job의 Metric 정보의 경우 별도의 Exporter를 짧게 구동하여 해당 Metric을 수집하는 방법 보다는 Pushgateway를 통해서 수집하는 방법이 더욱 효율적이다. Exporter 또는 Pushgateway로 부터 Metric Pull 수행은 Server의 Scape Manager에 의해서 진행된다.
+
 ### 2. 참조
 
 * [https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)
