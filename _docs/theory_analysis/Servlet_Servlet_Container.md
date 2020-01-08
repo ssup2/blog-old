@@ -21,7 +21,7 @@ Servlet은 Java EE의 표준중 하나로 **javax.servlet Package**를 기반으
 
 ![[그림 1] Servlet Container]({{site.baseurl}}/images/theory_analysis/Servlet_Servlet_Container/Servlet_Servlet_Container.PNG)
 
-Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역활을 수행한다. Web Container라고도 불린다. [그림 1]은 3 Tier Architecture로 서버를 구성할때의 Servlet Container의 위치를 나타내고 있다. HTTP 요청을 다음과 같은 과정을 통해 처리된다.
+Servlet Container는 **Servlet Instance를 생성하고 관리**하는 역할을 수행한다. Web Container라고도 불린다. [그림 1]은 3 Tier Architecture로 서버를 구성할때의 Servlet Container의 위치를 나타내고 있다. HTTP 요청을 다음과 같은 과정을 통해 처리된다.
 
 * Web Brower에서 Web Server에게 HTTP 요청을 보내면 Web Server는 받은 HTTP 요청을 그대로 WAS Server의 Web Server에게 전달한다.
 * WAS Server의 Web Server는 다시 HTTP 요청을 Servlet Container에게 전달한다.

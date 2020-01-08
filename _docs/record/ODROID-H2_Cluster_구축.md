@@ -39,7 +39,7 @@ Ceph, Openstack 설치를 위한 ODROID-H2 Cluster를 구축한다.
 
 ![[그림 3] OpenStack 구성 on ODROID-H2 Cluster]({{site.baseurl}}/images/record/ODROID-H2_Cluster_Build/OpenStack.PNG)
 
-[그림 3]은 OpenStack 구성시 필요한 구성 요소를 나타내고 있다. Node01은 OpenStack의 Controller Node와 Network Node로 이용하고, Node02, Node03은 OpenStack의 Compute Node로 이용한다. Node01은 OpenStack의 Network Node 역활을 수행하기 때문에 OpenStack의 External Network를 위한 추가 Network Interface (enx88366cf9f9ed)를 갖고 있다. 해당 Network Interface에는 IP를 할당하지 않는다. External Network (Provider Network)로 NAT Network를 이용한다. Guest (Tenant Network), Management Network는 Private Network를 이용한다.
+[그림 3]은 OpenStack 구성시 필요한 구성 요소를 나타내고 있다. Node01은 OpenStack의 Controller Node와 Network Node로 이용하고, Node02, Node03은 OpenStack의 Compute Node로 이용한다. Node01은 OpenStack의 Network Node 역할을 수행하기 때문에 OpenStack의 External Network를 위한 추가 Network Interface (enx88366cf9f9ed)를 갖고 있다. 해당 Network Interface에는 IP를 할당하지 않는다. External Network (Provider Network)로 NAT Network를 이용한다. Guest (Tenant Network), Management Network는 Private Network를 이용한다.
 
 ### 2. 참조
 

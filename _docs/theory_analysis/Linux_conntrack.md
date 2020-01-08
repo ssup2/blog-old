@@ -24,7 +24,7 @@ Linux conntrack Module은 Connection State를 다음과 같이 정의한다.
 
 #### 1.2. Connection Tracking Helper
 
-Connection Tracking Helper는 **Stateful Application Layer Protocol**을 파악하여 새로운 Connection을 예상하고, 예상된 Connection이 생성될 경우 해당 Connection을 RELATED Connection으로 분류하는 역활을 수행한다. 지원하는 Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. HTTP와 같은 Stateless Application Layer Protocol은 지원하지 않는다.
+Connection Tracking Helper는 **Stateful Application Layer Protocol**을 파악하여 새로운 Connection을 예상하고, 예상된 Connection이 생성될 경우 해당 Connection을 RELATED Connection으로 분류하는 역할을 수행한다. 지원하는 Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. HTTP와 같은 Stateless Application Layer Protocol은 지원하지 않는다.
 
 #### 1.3. Max Connection Count
 

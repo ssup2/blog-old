@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Linux Log 관련 구성 요소와 역활을 분석한다.
+Linux Log 관련 구성 요소와 역할을 분석한다.
 
 ### 1. Linux Log
 

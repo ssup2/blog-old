@@ -13,7 +13,7 @@ Linux의 Security Framework인 LSM(Linux Security Module)을 분석한다.
 
 ![[그림 1] Linux LSM Framework]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Framework.PNG){: width="300px"}
 
-LSM은 Linux안에서 다양한 Security Module들의 구동 환경을 제공해주는 Security Framework이다. 현재 Linux의 Capability, SELinux, AppArmor, smack들의 기법들은 모두 LSM을 이용하고 있다. Linux Document에는 LSM을 Framework라고 명시하지만, 실제로 LSM은 Linux Kernel Code 곳곳에 **Hook**을 넣어 Linux Kernel이 Security Module의 함수를 호출할 수 있게 만드는 **Interface** 역활만을 수행한다. 따라서 LSM은 Security 정책을 전적으로 Security Module에 의존하게 된다.
+LSM은 Linux안에서 다양한 Security Module들의 구동 환경을 제공해주는 Security Framework이다. 현재 Linux의 Capability, SELinux, AppArmor, smack들의 기법들은 모두 LSM을 이용하고 있다. Linux Document에는 LSM을 Framework라고 명시하지만, 실제로 LSM은 Linux Kernel Code 곳곳에 **Hook**을 넣어 Linux Kernel이 Security Module의 함수를 호출할 수 있게 만드는 **Interface** 역할만을 수행한다. 따라서 LSM은 Security 정책을 전적으로 Security Module에 의존하게 된다.
 
 ![[그림 2] Linux LSM 동작 과정]({{site.baseurl}}/images/theory_analysis/Linux_LSM/Linux_LSM_Query.PNG){: width="500px"}
 

@@ -42,11 +42,11 @@ AUFS는 COW(Copy on Write)방식을 이용한다. /mnt 폴더에서 파일을 �
 
 ![[그림 3] AUFS에서 File, Directory 제거시 동작 과정]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove.PNG){: width="600px"}
 
-파일이나 폴더를 지우는 경우 RW Branch 폴더에 .wh.<file_or_dir_name> Writeout 파일을 생성하여 AUFS Mount가 된 폴더 내에서는 파일이 안보이지만, 원본은 유지된다. [그림 3]에서는 file_01 파일을 삭제할 경우를 나타내고 있다. 또한 RO Branch 폴더안에 있는 Whiteout 파일의 역활도 나타내고 있다. Mount시 RO Branch에 +wh 옵션을 주었기 때문에 RO Branch의 Whiteout 파일이 하위 Branch의 파일을 숨긴다.
+파일이나 폴더를 지우는 경우 RW Branch 폴더에 .wh.<file_or_dir_name> Writeout 파일을 생성하여 AUFS Mount가 된 폴더 내에서는 파일이 안보이지만, 원본은 유지된다. [그림 3]에서는 file_01 파일을 삭제할 경우를 나타내고 있다. 또한 RO Branch 폴더안에 있는 Whiteout 파일의 역할도 나타내고 있다. Mount시 RO Branch에 +wh 옵션을 주었기 때문에 RO Branch의 Whiteout 파일이 하위 Branch의 파일을 숨긴다.
 
 ![[그림 4] AUFS에서 Directory 제거 및 생성시 동작 과정]({{site.baseurl}}/images/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/AUFS_Remove_opq.PNG){: width="600px"}
 
-AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있다. Branch의 특정 폴더내에 .wh..wh..opq 파일이 있으면 하위 Branch들의 해당 폴더내의 모든 파일들은 AUFS Mount가 된 폴더내에서 볼 수 없다. [그림 4]는 .wh..wh..opq 파일의 역활을 나타내고 있다. /layer_rw Branch의 /dir 폴더에 .wh..wh..opq 파일이 있기 때문에 하위 /layer_02 Branch의 /dir폴더 안에 있는 모든 파일들은 /mnt 폴더에서 보이지 않는다. /mnt 폴더에서 dir 폴더 자체를 삭제했다가 다시 dir 폴더를 생성하는 경우, AUFS는 [그림 4]처럼 /layer_rw Branch의 /dir 폴더안에 .wh..wh..opq 파일 생성을 통해 처리한다.
+AUFS의 Whiteout 파일중 .wh..wh..opq라는 특수한 Whiteout 파일이 있다. Branch의 특정 폴더내에 .wh..wh..opq 파일이 있으면 하위 Branch들의 해당 폴더내의 모든 파일들은 AUFS Mount가 된 폴더내에서 볼 수 없다. [그림 4]는 .wh..wh..opq 파일의 역할을 나타내고 있다. /layer_rw Branch의 /dir 폴더에 .wh..wh..opq 파일이 있기 때문에 하위 /layer_02 Branch의 /dir폴더 안에 있는 모든 파일들은 /mnt 폴더에서 보이지 않는다. /mnt 폴더에서 dir 폴더 자체를 삭제했다가 다시 dir 폴더를 생성하는 경우, AUFS는 [그림 4]처럼 /layer_rw Branch의 /dir 폴더안에 .wh..wh..opq 파일 생성을 통해 처리한다.
 
 ### 3. Docker Image Layer
 

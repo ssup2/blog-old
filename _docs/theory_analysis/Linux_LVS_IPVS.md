@@ -47,7 +47,7 @@ ip_vs_local_reply()는 LOCAL_OUT Hook에서 호출되는 Hook Function이다. ip
 
 ##### 2.1.5. ip_vs_forward_icmp()
 
-ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. Dest가 0.0.0.0/0(모든 IP)인 ICMP Packet은 LOCAL_IN Table이 아니라 FORWARD Table로 전달되는데, 이러한 ICMP Packet을 받아서 Real Server에게 전달하는 역활을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
+ip_vs_forward_icmp()는 FORWARD Hook에서 호출되는 Hook Function이다. Dest가 0.0.0.0/0(모든 IP)인 ICMP Packet은 LOCAL_IN Table이 아니라 FORWARD Table로 전달되는데, 이러한 ICMP Packet을 받아서 Real Server에게 전달하는 역할을 수행한다. ip_vs_forward_icmp()은 Forward Filter Table과 ip_vs_reply() 사이에서 호출되기 때문에 Forward Filter Table에서 Filtering된 ICMP Packet은 ip_vs_forward_icmp()에서 처리하지 못한다. ip_vs_forward_icmp()의 실제 구현은 in_vs_in_icmp()을 호출하는 형태로 되어있다.
 
 #### 2.2 IPVS Dummpy Interface
 

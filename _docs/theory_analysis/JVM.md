@@ -17,7 +17,7 @@ Java는 **Write once, Run anywhere**라는 철학 위에서 만들어진 언어�
 
 #### 1.1. Class Loader
 
-Class Loader는 Byte Code로 Compile된 Class File을 Memory에 올리는 역활을 수행한다. 기본 Class Loader에는 Bootstrap, Extension, Systme Class 3가지 Class Loader가 존재한다.
+Class Loader는 Byte Code로 Compile된 Class File을 Memory에 올리는 역할을 수행한다. 기본 Class Loader에는 Bootstrap, Extension, Systme Class 3가지 Class Loader가 존재한다.
 
 * Bootstrap Class Loader : rt.jar (runtime)라는 Java Core Library를 올린다. ex) java.lang.System
 * Extension Class Loader : $JAVA_HOME/lib/ext아래의 Class들을 올린다.
@@ -58,7 +58,7 @@ Runtime Memory를 이용하여 실제 Bytecode를 수행한다. Execution Engine
 
 #### 1.4. Native Method Interface (JNI)
 
-Execution Engine이 Native Method Library안의 Native Method를 실행 할 수 있도록 도와주는 Interface 역활을 수행한다.
+Execution Engine이 Native Method Library안의 Native Method를 실행 할 수 있도록 도와주는 Interface 역할을 수행한다.
 
 ### 2. 참조
 * [https://dzone.com/articles/jvm-architecture-explained](https://dzone.com/articles/jvm-architecture-explained)

@@ -13,7 +13,7 @@ Event Driven Architecture를 분석하고 Linux에서 동작하는 Event Driven 
 
 ![[그림 1] Event Driven]({{site.baseurl}}/images/theory_analysis/Event_Driven_Architecture_on_Linux/Event_Driven_Architecture.PNG){: width="500px"}
 
-Event Driven Architecture는 **Event**와 해당 Event를 처리하는 **Event Handler**로 구성된다. 또한 **Main Loop**라는 Single Thread만 이용한다는 점이 특징이다. Main Loop Thread는 평소에 Blocking되어 있다가 Event가 발생하면 해당 Event가 어떤 Event인지 파악한 후 해당하는 Event Handler를 실행한다. 그 후 다시 Blocking 상태가 되어 다음 Event가 올 때까지 대기한다. 이렇게 평소에 Blocking 되어 있다가 발생한 Event를 알려주는 역활을 하는 함수를 **I/O Multiplexer**라고 한다. Main Loop Thread가 Event 발생순으로 매우 빠르게 Event Handler들을 실행하기 때문에 Concurrent 프로그램처럼 동작하게 된다.
+Event Driven Architecture는 **Event**와 해당 Event를 처리하는 **Event Handler**로 구성된다. 또한 **Main Loop**라는 Single Thread만 이용한다는 점이 특징이다. Main Loop Thread는 평소에 Blocking되어 있다가 Event가 발생하면 해당 Event가 어떤 Event인지 파악한 후 해당하는 Event Handler를 실행한다. 그 후 다시 Blocking 상태가 되어 다음 Event가 올 때까지 대기한다. 이렇게 평소에 Blocking 되어 있다가 발생한 Event를 알려주는 역할을 하는 함수를 **I/O Multiplexer**라고 한다. Main Loop Thread가 Event 발생순으로 매우 빠르게 Event Handler들을 실행하기 때문에 Concurrent 프로그램처럼 동작하게 된다.
 
 {% highlight cpp %}
 int event_handler1(event *ev){
@@ -70,7 +70,7 @@ Linux에서는 **select(), poll(), epoll()** 3개의 I/O Multiplexer를 제공�
 
 Linux에서 지원하는 I/O Multiplexer는 모두 fd를 기반으로 동작한다. 이러한 특징 때문에 프로그램으로 전달되는 Event들을 fd로 받거나 또는 fd로 전달 할 수 있어야 한다. Linux Kernel에서는 이러한 Event / fd 전환을 도와주는 timerfd(), signalfd(), eventfd() 함수들이 존재한다.
 
-timerfd() 함수는 일정한 주기로 fd를 읽기 가능 상태로 바꾸어 준다. 따라서 timerfd()를 이용하면 일정한 주기로 Event Handler를 실행시킬 수 있다. signalfd()는 Linux Kernel로 부터 오는 Signal을 fd의 변화로 전환해주는 역활을 한다. signalfd()를 통해서 Signal 처리를 Event handler에서 수행 할 수 있다.
+timerfd() 함수는 일정한 주기로 fd를 읽기 가능 상태로 바꾸어 준다. 따라서 timerfd()를 이용하면 일정한 주기로 Event Handler를 실행시킬 수 있다. signalfd()는 Linux Kernel로 부터 오는 Signal을 fd의 변화로 전환해주는 역할을 한다. signalfd()를 통해서 Signal 처리를 Event handler에서 수행 할 수 있다.
 
 eventfd()는 fd를 통해서 Event를 주고 받을 수 있도록 도와준다. eventfd()는 Object를 하나 생성할때 마다 오직 **8Byte Counter 변수 하나**를 Kernel 영역에 할당한다. eventfd()에 Write를 수행하면 Counter 값에 Write 값을 더한다. Read를 수행하면 eventfd()의 Option에 따라서 Counter 값을 0으로 만들거나, Counter값을 1 줄인다.
 

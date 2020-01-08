@@ -11,7 +11,7 @@ adsense: true
 
 ### 1. systemd
 
-systemd는 Linux Kernel과의 협력을 통해 OS를 전반적으로 관리하는 System 및 Service Manager이다. 처음에는 기존에 Init Process로 많이 이용되던 SysVinit의 빈약한 Service(Daemon) 관리 기능을 대체하기 위해서 개발되었다. 시간이 지나면서 systemd에는 Service 관리 기능뿐만이 아니라 Log, User Session, Network, Device, Mount등의 System Resource를 관리하는 기능이 추가되었고, 현재는 전반적인 System을 관리하는 역활을 수행하고 있다.
+systemd는 Linux Kernel과의 협력을 통해 OS를 전반적으로 관리하는 System 및 Service Manager이다. 처음에는 기존에 Init Process로 많이 이용되던 SysVinit의 빈약한 Service(Daemon) 관리 기능을 대체하기 위해서 개발되었다. 시간이 지나면서 systemd에는 Service 관리 기능뿐만이 아니라 Log, User Session, Network, Device, Mount등의 System Resource를 관리하는 기능이 추가되었고, 현재는 전반적인 System을 관리하는 역할을 수행하고 있다.
 
 SysVinit은 System 관리자가 작성한 Service Script를 실행하고, Service Process를 관리하는 정도의 제한된 Service 기능만을 제공하였다. systemd는 Service Config 파일을 통해서 Service를 세밀하게 제어할 수 있고, Service Log 관리기능도 제공한다. 또한 Process 사이의 Message BUS인 D-BUS 제공을 통해 Service 사이의 통신도 쉽게 구현 할 수 있는 환경을 제공한다.
 

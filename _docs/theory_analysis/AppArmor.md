@@ -75,7 +75,7 @@ apparmor module is loaded.
 <figcaption class="caption">[Shell 1] Apparmor 상태 확인</figcaption>
 </figure>
 
-[Shell 1]은 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역활을 수행한다.
+[Shell 1]은 aa-status 명령어을 이용하여 AppArmor의 상태를 조회한 내용이다. AppArmor가 이용할 수 있는 Profile과 Profile이 적용된 Process를 확인 할 수 있다. AppArmor의 정보는 /sys/kernel/security/apparmor 폴더안에 위치하고 있는데, aa-status 명령어는 /sys/kernel/security/apparmor 폴더안의 내용을 정리해서 보여주는 역할을 수행한다.
 
 #### 1.1. AppArmor Profile
 

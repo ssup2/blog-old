@@ -50,7 +50,7 @@ struct task_struct{
 
 Kernel이 Audit Log를 작성할때는 **Audit Context**를 이용한다. Audit Context는 Linux Kernel Code에 audit_context Sturcture로 존재하고 있으며, System Call 처리 분석 및 Audit Log 작성에 필요한 System Call Parameter, System Call Return Code, System Call Entry Time, Thread ID, Thread Working Directory등의 다양한 정보를 저장한다. 각 Thread마다 Audit Context가 유지 되야하기 때문에 각 Thread의 정보를 저장하는 task_struct Structure가 audit_context의 Pointer를 갖는다. 각각의 Audit Context는 Kernel에 의해서 System Call 처리전 System Call 및 Thread 정보로 초기화 되고, System Call이 끝나면 정리된다.
 
-kauditd는 Kernel Process로 Queue에 저장된 Audit Log들을 모아서 auditd에게 Audit Event로 전달하는 역활을 수행한다. 또한 auditctl을 통해 Audit Rule 관련 명령을 전달 받아 Audit을 설정한다. kauditd는 netlink(NETLINK_AUDIT Option)를 이용하여 auditd와 auditctl과 통신한다. kauditd는 auditd와의 netlink Connection을 직접 관리하며 오직 하나의 auditd와 Connection을 맺는다. 즉 여러개의 auditd가 동작하여도 하나의 auditd에게만 Audit Event를 전달한다.
+kauditd는 Kernel Process로 Queue에 저장된 Audit Log들을 모아서 auditd에게 Audit Event로 전달하는 역할을 수행한다. 또한 auditctl을 통해 Audit Rule 관련 명령을 전달 받아 Audit을 설정한다. kauditd는 netlink(NETLINK_AUDIT Option)를 이용하여 auditd와 auditctl과 통신한다. kauditd는 auditd와의 netlink Connection을 직접 관리하며 오직 하나의 auditd와 Connection을 맺는다. 즉 여러개의 auditd가 동작하여도 하나의 auditd에게만 Audit Event를 전달한다.
 
 #### 1.2. User Level   
 

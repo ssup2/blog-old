@@ -25,8 +25,8 @@ adsense: true
 ### 2. 설정 Plugin 목록
 
 이용하는 VIM Plugin의 목록은 아래와 같다.
-* vundle : Vim Plugin Manager 역활을 수행한다. .vimrc에 설치할 Vim Plugin을 넣어두면 vundle을 통해서 손쉽게 Vim Plugin을 설치할 수 있다.
-* nerdtree : 파일 탐색기 역활을 수행한다.
+* vundle : Vim Plugin Manager 역할을 수행한다. .vimrc에 설치할 Vim Plugin을 넣어두면 vundle을 통해서 손쉽게 Vim Plugin을 설치할 수 있다.
+* nerdtree : 파일 탐색기 역할을 수행한다.
 * tagbar : Code의 Tag 목록을 보여준다.
 * YouCompleteMe : Code 자동완성 기능 (Code Autocomplete)을 수행한다.
 * vim-gutentags : Ctag 파일을 자동으로 관리한다.

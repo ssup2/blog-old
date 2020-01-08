@@ -21,7 +21,7 @@ OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발�
 
 ![[그림 2] OAuth 2.0 Component]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="700px"}
 
-[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역활을 수행한다. App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Auth Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
+[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Auth Server에게 전달하거나, App이나 Auth Server에게 받은 내용을 User에게 보여주는 역할을 수행한다. App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Auth Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
 
 #### 1.2. Access Token 발급
 

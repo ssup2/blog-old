@@ -44,13 +44,13 @@ SCHED_CLS, SCHED_ACT BPF Program의 Input Type은 Socket Buffer (\_\_sk_buff)이
 
 cgroup eBPF는 Socket Layer Hook에서 각 cgroup마다 존재하는 eBPF이며, cgroup에 포함되어 있는 Process들만 이용하는 eBPF이다. 따라서 cgroup eBPF Program은 오직 해당 cgroup에 포함되어 있는 Process들에게만 영향을 준다. 특정 Process Group에게만 eBPF Program을 적용하고 싶으면 cgroup eBPF와 cgroup을 이용하면 된다. cgroup eBPF Program Type은 다음과 같이 존재한다.
 
-* CGROUP_SKB : CGROUP_SOCK_ADDR BPF Program은 cgroup에 포함되어 있는 Process의 Ingress/Egress Packet을 Filtering하는 역활을 수행한다.
-* CGROUP_SOCK : CGROUP_SOCK BPF Program은 cgroup에 포함되어 있는 Procees가 Socket을 Open하는 경우 구동되어 Socket의 Option을 변경하는 역활을 수행한다. Socket의 Option을 변경하여 Socket Security를 보안하는 목적으로 이용이 가능하다.
-* CGROUP_SOCK_ADDR : Process의 Ingress/Egress Packet의 IP, Port를 변경하는 역활을 수행한다.
+* CGROUP_SKB : CGROUP_SOCK_ADDR BPF Program은 cgroup에 포함되어 있는 Process의 Ingress/Egress Packet을 Filtering하는 역할을 수행한다.
+* CGROUP_SOCK : CGROUP_SOCK BPF Program은 cgroup에 포함되어 있는 Procees가 Socket을 Open하는 경우 구동되어 Socket의 Option을 변경하는 역할을 수행한다. Socket의 Option을 변경하여 Socket Security를 보안하는 목적으로 이용이 가능하다.
+* CGROUP_SOCK_ADDR : Process의 Ingress/Egress Packet의 IP, Port를 변경하는 역할을 수행한다.
 
 #### 1.4. SOCK_OPS
 
-SOCK_OPS eBPF Program은 Connection Life Cycle중 여러번 호출되는 eBPF에 적재되어 구동되는 특징을 갖는다. 따라서 SOCK_OPS eBPF Program은 Connection의 상태 파악 및 상태에 따라서 Connection을 제어하는 역활을 수행한다.
+SOCK_OPS eBPF Program은 Connection Life Cycle중 여러번 호출되는 eBPF에 적재되어 구동되는 특징을 갖는다. 따라서 SOCK_OPS eBPF Program은 Connection의 상태 파악 및 상태에 따라서 Connection을 제어하는 역할을 수행한다.
 
 #### 1.5. SOCK_REUSEPORT
 
@@ -58,7 +58,7 @@ SOCK_REUSEPORT eBPF Program은 Kernel에서 Port를 Binding할때 호출되는 e
 
 #### 1.6. SOCKET_FILTER
 
-SOCKET_FILTER BPF Program은 Socket Layer Hook에서 실행되는 BPF에 적재되어 구동된다. SOCKET_FILTER BPF Program은 Socket으로 들어오는 Packet을 필터링, 분류, 파싱하는 역활을 수행한다. 위에서 언급했던것 처럼 cBPF (SO_ATTACH_FILTER), eBPF (SO_ATTACH_BPF) 둘다 지원한다. SOCKET_FILTER BPF Program의 Input Type은 Socket Buffer (__sk_buff)이다. SOCKET_FILTER BPF Program의 실행결과는 기존의 cBPF Program의 반환값을 그대로 이용한다.
+SOCKET_FILTER BPF Program은 Socket Layer Hook에서 실행되는 BPF에 적재되어 구동된다. SOCKET_FILTER BPF Program은 Socket으로 들어오는 Packet을 필터링, 분류, 파싱하는 역할을 수행한다. 위에서 언급했던것 처럼 cBPF (SO_ATTACH_FILTER), eBPF (SO_ATTACH_BPF) 둘다 지원한다. SOCKET_FILTER BPF Program의 Input Type은 Socket Buffer (__sk_buff)이다. SOCKET_FILTER BPF Program의 실행결과는 기존의 cBPF Program의 반환값을 그대로 이용한다.
 
 ### 2. 참조
 

@@ -13,7 +13,7 @@ Kubernetes에서 Nginx Ingress를 제어하는 Nginx Ingress Controller를 분�
 
 ![[그림 1] Nginx Ingress Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_Nginx_Ingress_Controller/Nginx_Ingress_Controller.PNG)
 
-Nginx Ingress Controller는 Kubernetes의 Ingress 및 관련 Ojbect들에 따라서 Nginx를 제어하고, Nginx 관련 Metric 정보를 수집하여 외부로 전달하는 역활을 수행한다. [그림 1]은 Nginx Ingress Controller를 나타내고 있다. Nginx Ingress Controller는 Nginx Ingress Controller Pod에 Nginx와 같이 존재한다. Nginx Ingress Controller는 Leader (Active)/Non-leader (Standby) 방식으로 동작하지만 Leader/Non-leader 둘다 자신과 같은 Pod안에서 구동중인 Nginx를 제어하고, 관련 Metric 정보를 수집하는 것은 동일하다.
+Nginx Ingress Controller는 Kubernetes의 Ingress 및 관련 Ojbect들에 따라서 Nginx를 제어하고, Nginx 관련 Metric 정보를 수집하여 외부로 전달하는 역할을 수행한다. [그림 1]은 Nginx Ingress Controller를 나타내고 있다. Nginx Ingress Controller는 Nginx Ingress Controller Pod에 Nginx와 같이 존재한다. Nginx Ingress Controller는 Leader (Active)/Non-leader (Standby) 방식으로 동작하지만 Leader/Non-leader 둘다 자신과 같은 Pod안에서 구동중인 Nginx를 제어하고, 관련 Metric 정보를 수집하는 것은 동일하다.
 
 {% highlight text %}
 ...
@@ -59,9 +59,9 @@ Nginx Config 중에서 Backend 부분이 변경되었다면 변경된 내용은 
 
 #### 1.2. Metric Collector
 
-Nginx Ingress Controller의 Metric Collector는 Metric 정보를 수집하여 Prometheus에게 전송하는 역활을 수행한다. [그림 1]에는 Metric Collector로 전송되는 Metric의 경로도 포함하고 있다. Metric Collector는 3가지 경로를 통해서 Metric 정보를 수집한다. 첫번째로 Nginx 내부의 HTTP Stub Status Module이 제공하는 Metric 정보를 Nginx의 /nginx_status URL을 통해서 얻어온다. 두번째로 Nginx의 Monitor Lua Module을 통해서 Metric 정보를 얻어온다. Client가 Nginx를 통해서 App에게 Packet을 전송할때 마다 관련 Metric 정보는 Monitor Lua Module로 전송된다. Monitor Lua Module은 받은 Metirc 정보를 모아 한꺼번에 주기적으로 Domain Socket을 이용하여 Metric Collector로 전송한다.
+Nginx Ingress Controller의 Metric Collector는 Metric 정보를 수집하여 Prometheus에게 전송하는 역할을 수행한다. [그림 1]에는 Metric Collector로 전송되는 Metric의 경로도 포함하고 있다. Metric Collector는 3가지 경로를 통해서 Metric 정보를 수집한다. 첫번째로 Nginx 내부의 HTTP Stub Status Module이 제공하는 Metric 정보를 Nginx의 /nginx_status URL을 통해서 얻어온다. 두번째로 Nginx의 Monitor Lua Module을 통해서 Metric 정보를 얻어온다. Client가 Nginx를 통해서 App에게 Packet을 전송할때 마다 관련 Metric 정보는 Monitor Lua Module로 전송된다. Monitor Lua Module은 받은 Metirc 정보를 모아 한꺼번에 주기적으로 Domain Socket을 이용하여 Metric Collector로 전송한다.
 
-마지막으로 Nginx Ingress Controller Pod의 procfs를 통해서 Nginx Process의 Metric 정보를 얻는다. 얻은 Metric 정보는 Nginx Ingress Controller의 /metrics를 통해서 Prometheus에게 전달된다. 따라서 각 Nginx Ingress Controller는 Prometheus의 Exporter 역활을 수행하게된다.
+마지막으로 Nginx Ingress Controller Pod의 procfs를 통해서 Nginx Process의 Metric 정보를 얻는다. 얻은 Metric 정보는 Nginx Ingress Controller의 /metrics를 통해서 Prometheus에게 전달된다. 따라서 각 Nginx Ingress Controller는 Prometheus의 Exporter 역할을 수행하게된다.
 
 #### 1.3. Load Balancing, TLS
 

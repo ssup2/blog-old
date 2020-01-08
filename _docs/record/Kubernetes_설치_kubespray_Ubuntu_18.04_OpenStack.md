@@ -113,7 +113,7 @@ kube-node
 <figcaption class="caption">[파일 1] Deploy Node - ~/kubespray/inventory/mycluster/inventory.ini</figcaption>
 </figure>
 
-Deploy Node의 inventory/mycluster/inventory.ini 파일에 각 VM의 정보 및 역활을 저장한다.
+Deploy Node의 inventory/mycluster/inventory.ini 파일에 각 VM의 정보 및 역할을 저장한다.
 
 {% highlight text %}
 ...

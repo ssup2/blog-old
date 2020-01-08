@@ -17,13 +17,13 @@ I/O Data 전달은 CPU의 **IOMMU** 기능을 통해 수행한다. Device Emulat
 
 ### 2. IOMMU
 
-![[그림 1] IOMMU 역활]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU.PNG){: width="650px"}
+![[그림 1] IOMMU 역할]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU.PNG){: width="650px"}
 
-CPU의 IOMMU를 통해 Hypervisor의 간섭 없이 가상 머신은 I/O Device와 I/O Data를 직접 주고 받을 수 있다. [그림 1]은 IOMMU의 역활을 간략하게 나타내고 있다. Intel의 Vt-d이 IOMMU를 기반으로한 기법이다.
+CPU의 IOMMU를 통해 Hypervisor의 간섭 없이 가상 머신은 I/O Device와 I/O Data를 직접 주고 받을 수 있다. [그림 1]은 IOMMU의 역할을 간략하게 나타내고 있다. Intel의 Vt-d이 IOMMU를 기반으로한 기법이다.
 
 ![[그림 2] IOMMU Flow]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU_MMU_Flow.PNG){: width="650px"}
 
-IOMMU는 MMU와 다른 역활을 수행한다. MMU는 CPU에서 보는 Memory 주소를 변환하는 장치이다. IOMMU는 I/O Device가 보는 Memory 주소를 변환하는 장치이다. [그림 2]는 MMU와 IOMMU를 통해 CPU와 I/O Device가 보는 Memory 주소가 변환되는 과정을 나타내고 있다. MMU는 CPU Core에 위치하여 Memory 주소를 변환한다. 반면 IOMMU는 CPU의 North-Bridge에 위차하여 I/O Device가 보는 Memory 주소를 변환한다.
+IOMMU는 MMU와 다른 역할을 수행한다. MMU는 CPU에서 보는 Memory 주소를 변환하는 장치이다. IOMMU는 I/O Device가 보는 Memory 주소를 변환하는 장치이다. [그림 2]는 MMU와 IOMMU를 통해 CPU와 I/O Device가 보는 Memory 주소가 변환되는 과정을 나타내고 있다. MMU는 CPU Core에 위치하여 Memory 주소를 변환한다. 반면 IOMMU는 CPU의 North-Bridge에 위차하여 I/O Device가 보는 Memory 주소를 변환한다.
 
 ![[그림 3] IOMMU Page Walk]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Hardware/IOMMU_Page_Walk.PNG)
 

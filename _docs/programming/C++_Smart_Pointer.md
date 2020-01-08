@@ -279,7 +279,7 @@ int main()
 <figcaption class="caption">[Shell 4] weak_ptr 예제의 출력</figcaption>
 </figure>
 
-weak_ptr은 **shared_ptr이 가리키는 Instance를 참조**만 하는 참조자 역활을 수행한다. weak_ptr은 Reference Count를 관리하지 않는다. Instace의 생명주기에 영향을 주지 않는다. 따라서 weak_ptr이 가리키는 Instance는 실제 존재하지 않을 수 있다. [Code 6]은 weak_ptr의 사용법을 나타내고 있다. weak_ptr은 shared_ptr을 통해 shared_ptr이 가리키는 Instance를 가리키게 된다. [Code 6]에서 wp1은 sp1을 통해서 초기화 되기 때문에 wp1은 sp1이 가리키는 Instance A를 가리키게 된다.
+weak_ptr은 **shared_ptr이 가리키는 Instance를 참조**만 하는 참조자 역할을 수행한다. weak_ptr은 Reference Count를 관리하지 않는다. Instace의 생명주기에 영향을 주지 않는다. 따라서 weak_ptr이 가리키는 Instance는 실제 존재하지 않을 수 있다. [Code 6]은 weak_ptr의 사용법을 나타내고 있다. weak_ptr은 shared_ptr을 통해 shared_ptr이 가리키는 Instance를 가리키게 된다. [Code 6]에서 wp1은 sp1을 통해서 초기화 되기 때문에 wp1은 sp1이 가리키는 Instance A를 가리키게 된다.
 
 weak_ptr은 반드시 lock() 함수를 통해서 shared_ptr로 변환 뒤에 Instance를 접근할 수 있다. lock() 함수 호출시 weak_ptr이 가리키는 Instance가 존재하면 변환된 shared_ptr은 동일한 Instance를 가리키고 있게 된다. weak_ptr이 가리키는 Instance가 존재하지 않으면 변환된 shared_ptr은 NULL값을 갖게 된다. [Code 6]에서 첫번째 lock() 함수를 호출 하였을때는 sp1이 Instance A를 가리고 있기 때문에 Instance A가 존재하고 있는 상태이다. 따라서 sp2는 NULL이 아니이다. 두번째 lock() 함수를 호출 하였을때는 sp1, sp2가 reset() 함수를 호출하여 모두 Instance A를 가리키지 않는 상태이기 때문에 Instance A는 존재하지 않는 상태이다. 따라서 sp3은 NULL값을 갖게 된다.
 

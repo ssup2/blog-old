@@ -19,7 +19,7 @@ BPF (Berkeley Packet Filter)는 Unix-like OS의 **Kernel Level**에서 Bytecode�
 
 [그림 1]은 cBPF (Classic BPF)와 eBPF (Extended BPF)를 나타내고 있다. BPF가 다양한 기능을 수행하면서 BPF가 갖고있는 매우 제한된 Resource는 큰 걸림돌이 되었다. 이러한 BPF의 Resource 문제를 해결하기 위해서 Linux는 더 많은 Resource와 기능을 이용할 수 있는 **eBPF** (Extened BPF)를 정의하였다. eBPF를 정의하면서 기존의 BPF는 **cBPF** (Classic BPF)라고 불린다.
 
-cBPF에서는 2개의 32bit Register와 메모리 역활을 수행하는 16개의 32bit Scratch Pad만을 이용 할 수 있었다. 하지만 eBPF에서는 11개의 64bit Register, 512개의 8bit Stack, Key-Value를 저장할 수 있는 무제한의 Map을 이용 할 수 있다. 또한 실행할 수 있는 Bytecode도 추가되어 eBPF에서는 Kernel이 eBPF 지원을 위해 제공하는 **Kernel Helper Function**을 호출하거나 다른 eBPF Program을 호촐할 수 있다. 이처럼 eBPF는 cBPF보다 많은 리소스 및 기능을 이용 할 수 있기 때문에 cBPF보다 다양한 기능의 Program을 구동 할 수 있다.
+cBPF에서는 2개의 32bit Register와 메모리 역할을 수행하는 16개의 32bit Scratch Pad만을 이용 할 수 있었다. 하지만 eBPF에서는 11개의 64bit Register, 512개의 8bit Stack, Key-Value를 저장할 수 있는 무제한의 Map을 이용 할 수 있다. 또한 실행할 수 있는 Bytecode도 추가되어 eBPF에서는 Kernel이 eBPF 지원을 위해 제공하는 **Kernel Helper Function**을 호출하거나 다른 eBPF Program을 호촐할 수 있다. 이처럼 eBPF는 cBPF보다 많은 리소스 및 기능을 이용 할 수 있기 때문에 cBPF보다 다양한 기능의 Program을 구동 할 수 있다.
 
 현재 Linux에서는 cBPF, eBPF 둘다 이용하고 있으며, BPF가 실행되는 지점인 **Hook**과 Kernel Version에 따라서 어떤 BPF가 이용될지 결정된다. bpf() System Call이 추가된 Kernel Version은 3.18인데, 3.18 이전 Version의 BPF는 모두 cBPF이다. 예를들어 Socket() System Call의 SO_ATTACH_FILTER Option이나 Seccomp() System Call의 SECCOMP_SET_MODE_FILTER Option을 통해 이용하던 BPF는 모두 cBPF였다. 3.18 이후 Version에 추가된 BPF는 모두 eBPF이다. eBPF가 도입되면서 cBPF는 현재 일부에서만 이용되고 있고 추후 eBPF가 cBPF를 완전히 대체하게될 예정이다.
 

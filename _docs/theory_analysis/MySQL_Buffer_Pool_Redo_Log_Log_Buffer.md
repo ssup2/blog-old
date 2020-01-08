@@ -17,7 +17,7 @@ MySQL의 Buffer Pool, Redo Log 및 Log Buffer를 분석한다.
 
 InnoDB는 Transaction 내용은 계속 Buffer Pool과 Redo Log에 쌓지 않고, 주기적으로 또는 Redo Log가 가득차면 Buffer Pool에 기록된 Transaction 내용을 실제 Disk에 반영한다. 이러한 동작을 **Checkpoint**라고 한다. Redo Log는 2개의 파일을 번갈아가며 이용한다. Redo Log가 가득차면 가득찬 Redo Log는 놔두고 이용하지 않고 있던 Redo Log에 Transaction 내용을 기록한다. 가득찬 Redo Log는 Checkpoint 동작을 수행하고 비워진다.
 
-Redo Log도 File이기 때문에 Transaction을 처리할때 마다 바로 Redo Log에 직접 Transaction 내용을 쓴다면 잦은 Disk 접근으로 인한 성능저하가 발생할 수 있다. InnoDB는 이러한 문제는 해결하기 위해서 Redo Log의 Cache 역활을 수행하는 **Log Buffer**에 Transaction 내용을 기록하고 한꺼번에 Redo Log에 기록한다. Log Buffer에 있는 Transaction 내용은 InnoDB의 Write 동작으로 인해서 OS의 Disk Cache로 전달되고 Inno DB의 Flush 동작으로 인해서 Redo Log 파일에 저장된다. InnoDB의 Write 및 Flush 동작은 InnoDB의 설정에 따라 수행되는 시점이 달라진다.
+Redo Log도 File이기 때문에 Transaction을 처리할때 마다 바로 Redo Log에 직접 Transaction 내용을 쓴다면 잦은 Disk 접근으로 인한 성능저하가 발생할 수 있다. InnoDB는 이러한 문제는 해결하기 위해서 Redo Log의 Cache 역할을 수행하는 **Log Buffer**에 Transaction 내용을 기록하고 한꺼번에 Redo Log에 기록한다. Log Buffer에 있는 Transaction 내용은 InnoDB의 Write 동작으로 인해서 OS의 Disk Cache로 전달되고 Inno DB의 Flush 동작으로 인해서 Redo Log 파일에 저장된다. InnoDB의 Write 및 Flush 동작은 InnoDB의 설정에 따라 수행되는 시점이 달라진다.
 
 ### 2. Configuration
 

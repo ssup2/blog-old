@@ -21,7 +21,7 @@ Ceph는 Object Storage, Block Storage, File Storage 3가지 Type의 Storage를 �
 
 ##### 1.1.1. Object Storage
 
-Ceph가 Object Storage로 동작할때는 RADOS Gateway가 RADOS Cluster의 Client 역활 및 Object Storage의 Proxy 역활을 수행한다. RADOS Gateway는 RADOS Cluster 제어를 도와주는 Librados를 이용하여 Object를 저장하고 제어한다. App은 RADOS Gateway의 REST API를 이용하여 Data를 저장한다. REST API는 Account 관련 기능과 File System의 폴더 역활을 수행하는 Bucket을 관리하는 기능을 제공하며, AWS S3와 OpenStack의 Swift와 호환되는 특징을 갖는다.
+Ceph가 Object Storage로 동작할때는 RADOS Gateway가 RADOS Cluster의 Client 역할 및 Object Storage의 Proxy 역할을 수행한다. RADOS Gateway는 RADOS Cluster 제어를 도와주는 Librados를 이용하여 Object를 저장하고 제어한다. App은 RADOS Gateway의 REST API를 이용하여 Data를 저장한다. REST API는 Account 관련 기능과 File System의 폴더 역할을 수행하는 Bucket을 관리하는 기능을 제공하며, AWS S3와 OpenStack의 Swift와 호환되는 특징을 갖는다.
 
 RADOS Gateway는 동시에 여러대가 운영될 수 있으며 Single Point of Failure를 막기 위해서 다수의 RADOS Gateway를 운영하는 것이 좋다. RADOS Gateway간의 Load Balancing은 Ceph에서 제공하지 않고, 별도의 Load Balancer를 이용해야 한다.
 
@@ -41,7 +41,7 @@ RADOS Cluster는 OSD(Object Storage Daemon), Monitor, MDS(Meta Data Server) 3가
 
 ![[그림 2] Ceph Object]({{site.baseurl}}/images/theory_analysis/Ceph/Ceph_Object.PNG){: width="700px"}
 
-OSD는 Disk에 **Object 형태**로 Data를 저장하는 Daemon이다. Object 형태로 저장한다는 의미는 Data를 **Key/Value/Metadata**로 저장한다는 의미이다. [그림 2]는 OSD가 Data를 저장하는 모습을 나타내고 있다. Data는 File System의 폴더역활을 수행하는 Namespace라는 곳에 저장된다. 위의 Object Stroage 설명에서 나오는 Bucket이 OSD의 Namespace와 동일한 개념이다. Namespace는 Files System의 폴더처럼 Tree 계층을 구성하지는 않는다. Metadata는 다시 Key/Value로 구성되어 있다.
+OSD는 Disk에 **Object 형태**로 Data를 저장하는 Daemon이다. Object 형태로 저장한다는 의미는 Data를 **Key/Value/Metadata**로 저장한다는 의미이다. [그림 2]는 OSD가 Data를 저장하는 모습을 나타내고 있다. Data는 File System의 폴더역할을 수행하는 Namespace라는 곳에 저장된다. 위의 Object Stroage 설명에서 나오는 Bucket이 OSD의 Namespace와 동일한 개념이다. Namespace는 Files System의 폴더처럼 Tree 계층을 구성하지는 않는다. Metadata는 다시 Key/Value로 구성되어 있다.
 
 Node의 각 Disk마다 별도의 OSD Daemon이 동작한다. Disk는 주로 XFS Filesystem으로 Format된 Disk를 이용한다. 하지만 ZFS, EXT4 Filesystem도 이용이 가능하고, 최신 버전 Ceph의 OSD는 BlueStore Backend를 이용해 별도의 Filesystem을 이용하지 않고 Disk를 직접 이용하기도 한다.
 
@@ -59,7 +59,7 @@ MDS는 POSIX 호환 File System를 제공하기 위해 필요한 Meta Data를 �
 
 ##### 1.2.4. Client (Librados, RBD Module, Ceph File System)
 
-위에서 언급한 것처럼 Librados, Kernel의 RBD Module, Kernel의 Ceph File System은 RADOS Cluster의 Client 역활을 수행한다. Client는 Ceph 관리자가 Config 파일에 써놓은 **Monitor IP List**를 통해서 Monitor에 직접 연결하여 Monitor가 관리하는 Cluster Map 정보를 얻어온다. 그 후 Client는 Cluster Map에 있는 OSD Map, MDS Map등의 정보를 이용하여 OSD, MDS에 직접 접속하여 필요한 동작을 수행한다. 각 Client와 Monitor가 저장하고 있는 Cluster Map들의 Consensus도 paxos 알고리즘을 이용하여 맞춘다.
+위에서 언급한 것처럼 Librados, Kernel의 RBD Module, Kernel의 Ceph File System은 RADOS Cluster의 Client 역할을 수행한다. Client는 Ceph 관리자가 Config 파일에 써놓은 **Monitor IP List**를 통해서 Monitor에 직접 연결하여 Monitor가 관리하는 Cluster Map 정보를 얻어온다. 그 후 Client는 Cluster Map에 있는 OSD Map, MDS Map등의 정보를 이용하여 OSD, MDS에 직접 접속하여 필요한 동작을 수행한다. 각 Client와 Monitor가 저장하고 있는 Cluster Map들의 Consensus도 paxos 알고리즘을 이용하여 맞춘다.
 
 #### 1.3. CRUSH, CRUSH Map
 

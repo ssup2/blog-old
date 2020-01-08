@@ -17,7 +17,7 @@ ELK Stack은 Elasticsearch, Logstash, Kibana를 조합을 의미한다. ELK Stac
 
 ### 2. Elasticsearch
 
-Elasticsearch는 분산형 Data 검색 및 분석 엔진 역활을 수행한다. 논리적으로는 JSON 형태와 같은 **Document** 형태로 Data를 저장하며, 물리적으로는 **Columnstore (Column-oriented)** 형태로 Data를 저장하여 대용량의 Data를 빠르게 분석할 수 있는 구조를 갖고 있다. 또한 Elasticsearch는 Full-text Search시 **Inverted Index**를 이용하고, 숫자 및 위치 Data 처리시에는 **BKD Tree**를 이용하여 빠른 Data 검색이 가능하도록 설계되어 있다. Elasticsearch는 Master-elibigle, Data, Ingest, Coodinating 4개의 Node Type으로 구성되어 있다. Node Type이 4개이지만 하나의 Node에 4개의 Node Type을 모두 적용할 수도 있다.
+Elasticsearch는 분산형 Data 검색 및 분석 엔진 역할을 수행한다. 논리적으로는 JSON 형태와 같은 **Document** 형태로 Data를 저장하며, 물리적으로는 **Columnstore (Column-oriented)** 형태로 Data를 저장하여 대용량의 Data를 빠르게 분석할 수 있는 구조를 갖고 있다. 또한 Elasticsearch는 Full-text Search시 **Inverted Index**를 이용하고, 숫자 및 위치 Data 처리시에는 **BKD Tree**를 이용하여 빠른 Data 검색이 가능하도록 설계되어 있다. Elasticsearch는 Master-elibigle, Data, Ingest, Coodinating 4개의 Node Type으로 구성되어 있다. Node Type이 4개이지만 하나의 Node에 4개의 Node Type을 모두 적용할 수도 있다.
 
 #### 2.1. Master-elibigle Node
 
@@ -30,7 +30,7 @@ node.ingest: false
 <figcaption class="caption">[설정 1] Master Node 설정 Configuration</figcaption>
 </figure>
 
-Master-eligible Node는 Elasticsearch Cluster를 전반적으로 관리하는 Node이다. Cluster를 구성하는 Node들의 상태를 관리하고, Index를 관리하고, Data를 어느 Shard에 저장할지 결정한다. Cluster에서 다수의 Master-elibigle Node가 있는 경우 실제로 Master 역활을 수행하는 Node는 하나이며, 나머지 Master-elibigle Node는 Failover시 Master가 될 수 있는 예비 Node 역활을 수행한다. [설정 1]은 Master-elibigle Node를 설정하는 Configuration이다.
+Master-eligible Node는 Elasticsearch Cluster를 전반적으로 관리하는 Node이다. Cluster를 구성하는 Node들의 상태를 관리하고, Index를 관리하고, Data를 어느 Shard에 저장할지 결정한다. Cluster에서 다수의 Master-elibigle Node가 있는 경우 실제로 Master 역할을 수행하는 Node는 하나이며, 나머지 Master-elibigle Node는 Failover시 Master가 될 수 있는 예비 Node 역할을 수행한다. [설정 1]은 Master-elibigle Node를 설정하는 Configuration이다.
 
 #### 2.2. Data Node
 
@@ -69,11 +69,11 @@ node.ingest: false
 <figcaption class="caption">[설정 4] Coodinating Node 설정</figcaption>
 </figure>
 
-Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고, 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 또는 Proxy 역활을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
+Coodinating Node는 외부의 (Logstash, Kibana) 요청에 따라서 Master Node, Data Node, Coodinating Node에 적절한 요청을 보내고, 요청 결과를 받아 다시 외부로 전달하는 Load Balaner 또는 Proxy 역할을 수행한다. [설정 4]는 Coodinating Node를 설정하는 Configuration이다.
 
 ### 3. Logstash
 
-Logstash는 다양한 Data Source로부터 Data를 수집하고 가공하여 Elasticsearch에게 전송하는 역활을 수행한다. Data Source에는 Log 파일, App의 Rest API 호출을 통해 전달되는 Data, Beats를 통해 전달되는 Data가 있다. Logstash는 기본적으로 Data Source로부터 받은 Data를 In-memory Queue에 넣기 때문에, Logstash 장애 발생시 Data 유실이 발생한다. 이러한 Data 유실을 방지하기 위해서 Logstash는 Persistent Queue를 제공한다. Persistent Queue는 Data를 Disk에 저장하여 Data 손실을 방지한다. Persistent Queue는 Kafka, RabbitMQ와 같은 Message Queue를 대신하여 Data Buffer의 역활로도 이용될 수 있다.
+Logstash는 다양한 Data Source로부터 Data를 수집하고 가공하여 Elasticsearch에게 전송하는 역할을 수행한다. Data Source에는 Log 파일, App의 Rest API 호출을 통해 전달되는 Data, Beats를 통해 전달되는 Data가 있다. Logstash는 기본적으로 Data Source로부터 받은 Data를 In-memory Queue에 넣기 때문에, Logstash 장애 발생시 Data 유실이 발생한다. 이러한 Data 유실을 방지하기 위해서 Logstash는 Persistent Queue를 제공한다. Persistent Queue는 Data를 Disk에 저장하여 Data 손실을 방지한다. Persistent Queue는 Kafka, RabbitMQ와 같은 Message Queue를 대신하여 Data Buffer의 역할로도 이용될 수 있다.
 
 #### 3.1. Beats
 

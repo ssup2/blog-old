@@ -17,7 +17,7 @@ Kubebuilder는 Kubernetes Operator 개발을 도와주는 SDK이다. **Kubernete
 
 ![[그림 1] Controller Package]({{site.baseurl}}/images/programming/Kubernetes_Kubebuilder/Controller_Package.PNG){: width="700px"}
 
-[그림 1]은 Kubebuilder로 구현한 Controller의 주요 Package를 나타내고 있다. Controller는 크게 Kubebuilder Controller Package, Runtime Controller Package, Runtime Manager Package로 구성되어 있다. Kubebuilder Controller Package는 Kubebuilder를 이용하여 Controller를 개발하는 개발자가 생성하는 Package이다. **Runtime**은 Controller 개발을 도와주는 Library 역활을 수행하는 Package를 의미하며 Runtime Controller Package, Runtime Manager Package는 모두 Runtime의 하위 Package를 의미한다.
+[그림 1]은 Kubebuilder로 구현한 Controller의 주요 Package를 나타내고 있다. Controller는 크게 Kubebuilder Controller Package, Runtime Controller Package, Runtime Manager Package로 구성되어 있다. Kubebuilder Controller Package는 Kubebuilder를 이용하여 Controller를 개발하는 개발자가 생성하는 Package이다. **Runtime**은 Controller 개발을 도와주는 Library 역할을 수행하는 Package를 의미하며 Runtime Controller Package, Runtime Manager Package는 모두 Runtime의 하위 Package를 의미한다.
 
 Runtime Controller Package는 Kubernetes API Server를 통해서 Controller가 관리 해야할 CR의 변경를 감지하고, 변경된 CR의 Name과 Namespace 정보를 자신의 Worker Queue에 넣는다. 그 후 Runtime Controller Package는 Worker Queue에 있는 CR의 Name과 Namespace 정보를 다시 Kubebuilder Controller Package의 Reconcile Loop에 전달하여 Reconcile Loop가 동작하도록 만든다.
 
@@ -29,7 +29,7 @@ Recocile Loop의 동작 수행중 Error가 발생하거나 일정 시간 대기�
 
 #### 1.2. Controller HA
 
-Controller도 Kubernetes 위에서 동작하는 App이기 때문에, Controller의 HA를 위해서는 다수의 동일한 Controller를 동시에 구동하는 것이 좋다. 다수의 동일한 Controller를 구동하는 경우 하나의 Controller만 실제로 역활을 수행하고 나머지 Controller는 대기 상태를 유지하는 **Active-standby** 형태로 동작한다. Controller 수행시 'enable-leader-election' 옵션을 설정하면 Controller HA 기능을 적용할 수 있다.
+Controller도 Kubernetes 위에서 동작하는 App이기 때문에, Controller의 HA를 위해서는 다수의 동일한 Controller를 동시에 구동하는 것이 좋다. 다수의 동일한 Controller를 구동하는 경우 하나의 Controller만 실제로 역할을 수행하고 나머지 Controller는 대기 상태를 유지하는 **Active-standby** 형태로 동작한다. Controller 수행시 'enable-leader-election' 옵션을 설정하면 Controller HA 기능을 적용할 수 있다.
 
 #### 1.3. Controller Metric, kube-rback-proxy
 
@@ -77,7 +77,7 @@ Dockerfile  Makefile  PROJECT  bin  config  go.mod  go.sum  hack  main.go
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. **Makefile**은 make를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Operator 구동을 위한 Kubernetes YAML을 생성하는 역활을 수행한다.
+**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. **Makefile**은 make를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Operator 구동을 위한 Kubernetes YAML을 생성하는 역할을 수행한다.
 
 #### 2.3. Memcached CR, Controller 파일 생성
 
@@ -274,7 +274,7 @@ func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
 <figcaption class="caption">[Code 3] controllers/memcached_controller.go</figcaption>
 </figure>
 
-[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 8,9번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다. 111~115번째 줄은 Runtime Controller Package를 통하여 Memcached CR 또는 Memcached CR이 소유하고 있는 Deployment Resource의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, Runtime Controller Package는 해당 Memcached CR의 Name/Namespace 정보를 Reconcile Loop 역활을 수행하는 Reconcile() 함수에게 전달한다.
+[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 8,9번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다. 111~115번째 줄은 Runtime Controller Package를 통하여 Memcached CR 또는 Memcached CR이 소유하고 있는 Deployment Resource의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, Runtime Controller Package는 해당 Memcached CR의 Name/Namespace 정보를 Reconcile Loop 역할을 수행하는 Reconcile() 함수에게 전달한다.
 
 Reconcile() 함수에 소속된 18~31번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memcached CR을 얻는 부분이다. 34~52번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 
 

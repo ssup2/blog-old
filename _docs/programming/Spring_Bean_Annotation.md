@@ -83,7 +83,7 @@ public class MyConfig {
 <figcaption class="caption">[Code 4] @Bean 예제</figcaption>
 </figure>
 
-@Bean은 Bean Method에 붙여 해당 Method가 Bean Method인 것을 Spring에게 알리는 역활을 수행한다. Bean Method는 반드시 Instance를 반환한다. Bean Method를 통해 생성되는 Bean의 Default 이름은 Method 이름이 된다. [Code 4]의 myBeanA() Method를 통해 생성되는 Bean의 이름은 myBeanA가 된다. 또한 @Bean의 Value를 통해서 Bean Method를 통해 생성되는 Bean의 이름을 지정할 수 있다. [Code 4]의 myBeanB() Method를 통해 생성되는 Bean의 이름은 @Bean의 Value인 myBeanC가 된다.
+@Bean은 Bean Method에 붙여 해당 Method가 Bean Method인 것을 Spring에게 알리는 역할을 수행한다. Bean Method는 반드시 Instance를 반환한다. Bean Method를 통해 생성되는 Bean의 Default 이름은 Method 이름이 된다. [Code 4]의 myBeanA() Method를 통해 생성되는 Bean의 이름은 myBeanA가 된다. 또한 @Bean의 Value를 통해서 Bean Method를 통해 생성되는 Bean의 이름을 지정할 수 있다. [Code 4]의 myBeanB() Method를 통해 생성되는 Bean의 이름은 @Bean의 Value인 myBeanC가 된다.
 
 ### 3. @Service, @Controller, @Repository
 

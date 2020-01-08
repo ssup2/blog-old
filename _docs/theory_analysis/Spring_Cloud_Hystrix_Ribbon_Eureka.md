@@ -99,7 +99,7 @@ Eureka는 모든 Service 정보를 관리하는 중요한 Service이기 때문�
 
 지금까지 분석한 Spring Cloud의 Hystrix, Ribbon, Eureka를 이용하여 Service를 구성하면 [그림 5]와 같은 구조가 된다. Service A의 Hystrix는 Service B가 제대로 동작하지 않는것을 파악한뒤, Service B의 Circuit을 Open하고 Fallback Service인 Service C를 호출하고 있다. Service A의 Eureka는 Eureka Server로 부터 Service 정보를 얻은뒤 Ribbon에게 전달한다. Eureka Server는 2개의 Instance가 구동하고 있고 첫번째 Eureka Server의 Eureka Client는 두번째 Eureka Server로부터 Service 정보를 얻고있다. Service A의 Ribbon은 Eureka로부터 얻은 Service D의 Instance 정보를 바탕으로 Load Balancing을 수행한다. Service D의 첫번째 Instance가 동작하지 않아 두번째 Instance로 Service D를 호출하고 있다.
 
-Zuul은 API Gateway로써 Service End-point 역활을 수행한다. Zuul에서도 Hystrix, Ribbon, Eureka를 이용하여 안정적인 Service-end point를 제공한다.
+Zuul은 API Gateway로써 Service End-point 역할을 수행한다. Zuul에서도 Hystrix, Ribbon, Eureka를 이용하여 안정적인 Service-end point를 제공한다.
 
 ### 6. 참조
 

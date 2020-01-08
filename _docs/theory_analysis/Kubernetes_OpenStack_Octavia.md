@@ -21,7 +21,7 @@ OpenStack의 LBaaS (Load Balancer as a Service)인 Octavia와 같이 동작하�
 
 Octavia는 OpenStack의 LBaaS이다. Kubernetes는 Octavia를 통해서 LoadBalancer Service를 OpenStack 외부에 제공할 수 있다. Octavia는 OpenStack Controller에서 동작하는 Octavia Service와 Packet을 Load Balancing하는 LB VM으로 구성되어 있다. LB VM은 실제 Packet을 Load Balancing하는 HAProxy와 Octavia Service와 통신을 담당하는 Agent (Amphora Agent)로 구성되어 있다. Octavia Network는 Octavia Service와 Agent가 통신에 이용되는 Network 이다.
 
-Agent는 Octavia Network를 통해서 HAProxy (LB VM)의 Health 정보를 Octavia Service에게 전송하고, Octavia Service로부터 HAProxy 설정 정보를 받아 HAProxy를 설정하는 역활을 수행한다. 또한 Agent는 Load Balancing을 통해서 Packet을 전달받을 Octavia Member VM의 Health 정보도 Octavia Service에게 전송한다. [그림 1]에서 Agent는 NodePort를 이용하여 Octavia Member VM인 K8s Slave VM의 Health를 검사하고, 검사내용을 Octavia Service에게 전송한다.
+Agent는 Octavia Network를 통해서 HAProxy (LB VM)의 Health 정보를 Octavia Service에게 전송하고, Octavia Service로부터 HAProxy 설정 정보를 받아 HAProxy를 설정하는 역할을 수행한다. 또한 Agent는 Load Balancing을 통해서 Packet을 전달받을 Octavia Member VM의 Health 정보도 Octavia Service에게 전송한다. [그림 1]에서 Agent는 NodePort를 이용하여 Octavia Member VM인 K8s Slave VM의 Health를 검사하고, 검사내용을 Octavia Service에게 전송한다.
 
 Active 상태의 LB VM에 장애가 발생한다면 HAProxy는 VRRP Protocol을 이용하여 Standby 상태의 HAProxy를 Active 상태로 변경하고 Load Balancing 동작을 지속한다. Octavia Service는 Agent의 Health 정보를 통해서 LB VM의 장애를 파악한뒤, 장애가 발생한 LB VM의 상태를 Error 상태로 변경하고, Standby 상태의 LB VM을 Active 상태로 변경한다. Octavia Member VM에 장애가 발생한다면 Octavia Service는 Agent의 Health 정보를 통해서 Octavia Member VM의 장애를 파악한뒤, 장애가 발생한 Octavia Member VM을 Member Pool에서 제외시킨다.
 
@@ -29,7 +29,7 @@ Active 상태의 LB VM에 장애가 발생한다면 HAProxy는 VRRP Protocol을 
 
 #### 1.2. Kubernetes 동작
 
-Kubernetes가 Octavia와 같이 연동되어 동작할 경우, Kubernetes API Server가 Octavia Service에게 Load Balancer를 직접 요청하여 필요한 Load Balancer를 할당 받는 구조이다. 따라서 Octavia Service는 Kubernetes의 존재를 알지 못하고 Kubernetes API Server의 요청대로 Load Balancer를 할당하고 설정하는 역활만 수행한다.
+Kubernetes가 Octavia와 같이 연동되어 동작할 경우, Kubernetes API Server가 Octavia Service에게 Load Balancer를 직접 요청하여 필요한 Load Balancer를 할당 받는 구조이다. 따라서 Octavia Service는 Kubernetes의 존재를 알지 못하고 Kubernetes API Server의 요청대로 Load Balancer를 할당하고 설정하는 역할만 수행한다.
 
 {% highlight text %}
 [Global]

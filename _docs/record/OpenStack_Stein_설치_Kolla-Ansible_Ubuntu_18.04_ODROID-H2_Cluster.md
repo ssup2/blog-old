@@ -52,7 +52,7 @@ OpenStack의 구성요소 중에서 설치할 구성요소는 다음과 같다.
 * Horizon : Web Dashboard Service를 제공한다.
 * Prometheus : Metric 정보를 저장한다.
 * Grafana : Prometheus에 저장된 Metric 정보를 다양한 Graph로 시각화한다.
-* Ceph : Glance, Cinder의 Backend Storage 역활을 수행한다.
+* Ceph : Glance, Cinder의 Backend Storage 역할을 수행한다.
 
 ### 3. Network 설정
 

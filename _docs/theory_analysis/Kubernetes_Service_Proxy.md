@@ -128,7 +128,7 @@ Service Proxy의 iptables Mode는 iptables를 이용하여 Service Proxy를 수�
 
 KUBE-SERVICES Table에서 요청 Packet의 Dest IP가 Node 자신의 IP인 경우에는 해당 요청 Packet은 KUBE-NODEPORTS Table로 전달된다. KUBE-NODEPORTS Table에서 요청 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 요청 Packet은 NodePort Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다. KUBE-SERVICES Table에서 요청 Packet의 Dest IP와 Dest Port가 LoadBalancer Service의 External IP와 Port와 일치한다면 해당 요청 Packet은 일치하는 LoadBalancer Service의 NAT Table인 KUBE-FW-XXX Table로 전달된 다음, 다시 LoadBalancer Service의 NAT Table인 KUBE-SVC-XXX Table로 전달된다.
 
-KUBE-SVC-XXX Table에서는 iptables의 statistic 기능을 이용하여 요청 Packet은 Service를 구성하는 Pod들로 랜덤하고 균등하게 Load Balancing하는 역활을 수행한다. [NAT Table 4]에서 Service는 3개의 Pod으로 구성되어 있기 때문에 3개의 KUBE-SEP-XXX Table로 요청 Packet이 랜덤하고 균등하게 Load Balancing 되도록 설정되어 있는것을 확인할 수 있다. KUBE-SEP-XXX Table에서 요청 Packet은 Pod의 IP 및 Service에서 설정한 Port로 DNAT를 수행한다. Pod의 IP로 **DNAT**된 요청 Packet은 CNI Plugin을 통해 구축된 Container Network를 통해서 해당 Pod에게 전달된다.
+KUBE-SVC-XXX Table에서는 iptables의 statistic 기능을 이용하여 요청 Packet은 Service를 구성하는 Pod들로 랜덤하고 균등하게 Load Balancing하는 역할을 수행한다. [NAT Table 4]에서 Service는 3개의 Pod으로 구성되어 있기 때문에 3개의 KUBE-SEP-XXX Table로 요청 Packet이 랜덤하고 균등하게 Load Balancing 되도록 설정되어 있는것을 확인할 수 있다. KUBE-SEP-XXX Table에서 요청 Packet은 Pod의 IP 및 Service에서 설정한 Port로 DNAT를 수행한다. Pod의 IP로 **DNAT**된 요청 Packet은 CNI Plugin을 통해 구축된 Container Network를 통해서 해당 Pod에게 전달된다.
 
 Service로 전달되는 요청 Packet은 iptables의 DNAT를 통해서 Pod에게 전달되기 때문에, Pod에서 전송한 응답 Packet의 Src IP는 Pod의 IP가 아닌 Service의 IP로 **SNAT**되어야 한다. iptables에는 Serivce를 위한 SNAT Rule이 명시되어 있지 않다. 하지만 iptables는 Linux Kernel의 **Conntrack** (Connection Tracking)의 TCP Connection 정보를 바탕으로 Service Pod으로부터 전달받은 응답 Packet을 SNAT한다.
 
@@ -188,7 +188,7 @@ Chain KUBE-NODEPORT-HOST (1 references)
 <figcaption class="caption">[NAT Table 12] Userspace Mode의 KUBE-NODEPORT-HOST</figcaption>
 </figure>
 
-Service Proxy의 iptables Mode는 Userspace에서 동작하는 kube-proxy가 Service Proxy 역활을 수행하는 Mode이다. Kubernetes가 처음으로 제공했던 Proxy Mode이다. 현재는 iptables Mode에 비해서 떨어지는 성능 때문에 잘 이용되지 않고 있다. [그림 3]은 Userspace Mode에서 Service 요청 Packet의 경로를 나타내고 있다. [NAT Table 9] ~ [NAT Table 12]은 [그림 3]의 주요 NAT Table의 실제 내용을 보여주고 있다. [그림 3]의 NAT Table과, kube-proxy는 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service 요청 Packet을 전송할 수 있다.
+Service Proxy의 iptables Mode는 Userspace에서 동작하는 kube-proxy가 Service Proxy 역할을 수행하는 Mode이다. Kubernetes가 처음으로 제공했던 Proxy Mode이다. 현재는 iptables Mode에 비해서 떨어지는 성능 때문에 잘 이용되지 않고 있다. [그림 3]은 Userspace Mode에서 Service 요청 Packet의 경로를 나타내고 있다. [NAT Table 9] ~ [NAT Table 12]은 [그림 3]의 주요 NAT Table의 실제 내용을 보여주고 있다. [그림 3]의 NAT Table과, kube-proxy는 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service 요청 Packet을 전송할 수 있다.
 
 대부분의 Pod에서 전송된 요청 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 요청 Packet은 PREROUTING Table에 의해서 KUBE-PORTALS-CONTAINER Table로 전달된다. KUBE-PORTALS-CONTAINER Table에서 요청 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 요청 Packet은 kube-proxy로 **Redirect**된다. 요청 Packet의 Dest IP가 Node 자신의 IP인 경우에는 해당 Packet은 KUBE-NODEPORT-CONTAINER Table로 전달된다. KUBE-NODEPORT-CONTAINER Table에서 요청 Packet의 Dest Port가 NodePort Service의 Port와 일치하는 경우 해당 요청 Packet은 kube-proxy로 Redirect된다. 요청 Packet의 Dest IP와 Dest Port가 LoadBalancer Service의 External IP와 Port와 일치한다면 해당 요청의 Packet도 kube-proxy로 Redirect된다.
 
@@ -332,7 +332,7 @@ TCP  10.103.1.234:80 rr
 <figcaption class="caption">[IPVS List 1] IPVS Mode의 IPVS List </figcaption>
 </figure>
 
-Service Proxy의 IPVS Mode는 Linue Kernel에서 제공하는 L4 Load Balacner인 IPVS가 Service Proxy 역활을 수행하는 Mode이다. Packet Load Balancing 수행시 IPVS가 iptables보다 높은 성능을 보이기 때문에 IPVS Mode는 iptables Mode보다 높은 성능을 보여준다. [그림 4]는 IPVS Mode에서 Service로 전송되는 요청 Packet의 경로를 나타내고 있다. [NAT Table 13] ~ [NAT Table 15]는 [그림 4]의 주요 NAT Table의 실제 내용을 보여주고 있다. [IPset List 1]는 IPVS Mode의 주요 IPset 목록을 보여주고 있다. [IPVS List 1]는 [그림 4]의 IPVS의 실제 내용을 보여주고 있다. [그림 4]의 NAT Table, IPset, IPVS는 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service 요청 Packet을 전송할 수 있다.
+Service Proxy의 IPVS Mode는 Linue Kernel에서 제공하는 L4 Load Balacner인 IPVS가 Service Proxy 역할을 수행하는 Mode이다. Packet Load Balancing 수행시 IPVS가 iptables보다 높은 성능을 보이기 때문에 IPVS Mode는 iptables Mode보다 높은 성능을 보여준다. [그림 4]는 IPVS Mode에서 Service로 전송되는 요청 Packet의 경로를 나타내고 있다. [NAT Table 13] ~ [NAT Table 15]는 [그림 4]의 주요 NAT Table의 실제 내용을 보여주고 있다. [IPset List 1]는 IPVS Mode의 주요 IPset 목록을 보여주고 있다. [IPVS List 1]는 [그림 4]의 IPVS의 실제 내용을 보여주고 있다. [그림 4]의 NAT Table, IPset, IPVS는 Kubernetes Cluster를 구성하는 모든 Node에 동일하게 설정된다. 따라서 Kubernetes Cluster를 구성하는 어느 Node에서도 Service 요청 Packet을 전송할 수 있다.
 
 대부분의 Pod에서 전송된 요청 Packet은 Pod의 veth를 통해서 Host의 Network Namespace로 전달되기 때문에 요청 Packet은 PREROUTING Table에 의해서 KUBE-SERVICES Table로 전달된다. Host의 Network Namespace를 이용하는 Pod 또는 Host Process에서 전송한 요청 Packet은 OUTPUT Table에 의해서 KUBE-SERVICES Table로 전달된다. KUBE-SERVICES Table에서 요청 Packet의 Dest IP와 Dest Port가 ClusterIP Service의 IP와 Port와 일치한다면, 해당 요청 Packet은 IPVS로 전달된다. 요청 Packet의 Dest IP가 Node 자신의 IP인 경우에는 해당 요청 Packet은 KUBE-NODE-PORT Table을 거쳐 IPVS로 전달된다. 요청 Packet의 Dest IP와 Dest Port가 LoadBalancer Service의 External IP와 Port와 일치한다면 해당 요청의 Packet은 KUBE-LOAD-BALANCER Table을 거쳐 IPVS로 전달된다. PREROUTING, OUTPUT Table의 Default Rule이 Accept라면 Service로 전달되는 Packet은 KUBE-SERVICES Table이 없어도 IPVS로 전달되기 때문에 Service에는 영향을 주지 않는다.
 

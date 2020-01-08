@@ -21,7 +21,7 @@ HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이
 
 ![[그림 2] HDFS Architecture]({{site.baseurl}}/images/theory_analysis/Hadoop/HDFS_Architecture.PNG){: width="700px"}
 
-HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이다. HDFS는 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **Name Node**와 Slave 역활을 수행하는 **Data Node**로 이루어져 있다. Name Node는 HDFS을 위한 Meta Data를 관리 및 Client에게 File Open, Close, Rename 같은 Namespace 기능을 제공한다. Data Node는 File 저장을 위한 Storage가 붙어 있는 모든 Node를 의미하며, Block 단위로 쪼개진 File들을 Storage에 저장하고 Client에게 제공하는 역활을 수행한다.
+HDFS는 Data Redundancy, Data Reliable을 보장하는 Distributed Filesystem이다. HDFS는 Master/Slave Architecture를 가지고 있으며, Master 역할을 수행하는 **Name Node**와 Slave 역할을 수행하는 **Data Node**로 이루어져 있다. Name Node는 HDFS을 위한 Meta Data를 관리 및 Client에게 File Open, Close, Rename 같은 Namespace 기능을 제공한다. Data Node는 File 저장을 위한 Storage가 붙어 있는 모든 Node를 의미하며, Block 단위로 쪼개진 File들을 Storage에 저장하고 Client에게 제공하는 역할을 수행한다.
 
 Meta Data에는 Namespace 정보, File-Block Mapping 정보등을 저장하고 있다. Name Node는 Meta Data를 Memory에 유지하고 이용한다. 또한 Name Node는 Meta Data 내용 보존을 위해서 Name Node안에 fsimage File 및 EditLog File에 Meta Data 내용을 저장한다. NameNode는 주기적으로 Checkpoint 동작을 통해 Memory의 Meta Data를 fsimage File로 저장한다. 그리고 Checkpoint 동작 수행 후 Meta Data 변경 내역을 EditLog File에 저장한다. 따라서 fsimage File과 EditLog File을 통해서 Meta Data를 복구할 수 있게 된다. fsimage File과 EditLog File은 Name Node를 재시작하거나 Name Node 장애시 Meta Data 복구를 위해 이용된다.
 
@@ -57,9 +57,9 @@ HDFS은 현재 대부분의 Filesystem에서 이용하는 **Tree** 구조를 이
 
 ![[그림 3] YARN Architecture]({{site.baseurl}}/images/theory_analysis/Hadoop/YARN_Achitecture.PNG){: width="600px"}
 
-YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. YARN도 Master/Slave Architecture를 가지고 있으며, Master 역활을 수행하는 **RM (Resource Manager)**과 Slave 역활을 수행하는 **NM (Node Manager)**로 이루어져 있다. RM은 NM를 통해서 **Container**라고 명칭된 Compute Resource (JVM)을 각 Node에 할당한다. Container중 일부 Container는 MapReduce같은 App을 전반적으로 관리하는 **AM (Application Master)**를 수행한다.
+YARN은 MapReduce같은 App이 어느 Node에서 수행될지 결정하는 Job Scheduling 동작을 수행하고, Cluster를 구성하는 각 Node의 Computing Resource를 관리하는 Daemon이다. YARN도 Master/Slave Architecture를 가지고 있으며, Master 역할을 수행하는 **RM (Resource Manager)**과 Slave 역할을 수행하는 **NM (Node Manager)**로 이루어져 있다. RM은 NM를 통해서 **Container**라고 명칭된 Compute Resource (JVM)을 각 Node에 할당한다. Container중 일부 Container는 MapReduce같은 App을 전반적으로 관리하는 **AM (Application Master)**를 수행한다.
 
-RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역활을 수행한다. NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Node들의 상태를 RM에게 주기적으로 보고한다. 또한 RM이나 AM의 요청에 의해서 Node에 Container를 생성하거나 삭제한다.
+RM은 Scehduler와 Application Manager로 구성되어 있다. Scheduler는 Client로부터 전달받은 App을 관리하는 AM을 실행할 Container를 Node에 할당하거나, AM이 요청한 Container를 할당한다. Application Manager는 Client로부터 전달받은 Job을 수락하거나 Scehduler를 도와 AM Container의 실행을 도와준다. 또한 AM Container를 Monitoring하며, AM Container가 죽었을 경우 AM Container를 다시 실행하는 역할을 수행한다. NM은 RM이 동작하는 Node를 제외한 나머지 Node에서 동작하며 Node들의 상태를 RM에게 주기적으로 보고한다. 또한 RM이나 AM의 요청에 의해서 Node에 Container를 생성하거나 삭제한다.
 
 Hadoop 1.0에서는 MapReduce App만 Hadoop Cluster의 Compute Resource를 이용 할 수 있었지만, Hadoop 2.0에서 YARN이 추가되면서 MapReduce뿐만 아니라 다양한 Spark, Hive같은 다양한 App이 Hadoop Cluster의 Compute Resource를 동시에 이용 할 수 있게 되었다. YARN을 HDFS과 같은 Cluster에 구축시 YARN의 Resource Manager를 HDFS의 Name Node에 구동하고, YARN의 Node Manager를 HDFS의 Data Node에 구동한다.
 

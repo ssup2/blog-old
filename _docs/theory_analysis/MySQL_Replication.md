@@ -41,7 +41,7 @@ Master DB는 Transaction 수행 중 Slave DB로 인한 추가적인 동작을 �
 
 ### 2. Group Replication
 
-Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역활을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
+Group Replication은 다수의 DB Instance를 Group으로 구성하여 Replication을 수행하는 방식이다. Client는 MySQL Router를 통해서 DB로 접근한다. MySQL Router는 Proxy, LB등의 역할을 수행한다. Group Replication은 **Single-primary**, **Multi-primary** 2가지 Mode를 지원한다.
 
 #### 2.1. Single-primary
 

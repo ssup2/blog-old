@@ -42,7 +42,7 @@ Conf 파일은 Container가 연결될 Network를 구성하는데 필요한 정�
 
 #### 1.2. Plugin
 
-Plugin은 Conf 파일에 정의된 Container Network에 특정 Container를 붙이고, 해당 Network에 연결된 Container의 Network Interface 정보를 반환하는 역활을 수행한다. Plugin은 Shell에서 실행가능한 **Binary**이다. Plugin은 Conf 파일의 내용을 **stdin**으로 받고 CNI_COMMAND, CNI_CONTAINERID, CNI_NETNS, CNI_IFNAME 등의 환경변수를 Parameter로 이용한다. 아래는 중요 환경변수에 대한 설명이다.
+Plugin은 Conf 파일에 정의된 Container Network에 특정 Container를 붙이고, 해당 Network에 연결된 Container의 Network Interface 정보를 반환하는 역할을 수행한다. Plugin은 Shell에서 실행가능한 **Binary**이다. Plugin은 Conf 파일의 내용을 **stdin**으로 받고 CNI_COMMAND, CNI_CONTAINERID, CNI_NETNS, CNI_IFNAME 등의 환경변수를 Parameter로 이용한다. 아래는 중요 환경변수에 대한 설명이다.
 
 * CNI_COMMAND : Network Interface ADD(추가), DEL(삭제), GET(조회) 명령어
 * CNI_CONTAINERID : Network Interface를 조작할 Target Container의 ID

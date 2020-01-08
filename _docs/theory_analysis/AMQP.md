@@ -15,7 +15,7 @@ AMQP는 **표준 MQ Protocol**으로써 App사이의 Message를 전달할 때 Me
 
 ![[그림 1] AMQP Architecture]({{site.baseurl}}/images/theory_analysis/AMQP/AMQP_Architecture.PNG){: width="700px"}
 
-[그림 1]은 AMQP의 Architecture를 나타내고 있다. AMQP는 Producer, Consumer, Broker로 구성되어 있다. Producer는 Message를 생산하여 전송하는 주체이고, Consumer는 Producer가 생산한 Message를 받아서 소비하는 주체이다. Broker는 Producer와 Consumer 사이에서 Message를 중개하는 역활을 수행한다. Broker는 다시 **Exchange**와 **Queue**로 구성되어 있다.
+[그림 1]은 AMQP의 Architecture를 나타내고 있다. AMQP는 Producer, Consumer, Broker로 구성되어 있다. Producer는 Message를 생산하여 전송하는 주체이고, Consumer는 Producer가 생산한 Message를 받아서 소비하는 주체이다. Broker는 Producer와 Consumer 사이에서 Message를 중개하는 역할을 수행한다. Broker는 다시 **Exchange**와 **Queue**로 구성되어 있다.
 
 Producer는 임의의 Exchange를 선택하여 자유롭게 Message를 전송할 수 있다. Producer는 Exchange에게 Message와 함께 Message Routing을 위한 **Routing Key**를 같이 전달한다. Exchange는 Routing Key를 이용하여 해당 Message를 **Filtering** 하거나, Queue 또는 다른 Exchange에게 **Routing** 한다. Exchange는 자신과 연결되어 있는 Queue 또는 Exchange에게만 Message를 전달 할 수 있는데, 이러한 연결 과정을 **Binding**이라고 표현한다.
 

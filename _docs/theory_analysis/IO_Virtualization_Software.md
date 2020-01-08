@@ -17,7 +17,7 @@ Software I/O Virtualization은 **Emulation**을 기반으로 하는 기법이다
 
 ### 2. I/O Full-virtualization
 
-I/O Full-virtualization은 물리 머신의 Device Driver를 그대로 이용하는 기법을 의미한다. Linux에서 많이 이용되는 KVM+QEMU 조합에서 QEMU가 Device Emulation 역활을 수행한다.
+I/O Full-virtualization은 물리 머신의 Device Driver를 그대로 이용하는 기법을 의미한다. Linux에서 많이 이용되는 KVM+QEMU 조합에서 QEMU가 Device Emulation 역할을 수행한다.
 
 ![[그림 2] KVM + QEMU의 I/O 처리과정]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_IO_Process.PNG){: width="650px"}
 
@@ -40,7 +40,7 @@ I/O Para-virtualization은 가상 머신에서 물리 머신의 Device Driver를
 
 ![[그림 4] Virtio Architecture]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/VirtIO_Architecture.PNG){: width="600px"}
 
-[그림 4]는 VirtIO의 Architecture를 간략히 나타내고 있다. VirtIO는 크게 Frontend 부분인 VirtIO Driver, Backend 부분인 VirtIO Device Emulator 그리고 Frontend와 Backend를 연결해주는 Virtqueue 3가지로 구성되어 있다. Virio Driver는 가상 머신의 Kernel에 탑재되는 Device Driver이다. Virito Device Driver에는 여러가지가 있는데, 대표적으로 Network를 위한 virito-net과 Block 장치를 위한 virtio-Blk, virtio-scsi가 있다. VirtIO Device Emulator는 QEMU가 담당한다. Virtqueue는 가상 머신과 QEMU의 공유 메모리에 위치하여 Frontend와 Backend사이에서 가상 머신의 I/O Data를 전달하는 역활을 수행한다.
+[그림 4]는 VirtIO의 Architecture를 간략히 나타내고 있다. VirtIO는 크게 Frontend 부분인 VirtIO Driver, Backend 부분인 VirtIO Device Emulator 그리고 Frontend와 Backend를 연결해주는 Virtqueue 3가지로 구성되어 있다. Virio Driver는 가상 머신의 Kernel에 탑재되는 Device Driver이다. Virito Device Driver에는 여러가지가 있는데, 대표적으로 Network를 위한 virito-net과 Block 장치를 위한 virtio-Blk, virtio-scsi가 있다. VirtIO Device Emulator는 QEMU가 담당한다. Virtqueue는 가상 머신과 QEMU의 공유 메모리에 위치하여 Frontend와 Backend사이에서 가상 머신의 I/O Data를 전달하는 역할을 수행한다.
 
 ![[그림 5] KVM + QEMU + VirtIO의 I/O 처리과정]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_virtIO_Process.PNG){: width="650px"}
 
@@ -54,7 +54,7 @@ I/O Para-virtualization은 가상 머신에서 물리 머신의 Device Driver를
 
 #### 3.2. vhost
 
-vhost는 QEMU의 Virtio Device Emulation 역활을 수행하는 **Kernel Module**이다. 지금까지 설명한 가상 머신의 I/O 처리 과정을 보면, 가상 머신의 Exception 뿐만 아니라 KVM <-> QEMU, QEMU <-> Host Device Driver 사이의 많은 CPU Mode Switch가 발생하는 것을 알 수 있다. 이러한 Mode Switch Overhead를 줄이기 위해서 vhost는 Virtio Device Emulation을 Kernel Module에서 수행한다.
+vhost는 QEMU의 Virtio Device Emulation 역할을 수행하는 **Kernel Module**이다. 지금까지 설명한 가상 머신의 I/O 처리 과정을 보면, 가상 머신의 Exception 뿐만 아니라 KVM <-> QEMU, QEMU <-> Host Device Driver 사이의 많은 CPU Mode Switch가 발생하는 것을 알 수 있다. 이러한 Mode Switch Overhead를 줄이기 위해서 vhost는 Virtio Device Emulation을 Kernel Module에서 수행한다.
 
 또한 QEMU는 Global Mutex를 통해 Device Emulation 과정을 Serialization하기 때문에 가상 머신이 동시에 많은 I/O 요청을 수행하면 I/O 성능이 크게 떨어지는 단점을 가지고 있다. vhost를 이용하면 QEMU의 Global Mutex를 벗어나 VirtIO Device Emulation을 수행하기 때문에 VirtIO의 성능 향상 효과도 가져온다.
 
@@ -62,7 +62,7 @@ vhost는 QEMU의 Virtio Device Emulation 역활을 수행하는 **Kernel Module*
 
 ![[그림 9] KVM + QEMU + VirtIO + vhostscsi의 I/O 처리과정]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_virtIO_vhostscsi_Progress.PNG){: width="650px"}
 
-[그림 8], [그림 9]는 KVM+QEMU+VirtIO+vhost에서 I/O Para-virtualization 처리 과정을 나타내고 있다. QEMU대신 vhost가 VirtIO Device Emulation 역활을 수행하는 것을 알 수 있다. 나머지 과정은 VirtIO만을 이용 할 때와 동일하다. vhost-net은 virtio-net의 Emulation 역활을 수행하고, vhost-scsi+LIO가 virtio-scsi의 Emulation 역활을 수행한다.
+[그림 8], [그림 9]는 KVM+QEMU+VirtIO+vhost에서 I/O Para-virtualization 처리 과정을 나타내고 있다. QEMU대신 vhost가 VirtIO Device Emulation 역할을 수행하는 것을 알 수 있다. 나머지 과정은 VirtIO만을 이용 할 때와 동일하다. vhost-net은 virtio-net의 Emulation 역할을 수행하고, vhost-scsi+LIO가 virtio-scsi의 Emulation 역할을 수행한다.
 
 ![[그림 10] KVM + QEMU + VirtIO + vhost 가상 머신이 보는 Device]({{site.baseurl}}/images/theory_analysis/IO_Virtualization_Software/KVM_QEMU_virtIO_vhost_Device.PNG)
 

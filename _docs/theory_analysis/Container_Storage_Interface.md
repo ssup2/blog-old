@@ -21,7 +21,7 @@ Container Storage Interface (CSI)는 Kubernetes, Mesos같은 Container Orchestra
 
 #### 1.1. Plugin
 
-Plugin은 CO의 명령에 따라서 Storage를 제어하는 Storage Controller를 의미한다. Plugin은 **Controller Plugin**과 **Node Plugin**으로 구분된다. Controller Plugin은 어느 Node에서 동작해도 관계없는 Plugin을 의미한다. Storage 중앙 관리 기능은 Controller Plugin이 수행한다. Node Plugin은 Container가 동작하는 모든 Node에서 동작하는 Plugin을 의미한다. 특정 Node를 제어하는 역활은 Node Plugin이 수행한다.
+Plugin은 CO의 명령에 따라서 Storage를 제어하는 Storage Controller를 의미한다. Plugin은 **Controller Plugin**과 **Node Plugin**으로 구분된다. Controller Plugin은 어느 Node에서 동작해도 관계없는 Plugin을 의미한다. Storage 중앙 관리 기능은 Controller Plugin이 수행한다. Node Plugin은 Container가 동작하는 모든 Node에서 동작하는 Plugin을 의미한다. 특정 Node를 제어하는 역할은 Node Plugin이 수행한다.
 
 CSI에서 Controller Plugin과 Node Plugin의 구성 및 배치는 비교적 자유롭게 열어두었다. CSI는 Controller Plugin과 Node Plugin을 구분하였지만, 하나의 Program으로 구성될수도 있다고 정의하고 있다. 심지어 Controller Plugin이 존재하지 않고 Node Plugin으로만 구성할 수 있다고 정의하고 있다. CSI는 Plugin의 Life Cycle은 정의하지 않는다.
 

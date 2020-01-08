@@ -11,7 +11,7 @@ Apache ZooKeeper를 분석한다.
 
 ### 1. ZooKeeper
 
-ZooKeeper는 분산 시스템 환경에서 Leader 선출, Node 상태, 분산 Lock 관리등 다양한 역활을 수행하는 **분산 Coordinator**이다. 안전성과 성능을 인정 받아 Hadoop, HBase, Storm, Kafka 등 다양한 Open Source Project에 이용되고 있다.
+ZooKeeper는 분산 시스템 환경에서 Leader 선출, Node 상태, 분산 Lock 관리등 다양한 역할을 수행하는 **분산 Coordinator**이다. 안전성과 성능을 인정 받아 Hadoop, HBase, Storm, Kafka 등 다양한 Open Source Project에 이용되고 있다.
 
 #### 1.1. Architecture
 
@@ -35,7 +35,7 @@ ZNode는 **Persistent Node**와 **Ephemeral Node**로 구분된다. Persistent N
 
 ![[그림 3] Zookeeper Watcher]({{site.baseurl}}/images/theory_analysis/ZooKeeper/ZooKeeper_Watcher.PNG)
 
-Watcher는 ZNode의 변경을 Client에게 먼져 알려주는 역활을 수행한다. Client는 먼져 특정 ZNode에 대해 Watcher를 등록한다. 그 후 해당 ZNode의 Data가 변경되거나, Child Node가 생성/삭제 될 경우 Client에게 변경되었다는 Event를 Client에게 전달한다.
+Watcher는 ZNode의 변경을 Client에게 먼져 알려주는 역할을 수행한다. Client는 먼져 특정 ZNode에 대해 Watcher를 등록한다. 그 후 해당 ZNode의 Data가 변경되거나, Child Node가 생성/삭제 될 경우 Client에게 변경되었다는 Event를 Client에게 전달한다.
 
 #### 1.4. Usage Example
 

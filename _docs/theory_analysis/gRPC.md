@@ -39,7 +39,7 @@ message Person {
 <figcaption class="caption">[파일 1] addressbook.proto </figcaption>
 </figure>
 
-ProtoBuf는 Server와 Client 사이에서 구조화된 Data를 쉽게 주고 받을수 있도록, Interface를 정의하고 구조화된 Data를 Serialization하는 역활을 수행한다. [파일 1]은 구조화된 Data인 Person Data를 ProtoBuf 규격에 맞게 저장하고 있는 .proto 파일을 나타내고 있다. ProtoBuf는 .proto 파일을 컴파일하여 gRPC Server와 gRPC Client에서 이용할 수 있는 Code를 생성한다. 생성된 Code를 이용하여 Server와 Client는 gRPC를 수행한다.
+ProtoBuf는 Server와 Client 사이에서 구조화된 Data를 쉽게 주고 받을수 있도록, Interface를 정의하고 구조화된 Data를 Serialization하는 역할을 수행한다. [파일 1]은 구조화된 Data인 Person Data를 ProtoBuf 규격에 맞게 저장하고 있는 .proto 파일을 나타내고 있다. ProtoBuf는 .proto 파일을 컴파일하여 gRPC Server와 gRPC Client에서 이용할 수 있는 Code를 생성한다. 생성된 Code를 이용하여 Server와 Client는 gRPC를 수행한다.
 
 #### 1.2. vs HTTP/1.1 + JSON
 
