@@ -21,7 +21,7 @@ Pushgateway는 의미 그대로 Server가 수행하지 못하는 Push 방식으�
 
 Storage는 기본적으로 TSDB (Time Serise Data Base) 역할을 수행하는 Local Storage를 이용하며 추가적으로 외부에 있는 Remote Storage를 이용할 수 있다. Local Storage는 Metric을 오래동안 저장하도록 설계되어 있지 않다. 오랜 기간동안 Metric을 저장하기 위해서는 Remote Storage를 이용해야한다. 현재는 Remote Storage에서도 Metric을 읽어올수 있지만 추후에 Remote Storage에는 Metric 쓰기 동작만 허용하도록 변경될 예정이다. PromQL Engine은 Storage에 저장된 Metric 정보를 바탕으로 PromQL Query를 처리를 수행하는 역할을 수행한다. Grafana와 같은 Client는 PromQL Query를 통해서 원하는 Metric 정보를 얻는다.
 
-Rule Manager는 Prometheus 사용자가 지정한 Alert Rule을 관리하고, PromQL Engine에게 PromQL Query를 통해서 설정한 Alert Rule의 조건이 충족되었는지 주기적으로 확인한다. 만약 Alert Rule의 조건이 충족되었다면 Rule Manager는 해당 Alert을 Notifier를 통해서 Alertmanager에게 전달한다. Notifier는 Rule Manager의 Alert뿐만 아니라 Target의 변경 내용을 발견하고 해당 변경 내용을 Alert으로 Alertmanager에게 전달하는 기능도 수행한다. Alertmanager는 Notifier로부터 전달 받은 Alert을 Alertmanager에 설정된 Alert 목적지 정보에 따라 전달한다. Alertmanager는 비슷한 Alert을 묶어주는 Grouping, Alert이 발생하면 설정된 다른 Alert이 발생하지 않게 하는 Inhibition, Alert을 끄는 Silence 기능을 제공한다. Alert 목적지로는 Email, HTTP/HTTPS, Webhook, Slack의 방법 등을 지원하고 있다.
+Rule Manager는 Prometheus 사용자가 지정한 Alert Rule을 관리하고, PromQL Engine에게 PromQL Query를 통해서 설정한 Alert Rule의 조건이 충족되었는지 주기적으로 확인한다. 만약 Alert Rule의 조건이 충족되었다면 Rule Manager는 해당 Alert을 Notifier를 통해서 Alertmanager에게 전달한다. Notifier는 Rule Manager의 Alert뿐만 아니라 Target의 변경 내용을 발견하고 해당 변경 내용을 Alert으로 Alertmanager에게 전달하는 기능도 수행한다. Alertmanager는 Notifier로부터 전달 받은 Alert을 Alertmanager에 설정된 Alert 목적지에 따라 전달한다. Alertmanager는 비슷한 Alert을 묶어주는 Grouping, Alert이 발생하면 설정된 다른 Alert이 발생하지 않게 하는 Inhibition, Alert을 끄는 Silence 기능을 제공한다. Alert 목적지로는 Email, HTTP/HTTPS, Webhook, Slack의 방법 등을 지원하고 있다.
 
 ### 2. 참조
 
