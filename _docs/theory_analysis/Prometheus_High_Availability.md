@@ -11,10 +11,12 @@ Prometheus의 High Availability 구성 방법을 분석한다.
 
 ### 1. Prometheus High Availability
 
+![[그림 1] Prometheus HA 구성]({{site.baseurl}}/images/theory_analysis/Prometheus_High_Availability/Prometheus_HA.PNG){: width="700px"}
+
 ### 2. 참조
 
 * [https://www.perimeterx.com/blog/scaling-out-with-prometheus/](https://www.perimeterx.com/blog/scaling-out-with-prometheus/)
 * [https://coreos.com/operators/prometheus/docs/latest/high-availability.html](https://coreos.com/operators/prometheus/docs/latest/high-availability.html)
 * [https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available](https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available)
 * [https://promcon.io/2017-munich/slides/alertmanager-and-high-availability.pdf](https://promcon.io/2017-munich/slides/alertmanager-and-high-availability.pdf)
-* [https://www.slideshare.net/ienvyou/ss-141517899](https://www.slideshare.net/ienvyou/ss-141517899)
+* [https://github.com/prometheus/pushgateway/issues/241](https://github.com/prometheus/pushgateway/issues/241)
