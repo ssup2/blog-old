@@ -21,7 +21,9 @@ Prometheus Exporter와 같이 Metric을 수집하는 Agent에서 Server에게 Pu
 
 하지만 Prometheus Server가 죽을경우 죽은 Prometheus Server를 이용하던 Client는 동일한 Metric Data를 가져올 수 없기 때문에 완전한 HA 방식이라고 볼수는 없다. 이러한 불완전한 Prometheus Server의 HA를 해결해주는 기법중 하나가 Thanos를 이용하는 방법이다. Thanos는 각 Prometheus Server가 갖고 있는 Metric 정보를 하나의 공유 Storage에 모은 다음, Prometheus Client의 요청을 Prometheus Server대신 Thanos가 대신 받아 공유 Storage에 저장된 Metric 정보를 Prometheus Client에게 제공하는 방식을 이용한다. Thanos는 모든 Metric 정보는 하나의 공유 Storage에 저장되기 때문에 다수의 Thanos Server를 구동하는 방식으로 쉽게 HA를 구성할 수 있다.
 
-Prometheus Alertmanager의 HA는 gossip이라고 불리는 Protocol을 이용한 **Prometheus Alertmanager Clustering**으로 해결할 수 있다. 각 Prometheus Server는 Alert이 발생하면 Cluster를 구성하는 모든 Prometheus Alertmanager에게 Alert을 전송한다. 따라서 일부의 Prometheus Alertmanager가 Alert을 받지 못하거나 죽더라도 Alert은 소실되지 않는다. 하지만 Prometheus Alertmanager Cluster는 동일한 Alert을 최대 Cluster에 포함된 Prometheus Alertmanager의 개수만큼 중복해서 받게된다. Prometheus Alertmanager Cluster는 중복된 수신 Alert을 중복 횟수만큼 여러번 Alert 목적지로 전송하지 않는다. 중복을 제거하여 하나의 Alert만 Alert 목적지로 전송한다. 현재 Prometheus Pushgateway는 HA를 지원하지 않는다.
+Prometheus Alertmanager의 HA는 gossip이라고 불리는 Protocol을 이용한 **Prometheus Alertmanager Clustering**으로 해결할 수 있다. 각 Prometheus Server는 Alert이 발생하면 Cluster를 구성하는 모든 Prometheus Alertmanager에게 Alert을 전송한다. 따라서 일부의 Prometheus Alertmanager가 Alert을 받지 못하거나 죽더라도 Alert은 소실되지 않는다. 하지만 Prometheus Alertmanager Cluster는 동일한 Alert을 최대 Cluster에 포함된 Prometheus Alertmanager의 개수만큼 중복해서 받게된다. 
+
+Prometheus Alertmanager Cluster는 중복 수신한 Alert을 중복 횟수만큼 여러번 Alert 목적지로 전송하지 않는다. 중복을 제거하여 하나의 Alert만 Alert 목적지로 전송한다. 외부의 장애 요소로 인해서 Prometheus Alertmanager Cluster가 일시적으로 Alert 중복 제거 기능을 이용하지 못하는 경우, Alert 목적지로 동일한 Alert이 여려번 전송될 수 있다. 현재 Prometheus Pushgateway는 HA를 지원하지 않는다.
 
 ### 2. 참조
 
