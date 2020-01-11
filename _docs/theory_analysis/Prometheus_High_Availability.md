@@ -23,7 +23,7 @@ Prometheus Exporter와 같이 Metric을 수집하는 Agent에서 Server에게 Pu
 
 Prometheus Alertmanager의 HA는 gossip이라고 불리는 Protocol을 이용한 **Prometheus Alertmanager Clustering**으로 해결할 수 있다. 각 Prometheus Server는 Alert이 발생하면 Cluster를 구성하는 모든 Prometheus Alertmanager에게 Alert을 전송한다. 따라서 일부의 Prometheus Alertmanager가 Alert을 받지 못하거나 죽더라도 Alert은 소실되지 않는다. 하지만 Prometheus Alertmanager Cluster는 동일한 Alert을 최대 Cluster에 포함된 Prometheus Alertmanager의 개수만큼 중복해서 받게된다. 
 
-Prometheus Alertmanager Cluster는 중복 수신한 Alert을 중복 횟수만큼 여러번 Alert 목적지로 전송하지 않는다. 중복을 제거하여 하나의 Alert만 Alert 목적지로 전송한다. 외부의 장애 요소로 인해서 Prometheus Alertmanager Cluster가 일시적으로 Alert 중복 제거 기능을 이용하지 못하는 경우, Alert 목적지로 동일한 Alert이 여려번 전송될 수 있다. 현재 Prometheus Pushgateway는 HA를 지원하지 않는다.
+Prometheus Alertmanager Cluster는 중복 수신한 Alert을 중복 횟수만큼 여러번 Alert 목적지로 전송하지 않는다. 중복을 제거하여 하나의 Alert만 Alert 목적지로 전송한다. 외부의 장애 요소로 인해서 Prometheus Alertmanager Cluster가 일시적으로 Alert 중복 제거를 수행하지 못하는 경우, Alert 목적지로 동일한 Alert이 여려번 전송될 수 있다. 현재 Prometheus Pushgateway는 HA를 지원하지 않는다.
 
 ### 2. 참조
 
