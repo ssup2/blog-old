@@ -31,4 +31,3 @@ Prometheus Alertmanager Cluster는 중복 수신한 Alert을 중복 횟수만큼
 * [https://promcon.io/2017-munich/slides/alertmanager-and-high-availability.pdf](https://promcon.io/2017-munich/slides/alertmanager-and-high-availability.pdf)
 * [https://github.com/prometheus/pushgateway/issues/241](https://github.com/prometheus/pushgateway/issues/241)
 * [https://github.com/prometheus/pushgateway/issues/319](https://github.com/prometheus/pushgateway/issues/319)
-* [https://engineering.hellofresh.com/monitoring-at-hellofresh-part-1-architecture-677b4bd6b728](https://engineering.hellofresh.com/monitoring-at-hellofresh-part-1-architecture-677b4bd6b728)
