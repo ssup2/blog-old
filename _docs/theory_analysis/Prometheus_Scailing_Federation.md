@@ -45,5 +45,3 @@ scrape_configs:
 * [https://www.robustperception.io/federation-what-is-it-good-for]
 (https://www.robustperception.io/federation-what-is-it-good-for)
 * [https://stackoverflow.com/questions/48751632/prometheus-federation-match-params-do-not-work](https://stackoverflow.com/questions/48751632/prometheus-federation-match-params-do-not-work)
-
-
