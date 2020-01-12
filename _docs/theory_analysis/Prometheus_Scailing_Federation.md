@@ -11,7 +11,7 @@ Prometheus Federation을 분석한다.
 
 ### 1. Prometheus Scailing, Federation
 
-![[그림 1] Prometheus Horizontal Sharding]({{site.baseurl}}/images/theory_analysis/Prometheus_Federation/Prometheus_Scailing.PNG)
+![[그림 1] Prometheus Horizontal Sharding]({{site.baseurl}}/images/theory_analysis/Prometheus_Scaling_Federation/Prometheus_Scailing.PNG)
 
 수집해야할 Metric이 증가하여 단일 Prometheus Server에서 모든 Metric 정보를 수집하기 힘든경우, 다수의 Prometheus Server를 띄우고 Metric을 분산하여 수집하는 **Horizontal Sharding** 기반의 Scaling 기법을 이용할 수 있다. [그림 1]은 Horizontal Sharding을 이용한 Scaling 기법을 나타내고 있다. Horizontal Sharding을 수행하여 다수의 Prometheus Server가 구동될 경우 일부 Prometheus Server는 다른 Prometheus Server가 저장하고 있는 Metric이 필요할 경우가 있다. 이러한 필요성을 충족시키기 위해서 Prometheus Server는 **Federation** 기능을 제공한다.
 
