@@ -42,6 +42,5 @@ scrape_configs:
 ### 2. 참조
 
 * [https://prometheus.io/docs/prometheus/latest/federation/](https://prometheus.io/docs/prometheus/latest/federation/)
-* [https://www.robustperception.io/federation-what-is-it-good-for]
-(https://www.robustperception.io/federation-what-is-it-good-for)
+* [https://www.robustperception.io/federation-what-is-it-good-for](https://www.robustperception.io/federation-what-is-it-good-for)
 * [https://stackoverflow.com/questions/48751632/prometheus-federation-match-params-do-not-work](https://stackoverflow.com/questions/48751632/prometheus-federation-match-params-do-not-work)
