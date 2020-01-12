@@ -33,7 +33,7 @@ scrape_configs:
 <figcaption class="caption">[파일 1] Federation Scrape Target 설정</figcaption>
 </figure>
 
-모든 Prometheus Server는 자신이 수집한 Metric을 외부에서 가져갈 수 있도록 /federate URL을 제공하고 있다. /federate?[MatchQuery] 처럼 Match Query를 /federate URL뒤에 붙여 가져올 Metric을 Filtering 한다. [파일 1]은 Federation 기능을 이용하여 외부의 prom-1, prom-2 Prometheus Server에서 Metric을 가져오도록 설정되어 있는 Promethues Server의 설정을 나타내고 있다. http://[prom-1, prom-2]:9090/federate?match[]={job="prometheus"} URL을 이용하여 job Label에 prometheus가 저장되어 있는 모든 metric 정보를 15초의 주기로 가져오도록 설정되어 있다.
+모든 Prometheus Server는 자신이 수집한 Metric을 외부에서 가져갈 수 있도록 /federate URL을 제공하고 있다. `/federate?[MatchQuery]` 처럼 Match Query를 /federate URL뒤에 붙여 가져올 Metric을 Filtering 한다. [파일 1]은 Federation 기능을 이용하여 외부의 prom-1, prom-2 Prometheus Server에서 Metric을 가져오도록 설정되어 있는 Promethues Server의 설정을 나타내고 있다. `http://[prom-1, prom-2]:9090/federate?match[]={job="prometheus"}` URL을 이용하여 job Label에 prometheus 문자열이 저장되어 있는 모든 metric 정보를 15초의 주기로 가져오도록 설정되어 있다.
 
 ![[그림 2] Prometheus Server의 Federation 구성]({{site.baseurl}}/images/theory_analysis/Prometheus_Scaling_Federation/Prometheus_Federation.PNG)
 
