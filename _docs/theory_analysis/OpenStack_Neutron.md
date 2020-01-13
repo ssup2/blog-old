@@ -49,23 +49,25 @@ Neutron Server와 Agent들은 사이의 통신은 Message Queue를 이용한다.
 
 #### 2.1. Management/Provider/Self-service Network, Router, DHCP
 
-OpenStack 구성에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP Server가 실제 어떻게 구성되는지 분석한다. Management Network는 VLAN을 이용하지 않으면서 Node의 Network를 직접 이용하는 Flat Network로 구성되어 있다고 가정하였다. 또한 Guest/Provider Network는 VLAN 10번 Network로 구성되어 있고 Guest/Self-service Network는 VXLAN 20번 Network로 구성되어 있다고 가정하였다.
+OVS (Open vSwitch)의 유뮤에 따라서 Management Network, Provider Network, Self-service Network, Router, DHCP Server가 실제 어떻게 구성되는지 분석한다. Management Network는 VLAN을 이용하지 않으면서 Node의 Network를 직접 이용하는 Flat Network로 구성되어 있다고 가정하였다. 또한 Guest/Provider Network는 VLAN 10번 Network로 구성되어 있고 Guest/Self-service Network는 VXLAN 20번 Network로 구성되어 있다고 가정하였다.
 
-##### 2.1.1. Without SDN
+##### 2.1.1. Without OVS
 
-![[그림 3] Compute Node의 Network 구성]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_SDN.PNG){: width="700px"}
+![[그림 3] Compute Node Network without OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_OVS.PNG){: width="700px"}
 
 [그림 3]은 Compute Node의 Network 설정을 나타내고 있다. eth0는 Management Network와 연결되어 있다. Guest/Provider Network는 VLAN 10번을 이용하기 때문에 eth0 Interface에 VLAN 10번 Interface와 VLAN 10번에 VM을 붙일때 이용하는 Bridge를 설정한다. 이와 유사하게 Guest/Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙일때 이용하는 Bridge를 설정한다.
 
 VM A는 Provider Network에만 연결되어 있기 때문에 VM A의 TAP Interface는 VLAN 10번 Interface와  연결되어 있는 Bridge에만 연결되어 있다. VM C는 Self-serviced Network에만 연결되어 있기 때문에 VM C의 TAP Interface는 VLAN 20번 Interface와 연결되어 있는 Bridge에만 연결되어 있다. VM B는 양쪽 Network 모두와 연결되어 있기 때문에 VM B의 2개의 TAP Interface를 이용하여 모든 Bridge에 연결되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
 
-![[그림 4] Network Node의 Network 구성]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_SDN.PNG){: width="700px"}
+![[그림 4] Network Node Network without OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_OVS.PNG){: width="700px"}
 
 [그림 4]는 Network Node의 Network 설정을 나타내고 있다. eth1는 Management Network와 연결되어있고, eth0은 External/Provider Network에 연결되어 있다. Compute Node와 유사하게 VLAN 10번 Interface, VXLAN 20번 Interface 설정 및 관련 Bridge들을 설정한다. 이와 더불어 External/Provider Network와 연결을 위한 별도의 Bridge가 설정되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
 
 Router와 Network Namespace는 1:1 관계를 갖는다. Router별로 별도의 Network Namespace를 이용하기 때문에 각 Router는 완전히 독립된 Routing Table을 구성할 수 있다. [그림 4]의 Router는 External/Provider Network, Guest/Provider Network, Guest/Self-service Network를 연결하는 Router이다. 각 Network를 연결하는 Bridge에 VETH Interface를 이용하여 Router Network Namespace로 Packet을 전송한다. Router Network Namespace로 전송된 Packet은 iptables을 통해 설정된 Routing Rule에 의해서 Routing된다. Router 설정은 L3 Agent가 수행한다.
 
 DHCP Server는 Network Node에 Guest Network의 Bridge에 dnsmasq를 붙여 구성한다. 각 dnsmasq는 별도의 Network Namespace에서 구동되기 때문에 Network Node에 여러개의 dnsmasq가 동작하여도 충돌이 발생하지 않는다. dnsmasq의 Network Namespace로 Packet을 전송하기 위해서 Router와 동일하게 VETH를 이용한다. dnsmasq 설정은 DHCP Agent가 수행한다.
+
+##### 2.1.2. With OVS
 
 ### 3. 참조
 
