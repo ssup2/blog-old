@@ -2,7 +2,7 @@
 title: OpenStack Neutron
 category: Theory, Analysis
 date: 2018-12-02T12:00:00Z
-lastmod: 2017-12-02T12:00:00Z
+lastmod: 2020-01-15T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -55,7 +55,7 @@ OVS (Open vSwitch)의 유뮤에 따라서 Management Network, Provider Network, 
 
 ![[그림 3] Compute Node Network without OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_No_OVS.PNG){: width="700px"}
 
-[그림 3]은 Compute Node의 Network 설정을 나타내고 있다. eth0는 Management Network와 연결되어 있다. Guest/Provider Network는 VLAN 10번을 이용하기 때문에 eth0 Interface에 VLAN 10번 Interface와 VLAN 10번에 VM을 붙일때 이용하는 Bridge를 설정한다. 이와 유사하게 Guest/Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙일때 이용하는 Bridge를 설정한다.
+[그림 3]은 Compute Node의 Network 설정을 나타내고 있다. eth0는 Management Network와 연결되어 있다. Guest/Provider Network는 VLAN 10번을 이용하기 때문에 eth0 Interface에 VLAN 10번 Interface와 VLAN 10번에 VM을 붙일때 이용하는 Bridge를 설정한다. 이와 유사하게 Guest/Self-service Network는 VXLAN 20번을 이용하기 때문에 eth0 Interface에 VXLAN 20번 Interface와 VXLAN 20번에 VM을 붙일때 이용하는 Bridge를 설정한다. VM의 Inbound/Outbound Packet은 Bridge를 지나며 OpenStack의 Security Group의 Rule에 의해서 설정된 IPTables의 Filter Table에 의해서 Filtering 된다.
 
 VM A는 Provider Network에만 연결되어 있기 때문에 VM A의 TAP Interface는 VLAN 10번 Interface와  연결되어 있는 Bridge에만 연결되어 있다. VM C는 Self-serviced Network에만 연결되어 있기 때문에 VM C의 TAP Interface는 VLAN 20번 Interface와 연결되어 있는 Bridge에만 연결되어 있다. VM B는 양쪽 Network 모두와 연결되어 있기 때문에 VM B의 2개의 TAP Interface를 이용하여 모든 Bridge에 연결되어 있다. Bridge, VLAN Interface, VXLAN Interface는 ML2 Plugin Agent가 설정한다.
 
@@ -69,9 +69,14 @@ DHCP Server는 Network Node에 Guest Network의 Bridge에 dnsmasq를 붙여 구�
 
 ##### 2.1.2. With OVS
 
+![[그림 5] Compute Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_With_OVS.PNG){: width="700px"}
+
+![[그림 6] Network Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_OVS.PNG){: width="700px"}
+
 ### 3. 참조
 
 * [https://docs.openstack.org/install-guide/](https://docs.openstack.org/install-guide/)
 * [https://docs.openstack.org/security-guide/networking/architecture.html](https://docs.openstack.org/security-guide/networking/architecture.html)
-* [https://www.slideshare.net/rootfs32/20150511-jun-leeopenstack-neutron](https://www.slideshare.net/rootfs32/20150511-jun-leeopenstack-neutron)
+* [https://docs.openstack.org/liberty/networking-guide/scenario-classic-ovs.html](https://docs.openstack.org/liberty/networking-guide/scenario-classic-ovs.html)
+* [https://docs.openstack.org/liberty/networking-guide/scenario-classic-lb.html](https://docs.openstack.org/liberty/networking-guide/scenario-classic-lb.html)
 * [https://www.suse.com/c/vms-get-access-metadata-neutron/](https://www.suse.com/c/vms-get-access-metadata-neutron/)
