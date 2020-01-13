@@ -71,7 +71,7 @@ DHCP Server는 Network Node에 Guest Network의 Bridge에 dnsmasq를 붙여 구�
 
 ![[그림 5] Compute Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Compute_Node_With_OVS.PNG){: width="700px"}
 
-![[그림 6] Network Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_No_OVS.PNG){: width="700px"}
+![[그림 6] Network Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Neutron/Network_Node_With_OVS.PNG){: width="700px"}
 
 ### 3. 참조
 
