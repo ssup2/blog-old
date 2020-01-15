@@ -123,7 +123,7 @@ spec:
 
 Nginx는 Lua Module을 이용하여 Client의 Packet을 Load Balancing하고 필요에 따라서 TLS 암호화/복호화도 수행한다. [파일 2]은 Kubernetes의 Ingress, Service, Deployment의 예제를 나타내고 있다. [파일 2]의 내용처럼 Ingress는 Service에 Mapping이되고 Service는 Pod(Deployment)에 Mapping이 된다. 따라서 [파일 2]의 내용을 보면 Client의 Packet은 Nginx에서 Service IP로 DNAT되고 다시 Service IP에서 Pod IP로 2번 DNAT 및 Load Balancing 되어 전송되는것 처럼 보인다. 하지만 실제로 Nginx는 Client가 전송한 Packet을 Configuration Lua Module이 Shared Memory에 저장한 Backend의 Service 및 Endpoint(Pod IP/Port) 정보를 바탕으로 **한번만 DNAT를 수행**하여 Load Balancing 및 Packet을 Pod으로 바로 전송한다.
 
-Load Balancing 알고리즘은 기본적으로 Round Robin을 이용하고 configmap을 이용하여 설정 할 수 있다. Protocol은 HTTP/HTTPS 뿐만 아니라 TCP/UDP도 지원한다. Ingress 설정시 TLS를 이용하도록 설정되어 있다면, Nginx의 Certificate Lua Module은  Configuration Lua Module이 Shared Memory에 저장한 Certificate 정보를 바탕으로 TLS 암호화/복호화를 수행한다.
+Load Balancing 알고리즘은 기본적으로 Round Robin을 이용하고 configmap을 이용하여 설정 할 수 있다. Protocol은 HTTP/HTTPS 뿐만 아니라 TCP/UDP도 지원한다. Ingress 설정시 TLS를 이용하도록 설정되어 있다면 Configuration Lua Module이 Shared Memory에 저장한 Certificate 정보를 바탕으로 TLS 암호화/복호화를 수행한다.
 
 #### 1.4. Health Check
 
