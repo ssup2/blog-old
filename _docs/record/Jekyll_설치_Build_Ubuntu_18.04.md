@@ -25,7 +25,7 @@ Jeykll 구동에 필요한 Ubuntu Package를 설치한다.
 ~~~console
 # gem install bundler -v '1.16.1'
 # bundle install
-# gem install jeykll
+# gem install jekyll
 ~~~
 
 Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
@@ -33,11 +33,11 @@ Jekyll 구동에 필요한 Ruby Gem 및 Jekyll을 설치한다.
 ### 4. Jekyll Servce
 
 ~~~console
-# jekyll serve
+# bundle exec jekyll serve
 ~~~
 
 Jekyll Blog의 Root 폴더에서 jekyll serve 명령어를 이용하여 Local에서 Jekyll Blog를 구동하고, 동작을 확인한다.
-*  http://192.168.0.150:4000
+*  http://127.0.0.1:4000
 
 ### 5. 참조
 

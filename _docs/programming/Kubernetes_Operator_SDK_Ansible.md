@@ -121,12 +121,6 @@ size: 1
 </figure>
 
 {% highlight text %}
-# sed -i 's|{{ REPLACE_IMAGE }}|supsup5642/memcached-operator:v0.0.1|g' deploy/operator.yaml
-# sed -i 's|{{ pull_policy\|default('\''Always'\'') }}|Always|g' deploy/operator.yaml
-# kubectl create -f deploy/service_account.yaml
-# kubectl create -f deploy/role.yaml
-# kubectl create -f deploy/role_binding.yaml
-# kubectl create -f deploy/operator.yaml
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 5] Memcached Operator 구동</figcaption>

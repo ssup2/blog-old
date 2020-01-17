@@ -98,7 +98,7 @@ header {
 		font-size: 2rem;
 		line-height: 0.8;
 		letter-spacing: 0;
-		font-weight: 700;
+		font-weight: 600;
 		text-indent: 0;
 		@include display-flex();
 		@include flex-direction(row);
@@ -138,10 +138,6 @@ header {
 
 		.open-nav {
 			display: none;
-		}
-
-		h1 {
-			box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1);
 		}
 	}
 }
