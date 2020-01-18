@@ -11,20 +11,21 @@ OpenStack의 Keystone을 분석한다.
 
 ### 1. OpenStack Keystone
 
-![[그림 1] Keystone Component]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG){: width="450px"}
+![[그림 1] Keystone Components]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG){: width="700px"}
 
-Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Authorization)를 제공하고 OpenStack의 Service Discovey 기능도 제공한다. [그림 1]은 Keystone의 구성요소를 나타내고 있다. 각 구성 요소는 다음과 같다.
+Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Authorization)를 제공하고 OpenStack의 Service Discovey 기능도 제공한다. [그림 1]은 Keystone의 Backend와 각 Backend에 저장된 Keystone의 구성요소를 나타내고 있다. 각 구성 요소는 다음과 같다.
 
 * User :
-* Tenant :
+* Group : 
+* Project : 
 * Role : 
-* Credentials :
-* Authentication :
-* Token :
-* Service :
-* Endpoint :
+* Credentials : 
+* Authentication : 
+* Token : 
+* Service : 
+* Endpoint : 
 
-#### 1.1. Authentication, Authorization Flow
+#### 1.1. Authentication, Authorization
 
 ![[그림 2] Keystone Authentication, Authorization Flow]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Auth_Flow.PNG){: width="700px"}
 
