@@ -29,7 +29,7 @@ Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Author
 
 #### 1.1. Components Relation
 
-![[그림 1] Keystone Components Relation]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG){: width="700px"}
+![[그림 1] Keystone Components Relation]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component_Relation.PNG){: width="600px"}
 
 [그림 1]은 Keystone의 주요 구성요소들의 관계를 나타내고 있다.
 
