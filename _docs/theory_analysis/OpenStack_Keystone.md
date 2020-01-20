@@ -29,7 +29,7 @@ Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Author
 
 #### 1.1. Components Relation
 
-![[그림 1] Keystone Components Relation]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component_Relation.PNG){: width="500px"}
+![[그림 1] Keystone Components Relation]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component_Relation.PNG){: width="550px"}
 
 [그림 1]은 Keystone의 주요 구성요소들의 관계를 나타내고 있다. Policy는 Domain 밖의 전역 공간에 위치한다. Policy안의 Rule의 집합으로 Role이 정의된다. Role은 특정 Domain안에 소속되거나 Domain 밖의 전역 공간에 위치한다. User, Group, Project는 특정 Domain안에 소속된다. Group은 User의 집합으로 구성된다. User 또는 Group은 각 Project마다 다른 Role을 갖도록 Mapping 될 수 있다.
 
