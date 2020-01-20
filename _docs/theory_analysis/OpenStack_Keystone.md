@@ -11,7 +11,7 @@ OpenStack의 Keystone을 분석한다.
 
 ### 1. OpenStack Keystone
 
-![[그림 1] Keystone Components]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG){: width="700px"}
+![[그림 1] Keystone Components]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG)
 
 Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Authorization)를 제공하고 OpenStack의 Service Discovey 기능도 제공한다. [그림 1]은 Keystone의 Backend들과 각 Backend에 저장된 Keystone의 구성요소들을 나타내고 있다. 각 구성 요소는 다음과 같다.
 
@@ -19,7 +19,7 @@ Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Author
 
 * Assignment Backend : Project, Domain, Role 및 Role Assignment 정보를 저장한다. SQL DB를 이용하여 구성한다. Project는 Server, Image 같은 Resource의 Isolation 및 Grouping을 위한 단위를 의미한다. 과거에 OpenStack에서는 Tenant라는 이름으로 지칭되었다. Domain은 User와 Project의 Isolation 및 Grouping을 위한 단위를 의미한다. User 이름과 Project 이름이 동일하더라도 각각 다른 Domain에 소속되어 있다면 하나의 OpenStack에서 이용할 수 있다. Role은 권한의 집합을 의미하고, Role Assignment는 Role의 할당 정보를 의미한다. User 또는 Group은 각 Project 마다 다른 Role을 갖을 수 있다.
 
-* Policy Backend : Policy 정보를 저장한다. Oslo RBAC Engine을 이용하여 구성한다. Policy는 Role의 권한을 정의한다.
+* Policy Backend : Policy 정보를 저장한다. Oslo RBAC Engine을 이용하여 구성한다. Policy는 Rule이라고 불리는 명시된 권한의 집합을 의미한다. Role은 Rule의 집합으로 정의된다.
 
 * Credentials Backend : Credentials 정보를 저장한다. SQL DB를 이용하여 구성한다. Credentials는 OpenStack Service를 이용하는 OpenStack Client(Application)의 인증, 인가를 위해서 이용된다. Keystone을 이용하여 언제든지 Credentials 생성/삭제가 가능하다.
 
@@ -29,7 +29,11 @@ Keystone은 OpenStack에서 RBAC 기반의 인증(Authentication), 인가(Author
 
 #### 1.1. Components Relation
 
-#### 1.2. Authentication, Authorization
+![[그림 1] Keystone Components Relation]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Component.PNG){: width="700px"}
+
+[그림 1]은 Keystone의 주요 구성요소들의 관계를 나타내고 있다.
+
+#### 1.2. Authentication, Authorization Flow
 
 ![[그림 3] Keystone Authentication, Authorization Flow with Server Side Authorization]({{site.baseurl}}/images/theory_analysis/OpenStack_Keystone/Keystone_Auth_Flow_Server_Side_Authorization.PNG)
 
