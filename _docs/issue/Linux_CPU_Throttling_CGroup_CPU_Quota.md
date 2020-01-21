@@ -13,7 +13,7 @@ Multi Core Machine에서 CGroup CPU Quota를 통해 CPU 사용량이 제한된 P
 
 ### 2. 해결 방안
 
-Linux Kernel의 Process Scheduler 문제이기 때문에 Kernel Upgrade를 통해서 해결해야 한다. 다음과 같은 Linux Kernel Version을 이용하면 Issue를 해결할 수 있다. Kernel Upgrade가 힘들다면 CPU Quota 값을 원하는 값보다 높게 설정하거나 CPU Quota 기능을 이용하지 않는 방식으로 CPU Throttling Issue를 우회할 수 있다.
+Linux Kernel Scheduler의 문제이기 때문에 Kernel Upgrade를 통해서 해결해야 한다. 다음과 같은 Linux Kernel Version을 이용하면 Issue를 해결할 수 있다. Kernel Upgrade가 힘들다면 CPU Quota 값을 원하는 값보다 높게 설정하거나 CPU Quota 기능을 이용하지 않는 방식으로 CPU Throttling Issue를 우회할 수 있다.
 
 * Linux mainline
   * Apply to 5.4
