@@ -25,7 +25,6 @@ Linux Kernel Scheduler 문제이기 때문에 Kernel Upgrade를 통해서 해결
   * RHEL7 : 3.10.0-1062.8.1.el7
   * RHEL8.2 : WIP
 
-
 ### 3. 참조
 
 * https://sched.co/Uae1

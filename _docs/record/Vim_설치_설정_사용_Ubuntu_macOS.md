@@ -67,19 +67,16 @@ Vim, ctags, cscope, ClangFormat, python2를 설치한다.
 
 ##### 3.2.1. Ubuntu
 
-~~~console
+{% highlight shell %}
+...
+export TERM=xterm-256color
 source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-~~~
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] ~/.bashrc</figcaption>
+</figure>
 
-Vim의 gruvbox Theme를 위해서 ~/.bashrc 파일에 위의 내용을 추가한다.
-
-##### 3.2.2. macOS
-
-~~~console
-source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-~~~
-
-Vim의 gruvbox Theme를 위해서 ~/.bash_profile 파일에 위의 내용을 추가한다.
+ ~/.bashrc 파일에 [파일 1]의 내용을 추가하여 Vundle이 vim-go를 설치하도록 설정한다.
 
 #### 3.3. Vundle Plugin 설치
 
@@ -108,7 +105,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
-Plugin 'dracula/vim'
+Plugin 'morhetz/gruvbox'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'Valloric/YouCompleteMe'
@@ -129,6 +126,9 @@ set sw=4                        " Shift Width
 set hlsearch                    " highlight all search matches
 colorscheme gruvbox
 syntax on
+
+"" gruvbox	
+set background=dark
 
 "" cscope Setting
 set csprg=/usr/bin/cscope         " cscope Which
@@ -166,10 +166,10 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 let g:clang_format#auto_format = 0
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] ~/.vimrc</figcaption>
+<figcaption class="caption">[파일 2] ~/.vimrc</figcaption>
 </figure>
 
-~/.vimrc 파일을 [파일 1]과 같이 생성하여, Plugin 설치 및 설정 정보를 저장한다.
+~/.vimrc 파일을 [파일 2]와 같이 생성하여, Plugin 설치 및 설정 정보를 저장한다.
 
 #### 3.5. Vundle을 이용하여 Vim Plugin 설치
 
@@ -229,10 +229,10 @@ Plugin 'fatih/vim-go'
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] ~/.vimrc</figcaption>
+<figcaption class="caption">[파일 3] ~/.vimrc</figcaption>
 </figure>
 
-~/.vimrc 파일의 Vundle Plugins에 [파일 2]내용을 추가하여 Vundle이 vim-go를 설치하도록 설정한다.
+~/.vimrc 파일의 Vundle Plugins에 [파일 3]의 내용을 추가하여 Vundle이 vim-go를 설치하도록 설정한다.
 
 ~~~console
 : PluginInstall
