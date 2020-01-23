@@ -73,7 +73,7 @@ fi
 
 > Preferences... -> Profiles -> General -> Sends text at start:
 
-> tmux ls && read tmux_session && tmux attach -t ${tmux_session:-default} || tmux new -s ${tmux_session:-default}
+> tmux ls && read tmux_session && tmux attach -t ${tmux_session:-default} \|\| tmux new -s ${tmux_session:-default}
 
 iTerm2 설정에 "Sends text at start"에 tmux 설정을 추가하여 iTerm2 실행시 tmux가 실행되도록 설정한다.
 
