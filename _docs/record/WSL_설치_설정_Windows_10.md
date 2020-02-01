@@ -71,7 +71,7 @@ White=168,153,132
 BoldWhite=235,219,178
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] wsltty grubbox Theme</figcaption>
+<figcaption class="caption">[파일 1] WSLtty grubbox Theme</figcaption>
 </figure>
 
 %APPDATA%\wsltty\themes\grubbox 파일을 생성하고 [파일 1]의 내용으로 저장하여 wsltty에서 이용할 grubbox Theme를 설정한다.
@@ -84,7 +84,7 @@ FontHeight=10
 AllowSetSelection=yes
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] wsltty grubbox Theme</figcaption>
+<figcaption class="caption">[파일 2] WSLtty Config</figcaption>
 </figure>
 
 %APPDATA%\wsltty\themes\grubbox\config 파일을 [파일 2]의 내용으로 수정한다.
