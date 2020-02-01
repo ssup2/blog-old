@@ -82,6 +82,7 @@ ThemeFile=gruvbox
 Term=xterm-256color
 FontHeight=10
 AllowSetSelection=yes
+{% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] wsltty grubbox Theme</figcaption>
 </figure>
