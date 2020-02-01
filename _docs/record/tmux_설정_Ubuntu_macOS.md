@@ -53,7 +53,7 @@ run -b '~/.tmux/plugins/tpm/tpm'
 
 ~/.tmux.conf 파일을 [파일 1]의 내용으로 생성/변경 한다.
 
-### 3. Bash Shell 설정
+### 3. Bash Shell, Terminal 설정
 
 #### 3.1. Ubuntu
 
@@ -71,11 +71,19 @@ fi
 
 #### 3.2. macOS
 
+![[그림 1] tmux autorun setting with iTerm2]({{site.baseurl}}/images/record/tmux_Install_Ubuntu_macOS/tmux_autorun_iTerm2.PNG){: width="600px"}
+
 > Preferences... -> Profiles -> General -> Sends text at start:
 
 > tmux ls && read tmux_session && tmux attach -t ${tmux_session:-default} \|\| tmux new -s ${tmux_session:-default}
 
-iTerm2 설정에 "Sends text at start"에 tmux 설정을 추가하여 iTerm2 실행시 tmux가 실행되도록 설정한다.
+[그림 1]의 내용처럼 iTerm2 설정에 "Sends text at start"에 tmux 설정을 추가하여 iTerm2 실행시 tmux가 실행되도록 설정한다.
+
+![[그림 2] tmux clipboard setting with iTerm2]({{site.baseurl}}/images/record/tmux_Install_Ubuntu_macOS/tmux_clipboard_iTerm2.PNG){: width="600px"}
+
+> Preferences... -> General -> Applications in terminal may access clipboard
+
+[그림 2]의 내용처럼 iTerm2를 설정하여 tmux에서 선택한 Text가 Clipboard로 복사되도록 설정한다.
 
 ### 4. TPM (Tmux Plugin Manager) 설치, 실행
 
