@@ -43,7 +43,7 @@ WSL Ubuntu의 root 계정을 생성한다. WSL Ubuntu를 설치 후 처음으로
 
 WSL Ubuntu가 Default 계정으로 root를 이용하도록 설정한다. WSL Ubuntu를 종료한 다음, PowerShell을 관리자 권한으로 실행하여 위의 명령어를 실행한다.
 
-### 4. wsltty 설치, 설정
+### 4. WSLtty 설치, 설정
 
 * [https://github.com/mintty/wsltty/releases](https://github.com/mintty/wsltty/releases)
 
