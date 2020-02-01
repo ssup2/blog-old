@@ -1,5 +1,5 @@
 ---
-title: Visual Studio Code 설치, 설정, 사용 / Windows 10 환경
+title: WSL 설치,설정 / Windows 10 환경
 category: Record
 date: 2020-02-01T12:00:00Z
 lastmod: 2020-02-01T12:00:00Z

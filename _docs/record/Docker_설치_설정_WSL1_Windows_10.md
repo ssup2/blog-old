@@ -1,5 +1,5 @@
 ---
-title: Visual Studio Code 설치, 설정, 사용 / Windows 10 환경
+title: Docker 설치,설정 / WSL1 이용 / Windows 10 환경
 category: Record
 date: 2019-03-14T12:00:00Z
 lastmod: 2019-03-14T12:00:00Z
@@ -25,11 +25,11 @@ adsense: true
 Visual Studio Code의 Terminal에서 Docker 이용을 위한 Docker for Windows를 설치한다.
 * [https://docs.docker.com/docker-for-windows](https://docs.docker.com/docker-for-windows)
 
-![[그림 1] Docker for Windows 설치]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_01.PNG){: width="550px"}
+![[그림 1] Docker for Windows 설치]({{site.baseurl}}/images/record/Docker_Install_WSL1_Windows_10/Docker_Install_01.PNG){: width="550px"}
 
 [그림 1]과 같이 설치 완료후 Docker for Windows를 실행하여 Hyper-V를 활성화한다. Docker for Windows는 Hyper-V로 생성한 VM에서 Docker를 실행하는 구조이다.
 
-![[그림 2] Docker Port 설정]({{site.baseurl}}/images/record/Visual_Studio_Code_Install_Windows_10/Docker_Install_02.PNG){: width="550px"}
+![[그림 2] Docker Port 설정]({{site.baseurl}}/images/record/Docker_Install_WSL1_Windows_10/Docker_Install_02.PNG){: width="550px"}
 
 [그림 2]와 같이 WSL Ubuntu에서 Docker에 접근할 수 있도록 Docker Daemon을 2375 Port로 개방한다.
 
@@ -39,7 +39,7 @@ Visual Studio Code의 Terminal에서 Docker 이용을 위한 Docker for Windows�
 
 Windows에서 Container의 IP에 바로 접근할 수 있도록 Routing Rule을 추가한다. Default Docker Network인 172.17.0.0/24 Network 관련 Routing Rule을 추가한다. PowerShell을 관리자 권한으로 실행하여 위의 명령어를 입력한다.
 
-### 3. WSL1 Docker 설치, 설정
+### 3. WSL1에서 Docker 설치, 설정
 
 ~~~console
 # apt update
