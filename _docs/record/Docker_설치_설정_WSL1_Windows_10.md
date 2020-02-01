@@ -1,5 +1,5 @@
 ---
-title: Docker 설치,설정 / WSL1 이용 / Windows 10 환경
+title: Docker 설치, 설정 / WSL1 환경 / Windows 10 환경
 category: Record
 date: 2019-03-14T12:00:00Z
 lastmod: 2019-03-14T12:00:00Z
