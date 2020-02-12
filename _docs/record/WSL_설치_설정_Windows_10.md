@@ -87,7 +87,7 @@ AllowSetSelection=yes
 <figcaption class="caption">[파일 2] WSLtty Config</figcaption>
 </figure>
 
-%APPDATA%\wsltty\themes\grubbox\config 파일을 [파일 2]의 내용으로 수정한다.
+%APPDATA%\wsltty\config 파일을 [파일 2]의 내용으로 수정한다.
 
 ### 5. 참고
 
