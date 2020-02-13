@@ -27,7 +27,7 @@ adsense: true
 > New-NetNat -Name NAT-Network -InternalIPInterfaceAddressPrefix 172.35.0.0/24
 ~~~
 
-Powershell 관리자 권한에서 아래의 명령어 수행한다.
+Powershell 관리자 권한에서 위의 명령어를 수행한다.
 
 ### 3. VM
 
