@@ -11,7 +11,7 @@ Linux에서 Network Connection을 관리하는 역활을 수행하는 Netfilter 
 
 ### 1. Linux conntrack Module
 
-conntrack Module은 Linux Kernel에서 Network Connection을 관리, 추적하는 Netfilter Framework의 **Stateful Module**이다. iptables와 같이 Netfilter Filter Framework 기반 Application이 제공하는 Network Connection 관련 기능들은 모두 conntrack Module을 기반으로 하고 있다.
+conntrack Module은 Linux Kernel에서 **Network Connection을 관리, 추적**하는 Netfilter Framework의 Stateful Module이다. iptables와 같이 Netfilter Filter Framework 기반 Application이 제공하는 Network Connection 관련 기능들은 모두 conntrack Module을 기반으로 하고 있다.
 
 #### 1.1. Connection Status, conntrack Command
 
@@ -26,16 +26,16 @@ tcp      6 28 TIME_WAIT src=10.0.0.19 dst=10.0.0.19 sport=34306 dport=18080 src=
 <figcaption class="caption">[Shell 1] conntrack Table</figcaption>
 </figure>
 
-conntrack Module이 관리하고 있는 Connection 정보는 **conntrack 명령어**롤 통해서 확인할 수 있다. conntrack은 conntrack, expect, dying, unconfirmed 4개의 Table을 관리한다. Connection 정보가 저장되는 Table은 Connection Status에 따라 결정된다.
+conntrack Module이 관리하고 있는 Connection 정보는 conntrack 명령어롤 통해서 확인할 수 있다. conntrack은 conntrack, expect, dying, unconfirmed 4개의 Table을 관리한다. Connection 정보가 저장되는 Table은 Connection Status에 따라 결정된다.
 
 * conntrack : 대부분의 Connection 정보들을 저장하고 있다. [Shell 1]은 conntrack Table을 나타내고있다.
-* expect : Connection Tracking Helper에 의해서 **Related Connection**으로 분류된 Connection 정보들을 저정하고 있다.
+* expect : Connection Tracking Helper에 의해서 Related Connection으로 분류된 Connection 정보들을 저정하고 있다.
 * dying : Connection이 만기가 되거나, conntrack 명령어를 통해서 삭제되고 있는 Connection 정보들을 저장하고 있다.
 * unconfirmed : Kernel의 Socket Buffer에 저장된 Packet이 갖고 있는 Connection 정보이지만, 아직 확인하지 못하여 conntrack Table에는 저장되지 못한 Connection 정보들을 의미한다. Packet이 갖고 있는 Connection 정보는 Packet이 Postrouting Hook에 도달하였을 때 Confirm된다.
 
 #### 1.2. Connection Tracking Helper
 
-Connection Tracking Helper는 **Stateful Application Layer Protocol**을 파악하여 별도의 독립된 Connection을 **Related Connection**으로 분류하는 역활을 수행한다. 지원하는 Stateful Application Layer Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. 예를 들어 FTP의 경우 Control Connection과 Data Connection 2가지의 Connection을 이용하는데 Control Connection은 존재하지만 Data Connection이 없는 상태에서 Data Connection이 생성될 경우, 생성된 Data Connection은 New Connection 상태가 아닌 **Related Connection** 상태로 분류된다.
+Connection Tracking Helper는 Stateful Application Layer Protocol을 파악하여 별도의 독립된 Connection을 **Related Connection**으로 분류하는 역활을 수행한다. 지원하는 Stateful Application Layer Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. 예를 들어 FTP의 경우 Control Connection과 Data Connection 2가지의 Connection을 이용하는데 Control Connection은 존재하지만 Data Connection이 없는 상태에서 Data Connection이 생성될 경우, 생성된 Data Connection은 New Connection 상태가 아닌 Related Connection 상태로 분류된다.
 
 {% highlight text %}
 # lsmod | grep nf_conntrack
