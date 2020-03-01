@@ -13,7 +13,7 @@ Linux에서 Network Connection을 관리하는 역활을 수행하는 Netfilter 
 
 conntrack Module은 Linux Kernel에서 Network Connection을 관리, 추적하는 Netfilter Framework의 **Stateful Module**이다. iptables와 같이 Netfilter Filter Framework 기반 Application이 제공하는 Network Connection 관련 기능들은 모두 conntrack Module을 기반으로 하고 있다.
 
-#### 1.1. Connection Status, conntrack 명령어
+#### 1.1. Connection Status, conntrack Command
 
 {% highlight text %}
 # conntrack -L conntrack
@@ -38,14 +38,13 @@ conntrack Module이 관리하고 있는 Connection 정보는 **conntrack 명령�
 Connection Tracking Helper는 **Stateful Application Layer Protocol**을 파악하여 별도의 독립된 Connection을 **Related Connection**으로 분류하는 역활을 수행한다. 지원하는 Stateful Application Layer Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. 예를 들어 FTP의 경우 Control Connection과 Data Connection 2가지의 Connection을 이용하는데 Control Connection은 존재하지만 Data Connection이 없는 상태에서 Data Connection이 생성될 경우, 생성된 Data Connection은 New Connection 상태가 아닌 **Related Connection** 상태로 분류된다.
 
 {% highlight text %}
-# # lsmod | grep nf_conntrack
+# lsmod | grep nf_conntrack
 nf_conntrack_tftp      16384  0
 nf_conntrack_sip       28672  0
 nf_conntrack_snmp      16384  0
 nf_conntrack_broadcast    16384  1 nf_conntrack_snmp
 nf_conntrack_ftp       20480  0
 nf_conntrack_netlink    40960  0
-nfnetlink              16384  2 nf_conntrack_netlink
 nf_conntrack_ipv6      20480  1
 nf_conntrack_ipv4      16384  5
 nf_conntrack          131072  16 xt_conntrack,nf_nat_masquerade_ipv4,nf_conntrack_ipv6,nf_conntrack_ipv4,nf_nat,nf_conntrack_tftp,nf_nat_ipv6,ipt_MASQUERADE,nf_nat_ipv4,xt_nat,nf_conntrack_sip,openvswitch,nf_conntrack_broadcast,nf_conntrack_netlink,nf_conntrack_ftp,nf_conntrack_snmp
@@ -59,7 +58,7 @@ Connection Tracking Helper는 별도의 Module로 구성되어 있다. [Shell 2]
 #### 1.3. Connection Option in iptables
 
 {% highlight text %}
-iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+# iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 3] Connection State in iptables</figcaption>
