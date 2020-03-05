@@ -44,7 +44,9 @@ UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발�
 
 ### 4. DNS Timeout Issue with Kubernetes
  
-Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다.
+Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데, Kubernetes 환경에서는 본 이슈로 인해서 DNS Resolve 수행시 발생하는 UDP Packet이 Drop될 확률이 높다. Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다. 따라서 App에서 Domain Reslove를 위해서 CoreDNS로 전송되는 UDP Packet은 App Pod이 있는 Node에서 DNAT되어 Master의 CoreDNS로 분배된다.
+
+또한 Container의 Base Image로 많이 이용된는 Alpine Image는 glibc대신 musl라는 C Library를 이용하여 Domain Resolve를 수행한다. musl은 Domain Resolve 수행시 A Record와 AAAA Record를 동일 Socket을 통해서 동시에 수행한다. 즉 Kubernetes에서 동작하는 Alpine Image 기반의 App은 동일한 Src IP/Port를 갖고 있고, DNAT되는 CoreDNS Service의 Cluster IP를 Dst IP/Port로 갖는 UDP Packet을 동시에 전송하게 되어 UDP Packet Drop 현상을 겪게된다.
 
 ### 5. 참조
 
@@ -55,3 +57,5 @@ Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행�
 * [http://patchwork.ozlabs.org/patch/1032812](http://patchwork.ozlabs.org/patch/1032812)
 * [https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns](https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns)
 * [https://github.com/kubernetes/kubernetes/issues/56903#issuecomment-466368174](https://github.com/kubernetes/kubernetes/issues/56903#issuecomment-466368174)
+* [https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/](https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/)
+* [https://wiki.musl-libc.org/functional-differences-from-glibc.html](https://wiki.musl-libc.org/functional-differences-from-glibc.html)
