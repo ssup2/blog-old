@@ -40,6 +40,15 @@ DNAT를 수행하지 않을 경우에 발생하는 Issue는 다음의 2가지의
 * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed07d9a021df6da53456663a76999189badc432a](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed07d9a021df6da53456663a76999189badc432a)
 * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e35c1cb9460240e983a01745b5f29fe3a4d8e39](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e35c1cb9460240e983a01745b5f29fe3a4d8e39)
 
+위의 Kernel Patch가 적용된 Version은 다음과 같다.
+
+* Linux stable 
+  * 5.0+
+* Linux longterm
+  * 4.9.163+, 4.14.106+, 4.19.29+, 5.4+
+* Distro Linux Kernel
+  * Ubuntu : 4.15.0-56+
+
 UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발생하는 Issue는 아직 Kernel에서 해결하지 못한 상태이다. 따라서 App 내부에서 하나의 Socket을 통해서 (동일한 Port를 이용하여) 동시에 UDP Packet을 전송하지 못하도록 제한하여 conntrack Race Condition을 방지하거나, 위의 Kernel Patch가 적용된 상태에서 UDP Packet이 DNAT 되어 전송되어도 서로 다른 상대가 아닌 동일한 상대한테 전송되도록 Kernel의 DNAT Rule을 설정하여 해당 이슈를 우회해야 한다.
 
 ### 4. DNS Timeout Issue with Kubernetes
@@ -48,11 +57,11 @@ Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데,
 
 또한 Domain Resolve를 수행시 App에서 가장 많이 이용하는 C Library인 glibc과 musl은 A Record와 AAAA Record를 동일 Socket을 통해서 동시에 수행한다. 즉 Kubernetes에서 동작하는 glic 또는 musl 기반의 App은 동일한 Src IP/Port를 갖고 있고, DNAT되는 CoreDNS Service의 Cluster IP를 Dst IP/Port로 갖는 UDP Packet을 동시에 전송하게 되어 UDP Packet Drop 현상을 겪게된다.
 
-위에서 언급한 Patch가 적용된 Kernel Version을 이용해도 DNAT로 인해 발생하는 Issue는 해결하지 못하기 때문에 우회 방법을 적용하여 문제를 해결해야 한다. 가장 쉬운 접근법은 동시에 수행되는 Domain Resolve를 막아 conntrack Race Condition을 방지하는 방법이다. glibc는 /etc/resolv.conf 파일에 “single-request” 또는 “single-request-reopen” Option을 주어 동시에 A Record와 AAAA Record를 동시에 Resolve하지 못하게 제한할 수 있다. 하지만 musl은 이러한 Opiton을 제공하지 않는다. musl은 많은 곳에서 이용중인 Alpine Image에서 이용되는 C Library이다.
+위에서 언급한 Patch가 적용된 Kernel Version을 이용해도 DNAT 수행시 발생하는 Issue는 해결하지 못하기 때문에 우회 방법을 적용하여 문제를 해결해야 한다. 가장 쉬운 접근법은 동시에 수행되는 Domain Resolve를 막아 conntrack Race Condition을 방지하는 방법이다. glibc는 /etc/resolv.conf 파일에 “single-request” 또는 “single-request-reopen” Option을 주어 동시에 A Record와 AAAA Record를 동시에 Resolve하지 못하게 제한할 수 있다. 하지만 musl은 이러한 Opiton을 지원하지 않는다. musl은 많은 곳에서 이용중인 Alpine Image에서 이용되는 C Library이다.
 
-또 하나의 우회 방법은 하나의 App에서 전송되는 Domain Resolve Packet은 무조건 동일한 CoreDNS로 DNAT 되도록 설정하는 방법이 있다. Packet의 Header Hashing을 기반으로 하는 Load Balancing을 수행하는 알고리즘을 이용하면 된다. Kubernetes Cluster에서 Service Loadbalancing을 IPVS를 통해서 수행하고 있다면 IPVS의 Load Balancing 알고리즘을 dh(Destination Hashing Scheduling), sh(Source Hashing Scheduling)을 이용하면 된다. Cilium CNI Plugin은 eBPF에서 Packet의 Header Hasing을 통해서 Load Balancing을 이용하기 때문에 Cilium CNI Plugin 사용 또한 우회 방법중 하나이다.
+또 하나의 우회 방법은 하나의 App에서 전송되는 Domain Resolve Packet은 무조건 동일한 CoreDNS로 DNAT 되도록 설정하는 방법이 있다. Packet의 Header Hashing을 기반으로 하는 Load Balancing을 수행하는 알고리즘을 이용하면 된다. Kubernetes Cluster에서 Service Loadbalancing을 IPVS를 통해서 수행하고 있다면 IPVS의 Load Balancing 알고리즘을 dh(Destination Hashing Scheduling), sh(Source Hashing Scheduling)을 이용하면 된다. Cilium CNI Plugin은 eBPF에서 Packet의 Header Hashing을 통해서 Load Balancing을 이용하기 때문에 Cilium CNI Plugin 사용 또한 우회 방법중 하나이다.
 
-마지막으로 우회 방법은 App이 동작하는 Node에서 DNAT를 수행하지 않고 바로 CoreDNS로 Domain Resolve Packet을 전송하는 방법이다. 가장 많이 이용되는 방법은 각 Node마다 CoreDNS를 띄운다음 App이 동일 Node의 CoreDNS를 이용하도록 하여 DNAT를 제거하는 방법이다.
+마지막으로 우회 방법은 DNAT를 수행없이 바로 CoreDNS로 Domain Resolve Packet을 전송하는 방법이다. 가장 많이 이용되는 방법은 각 Node마다 CoreDNS를 띄운다음 App이 동일 Node의 CoreDNS를 이용하도록 하여 DNAT를 제거하는 방법이다.
 
 ### 5. 참조
 
@@ -65,3 +74,4 @@ Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데,
 * [https://github.com/kubernetes/kubernetes/issues/56903#issuecomment-466368174](https://github.com/kubernetes/kubernetes/issues/56903#issuecomment-466368174)
 * [https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/](https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/)
 * [https://wiki.musl-libc.org/functional-differences-from-glibc.html](https://wiki.musl-libc.org/functional-differences-from-glibc.html)
+* [https://launchpad.net/ubuntu/+source/linux/4.15.0-58.64](https://launchpad.net/ubuntu/+source/linux/4.15.0-58.64)

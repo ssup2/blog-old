@@ -21,15 +21,13 @@ Linux Kernel의 Process Scheduler의 문제이기 때문에 다음의 3개의 Pa
 
 Patch가 적용된 Kernel Version은 다음과 같다.
 
-* Linux mainline
-  * Apply to 5.4
 * Linux stable
-  * 4.14.154+, 4.19.84+, 5.3.9+
+  * 5.4+
+* Linux longterm
+  * 4.14.154+, 4.19.84+, 5.4+
 * Distro Linux Kernel
-  * Ubuntu 16.04 : 4.15.0-67+
-  * Ubuntu 18.04 : 5.3.0-24+
-  * RHEL7 : 3.10.0-1062.8.1.el7
-  * RHEL8.2 : WIP
+  * Ubuntu : 4.15.0-67+
+  * Centos7 : 3.10.0-1062.8.1.el7+
 
 Kernel Upgrade가 힘들다면 CPU Quota 값을 원하는 값보다 높게 설정하거나 CPU Quota 기능을 이용하지 않는 방식으로 CPU Throttling Issue를 우회할 수 있다.
 
