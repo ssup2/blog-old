@@ -21,9 +21,9 @@ Linux Kernel의 Process Scheduler의 문제이기 때문에 다음의 3개의 Pa
 
 Patch가 적용된 Kernel Version은 다음과 같다.
 
-* Linux stable
+* Linux Stable
   * 5.4+
-* Linux longterm
+* Linux Longterm
   * 4.14.154+, 4.19.84+, 5.4+
 * Distro Linux Kernel
   * Ubuntu : 4.15.0-67+

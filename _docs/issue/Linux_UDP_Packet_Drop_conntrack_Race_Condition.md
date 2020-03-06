@@ -42,9 +42,9 @@ DNAT를 수행하지 않을 경우에 발생하는 Issue는 다음의 2가지의
 
 위의 Kernel Patch가 적용된 Version은 다음과 같다.
 
-* Linux stable 
+* Linux Stable 
   * 5.0+
-* Linux longterm
+* Linux Longterm
   * 4.9.163+, 4.14.106+, 4.19.29+, 5.4+
 * Distro Linux Kernel
   * Ubuntu : 4.15.0-56+
