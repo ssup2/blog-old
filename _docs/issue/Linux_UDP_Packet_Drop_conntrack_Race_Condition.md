@@ -49,11 +49,11 @@ DNAT를 수행하지 않을 경우에 발생하는 Issue는 다음의 2가지의
 * Distro Linux Kernel
   * Ubuntu : 4.15.0-56+
 
-UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발생하는 Issue는 아직 Kernel에서 해결하지 못한 상태이다. 따라서 App 내부에서 하나의 Socket을 통해서 (동일한 Port를 이용하여) 동시에 UDP Packet을 전송하지 못하도록 제한하여 conntrack Race Condition을 방지하거나, 위의 Kernel Patch가 적용된 상태에서 UDP Packet이 DNAT 되어 전송되어도 서로 다른 상대가 아닌 동일한 상대한테 전송되도록 Kernel의 DNAT Rule을 설정하여 해당 이슈를 우회해야 한다.
+UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발생하는 Issue는 아직 Kernel에서 해결하지 못한 상태이다. 따라서 App 내부에서 하나의 Socket을 통해서 (동일한 Port를 이용하여) 동시에 UDP Packet을 전송하지 못하도록 제한하여 conntrack Race Condition을 방지하거나, 위의 Kernel Patch가 적용된 상태에서 UDP Packet이 DNAT 되어 전송되어도 서로 다른 상대가 아닌 동일한 상대한테 전송되도록 Kernel의 DNAT Rule을 설정하여 본 Issue를 우회해야 한다.
 
 ### 4. DNS Timeout Issue with Kubernetes
  
-Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데, Kubernetes 환경에서는 본 이슈로 인해서 Domain Resolve 수행시 발생하는 UDP Packet이 Drop될 수 있다. Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다. 따라서 App에서 Domain Resolve를 위해서 CoreDNS로 전송되는 UDP Packet은 App Pod이 있는 Node에서 **DNAT** 되어 Master의 CoreDNS로 분배된다.
+Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데, Kubernetes 환경에서는 본 Issue로 인해서 Domain Resolve 수행시 발생하는 UDP Packet이 Drop될 수 있다. Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다. 따라서 App에서 Domain Resolve를 위해서 CoreDNS로 전송되는 UDP Packet은 App Pod이 있는 Node에서 **DNAT** 되어 Master의 CoreDNS로 분배된다.
 
 또한 Domain Resolve를 수행시 App에서 가장 많이 이용하는 C Library인 glibc과 musl은 A Record와 AAAA Record를 동일 Socket을 통해서 동시에 수행한다. 즉 Kubernetes에서 동작하는 glic 또는 musl 기반의 App은 동일한 Src IP/Port를 갖고 있고, DNAT되는 CoreDNS Service의 Cluster IP를 Dst IP/Port로 갖는 UDP Packet을 동시에 전송하게 되어 UDP Packet Drop 현상을 겪게된다.
 
