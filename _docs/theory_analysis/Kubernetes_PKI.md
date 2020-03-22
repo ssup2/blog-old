@@ -13,7 +13,7 @@ Kubernetes PKI (Public Key Infrastructure)를 분석한다.
 
 ![[그림 1] Kubernetes Certificate, Key]({{site.baseurl}}/images/theory_analysis/Kubernetes_PKI/Kubernetes_Cert_Key.PNG)
 
-![[그림 2] Kubernetes PKI]({{site.baseurl}}/images/theory_analysis/Kubernetes_PKI/Kubernetes_Cert_Key.PNG)
+![[그림 2] Kubernetes PKI]({{site.baseurl}}/images/theory_analysis/Kubernetes_PKI/Kubernetes_PKI.PNG)
 
 ### 2. 참고
 
