@@ -124,7 +124,7 @@ cilium 16.xx 이전 Version의 경우에 Host Process의 경우 BPF를 이용하
 
 ![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_Host.PNG)
 
-[그림 4]는 Host L3 Network을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Service와 연결된 Pod이 외부에 있을경우 SNAT가 cilium_host의 tc action engress BPF에서 수행된다는점을 제외하고는 VXLAN을 이용할때와 크게 다르지 않다.
+[그림 4]는 Host L3 Network을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Service와 연결된 Pod이 외부에 있을경우 SNAT가 cilium_host의 tc action engress BPF에서 수행된다는 점을 제외하고는 VXLAN을 이용할때와 크게 다르지 않다.
 
 #### 1.4. Filtering
 
