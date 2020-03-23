@@ -21,7 +21,7 @@ Kubernetes Component들은 서로간 통신시 TLS를 이용하여 암호화 한
 
 etcd Server에는 etcd/peer.crt,key와 etcd/server.crt,key를 이용한다. etcd/peer.crt,key는 Cluster내의 etcd Server 사이의 통신에 이용한다. etcd/server.crt,key는 etcd Server의 Certificate, Key 역활을 수행하며 etcd의 Client인 etcdctl 또는 Kubernetes API Server와의 통신시에 이용한다. etcdctl은 etcd Server에 연결시 etcd/healthcheck-client.crt,key를 이용한다.
 
-etcd를 제외한 나머지 Kubernetes Component들은 ca.crt를 기반으로 생성된 client.crt,key를 이용하여 apiserver.crt,key를 이용하는 Kubernetes API Server와 통신한다. Kubernetes API Server는 kubelet에 연결시 apiserver-kublet-client.crt,key를 이용하고, Kubernetes 사용자가 정의하는 Kubernetes Extention API Server에 연결시 front-proxy-client.crt,key 파일을 이용한다. kubelet은 스스로 생성한 kubelet.crt,key를 이용하여 Server 역활을 수행한다. Kubernetes Scheduler, Controller Manager도 Memory에 스스로 생성한 Certificate, Key를 이용하여 Server 역활을 수행한다.
+etcd Server를 제외한 나머지 Kubernetes Component들은 ca.crt를 기반으로 생성된 client.crt,key를 이용하여 apiserver.crt,key를 이용하는 Kubernetes API Server와 통신한다. Kubernetes API Server는 kubelet에 연결시 apiserver-kublet-client.crt,key를 이용하고, Kubernetes 사용자가 정의하는 Kubernetes Extention API Server에 연결시 front-proxy-client.crt,key 파일을 이용한다. kubelet은 스스로 생성한 kubelet.crt,key를 이용하여 Server 역활을 수행한다. Kubernetes Scheduler, Controller Manager도 Memory에 스스로 생성한 Certificate, Key를 이용하여 Server 역활을 수행한다.
 
 sa.pub,key는 Kubernetes의 Service Account Token을 암후화/복호화 하는데 이용된다. Service Account Token은 Kubernetes Controller Manager에서 암호화 되며 Kubernetes API Server에서 복호화 된다.
 
