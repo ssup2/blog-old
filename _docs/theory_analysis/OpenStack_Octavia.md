@@ -11,9 +11,9 @@ OpenStack의 Octavia를 분석한다.
 
 ### 1. OpenStack Octavia
 
-![[그림 1] OpenStack Octavia Concept]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Concept.PNG){: width="600px"}
+![[그림 1] OpenStack Octavia Concept]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Concept.PNG){: width="700px"}
 
-![[그림 2] OpenStack Octavia Architecture]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Architecture.PNG){: width="700px"}
+![[그림 2] OpenStack Octavia Architecture]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Architecture.PNG)
 
 
 ### 2. 참조
