@@ -129,7 +129,68 @@ Octavia는 LBaaS (Load Balancer as a Service)를 제공하는 OpenStack의 Servi
 
 이러한 Octavia의 Concept Component는 Octavia의 Resource로 관리된다. [Shell 1]은 openstack CLI를 이용여 Octavia의 Resource를 조회하는 Shell을 나타내고 있다. 이러한 Octavia Concept은 Neutron LBaaS V2와 동일하며, Octavia는 Neutron LBaaS V2 API를 그대로 지원한다는 특징도 갖고 있다.
 
+#### 1.1. Architecture
+
 ![[그림 2] OpenStack Octavia Architecture]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Architecture.PNG)
+
+[그림 2]는 Octavia의 Architecture를 나타내고 있다. Controller Node에는 Octavia Service가 동작하고 있고, Octavia의 Load Balancer Instance인 Amphora는 Compute Node에서 동작한다. Amphora는 VM, PM, Container로 구성 가능하다. Octavia Service와 Amphora 사이의 통신은 일반적으로 Provider가 생성하는 Octvia 전용 Network를 통해서 이루어진다.
+
+Octavia Client는 Octavia Service의 API Controller에게 LB 생성을 요청하면 API Controller는 Nova, Neutron 같은 다른 OpenStack Service의 도움을 받아 Amphora를 생성한다. Amphora 생성이 완료되면 Octavia Service의 Controller Worker는 Amphora의 Agent를 통해서 HAProxy의 Config 파일을 생성하고 HAProxy를 구동한다. Member의 Health Check는 Agent의 설정에 따라서 HAProxy가 수행한다. HAProxy가 수집한 Member의 Health 상태는 Unix Socket을 통해서 Agent에 전달되며, Agent는 다시 Controller Worker에게 전달한다.
+
+Controller Worker는 전달 받은 Member의 Health 상태를 Octavia의 Member Resource에 반영한다. Housekeeping Manager는 삭제된 Resource를 Octavia DB에서 완전히 지우는 역활 및 Amphora의 Certificate를 관리하는 역활을 수행한다. Amphora는 Standalone 또는 HA를 위한 Active-Standby로 동작한다. [그림 1]에서는 Active-Standby 형태로 동작하는 Amphora를 나타내고 있다.
+
+{% highlight text %}
+[DEFAULT]
+debug = False
+
+[haproxy_amphora]
+base_cert_dir = /var/lib/octavia/certs
+base_path = /var/lib/octavia
+bind_host = ::
+bind_port = 9443
+haproxy_cmd = /usr/sbin/haproxy
+respawn_count = 2
+respawn_interval = 2
+use_upstart = True
+
+[health_manager]
+controller_ip_port_list = 192.168.0.31:5555
+heartbeat_interval = 10
+heartbeat_key = insecure
+
+[amphora_agent]
+agent_server_ca = /etc/octavia/certs/client_ca.pem
+agent_server_cert = /etc/octavia/certs/server.pem
+agent_request_read_timeout = 180
+amphora_id = c7e877d5-f1c6-4fb2-a9fb-214cb7cc793a
+amphora_udp_driver = keepalived_lvs
+
+[controller_worker]
+loadbalancer_topology = ACTIVE_STANDBY
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] amphora-agent.conf</figcaption>
+</figure>
+
+[파일 1]은 Agent의 Config 파일을 나타내고 있다. HAProxy 설정, Health Manager 설정, Amphora 동작 모드 설정들을 찾아볼수 있다. 
+
+{% highlight console %}
+# ip netns list
+amphora-haproxy
+
+# ip netns exec amphora-haproxy ip a
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether fa:16:3e:f0:b8:43 brd ff:ff:ff:ff:ff:ff
+    inet 30.0.0.123/24 brd 30.0.0.255 scope global eth1
+       valid_lft forever preferred_lft forever
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] HAProxy Network Namespace in Amphora</figcaption>
+</figure>
+
+HAProxy는 Amphora의 Network Namespace가 아닌 HAProxy 전용 Network Namespace를 이용한다. [Shell 2]는 HAProxy Network Namespace에서 VIP를 갖고 있는 Interface를 나타내고 있다.
 
 ### 2. 참조
 
