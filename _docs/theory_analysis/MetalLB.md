@@ -17,4 +17,3 @@ adsense: true
 
 * [https://metallb.universe.tf/concepts/layer2/](https://metallb.universe.tf/concepts/layer2/)
 * [https://metallb.universe.tf/concepts/bgp/](https://metallb.universe.tf/concepts/bgp/)
-* []
