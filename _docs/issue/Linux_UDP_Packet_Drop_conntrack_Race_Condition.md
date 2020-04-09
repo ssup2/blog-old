@@ -53,9 +53,9 @@ UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발�
 
 ### 4. DNS Timeout Issue with Kubernetes
  
-Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데, Kubernetes 환경에서는 본 Issue로 인해서 Domain Resolve 수행시 발생하는 UDP Packet이 Drop될 수 있다. Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다. 따라서 App에서 Domain Resolve를 위해서 CoreDNS로 전송되는 UDP Packet은 App Pod이 있는 Node에서 **DNAT** 되어 Master의 CoreDNS로 분배된다.
+Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데, Kubernetes 환경에서는 본 Issue로 인해서 Domain Resolve 수행시 발생하는 UDP Packet이 Drop되어 Service Discovery가 일시적으로 실패하는 현상이 발생할 수 있다. Kubernetes에서는 일반적으로 Master Node에 DNS Server 역활을 수행하는 CoreDNS를 다수 띄우고 Service로 묶어서 Kubernetes Cluster 내부의 App들에게 제공한다. 따라서 App에서 Domain Resolve를 위해서 CoreDNS로 전송되는 UDP Packet은 App Pod이 있는 Node에서 **DNAT** 되어 Master의 CoreDNS로 분배된다.
 
-또한 Domain Resolve를 수행시 App에서 가장 많이 이용하는 C Library인 glibc과 musl은 A Record와 AAAA Record를 동일 Socket을 통해서 동시에 수행한다. 즉 Kubernetes에서 동작하는 glic 또는 musl 기반의 App은 동일한 Src IP/Port를 갖고 있고, DNAT되는 CoreDNS Service의 Cluster IP를 Dst IP/Port로 갖는 UDP Packet을 동시에 전송하게 되어 UDP Packet Drop 현상을 겪게된다.
+또한 Domain Resolve를 수행시 App에서 가장 많이 이용하는 C Library인 glibc과 musl은 A Record와 AAAA Record를 동일 Socket(동일 Port)을 이용하여 동시에 수행한다. 즉 Kubernetes에서 동작하는 glic 또는 musl 기반의 App이 전송하는 A Record Resolve Packet과 AAAA Record Resolve Packet은 동시에 동일한 Src IP/Port를 갖고 DNAT를 통해서 CoreDNS로 되지만, 본 이슈로 인해서 두 Resolve Packet 중에서 하나의 Packet은 Conntrack에 의해서 Drop이 발생한다.
 
 위에서 언급한 Patch가 적용된 Kernel Version을 이용해도 DNAT 수행시 발생하는 Issue는 해결하지 못하기 때문에 우회 방법을 적용하여 문제를 해결해야 한다. 가장 직관적인 접근법은 동시에 수행되는 Domain Resolve를 막아 conntrack Race Condition을 방지하는 방법이다. glibc는 /etc/resolv.conf 파일에 “single-request” 또는 “single-request-reopen” Option을 주어 동시에 A Record와 AAAA Record를 동시에 Resolve하지 못하게 제한할 수 있다. 하지만 musl은 이러한 Opiton을 지원하지 않는다. musl은 많은 곳에서 이용중인 Alpine Image에서 이용되는 C Library이다.
 
