@@ -19,7 +19,7 @@ etcd는 High Availability를 제공하는 분산 Key-value 저장소이다. etcd
 
 #### 1.1. Quorum
 
-![[표 1] etcd Quorum]({{site.baseurl}}/images/theory_analysis/etcd/etcd_Quorum.PNG){: width="450px"}
+![[표 1] etcd Quorum]({{site.baseurl}}/images/theory_analysis/etcd/etcd_Quorum.PNG){: width="350px"}
 
 Quorum은 Consensus를 유지하기 위한 최소한의 **동의표**를 의미한다. [표 1]은 Server의 개수에 따른 Quorum을 나타내고 있다. Quorum은 Server의 개수를 절반으로 나눈 다음 하나를 더한 값이란걸 알 수 있다. 즉 찬성하는 Server의 개수가 반대하는 Server의 개수보다 크다는걸 보장하는 최소값이 Quorum이라고 할 수 있다. Quorum은 Server Cluster에서 동작해야 하는 최소한의 Server의 개수의 기준이 된다. 만약 Server 5개로 Cluster가 구성되어 있을 경우 동작하는 Server는 최소 3대 이상이 필요하다. 동작하는 Server의 개수가 Quorum보다 미만인 경우 Server Cluster는 Data Read/Write를 수행할 수 없게 된다.
 
