@@ -45,7 +45,7 @@ NVIDIA Driver 설치를 위한 Linux Header Package를 설치한다.
 # apt-get install linux-headers-$(uname -r)
 ~~~
 
-https://www.nvidia.com/en-us/drivers/unix/에서 Stable NVIDIA Driver를 Download 한다. Download한 파일을 이용하여 NVIDIA Driver를 설치한다.
+https://www.nvidia.com/en-us/drivers/unix/ 에서 Stable NVIDIA Driver를 Download 한다. Download한 파일을 이용하여 NVIDIA Driver를 설치한다.
 
 ~~~
 # chmod +x NVIDIA-Linux-x86_64-440.44.run 

@@ -150,7 +150,7 @@ monitor-max-retries=3
 모든 Master Node에 /etc/kubernetes/cloud-config 파일을 [파일 2]의 내용으로 생성한다. [파일 2]의 Global 영역에는 Kubernetes VM의 User ID/PW, Tenant, Region 정보등이 저장되어 있다. LoadBalancer 영역에는 Load Balancer 관련 설정 정보가 저장되어 있다. subnet-id는 Kubernetes Network의 Subnet ID를 의미한다. floating-network-id는 External Network ID를 의미한다. lb-method는 Load Balancing 알고리즘을 의미한다. monitor 관련 설정은 Octavia Member VM Monitoring 정책을 결정한다.
 
 ~~~console
-(Master)# kubectl create secret -n kube-system generic cloud-config --from-literal=cloud.conf="$(cat /etc/kubernetes/cloud-config)" --dry-run -o yaml > cloud-config-secret.yaml
+(Master)# kubectl create secret -n kube-system generic cloud-config --from-literal=cloud.conf="$(cat /etc/kubernetes/cloud_config)" --dry-run -o yaml > cloud-config-secret.yaml
 (Master)# kubectl -f cloud-config-secret.yaml apply
 ~~~
 

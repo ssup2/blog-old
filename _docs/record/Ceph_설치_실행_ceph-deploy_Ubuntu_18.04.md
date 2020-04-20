@@ -110,7 +110,7 @@ passwd: password updated successfully
 (Ceph)# sudo chmod 0440 /etc/sudoers.d/cephnode
 ~~~
 
-cephnode User를 생성한다. 
+cephnode User를 생성한다.
 * Password : cephnode
 
 #### 3.2. Deploy Node
