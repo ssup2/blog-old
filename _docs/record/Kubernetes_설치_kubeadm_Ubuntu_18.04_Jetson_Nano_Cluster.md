@@ -27,7 +27,7 @@ adsense: true
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
 * CNI
   * flannel 0.12.0
-* Docker 
+* Docker 19.03
 * Node
   * Jetson Nano
     * r32.3.1 (Ubuntu 18.04)
