@@ -16,7 +16,7 @@ adsense: true
 * NFS share : NFSv3 Server를 통해 실제 공유할 Directory의 절대 경로를 의미한다.
   * NFS share로 /root/nfs_share를 이용한다.
 
-### 2. NFSv4 Server 설정
+### 2. NFSv3 Server 설정
 
 #### 2.1. Ubuntu Package 설치
 
@@ -24,7 +24,7 @@ adsense: true
 # sudo apt-get install nfs-kernel-server nfs-common rpcbind
 ~~~
 
-NFSv4 Server Package를 설치한다.
+NFSv3 Server Package를 설치한다.
 
 #### 2.2. 공유 폴더 생성 및 Bind Mount 설정
 
