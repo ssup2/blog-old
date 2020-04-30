@@ -13,7 +13,7 @@ etcd를 분석한다.
 
 ![[그림 1] etcd Architecture]({{site.baseurl}}/images/theory_analysis/etcd/etcd_Architecture.PNG){: width="600px"}
 
-etcd는 High Availability를 제공하는 분산 Key-value 저장소이다. etcd는 **Raft Algorithm**을 이용하여 Consensus(동의)를 유지한다. [그림 1]은 etcd의 Architure를 나타내고 있다. Server는 Raft Algorithm에 따라서 **Leader**와 **Follower**로 역활이 나누어 진다. Leader는 Client의 요청에 따라서 Server Cluster에 저장되는 Data를 관리하는 역활을 수행하며, Data의 변경 내역은 AppendEntries를 통해서 Follower에게 전달된다. Follower는 Leader로 부터 전달받은 AppendEntries를 통해서 자신이 저장하고 있는 Data를 Leader가 저장하고 있는 Data와 일치시킨다.
+etcd는 High Availability를 제공하는 분산 Key-value 저장소이다. etcd는 **Raft Algorithm**을 이용하여 Consensus(동의)를 유지한다. [그림 1]은 etcd의 Architure를 나타내고 있다. Server는 Raft Algorithm에 따라서 **Leader**와 **Follower**로 역활이 나누어 진다. Leader는 Client의 요청에 따라서 Server Cluster에 저장되는 Data를 관리하는 역활을 수행하며, Data의 변경 내역은 Raft Algorithm의 AppendEntries를 통해서 Follower에게 전달된다. Follower는 Leader로 부터 전달받은 AppendEntries를 통해서 자신이 저장하고 있는 Data를 Leader가 저장하고 있는 Data와 일치시킨다.
 
 모든 Client의 요청은 Leader로 전달되며 Leader에서 처리된다. Client의 요청이 Follower에게 전달되면 Follower는 전달 받은 Client의 요청을 다시 Leader로 전달하고, Leader로 부터 요청에 대한 응답을 받아 Client에게 전달하는 Leader의 Proxy 역활을 수행한다. 일반적으로 Client는 각 Server들의 Endpoint(IP,Port) 정보를 갖고 있으며, Client 내부의 Load Balancer는 Server들의 Endpoint 정보를 바탕으로 Client가 접속하고 있는 Server의 장애 발생시 다른 Server로 연결하는 역활을 수행한다. 하지만 Client는 Client 내부의 Load Balancer를 이용할 필요 없으며, Server들을 묶어주는 외부의 Load Balancer를 이용해도 관계없다.
 
