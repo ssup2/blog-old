@@ -13,7 +13,7 @@ Consul을 분석한다.
 
 #### 1.1. Architecture
 
-![[그림 1] Consul Architecture]({{site.baseurl}}/images/theory_analysis/Consul/Consul_Architecture.PNG){: width="700px"}
+![[그림 1] Consul Architecture]({{site.baseurl}}/images/theory_analysis/Consul/Consul_Architecture.PNG)
 
 ### 2. 참조
 
