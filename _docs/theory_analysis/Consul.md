@@ -23,6 +23,12 @@ Service 등록은 Consul API를 통해서 진행되며, 등록된 Service는 DNS
 
 gossip Protocol을 통해서 Cluster를 구성하고 있는 Member들은 서로의 Health 상태를 빠르게 검사할 수 있다. 또한 Consul Client는 gossip Protocol을 통해서 LAN gossip Pool의 Server들 중에서 하나의 Server 정보만 알고 있어도 나머지 Server들에 접근할 수 있게 된다. gossip Protocol은 내부적으로 Serf라고 불리는 Algorithm을 이용한다.
 
+동일 Data Center에 존재하는 Server들 사이의 Data Consensus는 **Raft Algorithm**을 통해서 맞추어 진다. Server는 Raft Algorithm에 의해서 실제 Data를 처리하는 Leader와 Client와 Leader 사이에서 Proxy 역활만 수행하는 Follower로 구성되어 동작한다. Raft Algorithm에 의해서 Server에 저장된 Data들은 동일 LAN gossip Pool의 다른 Server에게 Replication 된다. Raft Algorithm에 참여한 Server들 중에서 동작하는 Server의 개수가 Quorum 이상이라면 Data Loss는 발생하지 않는다. 서로 다른 Data Center에 존재하는 Server들 사이에서는 Replication을 수행하지 않는다.
+
+Client (Agent)는 모든 Node에서 동작하며 Consul에 등록된 Service의 Health Check 정보를 바탕으로 각 Service의 Health Check를 수행한다. Client는 Server로 요청 전송시 자신이 소속된 LAN gossip Pool에 소속된 Server들 중에서 임의의 Server에게 요청을 전송할 수 있다. Client로 부터 요청을 받은 Server는 요청이 자신이 소속된 LAN gossip Pool에서 처리 되어야 하는지 아니면 외부 Data Center에 존재하는 Server에서 처리되어야 하는지 판단한다. 만약 LAN gossip Pool에서 처리 되어야 한다면 Client의 요청은 Leader Server로 전달되어 처리된다.
+
+만약 외부 Data Center에 존재하는 Server에서 처리되어야 한다면 Client 요청을 받은 Server는 WAN gossip Pool에 Client 요청을 처리할 수 있는 Server가 존재하는지 파악하고, Server가 존재한다면 해당 Server가 있는 Data Center의 임의의 Server로 요청을 다시 전달한다. Client 요청을 받은 외부 Data Center의 Server가 Follower라면 Client 요청은 Follower의 Leader로 다시 전달되어 처리된다.
+
 ### 2. 참조
 
 * [https://www.consul.io/intro/index.html](https://www.consul.io/intro/index.html)
