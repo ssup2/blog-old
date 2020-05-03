@@ -17,7 +17,7 @@ ELK Stack은 Elasticsearch, Logstash, Kibana를 조합을 의미한다. ELK Stac
 
 ### 2. Elasticsearch
 
-Elasticsearch는 분산형 Data 검색 및 분석 엔진 역할을 수행한다. 논리적으로는 JSON 형태와 같은 **Document** 형태로 Data를 저장하며, 물리적으로는 **Columnstore (Column-oriented)** 형태로 Data를 저장하여 대용량의 Data를 빠르게 분석할 수 있는 구조를 갖고 있다. 또한 Elasticsearch는 Full-text Search시 **Inverted Index**를 이용하고, 숫자 및 위치 Data 처리시에는 **BKD Tree**를 이용하여 빠른 Data 검색이 가능하도록 설계되어 있다. Elasticsearch는 Master-elibigle, Data, Ingest, Coodinating 4개의 Node Type으로 구성되어 있다. Node Type이 4개이지만 하나의 Node에 4개의 Node Type을 모두 적용할 수도 있다.
+Elasticsearch는 분산형 Data 검색 및 분석 엔진 역할을 수행한다. Elasticsearch는 JSON 형태와 같은 **Document** 형태로 Data를 저장한다. Elasticsearch는 Full-text Search시 **Inverted Index**를 이용하고, 숫자 및 위치 Data 처리시에는 **BKD Tree**를 이용하여 빠른 Data 검색이 가능하도록 설계되어 있다. Elasticsearch는 Master-elibigle, Data, Ingest, Coodinating 4개의 Node Type으로 구성되어 있다. Node Type이 4개이지만 하나의 Node에 4개의 Node Type을 모두 적용할 수도 있다.
 
 #### 2.1. Master-elibigle Node
 
