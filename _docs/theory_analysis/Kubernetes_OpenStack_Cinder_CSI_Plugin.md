@@ -30,6 +30,10 @@ Node Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, node-driver-regi
 
 cinder-csi-plugin은 OpenStack Provider Project에 소속되있고 나머지 App들은 Kubernetes CSI Project에 소속되어 있다. 다른 CSI Plugin을 이용할 경우 cinder-csi-plugin만 원하는 CSI Plugin으로 교체하면 된다.
 
+![[그림 2] Kubernetes OpenStack Cinder CSI Volume Lifecycle]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI_Plugin/OpenStack_Cinder_CSI_Volume_Lifecycle.PNG){: width="500px"}
+
+[그림 2]는 Cinder CSI Plugin에서 지원하는 Cinder Volume의 Lifecycle을 나타내고 있다. Created, Node Ready, Volume Ready, Published 4단계 상태가 존재하는 Volume Lifecycle을 이용한다. 각 단계별로 Cinder Volume Create/Delete, Cinder Volume Attach/Detach, Cinder Volume Format, Mount/Unmount를 진행하는 것을 확인할 수 있다.
+
 ### 2. 참조
 
 * [https://github.com/container-storage-interface/spec/blob/master/spec.md](https://github.com/container-storage-interface/spec/blob/master/spec.md)
