@@ -38,7 +38,7 @@ Elasticsearch의 Data Management 관련 내용을 분석한다.
 
 #### 1.2. Shard, Replica
 
-![[그림 1] Shard, Replica]({{site.baseurl}}/images/theory_analysis/Elasticsearch_Data_Management/Elasticsearch_Shard_Replica.PNG){: width="700px"}
+![[그림 2] Shard, Replica]({{site.baseurl}}/images/theory_analysis/Elasticsearch_Data_Management/Elasticsearch_Shard_Replica.PNG){: width="600px"}
 
 ### 2. 참조
 
