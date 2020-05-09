@@ -13,7 +13,7 @@ Kubernetes와 동작하는 OpenStack Cinder CSI(Container Storage Interface Plug
 
 ![[그림 1] Kubernetes OpenStack Cinder CSI Plugin]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI_Plugin/OpenStack_Cinder_CSI_Plugin.PNG)
 
-[그림 1]은 Kubernetes와 동작하는 OpenStack Cinder CSI Plugin을 나타내고 있다. **Cinder CSI Plugin은 CSI Spec의 Controller Plugin 역할과 Node Plugin 역할 모두 수행가능하다.** 따라서 Cinder CSI Plugin은 CSI Spec의 Identity Service, Controller Service, Node Service 3가지 Interface를 지원한다. Cinder CSI Plugin중에서 Controller Plugin으로 동작하는 것은 Controller Plugin Pod에서 동작하고, Node Plugin으로 동작하는 것은 Node Plugin Pod에서 동작한다. Controller Plugin Pod은 K8s의 Deployment 또는 Statefulset에 소속되어 있고, Node Plugin Pod은 K8s의 Daemonset에 소속되어 모든 Worker Node에서 동작한다.
+[그림 1]은 Kubernetes와 동작하는 OpenStack Cinder CSI Plugin을 나타내고 있다. **Cinder CSI Plugin은 CSI Spec의 Controller Plugin 역할과 Node Plugin 역할 모두 수행가능하다.** 따라서 Cinder CSI Plugin은 CSI Spec의 Identity Service, Controller Service, Node Service 3가지 Interface를 지원한다. Cinder CSI Plugin중에서 Controller Plugin으로 동작하는 것은 Controller Plugin Pod에서 동작하고, Node Plugin으로 동작하는 것은 Node Plugin Pod에서 동작한다. Controller Plugin Pod은 Master Node 또는 Worker Node에서 동작하고, Node Plugin Pod은 K8s의 Daemonset에 소속되어 모든 Worker Node에서 동작한다.
 
 Controller Plugin Pod에서 동작하는 App들은 cinder-csi-plugin, csi-provisioner, csi-attacher, csi-snapshotter, csi-resizer가 있으며 각각의 Container 안에서 동작한다. HA (High Availability)를 위해서 Controller Plugin Pod이 다수가 동작하는 경우, cinder-csi-plugin App을 제외한 나머지 App의 경우 Active-Standby 형태로 동작한다. 각 App의 역할은 다음과 같다.
 
