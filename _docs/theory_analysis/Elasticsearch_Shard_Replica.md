@@ -1,5 +1,5 @@
 ---
-title: Elasticsearch Data Structure
+title: Elasticsearch Shard, Replica
 category: Theory, Analysis
 date: 2020-05-05T12:00:00Z
 lastmod: 2020-05-05T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Elasticsearch의 Data Management 관련 내용을 분석한다.
+Elasticsearch의 Shard, Replica 관련 내용을 분석한다.
 
 ### 1. Elasticsearch Shard, Replica
 
