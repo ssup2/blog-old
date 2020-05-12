@@ -33,10 +33,9 @@ PORT     STATE SERVICE
 5000/tcp open  upnp
 
 Nmap done: 1 IP address (1 host up) scanned in 1.63 seconds
-
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] nmap</figcaption>
+<figcaption class="caption">[Shell 1] nmap localhost</figcaption>
 </figure>
 
 host에서 1000번까지의 TCP Port들을 Scanning하여 Listen 상태의 TCP Port 정보를 출력한다. [Shell 1]은 "nmap localhost"를 이용하여 localhost에서 Listen하고 있는 1000번 이하의 TCP Port 목록을 출력하는 Shell의 모습을 나타내고 있다.
