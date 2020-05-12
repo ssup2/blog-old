@@ -28,13 +28,13 @@ tcp        0      0 10.0.0.19:9100          0.0.0.0:*               LISTEN      
 tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      23825/systemd-resol
 tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1618/sshd
 tcp        0      0 10.0.0.19:9091          0.0.0.0:*               LISTEN      2912/prometheus
-tcp        0      0 10.0.0.19:9093          0.0.0.0:*               LISTEN      3361/alertmanager   
+tcp        0      0 10.0.0.19:9093          0.0.0.0:*               LISTEN      3361/alertmanager
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] uptime</figcaption>
 </figure>
 
-netstat은 Linux Kernel이 갖고있는 대부분의 Network 정보를 출력하는 Tool이다. [Shell 1]은 netstat을 이용하여 현재 Listen 상태의 Server Process와 Port를 출력하는 Shell의 모습을 나타내고 있다.
+netstat은 Linux Kernel이 갖고있는 대부분의 Network 정보를 출력하는 Tool이다. [Shell 1]은 netstat을 이용하여 현재 Listen 상태의 Server Process와 Port를 출력하는 Shell의 모습을 나타내고 있다. netstat은 Network Interface의 성능을 측정 할때도 이용가능한 Tool이다.
 
 #### 1.2. nmap
 
@@ -55,7 +55,7 @@ PORT      STATE SERVICE
 <figcaption class="caption">[Shell 2] nmap</figcaption>
 </figure>
 
-nmap은 외부 Host의 Port Scanning을 수행하여 외부 Host의 Network 상태 정보를 출력하는 Tool이다. [Shell 2]는 nmap을 이용하여 localhost의 TCP 1번 Port부터 65536번 Port까지 Scanning을 수행하는 Shell의 모습을 나타내고 있다. 22, 5000, 9094, 18080 Port로 Listen하고 있는것을 확인할 수 있다.
+nmap은 외부 Host를 대상으로 Network Exploration을 수행하여 외부 Host의 Network 상태 정보를 출력하는 Tool이다. [Shell 2]는 nmap을 이용하여 localhost를 대상으로 1번 Port부터 65536번 Port까지 TCP Port Scanning을 수행하는 Shell의 모습을 나타내고 있다. 22, 5000, 9094, 18080 Port를 이용하여 TCP Listening 상태인 것을 확인할 수 있다.
 
 #### 1.3. tcpdump
 

@@ -115,7 +115,25 @@ sdb              0.03    0.00      0.75      0.00     0.00     0.00   0.00   0.0
 
 iostat은 Block Device별 사용량을 출력하는 Tool이다. [Shell 6]는 iostat을 이용하여 1초 간격으로 모든 Block Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다. iostat은 평균 CPU 사용률도 출력한다.
 
-#### 1.7. nicstat
+#### 1.7. netstat
+
+{% highlight console %}
+# netstat -i
+Kernel Interface table
+Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+docker0   1500        0      0      0 0            37      0      0      0 BMRU
+eth0      1500    95498      0      0 0         76031      0      0      0 BMRU
+eth1      1500  1017307      0      0 0        386209      0      0      0 BMRU
+lo       65536   196363      0      0 0        196363      0      0      0 LRU
+vetheeab  1500        0      0      0 0            74      0      0      0 BMRU
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 7] uptime</figcaption>
+</figure>
+
+netstat은 Linux Kernel이 갖고있는 대부분의 Network 정보를 출력하는 Tool이다. netstat은 Network 성능을 측정하는데도 이용할수 있다. [Shell 7]은 netstat을 이용하여 모든 Network Interface의 성능을 측정하는 Shell의 모습을 나타내고 있다.
+
+#### 1.8. nicstat
 
 {% highlight console %}
 # nicstat 1
@@ -127,12 +145,12 @@ iostat은 Block Device별 사용량을 출력하는 Tool이다. [Shell 6]는 ios
 15:41:38     eth1    7.32    0.55   12.19    5.00   614.8   111.7  0.01   0.00
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 7] nicstat</figcaption>
+<figcaption class="caption">[Shell 8] nicstat</figcaption>
 </figure>
 
-nicstat은 Network Device별 사용량을 출력하는 Tool이다. [Shell 7]은 nicstat을 이용하여 1초 간격으로 모든 Network Device의 사용량을 출력하는 Shell의 모습을 나타내고 있다.
+nicstat은 Network Interface별 성능을 출력하는 Tool이다. [Shell 8]은 nicstat을 이용하여 1초 간격으로 모든 Network Interface의 성능을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.8. top
+#### 1.9. top
 
 {% highlight console %}
 # top
@@ -149,12 +167,12 @@ KiB Swap:  4194300 total,  4194300 free,        0 used.  6637292 avail Mem
  1529 root      20   0 1290564  82076  37524 S   1.0  1.0   1:55.27 dockerd
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 8] top</figcaption>
+<figcaption class="caption">[Shell 9] top</figcaption>
 </figure>
 
-top은 CPU 사용률 또는 Memory 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 8]은 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+top은 CPU 사용률 또는 Memory 사용률이 높은 순서대로 Process 또는 Thread를 보여주는 Tool이다. [Shell 9]는 top을 이용하여 Process의 CPU 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.9. slabtop
+#### 1.10. slabtop
 
 {% highlight console %}
 # slabtop
@@ -173,12 +191,12 @@ top은 CPU 사용률 또는 Memory 사용률이 높은 순서대로 Process 또�
 123776 122174   0%    0.06K   1934       64      7736K kmalloc-64
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 9] slabtop</figcaption>
+<figcaption class="caption">[Shell 10] slabtop</figcaption>
 </figure>
 
-slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 9]는 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
+slabtop은 Kernel이 이용하는 Slab Memory 사용량을 출력하는 Tool이다. [Shell 10]은 slabtop을 이용하여 Slab Memory 사용량을 출력하는 Shell의 모습을 나타내고 있다. 사용량 정렬 기준은 다양한 옵션을 통해서 변경이 가능하다.
 
-#### 1.10. iotop
+#### 1.11. iotop
 
 {% highlight console %}
 # iotop
@@ -195,12 +213,12 @@ Actual DISK READ:      46.79 K/s | Actual DISK WRITE:       5.52 M/s
     2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]            
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 10] iotop</figcaption>
+<figcaption class="caption">[Shell 11] iotop</figcaption>
 </figure>
 
-iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 출력하는 Tool이다. [Shell 10]은 iotop을 이용하여 Block I/O 사용률을 출력하는 Shell의 모습을 나타내고 있다.
+iotop은 Block I/O 사용률이 높은 순서대로 Process 또는 Thread를 출력하는 Tool이다. [Shell 11]은 iotop을 이용하여 Block I/O 사용률을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.11. iftop
+#### 1.12. iftop
 
 {% highlight console %}
 # iftop
@@ -227,34 +245,34 @@ RX:                    23.8KB           67.5Kb                   672b   1.00Kb  
 TOTAL:                 35.0KB           86.6Kb                  1.31Kb  2.11Kb  6.48Kb 
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 11] iftop</figcaption>
+<figcaption class="caption">[Shell 12] iftop</figcaption>
 </figure>
 
-iftop은 특정 Interface의 Network Bandwidth 사용량을 Src IP/Dst IP로 분류한 다음, 샤용량이 높은 순서에 따라서 출력하는 Tool이다. [Shell 11]은 iftop을 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
+iftop은 특정 Interface의 Network Bandwidth 사용량을 Src IP/Dst IP로 분류한 다음, 샤용량이 높은 순서에 따라서 출력하는 Tool이다. [Shell 12]는 iftop을 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
-#### 1.12. nethogs
+#### 1.13. nethogs
 
 {% highlight console %}
 # nethogs
 NetHogs version 0.8.5-2
 
     PID USER     PROGRAM DEV SENT      RECEIVED
-      ? root     10.0.0.19:3000-10.0.0.11:56170                                                                                                       0.058       0.109 KB/sec
-      ? root     10.0.0.19:9093-10.0.0.11:39550                                                                                                       0.058       0.109 KB/sec
-  31723 root     sshd: root@pts/0                                                                                                         eth1        0.342       0.084 KB/sec
-      ? root     10.0.0.19:9091-10.0.0.11:55972                                                                                                       0.029       0.055 KB/sec
-  27860 42417    /usr/sbin/grafana-server                                                                                                 eth1        0.013       0.013 KB/sec
-      ? root     10.0.0.19:36076-10.0.0.11:9150                                                                                                       0.000       0.000 KB/sec
-   2912 42472    /opt/prometheus/prometheus                                                                                               eth1        0.000       0.000 KB/sec
-      ? root     unknown TCP                                                                                                                          0.000       0.000 KB/sec
+      ? root     10.0.0.19:3000-10.0.0.11:56170                0.058       0.109 KB/sec
+      ? root     10.0.0.19:9093-10.0.0.11:39550                0.058       0.109 KB/sec
+  31723 root     sshd: root@pts/0                  eth1        0.342       0.084 KB/sec
+      ? root     10.0.0.19:9091-10.0.0.11:55972                0.029       0.055 KB/sec
+  27860 42417    /usr/sbin/grafana-server          eth1        0.013       0.013 KB/sec
+      ? root     10.0.0.19:36076-10.0.0.11:9150                0.000       0.000 KB/sec
+   2912 42472    /opt/prometheus/prometheus        eth1        0.000       0.000 KB/sec
+      ? root     unknown TCP                                   0.000       0.000 KB/sec
 
-  TOTAL 0.000 0.000 KB/sec                                                                                                                            0.500       0.371
+  TOTAL 0.000 0.000 KB/sec                                     0.500       0.371
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 12] nethogs</figcaption>
+<figcaption class="caption">[Shell 13] nethogs</figcaption>
 </figure>
 
-nethogs는 Network Bandwidth 사용률이 높은 순서대로 Process를 출력하는 Tool이다. [Shell 12]은 nethogs를 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
+nethogs는 Network Bandwidth 사용률이 높은 순서대로 Process를 출력하는 Tool이다. [Shell 13]은 nethogs를 이용하여 Network Bandwidth 사용량을 출력하는 Shell의 모습을 나타내고 있다.
 
 ### 2. 참조
 
