@@ -19,14 +19,14 @@ adsense: true
 
 * 참고 가능한 Site
   * https://kubernetes.io/docs/home/
-  * https://kubernetes.io/docs/search/?q=$QUERY
   * https://github.com/kubernetes/
+  * https://kubernetes.io/blog/
   * 나머지 Site 참고 불가능
 
 * 시험 환경
-  * Kuberntes v1.13
-  * tmux 이용
-  * kubectl completion bash 세팅
+  * Kuberntes v1.18
+  * tmux 이용 가능
+  * kubectl completion bash 세팅 필수
 
 ### 2. Kubernetes 이론
 
