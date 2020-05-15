@@ -13,7 +13,7 @@ adsense: true
 
 #### 1.1. MIB (Management Information Base)
 
-![[그림 2] OID Tree]({{site.baseurl}}/images/theory_analysis/SNMP/OID_Tree){: width="700px"}
+![[그림 2] OID Tree]({{site.baseurl}}/images/theory_analysis/SNMP/OID_Tree.PNG){: width="700px"}
 
 ### 2. 참조
 
