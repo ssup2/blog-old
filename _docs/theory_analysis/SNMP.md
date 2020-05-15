@@ -9,11 +9,11 @@ adsense: true
 
 ### 1. SNMP (Simple Network Management Protocol)
 
-![[그림 1] SNMP Architecture]({{site.baseurl}}/images/theory_analysis/SNMP/OID_Tree.PNG){: width="600px"}
+![[그림 1] SNMP Architecture]({{site.baseurl}}/images/theory_analysis/SNMP/SNMP_Architecture.PNG){: width="500px"}
 
 #### 1.1. MIB (Management Information Base)
 
-![[그림 2] OID Tree]({{site.baseurl}}/images/theory_analysis/SNMP/SNMP_Architecture.PNG){: width="600px"}
+![[그림 2] OID Tree]({{site.baseurl}}/images/theory_analysis/SNMP/OID_Tree){: width="700px"}
 
 ### 2. 참조
 
