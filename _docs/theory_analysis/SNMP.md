@@ -17,17 +17,6 @@ SNMP (Simple Network Management Protocol)는 의미처럼 Network 관리를 위�
 
 #### 1.1. MIB (Management Information Base)
 
-| | Read Uncommitted | Read Committed | Repeatable-Read | Serializable |
-|----|----|----|----|----|
-| Lost Update | O | O | X | X |
-| Dirty Read | O | X | X | X |
-| Non-repeatable Read | O | O | X | X |
-| Phantom Read | O | O | O | X |
-
-<figure>
-<figcaption class="caption">[표 1] MIB Group</figcaption>
-</figure>
-
 ![[그림 2] OID Tree for MIB]({{site.baseurl}}/images/theory_analysis/SNMP/OID_Tree.PNG)
 
 MIB (Management Information Base)는 Network에 참여하고 각 Device들이 갖고 있는 Data를 관리하는 Database를 의미한다. MIB에서 Data는 Tree 형태로 관리되며 Data의 구분자로 OID (Ojbect ID)를 이용한다. OID는 Tree 형태의 계층 구조를 이용하기 때문에 Tree 형태로 Data를 관리하는 MIB의 Data의 구분자로 적합하다. [그림 2]는 MIB를 나타내기 위한 OID Tree를 나타내고 있다. OID Tree를 통해서 OID가 어떤 Data를 의미하는지를 파악할 수 있다. 만약 OID가 "1.3.6.1.2.1.4"라면 OID Tree의 Root에서부터 OID의 앞에서 부터 숫자를 따라가다 보면 MIB의 IP를 나타내는 것을 알 수 있다. 즉 Manager가 Agent를 통해서 특정 Device의 IP 정보를 얻고 싶다면. OID "1.3.6.1.2.1.4"를 요청하여 Device의 IP 정보를 얻어온다.
