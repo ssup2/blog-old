@@ -15,7 +15,7 @@ Kubernetes에서 Nginx Ingress를 제어하는 Nginx Ingress Controller를 분�
 
 Nginx Ingress Controller는 Kubernetes의 Ingress 및 관련 Ojbect들에 따라서 Nginx를 제어하고, Nginx 관련 Metric 정보를 수집하여 외부로 전달하는 역할을 수행한다. [그림 1]은 Nginx Ingress Controller를 나타내고 있다. Nginx Ingress Controller는 Nginx Ingress Controller Pod에 Nginx와 같이 존재한다. Nginx Ingress Controller는 Leader (Active)/Non-leader (Standby) 방식으로 동작하지만 Leader/Non-leader 둘다 자신과 같은 Pod안에서 구동중인 Nginx를 제어하고, 관련 Metric 정보를 수집하는 것은 동일하다.
 
-{% highlight text %}
+{% highlight text linenos %}
 ...
 http {
         lua_shared_dict certificate_data 20M;
@@ -45,9 +45,9 @@ http {
 <figcaption class="caption">[파일 1] Lua Module을 이용하는 Nginx의 nginx.conf </figcaption>
 </figure>
 
-Nginx는 Lua Module을 이용하여 Nginx Config를 Reload를 최소화 하여 Packet 손실을 최소화 하도록 구현되어 있다. 또한 Metric 정보도 Lua Module을 이용하여 수집하도록 구성되어 있다. [파일 1]은 Lua Module을 이용하는 Nginx의 nginx.conf 파일을 나타내고 있다. [파일 1]의 http 윗부분은 [그림 1]에도 표현된 Nginx의 Backend 정보와 Certificate가 저장되는 Dictionary 기반 Shared Memory를 나타내고 있다. nginx.conf의 upstream 부분에는 일반적으로 Load Balancing의 대상이 되는 Server의 정보가 저장되어 있는데, [파일 1]에서는 Server 정보 대신 balancer Lua Module을 호출하는 것을 확인할 수 있다.
+Nginx는 Lua Module을 이용하여 Nginx Config를 Reload를 최소화 하여 Packet 손실을 최소화 하도록 구현되어 있다. 또한 Metric 정보도 Lua Module을 이용하여 수집하도록 구성되어 있다. [파일 1]은 Lua Module을 이용하는 Nginx의 nginx.conf 파일을 나타내고 있다. [파일 1]의 3~5줄은 [그림 1]에도 표현된 Nginx의 Backend 정보와 Certificate가 저장되는 Dictionary 기반 Shared Memory를 나타내고 있다. nginx.conf의 upstream 부분에는 일반적으로 Load Balancing의 대상이 되는 Server의 정보가 저장되어 있는데, [파일 1]의 8~10줄에는 Server 정보 대신 balancer Lua Module을 호출하는 것을 확인할 수 있다.
 
-nginx.conf의 server 부분에는 일반적으로 Certificate Path 정보가 저장되는데, [파일 1]에서는 Certificate Path 정보 대신 certificate Lua Module을 호출하는 것을 확인할 수 있다. [파일 1]의 아래 부분은 /app URL이 호출될 경우 balancer를 통해서 Packet이 어느 Pod으로 전달되는지 Log를 남기고, monitor를 통해서 관련 Metric 정보를 남기는 부분을 나타낸다.
+nginx.conf의 server 부분에는 일반적으로 Certificate Path 정보가 저장되는데, [파일 1]의 14~16줄은 Certificate Path 정보 대신 certificate Lua Module을 호출하는 것을 확인할 수 있다. [파일 1]의 18~23줄은 /app URL이 호출될 경우 balancer를 통해서 Packet이 어느 Pod으로 전달되는지 Log를 남기고, monitor를 통해서 관련 Metric 정보를 남기는 부분을 나타낸다.
 
 #### 1.1. Configuration
 
@@ -61,7 +61,7 @@ Nginx Config 중에서 Backend 부분이 변경되었다면 변경된 내용은 
 
 Nginx Ingress Controller의 Metric Collector는 Metric 정보를 수집하여 Prometheus에게 전송하는 역할을 수행한다. [그림 1]에는 Metric Collector로 전송되는 Metric의 경로도 포함하고 있다. Metric Collector는 3가지 경로를 통해서 Metric 정보를 수집한다. 첫번째로 Nginx 내부의 HTTP Stub Status Module이 제공하는 Metric 정보를 Nginx의 /nginx_status URL을 통해서 얻어온다. 두번째로 Nginx의 Monitor Lua Module을 통해서 Metric 정보를 얻어온다. Client가 Nginx를 통해서 App에게 Packet을 전송할때 마다 관련 Metric 정보는 Monitor Lua Module로 전송된다. Monitor Lua Module은 받은 Metirc 정보를 모아 한꺼번에 주기적으로 Domain Socket을 이용하여 Metric Collector로 전송한다.
 
-마지막으로 Nginx Ingress Controller Pod의 procfs를 통해서 Nginx Process의 Metric 정보를 얻는다. 얻은 Metric 정보는 Nginx Ingress Controller의 /metrics를 통해서 Prometheus에게 전달된다. 따라서 각 Nginx Ingress Controller는 Prometheus의 Exporter 역할을 수행하게된다.
+마지막으로 Nginx Ingress Controller Pod의 procfs를 통해서 Nginx Process의 Metric 정보를 얻는다. 얻은 Metric 정보는 Nginx Ingress Controller의 /metrics URL를 통해서 Prometheus에게 전달된다. 따라서 각 Nginx Ingress Controller는 Prometheus의 Exporter 역할을 수행하게된다.
 
 #### 1.3. Load Balancing, TLS
 
