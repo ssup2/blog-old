@@ -33,11 +33,13 @@ dockerd는 docker-proxy는 Container의 Port Forwarding Option이 추가될 때�
 
 #### 1.4. containerd
 
-containerd는 OCI (Open Container Initiative) Runtime Spec을 준수하는 dockerd에 요청에 따라서 containerd-shim, runc를 이용하여 container를 생성하는 Daemon 역활을 수행한다. 또한 Node에 Container 구동에 필요한 Container Image가 존재하지 않는다면 OCI Image Spec을 기반으로 Container Image Server로부터 Container Image를 Pull 하는 역활도 수행한다. Container Snapshot 기능도 containerd가 수행한다. 
+containerd는 OCI (Open Container Initiative) Runtime Spec을 준수하는 dockerd에 요청에 따라서 config.json (Container Config) 파일을 생성하고 containerd-shim, runc를 이용하여 container를 생성하는 Daemon 역활을 수행한다. containerd는 dockerd의 OCI Runtime Spec  또한 Node에 Container 구동에 필요한 Container Image가 존재하지 않는다면 OCI Image Spec을 기반으로 Container Image Server로부터 Container Image를 Pull 하는 역활도 수행한다. Container Snapshot 기능도 containerd가 수행한다.
 
 containerd는 기본적으로 기본적으로 "/run/containerd/containerd.sock"의 Unix Domain Socket을 통해서 gRPC 기반 REST API를 제공한다. containerd는 ctr이라고 불리는 containerd 전용 CLI Client를 제공하기도 한다.
 
 #### 1.5. runc
+
+runc는 containerd가 생성한 config.json (Container Config) 파일을 통해서 Container를 실제로 생성하는 역활을 수행한다. config.json은 OCI Runtime Spec을 기반으로 작성되어 있다. runc는 containerd가 아닌 containerd-shim으로부터 실행되는데, runc의 stdin/stdout/stderr는 runc를 실행한 Process의 stdin/stdout/stderr를 그대로 이용한다. 따라서 runc의 stdin/stdou/stderr는 containerd-shim과 동일하다. runc는 Container를 생성한뒤 Container가 종료될때까지 대기하지 않고 바로 종료되는 특징을 갖고 있다.
 
 #### 1.6. containerd-shim
 
