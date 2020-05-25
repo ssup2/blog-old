@@ -39,9 +39,15 @@ containerd는 기본적으로 기본적으로 "/run/containerd/containerd.sock"�
 
 #### 1.5. runc
 
-runc는 containerd가 생성한 config.json (Container Config) 파일을 통해서 Container를 실제로 생성하는 역활을 수행한다. config.json은 OCI Runtime Spec을 기반으로 작성되어 있다. runc는 containerd가 아닌 containerd-shim으로부터 실행되는데, runc의 stdin/stdout/stderr는 runc를 실행한 Process의 stdin/stdout/stderr를 그대로 이용한다. 따라서 runc의 stdin/stdou/stderr는 containerd-shim과 동일하다. runc는 Container를 생성한뒤 Container가 종료될때까지 대기하지 않고 바로 종료되는 특징을 갖고 있다.
+runc는 containerd가 생성한 config.json (Container Config) 파일을 통해서 Container를 실제로 생성하는 역활을 수행한다. config.json은 OCI Runtime Spec을 기반으로 작성되어 있다. runc는 containerd가 아닌 containerd-shim으로부터 실행되는데, runc의 stdin/out/err는 runc를 실행한 Process의 stdin/out/err를 그대로 이용한다. 따라서 runc의 stdin/out/err는 containerd-shim과 동일하다. runc는 Container를 생성한뒤 Container가 종료될때까지 대기하지 않고 바로 종료되는 특징을 갖고 있다.
 
 #### 1.6. containerd-shim
+
+containerd-shim은 containerd와 runc사이에서 각 Container당 하나씩 동작하면서 Container의 stdin/out/err를 Named Pipe를 통해서 다른 Process에서 접근할수 있게 하고, Container Init Process (Container의 1번 Process)의 종료시 ExitCode를 containerd의 "/run/containerd/containerd.sock" Unix Domain Socket을 통해서 containerd에게 전달하는 역활을 수행한다. containerd-shim이 필요한 이유는 containerd는 언제든지 재시작 될수 있고 runc는 Container를 생성만하고 종료되기 때문에, Container의 stdin/out/err 및 Container Init Process의 Exit Code를 담당하는 Process가 필요하기 때문이다.
+
+containerd-shim은 "@/containerd-shim/moby/[containerID]/shim.sock@" 이름의 Unix Domain Socket을 통해서 전송되는 containerd의 명령어 따라서, Container Process Init Process의 상태를 Check하는 동작과 Container 내부에 별도의 Process를 띄우는 exec 동작도 수행한다. containerd-shim의 Unix Domain Socket은 기본적으로 별도의 파일이 존재하지 않는 형태로 동작하며 containerd-shim의 Option을 통해서 특정 경로에 Unix Domain Socket을 생성하는 형태로도 동작 가능하다.
+
+runc의 stdin/stdout/stderr는 containerd-shim에 의해서 Named Pipe로 설정된 상태로 Container를 생성하기 때문에 생성된 Container의 stdin/out/err로 Named Pipe로 설정된다. Named Pipe의 경로는 "/run/docker/containerd/[containerID]/init-stdin/out/err"에 위치하며 dockerd가 containerd에게 요청한 경로를 containerd-shim이 다시 받아서 생성한다. dockerd는 Named Pipe를 통해서 Container의 stdout/stderr (Log)를 수집하며, Container 구동 Option에 따라서 Container의 stdin/out을 Terminal과 연결할때도 Named Pipe를 이용한다.
 
 ### 2. 참조
 
