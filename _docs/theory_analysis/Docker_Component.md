@@ -45,9 +45,26 @@ runc는 containerd가 생성한 config.json (Container Config) 파일을 통해�
 
 containerd-shim은 containerd와 runc사이에서 각 Container당 하나씩 동작하면서 Container의 stdin/out/err를 Named Pipe를 통해서 다른 Process에서 접근할수 있게 하고, Container Init Process (Container의 1번 Process)의 종료시 ExitCode를 containerd의 "/run/containerd/containerd.sock" Unix Domain Socket을 통해서 containerd에게 전달하는 역활을 수행한다. containerd-shim이 필요한 이유는 containerd는 언제든지 재시작 될수 있고 runc는 Container를 생성만하고 종료되기 때문에, Container의 stdin/out/err 및 Container Init Process의 Exit Code를 담당하는 Process가 필요하기 때문이다.
 
-containerd-shim은 "@/containerd-shim/moby/[containerID]/shim.sock@" 이름의 Unix Domain Socket을 통해서 전송되는 containerd의 명령어 따라서, Container Process Init Process의 상태를 Check하는 동작과 Container 내부에 별도의 Process를 띄우는 exec 동작도 수행한다. containerd-shim의 Unix Domain Socket은 기본적으로 별도의 파일이 존재하지 않는 형태로 동작하며 containerd-shim의 Option을 통해서 특정 경로에 Unix Domain Socket을 생성하는 형태로도 동작 가능하다.
+containerd-shim은 "@/containerd-shim/moby/[containerID]/shim.sock@" 이름의 Unix Domain Socket을 통해 전송되는 containerd의 명령어 따라서, Container Init Process의 상태를 Check하는 동작과 Container 내부에 별도의 Process를 띄우는 exec 동작도 수행한다. containerd-shim의 Unix Domain Socket은 기본적으로 별도의 파일이 존재하지 않는 형태로 동작하며 containerd-shim의 Option을 통해서 특정 경로에 Unix Domain Socket을 생성하는 형태로도 동작 가능하다.
 
 runc의 stdin/stdout/stderr는 containerd-shim에 의해서 Named Pipe로 설정된 상태로 Container를 생성하기 때문에 생성된 Container의 stdin/out/err로 Named Pipe로 설정된다. Named Pipe의 경로는 "/run/docker/containerd/[containerID]/init-stdin/out/err"에 위치하며 dockerd가 containerd에게 요청한 경로를 containerd-shim이 다시 받아서 생성한다. dockerd는 Named Pipe를 통해서 Container의 stdout/stderr (Log)를 수집하며, Container 구동 Option에 따라서 Container의 stdin/out을 Terminal과 연결할때도 Named Pipe를 이용한다.
+
+{% highlight text %}
+# pstree
+systemd-+-containerd-+-containerd-shim-+-bash
+        |            |                 `-9*[{containerd-shim}]
+...
+        |-dockerd-+-docker-proxy---6*[{docker-proxy}]
+        |         `-29*[{dockerd}]
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 1] Docker Components pstree </figcaption>
+</figure>
+
+Linux는 기본적으로 고아 Process가 발생하는 경우 고아 Process의 새로운 부모 Process로 Node의 1번 Process인 Node Init Process를 설정한다. runc를 통해서 Container를 생성하게 되면 Container Init Process의 부모 Process는 runc가 된다. 이후 runc가 종료되면 Container Init Process의 부모 Process는 원래라면 Node Init Process가 되어야 하지만, [Shell 1]에서 확인할 수 있는것 처럼 containerd-shim Process가 새로운 Process가 된다. 이러한 이유는 containerd-shim이 runc를 실행하기 전에 prctl() System Call을 이용해 자신을 **Subreaper** Process로 설정하기 때문이다.
+
+Subreaper Process는 자신의 모든 하위 Process 중에서 고아 Process가 발생하면 Node Init Process가 새로운 부모가 아닌, 자기 자신이 고아 Process를 거두어 새로운 부모 Process가 된다는 의미이다. Container Init Process의 부모 Process가 containerd-shim이기 때문에 Container Init Process가 종료될 경우 containerd-shim은 SIGCHLD Signal을 받게되고 Container Init Process의 Exit Code를 얻을수 있는 것이다.
 
 ### 2. 참조
 
