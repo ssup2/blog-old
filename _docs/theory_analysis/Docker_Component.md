@@ -35,7 +35,7 @@ dockerd는 docker-proxy는 Container의 Port Forwarding Option이 추가될 때�
 
 containerd는 OCI (Open Container Initiative) Runtime Spec을 준수하는 dockerd에 요청에 따라서 config.json (Container Config) 파일을 생성하고 containerd-shim, runc를 이용하여 container를 생성하는 Daemon 역활을 수행한다. containerd는 dockerd의 OCI Runtime Spec  또한 Node에 Container 구동에 필요한 Container Image가 존재하지 않는다면 OCI Image Spec을 기반으로 Container Image Server로부터 Container Image를 Pull 하는 역활도 수행한다. Container Snapshot 기능도 containerd가 수행한다.
 
-containerd는 기본적으로 기본적으로 "/run/containerd/containerd.sock"의 Unix Domain Socket을 통해서 gRPC 기반 REST API를 제공한다. containerd는 ctr이라고 불리는 containerd 전용 CLI Client를 제공하기도 한다.
+containerd는 기본적으로 기본적으로 "/run/containerd/containerd.sock"의 Unix Domain Socket을 통해서 gRPC 기반 REST API를 제공한다. containerd는 ctr이라고 불리는 containerd 전용 CLI Client를 제공하기도 한다. containerd는 Namespace 기능을 제공하는데 Docker는 "moby"라는 이름의 Namespace에 모든 Container들을 생성한다.
 
 #### 1.5. runc
 
