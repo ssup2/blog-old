@@ -27,7 +27,7 @@ Docker Daemon의 REST API는 기본적으로 "/var/run/docker.sock" 파일의 Un
 
 #### 1.3. docker-proxy (Docker Proxy)
 
-docker-proxy는 Node 외부에서 Container안으로 Packet을 Forwarding 해주는 Proxy Server 역활을 수행한다. docker-proxy는 Container 구동시 반드시 필요한 구성 요소는 아니다. Linux에서 동작하는 dockerd는 Linux Netfilter Framework를 기반으로 동작하는 iptables를 이용하여 Container로 Packet을 Forwarding 하기 때문이다. 하지만 dockerd가 동작하는 모든 환경에서 iptables를 이용할수 있는것은 아니기 때문에, docker-proxy는 환경에 따라서 이용 유무가 결정된다. dockerd-proxy의 이용 유무는 docker-proxy를 실행하는 dockerd의 설정에 따라서 결정된다.
+docker-proxy는 Node 외부에서 Container안으로 Packet을 Forwarding 해주는 Proxy Server 역활을 수행한다. docker-proxy는 Container 구동시 반드시 필요한 구성 요소는 아니다. Linux에서 동작하는 dockerd는 Linux Netfilter Framework를 기반으로 동작하는 iptables를 이용하여 Container로 Packet을 Forwarding 하기 때문이다. 하지만 dockerd가 동작하는 모든 환경에서 iptables를 이용할수 있는것은 아니기 때문에, docker-proxy의 이용은 환경에 따라 선택되어야 한다. dockerd-proxy의 이용 유무는 docker-proxy를 실행하는 dockerd의 설정에 따라서 결정된다.
 
 dockerd는 docker-proxy는 Container의 Port Forwarding Option이 추가될 때마다 해당 Port를 담당하는 docker-proxy를 추가로  실행한다. 예를 들어 A Container에 10, 20 Port를 Port Forwarding 설정하고, B Container에 30, 40 Port를 Port Forwarding 하도록 설정한다면 docker-proxy는 총 4개가 동작한다. 다수의 docker-proxy 구동은 Node에도 부담될수 있기 때문에 dockerd가 Linux의 iptables가 이용가능한 환경이라면 docker-proxy를 이용 안하도록 dockerd를 설정하는 것이 좋다.
 
