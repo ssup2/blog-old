@@ -64,7 +64,7 @@ systemd-+-containerd-+-containerd-shim-+-bash
 
 Linux는 기본적으로 고아 Process가 발생하는 경우 고아 Process의 새로운 부모 Process로 Node의 1번 Process인 Node Init Process를 설정한다. runc를 통해서 Container를 생성하게 되면 Container Init Process의 부모 Process는 runc가 된다. 이후 runc가 종료되면 Container Init Process의 부모 Process는 원래라면 Node Init Process가 되어야 하지만, [Shell 1]에서 확인할 수 있는것 처럼 containerd-shim Process가 새로운 Process가 된다. 이러한 이유는 containerd-shim이 runc를 실행하기 전에 prctl() System Call을 이용해 자신을 **Subreaper** Process로 설정하기 때문이다.
 
-Subreaper Process는 자신의 모든 하위 Process 중에서 고아 Process가 발생하면 Node Init Process가 새로운 부모가 아닌, 자기 자신이 고아 Process를 거두어 새로운 부모 Process가 된다는 의미이다. Container Init Process의 부모 Process가 containerd-shim이기 때문에 Container Init Process가 종료될 경우 containerd-shim은 SIGCHLD Signal을 받게되고 Container Init Process의 Exit Code를 얻을수 있는 것이다.
+Subreaper Process는 자신의 모든 하위 Process 중에서 고아 Process가 발생하면 Node Init Process가 새로운 부모가 아닌, 자기 자신이 고아 Process를 거두어 새로운 부모 Process가 된다는 의미이다. Container Init Process의 부모 Process가 containerd-shim이기 때문에 Container Init Process가 종료될 경우 containerd-shim은 SIGCHLD Signal을 받게되고 Container Init Process의 ExitCode를 얻을수 있는 것이다.
 
 ### 2. 참조
 
