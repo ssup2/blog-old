@@ -32,5 +32,5 @@ Client (Agent)는 모든 Node에서 동작하며 Consul에 등록된 Service의 
 ### 2. 참조
 
 * [https://www.consul.io/intro/index.html](https://www.consul.io/intro/index.html)
-* [https://www.consul.io/docs/internals/architecture.html]*(https://www.consul.io/docs/internals/architecture.html)
+* [https://www.consul.io/docs/internals/architecture.html](https://www.consul.io/docs/internals/architecture.html)
 * [https://www.consul.io/docs/internals/gossip.html](https://www.consul.io/docs/internals/gossip.html)
