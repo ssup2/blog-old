@@ -11,7 +11,7 @@ Consul을 분석한다.
 
 ### 1. Consul
 
-Consul은 **Service Mesh Architecture에서 Control Plan**이 수행하는 Service Discovery, Service Health Check, Service 상태/설정 정보 관리 등의 역활을 수행한다. 이러한 Consul에서 제공하는 기능들은 Consul의 **Key-value Store**를 기반으로 하고 있다. Consule의 Key-value Store는 다수의 Consule Cluster로 구성되며 Raft Algorithm, gossip Protocol을 이용하여 High Availability에 중점을 두고 있다.
+Consul은 **Service Mesh Architecture에서 Control Plan**이 수행하는 Service Discovery, Service Health Check, Service 상태/설정 정보 관리, Key-value Store 등의 역활을 수행한다. 이러한 Consul에서 제공하는 기능들은 Consul의 **Key-value Store**를 기반으로 하고 있다. Consule의 Key-value Store는 다수의 Consule Cluster로 구성되며 Raft Algorithm, gossip Protocol을 이용하여 High Availability에 중점을 두고 있다.
 
 Service 등록은 Consul API를 통해서 진행되며, 등록된 Service는 DNS 또는 HTTP Request를 통해서 Discovery 할 수 있다. Service 정보에는 해당 Service의 Health Check 방법도 포함되어 있으며, Consul은 등록된 Service의 Health Check 방법을 통해서 해당 Service의 Health를 주기적으로 검사한다. 만약 Consul이 정상 상태가 아닌 Service를 발견하면 해당 Service는 Discovery 대상에서 제외하여, Traffic이 정상 상태가 아닌 Service로 전달되지 않도록 한다.
 
