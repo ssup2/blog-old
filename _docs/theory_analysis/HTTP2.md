@@ -19,7 +19,7 @@ HTTP/2는 기존 HTTP/1의 느린 성능 개선을 목적으로 탄생하게된 
 
 #### 1.2. Stream, Multiplexing
 
-![[그림 2] HTTP/2 Components]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Header_Compression.PNG){: width="700px"}
+![[그림 2] HTTP/2 Components]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Components.PNG){: width="700px"}
 
 ![[그림 2] HTTP/2 Components]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Stream.PNG){: width="700px"}
 
