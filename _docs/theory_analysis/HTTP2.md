@@ -25,7 +25,7 @@ HTTP/2는 이러한 HTTP Header의 Overhead를 줄이기 위해서 Header 압축
 
 Static Table을 이용하여 변경되지 않은 나머지 Key-value들은 각각 Huffman Algorithm을 이용해 압축된다. 그리고 Huffman을 통해서 압축된 Key-value는 Dynamic Table에 저장된다. [그림 1]에서 ":host ssup.com", ":path /home", "user-agent Mozila/5.0"는 Dynamic Table의 62에 저장되는 것을 확인할 수 있다. 그 뒤 동일 Header를 한번더 전송하는 경우 Dynamic Table을 이용하여 첫번째 Header를 전송할때보다 효율적으로 압축한다. [그림 1]에서 두번째 전송하는 Header의 경우에는 Huffman Algorithm을 이용하지 않고 Static, Dynamic Table만을 이용하여 Header를 압축하는걸 확인할 수 있다.
 
-Static Table은 61번 Index까지 갖고 있기 때문에 Dynamic Table의 Index는 62번부터 시작한다. Dynamic Table은 FIFO 형태로 동작한다. 즉 Dyanamic Table이 가득차 새로운 Key-value를 저장할 공간이 부족할 경우, 가장 오래 저장된 Key-value를 제거하고 새로운 Key-value를 저장한다.
+Static Table은 61번 Index까지 갖고 있기 때문에 Dynamic Table의 Index는 62번부터 시작한다. Dynamic Table은 FIFO 형태로 동작한다. 즉 Dynamic Table이 가득차 새로운 Key-value를 저장할 공간이 부족할 경우, 가장 오랜 기간 저장된 Key-value를 제거하고 새로운 Key-value를 저장한다.
 
 #### 1.2. Stream, Multiplexing
 
