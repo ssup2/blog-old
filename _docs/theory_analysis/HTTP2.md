@@ -37,7 +37,7 @@ Static Table은 61번 Index까지 갖고 있기 때문에 Dynamic Table의 Index
 
 HTTP/2에서 Stream이라는 개념이 탄생한 이유는 Server와 Client의 전송 대기 시간 감소 및 HOL Blocking (Head of Line Blocking) 현상을 제거 하기 위해서 이다. [그림 3]은 Stream Multiplexing을 나타내고 있다. 기존 HTTP/1에서는 하나의 Connection 내부에서 Server나 Client는 동시에 Message를 전송하지 못하고 Message를 Ping-pong 형태로 주고 받을수 밖에 없었다. 따라서 Server나 Client는 불필요한 대기시간이 길어지게 되고, 앞의 Message 전송이 느려지면 뒤의 Message 전송에 큰 영향을 미치게 된다. HTTP/2에서는 Stream 이라는 논리적인 Channel을 도입하여 HOL Blocking 문제를 해결하였다. HTTP/2는 각 Stream 단위로 Flow Control을 수행한다. HTTP/2의 Stream Flow Control은 TCP의 Flow Control처럼 Window를 생성하는 방식을 이용한다.
 
-![[그림 4] HTTP/2 Frame Interleaving]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Stream.PNG)
+![[그림 4] HTTP/2 Frame Interleaving]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Frame_interleaving.PNG)
 
 [그림 4]는 HTTP/2에서 Stream을 통해서 실제 어떻게 Multiplexing을 구현하는지를 나타내고 있다. Stream의 구현은 Frame Interleaving을 통해서 구현된다. 각 Stream에 소속되어 있는 Frame들은 시분활을 통해 동시에 전송된다. 목적지에 도착한 Frame들은 Frame Header에 포함된 Stream Number 정보를 통해서 재조합되어 Server 또는 Client에게 전달된다. Frame Header에는 Frame의 Type을 나타내는 정보도 포함되어 있으며 대표적인 Type에는 HTTP/2의 Header가 포함되어 있는 "HEADER" Type과 HTTP/2의 Body가 포함되어 있는 "DATA" Type이 존재한다.
 
