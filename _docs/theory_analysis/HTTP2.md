@@ -39,7 +39,7 @@ HTTP/2에서 Stream이라는 개념이 탄생한 이유는 Server와 Client의 �
 
 ![[그림 4] HTTP/2 Frame Interleaving]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Frame_interleaving.PNG)
 
-[그림 4]는 HTTP/2에서 Stream을 통해서 실제 어떻게 Multiplexing을 구현하는지를 나타내고 있다. Stream의 구현은 Frame Interleaving을 통해서 구현된다. 각 Stream에 소속되어 있는 Frame들은 시분활을 통해 동시에 전송된다. 목적지에 도착한 Frame들은 Frame Header에 포함된 Stream Number 정보를 통해서 재조합되어 Server 또는 Client에게 전달된다. Frame Header에는 Frame의 Type을 나타내는 정보도 포함되어 있으며 대표적인 Type에는 HTTP/2의 Header가 포함되어 있는 "HEADER" Type과 HTTP/2의 Body가 포함되어 있는 "DATA" Type이 존재한다.
+[그림 4]는 HTTP/2에서 Stream을 통해서 실제 어떻게 Multiplexing을 구현하는지를 나타내고 있다. Stream의 구현은 Frame Interleaving을 통해서 구현된다. 각 Stream에 소속되어 있는 Frame들은 시분활을 통해 동시에 전송된다. 목적지에 도착한 Frame들은 Frame Header에 포함된 Stream Number 정보를 통해서 재조합되어 Server 또는 Client에게 전달된다. Frame Header에는 Frame의 Type을 나타내는 정보도 포함되어 있으며 대표적인 Type에는 HTTP/2의 Header가 포함되어 있는 HEADER Type과 HTTP/2의 Body가 포함되어 있는 DATA Type이 존재한다.
 
 #### 1.3. Stream Priority
 
