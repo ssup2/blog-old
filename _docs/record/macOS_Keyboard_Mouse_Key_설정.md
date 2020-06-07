@@ -106,6 +106,6 @@ Key 변경을 위해서 Karabiner-Elements을 설치한다.
 
 ![[그림 1] Complex Modification Rules 설정전]({{site.baseurl}}/images/record/macOS_Keyboard_Mouse_Key/Karabiner-Elements_Complex_Modification_Rules_Before_Setting.PNG)
 
-![[그림 2] Complex Modification Rules 설정후]({{site.baseurl}}/images/record/macOS_Keyboard_Mouse_Key/Karabiner-Elements_Complex_Modification_Rules_Before_Setting.PNG)
+![[그림 2] Complex Modification Rules 설정후]({{site.baseurl}}/images/record/macOS_Keyboard_Mouse_Key/Karabiner-Elements_Complex_Modification_Rules_After_Setting.PNG)
 
 Karabiner-Elements에서 [파일 1], [파일 2]의 Complex Modification Rules을 적용한다. [그림 1]에서 "Add rule" Button을 눌러 설정한다.
