@@ -11,7 +11,7 @@ GitOps를 분석한다.
 
 ### 1. GitOps
 
-![[그림 1] GitOps Pipeline]({{site.baseurl}}/images/theory_analysis/GitOps/GitOps_Pipeline.PNG){: width="700px"}
+![[그림 1] GitOps Pipeline]({{site.baseurl}}/images/theory_analysis/GitOps/GitOps_Pipeline.PNG)
 
 ### 2. 참조
 
