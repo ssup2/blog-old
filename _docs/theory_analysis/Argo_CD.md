@@ -11,7 +11,7 @@ Argo CD를 분석한다.
 
 ### 1. Argo CD
 
-![[그림 1] Argo CD Architecture]({{site.baseurl}}/images/theory_analysis/Argo_CD/Argo_CD_Architecture.PNG){: width="700px"}
+![[그림 1] Argo CD Architecture]({{site.baseurl}}/images/theory_analysis/Argo_CD/Argo_CD_Architecture.PNG){: width="750px"}
 
 ### 2. 참조
 
