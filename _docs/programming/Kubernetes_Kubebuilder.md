@@ -274,7 +274,7 @@ func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
 <figcaption class="caption">[Code 3] controllers/memcached_controller.go</figcaption>
 </figure>
 
-[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 8,9번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다. 111~115번째 줄은 Runtime Controller Package를 통하여 Memcached CR 또는 Memcached CR이 소유하고 있는 Deployment Resource의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, Runtime Controller Package는 해당 Memcached CR의 Name/Namespace 정보를 Reconcile Loop 역할을 수행하는 Reconcile() 함수에게 전달한다.
+[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 9,10번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다. 111~115번째 줄은 Runtime Controller Package를 통하여 Memcached CR 또는 Memcached CR이 소유하고 있는 Deployment Resource의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, Runtime Controller Package는 해당 Memcached CR의 Name/Namespace 정보를 Reconcile Loop 역할을 수행하는 Reconcile() 함수에게 전달한다.
 
 Reconcile() 함수에 소속된 18~31번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 Manager Client를 이용하여 Memcached CR을 얻는 부분이다. 34~52번째 줄은 Runtime Controller Package로부터 받은 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Resource를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Resource의 Replica가 다르다면 Deployment Resource의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 
 
