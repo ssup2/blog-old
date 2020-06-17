@@ -19,4 +19,4 @@ JWT (JSON Web Token)을 분석한다.
 * [https://jwt.io/](https://jwt.io/)
 * [http://www.opennaru.com/opennaru-blog/jwt-json-web-token/](http://www.opennaru.com/opennaru-blog/jwt-json-web-token/)
 * [https://auth0.com/docs/tokens/concepts/jwt-claims](https://auth0.com/docs/tokens/concepts/jwt-claims)
-* Claim : [https://www.iana.org/assignments/jwt/jwt.xhtml#claims](https://www.iana.org/assignments/jwt/jwt.xhtml#claims)
+* Claim Type : [https://www.iana.org/assignments/jwt/jwt.xhtml#claims](https://www.iana.org/assignments/jwt/jwt.xhtml#claims)
