@@ -31,11 +31,19 @@ Reserved Claim과 Public Claim은 [링크](https://www.iana.org/assignments/jwt/
 
 JWT의 Header와 Payload는 Base64로 Encoding 되어 있기 때문에 누구든지 JWT의 Header와 Payload를 Decoding하여 확인할 수 있고, JWT를 가로채어 기존의 Payload를 조작된 Payload와 교체하는 일도 어렵지 않다. JWT에서는 이러한 보안 문제를 해결하기 위해서 Signature를 이용한다. Signature를 통해서 Header와 Payload가 조작되지 않았으며, 인증된 App으로부터 전송 되었다는걸 검증할 수 있다.
 
-Signature는 Base64로 Encoding된 Header와 Payload를 "." (마침표)로 연결한 문자열과 사용자가 임의로 설정한 Password (대칭키, 비대칭키)를 이용하여 암호화 한다음, 다시 Base64로 Encoding하여 생성한다. JWT를 수신한 App은 수신한 JWT의 Header, Payload 및 자신이 알고 있는 Password를 이용하여 Signature를 생성한 다음, 수신한 JWT의 Signature와 비교한다. 만약 두 Signature가 동일하다면 해당 JWT는 유효하다는 의미이다. Payload가 변경 되었거나 Password를 알지 못하는 (검증되지 않은) App이 엉뚱한 Password를 이용하여 Signature를 생성하여 JWT에 포함시켰다면, JWT의 Signature와 JWT의 수신한 App에서 생성한 Signature는 다를수 밖에 없기 때문이다. 이처럼 JWT는 외부의 도움없이 JWT 자체만으로도 자신이 유효하다는걸 검증할 수 있다. 이러한 성질을 **Self-contained**라고 표현한다. 
+Signature는 Base64로 Encoding된 Header와 Payload를 "." (마침표)로 연결한 문자열과 사용자가 임의로 설정한 Password (대칭키, 비대칭키)를 이용하여 암호화 한다음, 다시 Base64로 Encoding하여 생성한다. JWT를 수신한 App은 수신한 JWT의 Header, Payload 및 자신이 알고 있는 Password를 이용하여 Signature를 생성한 다음, 수신한 JWT의 Signature와 비교한다. 만약 두 Signature가 동일하다면 해당 JWT는 유효하다는 의미한다.
+
+Payload가 변경 되었거나 Password를 알지 못하는 (검증되지 않은) App이 엉뚱한 Password를 이용하여 Signature를 생성하여 JWT에 포함시켰다면, JWT의 Signature와 JWT의 수신한 App에서 생성한 Signature는 다를수 밖에 없기 때문이다. 이처럼 JWT는 외부의 도움없이 JWT 자체만으로도 자신이 유효하다는걸 검증할 수 있다.
 
 JWT에서는 Signature 생성을 위해서 다양한 암호화 Algorithm을 이용할 수 있다. 일반적으로 대칭키 기반의 암호화가 필요한 경우에는 HMACSHA256 Algorithm을 많이 이용하고, 비대칭키 (공개키, 비공개키) 기반의 암호화가 필요한 경우에는 RSA256 Algorithm을 이용한다. [그림 1]에서는 HMACSHA256 Algorithm을 이용해 암호화 하는 과정을 나타내고 있다.
 
-#### 1.4. 용도
+#### 1.4. 특징, 용도
+
+JWT는 Payload에 원하는 Data를 저장할 수 있고, Signature를 이용하여 자신의 무결성을 검증할 수 있다. JWT처럼 자신에게 필요한 모든 정보를 담고 있는 특징을 **Self-contained**라고 표현한다. JWT의 Self-contained 특징은 JWT를 REST API Server와 같이 Stateless App에서 이용하기 유리하도록 만든다.
+
+Stateless App의 가장 큰 장점은 자유로운 Scale Out이다. Stateless App에서 Self-containerd 특징을 갖고 있지 않는 Token, 즉 Token의 의미 파악과 유효성 검사를 외부 Token Server의 도움을 받아 진행해야 하는 Token을 이용한다면, Stateless App이 Scale Out 될때마다 외부 Token Server의 부하도 같이 증가한다. 이러한 외부 Token Server의 부하 증가는 Stateless App의 Scale Out을 방해하는 요소가 된다. JWT를 수신하는 App은 수신한 JWT의 의미 파악 및 유효성 검증을 App 스스로 수행할 수 있기 때문에 이러한 부하 문제가 발생하지 않는다.
+
+JWT는 Payload에 인가 정보를 넣어 주로 Service의 인증/인가를 수행하는 Token으로 이용되거나, Web 환경에서 암호화 하여 Data를 주고받는 목적으로 이용된다.
 
 ### 2. 참조
 
