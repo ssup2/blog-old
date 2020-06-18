@@ -25,7 +25,7 @@ Payload에는 Token의 Meta Data와 Token이 전달하려는 실제 Data가 Key-
 
 Custom Claim에는 Token이 전달하려는 실제 Data가 저장된다. Public Claim의 이름은 모두에게 공개되어 있으며, 각 Public Claim의 이름은 일반적으로 많이 전송하는 Data들을 나타낸다. 즉 Public Claim은 일반적으로 많이 전송하는 Data를 저장한다. Public Claim의 이름으로는 Full Name을 의미하는 "name", Email 주소를 의미하는 "email" 등의 존재한다. Private Claim의 이름은 Token을 주고 받는 App들의 협의하에 결정된 이름을 이용한다. [그림 1]의 "app" Key는 Private Claim의 Key를 나타내고 있다.
 
-Reserved Claim과 Public Claim은 [링크](https://www.iana.org/assignments/jwt/jwt.xhtml#claims)에서 확인 가능하다. Payload의 내용 또한 Header처럼 Base64로 Encoding되어 JWT에 저장된다.
+Reserved Claim과 Public Claim의 이름은 [링크](https://www.iana.org/assignments/jwt/jwt.xhtml#claims)에서 확인 가능하다. Payload의 내용 또한 Header처럼 Base64로 Encoding되어 JWT에 저장된다.
 
 #### 1.3. Signature
 
