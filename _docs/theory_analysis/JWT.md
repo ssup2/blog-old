@@ -43,7 +43,7 @@ JWT는 Payload에 원하는 Data를 저장할 수 있고, Signature를 이용하
 
 Stateless App의 가장 큰 장점은 자유로운 Scale Out이다. Stateless App에서 Self-containerd 특징을 갖고 있지 않는 Token, 즉 Token의 의미 파악과 유효성 검사를 외부 Token Server의 도움을 받아 진행해야 하는 Token을 이용한다면, Stateless App이 Scale Out 될때마다 외부 Token Server의 부하도 같이 증가한다. 이러한 외부 Token Server의 부하 증가는 Stateless App의 Scale Out을 방해하는 요소가 된다. JWT를 수신하는 App은 수신한 JWT의 의미 파악 및 유효성 검증을 App 스스로 수행할 수 있기 때문에 이러한 부하 문제가 발생하지 않는다.
 
-JWT는 Payload에 인가 정보를 넣어 주로 Service의 인증/인가를 수행하는 Token으로 이용되거나, Web 환경에서 암호화 하여 Data를 주고받는 목적으로 이용된다.
+JWT는 Self-contained 특징을 바탕으로 Payload에 인가 정보를 넣어 주로 Service의 인증/인가를 수행하는 Token으로 이용되거나, Web 환경에서 암호화 하여 Data를 주고받는 목적으로 이용된다.
 
 ### 2. 참조
 
