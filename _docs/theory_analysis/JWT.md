@@ -21,7 +21,7 @@ Header에는 Type을 나타내는 "typ" Key와 Algorithm을 나타내는 "alg" K
 
 #### 1.2. Payload
 
-Payload에는 Token의 Meta Data와 Token이 전달하려는 실제 Data가 Key-value 형태로 저장된다. Payload Key-value는 Claim이라고 부르며 Claim에는 Reserved Claim과 Custom Claim으로 구분된다. Custom Claim은 다시 Public Claim과 Private Claim으로 구분된다. Reserved Claim은 Token의 Meta 정보를 저장한다. Reserved Claim의 이름으로는 Token의 발급자를 의미하는 "iss", Token의 이름을 나타내는 "sub", 토근의 발급시간을 나타내는 "iat" 등이 존재한다.
+Payload에는 Token의 Meta Data와 Token이 전달하려는 실제 Data가 Key-value 형태로 저장된다. Payload의 Key-value는 Claim이라고 부르며 Claim에는 Reserved Claim과 Custom Claim으로 구분된다. Custom Claim은 다시 Public Claim과 Private Claim으로 구분된다. Reserved Claim은 Token의 Meta 정보를 저장한다. Reserved Claim의 이름으로는 Token의 발급자를 의미하는 "iss", Token의 이름을 나타내는 "sub", 토근의 발급시간을 나타내는 "iat" 등이 존재한다.
 
 Custom Claim에는 Token이 전달하려는 실제 Data가 저장된다. Public Claim의 이름은 모두에게 공개되어 있으며, 각 Public Claim의 이름은 일반적으로 많이 전송하는 Data들을 나타낸다. 즉 Public Claim은 일반적으로 많이 전송하는 Data를 저장한다. Public Claim의 이름으로는 Full Name을 의미하는 "name", Email 주소를 의미하는 "email" 등의 존재한다. Private Claim의 이름은 Token을 주고 받는 App들의 협의하에 결정된 이름을 이용한다. [그림 1]의 "app" Key는 Private Claim의 Key를 나타내고 있다.
 
@@ -39,7 +39,7 @@ JWT에서는 Signature 생성을 위해서 다양한 암호화 Algorithm을 이�
 
 #### 1.4. 특징, 용도
 
-JWT는 Payload에 원하는 Data를 저장할 수 있고, Signature를 이용하여 자신의 무결성을 검증할 수 있다. JWT처럼 자신에게 필요한 모든 정보를 담고 있는 특징을 **Self-contained**라고 표현한다. JWT의 Self-contained 특징은 JWT를 REST API Server와 같이 Stateless App에서 이용하기 유리하도록 만든다.
+JWT는 Payload에 원하는 Data를 저장할 수 있고, Signature를 이용하여 자신의 무결성을 검증할 수 있다. JWT처럼 자신에게 필요한 모든 정보를 담고 있는 특징을 **Self-contained**라고 표현한다. JWT의 Self-contained 특징은 JWT를 REST API Server와 같은 Stateless App에서 이용하기 유리하도록 만든다.
 
 Stateless App의 가장 큰 장점은 자유로운 Scale Out이다. Stateless App에서 Self-containerd 특징을 갖고 있지 않는 Token, 즉 Token의 의미 파악과 유효성 검사를 외부 Token Server의 도움을 받아 진행해야 하는 Token을 이용한다면, Stateless App이 Scale Out 될때마다 외부 Token Server의 부하도 같이 증가한다. 이러한 외부 Token Server의 부하 증가는 Stateless App의 Scale Out을 방해하는 요소가 된다. JWT를 수신하는 App은 수신한 JWT의 의미 파악 및 유효성 검증을 App 스스로 수행할 수 있기 때문에 이러한 부하 문제가 발생하지 않는다.
 
