@@ -11,9 +11,9 @@ Directory Service와 Directory Service에서 이용되는 LDAP (Lightweight Dire
 
 ### 1. Directory Service
 
-첫 Directory Service는 기업이 갖고 있는 물리적 Network Resource를 관리하기 위해서 Network Resource의 위치, 사양, 관리자 등의 정보를 보관하던 Data 저장소였다. **하지만 기업의 요구에 따라서 Network Resource 뿐만 아니라 기업이 관리해야하는 장비, 조직, 직원 등 다양한 물리적 Resource들을 관리하는 Data 저장소로 기능이 확장되었다.** 직원의 인증 정보도 Service Directory에 저장하여 관리할 수 있기 때문에, Directory Service를 통해서 사내의 인증 서비스도 구축할 수 있다.
+첫 Directory Service는 기업이 갖고 있는 물리적 Network Resource를 관리하기 위해서 Network Resource의 위치, 사양, 관리자 등의 정보를 보관하던 Data 저장소였다. 하지만 기업의 요구에 따라서 Network Resource 뿐만 아니라 기업이 관리해야하는 장비, 조직, 직원 등 다양한 물리적 Resource들을 관리하는 Data 저장소로 기능이 확장되었다. 직원의 인증 정보도 Service Directory에 저장하여 관리할 수 있기 때문에, Directory Service를 통해서 사내의 인증 서비스도 구축할 수 있다.
 
-Directory Service는 거의 번화가 발생하지 않는 물리적 Resource를 관리하는 용도로 많이 이용되기 때문에 일반적으로 Data 쓰기 보다는 Data 읽기에 중점을 두어 설계되어 있다. 또한 물리적 Resource의 다양한 특징을 저장하기 위해서 일반적으로 다양한 속성 (Attribute)를 저장할 수 있도록 설계되어 있다. Directory Service의 대표적인 구현체는 LDAP (Lightweight Directory Access Protocol)이 있다.
+Directory Service는 거의 번화가 발생하지 않는 물리적 Resource를 관리하는 용도로 많이 이용되기 때문에 일반적으로 Data Write 보다는 Data Read에 중점을 두어 설계되어 있다. 또한 물리적 Resource의 다양한 특징을 저장하기 위해서 일반적으로 다양한 속성 (Attribute)를 저장할 수 있도록 설계되어 있다. Directory Service의 대표적인 구현체는 LDAP (Lightweight Directory Access Protocol)이 있다.
 
 ### 2. LDAP (Lightweight Directory Access Protocol)
 
@@ -29,6 +29,8 @@ LDAP은 의미 그대로 경량화된 Directory Service를 위한 Protocol이다
 * dc : Domain Component
 * st : State
 * c : Country
+
+LDAP은 Transaction, Rollback을 지원하지 않는다. LDAP은 Data Write 보다는 Data Read에 특화되어 있다. LDAP Server가 갖고 있는 Data는 일반적으로 Binary 형태로 저장되지만, LDIF (LDAP Data Interchange Format)를 통해서 사람이 읽을수 있는 형태로 변환가능하다.
 
 ### 3. 참조
 
