@@ -11,7 +11,7 @@ JavaScript에서 Data 저장소로 이용되는 Redux를 분석한다.
 
 ### 1. Redux
 
-![[그림 1] Redux Architecture]({{site.baseurl}}/images/theory_analysis/Redux/Redux_Architecture.PNG){: width="600px"}
+![[그림 1] Redux Architecture]({{site.baseurl}}/images/theory_analysis/Redux/Redux_Architecture.PNG){: width="650px"}
 
 #### 1.1. without Redux vs with Redux
 
