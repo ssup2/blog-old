@@ -50,7 +50,7 @@ State에 저장된 State 정보는 반드시 Reducer라고 불리는 함수를 �
 <figcaption class="caption">[Text 2] Action Example</figcaption>
 </figure>
 
-Action Creator가 생성하는 Action은 Event를 묘사하는 JavaScript의 Object를 의미한다. [Text 2]는 Action의 Example을 나타내고 있다. Action은 자체만으로 어떤 Event가 발생하였는지 명확하게 묘사되어야 한다. View는 사용자에게 노출되어 사용자의 입력을 Event로 Action Creator에게 전달한다. 또한 View는 자기 자신을 State의 Subscriber로 등록하여 State에 저장된 State 정보가 Reducer에 의해서 변경될 경우, 변경된 State 정보를 받아 사용자에게 노출하는 역활도 수행한다.
+Action Creator가 생성하는 Action은 Event를 묘사하는 JavaScript의 Object를 의미한다. [Text 2]는 Action의 예제를 나타내고 있다. Action은 그 자체만으로 어떤 Event가 발생하였는지 명확하게 묘사되어야 한다. View는 사용자에게 노출되어 사용자의 입력을 Event로 Action Creator에게 전달한다. 또한 View는 자기 자신을 State의 Subscriber로 등록하여 State에 저장된 State 정보가 Reducer에 의해서 변경될 경우, 변경된 State 정보를 받아 사용자에게 노출하는 역활도 수행한다.
 
 #### 1.1. React without Redux vs with Redux
 
