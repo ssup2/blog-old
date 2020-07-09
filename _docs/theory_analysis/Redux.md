@@ -15,7 +15,7 @@ JavaScript에서 State 정보를 저장하는 용도로 이용되는 Redux를 �
 
 Redux는 JavaScript에서 State 정보를 저장하는 State 저장소 역활을 수행한다. Redux는 주로 React의 Component들의 State 정보를 저장하는 용도로 이용된다. [그림 1]은 Redux의 Architecture를 나타내고 있다. Store는 Redux에서 State 정보를 저장하는 State 저장소를 나타내며 Redux의 핵심 구성요소이다. Store는 State, Reducer, Middleware로 구성되어 있다.
 
-{% highlight json %}
+{% highlight text %}
 {
   counters: [
     {
@@ -41,7 +41,7 @@ State는 Store의 구성요소중 실제로 State 정보를 저장하는 공간�
 
 State에 저장된 State 정보는 반드시 Reducer라고 불리는 함수를 통해서만 변경 가능하다. Reducer는 State에 저장된 Current State 정보와 Action Creator으로 부터 생성된 Action을 Parameter로 받은 다음 Next State를 반환하는 함수이다. Reducer가 반환한 Next State는 State에 다시 저장된다. Next State 정보가 State에 저장될때는 **Serialize**되어 저장된다. Serialize로 인해서 성능적 불이익이 발생하지만 Race Condtion을 고려하지 않아도 되기 때문에 JavaScript App 개발과 Debugging을 쉽게 만들어준다.
 
-{% highlight json %}
+{% highlight text %}
 { type: 'ADD_TODO', text: 'Go to swimming pool' }
 { type: 'TOGGLE_TODO', index: 1 }
 { type: 'SET_VISIBILITY_FILTER', filter: 'SHOW_ALL' }
