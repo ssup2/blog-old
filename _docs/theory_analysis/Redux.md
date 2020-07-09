@@ -52,11 +52,17 @@ State에 저장된 State 정보는 반드시 Reducer라고 불리는 함수를 �
 
 Action Creator가 생성하는 Action은 Event를 묘사하는 JavaScript의 Object를 의미한다. [Text 2]는 Action의 Example을 나타내고 있다. Action은 자체만으로 어떤 Event가 발생하였는지 명확하게 묘사되어야 한다. View는 사용자에게 노출되어 사용자의 입력을 Event로 Action Creator에게 전달한다. 또한 View는 자기 자신을 State의 Subscriber로 등록하여 State에 저장된 State 정보가 Reducer에 의해서 변경될 경우, 변경된 State 정보를 받아 사용자에게 노출하는 역활도 수행한다.
 
-#### 1.1. without Redux vs with Redux
+#### 1.1. React without Redux vs with Redux
 
 ![[그림 2] React Component Tree without Redux]({{site.baseurl}}/images/theory_analysis/Redux/React_Component_Tree_without_Redux.PNG){: width="350px"}
 
+React Component들은 자신의 State를 저장하는 기능을 제공하고 있다. 따라서 Redux의 도움없이 React만으로도 State를 갖는 Component를 구성할 수 있다. [그림 2]는 Redux 없이 React만 이용하여 Component를 구성할 경우, Component Tree와 Component State의 변화를 나타내고 있다. React Component는 부모, 자식 관계를 갖을 수 있다. 예를 들어 [그림 2]에서 Component D가 Component F와 G를 이용하여 구성될 경우 Component D는 Component F와 G의 부모 Component가 된다. 반대로 Component D의 자식 Component는 Component F와 G가 된다.
+
+React에서는 [그림 2]의 내용처럼 자식 Component가 부모 Component의 State를 직접 변경하는 방법을 권장하지 않는다. 대신 별도의 **Global Event System**을 이용하는 방법을 권장하고 있다. Component가 서로 직접 State를 변경할 경우 Component의 개수가 증가할 수록 복잡도도 증가하고 그에 따른 개발과 Debugging의 난이도도 증가할 수 밖에 없지만, Global Event System을 도입하면 이러한 문제를 해결할 수 있다 Redux는 State가 변경되면 변경된 State 내용을 Component (View)에게 전달하는 기능을 제공하고 있기 때문에, React의 Global Event System 역활을 수행할 수 있다.
+
 ![[그림 3] React Component Tree with Redux]({{site.baseurl}}/images/theory_analysis/Redux/React_Component_Tree_with_Redux.PNG){: width="350px"}
+
+[그림 3]은 Redux와 함께 React를 이용하여 Component를 구성할 경우, Component Tree와 Component State의 변화를 나타내고 있다. Redux는 Global Event System의 역활을 수행한다. 자식 Component는 부모 Component 대신 Store에게 Action을 전송한다. Action을 받은 Store의 Reducer는 변경된 State를 Component에게 전달하여 Component의 State를 변경한다.
 
 ### 2. 참조
 
