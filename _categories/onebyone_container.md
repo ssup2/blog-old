@@ -8,12 +8,12 @@ category: E.T.C
 * [3. Namespace]({{site.baseurl}}/onebyone_container/3.Namespace)
   * [3.1. PID Namespace]({{site.baseurl}}/onebyone_container/3.1.PID_Namespace)
   * [3.2. Network Namespace]({{site.baseurl}}/onebyone_container/3.2.Network_Namespace)
-  * 3.3\. Mount Namespace
-  * 3.4\. Namespace의 한계점
+  * [3.3. Mount Namespace]({{site.baseurl}}/onebyone_container/3.3.Mount_Namespace)
+  * 3.4\. Namespace와 Process의 Lifecycle
+  * 3.5\. Namespace의 한계점
 * 4\. Cgroup
-  * 4.1\. CPU 사용량 제어
-  * 4.2\. Memory 사용량 제어
-  * 4.3\. Monitoring
+  * 4.1\. CPU
+  * 4.2\. Memory
 * 5\. Conatiner Image
   * 5.1\. AUFS Filesystem
   * 5.2\. Overlay Filesystem
@@ -23,7 +23,8 @@ category: E.T.C
   * 6.3\. CNI
 * 7\. Kubernetes Pod
   * 7.1\. Paused Container
-  * 7.2\. Volume
+  * 7.2\. Resource
+  * 7.3\. Volume
 * 8\. Privilege
   * 8.1\. Capability
   * 8.2\. Seccomp
