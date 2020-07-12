@@ -24,7 +24,8 @@ category: E.T.C
 * 7\. Kubernetes Pod
   * 7.1\. Paused Container
   * 7.2\. Resource
-  * 7.3\. Volume
+  * 7.3\. Container Log
+  * 7.4\. Volume
 * 8\. Privilege
   * 8.1\. Capability
   * 8.2\. Seccomp
