@@ -20,10 +20,10 @@ adsense: true
 * VirtualBox 5.0.14r
   * Master Node : Ubuntu Desktop 18.04.1 64bit : 1대
   * Worker Node : Ubuntu Server 18.04.1 64bit : 2대
-* Kubernetes 1.12
+* Kubernetes 1.12.3
   * Network Plugin : calico or flannel or cilium 이용
   * Dashboard Addon : Dashboard 이용
-* kubeadm 1.12
+* kubeadm 1.12.3
   * VM을 이용하여 Cluster 환경을 구축하는 경우 kubeadm을 이용하여 쉽게 Kubernetes를 설치 할 수 있다.
 * Password
   * Kubernetes 설치에 필요한 Password는 간편한 설치를 위해 **root**로 통일한다.
@@ -113,8 +113,7 @@ Docker를 설치한다.
 (All)# apt-get update && apt-get install -y apt-transport-https curl
 (All)# curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 (All)# echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
-(All)# apt-get update
-(All)# apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
+(All)# apt-get update && apt-get install -y kubeadm=1.12.3-00 kubelet=1.12.3-00
 ~~~
 
 kubelet, kubeadm를 설치한다.
@@ -357,7 +356,7 @@ Web UI Privilege 권한을 위한 config 파일을 생성한다. [파일 7]의 �
 Web UI에 Privilege 권한을 적용하고 접속하여 확인한다. Web UI 접속후 Skip을 누른다.
 * http://192.168.0.150:8080/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
 
-### 7. 참조
+### 8. 참조
 
 * Kubernetes 설치 : [https://kubernetes.io/docs/setup/independent/install-kubeadm/](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 * Docker 설치 : [https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)

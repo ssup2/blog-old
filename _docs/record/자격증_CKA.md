@@ -30,6 +30,7 @@ adsense: true
     * https://chrome.google.com/webstore/detail/innovative-exams-screensh
   * Webcam
   * Microphone
+  * 여권
 
 * 시험 환경 Check
   * https://www.examslocal.com/ScheduleExam/Home/CompatibilityCheck
@@ -43,7 +44,7 @@ adsense: true
 
 ### 4. 시험중 알아야할 명렁어
 
-* root 권한
+* root 권한 획득
   * sudo -i
 * Windows Copy
   * ctrl + insert
