@@ -1,8 +1,8 @@
 ---
 title: webpack
 category: Theory, Analysis
-date: 2020-07-257T12:00:00Z
-lastmod: 2020-07-25T12:00:00Z
+date: 2020-08-02T12:00:00Z
+lastmod: 2020-08-02T12:00:00Z
 comment: true
 adsense: true
 ---
