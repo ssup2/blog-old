@@ -19,6 +19,43 @@ Docker Container Runtime의 경우에는 CRI를 지원하지 않는다. 따라�
 
 #### 1. Interface
 
+{% highlight console %}
+service RuntimeService {
+    rpc RunPodSandbox(RunPodSandboxRequest) returns (RunPodSandboxResponse) {}
+    rpc StopPodSandbox(StopPodSandboxRequest) returns (StopPodSandboxResponse) {}
+    rpc RemovePodSandbox(RemovePodSandboxRequest) returns (RemovePodSandboxResponse) {}
+    rpc PodSandboxStatus(PodSandboxStatusRequest) returns (PodSandboxStatusResponse) {}
+    rpc ListPodSandbox(ListPodSandboxRequest) returns (ListPodSandboxResponse) {}
+
+    rpc CreateContainer(CreateContainerRequest) returns (CreateContainerResponse) {}
+    rpc StartContainer(StartContainerRequest) returns (StartContainerResponse) {}
+    rpc StopContainer(StopContainerRequest) returns (StopContainerResponse) {}
+    rpc RemoveContainer(RemoveContainerRequest) returns (RemoveContainerResponse) {}
+    rpc ListContainers(ListContainersRequest) returns (ListContainersResponse) {}
+    rpc ContainerStatus(ContainerStatusRequest) returns (ContainerStatusResponse) {}
+    rpc UpdateContainerResources(UpdateContainerResourcesRequest) returns (UpdateContainerResourcesResponse) {}
+    rpc ReopenContainerLog(ReopenContainerLogRequest) returns (ReopenContainerLogResponse) {}
+
+    rpc ExecSync(ExecSyncRequest) returns (ExecSyncResponse) {}
+    rpc Exec(ExecRequest) returns (ExecResponse) {}
+    rpc Attach(AttachRequest) returns (AttachResponse) {}
+    rpc PortForward(PortForwardRequest) returns (PortForwardResponse) {}
+}
+
+service ImageService {
+    rpc ListImages(ListImagesRequest) returns (ListImagesResponse) {}
+    rpc ImageStatus(ImageStatusRequest) returns (ImageStatusResponse) {}
+    rpc PullImage(PullImageRequest) returns (PullImageResponse) {}
+    rpc RemoveImage(RemoveImageRequest) returns (RemoveImageResponse) {}
+    rpc ImageFsInfo(ImageFsInfoRequest) returns (ImageFsInfoResponse) {}
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] CRI protobuf</figcaption>
+</figure>
+
+[파일 1]은 CRI의 protobuf 파일의 일부를 나타내고 있다. protobuf 파일을 통해서 CRI가 어떠한 Interface를 정의하고 있는지 파악할 수 있다. Runtime Service에는 Container 그리고 Container의 집합인 Pod을 관리하는 함수들을 확인할 수 있다. Image Service에서는 Container Image를 관리하는 함수들을 확인할 수 있다.
+
 ### 2. 참고
 
 * [https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/](https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/)
