@@ -19,7 +19,7 @@ Docker Container Runtime의 경우에는 CRI를 지원하지 않는다. 따라�
 
 #### 1. Interface
 
-{% highlight console %}
+{% highlight text %}
 service RuntimeService {
     rpc RunPodSandbox(RunPodSandboxRequest) returns (RunPodSandboxResponse) {}
     rpc StopPodSandbox(StopPodSandboxRequest) returns (StopPodSandboxResponse) {}
