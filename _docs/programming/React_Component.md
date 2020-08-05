@@ -1,5 +1,5 @@
 ---
-title: JavaScript Closure
+title: React Component
 category: Programming
 date: 2020-08-04T12:00:00Z
 lastmod: 2019-08-04T12:00:00Z
