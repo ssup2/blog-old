@@ -56,7 +56,7 @@ ReactDOM.render(
 <figcaption class="caption">[Code 2] Property Change Test</figcaption>
 </figure>
 
-Component의 Property는 **Read Only** 특징을 갖고 있다. 즉 Component가 선언 될때는 Property를 설정 할 수 있지만, 한번 설정된 Property는 변경 할 수 없다. [Code 2]의 Hello Component에는 render()에 name Property를 변경하는 Logic이 추가되었다. [Code 2]를 실행하면 `TypeError: Cannot assign to read only property 'name' of object '#<Object>'`와 같이 Error Message와 함께 Component가 제대로 동작하지 않는걸 확인 할 수 있다.
+Component의 Property는 **Read Only** 특징을 갖고 있다. 즉 Component가 선언 될때는 Property를 설정 할 수 있지만, 한번 설정된 Property는 변경 할 수 없다. [Code 2]의 Hello Component에는 render()에 name Property를 변경하는 Logic이 추가되었다. [Code 2]를 실행하면 "TypeError: Cannot assign to read only property 'name' of object '#<Object>'"와 같이 Error Message와 함께 Component가 제대로 동작하지 않는걸 확인 할 수 있다.
 
 #### 1.2. State
 
