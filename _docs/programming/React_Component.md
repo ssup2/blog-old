@@ -27,7 +27,7 @@ ReactDOM.render(
 <figcaption class="caption">[Code 1] Hello Component</figcaption>
 </figure>
 
-React는 Component라고 불리는 UI의 조각들을 조합하여 전체 UI를 구성한다. React Component는 재사용이 가능하며, Component 상속을 통해서 Component의 기능을 확장 할 수도 있다. [Code 1]은 Hello Component를 정의하고 이용하는 방법을 보여주고 있다. Hello Component는 name Property를 Hello라는 문자열과 함께 출력한다. render() 함수에서 ssup2 name Property와 함께 Hello Component를 이용하고 있기 때문에 "Hello, ssup2"라는 제목(h1)이 출력된다.
+React는 Component라고 불리는 UI의 조각들을 조합하여 전체 UI를 구성한다. React Component는 재사용이 가능하며, Component 상속을 통해서 Component의 기능을 확장 할 수도 있다. [Code 1]은 Hello Component를 정의하고 이용하는 방법을 보여주고 있다. 모든 **Component의 render()** 함수는 해당 Component가 ReactDOM에 의해서 Rendering될때 호출되는 함수이다. Hello Component는 name Property를 Hello라는 문자열과 함께 제목(h1)으로 출력한다. ReactDom의 render() 함수에는 ssup2 문자열로 설정된 name Property를 갖는 Hello Component가 선언되어 있다. 따라서 Web Browser에는 "Hello, ssup2"라는 제목(h1)이 출력된다.
 
 #### 1.1. Property
 
