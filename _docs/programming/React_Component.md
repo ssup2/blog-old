@@ -116,7 +116,20 @@ ReactDOM.render(
 
 #### 1.3. Lifecycle
 
+Component들은 Lifecycle을 갖고 있으며 React는 Component의 Lifecycle에 따라서 Component의 함수를 실행한다. [Code 1~4] render(), constructor() 함수도 Component의 Lifecycle에 따라서 호출되는 Lifecycle 함수이다. React v16.3을 기준으로 다음과 같은 Lifecycle 함수들이 존재한다.
+
+* constructor(props) : 
+* static getDerivedStateFromProps(props, state) :
+* shouldComponentUpdate(nextProps, nextState) :
+* getSnapshotBeforeUpdate(prevProps, prevState) :
+* render() :
+* getSnapshotBeforeUpdate(prevProps, prevState) :
+* componentDidMount() :
+* componentDidUpdate(prevProps, prevState, snapshot) :
+* componentWillUnmount() : 
+
 ### 2. 참조
 
 * [https://ko.reactjs.org/docs/components-and-props.html](https://ko.reactjs.org/docs/components-and-props.html)
 * [https://ko.reactjs.org/docs/state-and-lifecycle.html](https://ko.reactjs.org/docs/state-and-lifecycle.html)
+* [https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
