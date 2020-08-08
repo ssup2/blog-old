@@ -165,7 +165,7 @@ Component 사이에는 부모, 자식의 관계가 형성될 수 있다. [Code 5
 
 #### 1.4. Lifecycle
 
-Component들은 Lifecycle을 갖고 있으며 React는 Component의 Lifecycle에 따라서 Component의 함수를 실행한다. [Code 1~5] render(), constructor() 함수도 Component의 Lifecycle에 따라서 호출되는 Lifecycle 함수이다. React v16.3을 기준으로 주로 사용되는 Lifecycle 함수들은 다음과 같다.
+Component들은 Lifecycle을 갖고 있으며 React는 Component의 Lifecycle에 따라서 Component의 함수를 실행한다. [Code 1~5]에서의 render(), constructor() 함수도 Component의 Lifecycle에 따라서 호출되는 Lifecycle 함수이다. React v16.3을 기준으로 주로 사용되는 Lifecycle 함수들은 다음과 같다.
 
 ##### 1.4.1. constructor(props) 
 
