@@ -17,7 +17,7 @@ Container Runtime Interface (CRI)는 Kubernetes의 Component 중에서 kubelet�
 
 Docker Container Runtime의 경우에는 CRI를 지원하지 않는다. 따라서 kubelet은 Kubernetes에서 개발한 **dockershim**이라고 불리는 CRI shim 통해서 Docker Container를 제어한다. containerd Container Runtime의 경우에는 내부적으로 **CRI Plugin**을 통해서 CRI를 지원한다. **crictl** 명령어는 CRI를 통해서 containerd를 제어할때 이용하는 명령어이다.
 
-#### 1. Interface
+#### 1.1. Interface
 
 {% highlight text %}
 service RuntimeService {
