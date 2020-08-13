@@ -23,7 +23,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Output
+// Web Output
 // Hello
 {% endhighlight %}
 <figure>
@@ -46,7 +46,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Output
+// Web Output
 // Hello, ssup2
 {% endhighlight %}
 <figure>
@@ -68,7 +68,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Error
+// Web Error
 // TypeError: Cannot assign to read only property 'name' of object '#<Object>'
 {% endhighlight %}
 <figure>
@@ -82,19 +82,22 @@ ReactDOM.render(
 Component의 State는 의미 그대로 Component의 상태 정보를 저장하는 저장소이다. State는 Component 내부에서 **this.state**로 표현된다. State는 Component의 Constructor인 constructor() 함수 안에서만 초기화 될 수 있다. Property와 다르게 Component 내부에서도 변경이 가능하지만 반드시 **setState()** 함수를 통해서 변경해야 한다. setState() 함수를 통하지 않고 State를 변경하면, 변경 내용이 UI에 반영되지 않기 때문이다. setState()로 변경된 State는 UI에 바로 반영되지 않고 **비동기**로 처리될 수 있다. React가 성능을 위해 UI 변경 내용을 모았다가 한번에 처리할 수 있기 때문이다.
 
 {% highlight javascript linenos %}
-function Hello(props) {
-  const [date, setDate] = useState(new Date());
-  setInterval(() => tick(), 1000);
-
-  function tick() {
-    setDate(new Date());
+class Hello extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+    this.timerID = setInterval(() => this.tick(), 1000);
   }
-
-  return (
-    <div>
-      <h1>Hello, {props.name}, {date.toLocaleTimeString()}</h1>
-    </div>
-  );
+  
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+  
+  render() {
+    return <h1>Hello, {this.props.name}, {this.state.date.toLocaleTimeString()}</h1>;
+  }
 }
 
 ReactDOM.render(
@@ -102,7 +105,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Output
+// Web Output
 // Hello, ssup2, 오후 10:47:59
 {% endhighlight %}
 <figure>
@@ -148,7 +151,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Output
+// Web Output
 // Hello, ssup2
 // Date, 오후 10:47:59
 {% endhighlight %}
