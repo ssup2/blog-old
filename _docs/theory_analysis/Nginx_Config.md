@@ -89,49 +89,6 @@ http {
 </figure>
 
 {% highlight text %}
-proxy_redirect          off;
-proxy_set_header        Host            $host;
-proxy_set_header        X-Real-IP       $remote_addr;
-proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-client_max_body_size    10m;
-client_body_buffer_size 128k;
-proxy_connect_timeout   90;
-proxy_send_timeout      90;
-proxy_read_timeout      90;
-proxy_buffers           32 4k;
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[파일 2] proxy.conf</figcaption>
-</figure>
-
-{% highlight text %}
-fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
-fastcgi_param  QUERY_STRING       $query_string;
-fastcgi_param  REQUEST_METHOD     $request_method;
-fastcgi_param  CONTENT_TYPE       $content_type;
-fastcgi_param  CONTENT_LENGTH     $content_length;
-fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
-fastcgi_param  REQUEST_URI        $request_uri;
-fastcgi_param  DOCUMENT_URI       $document_uri;
-fastcgi_param  DOCUMENT_ROOT      $document_root;
-fastcgi_param  SERVER_PROTOCOL    $server_protocol;
-fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
-fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
-fastcgi_param  REMOTE_ADDR        $remote_addr;
-fastcgi_param  REMOTE_PORT        $remote_port;
-fastcgi_param  SERVER_ADDR        $server_addr;
-fastcgi_param  SERVER_PORT        $server_port;
-fastcgi_param  SERVER_NAME        $server_name;
-
-fastcgi_index  index.php;
-
-fastcgi_param  REDIRECT_STATUS    200;
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[파일 3] fastcgi.conf</figcaption>
-</figure>
-
-{% highlight text %}
 types {
   text/html                             html htm shtml;
   text/css                              css;
@@ -182,7 +139,50 @@ types {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 4] mime.types</figcaption>
+<figcaption class="caption">[파일 2] mime.types</figcaption>
+</figure>
+
+{% highlight text %}
+proxy_redirect          off;
+proxy_set_header        Host            $host;
+proxy_set_header        X-Real-IP       $remote_addr;
+proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+client_max_body_size    10m;
+client_body_buffer_size 128k;
+proxy_connect_timeout   90;
+proxy_send_timeout      90;
+proxy_read_timeout      90;
+proxy_buffers           32 4k;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3] proxy.conf</figcaption>
+</figure>
+
+{% highlight text %}
+fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+fastcgi_param  QUERY_STRING       $query_string;
+fastcgi_param  REQUEST_METHOD     $request_method;
+fastcgi_param  CONTENT_TYPE       $content_type;
+fastcgi_param  CONTENT_LENGTH     $content_length;
+fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+fastcgi_param  REQUEST_URI        $request_uri;
+fastcgi_param  DOCUMENT_URI       $document_uri;
+fastcgi_param  DOCUMENT_ROOT      $document_root;
+fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
+fastcgi_param  REMOTE_ADDR        $remote_addr;
+fastcgi_param  REMOTE_PORT        $remote_port;
+fastcgi_param  SERVER_ADDR        $server_addr;
+fastcgi_param  SERVER_PORT        $server_port;
+fastcgi_param  SERVER_NAME        $server_name;
+
+fastcgi_index  index.php;
+
+fastcgi_param  REDIRECT_STATUS    200;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] fastcgi.conf</figcaption>
 </figure>
 
 nginx.conf 파일은 Nginx 주요 설정이 포함되어 있는 파일이다. [파일 1]은 nginx.conf 예제를 나타내고 있으며, [파일 2~4]를 Include하고 있다. [파일 1~4]의 설정 내용을 분석한다.
@@ -233,15 +233,63 @@ http {
   include    /etc/nginx/proxy.conf;
   include    /etc/nginx/fastcgi.conf;
   index    index.html index.htm index.php;
+
+  default_type application/octet-stream;
+  log_format   main '$remote_addr - $remote_user [$time_local]  $status '
+    '"$request" $body_bytes_sent "$http_referer" '
+    '"$http_user_agent" "$http_x_forwarded_for"';
+  access_log   logs/access.log  main;
+  sendfile     on;
+  tcp_nopush   on;
+  server_names_hash_bucket_size 128; # this seems to be required for some vhosts
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1-3] nginx.conf http block top</figcaption>
+<figcaption class="caption">[파일 1-3] nginx.conf http Block Top</figcaption>
 </figure>
 
-* mime.types : 
-* proxy.conf : 
-* fastcgi.conf :
-* index : 
+* include mime.types : [파일 2]를 Include 한다. Nginx에서 이용하기 위한 MIME (Multipurpose Internet Mail Extensions) 확장자를 설정한다.
+* include proxy.conf : [파일 3]을 Include 한다. Nginx의 Reverse Proxy 관련 설정을 적용한다.
+* include fastcgi.conf : [파일 4]를 Include 한다. FastCGI 관련 설정을 적용한다.
+* index : Index Page를 의미한다.
+
+* default_type :
+* log_format :
+* access_log :
+* sendfile :
+* tcp_nopush :
+* server_names_hash_bucket_size :
+
+{% highlight text %}
+proxy_redirect          off;
+proxy_set_header        Host            $host;
+proxy_set_header        X-Real-IP       $remote_addr;
+proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+client_max_body_size    10m;
+client_body_buffer_size 128k;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3-1] proxy.conf Top</figcaption>
+</figure>
+
+* proxy_redirect :
+* proxy_set_header Host :
+* proxy_set_header X-Real-IP :
+* proxy_set_header X-Forwarded-For :
+
+{% highlight text %}
+proxy_connect_timeout   90;
+proxy_send_timeout      90;
+proxy_read_timeout      90;
+proxy_buffers           32 4k;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 3-2] proxy.conf Bottom</figcaption>
+</figure>
+
+* proxy_connect_timeout :
+* proxy_send_timeout :
+* proxy_read_timeout :
+* proxy_buffers :
 
 ### 2. 참조
 
