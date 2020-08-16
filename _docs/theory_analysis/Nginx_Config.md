@@ -187,7 +187,7 @@ types {
 
 nginx.conf 파일은 Nginx 주요 설정이 포함되어 있는 파일이다. [파일 1]은 nginx.conf 예제를 나타내고 있으며, [파일 2~4]를 Include하고 있다. [파일 1~4]의 설정 내용을 분석한다.
 
-#### 1.1. Top
+#### 1.1. nginx.conf Top
 
 {% highlight text %}
 user       nginx;  ## Default: nobody
@@ -206,7 +206,7 @@ worker_rlimit_nofile 8192;
 * pid : Nginx Master Process의 PID가 저장되는 Log의 경로를 의미한다.
 * worker_rlimit_nofile : Nginx Worker Process가 이용할 수 있는 최대 File Desciptor의 개수를 의미한다. 일반적으로 Worker Process 갖을 수 있는 최대 Connection 개수의 2배를 설정한다. 기본값은 1024이다.
 
-#### 1.1. events Block
+#### 1.2. events Block
 
 {% highlight text %}
 events {
@@ -221,11 +221,11 @@ events Block은 Network Connection 처리 관련 설정을 포함한다.
 
 * worker_connections : Nginx Worker Process가 동시에 갖을 수 있는 최대 Connection의 개수를 의미한다.
 
-#### 1.2. http Block
+#### 1.3. http Block
 
 http Block은 HTTP, HTTPS 관련 설정을 포함하고 있다.
 
-##### 1.2.1 http Block Top
+##### 1.3.1 http Block Top
 
 {% highlight text %}
 http {
