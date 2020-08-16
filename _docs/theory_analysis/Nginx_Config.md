@@ -96,6 +96,7 @@ nginx.conf 파일은 Nginx 주요 설정이 포함되어 있는 파일이다. [�
 * pid : Nginx Master Process의 PID가 저장되는 Log의 경로를 의미한다.
 * worker_rlimit_nofile : Nginx Worker Process가 이용할 수 있는 최대 File Desciptor의 개수를 의미한다. 일반적으로 Worker Process 갖을 수 있는 최대 Connection 개수의 2배를 설정한다. 기본값은 1024이다.
 
+
 * events Block : events Block은 Network Connection 처리 관련 설정이 포함된다.
 * worker_connections : Nginx Worker Process가 동시에 갖을 수 있는 최대 Connection의 개수를 의미한다.
 
