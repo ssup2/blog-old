@@ -13,7 +13,7 @@ Nginx의 Config를 분석한다.
 ### 1. Nginx Config
 
 {% highlight text %}
-user       www www;  ## Default: nobody
+user       nginx;  ## Default: nobody
 worker_processes  5;  ## Default: 1
 error_log  logs/error.log;
 pid        logs/nginx.pid;
@@ -87,19 +87,6 @@ http {
 <figure>
 <figcaption class="caption">[파일 1] nginx.conf</figcaption>
 </figure>
-
-nginx.conf 파일은 Nginx 주요 설정이 포함되어 있는 파일이다. [파일 1]은 nginx.conf 예제를 나타내고 있다. [파일 1]의 설정 내용은 다음과 같다.
-
-* user : Nginx Worker Process의 User를 의미한다. Worker Process의 권한을 설정할때 이용한다.
-* worker_processes : Nginx Worker Process의 개수를 의미한다.
-* error_log : Nginx Error Log의 경로를 의미한다.
-* pid : Nginx Master Process의 PID가 저장되는 Log의 경로를 의미한다.
-* worker_rlimit_nofile : Nginx Worker Process가 이용할 수 있는 최대 File Desciptor의 개수를 의미한다. 일반적으로 Worker Process 갖을 수 있는 최대 Connection 개수의 2배를 설정한다. 기본값은 1024이다.
-
-
-* events Block : events Block은 Network Connection 처리 관련 설정이 포함된다.
-* worker_connections : Nginx Worker Process가 동시에 갖을 수 있는 최대 Connection의 개수를 의미한다.
-
 
 {% highlight text %}
 proxy_redirect          off;
@@ -197,6 +184,64 @@ types {
 <figure>
 <figcaption class="caption">[파일 4] mime.types</figcaption>
 </figure>
+
+nginx.conf 파일은 Nginx 주요 설정이 포함되어 있는 파일이다. [파일 1]은 nginx.conf 예제를 나타내고 있으며, [파일 2~4]를 Include하고 있다. [파일 1~4]의 설정 내용을 분석한다.
+
+#### 1.1. Top
+
+{% highlight text %}
+user       nginx;  ## Default: nobody
+worker_processes  5;  ## Default: 1
+error_log  logs/error.log;
+pid        logs/nginx.pid;
+worker_rlimit_nofile 8192;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] nginx.conf Top</figcaption>
+</figure>
+
+* user : Nginx Worker Process의 User를 의미한다. Worker Process의 권한을 설정할때 이용한다.
+* worker_processes : Nginx Worker Process의 개수를 의미한다. 기본값은 1이다.
+* error_log : Nginx Error Log의 경로를 의미한다.
+* pid : Nginx Master Process의 PID가 저장되는 Log의 경로를 의미한다.
+* worker_rlimit_nofile : Nginx Worker Process가 이용할 수 있는 최대 File Desciptor의 개수를 의미한다. 일반적으로 Worker Process 갖을 수 있는 최대 Connection 개수의 2배를 설정한다. 기본값은 1024이다.
+
+#### 1.1. events Block
+
+{% highlight text %}
+events {
+  worker_connections  4096;  ## Default: 1024
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] nginx.conf events Block</figcaption>
+</figure>
+
+events Block은 Network Connection 처리 관련 설정을 포함한다.
+
+* worker_connections : Nginx Worker Process가 동시에 갖을 수 있는 최대 Connection의 개수를 의미한다.
+
+#### 1.2. http Block
+
+http Block은 HTTP, HTTPS 관련 설정을 포함하고 있다.
+
+##### 1.2.1 http Block Top
+
+{% highlight text %}
+http {
+  include    conf/mime.types;
+  include    /etc/nginx/proxy.conf;
+  include    /etc/nginx/fastcgi.conf;
+  index    index.html index.htm index.php;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] nginx.conf http block top</figcaption>
+</figure>
+
+* mime.types : 
+* proxy.conf : 
+* fastcgi.conf :
+* index :
 
 ### 2. 참조
 
