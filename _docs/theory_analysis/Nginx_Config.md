@@ -197,7 +197,7 @@ pid        logs/nginx.pid;
 worker_rlimit_nofile 8192;
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] nginx.conf Top</figcaption>
+<figcaption class="caption">[파일 1-1] nginx.conf Top</figcaption>
 </figure>
 
 * user : Nginx Worker Process의 User를 의미한다. Worker Process의 권한을 설정할때 이용한다.
@@ -214,7 +214,7 @@ events {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] nginx.conf events Block</figcaption>
+<figcaption class="caption">[파일 1-2] nginx.conf events Block</figcaption>
 </figure>
 
 events Block은 Network Connection 처리 관련 설정을 포함한다.
@@ -235,13 +235,13 @@ http {
   index    index.html index.htm index.php;
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 5] nginx.conf http block top</figcaption>
+<figcaption class="caption">[파일 1-3] nginx.conf http block top</figcaption>
 </figure>
 
 * mime.types : 
 * proxy.conf : 
 * fastcgi.conf :
-* index :
+* index : 
 
 ### 2. 참조
 
