@@ -276,10 +276,10 @@ client_body_buffer_size 128k;
 <figcaption class="caption">[파일 3-1] proxy.conf Top</figcaption>
 </figure>
 
-* proxy_redirect : 
-* proxy_set_header Host : 
-* proxy_set_header X-Real-IP : 
-* proxy_set_header X-Forwarded-For : 
+* proxy_redirect : Nginx의 Proxied Server로부터 받은 응답의 HTTP Location, Refresh Header를 변경유무를 의미한다. HTTP Location Header는 Resource의 위치가 변경되었을때 변경된 Resource의 URL을 갖고 있는 Header이다. HTTP Refresh Header는 Client가 Refresh를 하도록 명령하는 Header이다.
+* proxy_set_header Host : HTTP Host Header를 설정한다. HTTP Host Header는 어느 Virtual Host (Server)에 의해서 처리되었는지를 저장하는 Header이다.
+* proxy_set_header X-Real-IP : HTTP X-Real-IP Header를 설정한다. HTTP X-Real-IP Header는 Client의 IP 정보를 저장하는 Header이다.
+* proxy_set_header X-Forwarded-For : HTTP X-Forwarded-For Header를 설정한다. HTTP X-Forwarded-For Header는 Client의 IP 정보를 저장하는 Header이다.
 
 {% highlight text %}
 proxy_connect_timeout   90;
