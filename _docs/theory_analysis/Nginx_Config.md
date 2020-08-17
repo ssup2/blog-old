@@ -280,6 +280,8 @@ client_body_buffer_size 128k;
 * proxy_set_header Host : HTTP Host Header를 설정한다. HTTP Host Header는 어느 Virtual Host (Server)에 의해서 처리되었는지를 저장하는 Header이다.
 * proxy_set_header X-Real-IP : HTTP X-Real-IP Header를 설정한다. HTTP X-Real-IP Header는 Client의 IP 정보를 저장하는 Header이다.
 * proxy_set_header X-Forwarded-For : HTTP X-Forwarded-For Header를 설정한다. HTTP X-Forwarded-For Header는 Client의 IP 정보를 저장하는 Header이다.
+* client_max_body_size : 허용되는 Client Request의 최대 Body Size를 의미한다.
+* client_body_buffer_size : Client Request의 Body를 위한 Read Buffer의 크기를 의미한다.
 
 {% highlight text %}
 proxy_connect_timeout   90;
@@ -294,7 +296,7 @@ proxy_buffers           32 4k;
 * proxy_connect_timeout : TCP Connection이 구축되는데 필요한 최대 대기 시간을 의미한다.
 * proxy_send_timeout : Proxied Server에 Client의 Request를 전송하는데 필요한 최대 대기 시간을 의미한다.
 * proxy_read_timeout : Proxied Server로부터 Response를 수신하는데 필요한 최대 대기 시간을 의미한다.
-* proxy_buffers : 
+* proxy_buffers : Proxied Server와의 Connection 한개당 이용하는 Read Buffer의 크기를 의미한다. 순서대로 Buffer의 개수와 각 Buffer의 크기를 의미한다.
 
 ### 2. 참조
 
