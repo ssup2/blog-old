@@ -298,6 +298,68 @@ proxy_buffers           32 4k;
 * proxy_read_timeout : Proxied Server로부터 Response를 수신하는데 필요한 최대 대기 시간을 의미한다.
 * proxy_buffers : Proxied Server와의 Connection 한개당 이용하는 Read Buffer의 크기를 의미한다. 순서대로 Buffer의 개수와 각 Buffer의 크기를 의미한다.
 
+#### 1.3.2. http Block server Block
+
+{% highlight text %}
+  server { # php/fastcgi
+    listen       80;
+    server_name  domain1.com www.domain1.com;
+    access_log   logs/domain1.access.log  main;
+    root         html;
+
+    location ~ \.php$ {
+      fastcgi_pass   127.0.0.1:1025;
+    }
+  }
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1-4] nginx.conf http Block server Block-1</figcaption>
+</figure>
+
+{% highlight text %}
+  server { # simple reverse-proxy
+    listen       80;
+    server_name  domain2.com www.domain2.com;
+    access_log   logs/domain2.access.log  main;
+
+    # serve static files
+    location ~ ^/(images|javascript|js|css|flash|media|static)/  {
+      root    /var/www/virtual/big.server.com/htdocs;
+      expires 30d;
+    }
+
+    # pass requests for dynamic content to rails/turbogears/zope, et al
+    location / {
+      proxy_pass      http://127.0.0.1:8080;
+    }
+  }
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1-5] nginx.conf http Block server Block-2</figcaption>
+</figure>
+
+{% highlight text %}
+  upstream big_server_com {
+    server 127.0.0.3:8000 weight=5;
+    server 127.0.0.3:8001 weight=5;
+    server 192.168.0.1:8000;
+    server 192.168.0.1:8001;
+  }
+
+  server { # simple load balancing
+    listen          80;
+    server_name     big.server.com;
+    access_log      logs/big.server.access.log main;
+
+    location / {
+      proxy_pass      http://big_server_com;
+    }
+  }
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1-5] nginx.conf http Block server Block-3</figcaption>
+</figure>
+
 ### 2. 참조
 
 * [https://www.nginx.com/resources/wiki/start/topics/examples/full/](https://www.nginx.com/resources/wiki/start/topics/examples/full/)
