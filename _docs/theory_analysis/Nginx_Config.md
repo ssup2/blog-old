@@ -374,8 +374,8 @@ Reverse Proxy로 동작하도록 설정되어 있다.
 
 Load Balancing을 수행하는 Reverse Proxy로 동작하도록 설정되어 있다.
 
-upstream Block : Nginx가 수행하는 Load Balancing으로 인해서 분배될 Packet이 전달되는 Target Server들을 의미한다.
-location Block : upstream Block에서 설정한 Load Balancing Target Server들을 이용하여 Load Balancing을 수행하도록 설정되어 있다.
+* upstream Block : Nginx가 수행하는 Load Balancing으로 인해서 분배될 Packet이 전달되는 Target Server들을 의미한다.
+* location Block : upstream Block에서 설정한 Load Balancing Target Server들을 이용하여 Load Balancing을 수행하도록 설정되어 있다.
 
 ### 2. 참조
 
