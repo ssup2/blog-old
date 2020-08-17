@@ -29,7 +29,7 @@ http {
   include    /etc/nginx/fastcgi.conf;
   index    index.html index.htm index.php;
 
-  default_type application/octet-stream;
+  default_type application/octet-stream; ## Default: text/plain
   log_format   main '$remote_addr - $remote_user [$time_local]  $status '
     '"$request" $body_bytes_sent "$http_referer" '
     '"$http_user_agent" "$http_x_forwarded_for"';
@@ -233,8 +233,18 @@ http {
   include    /etc/nginx/proxy.conf;
   include    /etc/nginx/fastcgi.conf;
   index    index.html index.htm index.php;
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1-3] nginx.conf http Block Top-1</figcaption>
+</figure>
 
-  default_type application/octet-stream;
+* include mime.types : [파일 2]를 Include 한다. Nginx에서 이용하기 위한 MIME(Multipurpose Internet Mail Extensions)를 설정한다. MIME은 Image와 영상과 같은 파일을 Text 형태로 전송하기 위한 Encoding/Decoding 기법을 의미한다. 
+* include proxy.conf : [파일 3]을 Include 한다. Nginx의 Reverse Proxy 관련 설정을 적용한다.
+* include fastcgi.conf : [파일 4]를 Include 한다. FastCGI 관련 설정을 적용한다.
+* index : Index Page를 의미한다.
+
+{% highlight text %}
+  default_type application/octet-stream; ## Default: text/plain
   log_format   main '$remote_addr - $remote_user [$time_local]  $status '
     '"$request" $body_bytes_sent "$http_referer" '
     '"$http_user_agent" "$http_x_forwarded_for"';
@@ -244,20 +254,15 @@ http {
   server_names_hash_bucket_size 128; # this seems to be required for some vhosts
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1-3] nginx.conf http Block Top</figcaption>
+<figcaption class="caption">[파일 1-3] nginx.conf http Block Top-2</figcaption>
 </figure>
 
-* include mime.types : [파일 2]를 Include 한다. Nginx에서 이용하기 위한 MIME (Multipurpose Internet Mail Extensions) 확장자를 설정한다.
-* include proxy.conf : [파일 3]을 Include 한다. Nginx의 Reverse Proxy 관련 설정을 적용한다.
-* include fastcgi.conf : [파일 4]를 Include 한다. FastCGI 관련 설정을 적용한다.
-* index : Index Page를 의미한다.
-
-* default_type :
-* log_format :
-* access_log :
-* sendfile :
-* tcp_nopush :
-* server_names_hash_bucket_size :
+* default_type : Default MIME를 의미한다.
+* log_format : HTTP, HTTPS 처리 Log의 format을 의미한다. 기본값은 text/plain이다.
+* access_log : HTTP, HTTPS 처리 Log의 경로를 의미한다.
+* sendfile : Static File (Image, Video) 전송시 sendfile() System Call 이용 유무를 의미한다. sendfile() System Call은 2개의 File Descriptor 사이의 Data 전송시 Kernel Level 안에서만 Zero Copy를 기반으로 수행하기 때문에 기존의 read()/write() System Call에 비해서 빠르다.
+* tcp_nopush : sendfile() System Call 이용시 TCP Socket에 TCP_CORK 설정 유무를 의미한다. TCP_CORK은 TCP Socket으로 Packet 전송시 Packet을 TCP Socket Buffer에 모았다가 한번에 보내도록 설정한다. sendfile on으로 설정되어 있을 경우에만 의미있다.
+* server_names_hash_bucket_size : Nginx에 등록할 수 있는 최대 Server Name의 개수를 의미한다.
 
 {% highlight text %}
 proxy_redirect          off;
@@ -271,10 +276,10 @@ client_body_buffer_size 128k;
 <figcaption class="caption">[파일 3-1] proxy.conf Top</figcaption>
 </figure>
 
-* proxy_redirect :
-* proxy_set_header Host :
-* proxy_set_header X-Real-IP :
-* proxy_set_header X-Forwarded-For :
+* proxy_redirect : 
+* proxy_set_header Host : 
+* proxy_set_header X-Real-IP : 
+* proxy_set_header X-Forwarded-For : 
 
 {% highlight text %}
 proxy_connect_timeout   90;
@@ -286,12 +291,13 @@ proxy_buffers           32 4k;
 <figcaption class="caption">[파일 3-2] proxy.conf Bottom</figcaption>
 </figure>
 
-* proxy_connect_timeout :
-* proxy_send_timeout :
-* proxy_read_timeout :
-* proxy_buffers :
+* proxy_connect_timeout : 
+* proxy_send_timeout : 
+* proxy_read_timeout : 
+* proxy_buffers : 
 
 ### 2. 참조
 
 * [https://www.nginx.com/resources/wiki/start/topics/examples/full/](https://www.nginx.com/resources/wiki/start/topics/examples/full/)
 * [https://stackoverflow.com/questions/37591784/nginx-worker-rlimit-nofile](https://stackoverflow.com/questions/37591784/nginx-worker-rlimit-nofile)
+* [https://charsyam.wordpress.com/2019/03/14/%EC%9E%85%EA%B0%9C%EB%B0%9C-nagle-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EA%B3%BC-tcp_cork/](https://charsyam.wordpress.com/2019/03/14/%EC%9E%85%EA%B0%9C%EB%B0%9C-nagle-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EA%B3%BC-tcp_cork/)
