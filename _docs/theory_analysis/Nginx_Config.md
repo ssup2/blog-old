@@ -42,7 +42,6 @@ http {
     listen       80;
     server_name  domain1.com www.domain1.com;
     access_log   logs/domain1.access.log  main;
-    root         html;
 
     location ~ \.php$ {
       fastcgi_pass   127.0.0.1:1025;
@@ -300,12 +299,13 @@ proxy_buffers           32 4k;
 
 #### 1.3.2. http Block server Block
 
+하나의 server Block은 하나의 Virtual Server를 의미한다. Virtual Server는 Apache HTTP Server의 Virtual Host와 동일한 의미를 갖는다.
+
 {% highlight text %}
   server { # php/fastcgi
     listen       80;
     server_name  domain1.com www.domain1.com;
     access_log   logs/domain1.access.log  main;
-    root         html;
 
     location ~ \.php$ {
       fastcgi_pass   127.0.0.1:1025;
@@ -315,6 +315,13 @@ proxy_buffers           32 4k;
 <figure>
 <figcaption class="caption">[파일 1-4] nginx.conf http Block server Block-1</figcaption>
 </figure>
+
+FastCGI를 이용하는 PHP Application의 Reverse Proxy로 동작하도록 설정되어 있다.
+
+* listen : Virtual Server의 Listen Port를 의미한다.
+* server_name : Virtual Server의 이름을 의미한다. 주로 Domain 이름으로 설정한다.
+* access_log : Virtual Server 관련 Log의 경로를 의미한다.
+* location Block : FastCGI를 이용하는 PHP Application을 이용하도록 설정되어 있다.
 
 {% highlight text %}
   server { # simple reverse-proxy
@@ -338,6 +345,11 @@ proxy_buffers           32 4k;
 <figcaption class="caption">[파일 1-5] nginx.conf http Block server Block-2</figcaption>
 </figure>
 
+Reverse Proxy로 동작하도록 설정되어 있다.
+
+* First location Block : root 경로의 Static File들을 제공하도록 설정되어 있다.
+* Second location Block : 127.0.0.1:8080 Port의 Reverse Proxy로 동작하도록 설정되어 있다.
+
 {% highlight text %}
   upstream big_server_com {
     server 127.0.0.3:8000 weight=5;
@@ -359,6 +371,11 @@ proxy_buffers           32 4k;
 <figure>
 <figcaption class="caption">[파일 1-5] nginx.conf http Block server Block-3</figcaption>
 </figure>
+
+Load Balancing을 수행하는 Reverse Proxy로 동작하도록 설정되어 있다.
+
+upstream Block : Nginx가 수행하는 Load Balancing으로 인해서 분배될 Packet이 전달되는 Target Server들을 의미한다.
+location Block : upstream Block에서 설정한 Load Balancing Target Server들을 이용하여 Load Balancing을 수행하도록 설정되어 있다.
 
 ### 2. 참조
 
