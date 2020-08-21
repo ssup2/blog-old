@@ -9,7 +9,9 @@ adsense: true
 
 Nginx의 Architecture를 분석한다.
 
-### 1. Nginx Config
+### 1. Nginx Architecture
+
+![[그림 1] Nginx Architecture]({{site.baseurl}}/images/theory_analysis/Nginx_Architecture/Nginx_Architecture.PNG)
 
 ### 2. 참조
 
