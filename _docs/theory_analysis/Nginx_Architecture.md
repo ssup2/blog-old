@@ -27,7 +27,9 @@ Apache HTTP Server와 같이 기존의 Web Server들은 Client와의 Connection�
 
 Worker Process는 단일 Thread 안에서만 요청을 처리하기 때문에 처리시간이 오래 걸리는 함수를 호출하면 Worker Process가 처리해야 하는 다른 요청들은 처리되지 못하고 대기해야하는 Blocking 문제가 발생한다. 주로 Disk 동작이 동반되는 File Read/Write 관련 함수의 경우 상황에 따라서 오랜 처리 시간이 발생할 수 있다. Nginx는 이러한 Blocking 문제를 해결하기 위해서 Kernel에서 제공하는 비동기 방식의 File Read/Write 함수를 이용한다. Nginx가 Linux에서 동작하는 경우 AIO(Asynchronous IO) 또는 sendfile() 함수를 이용하여 Blocking 문제를 해결한다.
 
-Master Process는 Worker Process에게 Client의 Connection(요청)을 분배하는 별도의 기법을 이용하지 않고 Kernel의 기능을 그대로 이용한다. 각 Worker Process들은 모든 Worker Process들이 공유하는 Listen Socket을 select(), epoll(), kqueue()와 같은 Mutiplexing 함수에 각자 등록하고 Mutiplexing 함수에서 대기한다. 이후 Client로부터 Connection 요청이 오면 Kernel은 Mutiplexing 함수에서 대기하는 Worker Process중에서 임의의 Worker Process를 깨워 Connection 요청을 처리하게 만든다. 즉 동일한 Socket을 여러 Process에서 동시에 Mutiplexing 함수에 등록 및 대기하고 있더라도, Event 발생시 Kernel은 임의의 Process를 하나만을 깨운다는 특징을 이용하여 Client의 Connection을 분배한다.
+Master Process는 Worker Process에게 Client의 Connection(요청)을 분배하는 별도의 기법을 이용하지 않고 Kernel의 기능을 그대로 이용한다. 각 Worker Process들은 모든 Worker Process들이 공유하는 Listen Socket을 select(), epoll(), kqueue()와 같은 Mutiplexing 함수에 각자 등록하고 Mutiplexing 함수에서 대기한다. 이후 Client로부터 Connection 요청이 오면 Kernel은 Mutiplexing 함수에서 대기하는 Worker Process중에서 임의의 Worker Process를 깨워 Connection 요청을 처리하게 만든다. 
+
+즉 동일한 Socket을 여러 Process에서 동시에 Mutiplexing 함수에 등록 및 대기하고 있더라도, Event 발생시 Kernel은 임의의 Process를 하나만을 깨운다는 특징을 이용하여 Client의 Connection을 분배한다.
 
 #### 1.3. Cache
 
