@@ -11,7 +11,7 @@ Nginx의 Thread Pool 기법을 분석한다.
 
 ### 1. Nginx Thread Pool
 
-![[그림 1] Nginx Worker Process without Thread Pool]({{site.baseurl}}/images/theory_analysis/Nginx_Thread_Pool/Nginx_Worker_Process_Without_Thread_Pool.PNG){: width="400px"}
+![[그림 1] Nginx Worker Process without Thread Pool]({{site.baseurl}}/images/theory_analysis/Nginx_Thread_Pool/Nginx_Worker_Process_Without_Thread_Pool.PNG){: width="350px"}
 
 ![[그림 2] Nginx Worker Process with Thread Pool]({{site.baseurl}}/images/theory_analysis/Nginx_Thread_Pool/Nginx_Worker_Process_With_Thread_Pool.PNG)
 
