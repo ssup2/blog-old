@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-React Hook을 분석한다.
+React Hook을 간략하게 정리한다.
 
 ### 1. React Hook
 

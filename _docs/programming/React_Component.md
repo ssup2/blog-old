@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-React Component를 분석한다.
+React Component를 간략하게 정리한다.
 
 ### 1. React Component
 
