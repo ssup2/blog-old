@@ -129,6 +129,8 @@ React Router는 Path Parameter를 React Component엑 전달하는 기능을 제�
 
 React Router v4에서는 Query를 자체적으로 Parsing하는 기능을 제공하지는 않는다. 단지 현재의 Path 정보와 Sub-query 정보를 React Component가 얻을 수 있게만 제공하고 있다. React Component는 location Parameter를 통해서 현재의 Path 및 Sub-query 정보를 얻을수 있다. Sub-query 정보는 location.search Parameter에 포함되어 있다. [Code 7]에서는 Home Component가 address Sub-query를 "query-string" Library를 통해 얻어 출력한다. 따라서 "/ssup2?address=github" Path로 이동하게 되면, Home Component는 "Home ssup2 github" 문자열을 출력한다.
 
+#### 1.2. NavLink Component
+
 ### 2. 참조
 
 * [https://velopert.com/3417](https://velopert.com/3417)
