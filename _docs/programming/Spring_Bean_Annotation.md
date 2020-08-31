@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Spring의 Bean과 연관된 Annotation을 분석한다.
+Spring의 Bean과 연관된 Annotation을 정리한다.
 
 ### 1. @Component
 
