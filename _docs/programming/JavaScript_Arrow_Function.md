@@ -1,5 +1,5 @@
 ---
-title: JavaScript Closure
+title: JavaScript Arrow 함수
 category: Programming
 date: 2020-07-04T12:00:00Z
 lastmod: 2019-07-04T12:00:00Z
@@ -9,7 +9,7 @@ adsense: true
 
 JavaScript Arrow 함수를 정리한다.
 
-### 1. Arrow Function
+### 1. Arrow 함수
 
 {% highlight javascript %}
 // Parameter
