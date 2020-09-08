@@ -57,7 +57,11 @@ Commercial support is available at
 
 입력 받은 IP, Port와 Connection을 맺고, 맺은 Connection을 통해 Data를 송수신한다. [shell 1]은 "netcat [IP] [Port]"를 이용하여 nginx에 접속하고, nginx로부터 / (root) Page를 수신하는 모습을 나타내고 있다.
 
-#### 1.2. # nc -l [Port]
+#### 1.2. # nc -zv [IP] [Port]
+
+입력 받은 IP, Port와의 Connection만 맺고 어떠한 Data도 전송하지 않는다. 
+
+#### 1.3. # nc -l [Port]
 
 입력 받은 Port로 Listen하고 대기 한다.
 
