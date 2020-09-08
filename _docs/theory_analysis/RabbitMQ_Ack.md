@@ -23,9 +23,10 @@ Producer가 RabbitMQ에게 Message를 전송하면, RabbitMQ는 받은 Message�
 
 #### 1.2. Consumer Acknowledgement
 
-RabbitMQ가 Consumer에게 Message를 전송하면, Consumer는 받은 Message를 처리한 다음 RabbitMQ에게 ACK를 전송한다. RabbitMQ는 Consumer의 설정에 따라서 ACK를 기다리지 않을 수도 있다.
+RabbitMQ가 Consumer에게 Message를 전송하면, Consumer는 받은 Message를 처리한 다음 RabbitMQ에게 ACK를 전송한다. RabbitMQ는 ACK를 Consumer로부터 받지 못한 상태에서 Consumer와의 연결이 끊어지게 되면, 다른 Consumer에게 Message를 재전송한다. RabbitMQ는 Consumer의 설정에 따라서 ACK를 기다리지 않을 수도 있다.
 
 ### 2. 참조
 
 * [https://www.rabbitmq.com/reliability.html](https://www.rabbitmq.com/reliability.html)
 * [https://www.rabbitmq.com/confirms.html](https://www.rabbitmq.com/confirms.html)
+* [https://stackoverflow.com/questions/30546977/is-there-a-timeout-for-acking-rabbitmq-messages](https://stackoverflow.com/questions/30546977/is-there-a-timeout-for-acking-rabbitmq-messages)
