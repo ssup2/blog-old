@@ -9,15 +9,19 @@ adsense: true
 
 ### 1. 설치 환경
 
+![[그림 1] Kubernetes 설치를 위한 Node 구성도]({{site.baseurl}}/images/record/Kubernetes_Install_kubeadm_IPv6_Ubuntu_18.04/Node_Setting.PNG)
+
+[그림 1]은 Kubernetes 설치를 위한 Node의 구성도를 나타내고 있다. 설치 환경은 다음과 같다.
+
 * VM : 4 vCPU, 4GB Memory
   * Master Node * 1
   * Worker Node * 2
 * Network
-  * Node Network : 192.168.0.0/24, fdaa::0/64
-  * Pod Network : 192.167.0.0/16, fdbb::0/64
-  * Service Network : 10.96.0.0/12, fdcc::0/112
+  * Node Network : 192.168.0.0/24, fdaa::/64
+  * Pod Network : 192.167.0.0/16, fdbb::/64
+  * Service Network : 10.96.0.0/12, fdcc::/112
 * Kubernetes : 1.18.3
-  * CNI : Calico 1.5.6 Plugin
+  * CNI : Calico 3.14 Plugin
 
 ### 2. Ubuntu Package 설치
 
