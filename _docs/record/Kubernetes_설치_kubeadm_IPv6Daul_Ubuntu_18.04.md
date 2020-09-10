@@ -66,7 +66,7 @@ IPv6 Forwarding을 설정한다.
 kubeadm join 192.168.0.61:6443 --token 6gu1o3.dwhguhu651x137eq --discovery-token-ca-cert-hash sha256:2ab0fa9f6f8c3c49c263bc0a0edc19ddf973bf7fdf5e464c807df45e8bf49ab8
 ~~~
 
-kubeadm를 초기화 한다. --pod-network-cidr는 --pod-network-cidr와 중복만 되지 않으면 된다. 위에서는 --pod-network-cidr를 192.167.0.0/16으로 설정하였다.
+kubeadm를 초기화 한다. --pod-network-cidr, --service-cidr 각각 IPv6 CIDR도 설정한다.
 
 ~~~console
 (Master)# mkdir -p $HOME/.kube 
