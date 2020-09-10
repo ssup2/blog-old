@@ -61,7 +61,7 @@ IPv6 Forwarding을 설정한다.
 #### 3.1. Master Node
 
 ~~~console
-(Master)# kubeadm init --apiserver-advertise-address=192.168.0.61 --pod-network-cidr=192.167.0.0/16 --kubernetes-version=v1.18.3 --feature-gates=IPv6DualStack=true --pod-network-cidr=192.167.0.0/16,fdbb::0/64 --service-cidr=10.96.0.0/12,fdcc::0/112
+(Master)# kubeadm init --apiserver-advertise-address=192.168.0.61 --kubernetes-version=v1.18.3 --feature-gates=IPv6DualStack=true --pod-network-cidr=192.167.0.0/16,fdbb::0/64 --service-cidr=10.96.0.0/12,fdcc::0/112
 ...
 kubeadm join 192.168.0.61:6443 --token 6gu1o3.dwhguhu651x137eq --discovery-token-ca-cert-hash sha256:2ab0fa9f6f8c3c49c263bc0a0edc19ddf973bf7fdf5e464c807df45e8bf49ab8
 ~~~
