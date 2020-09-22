@@ -66,7 +66,3 @@ default       my-nginx-loadbalancer   LoadBalancer   10.96.98.173     10.0.0.200
 ~~~
 
 LoadBalancer Service를 생성하여 External IP가 제대로 할당되는지 확인한다.
-
-### 5. 참조
-
-* [https://istio.io/docs/setup/kubernetes/install/helm/](https://istio.io/docs/setup/kubernetes/install/helm/)

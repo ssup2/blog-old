@@ -31,6 +31,12 @@ Cilium은 Pod Network를 구축하는 방법으로 VXLAN 기반의 기법과 Hos
 
 [그림 2]는 Cilium과 VXLAN을 이용하여 구축한 Pod Network를 나타낸다. Host의 Network는 10.0.0.0/24이고, Pod Network는 10.244.0.0/16이다. Cilium은 etcd에 저장된 정보를 바탕으로 각 Host에 Pod Network를 할당한다. 그림에서 Host 1은 192.167.2.0/24 Network가 할당되었다. 따라서 Host 1에 생긴 Pod A의 IP는 192.167.2.0/24 Network에 속한 IP인 192.167.2.10을 이용한다. Host 2에는 192.167.3.0/24 Network가 할당되었기 때문에 Host 2에 생긴 Pod C의 IP는 192.167.3.0/24 Network에 속한 IP인 192.167.3.10를 이용한다.
 
+Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 SCHED_ACT Ingress BPF, Pod의 veth Interface에 붙는 SCHED_ACT Ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 SCHED_ACT Engress BPF, 3가지 BPF가 이용된다.
+
+Pod Network Namespace를 이용하는 Pod에서 다른 Pod으로 Packet을 전송하는 경우, Host의 Routing Table을 이용하지 않고 BPF만을 이용하여 Packet을 Routing 한다. [그림 2]에서 Pod A에서 Pod B로 Packet을 전송하는 경우, Pod A의 veth Interface에 붙는 SCHED_ACT Ingress BPF로 인해서 Pod B로 Packet이 바로 전송된다. Pod A에서 Pod F로 전송하는 경우, Pod A의 veth Interface에 붙는 SCHED_ACT Ingress BPF는 VXLAN Interface로 Packet을 바로 전송하여 Packet이 Pod F가 있는 Host 2로 바로 전달되도록 한다. Pod A가 전송한 Packet을 받은 Host 2의 VXLAN Interface의 SCHED_ACT Ingress BPF는 Pod F로 Packet을 바로 전송한다.
+
+Host Network Namespace를 이용하는 Pod에서 다른 Pod으로 Packet을 전송하는 경우, Packet은 Host routing Table에 의해서 Routing되어 cilium_host에 붙은 SCHED_ACT Egress BPF로 전달된다. 이후 cilium_host의 SCHED_ACT Egress BPF에 의해서 Packet은 Pod으로 Routing 된다. Host Process에서 Pod으로 Packet을 전송하는 경우에도 동일한 경로로 Packet이 전송된다. Pod이 Packet을 Pod이 아닌 Cluster 외부로 전송할 경우 Packet은 Host의 Routing Table에 의해서 Routing 되어 Host 밖으로 전송된다. [그림 2]에서는 Default Gateway가 eth0이기 때문에 Packet은 eth0를 통해서 외부로 전송된다.
+
 {% highlight text %}
 # cilium map get cilium_lxc
 Key               Value                                                                               State   Error
@@ -59,19 +65,15 @@ ENDPOINT   POLICY (ingress)   POLICY (egress)   IDENTITY   LABELS (source:key[=v
 <figcaption class="caption">[Shell 1] Cilium Endpoint</figcaption>
 </figure>
 
-Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 tc action ingress BPF, Pod의 veth Interface에 붙는 tc action ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 tc action engress BPF, 3가지 BPF가 이용된다. 모든 BPF는 Packet의 Dest IP가 Pod의 IP라면, Packet을 Pod으로 바로 **Routing**한다. Cilium이 이용하는 etcd에는 **Endpoint**라는 이름으로 Cilium이 관리하는 모든 Pod의 IP, MAC을 저장하고 관리하고 있다. cilium-agent는 자신이 동작하고 있는 Host의 Pod의 IP를 etcd로부터 얻어와 BPF Map에 저장한다. [Shell 1]은 'cilium map get cilium_lxc' 또는 'cilium endpoint list' 명령어를 이용하여 특정 Host에 있는 모든 Pod의 IP를 조회하는 Shell의 모습을 나타내고 있다. BPF는 BPF Map에 저장한 Pod의 IP 정보를 바탕으로 Packet을 Pod으로 Routing한다.
-
-특정 Pod에서 같은 Host에 있는 Pod으로 Packet을 전송하는 경우, Packet은 Routing Table을 거치지 않고, Pod의 veth Interface에 붙는 tc action ingress BPF만을 이용하여 Packet을 주고 받는다. [그림 2]의 Pod A/B 또는 Pod C/D의 Packet 경로가 예가 될 수 있다. 특정 Pod에서 다른 Host에 있는 Pod에 Packet을 전송하는 경우, Packet은 Routing Table로 전달되고 Routing Table의 Rule에 따라서 Packet은 다시 cilium_host의 tc action engress BPF로 전달된다. cilium_host의 tc action engress BPF은 전달 받은 Packet의 Dest IP가 유효한지 검사한 다음, 유효하다면 cilium_vxlan으로 Routing한다. cilium_vxlan으로 전달된 Packet은 Packet의 Dest Pod이 있는 Host의 cilium_vxlan의 tc action ingress으로 전달되고, 다시 Routing되어 해당 Pod으로 전달된다. [그림 2]의 Pod A/B와 Pod C/D의 경로가 예가 될 수 있다.
-
-특정 Pod에서 Pod이 아닌 외부로 Packet을 전송하게 되면 Packet을 Routing Table에 전달되고, Routing Table의 Rule에 따라서 Packet은 Routing Table의 Rule에 따라서 전달된다. [그림 2]에서 Pod이 외부로 전송한 Packet은 Routing Table에 의해서 바로 eth0로 전달되어 외부로 전달된다. Pod Network NS에 존재하는 Process가 아닌 Host의 Network NS에 존재하는 Process도 Pod의 IP로 Packet을 전달할 경우 Routing Table에 의해서 Packet은 cilium_host의 tc action engress BPF로 전달되기 때문에 해당 Pod과 Packet을 주고 받을 수 있다.
+Cilium은 Cilium이 이용하는 etcd에는 **Endpoint**라는 이름으로 Cilium이 관리하는 모든 Pod의 IP, MAC을 저장하고 관리하고 있다. cilium-agent는 BPF Map을 통해 Endpoint 정보를 BPF에 전달하여 BPF가 Routing을 수행할 수 있도록 한다. [Shell 1]은 'cilium map get cilium_lxc' 또는 'cilium endpoint list' 명령어를 이용하여 특정 Host에 있는 모든 Pod의 IP를 조회하는 Shell의 모습을 나타내고 있다.
 
 ##### 1.1.2. with Host L3
 
 ![[그림 3] Cilium Host L3 Pod Network]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_Host.PNG)
 
-[그림 3]은 Cilium과 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 VXLAN 기법의 예제와 동일하다. VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 tc action ingress BPF가 존재하지 않는다. Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있다. [그림 3]에서 Host 1의 Routing Table에는 Host 1에 할당된 Pod Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Pod Network인 192.167.3.0/24 관련 Rule은 없다. 마지막으로 Host 사이에는 반드시 L3 Router가 존재한다. L3 Router는 각 Host에 할당된 Pod Network 정보를 바탕으로 Pod으로 전달해야할 Packet을 적절한 Host로 Routing 해야한다.
+[그림 3]은 Cilium과 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 VXLAN 기법의 예제와 동일하다. VXLAN 기법과의 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 SCHED_ACT Ingress BPF가 존재하지 않는다. 또한 Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있는걸 확인할 수 있다.[그림 3]에서 Host 1의 Routing Table에는 Host 1에 할당된 Pod Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Pod Network인 192.167.3.0/24 관련 Rule은 없다.
 
-특정 Pod에서 같은 Host에 있는 Pod으로 Packet을 전송하는 경우에는 VXLAN을 이용할 경우와 동일하다. 특정 Pod에서 다른 Host에 있는 Pod에 Packet을 전송하는 경우, Packet은 Routing Table에 따라서 외부의 L3 Router에 전달된다. L3 Router는 Packet을 Pod이 존재하는 Host로 전송하고, Packet을 받은 Host는 Routing Table에 따라서 해당 Pod으로 전달한다. [그림 2]의 Pod A/B와 Pod C/D의 경로가 예가 될 수 있다. Pod Network NS에 존재하는 Process가 아닌 Host의 Network NS에 존재하는 Process도 Pod의 IP로 Packet을 전달할 경우에도 VXLAN을 이용할 경우와 동일하다.
+Packet의 경로 관점에서 VXLAN 기법과 가장큰 차이점은 Packet이 Host의 밖으로 나가기 위해서는 반드시 Host의 Routing Table을 이용해야 한다는 점이다. Host 내부에서의 Packet 경로는 VXLAN 기법과 큰 차이가 없다.
 
 #### 1.2. Connection Tracking
 
@@ -112,23 +114,25 @@ ID   Frontend           Backend
 <figcaption class="caption">[Shell 3] Cilium Service</figcaption>
 </figure>
 
-Cilium에서 제공하는 추가적인 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 BPF에 저장한다. [Shell 3]은 'cilium service list' 명령어를 이용하여 BPF Map에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service에 소속되어 있는 Pod의 IP를 의미한다. Cilium은 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우, 해당 Packet의 Dest IP를 Service에 소속된 임의의 Pod의 IP로 **DNAT**하여 Load Balancing을 수행한다.
+Cilium에서 제공하는 추가적인 기능중 하나는 Service Load Balancing을 지원한다는 점이다. Cilium은 Kubernetes API Server로부터 Service 정보를 얻어 Cilium이 이용하는 etcd에 저장한다. [Shell 3]은 'cilium service list' 명령어를 이용하여 Cilium의 etcd에 저장되어 있는 Service 정보를 출력하는 Shell을 나타내고 있다. Frontent는 Kubernetes Service의 Cluster IP를 의미하고, Backend는 해당 Service에 소속되어 있는 Pod의 IP를 의미한다. Cilium은 BPF Map의 Service 정보를 바탕으로 전달 받은 Packet의 Src IP가 Service IP인 경우, 해당 Packet의 Dest IP를 Service에 소속된 임의의 Pod의 IP로 **DNAT**하여 Load Balancing을 수행한다.
 
-Load Balancing Algorithm은 **Random 방식**과 Cilium이 저장하는 Connection 정보를 기반으로 하는 **Affinity 방식을** 혼용한다. Cilium은 Pod에서 Service로 전송시 BPF Map에 출발지 Pod과 목적지 Service에 소속된 임의의 Pod 사이의 Connection 정보가 있는지 확인한다. 관련 Connection 정보가 없다면 Cilium은 목적지 Service에 소속된 임의의 Pod을 선택하여 Packet을 전송하고 관련 Connection 정보를 BPF MAP에 추가한다. 관련 Connection 정보가 있다면 Connection 정보가 가리키는 기존에 보냈던 목적지 Service의 Pod으로 Packet을 다시 전송한다. Cilium 17.XX 이전 Version의 경우에 Cilium은 ClusterIP Type의 Service만 Load Balancing을 지원하였지만, Cilium 17.XX 이후 Version에서는 NodePort, Loadbalancer Type의 Service의 Load Balancing도 지원한다.
+Load Balancing Algorithm은 **Random 방식**과 Cilium이 저장하는 Connection 정보를 기반으로 하는 **Affinity 방식을** 혼용한다. Cilium은 Pod에서 Service로 전송시 BPF Map에 출발지 Pod과 목적지 Service에 소속된 임의의 Pod 사이의 Connection 정보가 있는지 확인한다. 관련 Connection 정보가 없다면 Cilium은 목적지 Service에 소속된 임의의 Pod을 선택하여 Packet을 전송하고 관련 Connection 정보를 BPF MAP에 추가한다. 관련 Connection 정보가 있다면 Connection 정보가 가리키는 기존에 보냈던 목적지 Service의 Pod으로 Packet을 다시 전송한다. 
+
+Cilium 17.XX 이전 Version의 경우에 Cilium은 ClusterIP Type의 Service만 Load Balancing을 지원하였지만, Cilium 17.XX 이후 Version에서는 NodePort, Loadbalancer Type의 Service의 Load Balancing도 지원한다.
 
 ##### 1.3.1. with VXLAN
 
 ![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
 
-[그림 3]은 VXLAN을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Pod에서 전송한 Packet은 Pod의 veth Interface에 붙는 tc action ingress BPF에서 DNAT되고, 이에 대한 응답은 응답을 준 Pod의 위치에 따라서 veth Interface의 tc action ingress BPF 또는 cilium_vxlan의 tc action ingress BPF에서 SNAT 된다.
+[그림 3]은 VXLAN을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service IP (Cluster IP)로 Packet을 전송할 경우, 전송한 Packet은 Pod의 veth Interface에 붙는 SCHED_ACT Ingress BPF에서 DNAT되고, 이에 대한 응답은 응답을 준 Pod의 위치에 따라서 veth Interface의 SCHED_ACT Ingress BPF 또는 cilium_vxlan의 SCHED_ACT Ingress BPF에서 SNAT 된다.
 
-cilium 16.xx 이전 Version의 경우에 Host Process의 경우 BPF를 이용하지 않고, kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT/SNAT를 수행한다. cilium 16.xx 이후 Version에서는 cgroup BPF를 이용하여 DNAT/SNAT를 수행할 수 있는 기능이 추가 되었다. 물론 cgroup BPF를 지원하는 Kernel Version에서만 이용할 수 있다.
+Pod Network Namespace를 이용하는 Pod 또는 Host Process에서 Service IP로 Packet을 전송하는 경우에는 기본적으로 kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT/SNAT를 수행한다. 하지만 cilium 16.xx 이후 Version의 경우에는 CGROUP_SOCK_ADDR BPF를 이용하여 DNAT/SNAT를 수행할 수 있는 기능이 추가 되었다. 물론 CGROUP_SOCK_ADDR BPF를 지원하는 Kernel Version에서만 이용할 수 있다.
 
 ##### 1.3.2. with Host L3
 
 ![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_Host.PNG)
 
-[그림 4]는 Host L3 Network을 이용할 경우 특정 Pod 또는 Host Network NS에 존재하는 Host Process가 Service IP (Cluster IP)에게 Packet을 전송할 경우 발생하는 DNAT/SNAT를 나타내고 있다. Service와 연결된 Pod이 외부에 있을경우 SNAT가 cilium_host의 tc action engress BPF에서 수행된다는 점을 제외하고는 VXLAN을 이용할때와 크게 다르지 않다.
+[그림 4]는 Host L3 Network을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service IP (Cluster IP)로 Packet을 전송할 경우 Service와 연결된 Pod이 외부에 있다면, SNAT가 cilium_host의 SCHED_ACT Egress BPF에서 수행된다는 점을 제외하고는 VXLAN 기법때와 크게 다르지 않다.
 
 #### 1.4. Filtering
 

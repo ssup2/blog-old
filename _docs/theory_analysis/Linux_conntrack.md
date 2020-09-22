@@ -85,3 +85,5 @@ conntrack Module은 Connection 정보를 Kernel Memory에 저장하기 때문에
 * [http://people.netfilter.org/pablo/docs/login.pdf](http://people.netfilter.org/pablo/docs/login.pdf)
 * [https://tech.kakao.com/2016/04/21/closewait-timewait/](https://tech.kakao.com/2016/04/21/closewait-timewait/)
 * [https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/security_guide/sect-security_guide-firewalls-iptables_and_connection_tracking](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/security_guide/sect-security_guide-firewalls-iptables_and_connection_tracking)
+* [https://unix.stackexchange.com/questions/57423/how-to-understand-why-the-packet-was-considered-invalid-by-the-iptables](https://unix.stackexchange.com/questions/57423/how-to-understand-why-the-packet-was-considered-invalid-by-the-iptables)
+* [https://www.frozentux.net/iptables-tutorial/chunkyhtml/x1555.html](https://www.frozentux.net/iptables-tutorial/chunkyhtml/x1555.html)
