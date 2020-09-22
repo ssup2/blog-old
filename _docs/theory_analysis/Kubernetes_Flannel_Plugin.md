@@ -1,5 +1,3 @@
-
-
 ---
 title: Kubernetes flannel Plugin
 category: Theory, Analysis
