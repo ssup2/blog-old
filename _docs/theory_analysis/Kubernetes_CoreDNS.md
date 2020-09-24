@@ -38,7 +38,7 @@ options ndots:5
 <figcaption class="caption">[Shell 2] CoreDNS Deployment, Pod</figcaption>
 </figure>
 
-[Shell 1]은 kube-system Namespace에 설정되어 있는 CoreDNS의 Deployment, Service의 모습을 나타내고 있다. [Shell 2]는 임의의 Shell Pod을 만들고 Shell Pod안에서 /etc/resolv.conf 파일에 설정된 DNS Server를 확인하는 과정이다. CoreDNS Service의 VIP (ClusterIP)가 설정되어 있는걸 확인할 수 있다.
+[Shell 1]은 kube-system Namespace에 설정되어 있는 CoreDNS의 Deployment, Service의 모습을 나타내고 있다. [Shell 2]는 임의의 Shell Pod을 만들고 Shell Pod안에서 /etc/resolv.conf 파일에 설정된 DNS Server를 확인하는 과정이다. CoreDNS Service의 VIP (ClusterIP)가 설정되어 있는걸 확인할 수 있다. [그림 1]에서도 Pod의 /etc/resolve.conf 파일에 CoreDNS Service의 VIP가 설정되어 있는것을 나타내고 있다.
 
 {% highlight text %}
 .:53 {
@@ -62,15 +62,12 @@ options ndots:5
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] CoreDNS Deployment, Pod</figcaption>
+<figcaption class="caption">[파일 1] CoreDNS Config</figcaption>
 </figure>
 
-[파일 1]은 CoreDNS의 설정 파일을 나타내고 있다. 주요 설정 내용은 다음과 같다.
+CoreDNS는 Kubernetes API 서버로부터 Service와 Pod를 Watch하여 **Service와 Pod의 Event를 수신**한다. Kubernetes API 서버로부터 Service 생성/삭제 또는 Pod의 생성/삭제 Event를 받은 CoreDNS는 Service, Pod의 Domain을 생성/삭제한다. 이러한 CoreDNS의 Kubernetes 관련 동작은 CoreDNS의 Config 파일을 통해서 설정할 수 있다. [파일 1]은 CoreDNS의 Config 파일을 나타내고 있다. kubernetes 설정 부분이 있는걸 확인할 수 있다.
 
-* kubernetes : 
-* prometheus : 
-* forward : 
-* loadbalance : 
+CoreDNS의 설정파일에서 한가지더 주목해야하는 설정은 forward 설정이다. forward 설정은 CoreDNS의 Upstream DNS Server를 지정하는 역활을 수행한다. forward 설정에 /etc/resolv.conf 파일이 지정되어 있는것을 알 수 있다. CoreDNS Pod의 dnsPolicy는 "Default"이다. "Default"는 Pod가 떠있는 Node의 /etc/resolv.conf 파일의 내용을 상속받아 Pod의 /etc/resolv.conf 파일을 생성하는 설정이다. 따라서 CoreDNS Pod의 /etc/resolve.conf는 Node의 DNS Server 정보가 저장되어 있다. **즉 CoreDNS는 Node의 DNS Server를 Upstream으로 설정한다.**
 
 ### 2. 참조
 
