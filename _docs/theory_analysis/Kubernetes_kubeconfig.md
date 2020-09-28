@@ -13,7 +13,7 @@ Kubernetes의 kubeconfig를 분석한다.
 
 ![[그림 1] Nginx Ingress Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_kubeconfig/kubeconfig.PNG){: width="700px"}
 
-kubeconfig는 Kubernetes의 Client인 kubectl 명렁어에서 이용하는 설정 파일이다. kubectl 명렁어가 접근해야할 Kubernetes API Server의 접속 정보와 kubectl 명령어가 이용하는 인증, 인가 정보가 포함되어 있다. kubeconfig는 yaml 형태를 갖고 있으며 크게 clusters, users, contexts 3가지 항목을 갖고 있다. [그림 1]은 kubeconfig 도식으로 나타내고 있다.
+kubeconfig는 Kubernetes의 Client인 kubectl 명렁어에서 이용하는 설정 파일이다. kubectl 명렁어가 접근해야할 Kubernetes API Server의 접속 정보와 kubectl 명령어가 이용하는 인증, 인가 정보가 포함되어 있다. kubeconfig는 yaml 형태를 갖고 있으며 크게 clusters, users, contexts 3가지 항목을 갖고 있다. kubeconfig는 kubectl config 명령어를 통해서 설정할 수 있다. [그림 1]은 kubeconfig 도식으로 나타내고 있다.
 
 kubeconfig의 clusters 항목에는 다수의 Cluster 정보가 저장되어 있다. Cluster 정보에는 Cluster의 이름, Cluster의 API Server의 접속 경로 그리고 Cluster에서 이용하는 Base64로 Encoding된 CA (Certificate Authority) 인증서 정보가 저장되어 있다. kubeconfig의 users 항목에는 다수의 User 정보가 저장되어 있다. User 정보에는 User의 이름, Base64로 Encoding된 User의 Public 인증서 그리고 Base64로 Encoding된 User의 Private Key가 저장되어 있다. User의 Public 인증서의 정보를 바탕으로 Kubernetes는 인증, 인가를 수행한다.
 
