@@ -11,6 +11,16 @@ Kubernetes의 kubeconfig를 분석한다.
 
 ### 1. Kubernetes kubeconfig
 
+![[그림 1] Nginx Ingress Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_kubeconfig/kubeconfig.PNG){: width="700px"}
+
+kubeconfig는 Kubernetes의 Client인 kubectl 명렁어에서 이용하는 설정 파일이다. kubectl 명렁어가 접근해야할 Kubernetes API Server의 접속 정보와 kubectl 명령어가 이용하는 인증, 인가 정보가 포함되어 있다. kubeconfig는 yaml 형태를 갖고 있으며 크게 clusters, users, contexts 3가지 항목을 갖고 있다. [그림 1]은 kubeconfig 도식으로 나타내고 있다.
+
+kubeconfig의 clusters 항목에는 다수의 Cluster 정보가 저장되어 있다. Cluster 정보에는 Cluster의 이름, Cluster의 API Server의 접속 경로 그리고 Cluster에서 이용하는 Base64로 Encoding된 CA (Certificate Authority) 인증서 정보가 저장되어 있다. kubeconfig의 users 항목에는 다수의 User 정보가 저장되어 있다. User 정보에는 User의 이름, Base64로 Encoding된 User의 Public 인증서 그리고 Base64로 Encoding된 User의 Private Key가 저장되어 있다. User의 Public 인증서의 정보를 바탕으로 Kubernetes는 인증, 인가를 수행한다.
+
+kubeconfig의 contexts는 Context의 이름 및 정보 배열로 구성된다. 여기서 Context는 Cluster와 User의 조합을 의미한다. [그림 1]에서 Context-A는 User-A가 Cluster-A를 이용하는 상태를 의미한다. 이와 유사하게 [그림 1]에서 Context-C는 User-C가 Cluster-B를 이용하는 상태를 의미한다. kubeconfig의 current-context 항목에은 현재 이용중인 Context를 의미한다. [그림 1]에서 current-context 항목에 Context-B가 명시되어 있는걸 확인할 수 있다. 따라서 kubectl이 [그림 1]의 kubeconfig를 이용한다면, kubectl은 User-B User로 Cluster-B Cluster에 접속하여 Client 동작을 수행한다.
+
+#### 1.1. Example
+
 {% highlight yaml %}
 apiVersion: v1
 kind: Config
@@ -36,15 +46,9 @@ users:
 <figcaption class="caption">[파일 1] Admin kubeconfig</figcaption>
 </figure>
 
-kubeconfig는 Kubernetes의 Client인 kubectl 명렁어에서 이용하는 설정 파일이다. kubectl 명렁어가 접근해야할 Kubernetes API Server의 접속 정보와 kubectl 명령어가 이용하는 인증, 인가 정보가 포함되어 있다. [파일 1]은 kubeadm 명령어로 Cluster를 구성하였을때 kubeadm이 구성한 Cluster의 Admin을 위해서 생성하는 kubeconfig 파일을 나타내고 있다. kubeconfig는 yaml 파일이며 크게 clusters, users, contexts 3가지 정보를 갖고 있다.
+[파일 1]은 kubeadm 명령어로 Cluster를 구성하였을때 kubeadm이 구성한 Cluster의 Admin을 위해서 생성하는 실제 kubeconfig 파일을 나타내고 있다. [파일 1]에서 clusters 항목에 "kubernetes" 이름의 Cluster 정보가 저장되어 있다. server에는 "kubernetes" Cluster의 API Server의 접속 정보가 저장되어 있고, certificate-authority-data에는 "kubernetes" Cluster에서 이용하는 CA (Certificate Authority) 인증서 정보가 Base64로 Encoding되어 저장되어 있다. "kubernetes" Cluster의 CA 인증서 정보를 보면 Cluster의 이름인 kubernetes 문자열을 Common Name 항목에 저장하고 있다.
 
-### 1.1. Cluster
-
-kubeconfig의 clusters는 Cluster의 이름 및 정보의 배열로 구성되며, server에는 해당 Cluster의 API Server의 접속 정보가 저장되어 있고, certificate-authority-data에는 해당 Kubernetes Cluster에서 이용하는 CA (Certificate Authority) 인증서 정보가 Base64로 Encoding되어 저장되어 있다. [파일 1]에는 kubernetes라는 이름의 Cluster의 정보가 저장되어 있는걸 알 수 있다. API Server에 접근하기 위해서는 "https://192.168.0.61:6443"로 접속해야 한다. CA 인증서는 Cluster의 이름인 kubernetes 문자열을 Common Name 항목에 저장하고 있다.
-
-### 1.2. User
-
-kubeconfig의 users는 User의 이름 및 정보의 배열로 구성되며, client-certificate-data에는 User의 인증, 인가 정보를 포함하는 User 인증서가 저장되어 있고, client-key-data에는 User 인증서의 Private Key가 저장되어 있다. [파일 1]에는 kubernetes-admin라는 이름의 User의 정보가 저장되어 있는걸 알 수 있다. User의 인증서는 User의 이름인 kubernetes-admin 문자열을 Common Name 항목에 저장하고 있고, Organization 항목에는 system:masters 문자열을 저장하고 있다. system:masters는 User인 kubernetes-admin가 소속되어 있는 Group을 의미한다.
+[파일 1]에서 users 항목에 "kubernetes-admin" 이름의 User의 정보가 저장되어 있다. client-certificate-data에는 Base64로 Encoding된 "kubernetes-admin" User의 Public 인증서가 저장되어 있고, client-key-data에는 Base64로 Encoding된 "kubernetes-admin" User의 Private Key가 저장되어 있다. "kubernetes-admin" User의 Public 인증서 정보를 보면 User의 이름인 kubernetes-admin 문자열을 Common Name 항목에 저장하고 있고, system:masters 문자열을 Organization 항목에 저장하고 있다. "system:masters"는 "kubernetes-admin" User가 소속되어 있는 Group을 의미한다.
 
 {% highlight yaml %}
 apiVersion: rbac.authorization.k8s.io/v1
@@ -64,11 +68,9 @@ subjects:
 <figcaption class="caption">[파일 2] cluster-admin ClusterRoleBinding</figcaption>
 </figure>
 
-[파일 2]는 Cluster에 적용되어있는 cluster-admin 이름의 ClusterRoleBinding을 나타내고 있다. cluster-admin 이름의 ClusterRole은 모든 API에 대해서 권한을 갖고 있는 Role이다. cluster-admin 이름의 ClusterRole이 적용(Binding)되는 대상은 system:masters 이름의 Group인걸 확인할 수 있다. 따라서 kubernetes-admin 이름의 User는 system:masters 이름의 Group에 속하기 때문에 모든 API에 대한 권한을 갖게된다.
+[파일 2]는 Cluster에 적용되어있는 "cluster-admin" 이름의 ClusterRoleBinding을 나타내고 있다. "cluster-admin" 이름의 ClusterRole은 모든 API에 대해서 권한을 갖고 있는 Role이다. "cluster-admin" ClusterRole이 적용(Binding)되는 대상은 "system:masters" 이름의 Group인걸 확인할 수 있다. 따라서 "kubernetes-admin" User는 "system:masters" Group에 소속되기 때문에 모든 API에 대한 권한을 갖게된다.
 
-### 1.3. Context
-
-kubeconfig의 contexts는 Context의 이름 및 정보 배열로 구성된다. 여기서 Context는 Cluster와 User의 조합을 의미한다. [파일 1]에서 kubernetes-admin@kubernetes Context는 kubernetes-admin 이름의 User로 kubernetes 이름의 Cluster를 이용하는 것을 의미한다. [파일 1]에서 current-context에 kubernetes-admin@kubernetes Context가 명시되어 있는걸 확인할 수 있다. 현재 이용중인 Context가 kubernetes-admin@kubernetes Context라는걸 의미한다. 즉 kubectl 명령어는 kubernetes-admin 이름의 User로 kubernetes 이름의 Cluster에 접속한다는 의미이다.
+[파일 1]에서 contexts 항목에 "kubernetes-admin@kubernetes" 이름의 Context 정보가 저장되어 있다. "kubernetes-admin@kubernetes" Context는 "kubernetes-admin" User가 "kubernetes" Cluster를 이용하는 것을 의미한다. current-context 항목에는 "kubernetes-admin@kubernetes" Context가 명시되어 있는걸 확인할 수 있다. 즉 현재 kubectl 명령어는 kubernetes-admin 이름의 User로 kubernetes 이름의 Cluster에 접속한다는 의미이다.
 
 ### 2. 참조
 
