@@ -1,8 +1,8 @@
 ---
 title: Kubernetes CSR (Certificate Signing Request)
 category: Theory, Analysis
-date: 2020-09-28T12:00:00Z
-lastmod: 2020-09-28T12:00:00Z
+date: 2020-09-29T12:00:00Z
+lastmod: 2020-09-29T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -11,7 +11,7 @@ Kubernetes의 CSR (Certificate Signing Request)을 분석한다.
 
 ### 1. Kubernetes CSR (Certificate Signing Request)
 
-#### 1.1. Example
+#### 1.1. User Example
 
 {% highlight console %}
 # openssl genrsa -out ssup2.key 2048
@@ -35,7 +35,7 @@ spec:
 EOF
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] ssup2 CSR 생성</figcaption>
+<figcaption class="caption">[Shell 1] CSR 생성</figcaption>
 </figure>
 
 {% highlight console %}
@@ -72,7 +72,7 @@ FEOMhduBhigs9tyUSlRwu/9BJg==
 # kubectl get csr/ssup2 -o json | jq -r .status.certificate | base64 --decode > ssup2.crt
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] ssup2 CSR 승인, ssup2 인증서 확인</figcaption>
+<figcaption class="caption">[Shell 2] CSR 승인, 인증서 확인</figcaption>
 </figure>
 
 {% highlight console %}
@@ -82,7 +82,81 @@ FEOMhduBhigs9tyUSlRwu/9BJg==
 # kubectl config use-context ssup2
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 3] ssup2 인증서 설정</figcaption>
+<figcaption class="caption">[Shell 3] Rolebinding, Context 설정</figcaption>
+</figure>
+
+#### 1.2. Group Example
+
+{% highlight console %}
+# openssl genrsa -out ssup2.key 2048
+# openssl req -new -key ssup2.key -out ssup2.csr
+...
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:system:masters
+Common Name (e.g. server FQDN or YOUR name) []:ssup2
+...
+
+# cat ssup2.csr | base64 | tr -d "\n"
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ2tEQ0NBWGdDQVFBd1N6RUxNQWtHQTFVRUJoTUNRVlV4RXpBUkJnTlZCQWdNQ2xOdmJXVXRVM1JoZEdVeApGekFWQmdOVkJBb01Ebk41YzNSbGJUcHRZWE4wWlhKek1RNHdEQVlEVlFRRERBVnpjM1Z3TWpDQ0FTSXdEUVlKCktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQU1KMHVaQndUVEgzWHBtV1JtMnpaU3luVDNTSXhvQkUKQnZMUG5IaENYSkVJcEM1cUxsY00wQWNQd2RiKzNMeEdiRWFTdlF4NzViVXFaOWZYQWF5SHFzcTRuTFVlbTNRSQpiSlJMTkVCbHBnUFh3SlVnT0hZUmpMczhUdW9EcmtrMlZrWTRKdkcwL015QTZ6V3FXVzBya3pXYTRZYVdEeDJlCmtOcW95bXJUMklESVhnYVFndUlOcVNjM3luK0FIcUZYUWFlcEVqS0NCN2lxSnlhcEk0SmhZNmtBbzZScmdpdGMKaGRLWHdTOVR6S0xPYmVMaUk5aTJhcVdJWVc2Tk9teVpPMkJrQVp1NHUweXlyVXJ4STVicHg3dFgvVVJsK2hucgp0bDJnMFloRS9RMndtenRoVmk4c004WUJsV1Y4aHpORDFESlQrekcrMk1KcmdpNlVrZXFrRVMwQ0F3RUFBYUFBCk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ09KTnZSZmNQdHdYZUVYL1ZpV1dSYjB0K1Z6UDJQWDBFTkJycHYKTnd3Y2VaWnVhZUpJT0p1clRGK3JQdDYwYm5qc0MvN3N3N0xjSTQwWUpncjdybGZjZTAvT0Foamt0YmU0Mm1JVwprc1RKWkdvdEhEOVpRV1FlUVlFYWtsdVhydjJicFZQMlFkTTg1eXZwT0pKV3NQOGxUQ0VOaHlPZW8wQkF5MHN1Cit3YlBkSEZvUGw0cnJ5clliS2xkejQwYVIxL1Yxb1VLTDF2NXJiZElNRHdaODZZTTJ4MSt3c29SUkpkcFV2dUUKQ3c5STdLRjZ5cEpWUlR1eFhPQVprTHZRM2pVZDNLTmc0a1ZINCtQaDg0a3BHUG5CQ1Jva3h4cDVkN2pzUnNrSwpzKzBVd2lJYUtsU1ZQa2JrSGJzczVwQjJIVVZNN2cxUUZwMlFtT2hQb0lybE5yS2IKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+
+# cat <<EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: ssup2
+spec:
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ2tEQ0NBWGdDQVFBd1N6RUxNQWtHQTFVRUJoTUNRVlV4RXpBUkJnTlZCQWdNQ2xOdmJXVXRVM1JoZEdVeApGekFWQmdOVkJBb01Ebk41YzNSbGJUcHRZWE4wWlhKek1RNHdEQVlEVlFRRERBVnpjM1Z3TWpDQ0FTSXdEUVlKCktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQU9mbFZJUldkaXpYSkQ0aXBFRlg5RlV2aDArOFU5aUsKeDFGaTNOcHVTTnhkVDlyMmVxc2hXbEQ0Y0ZPK0E5eUJ1MzJDTm41dE1QbXFGN1ZnZm1oemNHQjJYeERsc1IrdApVcE1FalJHSnNuUnA5WnUrNTZXbzhFZ3dWNzdMQnExRVBuTjd0WHk4Vmg5Sm50RHFraWZjUGhmbXR6Ui8rNklUCndWNHFRanNaQWlzREdnams4QlVLQURpTlYzMVI4VEt1TmVRVE9vWlBBM0RMb2tZK3pRYWxwVHJQcVphTld5YmwKb0RjbHlRZCtJcGdITnIxcHc5M2tPa2loY3V2VlQzWEpNV2NWaUl3cGRpT3YvcExTem9YaG1EZC9adERsVmhxdgp0bGxFT3A1ZW4zbUtDVXMvbHVQWTJaajJjVnNjZHp2VWxBOGJKWmlLUnV3S3hnTEo3WWhOeUg4Q0F3RUFBYUFBCk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQVFDZGZsOFNWbmQ1WjJpZW43SS9TeXZSWlBzakVvdTgyT2pRK2sKczJkeS9FczRBcFNMT2psTkJYUEdnZkZIQWlEUmFpRDFMM0FEbk0vSDFyTUFENStrNU92NnVQa0dUUGtvZ1hSaQpxT0FxekMzaUFGTHJWZENERnQ3d1Y0a25ZN3RTQkFkd1krc1VJdlV2RTB1UEJMOUY4dzZGR1NxeHpHemZ0V3o2CmEvZUtEZ0ZQZGVNNDFTbWhDcFFlVGJmZXdQM1FwL1JWamhTQXlzRW4xMkppQmppTmtHZEZMYTRaOUR3RzJXODcKSWJuSzBUS3lSR1QwajVxVEtHQ3JSY0Z6T0lZY05rTnQ0aHBVbHdoMXY3MHZnM0hIQ2dZOGRmcnBHSThmVkt2bApsdUE4YzA5Mk5GS2kzVnh4UkwzbnpzTGhvbE8rSmkxOVdGL3Z0dXdsQ3g2Sndlb2MKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+  usages:
+  - client auth
+EOF
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] CSR 생성</figcaption>
+</figure>
+
+{% highlight console %}
+# kubectl get csr
+NAME    AGE   SIGNERNAME                     REQUESTOR          CONDITION
+ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
+
+# kubectl certificate approve ssup2
+certificatesigningrequest.certificates.k8s.io/ssup2 approved
+# kubectl get csr
+NAME    AGE     SIGNERNAME                     REQUESTOR          CONDITION
+ssup2   5m6s    kubernetes.io/legacy-unknown   kubernetes-admin   Approved,Issue
+
+# kubectl get csr/ssup2 -o json | jq -r .status.certificate | base64 --decode
+-----BEGIN CERTIFICATE-----
+MIIDDzCCAfegAwIBAgIQLj9J/3jO5Cuz42A0YgwiMjANBgkqhkiG9w0BAQsFADAV
+MRMwEQYDVQQDEwprdWJlcm5ldGVzMB4XDTIwMDkyOTEzMjExNloXDTIxMDkyOTEz
+MjExNlowSzELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxFzAVBgNV
+BAoTDnN5c3RlbTptYXN0ZXJzMQ4wDAYDVQQDEwVzc3VwMjCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBAOflVIRWdizXJD4ipEFX9FUvh0+8U9iKx1Fi3Npu
+SNxdT9r2eqshWlD4cFO+A9yBu32CNn5tMPmqF7VgfmhzcGB2XxDlsR+tUpMEjRGJ
+snRp9Zu+56Wo8EgwV77LBq1EPnN7tXy8Vh9JntDqkifcPhfmtzR/+6ITwV4qQjsZ
+AisDGgjk8BUKADiNV31R8TKuNeQTOoZPA3DLokY+zQalpTrPqZaNWybloDclyQd+
+IpgHNr1pw93kOkihcuvVT3XJMWcViIwpdiOv/pLSzoXhmDd/ZtDlVhqvtllEOp5e
+n3mKCUs/luPY2Zj2cVscdzvUlA8bJZiKRuwKxgLJ7YhNyH8CAwEAAaMlMCMwEwYD
+VR0lBAwwCgYIKwYBBQUHAwIwDAYDVR0TAQH/BAIwADANBgkqhkiG9w0BAQsFAAOC
+AQEAj8BxaFooOCWx+8BCsOm4Zxdn/UE0jWRvLlgxNMHvNSWoIfHRoCxSLIECMrxQ
+SHRG47YcZMDJATBQ5TRNgGO7WuBos2MYMEzVc3E1/IjYIyazC6vWZ/6PkM6h7IkX
+UqTI3swOqfOvvOZpv2oRCMq5PLtasVNHdIUJyzTUgb9GgYiipgtA1fluXb5aFRd8
+xH0NHI0nOgFZvoKGbwjX8uGmnFwM20OEDMb3WBUg2D0YGjzw5Mp4UpzDVF6PChsI
+d3Mohd4bJoYkuiWgQFhSPdfCCihBwto6jcx+JQSK5UaUjlMGOOaYY/GDkYBpklux
+B5fPsCHS37uxQKe+t+uQZCDOgg==
+-----END CERTIFICATE-----
+# kubectl get csr/ssup2 -o json | jq -r .status.certificate | base64 --decode > ssup2.crt
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 5] CSR 승인, 인증서 확인</figcaption>
+</figure>
+
+{% highlight console %}
+# kubectl config set-credentials ssup2 --client-key=./ssup2.key --client-certificate=./ssup2.crt --embed-certs=true
+# kubectl config set-context ssup2 --cluster=kubernetes --user=ssup2
+# kubectl config use-context ssup2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 6] Context 설정</figcaption>
 </figure>
 
 ### 2. 참조
