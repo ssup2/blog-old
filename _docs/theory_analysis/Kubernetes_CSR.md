@@ -99,9 +99,11 @@ FEOMhduBhigs9tyUSlRwu/9BJg==
 <figcaption class="caption">[Shell 3] Rolebinding, Context 설정</figcaption>
 </figure>
 
-[Shell 3]은 발급한 인증서를 이용하여 kubectl의 Context를 설정하는 과정을 나타내고 있다. 먼저 ssup2 User가 Kubernetes Cluster의 모든 API를 이용할 수 있도록 "kubectl create clusterrolebinding" 명령어를 통해서 ssup2 User에게 cluster-admin Role을 할당한다. 이후 생성한 ssup2 User의 Private Key와 발급 받은 ssup2의 인증서를 "kubectl config" 명령어를 이용하여 Context를 설정하면 된다.
+[Shell 3]은 발급한 ssup2 User의 인증서를 이용하여 kubectl의 Context를 설정하는 과정을 나타내고 있다. 먼저 ssup2 User가 Kubernetes Cluster의 모든 API를 이용할 수 있도록 "kubectl create clusterrolebinding" 명령어를 통해서 ssup2 User에게 cluster-admin Role을 할당한다. 이후 생성한 ssup2 User의 Private Key와 발급 받은 ssup2의 인증서를 "kubectl config" 명령어를 이용하여 Context를 설정하면 된다.
 
 #### 1.2. Group Example
+
+Kubernetes CSR을 통해서 "system:masters" Group에 소속되어 있는 ssup2 User의 인증서를 발급하고, kubectl에 설정하여 이용하는 과정은 다음과 같다. "system:masters" Group에 소속되어 있는 User는 기본적으로 cluster-admin Role이 할당되기 때문에  Kubernetes Cluster의 모든 API를 이용할 수 있게 된다.
 
 {% highlight console %}
 # openssl genrsa -out ssup2.key 2048
@@ -132,6 +134,8 @@ ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
 <figure>
 <figcaption class="caption">[Shell 4] CSR 생성</figcaption>
 </figure>
+
+[Shell 4]는 [Shell 1]의 과정처럼 openssl 명령어를 이용하여 ssup2 User의 Private Key 및 csr 파일을 생성하고, 생성한 csr 파일을 이용하여 CertificateSigningRequest Manifest를 통해서 인증서 발급 요청을 진행하는 과정을 나타내고 있다. 차이점은   **csr 파일 생성시 Organization Name에는 반드시 Group의 이름이 설정이 되어야 한다는 점이다.**
 
 {% highlight console %}
 # kubectl certificate approve ssup2
@@ -166,6 +170,8 @@ B5fPsCHS37uxQKe+t+uQZCDOgg==
 <figcaption class="caption">[Shell 5] CSR 승인, 인증서 확인</figcaption>
 </figure>
 
+[Shell 5]는 [Shell 2]의 과정처럼 인증서 발급을 승인하고, 생성된 인증서를 확인 및 파일로 저장하는 과정을 나타내고 있다. "kubectl certificate approve" 명령어를 통해서 인증서 발급을 승인한다.
+
 {% highlight console %}
 # kubectl config set-credentials ssup2 --client-key=./ssup2.key --client-certificate=./ssup2.crt --embed-certs=true
 # kubectl config set-context ssup2 --cluster=kubernetes --user=ssup2
@@ -174,6 +180,8 @@ B5fPsCHS37uxQKe+t+uQZCDOgg==
 <figure>
 <figcaption class="caption">[Shell 6] Context 설정</figcaption>
 </figure>
+
+[Shell 6]은 [Shell 3]의 과정처럼 발급한 ssup2 User의 인증서를 이용하여 kubectl의 Context를 설정하는 과정을 나타내고 있다. [Shell 3]과의 차이점은 ssup2 User에게 "kubectl create clusterrolebinding" 명령어를 cluster-admin Role을 할당하는 과정이 없다는 점이다. 이유는 앞에서 설명했던것 처럼 "system:masters" Group에 소속되어 있는 User는 기본적으로 cluster-admin Role이 할당되는데, ssup2 User가 "system:masters" Group에 소속되어있기 때문이다.
 
 ### 2. 참조
 
