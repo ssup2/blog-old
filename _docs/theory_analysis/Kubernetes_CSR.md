@@ -11,7 +11,16 @@ Kubernetes의 CSR (Certificate Signing Request)을 분석한다.
 
 ### 1. Kubernetes CSR (Certificate Signing Request)
 
+대부분의 Kubernetes Cluster는 검증된 Root CA (Certificate Authority)를 이용하지 않고, Private Root CA를 이용하고 있다. Kubernetes는 CSR (Certificate Signing Request)을 통해서 Kubernetes Cluster가 이용중인 Private Root CA으로부터 인증서를 발급받는 기능을 제공하고 있다. Kubernetes CSR 기능을 통해서 인증서를 발급받는 과정은 다음과 같다.
+
+* 인증서의 Private Key 생성 
+* 생성한 인증서의 Private Key를 이용하여 csr 파일 생성
+* 생성한 .csr 파일의 내용을 base64로 Encoding한 문자열을 이용하여 Kubernetes의 CertificateSigningRequest Manifest 작성 및 인증서 발급 요청
+* 인증서 발급 요청 수락
+
 #### 1.1. User Example
+
+Kubernetes CSR을 통해서 ssup2 User의 인증서를 발급하고, kubectl에 설정하여 이용하는 과정은 다음과 같다.
 
 {% highlight console %}
 # openssl genrsa -out ssup2.key 2048
@@ -33,16 +42,18 @@ spec:
   usages:
   - client auth
 EOF
+
+# kubectl get csr
+NAME    AGE   SIGNERNAME                     REQUESTOR          CONDITION
+ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] CSR 생성</figcaption>
 </figure>
 
-{% highlight console %}
-# kubectl get csr
-NAME    AGE   SIGNERNAME                     REQUESTOR          CONDITION
-ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
+[Shell 1]은 openssl 명령어를 이용하여 ssup2 User의 Private Key 및 csr 파일을 생성하고, 생성한 csr 파일을 이용하여 CertificateSigningRequest Manifest를 통해서 인증서 발급 요청을 진행하는 과정을 나타내고 있다. **csr 파일 생성시 Common Name에는 반드시 User의 이름이 설정되어야 한다.** "kubectl get csr" 명령어를 통해서 인증서 발급 상태를 확인할 수 있다. 아직 인증서를 발급하지 않았기 때문에 Pending 상태로 나타난다.
 
+{% highlight console %}
 # kubectl certificate approve ssup2
 certificatesigningrequest.certificates.k8s.io/ssup2 approved
 # kubectl get csr
@@ -75,8 +86,11 @@ FEOMhduBhigs9tyUSlRwu/9BJg==
 <figcaption class="caption">[Shell 2] CSR 승인, 인증서 확인</figcaption>
 </figure>
 
+[Shell 2]는 인증서 발급을 승인하고, 생성된 인증서를 확인 및 파일로 저장하는 과정을 나타내고 있다. "kubectl certificate approve" 명령어를 통해서 인증서 발급을 승인한다.
+
 {% highlight console %}
 # kubectl create clusterrolebinding ssup2 --clusterrole=cluster-admin --user=ssup2
+
 # kubectl config set-credentials ssup2 --client-key=./ssup2.key --client-certificate=./ssup2.crt --embed-certs=true
 # kubectl config set-context ssup2 --cluster=kubernetes --user=ssup2
 # kubectl config use-context ssup2
@@ -84,6 +98,8 @@ FEOMhduBhigs9tyUSlRwu/9BJg==
 <figure>
 <figcaption class="caption">[Shell 3] Rolebinding, Context 설정</figcaption>
 </figure>
+
+[Shell 3]은 발급한 인증서를 이용하여 kubectl의 Context를 설정하는 과정을 나타내고 있다. 먼저 ssup2 User가 Kubernetes Cluster의 모든 API를 이용할 수 있도록 "kubectl create clusterrolebinding" 명령어를 통해서 ssup2 User에게 cluster-admin Role을 할당한다. 이후 생성한 ssup2 User의 Private Key와 발급 받은 ssup2의 인증서를 "kubectl config" 명령어를 이용하여 Context를 설정하면 된다.
 
 #### 1.2. Group Example
 
@@ -108,16 +124,16 @@ spec:
   usages:
   - client auth
 EOF
+
+# kubectl get csr
+NAME    AGE   SIGNERNAME                     REQUESTOR          CONDITION
+ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 4] CSR 생성</figcaption>
 </figure>
 
 {% highlight console %}
-# kubectl get csr
-NAME    AGE   SIGNERNAME                     REQUESTOR          CONDITION
-ssup2   4s    kubernetes.io/legacy-unknown   kubernetes-admin   Pending
-
 # kubectl certificate approve ssup2
 certificatesigningrequest.certificates.k8s.io/ssup2 approved
 # kubectl get csr
