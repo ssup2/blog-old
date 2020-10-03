@@ -15,7 +15,7 @@ Kubernetes의 CSR (Certificate Signing Request)을 분석한다.
 
 * 인증서의 Private Key 생성 
 * 생성한 인증서의 Private Key를 이용하여 csr 파일 생성
-* 생성한 .csr 파일의 내용을 base64로 Encoding한 문자열을 이용하여 Kubernetes의 CertificateSigningRequest Manifest 작성 및 인증서 발급 요청
+* 생성한 csr 파일의 내용을 base64로 Encoding한 문자열을 이용하여 Kubernetes의 CertificateSigningRequest Manifest 작성 및 인증서 발급 요청
 * 인증서 발급 요청 수락
 
 #### 1.1. User Example
