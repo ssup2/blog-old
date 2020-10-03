@@ -29,7 +29,7 @@ DefaultIngressClass Admission Controller는 Mutating Hooking만을 이용하는 
 
 ServiceAccount Admission Controller는 Mutating Hooking과 Validating Hooking을 둘다 이용하는 Compiled-in Admission Controller이다. Mutating Hooking은 Service Account가 설정되어 있지 않는 Pod에 Default Service Account를 설정하고, 설정된 Service Account의 Token을 Pod 내부에서 얻을수 있도록 Pod에 Mount 설정을 추가하는 용도로 이용한다. Validating Hooking은 Pod에 설정된 Service Account가 실제 유효한지 검사하는 용도로 이용한다. 이처럼 Kubernetes의 많은 기능들이 Compiled-in Admission Controller를 통해서 구현된다.
 
-#### 1.1. Custom Admission Controller Registration
+#### 1.2. Custom Admission Controller Registration
 
 {% highlight yaml %}
 apiVersion: admissionregistration.k8s.io/v1
