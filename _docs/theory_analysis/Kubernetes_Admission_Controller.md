@@ -91,8 +91,6 @@ apiVersion: admissionregistration.k8s.io/v1
 <figcaption class="caption">[파일 2] ValidatingWebhookConfiguration</figcaption>
 </figure>
 
-#### 1.2. Request, Response
-
 {% highlight yaml %}
 {
   "apiVersion": "admission.k8s.io/v1",
