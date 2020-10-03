@@ -11,7 +11,13 @@ Kubernetes의 Admission Controller를 분석한다.
 
 ### 1. Kubernetes Admission Controller
 
-![[그림 1] Kubernetes Admission Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_Admission_Controller/Kubernetes_Admission_Controller.PNG)
+![[그림 1] Kubernetes Admission Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_Admission_Controller/Kubernetes_Admission_Controller.PNG){: width="700px"}
+
+Kubernetes Admission Controller는 Kubernetes API 처리 과정 사이의 **Webhook**을 이용하여, Kubernetes의 기능을 확장하는 역활을 수행하는 Plugin을 의미한다. Kubernetes는 Admission Controller를 통해서 보안, 정책, 설정 관련 기능을 확장시킬 수 있다. [그림 1]은 Kubernetes Admission Controller를 나타내고 있다. Kubernetes API Server는 API 요청 처리 과정 사이에 Kubernetes API Server에 등록되어 있는 Admission Controller의 Webhook을 호출한다. Admission Controller의 Webhook에 의해서 API 요청은 변경되거나 중단될 수 있다.
+
+Webhook은 Mutating Admission을 수행하는 Webhook과 Validating Admission을 수행하는 Webhook으로 구분된다. Mutating Admission Webhook은 의미 그대로 API 요청을 변경하는 용도로 이용하는 Webhook이다. 또한 필요에 따라서는 API 요청을 거절하여 처리를 중단할 수 있다. Validating Admission Webhook은 의미 그대로 API 요청을 검증하는 용도로 이용하는 Webhook이다. API 요청을 거절하여 처리를 중단할 수만 있으며, Mutating Admission Webhook처럼 API 요청을 변경할 수는 없다.
+
+Admission Controller는 Kubernetes API Server와 같이 Compile된 **Compiled-in Admission Controller**와 Kubernetes User가 개발하여 Kubernetes API Server 외부에서 동작하는 **Custom Admission Controller** 2종류가 존재한다. Compiled-in Admission Controller는 다양한 종류가 존재하며 Kubernetes API Server의 "--enable-admission-plugins" Option을 통해서 이용할 Compiled-in Admission Controller를 설정할 수 있다.
 
 #### 1.1. Registration
 
@@ -154,5 +160,6 @@ apiVersion: admissionregistration.k8s.io/v1
 
 * [https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/)
 * [https://kubernetes.io/blog/2019/03/21/a-guide-to-kubernetes-admission-controllers/](https://kubernetes.io/blog/2019/03/21/a-guide-to-kubernetes-admission-controllers/)
+* [https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/)
 * [https://docs.openshift.com/container-platform/3.11/architecture/additional_concepts/dynamic_admission_controllers.html](https://docs.openshift.com/container-platform/3.11/architecture/additional_concepts/dynamic_admission_controllers.html)
 * [https://m.blog.naver.com/alice_k106/221546328906](https://m.blog.naver.com/alice_k106/221546328906)
