@@ -13,7 +13,7 @@ Kubernetes의 Admission Controller를 분석한다.
 
 ![[그림 1] Kubernetes Admission Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_Admission_Controller/Kubernetes_Admission_Controller.PNG){: width="700px"}
 
-Kubernetes Admission Controller는 Kubernetes API 처리 과정을 Hooking하여, Kubernetes의 기능을 확장하는 역활을 수행하는 Controller를 의미한다. Kubernetes는 Admission Controller를 통해서 보안, 정책 및 설정 관련 기능을 확장하고 있다. [그림 1]은 Kubernetes Admission Controller를 나타내고 있다. Kubernetes API Server는 API 요청 처리 과정 사이에 Kubernetes API Server 내부에 포함된 Compiled-in Admission Controller들에게 하나씩 차례대로 API 요청을 전달한다. API 요청을 받은 Admission Controller는 해당 API 요청을 거절, 승인 또는 변경&승인 할 수 있다.
+Kubernetes Admission Controller는 Kubernetes API 처리 과정을 Hooking하여, Kubernetes의 기능을 확장하는 역활을 수행하는 Controller를 의미한다. Kubernetes는 Admission Controller를 통해서 보안, 정책 및 설정 관련 기능을 확장하고 있다. [그림 1]은 Kubernetes Admission Controller를 나타내고 있다. Kubernetes API Server는 API 요청 처리 과정 사이에 Kubernetes API Server 내부에 포함된 Compiled-in Admission Controller들에게 하나씩 순차적으로 API 요청을 전달한다. API 요청을 받은 Admission Controller는 해당 API 요청을 거절, 승인 또는 변경&승인 할 수 있다.
 
 Admission Controller로 부터 거절 응답을 받은 Kubernetes API 서버는 해당 API 요청 처리를 중단한다. Admission Controller로 부터 승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 동일한 API 요청을 전달하고 응답을 기다린다. 변경&승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 변경된 API 요청을 전달하고 응답을 기다린다. 이런식으로 활성화된 모든 Admission Controller를 지나간 API 요청만이 etcd에 저장되어 반영된다.
 
@@ -23,13 +23,19 @@ Admission Controller는 Kubernetes API Server와 같이 Compile된 **Compiled-in
 
 #### 1.1. Compiled-in Admission Controller
 
-Kubernetes API Server에는 다양한 Compiled-in Admission Controller가 Kubernetes API Server에 포함되어 있으며 Kubernetes API Server의 "--enable-admission-plugins" Option을 통해서 이용할 Compiled-in Admission Controller만 활성화 할 수 있다. Compiled-in Admission Controller는 필요에 따라서 Mutating Hook만 이용하는 Controller, Validating Hook만 이용하는 Controller, Mutating Hook과 Validating Hook을 모두 이용하는 Controller로 구분할 수 있다. Mutating Hook을 이용하는 Controller는 [MutationInterface](https://github.com/kubernetes/kubernetes/blob/v1.19.2/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L129)의 Admit() 함수를 구현해야 하며, Validating Hook을 이용하는 Controller는 [ValidationInterface](https://github.com/kubernetes/kubernetes/blob/f5743093fd1c663cb0cbc89748f730662345d44d/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L138)의 Validat() 함수를 구현해야 한다.
+Compiled-in Admission Controller는 Kubernetes API Server와 같이 Compile되어 존재하는 Admission Controller를 의미한다. Kubernetes API Server의 "--enable-admission-plugins" Option을 통해서 이용할 Compiled-in Admission Controller만 활성화 할 수 있다. Compiled-in Admission Controller는 필요에 따라서 Mutating Hook만 이용하는 Controller, Validating Hook만 이용하는 Controller, Mutating Hook과 Validating Hook을 모두 이용하는 Controller로 구분할 수 있다. Mutating Hook을 이용하는 Controller는 [MutationInterface](https://github.com/kubernetes/kubernetes/blob/v1.19.2/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L129)의 Admit() 함수를 구현해야 하며, Validating Hook을 이용하는 Controller는 [ValidationInterface](https://github.com/kubernetes/kubernetes/blob/f5743093fd1c663cb0cbc89748f730662345d44d/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L138)의 Validat() 함수를 구현해야 한다.
 
 DefaultIngressClass Admission Controller는 Mutating Hook만을 이용하는 Compiled-in Admission Controller이다. Mutating Hook은 Ingress Class가 설정되어 있지 않는 Ingress의 Ingress Class를 Default Ingress Class로 설정하는 용도로 이용한다. NamespaceExists Admission Controller는 Validating Hook만을 이용하는 Compiled-in Admission Controller이다. Validating Hook은 존재하지 않는 Namespace 관련 API 요청을 거절하는 용도로 이용한다. 
 
 ServiceAccount Admission Controller는 Mutating Hook과 Validating Hook을 둘다 이용하는 Compiled-in Admission Controller이다. Mutating Hook은 Service Account가 설정되어 있지 않는 Pod에 Default Service Account를 설정하고, 설정된 Service Account의 Token을 Pod 내부에서 얻을수 있도록 Pod에 Mount 설정을 추가하는 용도로 이용한다. Validating Hook은 Pod에 설정된 Service Account가 실제 유효한지 검사하는 용도로 이용한다. 이처럼 Kubernetes의 많은 기능들이 Compiled-in Admission Controller를 통해서 구현된다.
 
-#### 1.2. Custom Admission Controller Registration
+#### 1.2. Custom Admission Controller
+
+Custom Admission Controller는 Kubernetes API Server 외부에서 동작하는 Kubernetes User가 개발한 Admission Controller를 의미한다. Custom Admission Controller의 동작을 이해하기 위해서는 Compiled-in Admission Controller인 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 역활을 이해하고 있어야한다. 
+
+[그림 1]은 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 동작도 나타내고 있다. MutatingAdmissionWebhook Controller는 Mutating Hook을 이용하여 API 요청을 Custom Admission Controller의 Webhook에 전달한다. API 요청이 전달되어야 Custom Admission Controller 및 Webhook이 다수 존재한다면 API 요청을 하나씩 순차적으로 Custom Admission Controller에게 전달하고 응답을 대기하는 동작을 반복한다. ValidationAdmissionWebhook은 Validating Hook을 이용하여 API 요청을 Custom Admission Controller의 Webhook에 전달한다. API 요청이 전달되어야 Custom Admission Controller 및 Webhook이 다수 존재한다면 API 요청을 동시에 Custom Admission Controller에게 전달하고 응답을 대기하는 동작을 반복한다.
+
+Custom Admission Controller는 HA (High Availability)를 위해서 다수의 Pod에서 동작하며, Service를 통해서 묶여 있다. MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller은 Custom Admission Controller Pod의 Service를 통해서 API 요청을 전달한다.
 
 {% highlight yaml %}
 apiVersion: admissionregistration.k8s.io/v1
@@ -90,6 +96,10 @@ apiVersion: admissionregistration.k8s.io/v1
 <figure>
 <figcaption class="caption">[파일 2] ValidatingWebhookConfiguration</figcaption>
 </figure>
+
+Custom Admission Controller가 MutatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 MutatingAdmissionWebhook Controller에 등록해야 한다. MutatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 MutatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 1]은 MutatingWebhookConfiguration 파일을 나타내고 있다. 이와 유사하게 Custom Admission Controller가 ValidatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에 등록해야 한다. ValidatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 2]는 ValidatingWebhookConfiguration 파일을 나타내고 있다.
+
+MutatingWebhookConfiguration와 ValidatingWebhookConfiguration은 동일한 형태로 구성되어 있는걸 확인할 수 있다.
 
 {% highlight yaml %}
 {
