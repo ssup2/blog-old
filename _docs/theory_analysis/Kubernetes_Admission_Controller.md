@@ -17,17 +17,17 @@ Kubernetes Admission Controller는 Kubernetes API 처리 과정을 Hooking하여
 
 Admission Controller로 부터 거절 응답을 받은 Kubernetes API 서버는 해당 API 요청 처리를 중단한다. Admission Controller로 부터 승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 동일한 API 요청을 전달하고 응답을 기다린다. 변경&승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 변경된 API 요청을 전달하고 응답을 기다린다. 이런식으로 활성화된 모든 Admission Controller를 지나간 API 요청만이 etcd에 저장되어 반영된다.
 
-API 요청은 Mutating 단계에서 한번, Validating 단계에서 한번, 총 2번 Hooking된다. Mutating 단계의 Hooking은 의미 그대로 API 요청을 변경하는 용도로 이용하는 Hooking이다. 또한 필요에 따라서는 API 요청을 거절하여 처리를 중단할 수 있다. Validating 단계의 Hooking은 그대로 API 요청을 검증하는 용도로 이용하는 Hooking이다. API 요청을 거절하여 처리를 중단할 수만 있으며, Validating 단계의 Hooking처럼 API 요청을 변경할 수는 없다.
+API 요청은 Mutating 단계에서 한번, Validating 단계에서 한번, 총 2번 Hook이 존재한다. Mutating 단계의 Hook은 의미 그대로 API 요청을 변경하는 용도로 이용하는 Hook이다. 또한 필요에 따라서는 API 요청을 거절하여 처리를 중단할 수 있다. Validating 단계의 Hook은 그대로 API 요청을 검증하는 용도로 이용하는 Hook이다. API 요청을 거절하여 처리를 중단할 수만 있으며, Validating 단계의 Hook처럼 API 요청을 변경할 수는 없다.
 
 Admission Controller는 Kubernetes API Server와 같이 Compile된 **Compiled-in Admission Controller**와 Kubernetes User가 개발하여 Kubernetes API Server 외부에서 동작하는 **Custom Admission Controller** 2종류가 존재한다.
 
 #### 1.1. Compiled-in Admission Controller
 
-Kubernetes API Server에는 다양한 Compiled-in Admission Controller가 Kubernetes API Server에 포함되어 있으며 Kubernetes API Server의 "--enable-admission-plugins" Option을 통해서 이용할 Compiled-in Admission Controller만 활성화 할 수 있다. Compiled-in Admission Controller는 필요에 따라서 Mutating Hooking만 이용하는 Controller, Validating Hooking만 이용하는 Controller, Mutating Hooking과 Validating Hooking을 모두 이용하는 Controller로 구분할 수 있다.
+Kubernetes API Server에는 다양한 Compiled-in Admission Controller가 Kubernetes API Server에 포함되어 있으며 Kubernetes API Server의 "--enable-admission-plugins" Option을 통해서 이용할 Compiled-in Admission Controller만 활성화 할 수 있다. Compiled-in Admission Controller는 필요에 따라서 Mutating Hook만 이용하는 Controller, Validating Hook만 이용하는 Controller, Mutating Hook과 Validating Hook을 모두 이용하는 Controller로 구분할 수 있다. Mutating Hook을 이용하는 Controller는 MutationInterface[https://github.com/kubernetes/kubernetes/blob/v1.19.2/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L129]의 Admit() 함수를 구현해야 하며, Validating Hook을 이용하는 Controller는 ValidationInterface[https://github.com/kubernetes/kubernetes/blob/f5743093fd1c663cb0cbc89748f730662345d44d/staging/src/k8s.io/apiserver/pkg/admission/interfaces.go#L138]의 Validat() 함수를 구현해야 한다.
 
-DefaultIngressClass Admission Controller는 Mutating Hooking만을 이용하는 Compiled-in Admission Controller이다. Mutating Hooking은 Ingress Class가 설정되어 있지 않는 Ingress의 Ingress Class를 Default Ingress Class로 설정하는 용도로 이용한다. NamespaceExists Admission Controller는 Validating Hooking만을 이용하는 Compiled-in Admission Controller이다. Validating Hooking은 존재하지 않는 Namespace 관련 API 요청을 거절하는 용도로 이용한다.
+DefaultIngressClass Admission Controller는 Mutating Hook만을 이용하는 Compiled-in Admission Controller이다. Mutating Hook은 Ingress Class가 설정되어 있지 않는 Ingress의 Ingress Class를 Default Ingress Class로 설정하는 용도로 이용한다. NamespaceExists Admission Controller는 Validating Hook만을 이용하는 Compiled-in Admission Controller이다. Validating Hook은 존재하지 않는 Namespace 관련 API 요청을 거절하는 용도로 이용한다. 
 
-ServiceAccount Admission Controller는 Mutating Hooking과 Validating Hooking을 둘다 이용하는 Compiled-in Admission Controller이다. Mutating Hooking은 Service Account가 설정되어 있지 않는 Pod에 Default Service Account를 설정하고, 설정된 Service Account의 Token을 Pod 내부에서 얻을수 있도록 Pod에 Mount 설정을 추가하는 용도로 이용한다. Validating Hooking은 Pod에 설정된 Service Account가 실제 유효한지 검사하는 용도로 이용한다. 이처럼 Kubernetes의 많은 기능들이 Compiled-in Admission Controller를 통해서 구현된다.
+ServiceAccount Admission Controller는 Mutating Hook과 Validating Hook을 둘다 이용하는 Compiled-in Admission Controller이다. Mutating Hook은 Service Account가 설정되어 있지 않는 Pod에 Default Service Account를 설정하고, 설정된 Service Account의 Token을 Pod 내부에서 얻을수 있도록 Pod에 Mount 설정을 추가하는 용도로 이용한다. Validating Hook은 Pod에 설정된 Service Account가 실제 유효한지 검사하는 용도로 이용한다. 이처럼 Kubernetes의 많은 기능들이 Compiled-in Admission Controller를 통해서 구현된다.
 
 #### 1.2. Custom Admission Controller Registration
 
