@@ -35,7 +35,7 @@ Custom Admission Controller는 Kubernetes API Server 외부에서 동작하는 K
 
 [그림 1]은 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 동작도 나타내고 있다. MutatingAdmissionWebhook Controller는 Mutating Hook을 이용하여 API 요청을 Custom Admission Controller의 Webhook에 전달한다. API 요청이 전달되어야 Custom Admission Controller 및 Webhook이 다수 존재한다면 API 요청을 하나씩 순차적으로 Custom Admission Controller에게 전달하고 응답을 대기하는 동작을 반복한다. ValidationAdmissionWebhook은 Validating Hook을 이용하여 API 요청을 Custom Admission Controller의 Webhook에 전달한다. API 요청이 전달되어야 Custom Admission Controller 및 Webhook이 다수 존재한다면 API 요청을 동시에 Custom Admission Controller에게 전달하고 응답을 대기하는 동작을 반복한다.
 
-Custom Admission Controller는 HA (High Availability)를 위해서 다수의 Pod에서 동작하며, Service를 통해서 묶여 있다. MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller은 Custom Admission Controller Pod의 Service를 통해서 API 요청을 전달한다.
+Custom Admission Controller는 HA (High Availability)를 위해서 다수의 Pod에서 동작하며, Service를 통해서 묶여 있다. MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller은 Custom Admission Controller Pod의 Service를 통해서 API 요청을 전달한다. API 요청은 HTTP 형태로 Custom Admission Controller에게 전달된다.
 
 {% highlight yaml %}
 apiVersion: admissionregistration.k8s.io/v1
@@ -97,9 +97,11 @@ apiVersion: admissionregistration.k8s.io/v1
 <figcaption class="caption">[파일 2] ValidatingWebhookConfiguration</figcaption>
 </figure>
 
-Custom Admission Controller가 MutatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 MutatingAdmissionWebhook Controller에 등록해야 한다. MutatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 MutatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 1]은 MutatingWebhookConfiguration 파일을 나타내고 있다. 이와 유사하게 Custom Admission Controller가 ValidatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에 등록해야 한다. ValidatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 2]는 ValidatingWebhookConfiguration 파일을 나타내고 있다.
+Custom Admission Controller가 MutatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 MutatingAdmissionWebhook Controller에 등록해야 한다. MutatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 MutatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 1]은 MutatingWebhookConfiguration 파일을 나타내고 있다.
 
-MutatingWebhookConfiguration와 ValidatingWebhookConfiguration은 동일한 형태로 구성되어 있는걸 확인할 수 있다.
+이와 유사하게 Custom Admission Controller가 ValidatingAdmissionWebhook Controller로부터 API 요청을 전달받기 위해서는 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에 등록해야 한다. ValidatingWebhookConfiguration 파일을 통해서 Custom Admission Controller를 ValidatingAdmissionWebhook Controller에게 등록할 수 있다. [파일 2]는 ValidatingWebhookConfiguration 파일을 나타내고 있다.
+
+MutatingWebhookConfiguration와 ValidatingWebhookConfiguration은 동일한 형태로 구성되어 있는걸 확인할 수 있다. webhooks 항목을 통해서 다수의 Webhook을 한번에 등록할 수 있다. clientConfig 항목에는 Custom Admission Controller의 Webhook에 API 요청을 전달하기 위해 필요한 Service 정보, Path 정보, 인증서 정보가 포함되어 있다. [파일 1]에서는 Webhook은 default Namespace의 MutatingWebhook Service의 /Mutating Path에 존재한다. rules 항목은 어떤 API 요청만을 Custom Admission Controller에게 전송할지 설정하는 부분이다. [파일 1]에서는 v1 API Version의 Pod Create 관련 API 요청만 Custom Admission Controller에게 전송된다.
 
 {% highlight yaml %}
 {
