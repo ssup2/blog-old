@@ -20,7 +20,7 @@ Kibana Query Language (KQL)을 정리한다.
 
 #### 1.1 Terms Query
 
-* [Field]:[Value] : Field에 Value가 존재하는 Document만 출력한다.
+* <Field>:<Value> : Field에 Value가 존재하는 Document만 출력한다.
   * respose:200 : response Field에 200 Value가 존재하는 Document만 출력한다.
   * message:"ssup2" : message Field에 ssup2 문자열 Value가 존재하는 Document만 출력한다.
 
