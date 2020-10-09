@@ -63,7 +63,8 @@ Wildcard(*)를 이용하는 Query를 의미한다.
 
 Field 내부에 Field가 존재하는 Nested Field에 존재하는 쿼리를 의미한다.
 
-* \[Field1\]*:{\[Field2\]:\[Value\]} : Field1 내부의 Field2에 Value가 존재하는 Document만 출력한다. 
+* \[Field1\]:{\[Field2\]:\[Value\]} : Field1 내부의 Field2에 Value가 존재하는 Document만 출력한다.
+  * request:{response:200} : request Field 내부의 response Field에 200 Value가 존재하는 Document만 출력한다.
 
 ### 2. 참조
 
