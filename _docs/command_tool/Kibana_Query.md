@@ -45,7 +45,9 @@ not, and, or 논리 연산자를 이용하는 Query를 의미한다.
 
 #### 1.3. Range Query
 
->, >=, <, <= 비교 연산자를 이용하는 Query를 의미한다.
+\>, >=, <, <= 비교 연산자를 이용하는 Query를 의미한다.
+
+* * \[Field\]:\[Value\]\>Number : Field에 Number보다 작은 Value가 존재하는 Document만 출력한다.
 
 #### 1.4. Wildcard Query
 
