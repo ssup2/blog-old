@@ -26,6 +26,19 @@ Kibana Query Language (KQL)을 정리한다.
 
 #### 1.2. Boolean Query
 
+* not \[Field\]:\[Value\] : Field에 Value가 존재하지 않는 Document만 출력한다.
+  * not respose:200 : response Field에 200 Value가 존재하지 않는 Document만 출력한다.
+  * not message:"ssup2" : message Field에 ssup2 문자열 Value가 존재하지 않는 Document만 출력한다.
+
+* \[Field1\]:\[Value1\] and \[Field2\]:\[Value2\] : Field1에 Value1하고 Field2에 Value2가 존재하는 Document만 출력한다.
+  * respose:200 and message:"ssup2" : response Field에 200 Value가 존재하고 message Field에 ssup2 문자열 Value가 존재하는 Document만 출력한다.
+
+* \[Field1\]:\[Value1\] or \[Field2\]:\[Value2\] : Field1에 Value1하거나 Field2에 Value2가 존재하는 Document만 출력한다.
+  * respose:200 or message:"ssup2" : response Field에 200 Value가 존재하거나 message Field에 ssup2 문자열 Value가 존재하는 Document만 출력한다.
+
+* \[Field\]:(\[Value1\] or \[Value2\]) : Field에 Value1이 존재하거나 Value2가 존재하는 Document만 출력한다.
+  * response:(200 or 404) : response Field에 200 Value가 존재학거나 404 Value가 존재하는 Document만 출력한다.
+
 #### 1.3. Range Query
 
 #### 1.4. Exist Query
