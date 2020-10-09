@@ -20,15 +20,19 @@ Kibana Query Language (KQL)을 정리한다.
 
 #### 1.1 Terms Query
 
+Field와 Value가 정확히 일치하는 Document만 출력하는 Query를 의미한다.
+
 * \[Field\]:\[Value\] : Field에 Value가 존재하는 Document만 출력한다.
   * respose:200 : response Field에 200 Value가 존재하는 Document만 출력한다.
-  * message:"ssup2" : message Field에 ssup2 문자열 Value가 존재하는 Document만 출력한다.
+  * message:ssup2 : message Field에 "ssup2" 문자열 Value가 존재하는 Document만 출력한다.
+  * message:"ssup2 blog" : message Field에 "ssup2 blog" 문자열 Value가 존재하는 Document만 출력한다.
 
 #### 1.2. Boolean Query
 
+not, and, or 논리 연산자를 이용하는 Query를 의미한다.
+
 * not \[Field\]:\[Value\] : Field에 Value가 존재하지 않는 Document만 출력한다.
   * not respose:200 : response Field에 200 Value가 존재하지 않는 Document만 출력한다.
-  * not message:"ssup2" : message Field에 ssup2 문자열 Value가 존재하지 않는 Document만 출력한다.
 
 * \[Field1\]:\[Value1\] and \[Field2\]:\[Value2\] : Field1에 Value1하고 Field2에 Value2가 존재하는 Document만 출력한다.
   * respose:200 and message:"ssup2" : response Field에 200 Value가 존재하고 message Field에 ssup2 문자열 Value가 존재하는 Document만 출력한다.
@@ -41,11 +45,22 @@ Kibana Query Language (KQL)을 정리한다.
 
 #### 1.3. Range Query
 
-#### 1.4. Exist Query
+>, >=, <, <= 비교 연산자를 이용하는 Query를 의미한다.
 
-#### 1.5. Wildcard Query
+#### 1.4. Wildcard Query
 
-#### 1.6. Nested Field Query
+Wildcard(*)를 이용하는 Query를 의미한다.
+
+* \[Field\]:* : Field가 존재하는 Document만 출력한다.
+  * respose:* : response Field가 존재하는 Document만 출력한다.
+
+* \[Field\]:\[Value\]* : Field에 "Value" 문자열로 시작하는 Value가 존재하는 Document만 출력한다.
+  * message:ssup* : message Field에 "ssup" 문자열로 시작하는 Value가 존재하는 Document만 출력한다.
+
+* \[Field\]*:\[Value\] : "Field" 문자열로 시작하는 Field에 Value가 존재하는 Document만 출력한다.
+  * mess*:ssup2 : "mess" 문자열로 시작하는 Field에 "ssup2" 문자열 Value가 존재하는 Document만 출력한다.
+
+#### 1.5. Nested Field Query
 
 ### 2. 참조
 
