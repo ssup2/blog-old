@@ -48,13 +48,13 @@ struct task_struct{
 <figcaption class="caption">[파일 1] Audit Context</figcaption>
 </figure>
 
-Kernel이 Audit Log를 작성할때는 **Audit Context**를 이용한다. Audit Context는 Linux Kernel Code에 audit_context Sturcture로 존재하고 있으며, System Call 처리 분석 및 Audit Log 작성에 필요한 System Call Parameter, System Call Return Code, System Call Entry Time, Thread ID, Thread Working Directory등의 다양한 정보를 저장한다. 각 Thread마다 Audit Context가 유지 되야하기 때문에 각 Thread의 정보를 저장하는 task_struct Structure가 audit_context의 Pointer를 갖는다. 각각의 Audit Context는 Kernel에 의해서 System Call 처리전 System Call 및 Thread 정보로 초기화 되고, System Call이 끝나면 정리된다.
+Kernel이 Audit Log를 작성할때는 **Audit Context**를 이용한다. Audit Context는 Linux Kernel Code에 audit_context Structure로 존재하고 있으며, System Call 처리 분석 및 Audit Log 작성에 필요한 System Call Parameter, System Call Return Code, System Call Entry Time, Thread ID, Thread Working Directory등의 다양한 정보를 저장한다. 각 Thread마다 Audit Context가 유지 되야하기 때문에 각 Thread의 정보를 저장하는 task_struct Structure가 audit_context의 Pointer를 갖는다. 각각의 Audit Context는 Kernel에 의해서 System Call 처리전 System Call 및 Thread 정보로 초기화 되고, System Call이 끝나면 정리된다.
 
 kauditd는 Kernel Process로 Queue에 저장된 Audit Log들을 모아서 auditd에게 Audit Event로 전달하는 역할을 수행한다. 또한 auditctl을 통해 Audit Rule 관련 명령을 전달 받아 Audit을 설정한다. kauditd는 netlink(NETLINK_AUDIT Option)를 이용하여 auditd와 auditctl과 통신한다. kauditd는 auditd와의 netlink Connection을 직접 관리하며 오직 하나의 auditd와 Connection을 맺는다. 즉 여러개의 auditd가 동작하여도 하나의 auditd에게만 Audit Event를 전달한다.
 
 #### 1.2. User Level   
 
-Audit 관련 여러개의 User Level Tool/Process가 존재한다. auditd는 kauditd로부터 받은 Audit Event를 audit.log파일에 기록하고 audispd에게 전달한다. auditctl은 kauditd와 통신하여 Audit Rule 추가/삭제 같은 Audit 제어에 이용된다. aureport는 audit.log 파일을 기반으로 지금까지 발생한 Audit Event 요약 정보를 보여준다. ausearch는 audit.log 파일을 기반으로 특정 Audit Event를 검색하여 보여준다.
+Audit과 관련된 여러개의 User Level Tool/Process가 존재한다. auditd는 kauditd로부터 받은 Audit Event를 audit.log파일에 기록하고 audispd에게 전달한다. auditctl은 kauditd와 통신하여 Audit Rule 추가/삭제 같은 Audit 제어에 이용된다. aureport는 audit.log 파일을 기반으로 지금까지 발생한 Audit Event 요약 정보를 보여준다. ausearch는 audit.log 파일을 기반으로 특정 Audit Event를 검색하여 보여준다.
 
 **audispd**는 auditd의 Child Process로써 auditd로부터 전달 받은 Audit Event를 audispd의 Child Process인 **audisp Plugin** Process들에게 Multiplexing한다. audisp Plugin은 audispd에게 Audit Event를 받는 Binary/Process를 의미한다. audispd는 기본적으로 af_unix Plugin과 syslog Plugin을 이용하지만 별도의 Plugin을 제작할 수도 있다. af_unix Plugin은 Unix Socket 파일을 생성하고 생성한 Unix Socket 파일로 audispd에게 받은 Audit Event를 전달한다. syslog Plugin은 Audit Event를 syslogd에게 전달하여 syslogd가 Audit Event를 Logging 할 수 있도록 만든다. 이 밖의 다양한 User Level Tool/Process들과 audisp plugin들이 존재한다.
 
