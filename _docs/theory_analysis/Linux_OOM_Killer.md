@@ -52,6 +52,7 @@ Memory 사용량 뿐만 아니라 Badness Score에 영향을 주는 요소가 �
 * 낮은 nice 값을 갖는 Process
 
 {% highlight console %}
+# Badness Score 감소
 (node)# cat /proc/2449/oom_score
 76
 (node)# echo -50 > /proc/2449/oom_score_adj
@@ -61,6 +62,7 @@ Memory 사용량 뿐만 아니라 Badness Score에 영향을 주는 요소가 �
 (node)# cat /proc/2449/oom_score
 0
 
+# Badness Score 증가
 (node)# cat /proc/2478/oom_score
 152
 (node)# echo 500 > /proc/2478/oom_score_adj
@@ -74,7 +76,33 @@ Memory 사용량 뿐만 아니라 Badness Score에 영향을 주는 요소가 �
 <figcaption class="caption">[Shell 2] Badness Score 조정</figcaption>
 </figure>
 
-Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의 Badness Score를 조정하기 위해서는 **"/proc/[PID]/oom_score_adj"** 파일에 조정값을 적으면 된다. [Shell 2]는 Badness Score를 조정하는 과정을 알 수 있다.
+Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의 Badness Score를 조정하기 위해서는 **"/proc/[PID]/oom_score_adj"** 파일에 조정값을 적으면 된다. [Shell 2]는 Badness Score를 조정하는 과정을 나타내고 있다. Badness Score를 감소시키기 위해서는 "/proc/[PID]/oom_score_adj" 파일에 감소시키고 싶은 만큼 음수를 쓰면 된다. [Shell 2]의 Badness Score 감소 예제에서 처음에는 Badness Score가 76이었지만, "/proc/[PID]/oom_score_adj" 파일에 쓴 음수만큼 감소하는 것을 확인할 수 있다. Badness Score의 최소값은 0이기 때문에 0이하로는 내려가지 않는것도 확인할 수 있다.
+
+반대로 Badness Score를 증가시키기 위해서는 "/proc/[PID]/oom_score_adj" 파일에 증가시키고 싶은 만큼 양수를 쓰면 된다. [Shell 2]의 Badness Score 증가 예제에서 처음에는 Bandness Score가 152이었지만, /proc/[PID]/oom_score_adj" 파일에 쓴 양수만큼 증가하는 것을 확인할 수 있다.
+
+{: .newline }
+> Final Badness Score = Original Badness Score + Adjust Score
+> Original Badness Score (Value >= 0 && Value <= 1000) 
+> Adjust Score (Value >= -1000 && Value <= 1000)
+> Final Badness Score (Value >= 0 && <= 2000) <br/>
+<figure>
+<figcaption class="caption">[공식 1] Badness Score 공식</figcaption>
+</figure>
+
+{% highlight console %}
+# System Out of Memory
+[ 2826.282883] Out of memory: Kill process 4070 (stress) score 972 or sacrifice child
+[ 2826.289059] Killed process 4070 (stress) total-vm:8192780kB, anon-rss:7231748kB, file-rss:0kB, shmem-rss:0kB
+[ 2826.635944] oom_reaper: reaped process 4070 (stress), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+
+# Cgroup Out of Memory
+[ 1869.151779] Memory cgroup out of memory: Kill process 27881 (stress) score 1100 or sacrifice child
+[ 1869.155654] Killed process 27881 (stress) total-vm:8192780kB, anon-rss:7152284kB, file-rss:4kB, shmem-rss:0kB
+[ 1869.434078] oom_reaper: reaped process 27881 (stress), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] OOM Killer Log</figcaption>
+</figure>
 
 ### 2. 참조
 
