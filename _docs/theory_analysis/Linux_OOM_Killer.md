@@ -89,7 +89,7 @@ Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의
 <figcaption class="caption">[공식 1] Badness Score 공식</figcaption>
 </figure>
 
-[공식 1]은 Badness Score를 구하는 과정을 나타내고 있다. 조정전 Badness Score는 최소 0부터 최대 1000의 값을 가질 수 있다. 조정값은 -1000에서 1000의 값을 가질 수 있다. 따라서 최종 Badness Score는 최대 2000까지 갖을수 있으며, 최소값은 정책상 0의 값을 가질 수 있다. 최종 Badness Score가 0이면 OOM Killer의 제거 대상에서 제외된다. 조정값을 -1000으로 설정하면 최종 Bandess Score는 반드시 0이기 때문에, OOM Killer의 제거 대상에서 제외된다. 최종 조정값이 1000이상인 경우, OOM 발생시 반드시 OOM Killer에 의해서 제거된다.
+[공식 1]은 Badness Score를 구하는 과정을 나타내고 있다. 조정전 Badness Score는 최소 0부터 최대 1000의 값을 가질 수 있다. 조정값은 -1000에서 1000의 값을 가질 수 있다. 따라서 최종 Badness Score는 최대 2000까지 갖을수 있으며, 최소값은 정책상 0의 값을 가질 수 있다. **최종 Badness Score가 0이면 OOM Killer의 제거 대상에서 제외된다. 조정값을 -1000으로 설정하면 최종 Bandess Score는 반드시 0이기 때문에, OOM Killer의 제거 대상에서 제외된다. 최종 조정값이 1000이상인 경우, OOM 발생시 반드시 OOM Killer에 의해서 제거된다.**
 
 {% highlight console %}
 # System Out of Memory
