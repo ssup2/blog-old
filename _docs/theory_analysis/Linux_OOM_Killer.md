@@ -82,9 +82,9 @@ Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의
 
 {: .newline }
 > Final Badness Score = Original Badness Score + Adjust Score
-> Original Badness Score : Value >= 0 && Value <= 1000
-> Adjust Score : Value >= -1000 && Value <= 1000
-> Final Badness Score : Value >= 0 && <= 2000 <br/>
+> Original Badness Score : 0 <= Value <= 1000
+> Adjust Score : 0 <= Value <= 1000
+> Final Badness Score : 0 <= Value <= 2000 <br/>
 <figure>
 <figcaption class="caption">[공식 1] Badness Score 공식</figcaption>
 </figure>
