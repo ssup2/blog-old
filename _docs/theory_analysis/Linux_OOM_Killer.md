@@ -82,26 +82,37 @@ Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의
 
 {: .newline }
 > Final Badness Score = Original Badness Score + Adjust Score
-> Original Badness Score (Value >= 0 && Value <= 1000) 
-> Adjust Score (Value >= -1000 && Value <= 1000)
-> Final Badness Score (Value >= 0 && <= 2000) <br/>
+> Original Badness Score : Value >= 0 && Value <= 1000
+> Adjust Score : Value >= -1000 && Value <= 1000
+> Final Badness Score : Value >= 0 && <= 2000 <br/>
 <figure>
 <figcaption class="caption">[공식 1] Badness Score 공식</figcaption>
 </figure>
+
+[공식 1]은 Badness Score를 구하는 과정을 나타내고 있다.
 
 {% highlight console %}
 # System Out of Memory
 [ 2826.282883] Out of memory: Kill process 4070 (stress) score 972 or sacrifice child
 [ 2826.289059] Killed process 4070 (stress) total-vm:8192780kB, anon-rss:7231748kB, file-rss:0kB, shmem-rss:0kB
 [ 2826.635944] oom_reaper: reaped process 4070 (stress), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 3] OOM Killer Log</figcaption>
+</figure>
 
+OOM Killer가 Process를 죽일경우, 죽인 Process의 정보는 Kernel Log에 기록된다. Kernel Log는 "dmesg" 명령어 또는 "/var/log/syslog" 파일에서 확인할 수있다. [Shell 3]은 OOM Killer의 Log를 나타내고 있다.
+
+#### 1.1. with Cgroup
+
+{% highlight console %}
 # Cgroup Out of Memory
 [ 1869.151779] Memory cgroup out of memory: Kill process 27881 (stress) score 1100 or sacrifice child
 [ 1869.155654] Killed process 27881 (stress) total-vm:8192780kB, anon-rss:7152284kB, file-rss:4kB, shmem-rss:0kB
 [ 1869.434078] oom_reaper: reaped process 27881 (stress), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] OOM Killer Log</figcaption>
+<figcaption class="caption">[Shell 4] OOM Killer Log</figcaption>
 </figure>
 
 ### 2. 참조
