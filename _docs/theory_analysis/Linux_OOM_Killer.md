@@ -13,7 +13,7 @@ Linux의 OOM (Out of Memory) Killer를 분석한다.
 
 Linux는 실제 물리 Memory보다 많은 양의 가상 Memory 공간을 생성하고 Process에게 할당 한다. 이러한 Memory 관리 정책을 Memory Overcommit이라고 명칭한다. 따라서 다수의 Process가 동시에 많은양의 Memory를 이용할 경우, 물리 Memory 공간이 부족현상이 발생할 수 있다. Linux의 Swap 기법은 물리 Memory 공간 부족시 Disk의 일부 영역을 Memory 처럼 활용하는 기법이다. 하지만 Swap 기법에 이용되는 Disk 영역인 Swap Space도 가득 찬다면, Linux는 더이상 Memory를 할당할 수 없게된다. **이럴때 Linux는 OOM (Out of Memory) Killer를 이용하여 기존의 동작중인 Process를 강제로 죽여 Memory를 확보하게 된다.**
 
-{% highlight Console %}
+{% highlight console %}
 # stress 명령어를 이용하여 512MB, 1024MB를 이용하는 Child Process생성
 (node)# stress --vm 1 --vm-bytes 512M --vm-hang 0 &
 [1] 2447
