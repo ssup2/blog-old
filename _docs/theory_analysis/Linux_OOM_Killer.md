@@ -51,7 +51,7 @@ Memory 사용량 뿐만 아니라 Badness Score에 영향을 주는 요소가 �
 * 많은 Child Process를 생성한 Process
 * 낮은 nice 값을 갖는 Process
 
-{% highlight Console %}
+{% highlight console %}
 # Badness Score 감소
 (node)# cat /proc/2449/oom_score
 76
@@ -91,7 +91,7 @@ Process의 Badness Score는 System 관리자가 조정할 수 있다. Process의
 
 [공식 1]은 Badness Score를 구하는 과정을 나타내고 있다. 조정전 Badness Score는 최소 0부터 최대 1000의 값을 가질 수 있다. 조정값은 -1000에서 1000의 값을 가질 수 있다. 따라서 최종 Badness Score는 최대 2000까지 갖을수 있으며, 최소값은 정책상 0의 값을 가질 수 있다. **최종 Badness Score가 0이면 OOM Killer의 제거 대상에서 제외된다. 조정값을 -1000으로 설정하면 최종 Bandess Score는 반드시 0이기 때문에, OOM Killer의 제거 대상에서 제외된다. 최종 조정값이 1000이상인 경우, OOM 발생시 반드시 OOM Killer에 의해서 제거된다.**
 
-{% highlight Console %}
+{% highlight console %}
 # System Out of Memory
 [ 2826.282883] Out of memory: Kill process 4070 (stress) score 972 or sacrifice child
 [ 2826.289059] Killed process 4070 (stress) total-vm:8192780kB, anon-rss:7231748kB, file-rss:0kB, shmem-rss:0kB
@@ -107,7 +107,7 @@ OOM Killer가 Process를 죽일경우, 죽인 Process의 정보는 Kernel Log에
 
 Cgroup은 다수의 Process가 소속되어 있는 Process Group의 Resource 사용량을 제한하고 Monitoring하는 Linux의 기능이다. 주로 Container Process들의 Resource 사용량을 제한하기 위한 용도로 많이 이용되고 있다. Cgroup을 통해서 Process Group의 Memory 사용량을 제한할 수 있다. Cgroup에 소속되어 있는 Process Group의 총 Memory 사용량이 Cgroup의 허용된 Memory 용량보다 높은 경우, OOM Killer는 해당 Process Group에서 가장 많은 Memory 용량을 이용하고 있는 (Badness Score가 높은) Process부터 죽여서 Memory를 확보한다.
 
-{% highlight Console %}
+{% highlight console %}
 # Cgroup Out of Memory
 [ 1869.151779] Memory cgroup out of memory: Kill process 27881 (stress) score 1100 or sacrifice child
 [ 1869.155654] Killed process 27881 (stress) total-vm:8192780kB, anon-rss:7152284kB, file-rss:4kB, shmem-rss:0kB
