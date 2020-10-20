@@ -105,6 +105,8 @@ OOM Killer가 Process를 죽일경우, 죽인 Process의 정보는 Kernel Log에
 
 #### 1.1. with Cgroup
 
+Cgroup은 다수의 Process가 소속되어 있는 Process Group의 Resource 사용량을 제한하고 Monitoring하는 Linux의 기능이다. 주로 Container Process들의 Resource 사용량을 제한하기 위한 용도로 많이 이용되고 있다. Cgroup을 통해서 Process Group의 Memory 사용량을 제한할 수 있다. Cgroup에 소속되어 있는 Process Group의 총 Memory 사용량이 Cgroup의 허용된 Memory 용량보다 높은 경우, OOM Killer는 해당 Process Group에서 가장 많은 Memory 용량을 이용하고 있는 (Badness Score가 높은) Process부터 죽여서 Memory를 확보한다.
+
 {% highlight console %}
 # Cgroup Out of Memory
 [ 1869.151779] Memory cgroup out of memory: Kill process 27881 (stress) score 1100 or sacrifice child
@@ -115,9 +117,13 @@ OOM Killer가 Process를 죽일경우, 죽인 Process의 정보는 Kernel Log에
 <figcaption class="caption">[Shell 4] OOM Killer Log</figcaption>
 </figure>
 
+[Shell 4]는 Cgroup에 소속되어 있는 Process가 Cgroup의 허용된 Memory 사용량보다 많은 Memory를 이용하여 OOM Killer가 Process를 죽일 경우 발생하는 Kernel Log를 나타내고 있다. Kernel Log에서 OOM Killer가 Cgroup의 Memory 제한 설정 때문에 Process를 죽였다는걸 확인할 수 있다. Cgroup 단위로 OOM Killer를 적용하지 않도록 설정할 수도 있다. Cgroup v2를 이용할 수 있는 Linux Kernel Version부터는 Cgroup을 인지하는 OOM Killer를 이용할 수 있다. Cgroup을 인지하는 OOM Killer는 총 Memory 사용량이 가장 높은 Process Group 찾아내고, Process Group의 모든 Process를 죽일수 있다.
+
 ### 2. 참조
 
 * [https://man7.org/linux/man-pages/man5/proc.5.html](https://man7.org/linux/man-pages/man5/proc.5.html)
+* [https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt](https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt)
 * [https://lwn.net/Articles/761118/](https://lwn.net/Articles/761118/)
 * [https://lwn.net/Articles/317814/](https://lwn.net/Articles/317814/)
 * [https://dev.to/rrampage/surviving-the-linux-oom-killer-2ki9](https://dev.to/rrampage/surviving-the-linux-oom-killer-2ki9)
+* [https://www.scrivano.org/posts/2020-08-14-oom-group/](https://www.scrivano.org/posts/2020-08-14-oom-group/)
