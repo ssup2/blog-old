@@ -21,7 +21,7 @@ Linux에서는 iptables 명령어를 통해서 Packet을 외부로 전송시, Pa
 
 하지만 **Kernel Bug로 인해서 동시에 TCP SYN Packet을 전송할 경우, 각 TCP SYN Packet은 동일한 Src Port 번호로 변경** 될 수 있다. 동일한 Src Port 번호로 SNAT된 TCP SYN Packet들 중에서 가장 먼저 처리되는 TCP SYN Packet을 제외한 나머지 TCP SYN Packet은 Linux conntrack의 중복 Connection 방지 Logic에 의해서 Drop된다.
 
-현재까지 관련 본 이슈 관련 Kernel Bug는 완전히 해결하지 못한 상태이다. 따라서 현재는 Masquerade 기법으로 인해서 할당되는 Src Port 번호가 최대한 중복되지 않도록 설정하는 방법밖에 없다. Masquerade 기법으로 인해서 할당되는 Src Port 번호는 NF_NAT_RANGE_PROTO_RANDOM 방법과 NF_NAT_RANGE_PROTO_RANDOM_FULLY 방법 2가지가 존재한다.
+현재까지 본 이슈 관련 Kernel Bug는 해결하지 못한 상태이다. 따라서 현재는 Masquerade 기법으로 인해서 할당되는 Src Port 번호가 최대한 중복되지 않도록 설정하는 방법밖에 없다. Masquerade 기법으로 인해서 할당되는 Src Port 번호는 NF_NAT_RANGE_PROTO_RANDOM 방법과 NF_NAT_RANGE_PROTO_RANDOM_FULLY 방법 2가지가 존재한다.
 
 ### 3. with Kubernetes
 
