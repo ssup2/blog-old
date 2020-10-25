@@ -53,7 +53,7 @@ Chain KUBE-POSTROUTING (1 references)
 <figcaption class="caption">[Shell 2] --random-fully Option이 적용 되어있는 않는 KUBE-POSTROUTING Chain</figcaption>
 </figure>
 
-Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptables 명령어가 "--random-fully" Option을 지원하면 KUBE-POSTROUTING Chain의 Masquerade Rule에  "--random-fully" Option을 적용한다. [Shell 1]은 "--random-fully" Option이 적용되어 있지 않는 KUBE-POSTROUTING Chain을 나타내고, [Shell 2]는 "--random-fully" Option이 적용되어 있는 Chain을 나타낸다.
+Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptables 명령어가 "--random-fully" Option을 지원하면 KUBE-POSTROUTING Chain의 Masquerade Rule에 "--random-fully" Option을 적용한다. [Shell 1]은 "--random-fully" Option이 적용되어 있지 않는 KUBE-POSTROUTING Chain을 나타내고, [Shell 2]는 "--random-fully" Option이 적용되어 있는 Chain을 나타낸다. 또한 일부 CNI Plugin은 "--random-fully" Option이 설정되어있는 Masquerade Rule을 추가하여 본 Issue를 해결하고 있다. Flannel, Cilium CNI는 "--random-fully" Option을 지원하고 있다.
 
 ### 4. 참조
 
@@ -62,3 +62,5 @@ Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptable
 * [https://manpages.debian.org/unstable/iptables/iptables-extensions.8.en.html](https://manpages.debian.org/unstable/iptables/iptables-extensions.8.en.html)
 * [https://patchwork.ozlabs.org/project/netfilter-devel/patch/1388963586-5049-7-git-send-email-pablo@netfilter.org/](https://patchwork.ozlabs.org/project/netfilter-devel/patch/1388963586-5049-7-git-send-email-pablo@netfilter.org/)
 * [https://lwn.net/Articles/746343/](https://lwn.net/Articles/746343/)
+* [https://github.com/coreos/flannel/commit/0d7b99460b81f98df43da183258edf56c4abf854](https://github.com/coreos/flannel/commit/0d7b99460b81f98df43da183258edf56c4abf854)
+* [https://github.com/cilium/cilium/commit/4e39def13bca568a21087238877fbc60f8751567](https://github.com/cilium/cilium/commit/4e39def13bca568a21087238877fbc60f8751567)
