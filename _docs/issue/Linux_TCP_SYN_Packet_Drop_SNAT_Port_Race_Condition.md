@@ -29,9 +29,36 @@ NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm을 Masquerade 기법에 적용하기 �
 
 ### 3. with Kubernetes
 
+{% highlight console %}
+# iptables -t nat -nvL
+...
+Chain KUBE-POSTROUTING (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service traffic requiring SNAT */ mark match 0x4000/0x4000
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 1] --random-fully Option이 적용 되어있지 않는 KUBE-POSTROUTING Chain</figcaption>
+</figure>
+
+{% highlight console %}
+# iptables -t nat -nvL
+...
+Chain KUBE-POSTROUTING (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service traffic requiring SNAT */ mark match 0x4000/0x4000 random-fully
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] --random-fully Option이 적용 되어있는 않는 KUBE-POSTROUTING Chain</figcaption>
+</figure>
+
+Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptables 명령어가 "--random-fully" Option을 지원하면 KUBE-POSTROUTING Chain의 Masquerade Rule에  "--random-fully" Option을 적용한다. [Shell 1]은 "--random-fully" Option이 적용되어 있지 않는 KUBE-POSTROUTING Chain을 나타내고, [Shell 2]는 "--random-fully" Option이 적용되어 있는 Chain을 나타낸다.
+
 ### 4. 참조
 
 * [https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02](https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02)
 * [https://github.com/kubernetes/kubernetes/pull/78547](https://github.com/kubernetes/kubernetes/pull/78547)
 * [https://manpages.debian.org/unstable/iptables/iptables-extensions.8.en.html](https://manpages.debian.org/unstable/iptables/iptables-extensions.8.en.html)
 * [https://patchwork.ozlabs.org/project/netfilter-devel/patch/1388963586-5049-7-git-send-email-pablo@netfilter.org/](https://patchwork.ozlabs.org/project/netfilter-devel/patch/1388963586-5049-7-git-send-email-pablo@netfilter.org/)
+* [https://lwn.net/Articles/746343/](https://lwn.net/Articles/746343/)
