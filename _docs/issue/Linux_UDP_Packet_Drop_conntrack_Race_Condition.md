@@ -69,6 +69,7 @@ Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데,
 ### 5. 참조
 
 * [https://www.weave.works/blog/racy-conntrack-and-dns-lookup-timeouts](https://www.weave.works/blog/racy-conntrack-and-dns-lookup-timeouts)
+* [https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/](https://blog.quentin-machu.fr/2018/06/24/5-15s-dns-lookups-on-kubernetes/)
 * [https://github.com/kubernetes/kubernetes/issues/56903](https://github.com/kubernetes/kubernetes/issues/56903)
 * [https://github.com/weaveworks/weave/issues/3287](https://github.com/weaveworks/weave/issues/3287)
 * [http://patchwork.ozlabs.org/patch/937963](http://patchwork.ozlabs.org/patch/937963)
