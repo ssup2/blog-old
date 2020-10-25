@@ -1,5 +1,5 @@
 ---
-title: Linux TCP SYN packet drop with SNAT Port Race Condition
+title: Linux TCP SYN Packet Drop with SNAT Port Race Condition
 category: Issue
 date: 2020-10-25T12:00:00Z
 lastmod: 2020-10-25T12:00:00Z
