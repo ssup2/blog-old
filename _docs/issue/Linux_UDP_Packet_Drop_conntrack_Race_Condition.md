@@ -35,12 +35,15 @@ UDP의 Connection 정보가 conntrack에 저장되는 시점은 실제 UDP Packe
 
 한가지 더 고려해야할 부분은 App에서 동일한 상대를 대상으로 다수의 UDP Packet을 동시에 전송하였더라도, App이 구동되는 Node에서 Kernel의 DNAT Rule에 의해서 실제로는 서로 다른 곳으로 Packet이 전송될 경우이다. DNAT Rule은 conntrack의 Reply Table에 저장될 Connection 정보에 영향을 주지만, conntrack의 Original Table에 저장될 Connection 정보에는 영향을 주지 않는다. 따라서 conntrack은 Original Table에서 충돌을 감시하고 일부 UDP Packet을 Drop한다.
 
-DNAT를 수행하지 않을 경우에 발생하는 Issue는 다음의 2가지의 Kernel Patch로 인해서 해결되었다.
+DNAT를 수행하지 않을 경우 또는 DNAT를 수행하였지만 동일한 곳으로 Packet을 전송하는 경우에 발생하는 UDP Packet Drop Issue는 아래의 Kernel Patch로 인해서 해결되었다.
 
 * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed07d9a021df6da53456663a76999189badc432a](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed07d9a021df6da53456663a76999189badc432a)
+
+DNAT를 수행하여 서로 다른 곳으로 Packet이 전송하는 경우 발생하는 경우에 발생하는 UDP Packet Drop Issue는 아래의 Kernel Patch로 인해서 일부 해결되었다. 하지만 완전히 해결된 상태는 아니다.
+
 * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e35c1cb9460240e983a01745b5f29fe3a4d8e39](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e35c1cb9460240e983a01745b5f29fe3a4d8e39)
 
-위의 Kernel Patch가 적용된 Version은 다음과 같다.
+위의 두 Kernel Patch가 적용된 Version은 다음과 같다.
 
 * Linux Stable 
   * 5.0+
@@ -49,7 +52,7 @@ DNAT를 수행하지 않을 경우에 발생하는 Issue는 다음의 2가지의
 * Distro Linux Kernel
   * Ubuntu : 4.15.0-56+
 
-UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발생하는 Issue는 아직 Kernel에서 해결하지 못한 상태이다. 따라서 App 내부에서 하나의 Socket을 통해서 동시에 UDP Packet을 전송하지 못하도록 제한하여 conntrack Race Condition을 방지하거나, 위의 Kernel Patch가 적용된 상태에서 UDP Packet이 DNAT 되어 전송되어도 서로 다른 상대가 아닌 동일한 상대한테 전송되도록 Kernel의 DNAT Rule을 설정하여 본 Issue를 우회해야 한다. 또는 iptables의 mangle Table을 활용하여 특정 IP, Port 대상으로 전송되는 Packet은 conntrack을 통해서 Connection 정보가 관리되지 않도록 설정하여 conntrack Race Condition을 방지할 수도 있다.
+UDP Packet이 DNAT 되어 서로 다른 상대에게 전송되는 경우에 발생하는 Issue는 아직 완전히 Kernel에서 해결하지 못한 상태이다. 따라서 App 내부에서 하나의 Socket을 통해서 동시에 UDP Packet을 전송하지 못하도록 제한하여 conntrack Race Condition을 방지하거나, 위의 Kernel Patch가 적용된 상태에서 UDP Packet이 DNAT 되어 전송되어도 서로 다른 상대가 아닌 동일한 상대한테 전송되도록 Kernel의 DNAT Rule을 설정하여 본 Issue를 우회해야 한다. 또는 iptables의 mangle Table을 활용하여 특정 IP, Port 대상으로 전송되는 Packet은 conntrack을 통해서 Connection 정보가 관리되지 않도록 설정하여 conntrack Race Condition을 방지할 수도 있다.
 
 ### 4. DNS Timeout Issue with Kubernetes
  
