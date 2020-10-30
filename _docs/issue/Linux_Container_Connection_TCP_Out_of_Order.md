@@ -19,7 +19,7 @@ Client와 Server가 TCP Connection을 맺고 TCP Connection을 맺고 통신을 
 
 Client가 Server로부터 Sequence Number 100번 Packet의 ACK를 받았다는 의미는 TCP Protocol에 의해서 Server가 Sequence Number 90번 Packet도 잘 수신했다는 의미도 포함하고 있다. 따라서 Client가 늦게 수신한 Sequence Number 90번 Packet의 ACK는 TCP의 Spurious Retranmission 기법으로 인해서 재전송된 Packet으로 간주하고 Kernel에 의해서 무시된다.
 
-Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 Server와 TCP Connection을 맺는 경우, Server가 Client에게 전송하는 Packet은 DNAT되어 Client에게 전송되야 한다. 문제는 이 경우 Server가 전송한 ACK에게 Out of Order 현상이 발생하면, 해당 ACK는 Linux의 conntrack Module에 의해서 Invalid Packet으로 분류된다. conntrack에 의해서 Invalid 상태가된 ACK는 DNAT되지 않기 때문에 Container가 아닌 Host로 전달된다. ACK를 받은 Host는 Host가 모르는 Connection으로부터 Packet을 수신하기 때문에 TCP Reset Flag를 통해서 Server와의 Connection을 강제로 종료한다.
+Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 Server와 TCP Connection을 맺는 경우, Server가 Client에게 전송하는 Packet은 DNAT되어 Client에게 전송되야 한다. 문제는 이 경우 Server가 전송한 ACK에게 Out of Order 현상이 발생하면, 해당 ACK는 Linux의 conntrack Module의 Bug로 인해서 Invalid Packet으로 분류된다. conntrack에 의해서 Invalid 상태가된 ACK는 DNAT되지 않기 때문에 Container가 아닌 Host로 전달된다. ACK를 받은 Host는 Host가 모르는 Connection으로부터 Packet을 수신하기 때문에 TCP Reset Flag를 통해서 Server와의 Connection을 강제로 종료한다.
 
 {% highlight console linenos %}
 ...
