@@ -11,7 +11,7 @@ adsense: true
 
 TCP Connection을 맺기 위해서 TCP SYN Packet을 SNAT하여 전송시, SNAT를 진행하면서 TCP SYN Packet에 설정되는 Src Port 번호를 선택하는 과정에서 발생하는 Race Condition에 의해서 TCP SYN Packet이 Drop 되는 Issue가 존재한다. TCP SYN Packet이 Drop되면 TCP Connection이 최소 1초 이상 지연되어 맺어지게 되어, Client는 Timeout을 경험할 수 있다.
 
-대부분의 Docker Container 내부에서 Docker Host 외부의 Server와 TCP Connection을 맺는 경우, Docker Container가 전송한 TCP SYN Packet은 Docker Host에서 SNAT 되어 외부로 전송되기 때문에 본 Issue로 인해서 TCP SYN Packet이 Drop 될 수 있다. 이와 유사하게 대부분의 Kubernetes Pod의 Container 내부에서 Kubernetes Cluster 외부의 Server와 TCP Connection을 맺는 경우, Kubernetes Pod의 Container가 전송한 TCP SYN Packet은 SNAT 되어 외부로 전송되기 때문에 본 Issue로 인해서 TCP SYN Packet이 Drop 될 수 있다.
+대부분의 Docker Container 내부에서 Docker Host 외부의 Server와 TCP Connection을 맺는 경우, Docker Container가 전송한 TCP SYN Packet은 Docker Host에서 SNAT 되어 외부로 전송되기 때문에 본 Issue가 발생할 수 있다. 이와 유사하게 대부분의 Kubernetes Pod의 Container 내부에서 Kubernetes Cluster 외부의 Server와 TCP Connection을 맺는 경우, Kubernetes Pod의 Container가 전송한 TCP SYN Packet은 SNAT 되어 외부로 전송되기 때문에 본 Issue가 발생할 수 있다.
 
 ### 2. 원인, 해결 방안
 
