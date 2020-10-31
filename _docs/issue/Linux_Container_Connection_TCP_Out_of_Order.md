@@ -95,7 +95,7 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 
 첫번째 방법은 Conntrack이 Invalid한 Packet이라고 판단하더라도, 실제로 Invalid 상태로 변경하지 않도록 만든다. 따라서 Server가 Client에게 전송한 Packet이 DNAT되지 않아 Host에게 전달되어 Connection Reset 발생을 막을 수 있다. Container뿐만 아니라 System 전체에 영향을 준다. Kubernetes에 적용시 conntrack의 Connection Table을 가득체워 System 전체의 Connection에 영향을 준다는 [Feedback](https://github.com/kubernetes/kubernetes/pull/74840#issuecomment-491674987)이 존재한다.
 
-* Invalid 상태의 Packet을 Drop
+* Invalid 상태의 Packet을 Drop하는 iptables Rule 추가
 
 두번째 방법은 Invalid 상태의 Packet을 Drop하는 방법이다. Docker Container의 경우에는 `iptables -I INPUT -m conntrack --ctstate INVALID -j DROP` 명령어 수행을 통해서 iptable Rule을 설정하여 Invalid 상태의 Packet을 Drop 시킬수 있다. 앞의 iptables Rule을 적용하면, [Shell 1]의 경우 7번째 줄에서는 Sequence Number 10110467번 Packet의 ACK가 Drop되기 때문에 Host가 Connection을 Reset시키지 않게된다.
 
