@@ -51,7 +51,7 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 <figcaption class="caption">[Shell 1] Host Network Interface Packet Dump with tshark</figcaption>
 </figure>
 
-[Shell 1]은 Container의 Connection Reset이 발생하였을때의 tshark를 이용하여 Host Interface의 Packet을 Dump한 결과이다. 10.205.13.221은 Docker Container의 Client IP이고, 192.168.0.100은 Host 외부의 Server이다. Docker Container의 Client가 Host 외부의 Server에게 TCP Connection을 맺고 Data를 전송하다가 Connection Reset 현상이 발생한 모습이다.
+[Shell 1]은 Docker Container의 Connection Reset이 발생하였을때의 tshark를 이용하여 Host Interface의 Packet을 Dump한 결과이다. 10.205.13.221은 Docker Container의 Client IP이고, 192.168.0.100은 Host 외부의 Server이다. Docker Container의 Client가 Host 외부의 Server에게 TCP Connection을 맺고 Data를 전송하다가 Connection Reset 현상이 발생한 모습이다.
 
 [Shell 1]의 5번째 줄에 Server가 Client에게 전송한 Sequence Number 10214711번 Packet의 Ack를 수신한걸 확인할 수 있다. [Shell 1]의 7번째 줄에서는 Sequence Number 10110467번 Packet의 ACK를 수신한 것을 확인할 수 있다. 10110467번이 10214711번 보다 작기 때문에 Sequence Number 10110467번의 Packet의 Ack는 원래라면 TCP Spurious로 간주되고 무시되어야 하지만, conntrack Module의 Bug로 인해서 Invalid Packet으로 간주되고 DNAT되지 않는다.
 
@@ -82,12 +82,22 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] Container Network Interface Packet Dump with tshark</figcaption>
+<figcaption class="caption">[Shell 2] Docker Container Network Interface Packet Dump with tshark</figcaption>
 </figure>
 
-[Shell 2]는 [Shell 1]의 Connection Reset 현상이 발생하였을때 tshark를 이용하여 Container 내부에서 Container Interface의 Packet을 Dump한 결과이다. [Shell 1]과 대부분 동일하지만 Sequence Number 10110467번 Packet의 ACK가 존재하지 않는걸 확인할 수 있다. Sequence Number 10110467번 Packet의 ACK는 Host에서 conntrack Module의 Bug로 인해서 Invalid Packet을 간주되어 DNAT 되지 않았기 때문에, Container로 전달되지 않았기 때문이다.
+[Shell 2]는 [Shell 1]의 Connection Reset 현상이 발생하였을때 tshark를 이용하여 Docker Container 내부에서 Docker Container Interface의 Packet을 Dump한 결과이다. [Shell 1]과 대부분 동일하지만 Sequence Number 10110467번 Packet의 ACK가 존재하지 않는걸 확인할 수 있다. Sequence Number 10110467번 Packet의 ACK는 Host에서 conntrack Module의 Bug로 인해서 Invalid Packet을 간주되어 DNAT 되지 않았기 때문에, Docker Container로 전달되지 않았기 때문이다.
 
 ### 3. 해결 방안
+
+본 이슈를 해결하기 위해서는 2가지 Workaround가 존재한다. 2가지 Workaround 모두 완벽한 방법은 아니며, System 전체에 영향을 주기 때문에 적용전 충분한 검토가 이루어져야 한다.
+
+* `echo 1 > /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_be_liberal` 명령어 수행
+
+첫번째 방법은 Conntrack이 Invalid한 Packet이라고 판단하더라도, 실제로 Invalid 상태로 변경하지 않도록 만든다. 따라서 Server가 Client에게 전송한 Packet이 DNAT되지 않아 Host에게 전달되어 Connection Reset 발생을 막을 수 있다. Container뿐만 아니라 System 전체에 영향을 준다. Kubernetes에 적용시 conntrack의 Connection Table을 가득체워 System 전체의 Connection에 영향을 준다는 [Feedback](https://github.com/kubernetes/kubernetes/pull/74840#issuecomment-491674987)이 존재한다.
+
+* Invalid 상태의 Packet을 Drop
+
+두번째 방법은 Invalid 상태의 Packet을 Drop하는 방법이다. Docker Container의 경우에는 `iptables -I INPUT -m conntrack --ctstate INVALID -j DROP` 명령어 수행을 통해서 iptable Rule을 설정하여 Invalid 상태의 Packet을 Drop 시킬수 있다. 앞의 iptables Rule을 적용하면, [Shell 1]의 경우 7번째 줄에서는 Sequence Number 10110467번 Packet의 ACK가 Drop되기 때문에 Host가 Connection을 Reset시키지 않게된다.
 
 ### 4. 참조
 
@@ -95,3 +105,4 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 * [https://github.com/moby/libnetwork/issues/1090#issuecomment-425421288](https://github.com/moby/libnetwork/issues/1090#issuecomment-425421288)
 * [https://imbstack.com/2020/05/03/debugging-docker-connection-resets.html](https://imbstack.com/2020/05/03/debugging-docker-connection-resets.html)
 * [https://github.com/kubernetes/kubernetes/pull/74840#issuecomment-491674987](https://github.com/kubernetes/kubernetes/pull/74840#issuecomment-491674987)
+* [https://kubernetes.io/blog/2019/03/29/kube-proxy-subtleties-debugging-an-intermittent-connection-reset/](https://kubernetes.io/blog/2019/03/29/kube-proxy-subtleties-debugging-an-intermittent-connection-reset/)
