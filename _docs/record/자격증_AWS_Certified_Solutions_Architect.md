@@ -31,8 +31,35 @@ adsense: true
 
 * Dedicated Host : ??
 
+#### 2.3. Snapshot
+
+#### 2.4. Placement Groups
+
+* EC2 Instance의 배치 전략을 설정할 수 있다.
+* Cluster : Low Latency를 위해서 하나의 Availability Zone안의 하나의 Rack(Partition)에 위치시킨다.
+* Spread : 다수의 Availability Zone에 분산시켜 가용성(High Availability)을 올린다.
+* Partition : 하나의 Availability Zone에서 다수의 Rack(Partition)에 분산시킨다.
+
 ### 3. Security Group
 
 * Default 정책 : 모든 Inboud Traffic은 거부, 모든 Outbound Traffic은 허용한다.
 * Src IP, Dest IP, Security Group 단위로 허용 여부를 설정할 수 있다.
+
+#### 4. ENI (Elastric Network Interfaces)
+
+* VPC에서 하나의 Virtual Network Card를 의미한다.
+* 하나의 Primary Private IPv4와 다수의 Secondary IPv4를 갖을 수 있다.
+* 하나의 Private IPv4 하나당 하나의 Elastic IP를 갖을 수 있다.
+* 하나의 Public IP를 갖을 수 있다.
+* 하나 이상의 Security Group에 포함될 수 있다.
+* 하나의 MAC Address를 갖는다.
+* 동일한 Availability Zone 내부의 EC2 Instance 사이에 속성 변경없이 이동이 가능하다. Failover시 유용한 기능이다.
+
+#### 5. ELB (Elastric Load Balancing)
+
+* Load Balancer
+* Upgrade, Maintenance, High Availability 보장
+* Classic Load Balancer : HTTP, HTTPS, TCP를 지원한다. v1, Old Generation Load Balancer이다.
+* Application Load Balancer : HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
+* Network Load Balancer : TCP, TLS, UDP를 지원한다. v2, New Generation Load Balancer이다.
 

@@ -28,7 +28,7 @@ iptables Bulid에 필요한 Ubuntu Package를 설치한다.
 iptables v1.6.2 Version Code를 Download한다.
 
 ~~~
-# ./configure --disable-nftable
+# ./configure --disable-nftables
 # make && make install
 ~~~
 
