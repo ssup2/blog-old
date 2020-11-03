@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-[Issue](https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02)글의 내용을 정리하였습니다.
+https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02 글의 내용을 바탕으로 정리하였습니다.
 
 ### 1. Issue
 
@@ -27,7 +27,7 @@ Linux에서는 iptables 명령어를 통해서 Packet을 외부로 전송시, Pa
 
 Kernel에서는 이러한 문제 해결을 위해서 Random으로 Src Port 번호를 할당하는 NF_NAT_RANGE_PROTO_RANDOM Algorithm과 NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm이 존재한다. NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm은 NF_NAT_RANGE_PROTO_RANDOM Algorithm을 보안하는 용도로 탄생한 Algorithm이다. 따라서 **NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm을 통해서 Src Port를 Random으로 할당하여 Src Port 중복을 방지**하여 TCP SYN Packet의 Drop 확률을 낮출수 있다. 하지만 100% 본 이슈를 해결할 수 있는 방법은 아니다.
 
-NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm을 Masquerade 기법에 적용하기 위해서는 iptables 명령어로 Masquerade Rule을 추가하면서 "--random-fully" Option을 넣으면 된다. "--random-fully" Option은 iptables v1.6.2 Version부터 지원한다.
+NF_NAT_RANGE_PROTO_RANDOM_FULLY Algorithm을 Masquerade 기법에 적용하기 위해서는 iptables 명령어로 Masquerade Rule을 추가하면서 "\-\-random-fully" Option을 넣으면 된다. "\-\-random-fully" Option은 iptables v1.6.2 Version부터 지원한다.
 
 ### 3. with Kubernetes
 
@@ -40,7 +40,7 @@ Chain KUBE-POSTROUTING (1 references)
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] --random-fully Option이 적용 되어있지 않는 KUBE-POSTROUTING Chain</figcaption>
+<figcaption class="caption">[Shell 1] \-\-random-fully Option이 적용 되어있지 않는 KUBE-POSTROUTING Chain</figcaption>
 </figure>
 
 {% highlight console %}
@@ -52,10 +52,10 @@ Chain KUBE-POSTROUTING (1 references)
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 2] --random-fully Option이 적용 되어있는 않는 KUBE-POSTROUTING Chain</figcaption>
+<figcaption class="caption">[Shell 2] \-\-random-fully Option이 적용 되어있는 않는 KUBE-POSTROUTING Chain</figcaption>
 </figure>
 
-Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptables 명령어가 "--random-fully" Option을 지원하면 KUBE-POSTROUTING Chain의 Masquerade Rule에 "--random-fully" Option을 적용한다. [Shell 1]은 "--random-fully" Option이 적용되어 있지 않는 KUBE-POSTROUTING Chain을 나타내고, [Shell 2]는 "--random-fully" Option이 적용되어 있는 Chain을 나타낸다. 또한 일부 CNI Plugin은 "--random-fully" Option이 설정되어있는 Masquerade Rule을 추가하여 본 Issue를 해결하고 있다. Flannel, Cilium CNI는 "--random-fully" Option을 지원하고 있다.
+Kubernetes v1.16.0 Version부터는 본 Issue를 해결하기 위해서, iptables 명령어가 "\-\-random-fully" Option을 지원하면 KUBE-POSTROUTING Chain의 Masquerade Rule에 "\-\-random-fully" Option을 적용한다. [Shell 1]은 "\-\-random-fully" Option이 적용되어 있지 않는 KUBE-POSTROUTING Chain을 나타내고, [Shell 2]는 "\-\-random-fully" Option이 적용되어 있는 Chain을 나타낸다. 또한 일부 CNI Plugin은 "\-\-random-fully" Option이 설정되어있는 Masquerade Rule을 추가하여 본 Issue를 해결하고 있다. Flannel, Cilium CNI는 "\-\-random-fully" Option을 지원하고 있다.
 
 ### 4. 참조
 

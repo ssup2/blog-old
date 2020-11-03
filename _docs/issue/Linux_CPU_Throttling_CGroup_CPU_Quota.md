@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-[Issue](https://sched.co/Uae1) 발표 내용을 정리하였습니다.
+https://sched.co/Uae1 발표 내용을 바탕으로 정리하였습니다.
 
 ### 1. Issue
 

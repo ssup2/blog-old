@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-[Issue](https://www.weave.works/blog/racy-conntrack-and-dns-lookup-timeouts)글의 내용을 정리하였습니다.
+https://www.weave.works/blog/racy-conntrack-and-dns-lookup-timeouts 글의 내용을 바탕으로 정리하였습니다.
 
 ### 1. Issue
 

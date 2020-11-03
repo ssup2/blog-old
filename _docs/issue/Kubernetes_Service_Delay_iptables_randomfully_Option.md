@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-[Issue](https://github.com/kubernetes/kubernetes/pull/92035)글의 내용을 정리하였습니다.
+https://github.com/kubernetes/kubernetes/pull/92035 글의 내용을 바탕으로 정리하였습니다.
 
 ### 1. Issue
 

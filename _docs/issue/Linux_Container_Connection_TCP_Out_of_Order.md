@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-[Issue](https://github.com/moby/libnetwork/issues/1090)글의 내용을 정리하였습니다.
+https://github.com/moby/libnetwork/issues/1090 글의 내용을 정리하였습니다.
 
 ### 1. Issue
 
