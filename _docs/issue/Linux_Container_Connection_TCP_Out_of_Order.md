@@ -7,6 +7,8 @@ comment: true
 adsense: true
 ---
 
+[Issue](https://github.com/moby/libnetwork/issues/1090)글의 내용을 정리하였습니다.
+
 ### 1. Issue
 
 Container에서 Host 외부로 Packet을 전송하면서 전송한 Packet이 **SNAT** 되는 경우 TCP Out of Order으로 인해서 TCP Connection이 Reset되는 Issue가 존재한다. Container안에서 Client가 동작하고 Host 외부에 Server가 동작하는 경우 Client가 전송한 Packet은 SNAT되어 Host 외부로 전달된다. Container의 Client와 Host 외부에 Server가 HTTP Protocol 처럼 짧은 시간동안 적은 양의 Packet을 전송하는 경우에는 문제 없지만, **오랜 시간동안 TCP Connection을 맺으면서 많은양의 Packet을 전송하는 경우**에는 본 이슈가 발생할 확률이 높다.

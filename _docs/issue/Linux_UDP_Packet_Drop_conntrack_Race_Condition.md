@@ -7,6 +7,8 @@ comment: true
 adsense: true
 ---
 
+[Issue](https://www.weave.works/blog/racy-conntrack-and-dns-lookup-timeouts)글의 내용을 정리하였습니다.
+
 ### 1. Issue
 
 Linux conntrack의 Race Condition에 의해서 UDP Packet이 Drop되는 Issue가 존재한다. Kubernetes Cluster 내부에서는 본 Issue로 인해서 Service Discovery가 일시적으로 실패하는 문제가 발생할 수 있다.

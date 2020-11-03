@@ -7,6 +7,8 @@ comment: true
 adsense: true
 ---
 
+[Issue](https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02)글의 내용을 정리하였습니다.
+
 ### 1. Issue
 
 TCP Connection을 맺기 위해서 TCP SYN Packet을 SNAT하여 전송시, SNAT를 진행하면서 TCP SYN Packet에 설정되는 Src Port 번호를 선택하는 과정에서 발생하는 Race Condition에 의해서 TCP SYN Packet이 Drop 되는 Issue가 존재한다. TCP SYN Packet이 Drop되면 TCP Connection이 최소 1초 이상 지연되어 맺어지게 되어, Client는 Timeout을 경험할 수 있다.

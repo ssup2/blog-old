@@ -7,6 +7,8 @@ comment: true
 adsense: true
 ---
 
+[Issue](https://sched.co/Uae1) 발표 내용을 정리하였습니다.
+
 ### 1. Issue
 
 Multi Core Machine에서 CGroup CPU Quota를 통해 CPU 사용량이 제한된 Process가 CPU 사용량이 Quota에 도달하지 않았는데도 Throttling되어 CPU를 제대로 이용하지 못하는 Issue가 존재한다. Container의 CPU 사용률을 제한하기 위해서 CGroup CPU Quota가 이용된다. 따라서 Container를 이용하는 모든 환경에서 해당 Issue가 적용될 수 있다.
