@@ -55,9 +55,9 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 
 [Shell 1]은 Docker Container의 Connection Reset이 발생하였을때의 tshark를 이용하여 Host Interface의 Packet을 Dump한 결과이다. 10.205.13.199은 Docker Container의 Client IP이고, 192.168.0.100은 Host 외부의 Server이다. Docker Container의 Client가 Host 외부의 Server에게 TCP Connection을 맺고 Data를 전송하다가 Connection Reset 현상이 발생한 모습이다.
 
-[Shell 1]의 5번째 줄에 Server가 Client에게 전송한 Sequence Number 10214711번 Packet의 Ack를 수신한걸 확인할 수 있다. [Shell 1]의 7번째 줄에서는 Sequence Number 10110467번 Packet의 ACK를 수신한 것을 확인할 수 있다. 10110467번이 10214711번 보다 작기 때문에 Sequence Number 10110467번의 Packet의 Ack는 원래라면 TCP Spurious로 간주되고 무시되어야 하지만, conntrack Module의 Bug로 인해서 Invalid Packet으로 간주되고 DNAT되지 않는다.
+[Shell 1]의 4번째 줄에 Server가 Client에게 전송한 Sequence Number 10149475번 Packet의 Ack를 수신한걸 확인할 수 있다. [Shell 1]의 7번째 줄에서는 Sequence Number 10110467번 Packet의 ACK를 수신한 것을 확인할 수 있다. 10110467번이 10149475번 보다 작기 때문에 Sequence Number 10110467번의 Packet의 Ack는 원래라면 TCP Spurious로 간주되고 무시되어야 하지만, conntrack Module의 Bug로 인해서 Invalid Packet으로 간주되고 DNAT되지 않는다.
 
-따라서 Sequence Number 10110467번의 Packet의 Ack는 Host로 전달되고, Host의 입장에서는 Sequence Number 10110467번의 Packet의 Ack는 자신이 전송한 Packet이 아니기 때문에 TCP Reset Flag를 통해서 Server와의 Connection을 강제로 종료한다. [Shell 1]의 8번째 줄에서 Server에게 전송하는 TCP Reset Packet을 확인할 수 있다.
+따라서 Sequence Number 10110467번의 Packet의 Ack는 Host로 전달된다. Host는 Sequence Number 10110467번의 Packet의 Ack는 자신이 전송한 Packet의 ACK도 아니고, conntrack의 Connection 정보를 통해서 Host 자신과 연결되어 있는 TCP Connection으로 부터온 Packet도 아니란걸 파악한다. 따라서 Host는 TCP Reset Flag를 통해서 Server와의 Connection을 강제로 종료한다. [Shell 1]의 8번째 줄에서 Host가 Server에게 전송하는 TCP Reset Packet을 확인할 수 있다. Server는 Host의 TCP Reset Packet을 전달받은 다음, TCP Protocol에 따라서 Pod에게 TCP Reset Packet을 전송한다.
 
 {% highlight console linenos %}
 ...
@@ -88,6 +88,8 @@ Container안의 Client가 전송한 Packet이 SNAT를 통해서 Host 외부의 S
 </figure>
 
 [Shell 2]는 [Shell 1]의 Connection Reset 현상이 발생하였을때 tshark를 이용하여 Docker Container 내부에서 Docker Container Interface의 Packet을 Dump한 결과이다. [Shell 1]과 대부분 동일하지만 Sequence Number 10110467번 Packet의 ACK가 존재하지 않는걸 확인할 수 있다. Sequence Number 10110467번 Packet의 ACK는 Host에서 conntrack Module의 Bug로 인해서 Invalid Packet을 간주되어 DNAT 되지 않았기 때문에, Docker Container로 전달되지 않았기 때문이다.
+
+Host가 전송한 TCP Reset Packet도 확인할 수 없다. Docker Container 내부에서는 Host가 전송한 TCP Reset Packet의 존재를 알지 못한체로 Server로부터 TCP Reset Packet을 받게된다. 따라서 Docker Container 내부에서는 Server가 먼저 Connection을 종료한다고 판단하고 "connection reset by peer" Error를 Docker Container App에게 전달한다.
 
 ### 3. 해결 방안
 
