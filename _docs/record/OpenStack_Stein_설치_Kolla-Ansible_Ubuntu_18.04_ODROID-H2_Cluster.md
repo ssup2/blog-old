@@ -723,6 +723,22 @@ OpenStack을 배포하여 OpenStack을 구동한다.
 
 OpenStack 초기화를 수행한다. 초기화가 완료되면 Network, Image, Flavor 등의 Service들이 초기화된다.
 
+{% highlight text linenos %}
+export OS_PROJECT_DOMAIN_NAME=default
+export OS_USER_DOMAIN_NAME=default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=admin
+export OS_AUTH_URL=http://10.0.0.20:35357/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 11] Deploy Node - /etc/kolla/admin-openrc.sh</figcaption>
+</figure>
+
+초기화가 완료되면 [파일 11]의 내용을 갖는 /etc/kolla/admin-openrc.sh 파일을 확인할 수 있다.
+
 ### 13. External Network, Octavia Network 생성
 
 ~~~console
@@ -831,10 +847,10 @@ octavia_amp_boot_network_list: "[octavia-net Network ID]"
 octavia_amp_secgroup_list: "[octavia-sec Security Group ID]"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 11] Deploy Node - /etc/kolla/globals.yml</figcaption>
+<figcaption class="caption">[파일 12] Deploy Node - /etc/kolla/globals.yml</figcaption>
 </figure>
 
-/etc/kolla/globals.yml 파일을 [파일 11]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다. octavia_amp_boot_network_list에는 위에서 생성한 octavia-net Network의 ID를 넣는다. octavia_amp_secgroup_list에는 위에서 생성한 octavia-sec Security Group의 ID를 넣는다.
+/etc/kolla/globals.yml 파일을 [파일 12]의 내용처럼, Octavia 설정 주석을 제거하여 Octavia를 설정한다. octavia_amp_boot_network_list에는 위에서 생성한 octavia-net Network의 ID를 넣는다. octavia_amp_secgroup_list에는 위에서 생성한 octavia-sec Security Group의 ID를 넣는다.
 
 ~~~console
 (Deploy)# kolla-ansible -i ~/kolla-ansible/multinode deploy -t octavia
