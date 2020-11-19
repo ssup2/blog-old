@@ -58,8 +58,31 @@ cert-manager                        cert-manager-webhook-845d9df8bf-9m4l8       
 ...
 ~~~
 
+### 5. VM Image Build
+
+Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다.
+
+~~~console
+(Local)# apt install qemu-kvm libvirt-bin qemu-utils
+...
+~~~
+
+~~~console
+(Local)# curl -L https://github.com/kubernetes-sigs/image-builder/tarball/master -o image-builder.tgz
+(Local)# tar xzf image-builder.tgz
+(Local)# cd kubernetes-sigs-image-builder-3c3a17
+~~~
+
+~~~console
+(Local)# cd images/capi
+(Local)# export PATH=$PWD/.bin:$PATH
+(Local)# make deps-qemu
+~~~
+
+
 ### 5. 참조
 
 * [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/](https://cluster-api.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/user/quick-start.html](https://cluster-api.sigs.k8s.io/user/quick-start.html)
+* [https://image-builder.sigs.k8s.io/capi/providers/openstack.html](https://image-builder.sigs.k8s.io/capi/providers/openstack.html)
