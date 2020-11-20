@@ -9,8 +9,9 @@ adsense: true
 
 ### 1. 설치 환경
 
-* kind v0.9.0
-* clusterctl v0.3.10
+설치 환경은 다음과 같다.
+
+* Local Node : Ubuntu 18.04, KVM Enable
 
 ### 2. Local Kubernetes Cluster 설치
 
@@ -60,27 +61,41 @@ cert-manager                        cert-manager-webhook-845d9df8bf-9m4l8       
 
 ### 5. VM Image Build
 
-Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다.
+Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다. VM Image Build에 필요한 Ubuntu Package를 설치한다.
 
 ~~~console
 (Local)# apt install qemu-kvm libvirt-bin qemu-utils
-...
 ~~~
+
+Ansible을 설치한다.
+
+~~~console
+(Local)# apt install python3-pip
+(Local)# pip3 install ansible --user
+(Local)# export PATH=$PATH:$HOME/.local/bin
+~~~
+
+packer를 설치한다.
+
+~~~console
+(Local)# export VER="1.6.5"
+(Local)# wget "https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip"
+(Local)# unzip packer_1.6.5_linux_amd64.zip 
+(Local)# sudo mv packer /usr/local/bin 
+~~~
+
+VM Image를 Build 한다. Image를 Build 하기 위해서는 KVM이 지원되는 환경이어야 한다.
 
 ~~~console
 (Local)# curl -L https://github.com/kubernetes-sigs/image-builder/tarball/master -o image-builder.tgz
 (Local)# tar xzf image-builder.tgz
-(Local)# cd kubernetes-sigs-image-builder-3c3a17
+(Local)# cd kubernetes-sigs-image-builder-3c3a17/images/capi
+(Local)# make build-qemu-ubuntu-1804
 ~~~
 
-~~~console
-(Local)# cd images/capi
-(Local)# export PATH=$PWD/.bin:$PATH
-(Local)# make deps-qemu
-~~~
+### 6. VM Image Upload
 
-
-### 5. 참조
+### 7. 참조
 
 * [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/](https://cluster-api.sigs.k8s.io/)
