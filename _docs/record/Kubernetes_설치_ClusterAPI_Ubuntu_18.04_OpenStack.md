@@ -87,7 +87,7 @@ clusterctl을 이용하여 Local Kubernetes Cluster에 Cluster API를 설치한�
 
 ### 6. VM Image Build, Import
 
-Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다. 
+Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다.
 
 ~~~console
 (Local)# apt install qemu-kvm libvirt-bin qemu-utils
@@ -165,11 +165,17 @@ OpenStack Cloud Controller Manager에서 이용할 application credential을 생
 {% highlight text %}
 clouds:
   openstack:
+    insecure: true
+    verify: false
+    identity_api_version: 3
     auth:
-      auth_url: http://192.168.0.40:5000
+      auth_url: http://192.168.0.40:5000/v3
       project_name: admin
       username: admin
       password: admin
+      project_domain_name: default
+      user_domain_name: default
+    region: RegionOne
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] clouds.yaml</figcaption>
@@ -178,52 +184,160 @@ clouds:
 clusterctl에서 이용할 [파일 2]의 내용을 갖고 있는 clouds.yaml 파일을 생성한다.
 
 {% highlight text %}
-[Global]
-auth-url="http://192.168.0.40:5000/v3"
-application-credential-id="96e2f01837884a59b5d70fa8a6960c9a"
-application-credential-secret="nKhWeYW0zEbkIqO4V8ubVXoHQDsfc8U8Z-eJ-up2JtvyxHWujeCB47XKJcvmaLcQjX0Qxg7CffgqwM0pdyeaww"
-
-[BlockStorage]
-bs-version=v3
-
-[LoadBalancer]
-use-octavia=True
-subnet-id=67ca5cfd-0c3f-434d-a16c-c709d1ab37fb
-floating-network-id=00a8e738-c81e-45f6-9788-3e58186076b6
-lb-method=ROUND_ROBIN
+---
+apiVersion: cluster.x-k8s.io/v1alpha3
+kind: Cluster
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks: ["192.167.0.0/16"]
+    serviceDomain: "cluster.local"
+  infrastructureRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+    kind: OpenStackCluster
+    name: ${CLUSTER_NAME}
+  controlPlaneRef:
+    kind: KubeadmControlPlane
+    apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
+    name: ${CLUSTER_NAME}-control-plane
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+kind: OpenStackCluster
+metadata:
+  name: ${CLUSTER_NAME}
+spec:
+  cloudName: ${OPENSTACK_CLOUD}
+  cloudsSecret:
+    name: ${CLUSTER_NAME}-cloud-config
+    namespace: ${NAMESPACE}
+  managedAPIServerLoadBalancer: true
+  managedSecurityGroups: true
+  nodeCidr: 10.6.0.0/24
+  dnsNameservers:
+  - ${OPENSTACK_DNS_NAMESERVERS}
+  disablePortSecurity: false
+  useOctavia: true
+  bastion:
+    enabled: true
+    flavor: m1.medium
+    image: ubuntu-18.04-capi
+    sshKeyName: ssup2
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
+kind: KubeadmControlPlane
+metadata:
+  name: "${CLUSTER_NAME}-control-plane"
+spec:
+  replicas: ${CONTROL_PLANE_MACHINE_COUNT}
+  infrastructureTemplate:
+    kind: OpenStackMachineTemplate
+    apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+    name: "${CLUSTER_NAME}-control-plane"
+  kubeadmConfigSpec:
+    initConfiguration:
+      nodeRegistration:
+        name: '{{ local_hostname }}'
+        kubeletExtraArgs:
+          cloud-provider: external
+    clusterConfiguration:
+      imageRepository: k8s.gcr.io
+      apiServer:
+        extraArgs:
+          cloud-provider: external
+      controllerManager:
+        extraArgs:
+          cloud-provider: external
+    joinConfiguration:
+      nodeRegistration:
+        name: '{{ local_hostname }}'
+        kubeletExtraArgs:
+          cloud-provider: external
+  version: "${KUBERNETES_VERSION}"
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+kind: OpenStackMachineTemplate
+metadata:
+  name: ${CLUSTER_NAME}-control-plane
+spec:
+  template:
+    spec:
+      flavor: ${OPENSTACK_CONTROL_PLANE_MACHINE_FLAVOR}
+      image: ${OPENSTACK_IMAGE_NAME}
+      sshKeyName: ${OPENSTACK_SSH_KEY_NAME}
+      cloudName: ${OPENSTACK_CLOUD}
+      cloudsSecret:
+        name: ${CLUSTER_NAME}-cloud-config
+        namespace: ${NAMESPACE}
+---
+apiVersion: cluster.x-k8s.io/v1alpha3
+kind: MachineDeployment
+metadata:
+  name: "${CLUSTER_NAME}-md-0"
+spec:
+  clusterName: "${CLUSTER_NAME}"
+  replicas: ${WORKER_MACHINE_COUNT}
+  selector:
+    matchLabels:
+  template:
+    spec:
+      clusterName: "${CLUSTER_NAME}"
+      version: "${KUBERNETES_VERSION}"
+      failureDomain: ${OPENSTACK_FAILURE_DOMAIN}
+      bootstrap:
+        configRef:
+          name: "${CLUSTER_NAME}-md-0"
+          apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
+          kind: KubeadmConfigTemplate
+      infrastructureRef:
+        name: "${CLUSTER_NAME}-md-0"
+        apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+        kind: OpenStackMachineTemplate
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+kind: OpenStackMachineTemplate
+metadata:
+  name: ${CLUSTER_NAME}-md-0
+spec:
+  template:
+    spec:
+      cloudName: ${OPENSTACK_CLOUD}
+      cloudsSecret:
+        name: ${CLUSTER_NAME}-cloud-config
+        namespace: ${NAMESPACE}
+      flavor: ${OPENSTACK_NODE_MACHINE_FLAVOR}
+      image: ${OPENSTACK_IMAGE_NAME}
+      sshKeyName: ${OPENSTACK_SSH_KEY_NAME}
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
+kind: KubeadmConfigTemplate
+metadata:
+  name: ${CLUSTER_NAME}-md-0
+spec:
+  template:
+    spec:
+      joinConfiguration:
+        nodeRegistration:
+          name: '{{ local_hostname }}'
+          kubeletExtraArgs:
+            cloud-provider: external
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${CLUSTER_NAME}-cloud-config
+  labels:
+    clusterctl.cluster.x-k8s.io/move: "true"
+data:
+  clouds.yaml: ${OPENSTACK_CLOUD_YAML_B64}
+  cacert: ${OPENSTACK_CLOUD_CACERT_B64}
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] cloud.conf</figcaption>
+<figcaption class="caption">[파일 3] template.yaml</figcaption>
 </figure>
 
-{% highlight text %}
-[Global]
-auth-url="http://192.168.0.40:5000/v3"
-application-credential-id="96e2f01837884a59b5d70fa8a6960c9a"
-application-credential-secret="nKhWeYW0zEbkIqO4V8ubVXoHQDsfc8U8Z-eJ-up2JtvyxHWujeCB47XKJcvmaLcQjX0Qxg7CffgqwM0pdyeaww"
-
-[BlockStorage]
-bs-version=v3
-
-[LoadBalancer]
-use-octavia=True
-subnet-id=67ca5cfd-0c3f-434d-a16c-c709d1ab37fb
-floating-network-id=00a8e738-c81e-45f6-9788-3e58186076b6
-lb-method=ROUND_ROBIN
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[파일 3] cloud.conf</figcaption>
-</figure>
-
-OpenStack Cloud Controller Manager에서 이용할 [파일 2]의 내용을 갖고 있는 cloud.conf 파일을 생성한다.
-
-~~~console
-(Local)# wget https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml -O template.yaml
-(Local)# sed -i "s/192.168.0.0/192.167.0.0/" template.yaml
-disableServerTags: true 제거
-~~~
-
-clusterctl에서 이용할 template 파일을 받고, template 파일의 Pod CIDR 값을 "192.167.0.0"으로 변경한다.
+Cluster Manifest Template 역활을 수행하는 [파일 3]의 내용을 갖고 있는 template.yaml 파일을 생성한다. https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml 파일에서 "disableServerTags: true" 제거, cidrBlocks을 "192.167.0.0/16"으로 변경, bastion 설정을 추가하였다.
 
 ~~~console
 (Local)# wget https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/master/templates/env.rc -O env.rc
@@ -233,25 +347,88 @@ clusterctl에서 이용할 환경변수를 설정하는 env.rc Script 파일을 
 
 ~~~console
 (Local)# source env.rc clouds.yaml openstack
-(Local)# export OPENSTACK_CLOUD_PROVIDER_CONF_B64=$(cat cloud.conf | base64)
 (Local)# export OPENSTACK_CONTROLPLANE_IP=10.0.0.20 \
 export OPENSTACK_SSH_KEY_NAME=ssup2 \
 export OPENSTACK_IMAGE_NAME=ubuntu-18.04-capi \
 export OPENSTACK_FAILURE_DOMAIN=nova \
 export OPENSTACK_DNS_NAMESERVERS=8.8.8.8 \
-export OPENSTACK_EXTERNAL_NETWORK_ID=00a8e738-c81e-45f6-9788-3e58186076b6 \
 export OPENSTACK_CONTROL_PLANE_MACHINE_FLAVOR=m1.medium \
 export OPENSTACK_NODE_MACHINE_FLAVOR=m1.medium
 ~~~
 
-clusterctl에서 이용할 환경변수를 설정한다.
+clusterctl에서 이용할 환경변수를 설정한다. VM Image, VM Flavor, DNS 등을 환경변수로 설정한다. 
 
 ~~~console
 (Local)# clusterctl config cluster ssup2 --from template.yaml --kubernetes-version v1.17.11 --control-plane-machine-count=3 --worker-machine-count=1 > ssup2_cluster.yaml
 (Local)# kubectl apply -f ssup2_cluster.yaml
 ~~~
 
-### 8. 참조
+Cluster Manifest 파일을 생성하고, 생성한 Cluster Manifest 파일을 이용하여 Kubernetes Cluster를 생성한다.
+
+### 9. OpenStack External Cloud Provider 배포
+
+Kubernetes Cluster를 생성하면 Control Plain (Master Node) VM이 하나만 생성되고, 더 이상 Control Plain이 생성되지 않는다. Control Plain Node VM의 Node Object의 "spec.providerID" 값이 설정 되어있지 않기 때문이다. "spec.providerID" 값은 OpenStack External Cloud Provider가 배포되어야 설정된다.
+
+~~~console
+(Local)# clusterctl get kubeconfig ssup2 > /root/.kube/ssup2.kubeconfig
+~~~
+
+clusterctl 파일을 이용하여 생성한 Kubernetes Cluster의 kubeconfig 파일을 생성한다.
+
+{% highlight text %}
+[Global]
+auth-url="http://192.168.0.40:5000/v3"
+application-credential-id="96e2f01837884a59b5d70fa8a6960c9a"
+application-credential-secret="nKhWeYW0zEbkIqO4V8ubVXoHQDsfc8U8Z-eJ-up2JtvyxHWujeCB47XKJcvmaLcQjX0Qxg7CffgqwM0pdyeaww"
+
+[BlockStorage]
+bs-version=v3
+
+[LoadBalancer]
+use-octavia=True
+subnet-id=67ca5cfd-0c3f-434d-a16c-c709d1ab37fb
+floating-network-id=00a8e738-c81e-45f6-9788-3e58186076b6
+lb-method=ROUND_ROBIN
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 4] cloud.conf</figcaption>
+</figure>
+
+OpenStack External Cloud Controller Manager에서 이용할 [파일 4]의 내용을 갖고 있는 cloud.conf 파일을 생성한다.
+
+~~~console
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' create secret -n kube-system generic cloud-config --from-file=cloud.conf
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/v1.17.0/cluster/addons/rbac/cloud-controller-manager-roles.yaml
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/v1.17.0/cluster/addons/rbac/cloud-controller-manager-role-bindings.yaml
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/v1.17.0/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
+~~~
+
+cloud-config Secret을 생성하고, OpenStack External Cloud Provider를 배포한다. 
+
+~~~console
+~~~
+
+OpenStack External Cloud Provider를 배포된 이후에 나머지 Control Plain (Master Node) VM이 생성되는걸 확인할 수 있다.
+
+### 10. Cilium CNI 배포
+
+~~~console
+(Local)# curl https://docs.projectcalico.org/v3.16/manifests/calico.yaml -o calico.yaml
+(Local)# sed -i "s/veth_mtu:.*/veth_mtu: \"1430\"/g" calico.yaml
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f calico.yaml
+~~~
+
+~~~
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' create -f https://raw.githubusercontent.com/cilium/cilium/1.7.11/install/kubernetes/quick-install.yaml
+~~~
+
+### 12. Kubernetes Cluster 동작 확인
+
+### 13. Kubernetes Cluster VM Node에 SSH 접근
+
+bastion VM으로 ssup2 Keypair를 이용해 SSH로 접속한 다음, bastion VM 내부에서 다시 ssup2 Keypair를 이용하여 Kubernetes Cluster VM Node에 접근한다.
+
+### 14. 참조
 
 * [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/](https://cluster-api.sigs.k8s.io/)
@@ -259,3 +436,4 @@ clusterctl에서 이용할 환경변수를 설정한다.
 * [https://image-builder.sigs.k8s.io/capi/providers/openstack.html](https://image-builder.sigs.k8s.io/capi/providers/openstack.html)
 * [https://github.com/kubernetes-sigs/cluster-api-provider-openstack](https://github.com/kubernetes-sigs/cluster-api-provider-openstack)
 * [https://github.com/kubernetes-sigs/cluster-api-provider-openstack/blob/master/docs/configuration.md](https://github.com/kubernetes-sigs/cluster-api-provider-openstack/blob/master/docs/configuration.md)
+* [https://github.com/kubernetes-sigs/cluster-api-provider-openstack/blob/v0.3.3/docs/external-cloud-provider.md](https://github.com/kubernetes-sigs/cluster-api-provider-openstack/blob/v0.3.3/docs/external-cloud-provider.md)
