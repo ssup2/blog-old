@@ -365,7 +365,7 @@ clusterctl에서 이용할 환경변수를 설정한다. VM Image, VM Flavor, DN
 
 Cluster Manifest 파일을 생성하고, 생성한 Cluster Manifest 파일을 이용하여 Kubernetes Cluster를 생성한다.
 
-### 9. OpenStack External Cloud Provider 배포
+### 9. OpenStack External Cloud Provider 설치
 
 Kubernetes Cluster를 생성하면 Control Plain (Master Node) VM이 하나만 생성되고, 더 이상 Control Plain이 생성되지 않는다. Control Plain Node VM의 Node Object의 "spec.providerID" 값이 설정 되어있지 않기 때문이다. "spec.providerID" 값은 OpenStack External Cloud Provider가 배포되어야 설정된다.
 
@@ -410,25 +410,37 @@ cloud-config Secret을 생성하고, OpenStack External Cloud Provider를 배포
 
 OpenStack External Cloud Provider를 배포된 이후에 나머지 Control Plain (Master Node) VM이 생성되는걸 확인할 수 있다.
 
-### 10. Cilium CNI 배포
-
-~~~console
-(Local)# curl https://docs.projectcalico.org/v3.16/manifests/calico.yaml -o calico.yaml
-(Local)# sed -i "s/veth_mtu:.*/veth_mtu: \"1430\"/g" calico.yaml
-(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f calico.yaml
-~~~
+### 10. Cilium CNI Pluing 설치
 
 ~~~
 (Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' create -f https://raw.githubusercontent.com/cilium/cilium/1.7.11/install/kubernetes/quick-install.yaml
 ~~~
 
-### 12. Kubernetes Cluster 동작 확인
+Cilium CNI Plugin을 설치한다.
 
-### 13. Kubernetes Cluster VM Node에 SSH 접근
+### 11. Kubernetes Cluster 동작 확인
+
+~~~
+(Local)# kubectl get kubeadmcontrolplane
+kubectl get kubeadmcontrolplane                                                                           [16:05:13]
+NAME                  INITIALIZED   API SERVER AVAILABLE   VERSION    REPLICAS   READY   UPDATED   UNAVAILABLE
+ssup2-control-plane   true          true                   v1.17.11   3          3       3
+
+(Local)# kubectl get nodes
+NAME                        STATUS   ROLES    AGE   VERSION
+ssup2-control-plane-9hdqg   Ready    master   67m   v1.17.11
+ssup2-control-plane-bbmhb   Ready    master   44m   v1.17.11
+ssup2-control-plane-phgfm   Ready    master   29m   v1.17.11
+ssup2-md-0-87mqq            Ready    <none>   63m   v1.17.11
+~~~
+
+Kubernetes Cluster 동작을 확인한다.
+
+### 12. Kubernetes Cluster VM Node에 SSH 접근
 
 bastion VM으로 ssup2 Keypair를 이용해 SSH로 접속한 다음, bastion VM 내부에서 다시 ssup2 Keypair를 이용하여 Kubernetes Cluster VM Node에 접근한다.
 
-### 14. 참조
+### 13. 참조
 
 * [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/](https://cluster-api.sigs.k8s.io/)
