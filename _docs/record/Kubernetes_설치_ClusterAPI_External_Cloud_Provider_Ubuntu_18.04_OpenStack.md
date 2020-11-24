@@ -439,6 +439,13 @@ kubectl get kubeadmcontrolplane                                                 
 NAME                  INITIALIZED   API SERVER AVAILABLE   VERSION    REPLICAS   READY   UPDATED   UNAVAILABLE
 ssup2-control-plane   true          true                   v1.17.11   3          3       3
 
+(Local)# kubectl get machine
+NAME                          PROVIDERID                                         PHASE        VERSION
+ssup2-control-plane-9hdqg     openstack://b628eb2a-83c9-4668-83de-1f884981f7dd   Running      v1.17.11
+ssup2-control-plane-vzvvn     openstack://a502d433-f431-44c2-918d-0f3df9d46045   Running      v1.17.11
+ssup2-control-plane-wgdcv     openstack://b628eb2a-83c9-4668-83de-1f884981f7dd   Running      v1.17.11
+ssup2-md-0-7b7b86d6f7-xsjvc   openstack://e3463a03-7702-496e-89fb-efbdda63d1a9   Running      v1.17.11
+
 (Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' get nodes
 NAME                        STATUS   ROLES    AGE   VERSION
 ssup2-control-plane-9hdqg   Ready    master   67m   v1.17.11
