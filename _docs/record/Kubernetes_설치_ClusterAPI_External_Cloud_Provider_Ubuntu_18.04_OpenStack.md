@@ -9,9 +9,20 @@ adsense: true
 
 ### 1. 설치 환경
 
-설치 환경은 다음과 같다.
+![[그림 1] Kubernetes 설치 환경]({{site.baseurl}}/images/record/Kubernetes_Install_ClusterAPI_External_Cloud_Provider_Ubuntu_18.04_OpenStack/Environment.PNG)
 
-* Local Node : Ubuntu 18.04, KVM Enable
+[그림 1]은 Kubernetes 설치 환경을 나타내고 있다. 설치 환경은 다음과 같다.
+
+* Local Node : Ubuntu 18.04, KVM Enable, 4CPU, 4GB Memory
+* Master, Worker Node : Ubuntu 18.04, 4vCPU, 4GB Memory
+* Network
+  * External Network : 192.168.0.0/24
+  * Octavia Network : 20.0.0.0/24
+  * Tenant Network : 10.6.0.0/24
+* Kubernetes : 1.17.11
+  * CNI : Cilium 1.7.11 Plugin
+* External Cloud Provider
+  * OpenStack Cloud Controller Manager : v1.17.0
 
 ### 2. OpenStack OpenRC 설정
 
@@ -337,7 +348,7 @@ data:
 <figcaption class="caption">[파일 3] template.yaml</figcaption>
 </figure>
 
-Cluster Manifest Template 역활을 수행하는 [파일 3]의 내용을 갖고 있는 template.yaml 파일을 생성한다. https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml 파일에서 "disableServerTags: true" 제거, cidrBlocks을 "192.167.0.0/16"으로 변경, bastion 설정을 추가하였다.
+Cluster Manifest Template 역활을 수행하는 [파일 3]의 내용을 갖고 있는 template.yaml 파일을 생성한다. https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml 파일에서 "disableServerTags: true" 제거, cidrBlocks을 "192.167.0.0/16"으로 변경, Bastion VM 설정을 추가하였다. ClusterAPI는 생성한 Kubernetes Cluster의 Node에 SSH 접근이 불가능 하도록 Security Group을 설정한다. Bastion VM은 ClusterAPI를 통해 생성한 Kubernetes Cluster의 Node에 SSH로 접근할 수 있게 만드는 통로 역활을 수행한다.
 
 ~~~console
 (Local)# wget https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/master/templates/env.rc -O env.rc
@@ -403,7 +414,7 @@ OpenStack External Cloud Controller Manager에서 이용할 [파일 4]의 내용
 (Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/v1.17.0/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
 ~~~
 
-cloud-config Secret을 생성하고, OpenStack External Cloud Provider를 배포한다. 
+cloud-config Secret을 생성하고, OpenStack External Cloud Provider를 배포한다.
 
 ~~~console
 ~~~
@@ -426,7 +437,7 @@ kubectl get kubeadmcontrolplane                                                 
 NAME                  INITIALIZED   API SERVER AVAILABLE   VERSION    REPLICAS   READY   UPDATED   UNAVAILABLE
 ssup2-control-plane   true          true                   v1.17.11   3          3       3
 
-(Local)# kubectl get nodes
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' get nodes
 NAME                        STATUS   ROLES    AGE   VERSION
 ssup2-control-plane-9hdqg   Ready    master   67m   v1.17.11
 ssup2-control-plane-bbmhb   Ready    master   44m   v1.17.11
@@ -438,7 +449,7 @@ Kubernetes Cluster 동작을 확인한다.
 
 ### 12. Kubernetes Cluster VM Node에 SSH 접근
 
-bastion VM으로 ssup2 Keypair를 이용해 SSH로 접속한 다음, bastion VM 내부에서 다시 ssup2 Keypair를 이용하여 Kubernetes Cluster VM Node에 접근한다.
+Bastion VM으로 ssup2 Keypair를 이용해 SSH로 접속한 다음, Bastion VM 내부에서 다시 ssup2 Keypair를 이용하여 Kubernetes Cluster VM Node에 접근해야 한다.
 
 ### 13. 참조
 
