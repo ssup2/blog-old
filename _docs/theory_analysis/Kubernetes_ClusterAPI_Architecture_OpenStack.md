@@ -11,7 +11,7 @@ OpenStack 위에서 동작하는 Kubernetes Cluster API의 Architecture를 분�
 
 ### 1. Kubernetes ClusterAPI Architecture on OpenStack
 
-![[그림 1] Kubernetes ClusterAPI Architecture on OpenStack]({{site.baseurl}}/images/theory_analysis/Kubernetes_ClusterAPI_Architecture_OpenStack/Kubernetes_ClusterAPI_Architecture_OpenStack.PNG){: width="700px"}
+![[그림 1] Kubernetes ClusterAPI Architecture on OpenStack]({{site.baseurl}}/images/theory_analysis/Kubernetes_ClusterAPI_Architecture_OpenStack/Kubernetes_ClusterAPI_Architecture_OpenStack.PNG)
 
 ### 2. 참조
 
