@@ -366,8 +366,7 @@ clusterctl에서 이용할 환경변수를 설정하는 env.rc Script 파일을 
 
 ~~~console
 (Local)# source env.rc clouds.yaml openstack
-(Local)# export OPENSTACK_CONTROLPLANE_IP=10.0.0.20 \
-export OPENSTACK_SSH_KEY_NAME=ssup2 \
+(Local)# export OPENSTACK_SSH_KEY_NAME=ssup2 \
 export OPENSTACK_IMAGE_NAME=ubuntu-18.04-capi \
 export OPENSTACK_FAILURE_DOMAIN=nova \
 export OPENSTACK_DNS_NAMESERVERS=8.8.8.8 \
