@@ -179,7 +179,7 @@ OpenStack Cloud Controller Manager에서 이용할 application credential을 생
 
 ### 8. Kubernetes Cluster 생성
 
-{% highlight text %}
+{% highlight yaml %}
 clouds:
   openstack:
     insecure: true
@@ -200,7 +200,7 @@ clouds:
 
 clusterctl에서 이용할 [파일 2]의 내용을 갖고 있는 clouds.yaml 파일을 생성한다.
 
-{% highlight text %}
+{% highlight yaml %}
 ---
 apiVersion: cluster.x-k8s.io/v1alpha3
 kind: Cluster
