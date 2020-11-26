@@ -442,6 +442,10 @@ OpenStack External Cloud Provider를 배포된 이후에 나머지 Control Plain
 NAME    PHASE
 ssup2   Provisioned
 
+(Local)# kubectl get openstackclusters.infrastructure.cluster.x-k8s.io
+NAME    CLUSTER   READY   NETWORK                                SUBNET                                 BASTION
+ssup2   ssup2     true    678c082d-1b80-4d5b-ad74-4daced3f9379   170d5b4b-6c05-4388-84af-e952dde31e59   192.168.0.56
+
 (Local)# kubectl get kubeadmcontrolplane
 NAME                  INITIALIZED   API SERVER AVAILABLE   VERSION    REPLICAS   READY   UPDATED   UNAVAILABLE
 ssup2-control-plane   true          true                   v1.17.11   3          3       3
