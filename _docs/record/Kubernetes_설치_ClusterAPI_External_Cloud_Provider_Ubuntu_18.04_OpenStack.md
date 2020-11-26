@@ -96,6 +96,12 @@ cert-manager                        cert-manager-webhook-845d9df8bf-9m4l8       
 
 clusterctl을 이용하여 Local Kubernetes Cluster에 Cluster API를 설치한다.
 
+~~~console
+(Local)# kubectl -n capo-system set env deployment/capo-controller-manager CLUSTER_API_OPENSTACK_INSTANCE_CREATE_TIMEOUT=60
+~~~
+
+OpenStack Controller Manager가 Instance 생성시 최대 60분 대기하도록 설정한다.
+
 ### 6. VM Image Build, Import
 
 Cluster API를 통해서 생성할 Kubernetes Cluster Node의 VM Image를 Build 한다.
@@ -378,15 +384,21 @@ clusterctl에서 이용할 환경변수를 설정한다. VM Image, VM Flavor, DN
 
 Cluster Manifest 파일을 생성하고, 생성한 Cluster Manifest 파일을 이용하여 Kubernetes Cluster를 생성한다.
 
-### 9. OpenStack External Cloud Provider 설치
+### 9. Cilium CNI & OpenStack External Cloud Provider 설치
 
-Kubernetes Cluster를 생성하면 Control Plain (Master Node) VM이 하나만 생성되고, 더 이상 Control Plain이 생성되지 않는다. Control Plain Node VM의 Node Object의 "spec.providerID" 값이 설정 되어있지 않기 때문이다. "spec.providerID" 값은 OpenStack External Cloud Provider가 배포되어야 설정된다.
+Kubernetes Cluster를 생성하면 Control Plain (Master Node) VM이 하나만 생성되고, 더 이상 Control Plain이 생성되지 않는다. Control Plain Node VM의 Node Object의 "spec.providerID" 값이 설정 되어있지 않기 때문이다. "spec.providerID" 값은 OpenStack External Cloud Provider가 설치되어야 설정된다.
 
 ~~~console
 (Local)# clusterctl get kubeconfig ssup2 > /root/.kube/ssup2.kubeconfig
 ~~~
 
 clusterctl 파일을 이용하여 생성한 Kubernetes Cluster의 kubeconfig 파일을 생성한다.
+
+~~~
+(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' create -f https://raw.githubusercontent.com/cilium/cilium/1.7.11/install/kubernetes/quick-install.yaml
+~~~
+
+OpenStack External Cloud Provider 설치전에 Cilium CNI Plugin을 설치하여, OpenStack External Cloud Provider가 설치 될수 있도록 만든다.
 
 {% highlight text %}
 [Global]
@@ -423,44 +435,46 @@ cloud-config Secret을 생성하고, OpenStack External Cloud Provider를 배포
 
 OpenStack External Cloud Provider를 배포된 이후에 나머지 Control Plain (Master Node) VM이 생성되는걸 확인할 수 있다.
 
-### 10. Cilium CNI Pluing 설치
+### 10. Kubernetes Cluster 동작 확인
 
 ~~~
-(Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' create -f https://raw.githubusercontent.com/cilium/cilium/1.7.11/install/kubernetes/quick-install.yaml
-~~~
+(Local)# kubectl get cluster
+NAME    PHASE
+ssup2   Provisioned
 
-Cilium CNI Plugin을 설치한다.
-
-### 11. Kubernetes Cluster 동작 확인
-
-~~~
 (Local)# kubectl get kubeadmcontrolplane
-kubectl get kubeadmcontrolplane                                                                           [16:05:13]
 NAME                  INITIALIZED   API SERVER AVAILABLE   VERSION    REPLICAS   READY   UPDATED   UNAVAILABLE
 ssup2-control-plane   true          true                   v1.17.11   3          3       3
 
 (Local)# kubectl get machine
-NAME                          PROVIDERID                                         PHASE        VERSION
-ssup2-control-plane-9hdqg     openstack://b628eb2a-83c9-4668-83de-1f884981f7dd   Running      v1.17.11
-ssup2-control-plane-vzvvn     openstack://a502d433-f431-44c2-918d-0f3df9d46045   Running      v1.17.11
-ssup2-control-plane-wgdcv     openstack://b628eb2a-83c9-4668-83de-1f884981f7dd   Running      v1.17.11
-ssup2-md-0-7b7b86d6f7-xsjvc   openstack://e3463a03-7702-496e-89fb-efbdda63d1a9   Running      v1.17.11
+NAME                          PROVIDERID                                         PHASE     VERSION
+ssup2-control-plane-88c9w     openstack://2dcc2ba4-2968-4e5a-8c85-11c61054b015   Running   v1.17.11
+ssup2-control-plane-m6hkz     openstack://79608e3b-d863-46ae-84a2-7855175b4450   Running   v1.17.11
+ssup2-control-plane-smlkx     openstack://f3214c23-a011-4353-bf9f-6a440097dd5e   Running   v1.17.11
+ssup2-md-0-7b7b86d6f7-whvwh   openstack://2facf68d-95e5-4d1a-882f-43b3bcafc2ba   Running   v1.17.11
+
+(Local)# kubectl get openstackmachine
+NAME                        CLUSTER   INSTANCESTATE   READY   PROVIDERID                                         MACHINE
+ssup2-control-plane-b74l9   ssup2     ACTIVE          true    openstack://f3214c23-a011-4353-bf9f-6a440097dd5e   ssup2-control-plane-smlkx
+ssup2-control-plane-l28lt   ssup2     ACTIVE          true    openstack://2dcc2ba4-2968-4e5a-8c85-11c61054b015   ssup2-control-plane-88c9w
+ssup2-control-plane-pcrxg   ssup2     ACTIVE          true    openstack://79608e3b-d863-46ae-84a2-7855175b4450   ssup2-control-plane-m6hkz
+ssup2-md-0-t5jtt            ssup2     ACTIVE          true    openstack://2facf68d-95e5-4d1a-882f-43b3bcafc2ba   ssup2-md-0-7b7b86d6f7-whvwh
 
 (Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' get nodes
-NAME                        STATUS   ROLES    AGE   VERSION
-ssup2-control-plane-9hdqg   Ready    master   67m   v1.17.11
-ssup2-control-plane-bbmhb   Ready    master   44m   v1.17.11
-ssup2-control-plane-phgfm   Ready    master   29m   v1.17.11
-ssup2-md-0-87mqq            Ready    <none>   63m   v1.17.11
+NAME                        STATUS   ROLES    AGE     VERSION
+ssup2-control-plane-b74l9   Ready    master   94m     v1.17.11
+ssup2-control-plane-l28lt   Ready    master   8m28s   v1.17.11
+ssup2-control-plane-pcrxg   Ready    master   70m     v1.17.11
+ssup2-md-0-t5jtt            Ready    <none>   89m     v1.17.11
 ~~~
 
 Kubernetes Cluster 동작을 확인한다.
 
-### 12. Kubernetes Cluster VM Node에 SSH 접근
+### 11. Kubernetes Cluster VM Node에 SSH 접근
 
 Bastion VM으로 ssup2 Keypair를 이용해 SSH로 접속한 다음, Bastion VM 내부에서 다시 ssup2 Keypair를 이용하여 Kubernetes Cluster VM Node에 접근해야 한다.
 
-### 13. 참조
+### 12. 참조
 
 * [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 * [https://cluster-api.sigs.k8s.io/](https://cluster-api.sigs.k8s.io/)
