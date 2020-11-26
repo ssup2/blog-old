@@ -1,5 +1,5 @@
 ---
-title: Kubernetes 설치 / Cluster API, External Cloud Provider 이용 / Ubuntu 18.04, OpenStack 환경
+title: Kubernetes 설치 / ClusterAPI, External Cloud Provider 이용 / Ubuntu 18.04, OpenStack 환경
 category: Record
 date: 2020-11-20T12:00:00Z
 lastmod: 2020-11-20T12:00:00Z
