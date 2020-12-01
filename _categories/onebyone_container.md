@@ -14,22 +14,24 @@ category: E.T.C
 * [4. Cgroup]({{site.baseurl}}/onebyone_container/4.Cgroup)
   * 4.1\. CPU
   * 4.2\. Memory
+  * 4.3\. Cgroup 제어
+  * 4.4\. Cgroup과 Process의 상관관계
 * 5\. Conatiner Image
   * 5.1\. AUFS Filesystem
   * 5.2\. Overlay Filesystem
-* 6\. Container Spec
-  * 6.1\. OCI Runtime Spec
-  * 6.2\. OCI Image Spec
-  * 6.3\. CNI
-* 7\. Kubernetes Pod
-  * 7.1\. Paused Container
-  * 7.2\. Resource
-  * 7.3\. Container Log
-  * 7.4\. Volume
-* 8\. Privilege
-  * 8.1\. Capability
-  * 8.2\. Seccomp
-  * 8.3\. LSM
-  * 8.4\. AppArmor
-* 9\. vs VM
+* 6\. Container vs VM
+* 7\. Container Spec
+  * 7.1\. OCI Runtime Spec
+  * 7.2\. OCI Image Spec
+  * 7.3\. CNI
+* 8\. Kubernetes Pod
+  * 8.1\. Paused Container
+  * 8.2\. Resource
+  * 8.3\. Container Log
+  * 8.4\. Volume
+* 9\. Privilege
+  * 9.1\. Capability
+  * 9.2\. Seccomp
+  * 9.3\. LSM
+  * 9.4\. AppArmor
 * 10\. 마치며
