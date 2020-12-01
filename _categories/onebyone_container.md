@@ -9,7 +9,7 @@ category: E.T.C
   * [3.1. PID Namespace]({{site.baseurl}}/onebyone_container/3.1.PID_Namespace)
   * [3.2. Network Namespace]({{site.baseurl}}/onebyone_container/3.2.Network_Namespace)
   * [3.3. Mount Namespace]({{site.baseurl}}/onebyone_container/3.3.Mount_Namespace)
-  * [3.4. with Process]({{site.baseurl}}/onebyone_container/3.4.with_Process)
+  * [3.4. Namespace와 Process의 상관관계]({{site.baseurl}}/onebyone_container/3.4.with_Process)
   * [3.5. Namespace의 한계점]({{site.baseurl}}/onebyone_container/3.5.Namespace_한계점)
 * [4. Cgroup]({{site.baseurl}}/onebyone_container/4.Cgroup)
   * 4.1\. CPU
