@@ -12,9 +12,9 @@ category: E.T.C
   * [3.4. Namespace와 Process의 상관관계]({{site.baseurl}}/onebyone_container/3.4.Namespace_with_Process)
   * [3.5. Namespace의 한계점]({{site.baseurl}}/onebyone_container/3.5.Namespace_한계점)
 * [4. Cgroup]({{site.baseurl}}/onebyone_container/4.Cgroup)
-  * 4.1\. CPU
-  * 4.2\. Memory
-  * 4.3\. Cgroup 제어
+  * [4.1. Cgroup 제어]({{site.baseurl}}/onebyone_container/4.Cgroup_제어)
+  * 4.2\. CPU
+  * 4.3\. Memory
   * 4.4\. Cgroup과 Process의 상관관계
 * 5\. Conatiner Image
   * 5.1\. AUFS Filesystem
