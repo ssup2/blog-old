@@ -66,7 +66,9 @@ Kubernetes에서는 Domain을 이용하여 Service Discovery를 수행하는데,
 
 또 하나의 우회 방법은 하나의 App에서 전송되는 Domain Resolve Packet은 무조건 동일한 CoreDNS로 DNAT 되도록 설정하는 방법이 있다. Packet의 Header Hashing을 기반으로 하는 Load Balancing을 수행하는 알고리즘을 이용하면 된다. Kubernetes Cluster에서 Service Loadbalancing을 IPVS를 통해서 수행하고 있다면 IPVS의 Load Balancing 알고리즘을 dh(Destination Hashing Scheduling), sh(Source Hashing Scheduling)을 이용하면 된다. DNAT 수행없이 바로 CoreDNS로 Domain Resolve Packet을 전송하여 본 Issue를 회피하는 방법도 존재한다. 모든 Node마다 CoreDNS를 구동한 다음 각각의 App이 App이 구동되는 Node의 CoreDNS를 이용하도록 설정하면, App의 Domain Resolve Packet은 DNAT 수행없이 CoreDNS에게 전달된다.
 
-마지막 우회 방법은 conntrack을 이용하지 않는 방법이다. Domain Resolve Packet은 53번 Port를 이용한다. iptables의 mangle Table을 활용하여 53번 Port를 갖는 Packet은 conntrack에 의해서 Connection 정보가 관리되지 않도록 설정할 수 있다. Cilium CNI를 이용하면 conntrack을 이용하지 않을수 있다. Cilium CNI는 Host Network Namespace를 이용하지 않는 Pod과 Service 사이의 Connection 관리를 conntrack을 이용하지 않고 BPF와 BPF Map을 이용한다. Host Network Namespace를 이용하는 Pod 또는 Host Processes와 Service 사이의 Connection 관리는 cgroup eBPF를 지원하는 Cilium CNI Version (1.6.0+)에서는 conntrack을 이용하지 않고 BPF와 BPF Map을 이용한다. 따라서 cgroup eBPF를 지원하는 Cilium CNI Version과 Kernel Version을 이용한다면 본 Issue를 우회할 수 있다.
+마지막 우회 방법은 conntrack을 이용하지 않는 방법이다. Cilium CNI를 이용하면 conntrack을 이용하지 않을수 있다. Cilium CNI는 Host Network Namespace를 이용하지 않는 Pod과 Service 사이의 Connection 관리를 conntrack을 이용하지 않고 BPF와 BPF Map을 이용한다. Host Network Namespace를 이용하는 Pod 또는 Host Processes와 Service 사이의 Connection 관리는 cgroup eBPF를 지원하는 Cilium CNI Version (1.6.0+)에서는 conntrack을 이용하지 않고 BPF와 BPF Map을 이용한다. 따라서 cgroup eBPF를 지원하는 Cilium CNI Version과 Kernel Version을 이용한다면 본 Issue를 우회할 수 있다.
+
+Kubernetes Local DNS를 이용하는 방법도 conntrack을 이용하지 않을수 있다. Domain Resolve Packet은 53번 Port를 이용한다. iptables의 mangle Table을 활용하여 53번 Port를 갖는 Packet은 conntrack에 의해서 Connection 정보가 관리되지 않도록 설정할 수 있다. Kubernetes Local DNS 이용시 iptables을 이용하여 Domain Resolve Packet이 Conntrack에 의해서 관리되지 않도록 설정하기 때문에 본 Issue를 우회할 수 있다.
 
 ### 5. 참조
 
