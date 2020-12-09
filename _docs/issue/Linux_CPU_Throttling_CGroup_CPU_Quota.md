@@ -21,7 +21,7 @@ Linux Kernel의 Process Scheduler의 문제이기 때문에 다음의 3개의 Pa
   * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=512ac999](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=512ac999)
 * sched/fair: Fix low cpu usage with high throttling by removing expiration of cpu-local slices
   * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=de53fd7aedb](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=de53fd7aedb)
-* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=763a9ec06c4
+* sched/fair: Fix -Wunused-but-set-variable warnings
   * [https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=763a9ec06c4](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=763a9ec06c4)
 
 Patch가 적용된 Kernel Version은 다음과 같다.
