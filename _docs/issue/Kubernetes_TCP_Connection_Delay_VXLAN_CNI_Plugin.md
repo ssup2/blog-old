@@ -39,7 +39,7 @@ VXLAN 기반의 CNI (Container Network Interface) Plugin을 이용하는 Kuberne
 
 한번더 SNAT가 되었다면 한번더 TCP/UDP Checksum을 계산해야 하지만 Kernel Bug에 의해서 한번더 TCP/UDP Checksum을 계산하지 않는 문제가 있다. Masquerade Rule에 "\-\-random-fully" Option이 적용되어 있지 않다면 VXLAN Tunnel Interface의 IP로 SNAT된 Packet을 한번더 VXLAN Tunnel Interface의 IP로 SNAT 하여도 Packet의 Src IP와 Src Port는 변경되지 않기 때문에 Kernel의 TCP/UDP Checksum Bug는 치명적이지 않는다. 하지만 Masquerade Rule에 "\-\-random-fully" Option이 적용되어 있다면 두번째 SNAT 수행시 Src IP는 변경되지 않지만 Src Port는 변경되기 때문에 Kernel의 TCP/UDP Checksum Bug는 치명적인 Bug가 된다. TCP/UDP Checksum이 맞지 않는 Packet은 해당 Packet을 수신한 NIC에서 Drop된다.
 
-대부분의 VXLAN을 기반으로하는 CNI Plugin에서는 Pod에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet 전송시, Packet은 VXLAN Tunnel Interface의 IP로 SNAT 되지 않고 Pod의 IP를 Src IP로 갖고 전송된다. Packet이 VXLAN Tunnel Interface의 IP로 SNAT 되는 경우는 Host에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet을 전송하거나, Host Network Namespace를 이용하는 Pod에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet을 전송할 때이다. 따라서 본 Issue는 앞의 2가지 경우에 주로 발생한다. Masquerade Rule에 "\-\-random-fully" Option은 Kubernetes v1.16 Version 이후부터 적용되었다. 따라서 v1.16 이전 Version에서는 본 이슈가 발생하지 않는다.
+대부분의 VXLAN을 기반으로하는 CNI Plugin에서는 Pod에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet 전송시, Packet은 VXLAN Tunnel Interface의 IP로 SNAT 되지 않고 Pod의 IP를 Src IP로 갖고 전송된다. Packet이 VXLAN Tunnel Interface의 IP로 SNAT 되는 경우는 Host에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet을 전송하거나, Host Network Namespace를 이용하는 Pod에서 VXLAN Tunnel Interface를 통해서 Pod으로 Packet을 전송할 때이다. **따라서 본 Issue는 Host 또는 Host Network Namespace를 이용하는 경우에 주로 발생한다.** Masquerade Rule에 "\-\-random-fully" Option은 Kubernetes v1.16 Version 이후부터 적용되었다. 따라서 v1.16 이전 Version에서는 본 이슈가 발생하지 않는다.
 
 ### 3. 해결 방안
 
@@ -73,7 +73,12 @@ Kubernetes의 KUBE-POSTROUTING Chain의 Rule이 하나의 Packet이 두번 SNAT 
 
 #### 3.2. Kernel Patch
 
-TCP/UDP Checksum Bug를 수정한 Kernel을 적용하면 된다. TCP/UDP Checksum Bug를 수정한 Kernel Version은 다음과 같다.
+다음의 Bug를 수정한 Kernel을 적용하면 된다.
+
+* netfilter: nat: never update the UDP checksum when it's 0
+  * [https://www.spinics.net/lists/netdev/msg648256.html](https://www.spinics.net/lists/netdev/msg648256.html)
+
+UDP Checksum Bug를 수정한 Kernel Version은 다음과 같다.
 
 * Linux Longterm
   * 4.14.181+
