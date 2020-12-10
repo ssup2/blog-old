@@ -100,5 +100,3 @@ NIC에서 TCP/UDP Checksum을 수행하지 않도록 TCP/UDP Checksum Offload를
 * [https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02](https://tech.xing.com/a-reason-for-unexplained-connection-timeouts-on-kubernetes-docker-abd041cf7e02)
 * [https://www.spinics.net/lists/netdev/msg648256.html](https://www.spinics.net/lists/netdev/msg648256.html)
 * [https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)
-
-
