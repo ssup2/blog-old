@@ -1,8 +1,8 @@
 ---
 title: Kubernetes NodeLocal DNSCache
 category: Theory, Analysis
-date: 2020-09-24T12:00:00Z
-lastmod: 2020-09-24T12:00:00Z
+date: 2020-12-24T12:00:00Z
+lastmod: 2020-12-24T12:00:00Z
 comment: true
 adsense: true
 ---
