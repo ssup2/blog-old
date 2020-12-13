@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-Kubernetes의 NodeLocal DNSCache룰 분석한다.
+Kubernetes의 NodeLocal DNSCache 기법을 분석한다.
 
 ### 1. Kubernetes NodeLocal DNSCache
 
-Kubernetes의 NodeLocal DNSCache는 모든 Kubernetes Cluster의 Node에 DNS Cache Server를 구성하는 기법이다. NodeLocal DNSCache를 통해서 Pod안의 App에서 전송하는 Domain Resolve 요청을 더 빠르게 처리할 수 있으며, Linux conntrack Race Condition에 의해서 발생하는 Domain Resolve 요청 Packet이 Drop되는 현상도 회피할 수 있다. Kubernetes Cluster가 이용하는 kube-proxy의 Mode에 따라서 NodeLocal DNSCache 기법의 구현 방법이 달라지게 된다.
+Kubernetes의 NodeLocal DNSCache 기법은 모든 Kubernetes Cluster의 Node에 DNS Cache Server를 구성하는 기법이다. NodeLocal DNSCache 기법을 통해서 Pod안의 App에서 전송하는 Domain Resolve 요청을 더 빠르게 처리할 수 있으며, Linux conntrack Race Condition에 의해서 발생하는 Domain Resolve 요청 Packet이 Drop되는 현상도 회피할 수 있다. Kubernetes Cluster가 이용하는 kube-proxy의 Mode에 따라서 NodeLocal DNSCache 기법의 구현 방법이 달라지게 된다.
 
 #### 1.1. with iptables kube-proxy Mode
 
