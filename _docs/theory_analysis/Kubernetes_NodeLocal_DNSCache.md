@@ -47,7 +47,7 @@ Pod안의 App은 10.96.0.10 또는 169.254.25.10 IP 주소를 통해서 자신�
 
 하지만 NodeLocal DNSCache가 정지하면 NodeLocal DNSCache가 정지한 Node에서 동작하는 모든 Pod의 App에서 Domain Resolve를 수행할 수 없다는 큰 단점을 갖고 있다. NodeLocal DNSCache의 구조상 하나의 Node에 여러개를 동시에 구동시킬수 없기 때문에, 각 Node에 동작중인 NodeLocal DNSCache가 정지하지 않도록 신경써야한다. NodeLocal DNSCache Pod는 kubelet에 의해서 강제로 제거되지 않도록 하기 위해서 system-node-critical priorityClassName을 갖고 동작한다.
 
-NodeLocal DNSCache Update를 위해서 단순히 NodeLocal DNSCache DaemonSet의 Image를 교체한다면, NodeLocal DNSCache의 동작이 일시적으로 정지되는 것을 막을수는 없기 때문에 App의 일시적 장애로 이어질 수 있다. 이러한 장애를 막기위한 우회 방법으로 먼져 NodeLocal DNSCache DaemonSet을 처음으로 구동할때 updateStrategy를 OnDelete으로 설정하여 Kubernetes Cluster 사용자가 하나씩 NodeLocal DNSCache Pod를 삭제하면서 Update를 하도록 설정한다. 이후에 Update를 진행할 Node를 Cordon하여 모든 Pod를 다른 Node로 옮겨놓고 NodeLocal DNSCache Pod를 삭제하여 Update를 진행한다. Update가 완료된 이후에는 Uncordon하여 Pod이 Scheduling 될수 있도록 복구한다. 모든 Node에 대해서 Cordon, Update, Uncordon을 반복해야 한다.
+NodeLocal DNSCache Update를 위해서 단순히 NodeLocal DNSCache DaemonSet의 Image를 교체한다면, NodeLocal DNSCache의 동작이 일시적으로 정지되는 것을 막을수는 없기 때문에 App의 일시적 장애로 이어질 수 있다. 이러한 장애를 막기위한 우회 방법으로 먼져 NodeLocal DNSCache DaemonSet을 처음으로 구동할때 updateStrategy를 OnDelete으로 설정하여 Kubernetes Cluster 사용자가 하나씩 NodeLocal DNSCache Pod를 삭제하면서 Update를 하도록 설정한다. 이후에 Update를 진행할 Node를 Cordon하여 모든 Pod를 다른 Node로 옮겨놓고 NodeLocal DNSCache Pod를 삭제하여 Update를 진행한다. Update가 완료된 이후에는 Uncordon하여 Pod이 Scheduling 될수 있도록 복구한다. 모든 Node에 대해서 Cordon, Update, Uncordon을 반복한다.
 
 {% highlight console %}
 # iptables -t raw -nvL
@@ -84,7 +84,7 @@ NOTRACK Rule은 해당 Packet이 Linux conntrack에 의해서 Connection이 관�
 
 iptables kube-proxy Mode일때는 Pod안의 App은 NodeLocal DNSCache 적용 유무에 관계없이 동일하게 10.96.0.10 IP 주소로 Domain Resolve 요청을 전송하면 된다. 또한 NodeLocal DNSCache는 시작하면서 nodelocaldns dummy Interface 생성 및 NOTRACK Rule을 설정하고, 종료하면서 odelocaldns dummy Interface 삭제 및 NOTRACK Rule을 제거한다. 따라서 App Pod의 재시작이 필요없이 NodeLocal DNSCache 이용유무를 자유롭게 변경할 수 있다.
 
-#### 1.1. with IPVS kube-proxy Mode
+#### 1.2. with IPVS kube-proxy Mode
 
 ![[그림 2] Kubernetes NodeLocal DNSCache Architecture with iptables kube-proxy Mode]({{site.baseurl}}/images/theory_analysis/Kubernetes_NodeLocal_DNSCache/Kubernetes_NodeLocal_DNSCache_IPVS.PNG){: width="700px"}
 
