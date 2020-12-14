@@ -45,7 +45,9 @@ NodeLocal DNSCache Pod안에서는 Cache Mode로 동작하는 CoreDNS가 존재�
 
 Pod안의 App은 10.96.0.10 또는 169.254.25.10 IP 주소를 통해서 자신이 동작하고 있는 Node의 NodeLocal DNSCache Pod에게만 Domain Resolve 요청을 전송한다. 따라서 Cluster CoreDNS로 전송 되어야하는 Domain Resolve 요청이 각 NodeLocal DNSCache Pod에게 자연스럽게 분산되는 효과를 얻을 수 있다. 또한 Pod안의 App에서 전송한 Domain Resolve 요청이 NodeLocal DNSCache Pod에게 까지만 전달되면, 대부분의 경우 NodeLocal DNSCache Pod내부에서 처리되기 때문에 Domain Resolve 요청의 Network Hop도 감소된다. 이러한 이유들 때문에 NodeLocal DNSCache를 통해서 Domain Resolve 처리 성능을 높일수 있다.
 
-NodeLocal DNSCache Pod의 CoreDNS는 모든 DNS Record의 정보를 Cluster CoreDNS으로부터 가져와 Caching 하지 않는다. Kubernetes Cluster Domain에 소속되어 있는 DNS Record의 정보의 경우에만 Cluster CoreDNS으로부터 가져와 Caching하고, 그외의 나머지 DNS Record의 정보는 외부 DNS 서버로부터 가져와 Caching한다. [그림 1]에서 NodeLocal DNSCache Pod의 CoreDNS의 Config 파일에 "cluster.local"은 Kubernetes Cluster의 Domain을 의미한다. [그림 1]에서 cluster.local Domain에 소속되어 있는 DNS Record에 대해서는 CoreDNS Service의 ClusterIP 주소를 설정하여 Cluster CoreDNS으로부터 정보를 가져오도록 설정되어 있고, 그외 나머지 DNS Record에 대해서는 외부 DNS Server로부터 Caching 하도록 설정되어 있다.
+NodeLocal DNSCache Pod의 CoreDNS는 모든 DNS Record의 정보를 Cluster CoreDNS으로부터 가져와 Caching 하지 않는다. Kubernetes Cluster Domain에 소속되어 있는 DNS Record의 정보의 경우에만 Cluster CoreDNS으로부터 가져와 Caching하고, 그외의 나머지 DNS Record의 정보는 외부 DNS 서버로부터 가져와 Caching한다. Cluster CoreDNS으로부터 DNS Record의 정보를 가져올때는 안전성을 위해서 특수하게 TCP를 이용하고, 외부 DNS 서버로부터 DNS Record 정보를 가져올때는 일반 Domain Resolve 요청처럼 UDP를 이용한다.
+
+[그림 1]에서 NodeLocal DNSCache Pod의 CoreDNS의 Config 파일에 "cluster.local"은 Kubernetes Cluster의 Domain을 의미한다. [그림 1]에서 cluster.local Domain에 소속되어 있는 DNS Record에 대해서는 CoreDNS Service의 ClusterIP 주소를 설정하여 Cluster CoreDNS으로부터 정보를 가져오도록 설정되어 있고, 그외 나머지 DNS Record에 대해서는 외부 DNS Server로부터 Caching 하도록 설정되어 있다.
 
 NodeLocal DNSCache 기법은 NodeLocal DNSCache Pod가 정지하면 NodeLocal DNSCache Pod가 정지한 Node에서 동작하는 모든 Pod에서 Domain Resolve를 수행할 수 없게되어 App의 일시적 장애로 이어질수 있다는 단점을 갖고 있다. NodeLocal DNSCache 기법의 구조상 하나의 Node에 여러개를 동시에 구동시킬수도 없기 때문에, 각 Node에 동작중인 NodeLocal DNSCache Pod가 정지하지 않도록 신경써야한다. NodeLocal DNSCache Pod는 kubelet에 의해서 강제로 제거되지 않도록 하기 위해서 system-node-critical priorityClassName을 갖고 동작한다.
 
