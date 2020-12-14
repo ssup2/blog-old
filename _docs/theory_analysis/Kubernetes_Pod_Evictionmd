@@ -1,0 +1,23 @@
+---
+title: Kubernetes Pod Eviction
+category: Theory, Analysis
+date: 2020-12-18T12:00:00Z
+lastmod: 2020-12-18T12:00:00Z
+comment: true
+adsense: true
+---
+
+Kubernetes의 Pod Eviction 기법을 정리한다.
+
+### 1. Kubernetes Pod Eviction
+
+Kubernetes는 Cluster의 Resource 부족시 우선순위가 낮은 Pod를 제거하여 Resource를 확보하는 Pod Eviction 기법을 제공한다. Pod Eviction 기법은 Kubernetes Scheduler가 수행하는 기법과 kubelet이 기법 2가지가 존재한다. Kubernetes Scheduler가 수행하는 Pod Eviction 기법은 Cluster Level의 기법이고, kubelet이 수행하는 Pod Eviction 기법은 Node Level의 기법이다. 
+
+#### 1.1. Kubernetes Scheduler의 Pod Eviction
+
+#### 1.2. kubelet의 Pod Eviction
+
+### 2. 참조
+
+* [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/)
+* [https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/](https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/)
