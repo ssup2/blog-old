@@ -53,7 +53,20 @@ spec:
 
 #### 1.2. Node에 Memory가 부족한 경우
 
-Kubernetes Cluster의 각 Node에서 동작하는 kubelet은 kubelet이 내장하고 있는 cAdvisor를 통해서 Node에서 동작하는 모든 Container의 Resource 사용량을 **Polling** 기반으로 Monitoring한다. cAdvisor는 Cgroup을 기반으로 모든 Container의 Resource 사용량을 측정하는 도구이다. 만약 Node의 모든 Container Memory 사용량이 Node에서 
+Kubernetes Cluster의 각 Node에서 동작하는 kubelet은 kubelet이 내장하고 있는 cAdvisor를 통해서 Node에서 동작하는 모든 Container의 Resource 사용량을 **Polling** 기반으로 Monitoring한다. cAdvisor는 Cgroup을 기반으로 모든 Container의 Resource 사용량을 측정하는 도구이다. 만약 Node의 모든 Container의 총 Memory 사용량이 Node의 Container에게 할당 가능한 Memory 용량을 초과하면, kubelet은 우선순위에 따라서 Pod Eviction 과정을 통해서 Pod를 삭제하여 Node의 Memory를 확보한다.
+
+문제는 Node의 모든 Container의 총 Memory 사용량이 갑작스럽게 급증하게되면, kubelet이 cAdvisor Polling을 통해서 Node의 모든 Container의 Memory 사용량을 얻고 Pod Eviction을 수행하기전에 Linux Kernel의 OOM Killer에 의해서 임의의 Container가 강제로 죽을수 있다.
+
+{% highlight console %}
+# dmesg
+...
+[ 2826.282883] Out of memory: Kill process 4070 (stress) score 972 or sacrifice child
+[ 2826.289059] Killed process 4070 (stress) total-vm:8192780kB, anon-rss:7231748kB, file-rss:0kB, shmem-rss:0kB
+[ 2826.635944] oom_reaper: reaped process 4070 (stress), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] OOM Killer Log with Lack of Node Memory </figcaption>
+</figure>
 
 ### 2. 참조
 
