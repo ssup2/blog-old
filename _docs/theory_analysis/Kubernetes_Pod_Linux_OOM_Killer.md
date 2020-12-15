@@ -55,7 +55,17 @@ spec:
 
 Kubernetes Cluster의 각 Node에서 동작하는 kubelet은 kubelet이 내장하고 있는 cAdvisor를 통해서 Node에서 동작하는 모든 Container의 Resource 사용량을 **Polling** 기반으로 Monitoring한다. cAdvisor는 Cgroup을 기반으로 모든 Container의 Resource 사용량을 측정하는 도구이다. 만약 Node의 모든 Container의 총 Memory 사용량이 Node의 Container에게 할당 가능한 Memory 용량을 초과하면, kubelet은 우선순위에 따라서 Pod Eviction 과정을 통해서 Pod를 삭제하여 Node의 Memory를 확보한다.
 
-문제는 Node의 모든 Container의 총 Memory 사용량이 갑작스럽게 급증하게되면, kubelet이 cAdvisor Polling을 통해서 Node의 모든 Container의 Memory 사용량을 얻고 Pod Eviction을 수행하기전에 Linux Kernel의 OOM Killer에 의해서 임의의 Container가 강제로 죽을수 있다.
+문제는 Node의 모든 Container의 총 Memory 사용량이 갑작스럽게 급증하게되면, kubelet이 cAdvisor Polling을 통해서 Node의 모든 Container의 Memory 사용량을 얻고 Pod Eviction을 수행하기전에 Linux Kernel의 OOM Killer에 의해서 임의의 Container가 강제로 죽을수 있다. Kubernetes는 높은 Level의 QoS를 갖는 Pod이 Linux Kernel의 OOM Killer로부터 가장 마지막에 선택되도록 oom_score_adj 값을 설정해둔다.
+
+| Pod QoS | oom_score_adj |
+|---|---|
+| Guaranteed | -998 |
+| Burstable | min(max(2, 1000 - (1000 * memoryRequestBytes) / machineMemoryCapacityBytes), 999 |
+| BestEffort | 1000 |
+
+<figure>
+<figcaption class="caption">[표 1] Pod의 QoS에 따른 oom_score_adj 값</figcaption>
+</figure>
 
 {% highlight console %}
 # dmesg
@@ -70,4 +80,4 @@ Kubernetes Cluster의 각 Node에서 동작하는 kubelet은 kubelet이 내장�
 
 ### 2. 참조
 
-* [https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/](https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/)
+* [https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-oom-behavior](https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-oom-behavior)
