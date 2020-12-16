@@ -187,10 +187,6 @@ kbd {
 }
 
 @media only screen and (max-width: 900px) {
-	blockquote {
-		margin-left: 0;
-	}
-
 	hr {
 		margin: 0 0;
 	}
@@ -224,16 +220,6 @@ kbd {
 @media only screen and (max-width: 500px) {
 	hr {
 		margin: 0 0;
-	}
-
-	p {
-		margin: 0 0 0 0;
-	}
-
-	ul,
-	ol,
-	dl {
-		margin: 0 0 0 0;
 	}
 
 	h1,
