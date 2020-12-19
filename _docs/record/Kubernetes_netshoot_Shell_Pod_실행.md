@@ -31,6 +31,7 @@ metadata:
   namespace: default
 spec:
   hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
   containers:
   - name: my-shell-hostnet
     image: nicolaka/netshoot
