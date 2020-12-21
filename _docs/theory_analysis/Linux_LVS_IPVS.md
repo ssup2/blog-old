@@ -83,7 +83,7 @@ TCP  10.103.1.234:80 rr
 <figcaption class="caption">[Shell 2] IPVS Dummy Interface</figcaption>
 </figure>
 
-LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당 Packet이 Process로 전달되기 전에 호출되는 Hook이다. 따라서 Packet의 Dest IP가 Node의 IP가 아닌 IPVS의 IP이면 해당 Packet은 LOCAL_IN Hook이 아니라 FORWARD Hook에서 처리되어야 한다. 하지만 해당 Packet이 LOCAL_IN Hook에서 처리되는 이유는 IPVS가 생성하는 Dummy Interface에 IPVS의 IP가 할당되기 때문이다.
+LOCAL_IN Hook은 Packet의 Dest IP가 Node 자기 자신의 IP일 경우, 해당 Packet이 Process로 전달되기 전에 호출되는 Hook이다. 따라서 Packet의 Dest IP가 Node의 IP가 아닌 IPVS의 IP이면 해당 Packet은 LOCAL_IN Hook이 아니라 FORWARD Hook에서 처리되어야 한다. 하지만 해당 Packet이 LOCAL_IN Hook에서 처리되는 이유는 IPVS 설정과 같이 설정되어야 하는 Dummy Interface에 IPVS의 IP가 할당되기 때문이다.
 
 [Shell 1]은 ipvsadm 명령어를 이용하여 IPVS List 정보를 보여주고 있다. Dest IP, Dest Port가 10.100.15.169:80 또는 10.103.1.234:80인 Packet이 Round Robin 알고리즘에 의해서 Load Balancing 되도록 설정되어 있다. [Shell 2]는 IPVS의 Dummy Interface를 나타내고 있다. ipvs0 Interface에 IPVS의 IP인 10.100.15.169와 10.103.1.234가 설정되어 있는것을 확인할 수 있다.
 
