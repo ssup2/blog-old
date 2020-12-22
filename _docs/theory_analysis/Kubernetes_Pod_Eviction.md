@@ -19,7 +19,7 @@ Kubernetes Scheduler가 수행하는 Pod Eviction은 Cluster Level의 기법이�
 
 Preemption이 발생하기 위해서는 새로 생성된 Pod의 Prority가 기존에 동작중인 Pod의 Priority가 높아야한다. 따라서 만약 동작중인 모든 Pod의 Priority가 새로 생성된 Pod의 Prority보다 높다면, 새로 생성된 Pod는 Scheduling되지 않고 Pending 상태를 유지한다. Preemption 과정을 통해서 제거되는 Pod는, 동작중인 Pod들 중에서 가장 낮은 Priority를 갖고 있어 선택되는 것은 아니다. 새로 생성되는 Pod의 Resource 요청량과 Node의 Resource 상태에 따라서는 가장 낮은 Priority를 갖고 있지 않아도 선택될 수 있다. 한가지 확실한 점은 새로 생성된 Pod의 Priority 보다는 낮은 Priority를 갖는 Pod이 Preemption을 통해서 제거된다는 점이다.
 
-##### 1.1. Pod PriorityClass
+##### 1.1.1. Pod PriorityClass
 
 {% highlight yaml %}
 apiVersion: scheduling.k8s.io/v1
@@ -62,3 +62,5 @@ Priority Class의 값이 높을수록 높은 Priority를 갖으며 최대값은 
 
 * [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/)
 * [https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#evicting-end-user-pods](https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#evicting-end-user-pods)
+* [https://m.blog.naver.com/PostView.nhn?blogId=alice_k106&logNo=221676471427&referrerCode=0&searchKeyword=Eviction](https://m.blog.naver.com/PostView.nhn?blogId=alice_k106&logNo=221676471427&referrerCode=0&searchKeyword=Eviction)
+* [https://stackoverflow.com/questions/56486023/does-kubernetes-consider-the-current-memory-usage-when-scheduling-pods](https://stackoverflow.com/questions/56486023/does-kubernetes-consider-the-current-memory-usage-when-scheduling-pods)
