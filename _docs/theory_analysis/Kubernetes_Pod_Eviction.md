@@ -70,7 +70,7 @@ kubelet은 Eviction 대상이 된 Pod 중에서 Priority Class에 의해서 낮�
 
 ##### 1.2.2. Disk, inode 부족시
 
-
+kubelet은 Disk 용량 부족시 낮은 QoS를 갖는 Pod부터 Eviction을 통해 제거한다. 동일한 QoS를 갖는 Pod 중에서는 많은 Disk를 용량을 사용하는 Pod부터 제거한다. kubelet은 inode 부족시에 낮은 QoS를 갖는 임이의 Pod부터 Eviction을 통해 제거한다.
 
 ### 2. 참조
 
