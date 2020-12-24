@@ -463,6 +463,18 @@ ssup2-control-plane-l28lt   ssup2     ACTIVE          true    openstack://2dcc2b
 ssup2-control-plane-pcrxg   ssup2     ACTIVE          true    openstack://79608e3b-d863-46ae-84a2-7855175b4450   ssup2-control-plane-m6hkz
 ssup2-md-0-t5jtt            ssup2     ACTIVE          true    openstack://2facf68d-95e5-4d1a-882f-43b3bcafc2ba   ssup2-md-0-7b7b86d6f7-whvwh
 
+(Local)# kubectl get secrets | grep ssup2
+ssup2-ca                    Opaque                                2      28d
+ssup2-cloud-config          Opaque                                2      28d
+ssup2-control-plane-5wcw6   cluster.x-k8s.io/secret               1      28d
+ssup2-control-plane-jlm5n   cluster.x-k8s.io/secret               1      28d
+ssup2-control-plane-pwpzr   cluster.x-k8s.io/secret               1      28d
+ssup2-etcd                  Opaque                                2      28d
+ssup2-kubeconfig            Opaque                                1      28d
+ssup2-md-0-sjlj9            cluster.x-k8s.io/secret               1      28d
+ssup2-proxy                 Opaque                                2      28d
+ssup2-sa                    Opaque                                2      28d
+
 (Local)# kubectl --kubeconfig='/root/.kube/ssup2.kubeconfig' get nodes
 NAME                        STATUS   ROLES    AGE     VERSION
 ssup2-control-plane-b74l9   Ready    master   94m     v1.17.11
