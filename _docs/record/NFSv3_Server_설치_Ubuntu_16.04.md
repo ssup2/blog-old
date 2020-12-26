@@ -50,7 +50,7 @@ NFSv3 Server Package를 설치한다.
 #### 2.3. 설정
 
 {% highlight text %}
-/nfs_root      *(rw,nohide,insecure,no_subtree_check,async)
+/nfs_root      *(rw,nohide,insecure,no_subtree_check,async,no_root_squash)
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] /etc/exports</figcaption>

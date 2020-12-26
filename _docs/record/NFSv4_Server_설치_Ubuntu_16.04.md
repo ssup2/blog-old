@@ -50,8 +50,8 @@ NFSv4 Server Package를 설치한다.
 #### 2.3. 설정
 
 {% highlight text %}
-/export               *(rw,fsid=0,insecure,no_subtree_check,async)
-/export/nfs_root      *(rw,nohide,insecure,no_subtree_check,async)
+/export               *(rw,fsid=0,insecure,no_subtree_check,async,no_root_squash)
+/export/nfs_root      *(rw,nohide,insecure,no_subtree_check,async,no_root_squash)
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] /etc/exports</figcaption>
