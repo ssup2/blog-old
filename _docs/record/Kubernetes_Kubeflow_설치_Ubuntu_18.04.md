@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Kubeflow 설치 (Not Working) / Ubuntu 18.04, Jetson Nano Cluster 환경
+title: Kubernetes Kubeflow 설치 / Ubuntu 18.04 환경
 category: Record
 date: 2020-12-26T12:00:00Z
 lastmod: 2020-12-26T12:00:00Z
