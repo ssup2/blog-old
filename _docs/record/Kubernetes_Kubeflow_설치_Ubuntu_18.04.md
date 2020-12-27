@@ -108,7 +108,7 @@ export CONFIG_URI="https://raw.githubusercontent.com/kubeflow/manifests/v1.2-bra
 Kubeflow를 설치한다. 설치가 완료된 이후에 istio-system Namespace의 istio-ingressgateway Service의 NodePort를 이용하여 Kubeflow Dashboard에 접근한다.
   * http://192.168.0.61:31380/
 
-### 6. 참조
+### 7. 참조
 
 * kustomize Install : [https://kubectl.docs.kubernetes.io/installation/kustomize/binaries/](https://kubectl.docs.kubernetes.io/installation/kustomize/binaries/)
 * Kubeflow Install : [https://www.kubeflow.org/docs/started/k8s/kfctl-k8s-istio/](https://www.kubeflow.org/docs/started/k8s/kfctl-k8s-istio/)
