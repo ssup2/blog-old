@@ -1,5 +1,5 @@
 ---
-title: Kubernetes istio 설치 / Ubuntu 18.04 환경
+title: Kubernetes istio 1.1 설치 / Ubuntu 18.04 환경
 category: Record
 date: 2019-05-19T12:00:00Z
 lastmod: 2019-05-19T12:00:00Z

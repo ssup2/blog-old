@@ -22,3 +22,4 @@ Data Plan에는 Envoy가 존재한다. Envoy는 모든 Service Pod에서 동작�
 * Introducing Istio Service Mesh for Microservices
 * [https://istio.io/docs/concepts/what-is-istio/](https://istio.io/docs/concepts/what-is-istio/)
 * [https://stackoverflow.com/questions/48639660/difference-between-mixer-and-pilot-in-istio](https://stackoverflow.com/questions/48639660/difference-between-mixer-and-pilot-in-istio)
+* [https://developer.ibm.com/components/istio/blogs/istio-15-release/](https://developer.ibm.com/components/istio/blogs/istio-15-release/)
