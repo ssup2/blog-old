@@ -7,11 +7,19 @@ comment: true
 adsense: true
 ---
 
+Istio의 Sidecar 기법을 분석한다.
+
 ### 1. Istio Sidecar
 
-#### 1.1. Sidecar Injection
+![[그림 1] Istio Sidecar]({{site.baseurl}}/images/theory_analysis/Istio_Sidecar/Istio_Sidecar.PNG){: width="500px"}
 
-![[그림 1] Istio Architecture]({{site.baseurl}}/images/theory_analysis/Istio_Sidecar/Istio_Sidecar.PNG){: width="500px"}
+Istio의 Sidecar 기법은 각 Pod 마다 전용 Proxy Server를 띄우는 기법을 의미한다. [그림 1]은 Istio Sidecar 기법의 Architecture를 나타내고 있다. Sidecar는 Pod으로 전달되는 모든 Inbound Packet을 대신 수신한 다음, 처리후 Pod의 Container에게 전송하는 역활을 수행한다. 또한 Sidecar는 Pod에서 밖으로 전송되는 모든 Packet을 대신 수신한 다음, 처리후 Pod의 외부로 전송하는 역활을 수행한다.
+
+이러한 Sidecar의 특징 때문에 Sidecar는 Packet 전송에 필요한 모든 정보를 알고 있어야 한다. Sidecar는 이러한 Packet 전송에 필요한 정보를 Istiod라고 불리는 중앙 Controller로 부터 받는다. Istiod가 Sidecar에게 전송하는 정보에는 Pod에서 동작하는 App이 제공하는 Service 정보, Packet 전송에 필요한 Routing 정보, Packet 송수신 허용 여부를 결정하는 Policy 정보, Packet 암호화를 위한 인증서 정보등이 포함되어 있다. Sidecar는 Istiod로 부터 받은 정보들을 바탕으로 Service Discovery, Packet Load Balancing, Packet Encap/Decap, Circuit Breaker 역활등을 수행한다.
+
+Istio의 Sidecar는 Envoy라고 불리는 Proxy 서버를 이용하며 HTTP, gRPC, TCP등 다양한 Protocol을 지원한다.
+
+#### 1.1. Sidecar Injection
 
 #### 1.2. Packet Capture
 
