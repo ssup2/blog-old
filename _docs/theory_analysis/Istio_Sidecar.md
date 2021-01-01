@@ -310,6 +310,10 @@ Chain ISTIO_REDIRECT (1 references)
 <figcaption class="caption">[Console 2] Pod iptables NAT Table with Istio Sidecar</figcaption>
 </figure>
 
+Sidecar가 Injection된 Pod으로 전송되는 모든 Inbound Packet이 Sidecar로 전송되는 이유, 또는 Sidecar가 Injection된 Pod에서 전송되는 모든 Outbound Packet이 Sidecar로 전송되는 이유는 Pod에 Sidecar와 같이 설정되는 Init Container 때문이다. Init Container는 Pod의 Network Namespace에 iptables를 이용하여 Pod의 Inbound/Outbound Packet이 Sidecar로 전송되도록 Redirect하는 Rule을 설정한다. [Console 2]는 Sidecar가 Injection된 Pod안에서 iptables DNAT Table을 조회한 결과이다.
+
+#### 1.3. Packet Load Balancing
+
 ### 2. 참조
 
 * [https://istio.io/latest/docs/reference/config/networking/virtual-service/](https://istio.io/latest/docs/reference/config/networking/virtual-service/)
