@@ -21,9 +21,237 @@ Istio의 Sidecar는 Envoy라고 불리는 Proxy 서버를 이용하며 HTTP, gRP
 
 #### 1.1. Sidecar Injection
 
-Sidecar는 Pod안에서 Container로 동작 해야한다. 따라서 Sidecar가 Pod안에서 Container로 동작할 수 있도록 설정해주어야 한다. Sidecar 설정은 각 Pod마다 수동으로 설정할 수도 있고, Namespace 단위로 설정하여 Namespace안에서 생성되는 모든 Pod에서 Sidecar가 동작하도록 설정할 수 있다.
+Sidecar는 Pod안에서 Container로 동작 해야한다. 따라서 Sidecar가 Pod안에서 Container로 Injection되어 동작할 수 있도록 설정해주어야 한다. Sidecar 설정은 각 Pod마다 수동으로 설정할 수도 있고, Namespace 단위로 설정하여 Namespace안에서 생성되는 모든 Pod에서 Sidecar가 동작하도록 설정할 수 있다.
 
 ##### 1.1.1. Manual 설정
+
+{% highlight console %}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] istioctl kube-inject 적용전 nginx Deployment Manifest</figcaption>
+</figure>
+
+{% highlight console %}
+apiVersion: apps/v1
+kind: Deployment
+...
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+      - args:
+        - proxy
+        - sidecar
+        - --domain
+        - $(POD_NAMESPACE).svc.cluster.local
+        - --serviceCluster
+        - nginx.$(POD_NAMESPACE)
+        - --proxyLogLevel=warning
+        - --proxyComponentLogLevel=misc:error
+        - --concurrency
+        - "2"
+        env:
+        - name: JWT_POLICY
+          value: first-party-jwt
+        - name: PILOT_CERT_PROVIDER
+          value: istiod
+        - name: CA_ADDR
+          value: istiod.istio-system.svc:15012
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: CANONICAL_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['service.istio.io/canonical-name']
+        - name: CANONICAL_REVISION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['service.istio.io/canonical-revision']
+        - name: PROXY_CONFIG
+          value: |
+            {"proxyMetadata":{"DNS_AGENT":""}}
+        - name: ISTIO_META_POD_PORTS
+          value: |-
+            [
+                {"containerPort":80}
+            ]
+        - name: ISTIO_META_APP_CONTAINERS
+          value: nginx
+        - name: ISTIO_META_CLUSTER_ID
+          value: Kubernetes
+        - name: ISTIO_META_INTERCEPTION_MODE
+          value: REDIRECT
+        - name: ISTIO_META_WORKLOAD_NAME
+          value: nginx-deployment
+        - name: ISTIO_META_OWNER
+          value: kubernetes://apis/apps/v1/namespaces/default/deployments/nginx-deployment
+        - name: ISTIO_META_MESH_ID
+          value: cluster.local
+        - name: TRUST_DOMAIN
+          value: cluster.local
+        - name: DNS_AGENT
+        image: docker.io/istio/proxyv2:1.8.1
+        imagePullPolicy: Always
+        name: istio-proxy
+        ports:
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /healthz/ready
+            port: 15021
+          initialDelaySeconds: 1
+          periodSeconds: 2
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1Gi
+          requests:
+            cpu: 10m
+            memory: 40Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1337
+          runAsNonRoot: true
+          runAsUser: 1337
+        volumeMounts:
+        - mountPath: /var/run/secrets/istio
+          name: istiod-ca-cert
+        - mountPath: /var/lib/istio/data
+          name: istio-data
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/istio/pod
+          name: istio-podinfo
+      initContainers:
+      - args:
+        - istio-iptables
+        - -p
+        - "15001"
+        - -z
+        - "15006"
+        - -u
+        - "1337"
+        - -m
+        - REDIRECT
+        - -i
+        - '*'
+        - -x
+        - ""
+        - -b
+        - '*'
+        - -d
+        - 15090,15021,15020
+        env:
+        - name: DNS_AGENT
+        image: docker.io/istio/proxyv2:1.8.1
+        imagePullPolicy: Always
+        name: istio-init
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1Gi
+          requests:
+            cpu: 10m
+            memory: 40Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsGroup: 0
+          runAsNonRoot: false
+          runAsUser: 0
+      securityContext:
+        fsGroup: 1337
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - emptyDir: {}
+        name: istio-data
+      - downwardAPI:
+          items:
+          - fieldRef:
+              fieldPath: metadata.labels
+            path: labels
+          - fieldRef:
+              fieldPath: metadata.annotations
+            path: annotations
+        name: istio-podinfo
+      - configMap:
+          name: istio-ca-root-cert
+        name: istiod-ca-cert
+...
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] istioctl kube-inject 적용후 nginx Deployment Manifest</figcaption>
+</figure>
+
+"istioctl kube-inject" 명령어를 통해서 Deployment, StatefulSet, DaemonSet등의 Pod를 관리하는 Object의 Manifest를 변경하여 Pod에 Sidecar가 생성되도록 만든다. [파일 1]은 "istioctl kube-inject" 명령어 적용 전 nginx Deployment Manifest 파일을 나타내고 있고, [파일 2]는 "istioctl kube-inject" 명령어 적용 후 nginx Deployment Manifest 파일을 나타내고 있다. Sidecar인 istio-proxy Container가 추가되었고, Init Container가 추가된 것을 확인할 수 있다.
+
+{% highlight console %}
+# istioctl kube-inject -f nginx-deployment.yaml | kubectl apply -f -
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] istioctl kube-inject 이용</figcaption>
+</figure>
+
+[Console 1]과 같이 "istioctl kube-inject" 명령어를 수행하면 Pod이 새로 생성되면서 Sidecar가 Injection 된다.
 
 ##### 1.1.2. Namespace 설정
 
@@ -75,7 +303,7 @@ Chain ISTIO_REDIRECT (1 references)
     3   180 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            redir ports 15001
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] Pod iptables NAT Table with Istio Sidecar</figcaption>
+<figcaption class="caption">[Console 2] Pod iptables NAT Table with Istio Sidecar</figcaption>
 </figure>
 
 ### 2. 참조
