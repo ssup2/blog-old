@@ -17,7 +17,7 @@ Control Plan은 Pliot, Mixer, Citadel, Mixer 4가지로 구성되어 있다. Pil
 
 Data Plan에는 Envoy가 존재한다. Envoy는 모든 Service(App) Pod의 별도의 Container 안에서 동작하며, Service가 전송한 모든 Packet을 받아 대신 전송하고, Service가 수신해야하는 모든 Packet을 대신 수신하여 Service에게 전달하는 **Sidecar** 역할을 수행한다. Envoy는 Control Plan의 구성요소들의 도움을 받아 Service Load Balancing, Circuit Breaker, Healt Check 등의 기능을 수행하여 Packet을 적절한 Service에게 전달하는 역할을 수행한다. 또한 Envoy가 전송/전달 받는 Packet의 Metric 정보 수집하고 Mixer에게 전달한다. Envoy 사이의 통신은 HTTP/1.1, HTTP/2, gRPC, TCP등의 다양한 Protocol을 지원한다.
 
-![[그림 2] Istio Architecture After v1.5]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture_1.5.PNG){: width="600px"}
+![[그림 2] Istio Architecture After v1.5]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture_1.5.PNG){: width="700px"}
 
 Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]는 v1.5 Version 이후의 Istio Architecture를 나타내고 있다. Pliot, Mixer, Citadel이 Istiod라고 불리는 하나의 Component (Binary)로 통합되었다. Mixer는 Deprecated 되었으며 Envoy에서 수집된 Metric 정보는 Prometheus, Jeager에서 직접 수집한다.
 

@@ -255,6 +255,10 @@ kind: Deployment
 
 ##### 1.1.2. Namespace 설정
 
+Label에 "istio-injection=enabled"이 붙어있는 Namespace안에 Pod이 생성될 경우에는 Istio는 Sidecar Injection을 수행하여 Kubernetes의 사용자의 개입없이 Pod안에 Sidecar를 강제로 생성한다. Kubernetes 사용자의 개입없이 Sidecar Injection을 강제로 수행할 수 있는 이유는 Kubernetes에서 제공하는 Admission Controller 기능을 이용하기 때문이다. 
+
+Admission Controller의 Mutating Webhook 기능을 통해서 Pod 관련 Object 생성 요청이 Kubernetes API Server에게 전달되면, Kubernetes API Server는 해당 Pod 생성 요청을 Istiod에게 전송한다. Istiod는 Pod 생성 요청에 Sidecar 및 Init Container 설정을 추가(Mutating)한 다음에 Kubernetes API 서버에 전달하여 Sidecar와 Init Container가 생성되도록 한다.
+
 #### 1.2. Packet Capture
 
 {% highlight console %}
