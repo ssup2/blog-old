@@ -318,7 +318,7 @@ Init Container는 iptables Rule을 설정해야하기 때문에 [파일 2]에서
 
 #### 1.3. Packet Load Balancing
 
-Sidecar는 Service에게 Packet 전송시 kube-proxy가 설정하는 iptables/IPVS Rule을 이용하여 Load Balancing을 수행하지 않는다. Sidecar는 Istiod를 통해서 받는 Service 및 Service와 연결되어 있는 Pod(Endpoint)의 정보를 받아서 직접 Load Balancing을 수행한다. 따라서 성능적 측면에서는 kube-proxy의 iptables/IPVS 기반의 Load Balancing 기법보다 불리하겠지만, kube-proxy가 지원하지 않는 다양한 Load Balancing 기법을 Sidecar를 통해서 적용할 수 있다. Round Robin, Least Connection, Random, Consistent Hash, Locality Base 기반의 기법등 다양한 Load Balancing 기법을 제공한다.
+Sidecar는 Service에게 Packet 전송시 kube-proxy가 설정하는 iptables/IPVS Rule을 이용하여 Load Balancing을 수행하지 않는다. Sidecar는 Istiod를 통해서 받는 Service 및 Service와 연결되어 있는 Pod(Endpoint)의 정보를 받아서 직접 Load Balancing을 수행한다. 따라서 성능적 측면에서는 kube-proxy의 iptables/IPVS 기반의 Load Balancing 기법보다 불리하겠지만, kube-proxy가 지원하지 않는 다양한 Load Balancing 기법을 Sidecar를 통해서 적용할 수 있다. Round Robin, Least Connection, Random, L7 기반의 Consistent Hash, Locality Base 기반의 기법등 다양한 Load Balancing 기법을 제공한다.
 
 ### 2. 참조
 
