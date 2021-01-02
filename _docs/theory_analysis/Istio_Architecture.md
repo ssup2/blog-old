@@ -9,7 +9,7 @@ adsense: true
 
 ### 1. Istio Architecture
 
-![[그림 1] Istio Architecture]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture.PNG){: width="6500px"}
+![[그림 1] Istio Architecture]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture.PNG){: width="700px"}
 
 [그림 1]은 Istio Architecture를 나타내고 있다. istio는 istio를 제어하는 Control Plan과 Service 사이의 Data를 주고 받는 Data Plan으로 나눌수 있다. Control Plan은 Pliot, Mixer, Citadel, Mixer 4가지로 구성되어 있고, Data Plan에는 Service를 제공하는 App Pod이 존재한다. App Pod는 실제 App이 동작하는 App Container와 Sidecar Container로 구성되어 있다. 여기서 Sidecar는 App Pod 전용 Proxy Server를 의미한다. Sidecar Container는 실제 Sidecar 역활을 수행하는 Envoy와 Envoy를 Control Plan의 명령에 따라서 설정하는 pilot-agent로 구성되어 있다.
 

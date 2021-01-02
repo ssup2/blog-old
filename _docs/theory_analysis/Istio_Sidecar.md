@@ -11,7 +11,7 @@ Istio의 Sidecar 기법을 분석한다.
 
 ### 1. Istio Sidecar
 
-![[그림 1] Istio Sidecar]({{site.baseurl}}/images/theory_analysis/Istio_Sidecar/Istio_Sidecar.PNG){: width="550px"}
+![[그림 1] Istio Sidecar]({{site.baseurl}}/images/theory_analysis/Istio_Sidecar/Istio_Sidecar.PNG){: width="600px"}
 
 Istio의 Sidecar 기법은 각 Pod 마다 전용 Proxy Server를 띄우는 기법을 의미한다. [그림 1]은 Istio Sidecar 기법의 Architecture를 나타내고 있다. Sidecar는 Pod으로 전달되는 모든 Inbound Packet을 대신 수신한 다음, 처리후 Pod의 App Container에게 대신 전송하는 역활을 수행한다. 또한 Sidecar는 App Container에서 밖으로 전송되는 모든 Packet을 대신 수신한 다음, 처리후 Pod의 외부로 대신 전송하는 역활을 수행한다.
 
