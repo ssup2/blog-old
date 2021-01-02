@@ -310,7 +310,11 @@ Chain ISTIO_REDIRECT (1 references)
 <figcaption class="caption">[Console 2] Pod iptables NAT Table with Istio Sidecar</figcaption>
 </figure>
 
-Sidecar가 Injection된 Pod으로 전송되는 모든 Inbound Packet이 Sidecar로 전송되는 이유, 또는 Sidecar가 Injection된 Pod에서 전송되는 모든 Outbound Packet이 Sidecar로 전송되는 이유는 Pod에 Sidecar와 같이 설정되는 Init Container 때문이다. Init Container는 Pod의 Network Namespace에 iptables를 이용하여 Pod의 Inbound/Outbound Packet이 Sidecar로 전송되도록 Redirect하는 Rule을 설정한다. [Console 2]는 Sidecar가 Injection된 Pod안에서 iptables DNAT Table을 조회한 결과이다.
+Sidecar가 Injection된 Pod으로 전송되는 모든 Inbound Packet이 Sidecar로 전송되는 이유, 또는 Sidecar가 Injection된 Pod에서 전송되는 모든 Outbound Packet이 Sidecar로 전송되는 이유는 Pod에 Sidecar와 같이 설정되는 Init Container (istio-init) 때문이다. Init Container는 Pod의 Network Namespace에 iptables를 이용하여 Pod의 Inbound/Outbound Packet이 Sidecar로 전송되도록 Redirect하는 Rule을 설정한다. 
+
+[Console 2]는 Sidecar가 Injection된 Pod안에서 iptables DNAT Table을 조회한 결과이다. Pod의 Inbound Packet은 15006 Port를 통해서 Sidecar로 전송되고, Pod의 Outbound Packet은 15001 Port를 통해서 Sidecar로 전송된다. 15020, 15090 Port는 Sidecar의 Prometheus Port로 이용하고 있고, 15020 Port는 Sidecar의 Health Check Port로 이용하고 있다. 따라서 관련된 Port들은 ISTIO_INBOUND Chain에서 Redirect되지 않도록 설정되어 있다. [파일 2]를 보면 Sidecar는 UID/GID 1337로 동작하도록 설정되어 있는것을 확인할 수 있다. 따라서 UID/GID가 1337로 동작하는 Sidecar가 전송하는 Packet은 Pod에서 Redirect되지 않도록 ISTIO_OUTPUT Chain에 설정되어 있다.
+
+Init Container는 iptables Rule을 설정해야하기 때문에 [파일 2]에서 NET_ADMIN, NET_RAW Capability를 갖고 동작되도록 설정되어 있는것을 확인할 수 있다. NET_ADMIN, NET_RAW Capability를 갖고 동작하는 Init Container는 보안상 취약점이 될 수 있다. 이러한 문제를 해결하기 위해서 Istio는 Istio CNI Plugin을 제공한다. Istio CNI Plugin을 통해서 Pod의 Network Namespace에 iptables 기반 DNAT Rule을 Host에서 설정할 수 있다.
 
 #### 1.3. Packet Load Balancing
 
