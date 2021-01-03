@@ -9,13 +9,15 @@ adsense: true
 
 Istio의 Traffic 제어를 담당하는 Gateway, Virtual Service, Destination Rule를 분석한다.
 
-### 1. Gateway
+### 1. Istio Traffic Management
 
-### 2. Virtual Service
+### 1.1. Gateway
 
-### 3. Destination Rule
+### 1.2. Virtual Service
 
-### 4. 참고
+### 1.3. Destination Rule
+
+### 2. 참고
 
 * [https://istio.io/latest/docs/concepts/traffic-management/](https://istio.io/latest/docs/concepts/traffic-management/)
 * [https://istio.io/latest/docs/reference/config/networking/virtual-service/](https://istio.io/latest/docs/reference/config/networking/virtual-service/)
