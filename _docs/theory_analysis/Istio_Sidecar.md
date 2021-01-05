@@ -326,3 +326,4 @@ Sidecar는 Service에게 Packet 전송시 kube-proxy가 설정하는 iptables/IP
 * [https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/](https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/)
 * [https://istio.io/latest/docs/ops/deployment/requirements/](https://istio.io/latest/docs/ops/deployment/requirements/)
 * [https://istio.io/latest/docs/reference/config/networking/destination-rule/#LoadBalancerSettings](https://istio.io/latest/docs/reference/config/networking/destination-rule/#LoadBalancerSettings)
+* [http://itnp.kr/post/istio-routing-api](http://itnp.kr/post/istio-routing-api)
