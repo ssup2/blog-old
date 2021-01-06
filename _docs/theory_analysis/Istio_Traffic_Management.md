@@ -11,6 +11,8 @@ Istio의 Traffic 제어를 담당하는 Gateway, Virtual Service, Destination Ru
 
 ### 1. Istio Traffic Management
 
+![[그림 1] Version Service, Deployment]({{site.baseurl}}/images/theory_analysis/Istio_Traffic_Management/Version_Service_Deploy.PNG){: width="650px"}
+
 {% highlight yaml%}
 apiVersion: apps/v1
 kind: Deployment
@@ -112,6 +114,8 @@ spec:
 
 ### 1.1. Virtual Service
 
+![[그림 2] Version Virtual Service]({{site.baseurl}}/images/theory_analysis/Istio_Traffic_Management/Version_Virtual_Service.PNG){: width="700px"}
+
 {% highlight yaml%}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -134,6 +138,8 @@ spec:
 </figure>
 
 ### 1.2. Destination Rule
+
+![[그림 3] Version Virtual Service, Destination Rule]({{site.baseurl}}/images/theory_analysis/Istio_Traffic_Management/Version_Virtual_Service_Desitination_Rule.PNG){: width="750px"}
 
 {% highlight yaml%}
 apiVersion: networking.istio.io/v1beta1
@@ -173,6 +179,8 @@ spec:
 </figure>
 
 ### 1.3. Gateway
+
+![[그림 4] Version Gateway, Virtual Service]({{site.baseurl}}/images/theory_analysis/Istio_Traffic_Management/Version_Gateway_Virtual_Service.PNG){: width="750px"}
 
 {% highlight yaml%}
 apiVersion: networking.istio.io/v1beta1
