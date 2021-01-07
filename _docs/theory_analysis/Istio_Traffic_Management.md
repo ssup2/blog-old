@@ -112,7 +112,7 @@ spec:
 <figcaption class="caption">[파일 1] version-app-deploy-service.yaml</figcaption>
 </figure>
 
-Istio에서는 Traffic 제어를 위해서 Virtual Service, Destination Rule, Gateway 3가지 Resource를 제공한다. [그림 1]과 [파일 1]은 Virtual Service, Destination Rule, Gateway 실습을 위한 "version" 이라고 불리는 App을 위한 Service와 Deployment를 나타내고 있다. verion:v1 Image에 포함된 version App은 HTTP 요청시 "version v1" 문자열을 반환하고, version:v2 Image에 포함된 App은 HTTP 요청시 "version v2" 문자열을 반환하는 간단한 App이다.
+Istio에서는 Traffic 제어를 위해서 Virtual Service, Destination Rule, Gateway 3가지 Resource를 제공한다. [그림 1]과 [파일 1]은 Virtual Service, Destination Rule, Gateway 이해 및 적용을 위한 "version" 이라고 불리는 App을 위한 Service와 Deployment를 나타내고 있다. verion:v1 Image에 포함된 version App은 HTTP 요청시 "version v1" 문자열을 반환하고, version:v2 Image에 포함된 App은 HTTP 요청시 "version v2" 문자열을 반환하는 간단한 App이다.
 
 verion:v1/v2 Container는 Deployment를 통해서 배포되며, version:v1을 연결하는 version-v1 Service와 version:v2를 연결하는 version-v2 Service가 존재한다. 또한 version:v1/v2 둘다 연결하는 version Service도 존재한다. 따라서 version-v1 Service에 HTTP 요청을 전송하면 "version v1" 문자열이 반환되고, version-v2 Service에 HTTP 요청을 전송하면 "version v2" 문자열이 반환된다. version Service에 HTTP 요청을 전송하면 "version v1", "version v2" 문자열이 Random으로 반환된다.
 
@@ -231,6 +231,10 @@ spec:
 <figure>
 <figcaption class="caption">[파일 4] version-gateway-virtual-service.yaml</figcaption>
 </figure>
+
+Gateway는 Virtual Service를 Kubernetes Cluster 외부로 노출시키는 역활을 수행한다. [그림 4], [파일 4]는 version-gateway Virtual Service를 version Gateway를 통해서 Kubernetes Cluster 외출에 노출시키는 예제를 나타내고 있다. Gateway에는 Protocol,  Port 번호 Kubernetes Cluster에서 Virtual Service에 접근할 Host (Domain)등을 설정할 수 있다. 또한 [파일 4]에는 명시되어 있지 않지만, 필요에 따라서는 인증서 (TLS) 정보도 설정하여 HTTPS 요청을 받을 수 있도록 설정할 수 있다.
+
+Virtual Service를 Gateway에 연결하기 위해서는 Virtual Service의 hosts에는 Gateway에서 설정한 Host를 추가해야 한다. 또한  Virtual Service의 gateways에는 Virtual Service가 연결된 Gateway의 이름을 명시해야 한다.
 
 ### 2. 참고
 
