@@ -37,7 +37,7 @@ Raft Algorithm은 아래의 5가지의 특징을 만족시키는것을 보장한
 * Leader Append-Only : Leader는 절대로 Log안에 있는 Entry(Command)를 Overwrite하거나 삭제하지 않는다. Leader는 오직 Log안에 다음 Index에 Entry를 추가만 한다.
 * Log Matching : 두 Log의 마지막 Entry의 Index와 Term이 동일하다면, 두 Log는 동일한 Log이다.
 * Leader Completeness : Commit된 Entry는 추후 Leader가 변경되더라도 변경된 Leader에도 존재한다.
-* State Machine Safety : 하나의 Server에서 특정 Index의 Entry를 State Machine에 반영하였다면, 다른 Server에서 동일한 Index의 동일한 Entry를 갖을 경우에만 해당 Stat Machine에 반영한다.
+* State Machine Safety : 하나의 Server에서 특정 Index의 Entry를 State Machine에 반영하였다면, 다른 Server에서 동일한 Index의 동일한 Entry를 갖을 경우에만 해당 Stat Machine에 반영한다. 만약 동일한 Index에 다른 내용의 Entry가 존재할 경우 해당 Entry는 반영되지 않는다.
 
 #### 4.1. Term
 
