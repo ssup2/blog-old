@@ -144,9 +144,9 @@ cancel
 <figcaption class="caption">[Shell 2] Context를 이용한 취소 Signal 전송 예제의 출력</figcaption>
 </figure>
 
-Context 객체를 이용하여 취소 Signal을 전송할 수 있다. [Code 3]은 Context 객체를 이용하여 취소 Signal을 전송하는 예제이다. WithCancel() 함수를 통해서 취소 Signal을 받을수 있도록 설정된 새로운 Context 객체와, 해당 Context 객체에 취소 Signal을 전송하는 cancel() 함수를 얻는다.
+Context 객체를 이용하여 취소 Signal을 전송할 수 있다. [Code 3]은 Context 객체를 이용하여 취소 Signal을 전송하는 예제이다. WithCancel() 함수를 통해서 취소 Signal을 받을수 있도록 설정된 새로운 Context 객체와, 해당 Context 객체에 취소 Signal을 전송하는 cancel() 함수를 얻는다. Context 객체를 받은 함수안에서는 Context 객체의 Done() 함수를 통해서 취소 Signal이 전달되는 Channel을 얻을 수 있다. 여기서 취소 Signal은 Channel을 통해서 어떠한 값이 전달되는 것이 아니라, Channel이 닫히는 것을 의미한다. 
 
-Context 객체를 받은 함수안에서는 Context 객체의 Done() 함수를 통해서 취소 Signal이 전달되는 Channel을 얻을 수 있다. 여기서 취소 Signal은 Channel을 통해서 어떠한 값이 전달되는 것이 아니라, Channel이 닫히는 것을 의미한다. [Code 3]에서 Main 함수에서 cancel() 함수가 호출되면 Channel이 닫히게 되고, Done() 함수의 Channel을 통해서 대기하던 Goroutine은 Channel이 닫힌것을 확인하고 종료된다.
+[Code 3]에서 Main 함수는 5초뒤에 cancel() 함수를 호출한다. 따라서 Context 객체를 받은 함수가 생성한 Goroutine은 5초동안 1초 간격으로 변수 n을 5번 출력하고 종료된다.
 
 #### 1.4. Deadline, Timeout
 
