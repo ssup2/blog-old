@@ -306,12 +306,12 @@ func main() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 5] Context를 이용한 HTTP Server 예제</figcaption>
+<figcaption class="caption">[Code 6] Context를 이용한 HTTP Server 예제</figcaption>
 </figure>
 
-[Code 5]는 Context를 이용하는 HTTP Server의 예제를 나타내고 있다. Context 객체는 하나의 Client의 Request를 처리하는 과정 동안에만 이용되기 때문에, 일반적으로 HTTP Request Handler 가장 윗부분에 Context 객채를 선언하고 초기화 한다. http.Request 객체는 Context() 함수를 통해서 취소 Signal을 받을 수 있는 Context 객체를 반환한다. Context 객체는 취소 Signal을 Client에서 먼저 Connection을 종료할 경우 전달된다.
+[Code 6]은 Context를 이용하는 HTTP Server의 예제를 나타내고 있다. Context 객체는 하나의 Client의 Request를 처리하는 과정 동안에만 이용되기 때문에, 일반적으로 HTTP Request Handler 가장 윗부분에 Context 객채를 선언하고 초기화 한다. http.Request 객체는 Context() 함수를 통해서 취소 Signal을 받을 수 있는 Context 객체를 반환한다. Context 객체는 취소 Signal을 Client에서 먼저 Connection을 종료할 경우 전달된다.
 
-[Code 5]에서 HTTP Handler인 hello() 함수의 첫 부분에 http.Request 객체는 Context() 함수를 통해서 Context 객채를 받은 다음, 받은 Context 객체에 "X-Request-Id" HTTP Header의 값을 저장하는 것을 확인할 수 있다. hello() 함수는 Client의 요청을 받으면 5초 대기후에 "hello" 문자열을 반환한다. 하지만 Client가 5초가 되기전에 먼저 Connection을 끊는다면, Error Log를 남기고 요청 처리를 중단한다.
+[Code 6]에서 HTTP Handler인 hello() 함수의 첫 부분에 http.Request 객체는 Context() 함수를 통해서 Context 객채를 받은 다음, 받은 Context 객체에 "X-Request-Id" HTTP Header의 값을 저장하는 것을 확인할 수 있다. hello() 함수는 Client의 요청을 받으면 5초 대기후에 "hello" 문자열을 반환한다. 하지만 Client가 5초가 되기전에 먼저 Connection을 끊는다면, Error Log를 남기고 요청 처리를 중단한다.
 
 ### 3. 참조
 
