@@ -75,7 +75,6 @@ Leader는 Follower으로부터 Quorum 개수 이상의 AppendEntries 요청 응�
 
 #### 4.3. Member 교체
 
-#### 4.4. Log 압축
 
 ### 5. 참조
 
