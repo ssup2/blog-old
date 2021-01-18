@@ -21,7 +21,7 @@ Heap Memory 영역의 Scan 최소화를 위한 위한 Generation 기법은 Golan
 
 #### 1.1. Tunning
 
-![[그림 1] GOGC]({{site.baseurl}}/images/theory_analysis/Golang_GC/Golang_GC.PNG)
+![[그림 1] GOGC]({{site.baseurl}}/images/theory_analysis/Golang_GC/GOGC.PNG)
 
 Golang은 "GOGC" 환경변수를 통해서 Garbarge Collector의 Garbage Collection 수행 시기를 어느정도 제어할 수 있다. GOGC 환경변수에 설정하는 값은 이전에 Garbage Collection 수행후에도 제거되지 않고 남아서 이용되는 Heap Memory 공간의 용량과 Heap Memory에 새롭개 할당된 공간의 용량의 비율을 나타낸다.
 
