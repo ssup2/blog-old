@@ -47,9 +47,9 @@ Raft Algorithm에서 각 Server는 Leader, Follower, Candidate 3가지의 상태
 
 모든 Server는 상황에 따라서 Leader, Follower, Candidate가 될 수 있다. 따라서 Leader를 선출하는 방법을 Raft Algorithm에서 제공하고 있다. Follower가 Leader가 되는 과정은 다음과 같다.
 
-1. Follower가 특정 시간(Election Timeout)동안 Leader로부터 Heartbeat를 받지 못한다.ㄴ
+1. Follower가 특정 시간(Election Timeout)동안 Leader로부터 Heartbeat를 받지 못한다.
 1. Follower는 Leader가 죽었다고 판단하고 Candidate가 된다.
-1. Candidate는 새로운 Term을 생성하고 다른 Server들로부터 투표를 요청한다. 이후에 새로 생성한 Term이 끝날때 까지 다른 Server들의 표를 대기한다. 투표 요청에는 Candidate 현재 자신의 Log 정보도 포함시킨다.
+1. Candidate는 새로운 Term을 생성하고 다른 Server들로부터 투표를 요청한다. 이후에 새로 생성한 Term이 끝날때 까지 다른 Server들의 표를 대기한다. 투표 요청(Request Vote)에는 Candidate 현재 자신의 Log 정보도 포함시킨다.
 1. 만약 Term동안에 자기 자신포함 다른 Server들로부터 표를 Quorum 개수이상 받는다면 해당 Follower는 Leader가 된다. 만약 Term 동안에 자기 자신 포함 표를 Quorum 개수 이상 받지 못한다면 해당 Follower는 Leader가 되지 못하고 다음 Term에 다시 투표를 진행한다.
 1. Leader가된 Server는 Heatbeat를 다른 Server들에게 전달하여 자신이 새로운 Leader가 된것을 알린다.
 
@@ -65,7 +65,13 @@ Follower는 Log 조건을 충족하는 Candidate의 투표 요청중에서 가�
 
 #### 4.2. Log Replication
 
-Term은 번호를 갖고 있으며, 모든 Server는 현재의 Term 번호를 알고 있다. Follower가 Candidate가 되면 현재의 Term 번호보다 숫자 1이 높은 새로운 Term을 만들고, 새로운 Term 번호를 투표 요청에 포함시켜 다른 Server들에게 새로운 Term 번호도 같이 전달한다. 만약 새로운 Term 동안 Leader가 선출되지 못한다면, Candidate는 다시 숫자 1이 높은 새로운 Term을 만들고 투표 요청을 진행한다.
+Leader가 선출되면 Leader는 Log Replication을 수행하여 Follower에게 자신의 Log를 복제한다. 여기서 Log를 복제한다는 의미는 Log에 저장되어 있는 Entry들을 복제한다는 의미와 동일하다. Entry들을 복제하는 과정에서 Leader는 Follower에게 AppendEntries 요청을 전송한다. AppendEntries 요청에는 복제 되어야하는 Entry들의 정보가 포함되어 있다. AppendEntries 요청을 받은 Follower는 요청에 포함된 Entry들의 정보를 확인한다. Entry들의 정보가 유효하면 해당 Entry들을 자신의 Log에 추가하고 Leader에게 Entry들이 반영되었다는 것을 알린다. 만약 Entry들의 정보가 유효하지 않다면 해당 Entry들을 반영되지 않았다는 것을 Leader에게 알린다.
+
+Follower는 수신한 Entry들이 자신이 가장 마지막에 저장한 Entry의 다음 Entry에 저장되는 Entry이면 유효하다고 판단하고, 그렇지 않으면 유효하지 않다고 판단한다. Entry들의 정보에는 Entry의 Index 번호, 현재의 Term 정보를 포함하고 있다. AppendEntries 요청 반영 응답을 받은 Leader는 복제되어야할 Entry가 존재한다면 다음 Entry들을 AppendEntries 요청에 포함하여 Follower에게 전송한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader는 빈 Entry 정보와 함께 AppendEntries 요청을 보낸다. 복제될 Entry가 없어도 AppendEntries 요청를 전송하는 이유는 AppendEntries 요청이 Leader의 Heartbeat 역활을 수행하기 때문이다.
+
+AppendEntries 요청 거절 응답을 받은 Leader는 이전에 보냈던 Entry의 이전 Entry를 AppendEntries 요청에 포함하여 다시 Follower에게 전송한다. AppendEntries 요청 거절 응답을 받을때 마다 Leader는 이전에 보냈던 Entry의 이전 Entry를 다시 보낸다. 이러한 과정을 계속 반복하면 언젠가 Leader는 Follower에게 유효한 Entry를 언젠가는 보내게 되고, Follower로부터 AppendEntries 요청 반영 응답을 받게 된다. 이후에는 이전에 보냈던 Entry의 다음 Entry를 보내면서 Leader는 Follower에게 Log 복제를 수행한다.
+
+Leader는 Follower으로부터 Quorum 개수 이상의 AppendEntries 요청 응답 Message를 받으면 해당 Entry를 Commit하여 State Machine에 반영한다. Follower는 Leader가 전송한 AppendEntries 요청의 Entry를 Log에 반영하면서, 바로 이전에 Leader가 전송하여 Log에 반영되어 있는 Entry를 State Machine에 반영한다.
 
 #### 4.3. Member 교체
 
