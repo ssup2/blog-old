@@ -73,8 +73,7 @@ AppendEntries 요청 거절 응답을 받은 Leader는 이전에 보냈던 Entry
 
 Leader는 Follower으로부터 Quorum 개수 이상의 AppendEntries 요청 응답 Message를 받으면 해당 Entry를 Commit하여 State Machine에 반영한다. Follower는 Leader가 전송한 AppendEntries 요청의 Entry를 Log에 반영하면서, 바로 이전에 Leader가 전송하여 Log에 반영되어 있는 Entry를 State Machine에 반영한다.
 
-#### 4.3. Member 교체
-
+#### 4.3. Cluster Member 변경
 
 ### 5. 참조
 

@@ -9,7 +9,7 @@ adsense: true
 
 Linux의 BPF (Berkeley Packet Filter)를 분석한다.
 
-### 1. BPF (Berkeley Packet Filter)
+### 1. BPF
 
 BPF (Berkeley Packet Filter)는 Unix-like OS의 **Kernel Level**에서 Bytecode에 따라 동작하는 경량화된 **VM (Virtual Machine)**이다. BPF는 의미 그대로 처음에는 Network Packet을 Filtering하는 Program을 구동하는 용도의 VM이었다. 하지만 사용자가 원하는 기능을 수행하는 Program을 언제든지 Kernel Level에서 구동 할 수 있다는 BPF의 장점 때문에 BPF는 꾸준히 발전하였고, 현재는 다양한 기능을 수행하는 VM이 되었다. 현재 Linux에서도 BPF를 지원하고 있다.
 
