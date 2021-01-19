@@ -11,7 +11,9 @@ Linux의 BPF Program 및 BPF Map의 Lifetime을 분석한다.
 
 ### 1. Linux BPF Lifetime
 
-> int bpf(int cmd, union bpf_attr *attr, unsigned int size)
+{% highlight c %}
+int bpf(int cmd, union bpf_attr *attr, unsigned int size)
+{% endhighlight %}
 <figure>
 <figcaption class="caption">[함수 1] bpf() System Call</figcaption>
 </figure>
