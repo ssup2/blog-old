@@ -11,6 +11,22 @@ Raft Consensus Algorithm을 분석한다.
 
 ### 1. Raft Consensus Algorithm
 
+![[그림 1] Raft Architecture]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Raft_Architecture.PNG){: width="700px"}
+
+#### 1.1. Qourum
+
+![[그림 2] Qourum]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Qourum.PNG){: width="400px"}
+
+#### 1.2. Term
+
+#### 1.3. Leader Election
+
+#### 1.4. Log Replication, Commit
+
+#### 1.5. Log Compaction
+
+#### 1.6. Cluster Member 변경
+
 ### 2. 참조
 
 * [https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf](https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf)
