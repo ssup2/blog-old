@@ -73,8 +73,17 @@ AppendEntries 요청 거절 응답을 받은 Leader는 이전에 보냈던 Entry
 
 Leader는 Follower으로부터 Quorum 개수 이상의 AppendEntries 요청 응답 Message를 받으면 해당 Entry를 Commit하여 State Machine에 반영한다. Follower는 Leader가 전송한 AppendEntries 요청의 Entry를 Log에 반영하면서, 바로 이전에 Leader가 전송하여 Log에 반영되어 있는 Entry를 State Machine에 반영한다.
 
-#### 4.3. Cluster Member 변경
+#### 4.3. Server 구성 변경
+
+Raft Algorithm을 통해서 Consensus를 맞추는 Server들은 상황에 따라서 교체되거나 추가될 수 있다. 이에 따라서 각 Server들의 Server 구성 설정도 변경되어야 한다. 문제는 한번에 모든 Server들의 Server 구성 설정을 동시에 변경할수 없다. 가장 쉬운 방법은 모든 Server들의 동작을 중지시킨 다음, Server 구성 설정을 변경하고 다시 모든 Server를 구동시키는 방법이다. 하지만 Server 구성 설정을 변경하는 동안 Client는 Server를 이용하지 못한다는 큰 단점을 갖게된다.
+
+이러한 문제를 해결하기 위해서 Raft Algorithm은 Two-phase로 Server 구성 설정을 변경한다. Server 구성 설정도 Client의 Command(요청)에 의해서 저장되는 Data처럼 동일하게 관리된다. Leader가 Server 구성 설정을 변경하면 변경 내역은 Leader의 Log의 Entry에 기록되고 Follower들의 Log의 Entry로 복제되어, Leader 및 Follower들의 State Machine에 저장된다. 이때 Server 구성 설정은 한번에 새로운 Server 구성 설정으로 변경하지 않고, 구 Server 구성 설정과 신규 Server 구성 설정이 둘다 존재하는 Joint Consensus라고 불리는 상태를 이용한다. 따라서 Server 구성 설정은 다음과 같은 단계로 이루어 진다.
+
+* 구 Server 구성 -> 구 Server 구성 + 신규 Server 구성 (Joint Consensus) -> 신규 Server 구성
+
+구 Server 구성 설정과 신규 Server 구성 설정이 잠깐 동안 동시에 존재해야 하는 이유는 동시에 2개의 Server가 Leader가 되는것을 방지하기 위해서이다. 구 Server 구성 설정과 신규 Server 구성 설정이 동시에 적용되어 있는 경우에는 두 Server 구성 설정을 만족하는 하나의 Leader만 선출되기 때문이다. 구 Server 구성 설정에서 신규 Server 구성으로 한번에 변경하게 되면 변경되는 동안 일부 Server들은 구 Server 구성 설정으로 돌아가고, 일부 Server들은 신규 Server 구성으로 동작하게 되는데, 이때 2개의 Server가 동시에 Leader가 되어 동작할 수 있다.
 
 ### 5. 참조
 
 * [https://raft.github.io/](https://raft.github.io/)
+* [https://ramcloud.stanford.edu/~ongaro/thesis.pdf](https://ramcloud.stanford.edu/~ongaro/thesis.pdf)

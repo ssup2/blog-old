@@ -31,15 +31,15 @@ Cilium은 Pod Network를 구축하는 방법으로 VXLAN 기반의 기법과 Hos
 
 [그림 2]는 Cilium과 VXLAN을 이용하여 구축한 Default Pod Network를 나타낸다. Host의 Network는 10.0.0.0/24이고, Pod Network는 10.244.0.0/16이다. Cilium은 etcd에 저장된 정보를 바탕으로 각 Host에 Pod Network를 할당한다. 그림에서 Host 1은 192.167.2.0/24 Network가 할당되었다. 따라서 Host 1에 생긴 Pod A의 IP는 192.167.2.0/24 Network에 속한 IP인 192.167.2.10을 이용한다. Host 2에는 192.167.3.0/24 Network가 할당되었기 때문에 Host 2에 생긴 Pod C의 IP는 192.167.3.0/24 Network에 속한 IP인 192.167.3.10를 이용한다.
 
-Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 SCHED_ACT Ingress BPF, Pod의 veth Interface에 붙는 SCHED_ACT Ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 SCHED_ACT Engress BPF, 3가지 BPF가 이용된다. cilium_host Interface와 짝을 이루는 veth Interface는 cilium_net Interface이다. 따라서 따라서 cilium_host Interface로 전달된 Packet은 cilium_host에 붙는 SCHED_ACT Engress BPF에 의해서 Packet이 Routing 되지 않는다면, cilium_net Interface로 나와서 Host Network Namespace를 이용하는 Pod로 전달된다.
+Pod Network 구축시 이용하는 주요 BPF는 VXLAN Interface에 붙는 SCHED_CLS Ingress BPF, Pod의 veth Interface에 붙는 SCHED_CLS Ingress BPF, Cilium을 위해 Host에 생성한 veth Inteface인 cilium_host에 붙는 SCHED_CLS Engress BPF, 3가지 BPF가 이용된다. cilium_host Interface와 짝을 이루는 veth Interface는 cilium_net Interface이다. 따라서 따라서 cilium_host Interface로 전달된 Packet은 cilium_host에 붙는 SCHED_CLS Engress BPF에 의해서 Packet이 Routing 되지 않는다면, cilium_net Interface로 나와서 Host Network Namespace를 이용하는 Pod로 전달된다.
 
-Pod Network Namespace를 이용하는 Pod들 사이에 Packet을 주고 받을때는 Host의 Routing Table 및 cilium_host/cilium_net Interface를 이용하지 않고 Packet을 Routing한다. [그림 2]에서 Pod A에서 Pod B로 Packet을 전송하는 경우 Pod A의 veth Interface에 붙는 SCHED_ACT Ingress BPF로 인해서 Pod B로 Packet이 바로 전송된다. Pod A에서 Pod F로 Packet을 전송하는 경우 Pod A의 veth Interface에 붙는 SCHED_ACT Ingress BPF는 cilium_vxlan Interface로 Packet을 바로 전송하여 Packet을 Host 2의 cilium_vxlan Interface로 전송한다. 이후에 cilium_vxlan Interface에 붙는 SCHED_ACT Ingress BPF에 의해서 Packet은 Pod F로 바로 전송된다.
+Pod Network Namespace를 이용하는 Pod들 사이에 Packet을 주고 받을때는 Host의 Routing Table 및 cilium_host/cilium_net Interface를 이용하지 않고 Packet을 Routing한다. [그림 2]에서 Pod A에서 Pod B로 Packet을 전송하는 경우 Pod A의 veth Interface에 붙는 SCHED_CLS Ingress BPF로 인해서 Pod B로 Packet이 바로 전송된다. Pod A에서 Pod F로 Packet을 전송하는 경우 Pod A의 veth Interface에 붙는 SCHED_CLS Ingress BPF는 cilium_vxlan Interface로 Packet을 바로 전송하여 Packet을 Host 2의 cilium_vxlan Interface로 전송한다. 이후에 cilium_vxlan Interface에 붙는 SCHED_CLS Ingress BPF에 의해서 Packet은 Pod F로 바로 전송된다.
 
 Pod Network Namespace를 이용하는 Pod와 Host Network Namespace를 이용하는 Pod 사이에 Packet을 주고 받을때는 Host의 Host의 Routing Table 및 cilium_host/cilium_net Interface를 이용한다. [그림 2]에서 Pod A에서 Pod C로 Packet을 전송하는 경우 Packet은 Host 1의 Routing Table로 전달되고, Host 1의 Routing Table에 따라서 cilium_host Interface로 전달된다. 이후 Packet은 cilium_net Interface로 나와서 Pod C로 전달된다. Pod A에서 Pod F로 전송하는 Packet을 전송하는 경우 Packet은 Host 1의 cilium_vxlan Interface를 통해서 Host 2의 cilium_vxlan Interface로 나오고, Host 2의 Routing Table에 의해서 cilium_host/cilium_net Interface 통해서 Pod F로 전달된다. 
 
-Pod C에서 Pod A로 Packet을 전송하는 경우 Packet은 Host 1의 Routing Table에 따라서 cilium_host Interface에 전달되는데 이때 cilium_host에 붙는 SCHED_ACT Engress BPF에 의해서 Packet은 Pod A로 바로 전달된다. Pod C에서 Pod D로 Pacekt으 전송하는 경우 Packet은 Host 1의 Routing Table에 따라서 cilium_host Interface에 전달되는데 이때 cilium_host에 붙는 SCHED_ACT Engress BPF에 의해서 Packet은 Host 1의 cilium_vxlan Interface를 통해서 Host 2의 cilium_vxlan Interface로 전송된다. 이후에 cilium_vxlan Interface에 붙는 SCHED_ACT Ingress BPF에 의해서 Packet은 Pod D로 바로 전송된다.
+Pod C에서 Pod A로 Packet을 전송하는 경우 Packet은 Host 1의 Routing Table에 따라서 cilium_host Interface에 전달되는데 이때 cilium_host에 붙는 SCHED_CLS Engress BPF에 의해서 Packet은 Pod A로 바로 전달된다. Pod C에서 Pod D로 Pacekt으 전송하는 경우 Packet은 Host 1의 Routing Table에 따라서 cilium_host Interface에 전달되는데 이때 cilium_host에 붙는 SCHED_CLS Engress BPF에 의해서 Packet은 Host 1의 cilium_vxlan Interface를 통해서 Host 2의 cilium_vxlan Interface로 전송된다. 이후에 cilium_vxlan Interface에 붙는 SCHED_CLS Ingress BPF에 의해서 Packet은 Pod D로 바로 전송된다.
 
-Pod가 이용한는 Network Namespace에 관계없이 Pod에서 전송한 Packet이 Pod가 아닌 Cluster 외부로 전송될 경우, Packet은 Host의 Routing Table에 의해서 Routing 되어 Host 밖으로 전송된다. [그림 2]에서는 Default Gateway가 eth0이기 때문에 Packet은 eth0를 통해서 Cluster 외부로 전송된다. Cilium의 설정에 따라서 [그림 2]와 다른 Pod Network가 생성될 수 있다. 예를들어 Cilium이 IPsec을 이용하도록 설정되어 있다면 Pod의 veth Interface에 붙는 SCHED_ACT Ingress BPF에서 Packet의 목적지에 관계없이 Packet을 무조건 Host의 Routing Table을 통해서 전송하도록 설정한다.
+Pod가 이용한는 Network Namespace에 관계없이 Pod에서 전송한 Packet이 Pod가 아닌 Cluster 외부로 전송될 경우, Packet은 Host의 Routing Table에 의해서 Routing 되어 Host 밖으로 전송된다. [그림 2]에서는 Default Gateway가 eth0이기 때문에 Packet은 eth0를 통해서 Cluster 외부로 전송된다. Cilium의 설정에 따라서 [그림 2]와 다른 Pod Network가 생성될 수 있다. 예를들어 Cilium이 IPsec을 이용하도록 설정되어 있다면 Pod의 veth Interface에 붙는 SCHED_CLS Ingress BPF에서 Packet의 목적지에 관계없이 Packet을 무조건 Host의 Routing Table을 통해서 전송하도록 설정한다.
 
 {% highlight text %}
 # cilium map get cilium_lxc
@@ -75,7 +75,7 @@ Cilium은 Cilium이 이용하는 etcd에는 **Endpoint**라는 이름으로 Cili
 
 ![[그림 3] Cilium Host L3 Pod Network]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Network_Host.PNG)
 
-[그림 3]은 Cilium과 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 [그림 2]의 예제와 동일하다. VXLAN을 이용할 때와 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 SCHED_ACT Ingress BPF가 존재하지 않는다. 또한 Routing Table도 VXLAN을 이용할 때와 다르다. Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있는걸 확인할 수 있다.
+[그림 3]은 Cilium과 Host L3 Network를 이용하여 구축한 Pod Network를 나타낸다. 각 Host에 할당된 Pod Network, Host IP, Pod IP는 [그림 2]의 예제와 동일하다. VXLAN을 이용할 때와 차이점은 VXLAN Interface 및 VXLAN Interface에 붙는 SCHED_CLS Ingress BPF가 존재하지 않는다. 또한 Routing Table도 VXLAN을 이용할 때와 다르다. Host의 Routing Table에는 각 Host에게 할당된 Pod Network 관련 Rule만 있는걸 확인할 수 있다.
 
 [그림 3]에서 Host 1의 Routing Table에는 Host 1에 할당된 Pod Network인 192.167.2.0/24 관련 Rule만 있지 Host 2에 할당된 Pod Network인 192.167.3.0/24 관련 Rule은 없는것을 확인할 수 있다. 따라서 서로 다른 Host에 위치한 Pod 사이에 전송되는 Packet은 Host Network의 설정에 따라서 전송된다. [그림 3]에서는 eth0 Inteface를 통해서 Host Network가 구성되어 있고 eth0 Interface가 Default GW로 설정되어 있기 때문에, Host 1,2 모두 eth0 Interface를 통해서 Pod의 Packet을 주고받는다.
 
@@ -130,15 +130,15 @@ Cilium 17.XX 이전 Version의 경우에 Cilium은 ClusterIP Type의 Service만 
 
 ![[그림 3] Cilium Service Load Balancing with VXLAN]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_VXLAN.PNG)
 
-[그림 3]은 VXLAN을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송할 경우, 전송한 Packet은 Pod의 veth Interface에 붙는 SCHED_ACT Ingress BPF에서 DNAT된다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_ACT Ingress BPF 또는 cilium_vxlan의 SCHED_ACT Ingress BPF에서 SNAT 된다.
+[그림 3]은 VXLAN을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송할 경우, 전송한 Packet은 Pod의 veth Interface에 붙는 SCHED_CLS Ingress BPF에서 DNAT된다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_CLS Ingress BPF 또는 cilium_vxlan의 SCHED_CLS Ingress BPF에서 SNAT 된다.
 
-Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송하는 경우에는 기본적으로 kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT를 수행한다. 하지만 cilium 16.xx 이후 Version의 경우에는 CGROUP_SOCK_ADDR BPF를 이용하여 DNAT를 수행할 수 있는 기능이 추가 되었다. 물론 CGROUP_SOCK_ADDR BPF를 지원하는 Kernel Version에서만 이용할 수 있다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_ACT Ingress BPF 또는 cilium_host의 SCHED_ACT Egress BPF에서 SNAT 된다.
+Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송하는 경우에는 기본적으로 kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT를 수행한다. 하지만 cilium 16.xx 이후 Version의 경우에는 CGROUP_SOCK_ADDR BPF를 이용하여 DNAT를 수행할 수 있는 기능이 추가 되었다. 물론 CGROUP_SOCK_ADDR BPF를 지원하는 Kernel Version에서만 이용할 수 있다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_CLS Ingress BPF 또는 cilium_host의 SCHED_CLS Egress BPF에서 SNAT 된다.
 
 ##### 1.3.2. with Host L3
 
 ![[그림 4] Cilium Service Load Balancing with Host L3]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Service_Host.PNG)
 
-[그림 4]는 Host L3 Network을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송할 경우 Service와 연결된 Pod이 외부에 있다면, SNAT가 cilium_host의 SCHED_ACT Egress BPF에서 수행된다는 점을 제외하고는 VXLAN을 이용할 때와 크게 다르지 않다.
+[그림 4]는 Host L3 Network을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송할 경우 Service와 연결된 Pod이 외부에 있다면, SNAT가 cilium_host의 SCHED_CLS Egress BPF에서 수행된다는 점을 제외하고는 VXLAN을 이용할 때와 크게 다르지 않다.
 
 #### 1.4. Filtering
 
