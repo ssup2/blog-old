@@ -13,9 +13,9 @@ Raft Consensus Algorithm을 분석한다.
 
 ![[그림 1] Raft Architecture]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Raft_Architecture.PNG){: width="700px"}
 
-#### 1.1. Qourum
+#### 1.1. Quorum
 
-![[그림 2] Qourum]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Qourum.PNG){: width="400px"}
+![[그림 2] Quorum]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Quorum.PNG){: width="400px"}
 
 #### 1.2. Term
 
