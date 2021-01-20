@@ -132,7 +132,7 @@ Cilium 17.XX 이전 Version의 경우에 Cilium은 ClusterIP Type의 Service만 
 
 [그림 3]은 VXLAN을 이용할 경우의 Service Load Balancing 과정을 나타내고 있다. Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송할 경우, 전송한 Packet은 Pod의 veth Interface에 붙는 SCHED_CLS Ingress BPF에서 DNAT된다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_CLS Ingress BPF 또는 cilium_vxlan의 SCHED_CLS Ingress BPF에서 SNAT 된다.
 
-Pod Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송하는 경우에는 기본적으로 kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT를 수행한다. 하지만 cilium 16.xx 이후 Version의 경우에는 CGROUP_SOCK_ADDR BPF를 이용하여 DNAT를 수행할 수 있는 기능이 추가 되었다. 물론 CGROUP_SOCK_ADDR BPF를 지원하는 Kernel Version에서만 이용할 수 있다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_CLS Ingress BPF 또는 cilium_host의 SCHED_CLS Egress BPF에서 SNAT 된다.
+Host Network Namespace를 이용하는 Pod에서 Service의 Cluster IP로 Packet을 전송하는 경우에는 기본적으로 kube-proxy가 설정하는 iptables 또는 IPVS를 이용하여 DNAT를 수행한다. 하지만 cilium 16.xx 이후 Version의 경우에는 CGROUP_SOCK_ADDR BPF를 이용하여 DNAT를 수행할 수 있는 기능이 추가 되었다. 물론 CGROUP_SOCK_ADDR BPF를 지원하는 Kernel Version에서만 이용할 수 있다. SNAT는 응답 Packet을 전송한 Pod의 위치에 따라서 veth Interface의 SCHED_CLS Ingress BPF 또는 cilium_host의 SCHED_CLS Egress BPF에서 SNAT 된다.
 
 ##### 1.3.2. with Host L3
 
