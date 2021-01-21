@@ -11,21 +11,27 @@ Raft Consensus Algorithm을 분석한다.
 
 ### 1. Raft Consensus Algorithm
 
-![[그림 1] Raft Architecture]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Raft_Architecture.PNG){: width="700px"}
+![[그림 1] Raft Architecture]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Raft_Architecture.PNG){: width="750px"}
 
 #### 1.1. Quorum
 
 ![[그림 2] Quorum]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Quorum.PNG){: width="400px"}
 
-#### 1.2. Term
+#### 1.2. Leader Election
 
-#### 1.3. Leader Election
+![[그림 3] Raft Term]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Term.PNG){: width="600px"}
 
-#### 1.4. Log Replication, Commit
+![[그림 4] Raft Server State]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Server_State.PNG){: width="700px"}
 
-#### 1.5. Log Compaction
+#### 1.3. Log Replication, Commit
 
-#### 1.6. Cluster Member 변경
+![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Server_State.PNG){: width="600px"}
+
+#### 1.4. Log Compaction
+
+#### 1.5. Cluster Member 변경
+
+![[그림 6] Raft Cluster Member 추가/삭제]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
 
 ### 2. 참조
 
