@@ -25,7 +25,7 @@ Raft Consensus Algorithm을 분석한다.
 
 #### 1.3. Log Replication, Commit
 
-![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Server_State.PNG){: width="600px"}
+![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Loh.PNG){: width="600px"}
 
 #### 1.4. Log Compaction
 
