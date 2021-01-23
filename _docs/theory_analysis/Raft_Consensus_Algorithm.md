@@ -41,7 +41,7 @@ Server Cluster의 Server의 개수가 홀수인 상태에서 Server를 한대더
 
 #### 1.3. Log Replication, Commit
 
-![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Loh.PNG){: width="600px"}
+![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Log.PNG){: width="600px"}
 
 #### 1.4. Log Compaction
 
