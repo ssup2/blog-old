@@ -50,7 +50,7 @@ Raft Algorithm에서 각 Server는 Leader, Follower, Candidate 3가지의 상태
 1. Follower가 특정 시간(Election Timeout)동안 Leader로부터 Heartbeat를 받지 못한다.
 1. Follower는 Leader가 죽었다고 판단하고 Candidate가 된다.
 1. Candidate는 새로운 Term을 생성하고 다른 Server들로부터 투표를 요청한다. 이후에 새로 생성한 Term이 끝날때 까지 다른 Server들의 표를 대기한다. 투표 요청(Request Vote)에는 Candidate 현재 자신의 Log 정보도 포함시킨다.
-1. 만약 Term동안에 자기 자신포함 다른 Server들로부터 표를 Quorum 개수이상 받는다면 해당 Follower는 Leader가 된다. 만약 Term 동안에 자기 자신 포함 표를 Quorum 개수 이상 받지 못한다면 해당 Follower는 Leader가 되지 못하고 다음 Term에 다시 투표를 진행한다.
+1. 만약 Term동안에 자기 자신포함 다른 Server들로부터 표를 Quorum 개수이상 받는다면 해당 Candidate는 Leader가 된다. 만약 Term 동안에 자기 자신 포함 표를 Quorum 개수 이상 받지 못한다면 해당 Candidate는 Leader가 되지 못하고 다음 Term에 다시 투표를 진행한다.
 1. Leader가된 Server는 Heatbeat를 다른 Server들에게 전달하여 자신이 새로운 Leader가 된것을 알린다.
 
 Term은 Raft Algorithm에서 이용하는 논리적 시간이다. Leader가 바뀌게 되면 새로운 Term이 시작된다. 즉 하나의 Term 동안에는 하나의 Leader가 해당 Term을 점유한다. 투표 요청에는 Candidate의 Log 정보도 같이 전송한다. Follower가 투표를 진행하고 다시 Follower가 되는 과정은 다음과 같다.

@@ -47,6 +47,28 @@ Term은 Raft에서 이용하는 임의의 시간을 나타내는 단위이다. �
 
 ![[그림 4] Raft Server State]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Server_State.PNG){: width="700px"}
 
+Raft는 새로운 Term이 시작되면 Leader Election을 통해서 새로운 Leader Server를 뽑는다. Leader Election 관점에서 Server는 Leader, Follower 그리고 Candidate 3가지의 상태를 갖는다. 앞에서 Leader Server 및 Follower Server라고 표현한 것은 정확히 말하면 Leader 상태의 Server와 Follower 상태의 Server를 의미한다. Candidate 상태는 Server가 Leader Server가 되기 위해서 다른 Server로부터 표를 받기 위해서 대기하는 상태를 의미한다. [그림 4]는 Server의 상태가 어떻게 변하는지를 나타내고 있다.
+
+Server는 처음 시작되면 Follower Server가 된다. Follower Server가 Leader Server가 되는 과정은 다음과 같다.
+
+1. Follower Server가 특정 시간(Election Timeout)동안 Leader Server로부터 Heartbeat를 받지 못한다.
+1. Follower Server는 Leader Server가 죽었다고 판단하고 Candidate Server가 된다.
+1. Candidate Server는 새로운 Term을 시작하고 다른 Server들로부터 투표를 요청한다.
+1. 만약 투표를 요청하고 특정시간 동안 자기 자신을 포함하여 다른 Server들로부터 표를 Quorum 개수이상 받는다면 해당 Candidate Server는 Leader Server가 된다. 
+1. 새로운 Leader Server는 Heatbeat를 다른 Server들에게 전달하여 자신이 새로운 Leader가 된것을 알린다.
+
+Raft에서 투표 요청은 **RequestVote** RPC를 통해서 이루어진다. 투표 요청에는 Candidate의 현재 Term 및 Log 정보도 같이 전송한다. 만약 Candidate Server가 투표를 요청하고 특정시간 동안 자기 자신을 포함하여 다른 Server들로부터 표를 Quorum 개수를 받지 못한다면, 해당 Candidate는 Candidate 상태를 유지한 상태로 새로운 Term을 시작하고 다시 투표 요청을 다른 Server들에게 전송한다. 또는 만약 Candidate Server가 새로운 Leader Server로부터 Heartbeat를 받거나 더 높은 Term을 갖는 다른 Candidate Server로부터 투표 요청을 받을 경우에, 해당 Candidate Server는 Follower 상태가 된다.
+
+Follower가 투표를 진행하고 다시 Follower가 되는 과정은 다음과 같다.
+
+1. Follower는 다른 Candidate 상태의 Server로부터 투표 요청을 받는다.
+1. Follower는 투표 요청에 Log 정보를 확인한다. 만약 투표 요청에 포함된 Log 정보가 자신의 Log 정보보다 오래 되었다면, 해당 투표 요청을 거절한다. 만약 투표 요청에 포함된 Log 정보가 자신의 Log 정보와 동일하거나 더 최신의 Log 정보이고, 현재의 Term 동안 다른 Candidate에게 표를 보낸적이 없다면 투표 요청에 응하여 표를 전송한다.
+1. Follower는 투표 또는 투표 거절이후 Heartbeat를 전송한 Server를 새로운 Leader로 간주한다.
+
+Follower가 투표 요청에 포함된 Log 정보를 확인하는 이유는, 자신이 Log에 저장하고 있는 Entry를 저장하고 있지 않는 Candidate가 Leader가 되는것을 방지하기 위해서이다. Raft Algorithm은 Leader의 Log를 기준으로 Consensus를 맞추기 때문에, Leader의 Log에 저장되어 있는 Entry를 Follower만 저장하고 있다면 해당 Entry는 Leader에 의해서 제거되기 때문이다.
+
+Follower는 Log 조건을 충족하는 Candidate의 투표 요청중에서 가장 먼저 투표를 요청하는 Candidate에게만 표를 전송한다. 따라서 동시에 다수의 Server가 Candidate가 된다면 투표로 Leader가 선출되지 않을 확률이 높아진다. 이러한 문제를 방지하기 위해서 각 Server는 Random한 Election Timeout을 갖는다. 즉 Follower가 Candidate가 되기 위한 대기 시간이 각 Follower마다 다르기 때문에, 동시에 다수의 Follower가 Candidate가 되는것을 방지한다.
+
 #### 1.4. Log Replication, Commit
 
 ![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Log.PNG){: width="600px"}
@@ -56,7 +78,6 @@ Term은 Raft에서 이용하는 임의의 시간을 나타내는 단위이다. �
 #### 1.6. Cluster Member 변경
 
 ![[그림 6] Raft Cluster Member 추가/삭제]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
-
 
 #### 1.7. Client Connection
 
