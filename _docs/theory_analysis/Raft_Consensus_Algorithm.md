@@ -33,21 +33,32 @@ Qourum은 Leader가 Entry에 저장되어 있는 State 변경 내역을 State Ma
 
 Server Cluster의 Server의 개수가 홀수인 상태에서 Server를 한대더 추가하면 Quorum의 개수도 한개더 추가되는 것을 알 수 있다. 예를 들어 Server의 개수가 3인 경우에 Quorum은 2이지만, Server를 한대더 추가하여 개수가 4개가 되면 Quorum도 1이 증가하여 3이되는 [그림 2]를 통해 확인할 수 있다. 이말은 즉 Server Cluster의 Server의 개수를 짝수개로 증설할 경우 가용성의 관점에서는 효율이 떨어진다는 의미가 된다. 따라서 Server Cluster의 Server의 개수는 홀수개로 구성하는 것이 권장된다.
 
-#### 1.2. Leader Election
+#### 1.2. Term
 
 ![[그림 3] Raft Term]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Term.PNG){: width="600px"}
 
+Term은 Raft에서 이용하는 임의의 시간을 나타내는 단위이다. [그림 3]은 Raft의 Term을 나타내고 있다. 하나의 Term이 시작되면 반드시 Server Cluster에서 하나의 Leader Server를 뽑는 Leader Election 과정이 진행된다. 만약 Leader Server가 뽑힌다면 뽑힌 Leader Server가 정상적으로 동작하는 동안에는 해당 Term은 유지된다. 만약 Leader Server가 뽑히지 않는다면 현재 Term을 종료하고 새로운 Term을 시작하여 다시 Leader Election을 수행한다. 즉 하나의 Term은 하나의 Leader Server와 동일한 Life Time을 갖는 특징을 갖는다.
+
+각 Term은 번호를 갖고 있으며, 새로운 Term이 시작될 때마다 이전 Term 번호보다 하나큰 Term 번호가 할당된다. [그림 3]에서 새로운 Term이 시작될때마다 Term 번호도 하나씩 증가하는것을 확인할 수 있다. Leader Server와 모든 Follwer Server들이 모두 문제 없이 동작중이라면 Leader Server와 모든 Follwer Server들은 동일한 Term안에서 동작한다. 하지만 일부 또는 전체 Server에서 장애가 발생시 일시적으로 각 Server는 다른 Term안에서 동작할 수 있다. 
+
+예를 들어 Leader Server는 계속 동작중이었지만 Leader Server와 Follower Server 사이에 Network 장애로 인해서 Follwer Server는 Leader Server가 비정상 상태라고 간주하고, 새로운 Term을 시작할 수 있다. 이러한 일시적인 Term 불일치는 Leader Election 과정을 통해서 맞춰지게 된다.
+
+#### 1.3. Leader Election
+
 ![[그림 4] Raft Server State]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Server_State.PNG){: width="700px"}
 
-#### 1.3. Log Replication, Commit
+#### 1.4. Log Replication, Commit
 
 ![[그림 5] Raft Log]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Log.PNG){: width="600px"}
 
-#### 1.4. Log Compaction
+#### 1.5. Log Compaction
 
-#### 1.5. Cluster Member 변경
+#### 1.6. Cluster Member 변경
 
 ![[그림 6] Raft Cluster Member 추가/삭제]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
+
+
+#### 1.7. Client Connection
 
 ### 2. 참조
 
