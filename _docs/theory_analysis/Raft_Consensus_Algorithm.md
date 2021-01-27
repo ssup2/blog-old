@@ -93,7 +93,7 @@ Raft는 Log를 압축하는 방법으로 **Snapshot**을 이용하고 있다. Sn
 
 Raft는 Server Cluster의 설정 정보도 State와 동일하게 Log 및 State Machine에 의해서 관리된다. 즉 Server Cluster의 설정 정보가 변경될 경우, 변경된 설정은 모든 Server에 동시에 적용 되는것이 아니라 각 Server가 변경된 설정을 State Machine에 반영할때 적용된다. 따라서 Leader Server가 제일 먼저 Server Cluster의 설정 정보를 적용하고 이후에 시간 차이를 두고 Follower Server들이 변경된 설정을 적용한다. Server Cluster의 Server를 추가/삭제하는 과정도 Server Cluster의 설정 변경을 의미한다.
 
-![[그림 6] Raft Server Cluster의 Server 추가에 의한 2개의 Leader]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_2_Leader.PNG){: width="500px"}
+![[그림 6] Raft Server Cluster의 Server 추가에 의한 2개의 Leader]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_2_Leader.PNG){: width="450px"}
 
 Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거 과정이 Raft의 동작이 중지되지 않으면서 이루어질 수 있는 방법을 제공하고 있다. Raft에서 이러한 무중단 Server 추가/제거 방법이 중요한 이유는 하나의 Server Cluster에서 일시적으로 2개의 Leader가 정상적으로 동작할 수 있기 때문이다. [그림 6]은 3개의 Server로 구성된 Server Cluster에 Server 4,5 2개의 Server를 추가하였을 경우 2개의 Leader로 인해서 문제가 발생할 수 있는 상황을 나타내고 있다.
 
