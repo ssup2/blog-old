@@ -89,9 +89,17 @@ Leader Server는 Follower Server들로부터 Quorum 개수 이상의 Entry 복�
 
 Raft는 Log를 압축하는 방법으로 **Snapshot**을 이용하고 있다. Snapshot을 찍은 이후에는 Snapshot을 찍기 이전의 Entry들은 제거되기 때문이다. Snapshot 이후에 State 변경 내역은 이전과 동일하게 Log의 Entry로 남게된다.
 
-#### 1.6. Cluster Member 변경
+#### 1.6. Server Cluster의 Server 추가/제거
 
-![[그림 6] Raft Cluster Member 추가/삭제]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
+Raft는 Server Cluster의 설정 정보도 State와 동일하게 Log 및 State Machine에 의해서 관리된다. 즉 Server Cluster의 설정 정보가 변경될 경우, 변경된 설정은 모든 Server에 동시에 적용 되는것이 아니라 각 Server가 변경된 설정을 State Machine에 반영할때 적용된다. 따라서 Leader Server가 제일 먼저 Server Cluster의 설정 정보를 적용하고 이후에 시간 차이를 두고 Follower Server들이 변경된 설정을 적용한다. Server Cluster의 Server를 추가/삭제하는 과정도 Server Cluster의 설정 변경을 의미한다.
+
+![[그림 6] Raft Server Cluster의 Server 추가에 의한 2개의 Leader]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_2_Leader.PNG){: width="500px"}
+
+Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거 과정이 Raft의 동작이 중지되지 않으면서 이루어질 수 있는 방법을 제공하고 있다. Raft에서 이러한 무중단 Server 추가/제거 방법이 중요한 이유는 하나의 Server Cluster에서 일시적으로 2개의 Leader가 정상적으로 동작할 수 있기 때문이다. [그림 6]은 3개의 Server로 구성된 Server Cluster에 Server 4,5 2개의 Server를 추가하였을 경우 2개의 Leader로 인해서 문제가 발생할 수 있는 상황을 나타내고 있다.
+
+[그림 6]에서 Old Conf는 Server Cluster에 3개의 Server만 존재하는 설정을 나타내고 New Conf는 Server Cluster에 5개의 Server만 존재하는 설정을 나타낸다. Server 4,5는 New Conf로 먼저 동작하고 있는 상태이다.
+
+![[그림 7] Raft Server Cluster의 단일 Server 추가/삭제]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
 
 #### 1.7. Client Connection
 
