@@ -105,7 +105,7 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 
 ![[그림 7] Raft Server Cluster의 단일 Server 추가/제거]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
 
-2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 첫번째 방법은, 동시에 단일 Server만 추가/제거를 하는 방식이다. [그림 7]은 순서대로 4개의 Server에서 1개의 Server를 추가, 2개의 Server에서 1개의 Server를 추가, 5개의 Server에서 1개의 Server를 제거, 4개의 Server에서 1개의 Server를 제거 할때의 Cluster Conf를 나타내고 있다. 즉 단일 Server 추가/제거를 하였을때의 Cluster Conf를 나타내고 있다. 4가지의 Case 모두 Old Conf와 New Conf가 동시에 필요한 Quorum의 개수를 만족시킬 수 없다는걸 알 수 있다. 즉 Old Conf의 Leader Server와 New Conf의 Leader 서버는 동시에 동작할 수 없게된다.
+2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 첫번째 방법은, 동시에 단일 Server만 추가/제거를 하는 방식이다. [그림 7]은 순서대로 4개의 Server에서 1개의 Server를 추가, 2개의 Server에서 1개의 Server를 추가, 5개의 Server에서 1개의 Server를 제거, 4개의 Server에서 1개의 Server를 제거 할때의 일시적인 Cluster의 설정 상태를 나타내고 있다. 즉 단일 Server 추가/제거를 하였을때의 일시적인 Cluster의 설정 상태를 나타내고 있다. 4가지의 Case 모두 Old Conf와 New Conf가 동시에 필요한 Quorum의 개수를 만족시킬 수 없다는걸 알 수 있다. 즉 Old Conf의 Leader Server와 New Conf의 Leader 서버는 동시에 동작할 수 없게된다.
 
 ##### 1.6.2. Joint Consensus
 
