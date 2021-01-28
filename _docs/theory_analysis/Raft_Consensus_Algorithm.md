@@ -79,7 +79,7 @@ Leader Server는 Follower Server에게 **AppendEntries** RPC 호출을 통해서
 
 Follower Server는 수신한 Entry들이 자신이 가장 마지막에 저장한 Entry의 다음 Entry에 저장되는 Entry이면 유효하다고 판단하고, 그렇지 않으면 유효하지 않다고 판단한다. Entry들의 정보에는 Entry의 Index 번호 및 현재의 Term 정보를 포함하고 있는데, Index 번호가 연속되며 및 현재의 Term 번호가 일치할 경우에만 수신한 Entry들이 유효한 Entry라고 간주한다.
 
-Follower Server에게 Entry 복제 수락 응답을 받은 Leader Server는 다음에 복제해야할 Entry들이 존재하는지 확인한다. 만약 복제할 Entry들이 존재한다면 다시 Entry 복제 요청을 통해서 Follower Server에게 Entry 복제를 시도한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader Server는 빈 Entry 정보와 함께 Entry 복제 요청을 계속 전송한다. 복제될 Entry가 없어도 Entry 복제 요청이 Leader Server의 Heartbeat 역활을 수행하기 때문이다. 즉 앞에서 Leader Server가 Follower Server에게 전송하는 Heatbeat의 정채는 Leader Server가 Follower Server들의 AppendEntries RPC를 호출하는 것을 의미한다.
+Follower Server에게 Entry 복제 수락 응답을 받은 Leader Server는 다음에 복제해야할 Entry들이 존재하는지 확인한다. 만약 복제할 Entry들이 존재한다면 다시 Entry 복제 요청을 통해서 Follower Server에게 Entry 복제를 시도한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader Server는 빈 Entry 정보와 함께 Entry 복제 요청을 계속 전송한다. 복제될 Entry가 없어도 Entry 복제 요청이 Leader Server의 **Heartbeat** 역활을 수행하기 때문이다. 즉 앞에서 Leader Server가 Follower Server에게 전송하는 Heatbeat의 정채는 Leader Server가 Follower Server들의 AppendEntries RPC를 호출하는 것을 의미한다.
 
 Follower Server에게 Entry 복제 거절 응답을 받은 Leader Server는 복제 거절된 Entry들의 이전 Entry들을 Entry 복제 요청에 포함하여 다시 Follower Server에게 전송한다. 이처럼 Leader Server는 Entry 복제 거절 응답을 받을때 마다 복제 거절된 Entry의 이전 Entry를 다시 보낸다. 이러한 과정을 계속 반복하면 언젠가 Leader Server는 Follower Server에게 유효한 Entry를 보내게 되고, 이후에는 Leader Server와 Follwer Server는 Entry 복제가 시작된다.
 
@@ -105,7 +105,7 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 
 ![[그림 7] Raft Server Cluster의 단일 Server 추가/제거]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
 
-2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 첫번째 방법은, 동시에 단일 Server만 추가/제거를 하는 방식이다. [그림 7]은 단일 Server 추가/제거를 하였을때의 Cluster Conf를 나타내고 있다. 4가지의 Case 모두 Old Conf와 New Conf가 동시에 필요한 Quorum의 개수를 만족시킬 수 없다는걸 알 수 있다. 즉 Old Conf의 Leader Server와 New Conf의 Leader 서버는 동시에 동작할 수 없게된다.
+2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 첫번째 방법은, 동시에 단일 Server만 추가/제거를 하는 방식이다. [그림 7]은 순서대로 4개의 Server에서 1개의 Server를 추가, 2개의 Server에서 1개의 Server를 추가, 5개의 Server에서 1개의 Server를 제거, 4개의 Server에서 1개의 Server를 제거 할때의 Cluster Conf를 나타내고 있다. 즉 단일 Server 추가/제거를 하였을때의 Cluster Conf를 나타내고 있다. 4가지의 Case 모두 Old Conf와 New Conf가 동시에 필요한 Quorum의 개수를 만족시킬 수 없다는걸 알 수 있다. 즉 Old Conf의 Leader Server와 New Conf의 Leader 서버는 동시에 동작할 수 없게된다.
 
 ##### 1.6.2. Joint Consensus
 
@@ -114,6 +114,10 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 두번째 방법은, Old Conf와 New Conf를 동시에 적용하는 Joint Consensus를 이용하는 방법이다. Server Cluster에 Old Conf와 New Conf가 동시에 적용되어 있는 동안에는 두 Conf를 만족시키는 하나의 Leader Server만이 동작하기 때문이다.
 
 #### 1.7. Client Connection
+
+Client는 Server Cluster에게 State 변경 요청을 전송하고 Server Cluster로 부터 현재 State 정보를 얻기 위해서는 Server Cluster의 Server들의 IP/Port 정보를 알고 있어야한다. Raft에서는 Client에게 Server Cluster의 Server들의 IP/Port 정보를 전달하는 방법으로 설정 파일을 이용하여 설정하는 방법과, DNS와 같은 Directory Service를 통해서 Client가 Server Cluster의 Server들의 IP/Port 정보를 동적으로 얻을 수 있는 방법을 제안하고 있다.
+
+Client가 Server Cluster의 Server들의 IP/Port 정보들을 알고 있다고 해도, Client의 요청이 동적으로 변경될수 있는 Leader Server에게 전달되어야 한다는 조건도 필요하다. Raft에서는 Leader Server일 경우에만 Client와의 Connection을 맺어 Client의 요청이 Leader Server로만 전달되도록 만드는 방법과, Follower Server들이 Leader Server의 Proxy 역활을 수행하여 Client가 Follower Server와 Conneciton을 맺고 요청을 전달하여도 요청을 Leader Server로 전달하는 방법을 제안하고 있다.
 
 ### 2. 참조
 
