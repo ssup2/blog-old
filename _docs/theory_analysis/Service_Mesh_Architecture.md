@@ -31,3 +31,4 @@ Service Mesh Architecture의 단점은 Proxy의 Overhead이다. Service와 동�
 
 * [https://medium.com/microservices-in-practice/service-mesh-for-microservices-2953109a3c9a](https://medium.com/microservices-in-practice/service-mesh-for-microservices-2953109a3c9a)
 * [http://tech.cloudz-labs.io/posts/service-mesh/](http://tech.cloudz-labs.io/posts/service-mesh/)
+* [https://waspro.tistory.com/432](https://waspro.tistory.com/432)
