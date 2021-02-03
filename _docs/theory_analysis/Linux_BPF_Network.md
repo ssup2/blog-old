@@ -38,7 +38,7 @@ SCHED_CLS, SCHED_ACT BPF Program의 Input Type은 Socket Buffer (\_\_sk_buff)이
 * TC_ACT_SHOT : Ingress를 통해오는 Packet을 버리고 Socket Buffer를 해지한다. 따라서 Packet은 상위 Network Stack으로 전달되지 못한다.
 * TC_ACT_STOLEN : Ingress를 통해오는 Packet을 소모하거나 Queuing한다. 따라서 Packet은 상위 Network Stack으로는 전달되지 못한다.
 * TC_ACT_OK : Ingress에서는 해당 Packet을 통과시켜 Network Stack으로 넘기고, Egress에서는 해당 Packet을 Network Device에게 넘긴다.
-* TC_ACT_REDIRECT : 해당 Packet을 동일 또는 다른 Network Device의 Ingress나 Engress로 전달한다.
+* TC_ACT_REDIRECT : 해당 Packet을 동일 또는 다른 Network Device의 Ingress나 Egress로 전달한다.
 
 #### 1.3. cgroup
 
