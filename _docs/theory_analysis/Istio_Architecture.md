@@ -19,7 +19,9 @@ Data Plan의 Envoy는 모든 App Pod의 별도의 Container안에서 동작하�
 
 ![[그림 2] Istio Architecture After v1.5]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture_1.5.PNG){: width="750px"}
 
-Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]는 v1.5 Version 이후의 Istio Architecture를 나타내고 있다. Pliot, Mixer, Citadel이 Istiod라고 불리는 하나의 Component(Binary)로 통합되었다. Mixer는 Deprecated 되었으며 pilot-agent 및 Envoy에서 수집된 Metric 정보는 Prometheus, Jeager에서 직접 수집한다.
+Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]는 v1.5 Version 이후의 Istio Architecture를 나타내고 있다. Pliot, Mixer, Citadel이 Istiod라고 불리는 하나의 Component(Binary)로 통합되었고, Mixer는 Deprecated 되었다.
+
+Mixer가 수행하던 App 사이의 Packet 허용 정책은 Envoy의 기능 및 Citadel의 보안 기능으로 대체되었다. Mixer가 수행하던 Rate Limiting도 Envoy의 기능을 이용하도록 변경되었다. Mixer가 수집하던 pilot-agent 및 Envoy의 Metric 정보는 Prometheus, Jeager에서 직접 수집하도록 변경되었다.
 
 ### 2. 참조
 
@@ -27,5 +29,6 @@ Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]�
 * [https://istio.io/docs/concepts/what-is-istio/](https://istio.io/docs/concepts/what-is-istio/)
 * [https://stackoverflow.com/questions/48639660/difference-between-mixer-and-pilot-in-istio](https://stackoverflow.com/questions/48639660/difference-between-mixer-and-pilot-in-istio)
 * [https://istio.io/latest/news/releases/1.5.x/announcing-1.5/upgrade-notes/](https://istio.io/latest/news/releases/1.5.x/announcing-1.5/upgrade-notes/)
+* [https://istio.io/v1.5/docs/tasks/policy-enforcement/enabling-policy/](https://istio.io/v1.5/docs/tasks/policy-enforcement/enabling-policy/)
 * [https://istio.io/latest/blog/2020/istiod/](https://istio.io/latest/blog/2020/istiod/)
 * [https://developer.ibm.com/components/istio/blogs/istio-15-release/](https://developer.ibm.com/components/istio/blogs/istio-15-release/)
