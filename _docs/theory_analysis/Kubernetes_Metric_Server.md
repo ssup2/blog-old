@@ -13,7 +13,7 @@ Kubernetes의 Metric Server를 분석한다.
 
 ![[그림 1] Kubernetes Metric Server]({{site.baseurl}}/images/theory_analysis/Kubernetes_Metric_Server/Kubernetes_Metric_Server.PNG){: width="600px"}
 
-Kubernetes Metric Server는 Kubernetes Cluster를 구성하는 Node와 Pod의 Metric 정보를 수집한 다음, Metric 정보가 필요한 Kubernetes Component들에게 수집한 Metric 정보를 전달하는 역활을 수행한다. [그림 1]은 Kubernetes Metric Server와 Metric 수집 과정을 나타내고 있다. kubelet은 cAdvisor라고 불리는 Linux의 Cgroup을 기반으로하는 Node, Pod Metric Collector를 내장하고 있다. cAdvisor가 수집하는 Metric은 kubelet의 10250 Port의 /stat Path를 통해서 외부로 노출된다. 
+Kubernetes Metric Server는 Kubernetes Cluster를 구성하는 Node와 Pod의 Metric 정보를 수집한 다음, Metric 정보가 필요한 Kubernetes Component들에게 수집한 Metric 정보를 전달하는 역할을 수행한다. [그림 1]은 Kubernetes Metric Server와 Metric 수집 과정을 나타내고 있다. kubelet은 cAdvisor라고 불리는 Linux의 Cgroup을 기반으로하는 Node, Pod Metric Collector를 내장하고 있다. cAdvisor가 수집하는 Metric은 kubelet의 10250 Port의 /stat Path를 통해서 외부로 노출된다. 
 
 Metric Server는 Kubernetes API Server로부터 Node에서 구동중인 kubelet의 접속 정보를 얻은 다음, kubelet으로 부터 Node, Pod의 Metric을 수집한다. 수집된 Metric은 Memory에 저장된다. 따라서 Metric Server가 재시작 되면 수집된 모든 Metric 정보는 사라진다. Metric Server는 Kubernetes의 API Aggregation 기능을 이용하여 Metric Server와 연결되어 있는 Metric Service를 metric.k8s.io API로 등록한다. 따라서 Metric Server의 Metric 정보가 필요한 Kubernetes Component들은 Metric Server 또는 Metric Service로부터 직접 Metric을 가져오지 않고, Kubernetes API Server를 통해서 가져온다.
 

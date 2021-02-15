@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Linux에서 Network Connection을 관리하는 역활을 수행하는 Netfilter Framework의 Module인 conntrack을 분석한다.
+Linux에서 Network Connection을 관리하는 역할을 수행하는 Netfilter Framework의 Module인 conntrack을 분석한다.
 
 ### 1. Linux conntrack Module
 
@@ -35,7 +35,7 @@ conntrack Module이 관리하고 있는 Connection 정보는 conntrack 명령어
 
 #### 1.2. Connection Tracking Helper
 
-Connection Tracking Helper는 Stateful Application Layer Protocol을 파악하여 별도의 독립된 Connection을 **Related Connection**으로 분류하는 역활을 수행한다. 지원하는 Stateful Application Layer Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. 예를 들어 FTP의 경우 Control Connection과 Data Connection 2가지의 Connection을 이용하는데 Control Connection은 존재하지만 Data Connection이 없는 상태에서 Data Connection이 생성될 경우, 생성된 Data Connection은 New Connection 상태가 아닌 Related Connection 상태로 분류된다.
+Connection Tracking Helper는 Stateful Application Layer Protocol을 파악하여 별도의 독립된 Connection을 **Related Connection**으로 분류하는 역할을 수행한다. 지원하는 Stateful Application Layer Protocol은 FTP, TFPT, SNMP, SIP 등이 있다. 예를 들어 FTP의 경우 Control Connection과 Data Connection 2가지의 Connection을 이용하는데 Control Connection은 존재하지만 Data Connection이 없는 상태에서 Data Connection이 생성될 경우, 생성된 Data Connection은 New Connection 상태가 아닌 Related Connection 상태로 분류된다.
 
 {% highlight text %}
 # lsmod | grep nf_conntrack

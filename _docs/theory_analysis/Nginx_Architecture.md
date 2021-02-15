@@ -17,7 +17,7 @@ Nginx의 Architecture를 분석한다.
 
 #### 1.1 Master Process
 
-Master Process는 Nginx 실행시 가장 먼저 실행되는 Process이다. Config 파일로 부터 얻은 설정 내용을 바탕으로 Worker Process, Cache Loader Process, Cache Manager Process를 생성하고 관련 설정 내용을 생성한 Process에게 전달하는 역활을 수행한다.
+Master Process는 Nginx 실행시 가장 먼저 실행되는 Process이다. Config 파일로 부터 얻은 설정 내용을 바탕으로 Worker Process, Cache Loader Process, Cache Manager Process를 생성하고 관련 설정 내용을 생성한 Process에게 전달하는 역할을 수행한다.
 
 #### 1.2. Worker Process
 
@@ -39,11 +39,11 @@ Cache의 Data는 File로 저장되더라도 Kernel이 제공하는 Filesystem Ca
 
 Cache의 Data는 기본적으로 Cache의 크기 초과로 인해서 지워지지 않는 이상은 계속 남아있으면서 Nginx에 의해서 이용된다. Cache의 크기가 초과하는 경우 LRU(Least Recently Used) Algorithm에 의해서 가장 나중에 이용된 Cache의 Data부터 지워진다. 또는 일정 시간이 지나면 Cache가 Expiration되어 지워질 수 있도록 설정할 수도 있다. 이러한 Cache 크기 및 Expiration 관리는 Cache Manager Process가 주기적으로 수행한다. Cache의 크기 및 Cache의 Expiration 시간은 Config 파일을 통해서 설정할 수 있다.
 
-Cache Loader Process는 Nginx가 시작하면서 Master Process에 의해서 한번만 실행되며, File로 저장된 Cache의 Data를 바탕으로 Shared Memory에 Cache의 Key와 Meta를 설정하는 역활을 수행한다.
+Cache Loader Process는 Nginx가 시작하면서 Master Process에 의해서 한번만 실행되며, File로 저장된 Cache의 Data를 바탕으로 Shared Memory에 Cache의 Key와 Meta를 설정하는 역할을 수행한다.
 
 #### 1.4. Client, Backend
 
-Nginx은 HTTP/HTTPS를 기반으로하는 L7 Web Server, Load Balancer 역활을 수행한다. 또한 TCP/UDP를 기반으로 하는 L4 Load Balancer의 역활도 수행이 가능하다. Nginx가 L7 Web Server, Load Balancer로 동작하는 경우, Nginx는 Client와 HTTP/HTTPS로 통신을 수행하고 Backend와는 HTTPS/HTTPS 또는 FastCGI를 이용하여 통신한다. Nginx가 L4 Load Balancer로 동작하는 경우, Nginx는 Client 및 Backend와 TCP/UDP를 이용하여 통신한다. Nginx의 Backend에는 NoSQL로 분류되는 Memcached, Redis와 같은 Key-Value Store를 이용할 수도 있다.
+Nginx은 HTTP/HTTPS를 기반으로하는 L7 Web Server, Load Balancer 역할을 수행한다. 또한 TCP/UDP를 기반으로 하는 L4 Load Balancer의 역할도 수행이 가능하다. Nginx가 L7 Web Server, Load Balancer로 동작하는 경우, Nginx는 Client와 HTTP/HTTPS로 통신을 수행하고 Backend와는 HTTPS/HTTPS 또는 FastCGI를 이용하여 통신한다. Nginx가 L4 Load Balancer로 동작하는 경우, Nginx는 Client 및 Backend와 TCP/UDP를 이용하여 통신한다. Nginx의 Backend에는 NoSQL로 분류되는 Memcached, Redis와 같은 Key-Value Store를 이용할 수도 있다.
 
 ### 2. 참조
 

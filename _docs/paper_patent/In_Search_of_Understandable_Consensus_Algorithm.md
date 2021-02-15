@@ -15,8 +15,8 @@ adsense: true
 
 Consensus Algorithm은 일반적으로 Replicated State Machine Architecture를 기반으로 동작한다. Replicated State Machine Architecture는 의미 그대로 동일한 상태를 갖는 State Machine들을 포함한 다수의 Server들로 구성된 Architecture를 의미한다. Replicated State Machine Architecture의 각 Server들은 다음과 같은 구성요소로 이루어져 있다.
 
-* Consensus Module : 다른 Server들의 Consensus Module들과 통신하면서 다른 Server들의 상태를 파악하고 Consensus를 맞추는 역활을 수행한다. 또한 Client의 Command(요청)를 받아 Command를 Log에 기록, State Machine에 반영, 다른 Server들의 Consensus Module에 전파하는 역활도 수행한다.
-* State Machine : Server의 현재의 상태를 저장하는 저장소 역활을 수행한다.
+* Consensus Module : 다른 Server들의 Consensus Module들과 통신하면서 다른 Server들의 상태를 파악하고 Consensus를 맞추는 역할을 수행한다. 또한 Client의 Command(요청)를 받아 Command를 Log에 기록, State Machine에 반영, 다른 Server들의 Consensus Module에 전파하는 역할도 수행한다.
+* State Machine : Server의 현재의 상태를 저장하는 저장소 역할을 수행한다.
 * Log : Consensus Module이 State Machine에 적용한 Client의 Command를 적용 순서대로 기록하는 공간이다. 즉 Log를 통해서 State Machine의 History를 파악할 수 있다. Consensus Module은 Log에 저장된 Command 정보를 바탕으로 Consensus를 맞춘다. 하나의 Command 정보는 Log의 하나의 Entry에 저장된다.
 
 ### 3. Consensus Algorithm 특징
@@ -41,7 +41,7 @@ Raft Algorithm은 기존의 Consensus Algorithm으로 많이 알려진 Pasox Alg
 
 Raft Algorithm에서 각 Server는 Leader, Follower, Candidate 3가지의 상태를 갖는다. Raft Algorithm은 Leader가 중심이 되어 Consensus를 맞춘다. 이러한 Leader 기반의 방식 때문에, Raft Algorithm은 다른 Consensus Algorithm에 비해서 이해하고, 구현하기 쉬운 장점을 갖게되었다. 3가자의 상태에 대한 설명은 아래와 같다.
 
-* Leader : Server 사이의 Consensus를 맞추는 중추적인 역활을 수행한다.
+* Leader : Server 사이의 Consensus를 맞추는 중추적인 역할을 수행한다.
 * Follower : Leader의 명령에 따라서 Log에 Entry 및 State Machine에 상태를 저장한다.
 * Candidate : Leader가 되기 위해서 다른 Server들로부터 표를 받을 상태를 의미한다.
 
@@ -67,7 +67,7 @@ Follower는 Log 조건을 충족하는 Candidate의 투표 요청중에서 가�
 
 Leader가 선출되면 Leader는 Log Replication을 수행하여 Follower에게 자신의 Log를 복제한다. 여기서 Log를 복제한다는 의미는 Log에 저장되어 있는 Entry들을 복제한다는 의미와 동일하다. Entry들을 복제하는 과정에서 Leader는 Follower에게 AppendEntries 요청을 전송한다. AppendEntries 요청에는 복제 되어야하는 Entry들의 정보가 포함되어 있다. AppendEntries 요청을 받은 Follower는 요청에 포함된 Entry들의 정보를 확인한다. Entry들의 정보가 유효하면 해당 Entry들을 자신의 Log에 추가하고 Leader에게 Entry들이 반영되었다는 것을 알린다. 만약 Entry들의 정보가 유효하지 않다면 해당 Entry들을 반영되지 않았다는 것을 Leader에게 알린다.
 
-Follower는 수신한 Entry들이 자신이 가장 마지막에 저장한 Entry의 다음 Entry에 저장되는 Entry이면 유효하다고 판단하고, 그렇지 않으면 유효하지 않다고 판단한다. Entry들의 정보에는 Entry의 Index 번호, 현재의 Term 정보를 포함하고 있다. AppendEntries 요청 반영 응답을 받은 Leader는 복제되어야할 Entry가 존재한다면 다음 Entry들을 AppendEntries 요청에 포함하여 Follower에게 전송한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader는 빈 Entry 정보와 함께 AppendEntries 요청을 보낸다. 복제될 Entry가 없어도 AppendEntries 요청를 전송하는 이유는 AppendEntries 요청이 Leader의 Heartbeat 역활을 수행하기 때문이다.
+Follower는 수신한 Entry들이 자신이 가장 마지막에 저장한 Entry의 다음 Entry에 저장되는 Entry이면 유효하다고 판단하고, 그렇지 않으면 유효하지 않다고 판단한다. Entry들의 정보에는 Entry의 Index 번호, 현재의 Term 정보를 포함하고 있다. AppendEntries 요청 반영 응답을 받은 Leader는 복제되어야할 Entry가 존재한다면 다음 Entry들을 AppendEntries 요청에 포함하여 Follower에게 전송한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader는 빈 Entry 정보와 함께 AppendEntries 요청을 보낸다. 복제될 Entry가 없어도 AppendEntries 요청를 전송하는 이유는 AppendEntries 요청이 Leader의 Heartbeat 역할을 수행하기 때문이다.
 
 AppendEntries 요청 거절 응답을 받은 Leader는 이전에 보냈던 Entry의 이전 Entry를 AppendEntries 요청에 포함하여 다시 Follower에게 전송한다. AppendEntries 요청 거절 응답을 받을때 마다 Leader는 이전에 보냈던 Entry의 이전 Entry를 다시 보낸다. 이러한 과정을 계속 반복하면 언젠가 Leader는 Follower에게 유효한 Entry를 보내게 되고, Follower로부터 AppendEntries 요청 반영 응답을 받게 된다. 이후에는 이전에 보냈던 Entry의 다음 Entry를 보내면서 Leader는 Follower에게 Log 복제를 수행한다.
 

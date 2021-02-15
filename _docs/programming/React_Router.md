@@ -69,7 +69,7 @@ const Blog = () => {
 <figcaption class="caption">[Code 4] React Router Example - Blog.js</figcaption>
 </figure>
 
-React Router는 React App을 SPA(Single Page Application)으로 구현할 수 있도록 도와주는 React Component이다. [Code 1-4]는 간단한 React Router Example을 나타내고 있다. "/" Path로 이동할 경우 Home.js가 Rendering 되고, "/blog" Path로 이동할 경우 Blog.js가 Rendering 된다. 중요한 React Component는 **BrowserRouter** Component와 **Route** Component이다. BrowserRouter Component는 Path에 따라서 실제 Routing을 수행하는 React Component이고, Route Component는 BrowserRouter에서 Routing을 수행할 Path 및 관련 React Component를 등록하는 역활을 수행한다.
+React Router는 React App을 SPA(Single Page Application)으로 구현할 수 있도록 도와주는 React Component이다. [Code 1-4]는 간단한 React Router Example을 나타내고 있다. "/" Path로 이동할 경우 Home.js가 Rendering 되고, "/blog" Path로 이동할 경우 Blog.js가 Rendering 된다. 중요한 React Component는 **BrowserRouter** Component와 **Route** Component이다. BrowserRouter Component는 Path에 따라서 실제 Routing을 수행하는 React Component이고, Route Component는 BrowserRouter에서 Routing을 수행할 Path 및 관련 React Component를 등록하는 역할을 수행한다.
 
 [Code 1]에서는 BrowserRouter Component가 선언되어 있다. [Code 2]에서는 Route Component를 통해서 Routing Path 및 관련 React Component를 등록한다. "/" Path에는 Home Component를 등록하고 있고, "/blog" Path에 Blog Component를 등록한다. "/" Path에 Home Component 등록시 **exact** 문법를 볼수 있는데, "/" Path와 정확하게 일치할 때만 Home Component를 Rendering (Routing) 한다는 의미이다. 만약 exact가 없다면 "/blog" Path로 이동시 Home Component와 Blog Component 둘다 Rendering 된다.
 

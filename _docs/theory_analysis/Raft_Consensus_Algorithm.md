@@ -13,19 +13,19 @@ Raft Consensus Algorithm을 분석한다.
 
 ![[그림 1] Raft Architecture]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Raft_Architecture.PNG){: width="750px"}
 
-Raft는 다수의 Server 사이의 **Consensus(합의)**를 맞추는 역활을 수행하는 Algorithm이다. 여기서 Consensus는 State(Date)의 정합성과 동일한 의미를 나타낸다. [그림 1]은 Raft의 Architecture 및 State 변경 요청의 흐름을 나타낸다. Raft는 State를 저장하고 있는 Server Cluster와 필요에 따라서 State 관련 요청을 Server에게 전달하는 Client로 구성되어 있다. Server는 **Leader Server**와 **Follower Server**로 구성되어 있다. 각 Server에는 State Consensus를 맞추는 역활을 수행하는 **Consensus Module**, Client의 State 변경 요청을 기록하는 **Log**, 현재의 State를 저장하는 **State Machine**으로 구성되어 있다. Log는 **Entry**의 집합으로 구성되며 하나의 Entry는 하나의 Client의 State 변경 요청을 의미한다.
+Raft는 다수의 Server 사이의 **Consensus(합의)**를 맞추는 역할을 수행하는 Algorithm이다. 여기서 Consensus는 State(Date)의 정합성과 동일한 의미를 나타낸다. [그림 1]은 Raft의 Architecture 및 State 변경 요청의 흐름을 나타낸다. Raft는 State를 저장하고 있는 Server Cluster와 필요에 따라서 State 관련 요청을 Server에게 전달하는 Client로 구성되어 있다. Server는 **Leader Server**와 **Follower Server**로 구성되어 있다. 각 Server에는 State Consensus를 맞추는 역할을 수행하는 **Consensus Module**, Client의 State 변경 요청을 기록하는 **Log**, 현재의 State를 저장하는 **State Machine**으로 구성되어 있다. Log는 **Entry**의 집합으로 구성되며 하나의 Entry는 하나의 Client의 State 변경 요청을 의미한다.
 
 Raft는 모든 동작이 Leader Server를 중심으로 동작한다. 따라서 Client의 모든 요청은 Leader Server로 전달 된다. Leader Server의 Consensus Module은 Client의 State 변경 요청이 온다면, 해당 요청을 Leader Server의 Log에 Entry로 저장한다. 이후 Leader Server의 Consensus Module은 Follower Server들에게 Log에 추가된 Entry(Client의 State 변경 요청)를 전달한다. Follower Server의 Consensus Module은 Leader Server로부터 전달된 Entry를 자신의 Log에 저장하고 Leader Server에게 Entry 저장이 완료된 사실을 알린다. 이처럼 Leader Server의 Log가 Follower Server의 Log로 복제되는 과정을 Raft에서는 **Log Replication**이라고 명칭한다.
 
 Follower Server로부터 Entry가 추가 되었다는 응답을 받은 Consensus Module은 추가된 Entry 정보를 State Machine에 반영하여, Client의 State 변경 요청 내역을 실제로 반영한다. 이러한 과정을 Raft에서는 **Commit**이라고 명칭한다. Leader Server의 Consensus Module은 Commit 동작 이후에 Follower Server에게 Commit이 수행되었다는 사실을 알려준다. 이후 Follower Server의 Consensus Module은 추가된 Entry를 State Machine에 반영한다.
 
-Leader, Follower 역활에 관계없이 Server에서 Client의 State 변경 요청은 Consensus Module, Log, State Machine으로 전달된다는 사실을 알 수 있다. 또한 일시적으로 각 Server의 State는 일시적으로 다를 수 있지만, Server의 Log를 통해서 최종적으로는 모든 Server는 동일한 State를 갖게도록 Raft가 설계되어 있다는 사실을 알 수 있다. Raft와 같이 특정 Server의 State를 다른 서버의 State에게 복제하는 방식의 기법을 **Replicated State Machine** 기법이라고 명칭한다.
+Leader, Follower 역할에 관계없이 Server에서 Client의 State 변경 요청은 Consensus Module, Log, State Machine으로 전달된다는 사실을 알 수 있다. 또한 일시적으로 각 Server의 State는 일시적으로 다를 수 있지만, Server의 Log를 통해서 최종적으로는 모든 Server는 동일한 State를 갖게도록 Raft가 설계되어 있다는 사실을 알 수 있다. Raft와 같이 특정 Server의 State를 다른 서버의 State에게 복제하는 방식의 기법을 **Replicated State Machine** 기법이라고 명칭한다.
 
 #### 1.1. Quorum
 
 ![[그림 2] Quorum]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Quorum.PNG){: width="400px"}
 
-Raft에서 의사 결정을 위해서 Quorum은 중요한 역활을 수행한다. Quorum은 Consensus를 유지하기 위한 최소한의 **동의표**를 의미한다. **Majority**라는 단어로도 쓰인다. [그림 2]는 Server Cluster에서 Server의 개수에 따른 Quorum을 나타내고 있다. Quorum은 Server의 개수를 절반으로 나눈 다음 하나를 더한 값이란걸 알 수 있다. 즉 찬성하는 Server의 개수가 반대하는 Server의 개수보다 크다는걸 보장하는 최소값이 Quorum이라고 할 수 있다.
+Raft에서 의사 결정을 위해서 Quorum은 중요한 역할을 수행한다. Quorum은 Consensus를 유지하기 위한 최소한의 **동의표**를 의미한다. **Majority**라는 단어로도 쓰인다. [그림 2]는 Server Cluster에서 Server의 개수에 따른 Quorum을 나타내고 있다. Quorum은 Server의 개수를 절반으로 나눈 다음 하나를 더한 값이란걸 알 수 있다. 즉 찬성하는 Server의 개수가 반대하는 Server의 개수보다 크다는걸 보장하는 최소값이 Quorum이라고 할 수 있다.
 
 Qourum은 Leader가 Entry에 저장되어 있는 State 변경 내역을 State Machine에 반영하기 전, Follower의 Log에 해당 State 변경 내역의 Entry가 저장되었다는 응답을 받아야 하는 개수의 기준이 된다. 즉 [그림 1]에서 Server Cluster는 Server 3대로 구성되어 있기 때문에 Leader는 하나의 Follower에게만 Entry 저장 응답을 받게되면, Leader는 자신을 포함하여 Quorum의 개수인 총 2개의 동의표를 얻었기 때문에 해당 Entry를 State Machine에 반영하게 된다.
 
@@ -79,7 +79,7 @@ Leader Server는 Follower Server에게 **AppendEntries** RPC 호출을 통해서
 
 Follower Server는 수신한 Entry들이 자신이 가장 마지막에 저장한 Entry의 다음 Entry에 저장되는 Entry이면 유효하다고 판단하고, 그렇지 않으면 유효하지 않다고 판단한다. Entry들의 정보에는 Entry의 Index 번호 및 현재의 Term 정보를 포함하고 있는데, Index 번호가 연속되며 및 현재의 Term 번호가 일치할 경우에만 수신한 Entry들이 유효한 Entry라고 간주한다.
 
-Follower Server에게 Entry 복제 수락 응답을 받은 Leader Server는 다음에 복제해야할 Entry들이 존재하는지 확인한다. 만약 복제할 Entry들이 존재한다면 다시 Entry 복제 요청을 통해서 Follower Server에게 Entry 복제를 시도한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader Server는 빈 Entry 정보와 함께 Entry 복제 요청을 계속 전송한다. 복제될 Entry가 없어도 Entry 복제 요청이 Leader Server의 **Heartbeat** 역활을 수행하기 때문이다. 즉 앞에서 Leader Server가 Follower Server에게 전송하는 Heatbeat의 정채는 Leader Server가 Follower Server들의 AppendEntries RPC를 호출하는 것을 의미한다.
+Follower Server에게 Entry 복제 수락 응답을 받은 Leader Server는 다음에 복제해야할 Entry들이 존재하는지 확인한다. 만약 복제할 Entry들이 존재한다면 다시 Entry 복제 요청을 통해서 Follower Server에게 Entry 복제를 시도한다. 만약 복제되어야할 Entry가 존재하지 않는다면 Leader Server는 빈 Entry 정보와 함께 Entry 복제 요청을 계속 전송한다. 복제될 Entry가 없어도 Entry 복제 요청이 Leader Server의 **Heartbeat** 역할을 수행하기 때문이다. 즉 앞에서 Leader Server가 Follower Server에게 전송하는 Heatbeat의 정채는 Leader Server가 Follower Server들의 AppendEntries RPC를 호출하는 것을 의미한다.
 
 Follower Server에게 Entry 복제 거절 응답을 받은 Leader Server는 복제 거절된 Entry들의 이전 Entry들을 Entry 복제 요청에 포함하여 다시 Follower Server에게 전송한다. 이처럼 Leader Server는 Entry 복제 거절 응답을 받을때 마다 복제 거절된 Entry의 이전 Entry를 다시 보낸다. 이러한 과정을 계속 반복하면 언젠가 Leader Server는 Follower Server에게 유효한 Entry를 보내게 되고, 이후에는 Leader Server와 Follwer Server는 Entry 복제가 시작된다.
 
@@ -117,7 +117,7 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 
 Client는 Server Cluster에게 State 변경 요청을 전송하고 Server Cluster로 부터 현재 State 정보를 얻기 위해서는 Server Cluster의 Server들의 IP/Port 정보를 알고 있어야한다. Raft에서는 Client에게 Server Cluster의 Server들의 IP/Port 정보를 전달하는 방법으로 설정 파일을 이용하여 설정하는 방법과, DNS와 같은 Directory Service를 통해서 Client가 Server Cluster의 Server들의 IP/Port 정보를 동적으로 얻을 수 있는 방법을 제안하고 있다.
 
-Client가 Server Cluster의 Server들의 IP/Port 정보들을 알고 있다고 해도, Client의 요청이 동적으로 변경될수 있는 Leader Server에게 전달되어야 한다는 조건도 필요하다. Raft에서는 Leader Server일 경우에만 Client와의 Connection을 맺어 Client의 요청이 Leader Server로만 전달되도록 만드는 방법과, Follower Server들이 Leader Server의 Proxy 역활을 수행하여 Client가 Follower Server와 Conneciton을 맺고 요청을 전달하여도 요청을 Leader Server로 전달하는 방법을 제안하고 있다.
+Client가 Server Cluster의 Server들의 IP/Port 정보들을 알고 있다고 해도, Client의 요청이 동적으로 변경될수 있는 Leader Server에게 전달되어야 한다는 조건도 필요하다. Raft에서는 Leader Server일 경우에만 Client와의 Connection을 맺어 Client의 요청이 Leader Server로만 전달되도록 만드는 방법과, Follower Server들이 Leader Server의 Proxy 역할을 수행하여 Client가 Follower Server와 Conneciton을 맺고 요청을 전달하여도 요청을 Leader Server로 전달하는 방법을 제안하고 있다.
 
 ### 2. 참조
 

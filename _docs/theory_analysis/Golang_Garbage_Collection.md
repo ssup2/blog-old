@@ -11,7 +11,7 @@ Golang의 Garbage Collection을 분석한다.
 
 ### 1. Golang Garbage Collection
 
-Golang의 Runtime에는 Heap Memory를 관리하는 역활을 수행하는 Garbage Collector가 존재한다. Golang의 Garbage Collector는 **TCMalloc Memory Allocator**를 기반으로 하는 **CMS(Concurrent Mark and Swap)** 기법만을 이용하여 비교적 단순하게 Garbage Collection을 수행한다. Heap Memory 영역의 단편화를 막기 위한 Compaction 기법이나, Garbage Colleciton을 수행하면서 발생하는 Heap Memory 영역의 Scan을 최소화 하기 위한 Generation 기법은 적용하여 이용하고 있지 않다.
+Golang의 Runtime에는 Heap Memory를 관리하는 역할을 수행하는 Garbage Collector가 존재한다. Golang의 Garbage Collector는 **TCMalloc Memory Allocator**를 기반으로 하는 **CMS(Concurrent Mark and Swap)** 기법만을 이용하여 비교적 단순하게 Garbage Collection을 수행한다. Heap Memory 영역의 단편화를 막기 위한 Compaction 기법이나, Garbage Colleciton을 수행하면서 발생하는 Heap Memory 영역의 Scan을 최소화 하기 위한 Generation 기법은 적용하여 이용하고 있지 않다.
 
 Heap Memory 영역의 단편화는 Heap Memory를 어떻게 할당 하냐에 따라서 최소화시킬 수 있다. Golang에서는 TCMalloc Memory Allocator가 Heap Memory 영역의 단편화를 최소화하면서 빠르게 Memory를 할당하고 있다고 간주하고 있다. 따라서 Golang에서는 Memory 단편화를 큰 문제로 보고 있지 않는다.
 

@@ -123,9 +123,9 @@ ReactDOM.render(
 <figcaption class="caption">[Code 2] useEffect()</figcaption>
 </figure>
 
-useEffect() Hook은 React Component의 Lifecycle에 따라서 호출되는 Hook이다. 기존의 React Component Class의 Lifecycle 함수를 대체한다. [Code 2]에서 1번째 useEffect() Hook은 기본적으로 useEffect() Hook을 이용하는 방법을 보여준다. useEffect() Hook의 Parameter로 함수를 Return하는 함수를 넘긴다. 넘긴 함수는 React Component가 Mount(생성), State 변경으로 인해서 다시 Rendering이 될 경우, Rendering이 된 이후에 호출이 된다. 기존 React Component Lifecycle 함수중에서 componentDidMount() 함수와 componentDidUpdate() 함수의 역활을 같이 수행한다고 보면 된다.
+useEffect() Hook은 React Component의 Lifecycle에 따라서 호출되는 Hook이다. 기존의 React Component Class의 Lifecycle 함수를 대체한다. [Code 2]에서 1번째 useEffect() Hook은 기본적으로 useEffect() Hook을 이용하는 방법을 보여준다. useEffect() Hook의 Parameter로 함수를 Return하는 함수를 넘긴다. 넘긴 함수는 React Component가 Mount(생성), State 변경으로 인해서 다시 Rendering이 될 경우, Rendering이 된 이후에 호출이 된다. 기존 React Component Lifecycle 함수중에서 componentDidMount() 함수와 componentDidUpdate() 함수의 역할을 같이 수행한다고 보면 된다.
 
-useEffect() Hook으로 넘긴 함수가 Return하는 함수는 React Component가 Umount(제거)되기 전에 호출된다. 기존 React Component Lifecycle 함수중에서 componentWillUnmount() 함수의 역활을 수행한다. React Component가 Unmount 될때 아무런 동작도 하고 싶지 않다면, useEffect() Hook으로 넘긴 함수가 아무것도 Return하지 않으면 된다. [Code 2]에서 2번째 2번째 useEffect() Hook이 이에 해당한다. React Component가 처음 Mount 될때만 useEffect() Hook으로 넘긴 함수가 호출되기 원한다면, useEffect() Hook의 두번째 Parameter로 빈 Array를 넘기면 된다. [Code 2]에서 3번째 useEffect() Hook이 이에 해당한다.
+useEffect() Hook으로 넘긴 함수가 Return하는 함수는 React Component가 Umount(제거)되기 전에 호출된다. 기존 React Component Lifecycle 함수중에서 componentWillUnmount() 함수의 역할을 수행한다. React Component가 Unmount 될때 아무런 동작도 하고 싶지 않다면, useEffect() Hook으로 넘긴 함수가 아무것도 Return하지 않으면 된다. [Code 2]에서 2번째 2번째 useEffect() Hook이 이에 해당한다. React Component가 처음 Mount 될때만 useEffect() Hook으로 넘긴 함수가 호출되기 원한다면, useEffect() Hook의 두번째 Parameter로 빈 Array를 넘기면 된다. [Code 2]에서 3번째 useEffect() Hook이 이에 해당한다.
 
 useEffect() Hook으로 넘긴 함수가 React Component가 특정 State가 변경 되었을때만 호출하게 만들 수 있다. useEffect() Hook의 두번째 Parameter로 변경을 감지할 State를 넘겨주면 된다. [Code 2]에서 4번째 useEffect() Hook이 이에 해당한다. useEffect() Hook에 넘겨진 함수에서도 Component의 지역 변수나 useState() Hook을 통해 생성한 State를 이용할 수 있다.
 

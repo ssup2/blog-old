@@ -13,7 +13,7 @@ OpenStack의 Octavia를 분석한다.
 
 ![[그림 1] OpenStack Octavia Concept]({{site.baseurl}}/images/theory_analysis/OpenStack_Octavia/Octavia_Concept.PNG){: width="700px"}
 
-Octavia는 LBaaS (Load Balancer as a Service)를 제공하는 OpenStack의 Service이다. [그림 1]은 Octavia의 Concept을 나타내고 있다. Load Balancer는 하나의 VIP (Virtual IP)를 의미한다. Listener는 하나의 Port를 의미한다. [그림 1]에서는 Port A, Port B를 담당하는 Listener가 하나씩 존재하는걸 확인할 수 있다. Pool은 Packet의 목적지가 되는 Server를 의미하는 Member들의 집합을 의미하며, 각 Listener들은 특정 Pool과 Mapping된다. [그림 1]에서는 Listener과 Pool은 1:1로 Mapping되어 있지만, 여러개의 Listener가 하나의 Pool을 공유할 수도 있다. Health Monitor는 Pool의 Member의 Health Check를 담당하며, Health Check에 실패한 Member로 Packet이 Load Balancing이 되지 않도록 하는 역활을 수행한다.
+Octavia는 LBaaS (Load Balancer as a Service)를 제공하는 OpenStack의 Service이다. [그림 1]은 Octavia의 Concept을 나타내고 있다. Load Balancer는 하나의 VIP (Virtual IP)를 의미한다. Listener는 하나의 Port를 의미한다. [그림 1]에서는 Port A, Port B를 담당하는 Listener가 하나씩 존재하는걸 확인할 수 있다. Pool은 Packet의 목적지가 되는 Server를 의미하는 Member들의 집합을 의미하며, 각 Listener들은 특정 Pool과 Mapping된다. [그림 1]에서는 Listener과 Pool은 1:1로 Mapping되어 있지만, 여러개의 Listener가 하나의 Pool을 공유할 수도 있다. Health Monitor는 Pool의 Member의 Health Check를 담당하며, Health Check에 실패한 Member로 Packet이 Load Balancing이 되지 않도록 하는 역할을 수행한다.
 
 {% highlight console %}
 # openstack loadbalancer show b13ce3b9-381f-4d33-9443-b7fc30619350
@@ -137,7 +137,7 @@ Octavia는 LBaaS (Load Balancer as a Service)를 제공하는 OpenStack의 Servi
 
 Octavia Client는 Octavia Service의 API Controller에게 LB 생성을 요청하면 API Controller는 Nova, Neutron 같은 다른 OpenStack Service의 도움을 받아 Amphora를 생성한다. Amphora 생성이 완료되면 Octavia Service의 Controller Worker는 Amphora의 Agent를 통해서 HAProxy의 Config 파일을 생성하고 HAProxy를 구동한다. Member의 Health Check는 Agent의 설정에 따라서 HAProxy가 수행한다. HAProxy가 수집한 Member의 Health 상태는 Unix Socket을 통해서 Agent에 전달되며, Agent는 다시 Controller Worker에게 전달한다.
 
-Controller Worker는 전달 받은 Member의 Health 상태를 Octavia의 Member Resource에 반영한다. Housekeeping Manager는 삭제된 Resource를 Octavia DB에서 완전히 지우는 역활 및 Amphora의 Certificate를 관리하는 역활을 수행한다. Amphora는 Standalone 또는 HA를 위한 Active-Standby로 동작한다. [그림 1]에서는 Active-Standby 형태로 동작하는 Amphora를 나타내고 있다.
+Controller Worker는 전달 받은 Member의 Health 상태를 Octavia의 Member Resource에 반영한다. Housekeeping Manager는 삭제된 Resource를 Octavia DB에서 완전히 지우는 역할 및 Amphora의 Certificate를 관리하는 역할을 수행한다. Amphora는 Standalone 또는 HA를 위한 Active-Standby로 동작한다. [그림 1]에서는 Active-Standby 형태로 동작하는 Amphora를 나타내고 있다.
 
 {% highlight text %}
 [DEFAULT]

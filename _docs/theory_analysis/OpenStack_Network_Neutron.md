@@ -71,13 +71,13 @@ DHCP Server는 Network Node에 Guest Network의 Bridge에 dnsmasq를 붙여 구�
 
 ![[그림 5] Compute Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Network_Neutron/Compute_Node_With_OVS.PNG){: width="700px"}
 
-[그림 5]는 OVS를 이용한 Compute Node의 Network 구성을 나타내고 있다. [그림 3]과 동일한 Network 구성이지만 OVS를 이용하여 구성했다는 점이 다르다. VM과 연결된 모든 TAP Interface는 Bridge, VETH를 통해서 통합 OVS 역활을 수행하는 br-int OVS에 연결된다. br-int에서 VXLAN, GRE 기반의 Guest Network는 br-tun OVS를 이용한다. VLAN 기반의 Network는 br-vlan OVS를 이용한다. 첫번째 Guest Network는 VLAN을 이용하기 때문에 br-vlan OVS를 이용하고, 두번째 Guest Network는 VXLAN을 이용하기 때문에 br-tun OVS를 이용한다.
+[그림 5]는 OVS를 이용한 Compute Node의 Network 구성을 나타내고 있다. [그림 3]과 동일한 Network 구성이지만 OVS를 이용하여 구성했다는 점이 다르다. VM과 연결된 모든 TAP Interface는 Bridge, VETH를 통해서 통합 OVS 역할을 수행하는 br-int OVS에 연결된다. br-int에서 VXLAN, GRE 기반의 Guest Network는 br-tun OVS를 이용한다. VLAN 기반의 Network는 br-vlan OVS를 이용한다. 첫번째 Guest Network는 VLAN을 이용하기 때문에 br-vlan OVS를 이용하고, 두번째 Guest Network는 VXLAN을 이용하기 때문에 br-tun OVS를 이용한다.
 
 VM의 모든 Inbound/Outbound Packet은 TAP Interface와 연결된 Bridge를 지나며 OpenStack의 Security Group의 Rule에 의해서 설정된 iptables의 Filter Table에 의해서 Filtering 된다. TAP Interface, Bridge, VETH, OVS 모두 ML2 Plugin Agent가 설정한다.
 
 ![[그림 6] Network Node Network with OVS]({{site.baseurl}}/images/theory_analysis/OpenStack_Network_Neutron/Network_Node_With_OVS.PNG){: width="700px"}
 
-[그림 6]은 OVS를 이용한 Network Node의 Network 구성을 나타내고 있다. [그림 4]와 동일한 Network 구성이지만 OVS를 이용하여 구성했다는 점이 다르다. 모든 VETH Interface는 통합 OVS 역활을 수행하는 br-int OVS에 연결된다. br-int에서 VXLAN, GRE 기반의 Guest Network는 br-tun OVS를 이용하고 VLAN 기반의 Network는 br-vlan OVS를 이용한다. 또한 External Network는 br-ex OVS를 이용한다. OVS는 ML2 Plugin Agent가 설정한다.
+[그림 6]은 OVS를 이용한 Network Node의 Network 구성을 나타내고 있다. [그림 4]와 동일한 Network 구성이지만 OVS를 이용하여 구성했다는 점이 다르다. 모든 VETH Interface는 통합 OVS 역할을 수행하는 br-int OVS에 연결된다. br-int에서 VXLAN, GRE 기반의 Guest Network는 br-tun OVS를 이용하고 VLAN 기반의 Network는 br-vlan OVS를 이용한다. 또한 External Network는 br-ex OVS를 이용한다. OVS는 ML2 Plugin Agent가 설정한다.
 
 ### 3. 참조
 

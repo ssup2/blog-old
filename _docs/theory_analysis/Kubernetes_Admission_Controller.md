@@ -13,7 +13,7 @@ Kubernetes의 Admission Controller를 분석한다.
 
 ![[그림 1] Kubernetes Admission Controller]({{site.baseurl}}/images/theory_analysis/Kubernetes_Admission_Controller/Kubernetes_Admission_Controller.PNG){: width="700px"}
 
-Kubernetes Admission Controller는 Kubernetes API 처리 과정을 Hooking하여, Kubernetes의 기능을 확장하는 역활을 수행하는 Controller를 의미한다. Kubernetes는 Admission Controller를 통해서 보안, 정책 및 설정 관련 기능을 확장하고 있다. [그림 1]은 Kubernetes Admission Controller를 나타내고 있다. Kubernetes API Server는 API 요청 처리 과정 사이에 Kubernetes API Server 내부에 포함된 Compiled-in Admission Controller들에게 하나씩 순차적으로 API 요청 정보를 전달한다. API 요청 정보를 받은 Admission Controller는 해당 API 요청을 거절, 승인 또는 변경&승인 할 수 있다.
+Kubernetes Admission Controller는 Kubernetes API 처리 과정을 Hooking하여, Kubernetes의 기능을 확장하는 역할을 수행하는 Controller를 의미한다. Kubernetes는 Admission Controller를 통해서 보안, 정책 및 설정 관련 기능을 확장하고 있다. [그림 1]은 Kubernetes Admission Controller를 나타내고 있다. Kubernetes API Server는 API 요청 처리 과정 사이에 Kubernetes API Server 내부에 포함된 Compiled-in Admission Controller들에게 하나씩 순차적으로 API 요청 정보를 전달한다. API 요청 정보를 받은 Admission Controller는 해당 API 요청을 거절, 승인 또는 변경&승인 할 수 있다.
 
 Admission Controller로 부터 거절 응답을 받은 Kubernetes API 서버는 해당 API 요청 처리를 중단한다. Admission Controller로 부터 승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 동일한 API 요청 정보를 전달하고 응답을 기다린다. 변경&승인 응답을 받은 Kubernetes API 서버는 다음 Admission Controller에게 변경된 API 요청 정보를 전달하고 응답을 기다린다. 이런식으로 활성화된 모든 Admission Controller를 지나간 API 요청만이 etcd에 저장되어 반영된다.
 
@@ -31,7 +31,7 @@ ServiceAccount Admission Controller는 Mutating Hook과 Validating Hook을 둘�
 
 #### 1.2. Custom Admission Controller
 
-Custom Admission Controller는 Kubernetes API Server 외부에서 동작하는 Kubernetes User가 개발한 Admission Controller를 의미한다. Custom Admission Controller의 동작을 이해하기 위해서는 Compiled-in Admission Controller인 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 역활을 이해하고 있어야한다. 
+Custom Admission Controller는 Kubernetes API Server 외부에서 동작하는 Kubernetes User가 개발한 Admission Controller를 의미한다. Custom Admission Controller의 동작을 이해하기 위해서는 Compiled-in Admission Controller인 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 역할을 이해하고 있어야한다. 
 
 [그림 1]은 MutatingAdmissionWebhook Controller와 ValidatingAdmissionWebhook Controller의 동작도 나타내고 있다. MutatingAdmissionWebhook Controller는 Mutating Hook을 이용하여 API 요청 정보를 Custom Admission Controller의 Webhook에 전달한다. API 요청 정보가 전달되어야 Custom Admission Controller 및 Webhook이 다수 존재한다면 API 요청 정보를 하나씩 순차적으로 Custom Admission Controller에게 전달하고 응답을 대기하는 동작을 반복한다.
 

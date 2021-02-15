@@ -354,9 +354,9 @@ data:
 <figcaption class="caption">[파일 3] template.yaml</figcaption>
 </figure>
 
-Cluster Manifest Template 역활을 수행하는 [파일 3]의 내용을 갖고 있는 template.yaml 파일을 생성한다. https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml 파일에서 "disableServerTags: true" 제거, cidrBlocks을 "192.167.0.0/16"으로 변경, Bastion VM 설정을 추가하였다.
+Cluster Manifest Template 역할을 수행하는 [파일 3]의 내용을 갖고 있는 template.yaml 파일을 생성한다. https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/v0.3.3/templates/cluster-template-external-cloud-provider.yaml 파일에서 "disableServerTags: true" 제거, cidrBlocks을 "192.167.0.0/16"으로 변경, Bastion VM 설정을 추가하였다.
 
-ClusterAPI는 기본적으로 생성한 Kubernetes Cluster의 Node에 SSH 접근이 불가능 하도록 Security Group을 설정한다. Bastion VM은 ClusterAPI를 통해 생성한 Kubernetes Cluster의 Node에 SSH로 접근할 수 있게 만드는 통로 역활을 수행한다.
+ClusterAPI는 기본적으로 생성한 Kubernetes Cluster의 Node에 SSH 접근이 불가능 하도록 Security Group을 설정한다. Bastion VM은 ClusterAPI를 통해 생성한 Kubernetes Cluster의 Node에 SSH로 접근할 수 있게 만드는 통로 역할을 수행한다.
 
 ~~~console
 (Local)# wget https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-openstack/master/templates/env.rc -O env.rc

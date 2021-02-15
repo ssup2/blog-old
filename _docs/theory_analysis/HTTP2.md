@@ -19,7 +19,7 @@ HTTP/2는 기존 HTTP/1의 느린 성능 개선을 목적으로 탄생하게된 
 
 일반적으로 HTTP Header에는 Cookie, User-Agent와 같은 많은 Meta Data를 저장하고 있기 때문에 HTTP Header의 길이는 HTTP Body의 길이와 비교해도 큰 차이가 나지 않는 경우가 많다. 문제는 Stateless한 HTTP의 특성 때문에 동일한 Server에게 동일한 HTTP Header 내용을 여러번 전송하는 경우가 빈번하게 발생한다는 점이다. 따라서 긴 HTTP Header는 HTTP 통신의 주요 Overhead 중 하나이다.
 
-HTTP/2는 이러한 HTTP Header의 Overhead를 줄이기 위해서 Header 압축 기법을 제공한다. [그림 1]은 Header 압축 기법을 나타내고 있다. HTTP/2의 Header 압축은 내부적으로 **HPACK**이라고 불리는 Module이 담당하는데 HPACK은 Huffman Algorithm과 Static Table, Dynamic Table을 통해서 압축을 수행한다. Huffman Algorithm은 자주 나오는 문자열 순서대로 짧은 Bitmap으로 Mapping하여 Data를 압축하는 기법이다. Static Table은 HTTP/2 Spec에 정의된 Table로 HTTP/2 Header로 자주 사용되는 Key-value 값 쌍을 저장하고 있는 Table이다. Dynamic Table은 한번 전송/수신한 Header의 Key-value 값을 임의로 저장하는 Buffer 역활을 수행하는 Table이다.
+HTTP/2는 이러한 HTTP Header의 Overhead를 줄이기 위해서 Header 압축 기법을 제공한다. [그림 1]은 Header 압축 기법을 나타내고 있다. HTTP/2의 Header 압축은 내부적으로 **HPACK**이라고 불리는 Module이 담당하는데 HPACK은 Huffman Algorithm과 Static Table, Dynamic Table을 통해서 압축을 수행한다. Huffman Algorithm은 자주 나오는 문자열 순서대로 짧은 Bitmap으로 Mapping하여 Data를 압축하는 기법이다. Static Table은 HTTP/2 Spec에 정의된 Table로 HTTP/2 Header로 자주 사용되는 Key-value 값 쌍을 저장하고 있는 Table이다. Dynamic Table은 한번 전송/수신한 Header의 Key-value 값을 임의로 저장하는 Buffer 역할을 수행하는 Table이다.
 
 [그림 1]은 동일한 HTTP/2 Header를 2번 전송 하였을때의 압축 과정을 나타내고 있다. 처음으로 Header 전송시 전송하려는 Header의 Key-value 중에서 Static Table의 Key-value와 일치하는 경우에는 해당 Key-value는 Static Table의 Index로 변경된다. [그림 1]에서 ":method GET", ":scheme POST"가 각각 Static Table의 Index 2, 7로 변경되는 것을 확인할 수 있다.
 
@@ -31,7 +31,7 @@ Static Table은 61번 Index까지 갖고 있기 때문에 Dynamic Table의 Index
 
 ![[그림 2] HTTP/2 Components]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Components.PNG)
 
-[그림 2]는 HTTP/2의 구성요소를 나타내고 있다. HTTP/2는 하나의 **Connection**안에서 논리적 Channel 역활을 수행하는 다수의 **Stream**을 두어 Multiplexing을 구현한다. 각 Stream 안에서는 Server와 Client는 다른 Stream에 관계 없이 독립적으로 **Message**를 주고 받는다. Message는 **Frame**이라고 불리는 전송 최소 단위로 쪼개져 구성된다.
+[그림 2]는 HTTP/2의 구성요소를 나타내고 있다. HTTP/2는 하나의 **Connection**안에서 논리적 Channel 역할을 수행하는 다수의 **Stream**을 두어 Multiplexing을 구현한다. 각 Stream 안에서는 Server와 Client는 다른 Stream에 관계 없이 독립적으로 **Message**를 주고 받는다. Message는 **Frame**이라고 불리는 전송 최소 단위로 쪼개져 구성된다.
 
 ![[그림 3] HTTP/3 Stream Multiplexing]({{site.baseurl}}/images/theory_analysis/HTTP2/HTTP2_Stream_Multiplexing.PNG)
 
@@ -55,7 +55,7 @@ HTTP/2의 Stream은 Weight 기반 Priority 기능을 제공한다. Stream Priori
 
 HTTP/2에서 Server는 Client의 요청 Message를 받으면 요청에 대한 응답 Message 뿐만 아니라, Client에서 아직 요청하지 않았지만 Client에게 필요할 걸로 예상되는 다른 Message도 함께 전송하는 Server Push 기능을 제공한다. [그림 6]은 Server Push 동작을 나타내고 있다. Client는 /index.html 파일만 Server에게 요청했지만 Server는 /index.html을 그리는데 필요한 PNG 파일들도 별도의 Strema을 통해서 동시에 같이 Client에게 전송하는 것을 확인할 수 있다.
 
-[그림 4]에서 PUSH_PROMISE Type의 Frame을 확인할 수 있는데, Server Push의 시작을 Client에게 알리는 역활을 수행한다. PUSH_PROMISE Type의 Frame에는 Message를 전송할 Stream을 명시하여 Client가 해당 Stream을 통해서 Message를 수신할 수 있도록 만든다.
+[그림 4]에서 PUSH_PROMISE Type의 Frame을 확인할 수 있는데, Server Push의 시작을 Client에게 알리는 역할을 수행한다. PUSH_PROMISE Type의 Frame에는 Message를 전송할 Stream을 명시하여 Client가 해당 Stream을 통해서 Message를 수신할 수 있도록 만든다.
 
 ### 2. 참조
 
