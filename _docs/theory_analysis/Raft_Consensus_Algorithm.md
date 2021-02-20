@@ -122,7 +122,7 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 
 2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 두번째 방법은, Old Conf와 New Conf를 동시에 적용하는 Joint Consensus를 이용하는 방법이다. Server Cluster에 Old Conf와 New Conf가 동시에 적용되어 있는 동안에는 두 Conf를 만족시키는 하나의 Leader Server만이 동작하기 때문이다.
 
-#### 1.7.3 Log Catch Up
+##### 1.7.3 Log Catch Up
 
 Log가 비어있는 새로운 Server 추가시 가용성에 영향을 줄 수 있다. 예를들어 Server Cluster에 3대의 Server가 존재하는데 이중에 Server 한대가 고장나 있는 상태에서 새로운 Server 한대가 추가되는 상황을 고려해보자. Server가 추가되기 전에는 Quorum은 2이기 때문에 동작에 문제가 없지만, 새로운 Server 한대가 추가되면 Quorum이 3으로 증가하게 된다. 문제는 새로운 Server에는 Log가 비어있기 때문에 새로운 Server의 Log가 Leader Server의 Log와 일치 될때까지 Leader Server는 새로운 Server로부터 동의표를 얻을 수 없다. 즉 새로운 Server의 Log가 Leader Server와 일치 될때까지 Leader Server는 Entry를 Commit할 수 없게된다.
 
