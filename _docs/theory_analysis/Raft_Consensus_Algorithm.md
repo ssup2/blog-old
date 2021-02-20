@@ -76,7 +76,7 @@ Leader Server가 재시작이 필요한 경우에 가장 안전하게 재시작�
 1. 이전의 Leader Server는 Client의 요청을 거부한다.
 1. 이전의 Leader Server는 새로운 Leader 역할을 수행할 Server와 Log를 일치시킨다.
 1. 이전의 Leader Server는 새로운 Leader 역할을 수행할 Server에게 **TimeoutNow** RPC 호출하여, 새로운 Leader 역할을 수행할 Server를 강제로 Follower 상태에서 Candidate 상태로 만들고 Leader Election을 수행하도록 만든다.
-1. Leader Election이 종료되면 이전의 Leader Server는 Follower 상태가되고, 새로운 Leader 역활을 수행할 Server는 Leader 상태가 되면서 Leader 역활이 넘어가게된다.
+1. Leader Election이 종료되면 이전의 Leader Server는 Follower 상태가되고, 새로운 Leader 역할을 수행할 Server는 Leader 상태가 되면서 Leader 역할이 넘어가게된다.
 
 #### 1.5. Log Replication, Commit
 
