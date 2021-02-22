@@ -11,7 +11,7 @@ Git Flow를 분석한다.
 
 ### 1. Git Flow
 
-![[그림 1] Git Flow]({{site.baseurl}}/images/theory_analysis/Git_Flow/Git_Flow.PNG){: width="600px"}
+![[그림 1] Git Flow]({{site.baseurl}}/images/theory_analysis/Git_Flow/Git_Flow.PNG){: width="700px"}
 
 ### 2. 참조
 
