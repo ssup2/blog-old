@@ -19,7 +19,7 @@ Kubernetes Scheduler가 수행하는 Pod Eviction 기법은 Cluster Level의 기
 
 Preemption이 발생하기 위해서는 새로 생성된 Pod의 Priority가 기존에 동작중인 Pod의 Priority보다 높아야한다. 새로 생성되는 Pod의 Priority가 기존의 동작중인 Pod의 Priority보다 높다면, Scheduler는 Priority가 낮은 Pod를 Evction을 통해서 제거하고 새로 생성되는 Pod를 동작시킨다. 이때 하나의 Pod만 Eviction되어 제거되는것이 아니라 필요 Resource 확보를 위해서 다수의 Pod가 Eviction되어 제거될 수 있다.
 
-또한 반드시 현재 동작중인 Pod중에서 가장 낮은 Priority를 갖는 Pod부터 제거되는것은 아니다. 새로 생성된 Pod가 필요한 Resource의 크기 및 현재 Node에서 동작하고 있는 Pod들의 Resource 사용량에 따라서 가장 낮은 Priority를 갖는 Pod가 아니더라도 제거될 수 있다. 한가지 확실한 점은 새로 생성된 Pod의 Priority 보다는 낮은 Priority를 갖는 Pod가 Eviction되어 제거 된다는 점이다.
+또한 반드시 현재 동작중인 Pod중에서 가장 낮은 Priority를 갖는 Pod부터 제거되는것은 아니다. 특정 Node에 새로 생성된 Pod의 Resource 확보를 위해서, 가장 낮은 Priority를 갖는 Pod가 아니더라도 먼저 제거될 수 있다. 한가지 확실한 점은 새로 생성된 Pod의 Priority 보다는 낮은 Priority를 갖는 Pod가 Eviction되어 제거 된다는 점이다.
 
 만약 동작중인 모든 Pod의 Priority가 새로 생성된 Pod의 Prority보다 높다면, 새로 생성된 Pod는 Scheduling되지 않고 Pending 상태를 유지한다.
 
