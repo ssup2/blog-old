@@ -11,7 +11,7 @@ OpenTracing을 분석한다.
 
 ### 1. OpenTracing
 
-![[그림 1] OpenStack Octavia Concept]({{site.baseurl}}/images/theory_analysis/OpenTracing/Data_Model.PNG){: width="700px"}
+![[그림 1] OpenTracing Data Model]({{site.baseurl}}/images/theory_analysis/OpenTracing/Data_Model.PNG){: width="700px"}
 
 ### 2. 참조
 
