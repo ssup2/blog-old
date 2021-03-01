@@ -9,7 +9,7 @@ adsense: true
 
 Jaeger Architecture를 분석한다.
 
-### 1. Jaeger
+### 1. Jaeger Architecture
 
 Jaeger는 MSA(Micro Service Architecture) Service(App)의 Profiling 및 Monitoring을 제공하는 Distributed Tracing System이다. **OpenTracing** 표준을 따른다. Jaeger는 Kafka를 이용하지 않고 구축하는 방식과 Kafka를 이용하는 방식으로 구축할 수 있다.
 
