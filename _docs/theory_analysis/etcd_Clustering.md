@@ -23,7 +23,7 @@ Server들이 Clustering을 수행하기 위해서는 각 Server는 Cluster에 �
 
 #### 1.2. Client Load Balancer
 
-Server Cluster와 통신하기 위해서 Client는 Cluster에 참여하는 모든 Server의 IP/Port 정보를 알고 있어야 한다. Client는 Parameter를 통해서 Static하게 Cluster에 참여하는 모든 Server의 IP/Port 정보를 얻어온다. 그리고 내장된 Load Balancer를 활용하여 요청을 분배하고, Server 장애시 장애가 발생하지 않는 다른 Server에게 요청을 다시 전송하여 스스로 장애에 대응한다. Client는 어느 Server가 Leader Server인지 알고있지 못한다. 따라서 Client가 Load Balancing을 수행할 때는 Server의 역활은 고려되지 않는다.
+Server Cluster와 통신하기 위해서 Client는 Cluster에 참여하는 모든 Server의 IP/Port 정보를 알고 있어야 한다. Client는 Parameter를 통해서 **Static**하게 Cluster에 참여하는 모든 Server의 IP/Port 정보를 얻어온다. 그리고 내장된 Load Balancer를 활용하여 요청을 분배하고, Server 장애시 장애가 발생하지 않는 다른 Server에게 요청을 다시 전송하여 스스로 장애에 대응한다. Client는 어느 Server가 Leader Server인지 알고있지 못한다. 따라서 Client가 Load Balancing을 수행할 때는 Server의 역활은 고려되지 않는다.
 
 Client는 처음에는 Cluster의 모든 Server와 동시에 TCP Connection을 맺는 방법을 이용하다가, 이후에 한번에 하나의 TCP Connection을 맺는 방법을 이용하다가 현재는 gRCP의 SubConnection을 통해서 모든 Server와 논리적 Connection을 맺는 방식을 이용하고 있다.
 
