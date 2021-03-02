@@ -19,7 +19,7 @@ Raft는 모든 동작이 Leader Server를 중심으로 동작한다. 따라서 C
 
 Follower Server로부터 Entry가 추가 되었다는 응답을 받은 Consensus Module은 추가된 Entry 정보를 State Machine에 반영하여, Client의 State 변경 요청 내역을 실제로 반영한다. 이러한 과정을 Raft에서는 **Commit**이라고 명칭한다. Leader Server의 Consensus Module은 Commit 동작 이후에 Follower Server에게 Commit이 수행되었다는 사실을 알려준다. 이후 Follower Server의 Consensus Module은 추가된 Entry를 State Machine에 반영한다.
 
-Leader, Follower 역할에 관계없이 Server에서 Client의 State 변경 요청은 Consensus Module, Log, State Machine으로 전달된다는 사실을 알 수 있다. 또한 일시적으로 각 Server의 State는 일시적으로 다를 수 있지만, Server의 Log를 통해서 최종적으로는 모든 Server는 동일한 State를 갖게도록 Raft가 설계되어 있다는 사실을 알 수 있다. Raft와 같이 특정 Server의 State를 다른 Server의 State에게 복제하는 방식의 기법을 **Replicated State Machine** 기법이라고 명칭한다.
+Leader, Follower 역할에 관계없이 Server에서 Client의 State 변경 요청은 Consensus Module, Log, State Machine으로 전달된다는 사실을 알 수 있다. 또한 일시적으로 각 Server의 State는 일시적으로 다를 수 있지만, Server의 Log를 통해서 최종적으로는 모든 Server는 동일한 State를 갖게도록 Raft가 설계되어 있다는 사실을 알 수 있다. Raft와 같이 특정 Server의 State를 다른 Server의 State에게 복제하는 방식의 기법을 **Replicated State Machine** 기법이라고 명칭한다. State Machine은 State를 **Memory**에 저장한다. Server가 재시작되면 Memory에 저장되어 있는 State는 제거되지만, Log를 통해서 마지막 상태의 State Machine을 복구할 수 있기 때문에 문제가 되지 않는다.
 
 #### 1.1. Quorum
 
