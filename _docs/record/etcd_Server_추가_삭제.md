@@ -141,11 +141,96 @@ raft2021/03/03 16:28:52 INFO: raft.node: 4eee438bb97e1153 elected leader 4eee438
 
 Node02의 etcd Server가 추가될때 Node01의 etcd Server는 위와 같은 Log를 남긴다. Node01의 etcd Server는 Node02의 etcd Server가 추가된 이후에 Node02의 etcd Server와 Connection이 될때까지 대기한다. 이후 Node01의 etcd Server는 Node02의 etcd Server와 Connection을 맺은 다음, Leader Election 과정을 통해서 이후에 Leader가 된것을 알 수 있다.
 
-### 4. Member 삭제
+### 4. Server 삭제
 
-#### 4.1. Leader etcd Server를 제거
+#### 4.1. Leader Server 삭제
 
-#### 4.2. Follower etcd Server를 제거
+~~~
+(Node02)# docker exec -it etcd sh
+(etcd Container)# etcdctl endpoint status --cluster -w table
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+|         ENDPOINT         |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+| http://192.168.0.61:2379 | 4eee438bb97e1153 |   3.4.0 |   20 kB |      true |      false |        61 |          7 |                  7 |        |
+| http://192.168.0.62:2379 | 6c9f385ab14331a2 |   3.4.0 |   20 kB |     false |      false |        61 |          7 |                  7 |        |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+
+(etcd Container)# etcdctl member remove 4eee438bb97e1153
+~~~
+
+Leader etcd Server를 etcd Cluster로부터 제거한다.
+
+~~~
+(Node02)# docker logs -f etcd
+...
+raft2021/03/03 16:46:41 INFO: 6c9f385ab14331a2 switched to configuration voters=(7827036639565394338)
+2021-03-03 16:46:41.520426 I | etcdserver/membership: removed member 4eee438bb97e1153 from cluster 35d99f7f50aa4509
+2021-03-03 16:46:41.520470 I | rafthttp: stopping peer 4eee438bb97e1153...
+2021-03-03 16:46:41.521156 I | rafthttp: closed the TCP streaming connection with peer 4eee438bb97e1153 (stream MsgApp v2 writer)
+2021-03-03 16:46:41.521191 I | rafthttp: stopped streaming with peer 4eee438bb97e1153 (writer)
+2021-03-03 16:46:41.522150 W | rafthttp: rejected the stream from peer 4eee438bb97e1153 since it was removed
+2021-03-03 16:46:41.523061 I | rafthttp: closed the TCP streaming connection with peer 4eee438bb97e1153 (stream Message writer)
+2021-03-03 16:46:41.523166 I | rafthttp: stopped streaming with peer 4eee438bb97e1153 (writer)
+2021-03-03 16:46:41.523369 I | rafthttp: stopped HTTP pipelining with peer 4eee438bb97e1153
+2021-03-03 16:46:41.523436 W | rafthttp: lost the TCP streaming connection with peer 4eee438bb97e1153 (stream MsgApp v2 reader)
+2021-03-03 16:46:41.523458 E | rafthttp: failed to read 4eee438bb97e1153 on stream MsgApp v2 (context canceled)
+2021-03-03 16:46:41.523462 I | rafthttp: peer 4eee438bb97e1153 became inactive (message send to peer failed)
+2021-03-03 16:46:41.523485 I | rafthttp: stopped streaming with peer 4eee438bb97e1153 (stream MsgApp v2 reader)
+2021-03-03 16:46:41.523525 W | rafthttp: lost the TCP streaming connection with peer 4eee438bb97e1153 (stream Message reader)
+2021-03-03 16:46:41.523534 I | rafthttp: stopped streaming with peer 4eee438bb97e1153 (stream Message reader)
+2021-03-03 16:46:41.523538 I | rafthttp: stopped peer 4eee438bb97e1153
+2021-03-03 16:46:41.523548 I | rafthttp: removed peer 4eee438bb97e1153
+2021-03-03 16:46:41.524312 W | rafthttp: rejected the stream from peer 4eee438bb97e1153 since it was removed
+raft2021/03/03 16:46:43 INFO: 6c9f385ab14331a2 is starting a new election at term 5
+raft2021/03/03 16:46:43 INFO: 6c9f385ab14331a2 became candidate at term 6
+raft2021/03/03 16:46:43 INFO: 6c9f385ab14331a2 received MsgVoteResp from 6c9f385ab14331a2 at term 6
+raft2021/03/03 16:46:43 INFO: 6c9f385ab14331a2 became leader at term 6
+raft2021/03/03 16:46:43 INFO: raft.node: 6c9f385ab14331a2 changed leader from 4eee438bb97e1153 to 6c9f385ab14331a2 at term 6
+~~~
+
+Node01의 etcd Server가 제거 될때 Node02의 etcd Server는 위와 같은 Log를 남긴다. Leader Server가 제거되었기 때문에, Node02의 etcd Server가 Leader Election 과정을 통해서 Leader가 되는것을 확인할 수 있다.
+
+#### 4.2. Follower Server 삭제
+
+~~~
+(Node01)# docker exec -it etcd sh
+(etcd Container)# etcdctl endpoint status --cluster -w table
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+|         ENDPOINT         |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+| http://192.168.0.61:2379 | 4eee438bb97e1153 |   3.4.0 |   20 kB |      true |      false |        11 |          7 |                  7 |        |
+| http://192.168.0.62:2379 | 9035c191246d362c |   3.4.0 |   20 kB |     false |      false |        11 |          7 |                  7 |        |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+
+(etcd Container)# etcdctl member remove 9035c191246d362c
+~~~
+
+Follower etcd Server를 etcd Cluster로부터 제거한다.
+
+~~~
+(Node01)# docker logs -f etcd
+...
+raft2021/03/03 17:04:23 INFO: 4eee438bb97e1153 switched to configuration voters=(5687557646807077203)
+2021-03-03 17:04:23.420808 I | etcdserver/membership: removed member 9035c191246d362c from cluster 35d99f7f50aa4509
+2021-03-03 17:04:23.420843 I | rafthttp: stopping peer 9035c191246d362c...
+2021-03-03 17:04:23.421311 I | rafthttp: closed the TCP streaming connection with peer 9035c191246d362c (stream MsgApp v2 writer)
+2021-03-03 17:04:23.421346 I | rafthttp: stopped streaming with peer 9035c191246d362c (writer)
+2021-03-03 17:04:23.421918 I | rafthttp: closed the TCP streaming connection with peer 9035c191246d362c (stream Message writer)
+2021-03-03 17:04:23.421951 I | rafthttp: stopped streaming with peer 9035c191246d362c (writer)
+2021-03-03 17:04:23.422194 W | rafthttp: rejected the stream from peer 9035c191246d362c since it was removed
+2021-03-03 17:04:23.422338 I | rafthttp: stopped HTTP pipelining with peer 9035c191246d362c
+2021-03-03 17:04:23.422612 W | rafthttp: lost the TCP streaming connection with peer 9035c191246d362c (stream MsgApp v2 reader)
+2021-03-03 17:04:23.422620 W | rafthttp: rejected the stream from peer 9035c191246d362c since it was removed
+2021-03-03 17:04:23.422657 E | rafthttp: failed to read 9035c191246d362c on stream MsgApp v2 (context canceled)
+2021-03-03 17:04:23.422667 I | rafthttp: peer 9035c191246d362c became inactive (message send to peer failed)
+2021-03-03 17:04:23.422679 I | rafthttp: stopped streaming with peer 9035c191246d362c (stream MsgApp v2 reader)
+2021-03-03 17:04:23.422729 W | rafthttp: lost the TCP streaming connection with peer 9035c191246d362c (stream Message reader)
+2021-03-03 17:04:23.422739 I | rafthttp: stopped streaming with peer 9035c191246d362c (stream Message reader)
+2021-03-03 17:04:23.422747 I | rafthttp: stopped peer 9035c191246d362c
+2021-03-03 17:04:23.422757 I | rafthttp: removed peer 9035c191246d362c
+~~~
+
+Node02의 etcd Server가 제거 될때 Node01의 etcd Server는 위와 같은 Log를 남긴다. Follower Server가 제거된거라 Leader Election을 수행하지 않는것을 알 수 있다.
 
 ### 5. Learner
 
