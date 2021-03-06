@@ -98,9 +98,11 @@ Leader Server는 Follower Server들로부터 Quorum 개수 이상의 Entry 복�
 
 Raft는 Log를 압축하는 방법으로 **Snapshot**을 이용하고 있다. Snapshot을 찍은 이후에는 Snapshot을 찍기 이전의 Entry들은 제거되기 때문이다. Snapshot 이후에 State 변경 내역은 이전과 동일하게 Log의 Entry로 남게된다.
 
-#### 1.7. Server Cluster의 Server 추가/제거
+#### 1.7. Server Config 변경
 
-Raft는 Server Cluster의 설정 정보도 State와 동일하게 Log 및 State Machine에 의해서 관리된다. 즉 Server Cluster의 설정 정보가 변경될 경우, 변경된 설정은 모든 Server에 동시에 적용 되는것이 아니라 각 Server가 변경된 설정을 State Machine에 반영할때 적용된다. 따라서 Leader Server가 제일 먼저 Server Cluster의 설정 정보를 적용하고 이후에 시간 차이를 두고 Follower Server들이 변경된 설정을 적용한다. Server Cluster의 Server를 추가/삭제하는 과정도 Server Cluster의 설정 변경을 의미한다.
+Raft는 Server의 Config도 State로 관리된다. 즉 Server 입장에서 Client의 Server Config 변경 요청은 Client State 변경 요청과 동일하다. Client가 전송한 변경된 Server Config는 Leader Log에 먼저 저장되며, Follower들의 동의표를 얻어 State Machine에 Commit 되어야 Server Config도 Server에 적용된다.
+
+#### 1.8. Server Cluster의 Server 추가/제거
 
 ![[그림 6] Raft Server Cluster의 Server 추가에 의한 2개의 Leader]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_2_Leader.PNG){: width="450px"}
 
@@ -110,19 +112,19 @@ Raft는 운영중에 발생할 수 있는 Server Cluster의 Server 추가/제거
 
 이러한 문제를 해결하기 위해서 Raft는 2가지 Server 추가/제거 방법을 제공한다. 첫번째 방법은 동시에 무조건 단일 Server만 추가/제거를 하는 방식이다. 두번째 방법은 Old Conf와 New Conf를 동시에 적용하는 Joint Consensus를 이용하는 방법이다.
 
-##### 1.7.1. 단일 Server 추가/제거
+##### 1.8.1. 단일 Server 추가/제거
 
 ![[그림 7] Raft Server Cluster의 단일 Server 추가/제거]({{site.baseurl}}/images/theory_analysis/Raft_Consensus_Algorithm/Cluster_Member_Add_Remove.PNG){: width="500px"}
 
 2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 첫번째 방법은, 동시에 단일 Server만 추가/제거를 하는 방식이다. [그림 7]은 순서대로 4개의 Server에서 1개의 Server를 추가, 2개의 Server에서 1개의 Server를 추가, 5개의 Server에서 1개의 Server를 제거, 4개의 Server에서 1개의 Server를 제거 할때의 일시적인 Server Cluster의 설정 상태를 나타내고 있다. 즉 단일 Server 추가/제거를 하였을때의 일시적인 Server Cluster의 설정 상태를 나타내고 있다. 4가지의 Case 모두 Old Conf와 New Conf가 동시에 필요한 Quorum의 개수를 만족시킬 수 없다는걸 알 수 있다. 즉 Old Conf의 Leader Server와 New Conf의 Leader Server는 동시에 동작할 수 없게된다.
 
-##### 1.7.2. Joint Consensus
+##### 1.8.2. Joint Consensus
 
 > 구 Server 구성 -> 구 Server 구성 + 신규 Server 구성 (Joint Consensus) -> 신규 Server 구성
 
 2개의 Leader Server가 동시에 동작하는 문제를 막기 위한 두번째 방법은, Old Conf와 New Conf를 동시에 적용하는 Joint Consensus를 이용하는 방법이다. Server Cluster에 Old Conf와 New Conf가 동시에 적용되어 있는 동안에는 두 Conf를 만족시키는 하나의 Leader Server만이 동작하기 때문이다.
 
-##### 1.7.3 Log Catch Up
+##### 1.8.3 Log Catch Up
 
 Log가 비어있는 새로운 Server 추가시 가용성에 영향을 줄 수 있다. 예를들어 Server Cluster에 3대의 Server가 존재하는데 이중에 Server 한대가 고장나 있는 상태에서 새로운 Server 한대가 추가되는 상황을 고려해보자. Server가 추가되기 전에는 Quorum은 2이기 때문에 동작에 문제가 없지만, 새로운 Server 한대가 추가되면 Quorum이 3으로 증가하게 된다. 문제는 새로운 Server에는 Log가 비어있기 때문에 새로운 Server의 Log가 Leader Server의 Log와 일치 될때까지 Leader Server는 새로운 Server로부터 동의표를 얻을 수 없다. 즉 새로운 Server의 Log가 Leader Server와 일치 될때까지 Leader Server는 Entry를 Commit할 수 없게된다.
 
@@ -130,7 +132,7 @@ Log가 비어있는 새로운 Server 다수가 짧은 간격으로 추가되어�
 
 이러한 Log Catch Up 문제를 해결하기 위해서 Raft는 새로 추가된 Server가 처음에는 Leader Server와의 Log 복제 동작만을 수행하고 투표에는 참여하지 않아 Quorum에는 영향을 주지 않도록 하는 방법을 제안하고 있다. 이후 새로 추가된 Server의 Log와 Leader Server의 Log가 어느정도 일치하게 된다면, 새로 추가된 Server는 투표에 참여하게 된다. 새로운 Server는 Log 복제를 Round라는 단위로 쪼개어 수행한다. Round가 Election Timeout안에 종료된다면 새로운 Server의 Log가 Leader Server의 Log와 어느정도 일치한다고 가정하고, 새로운 Server는 투표할 수 있는 권한을 얻게된다.
 
-#### 1.8. Client Connection
+#### 1.9. Client Connection
 
 Client는 Server Cluster에게 State 변경 요청을 전송하고 Server Cluster로 부터 현재 State 정보를 얻기 위해서는 Server Cluster의 Server들의 IP/Port 정보를 알고 있어야한다. Raft에서는 Client에게 Server Cluster의 Server들의 IP/Port 정보를 전달하는 방법으로 설정 파일을 이용하여 설정하는 방법과, DNS와 같은 Directory Service를 통해서 Client가 Server Cluster의 Server들의 IP/Port 정보를 동적으로 얻을 수 있는 방법을 제안하고 있다.
 
