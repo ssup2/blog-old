@@ -23,7 +23,6 @@ Node01에 단일 etcd Server를 구성한다.
 ~~~
 (Node01)# export NODE01=192.168.0.61
 (Node01)# export REGISTRY=gcr.io/etcd-development/etcd
-(Node01)# export DATA_DIR="etcd-data"
 
 (Node01)# docker run -d \
   --net=host \
@@ -58,7 +57,6 @@ Node01의 etcd Server에 Node02의 etcd Member를 추가한다.
 (Node02)# export NODE01=192.168.0.61
 (Node02)# export NODE02=192.168.0.62
 (Node02)# export REGISTRY=gcr.io/etcd-development/etcd
-(Node02)# export DATA_DIR="etcd-data"
 
 (Node02)# docker run -d \
   --net=host \
@@ -145,6 +143,8 @@ Node02의 etcd Server가 추가될때 Node01의 etcd Server는 위와 같은 Log
 
 #### 4.1. Leader Server 삭제
 
+Leader로 동작하는 Node01의 etcd Server를 제거해본다.
+
 ~~~
 (Node02)# docker exec -it etcd sh
 (etcd Container)# etcdctl endpoint status --cluster -w table
@@ -192,6 +192,8 @@ Node01의 etcd Server가 제거 될때 Node02의 etcd Server는 위와 같은 Lo
 
 #### 4.2. Follower Server 삭제
 
+Follower로 동작하는 Node02의 etcd Server를 제거해본다.
+
 ~~~
 (Node01)# docker exec -it etcd sh
 (etcd Container)# etcdctl endpoint status --cluster -w table
@@ -232,7 +234,91 @@ raft2021/03/03 17:04:23 INFO: 4eee438bb97e1153 switched to configuration voters=
 
 Node02의 etcd Server가 제거 될때 Node01의 etcd Server는 위와 같은 Log를 남긴다. Follower Server가 제거된거라 Leader Election을 수행하지 않는것을 알 수 있다.
 
-### 5. Learner
+### 5. Learner 기능을 이용하여 Server 추가
+
+Node03에 etcd Server 한대를 더 구동하고, Learner 기능을 이용하여 Node01, Node02의 etcd Server와 Clustering을 맺는다.
+
+~~~
+(Node01)# docker exec -it etcd sh
+(etcd Container)# etcdctl member add node03 --learner --peer-urls=http://192.168.0.63:2380
+Member aa9ac53bcb1de8c6 added to cluster 35d99f7f50aa4509
+
+ETCD_NAME="node03"
+ETCD_INITIAL_CLUSTER="node02=http://192.168.0.62:2380,node01=http://192.168.0.61:2380,node03=http://192.168.0.63:2380"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://192.168.0.63:2380"
+ETCD_INITIAL_CLUSTER_STATE="existing"
+~~~
+
+Node01의 etcd Server에 Node03의 etcd Member를 Learner로 추가한다.
+
+~~~
+(Node03)# export NODE01=192.168.0.61
+(Node03)# export NODE02=192.168.0.62
+(Node03)# export NODE03=192.168.0.63
+(Node03)# export REGISTRY=gcr.io/etcd-development/etcd
+
+(Node03)# docker run -d \
+  --net=host \
+  --name etcd ${REGISTRY}:v3.4.0 \
+  /usr/local/bin/etcd \
+  --data-dir=/etcd-data --name node03 \
+  --initial-advertise-peer-urls http://${NODE03}:2380 --listen-peer-urls http://0.0.0.0:2380 \
+  --advertise-client-urls http://${NODE03}:2379 --listen-client-urls http://0.0.0.0:2379 \
+  --initial-cluster node01=http://${NODE01}:2380,node02=http://${NODE02}:2380,node03=http://${NODE03}:2380 \
+  --initial-cluster-state existing
+~~~
+
+Node01의 etcd Server와 Clustering을 맺는다.
+
+~~~
+(Node01)# docker exec -it etcd sh
+(etcd Container)# etcdctl endpoint status --cluster -w table
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+|         ENDPOINT         |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+| http://192.168.0.63:2379 | aa9ac53bcb1de8c6 |   3.4.0 |   20 kB |     false |       true |        36 |         10 |                 10 |        |
+| http://192.168.0.62:2379 | 341224f3422176dd |   3.4.0 |   20 kB |     false |      false |        36 |         10 |                 10 |        |
+| http://192.168.0.61:2379 | 4eee438bb97e1153 |   3.4.0 |   20 kB |      true |      false |        36 |         10 |                 10 |        |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+
+(etcd Container)# etcdctl member promote aa9ac53bcb1de8c6
+Member aa9ac53bcb1de8c6 promoted in cluster 35d99f7f50aa450
+(etcd Container)# etcdctl endpoint status --cluster -w table
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+|         ENDPOINT         |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+| http://192.168.0.63:2379 | aa9ac53bcb1de8c6 |   3.4.0 |   20 kB |     false |      false |        36 |         12 |                 12 |        |
+| http://192.168.0.62:2379 | 341224f3422176dd |   3.4.0 |   20 kB |     false |      false |        36 |         12 |                 12 |        |
+| http://192.168.0.61:2379 | 4eee438bb97e1153 |   3.4.0 |   20 kB |      true |      false |        36 |         12 |                 12 |        |
++--------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
+~~~
+
+Node03의 etcd Server가 Learner 상태였다가 promote 명령어를 통해서 Follower가 된것을 확인할 수 있다.
+
+~~~
+(Node01)# docker logs -f etcd
+...
+2021-03-06 13:41:09.130322 W | rafthttp: health check for peer aa9ac53bcb1de8c6 could not connect: dial tcp 192.168.0.63:2380: connect: connection refused
+2021-03-06 13:41:09.130381 W | rafthttp: health check for peer aa9ac53bcb1de8c6 could not connect: dial tcp 192.168.0.63:2380: connect: connection refused
+2021-03-06 13:41:09.786452 W | etcdserver: failed to reach the peerURL(http://192.168.0.63:2380) of member aa9ac53bcb1de8c6 (Get http://192.168.0.63:2380/version: dial tcp 192.168.0.63:2380: connect: connection refused)
+2021-03-06 13:41:09.786492 W | etcdserver: cannot get the version of member aa9ac53bcb1de8c6 (Get http://192.168.0.63:2380/version: dial tcp 192.168.0.63:2380: connect: connection refused)
+2021-03-06 13:41:13.787721 W | etcdserver: failed to reach the peerURL(http://192.168.0.63:2380) of member aa9ac53bcb1de8c6 (Get http://192.168.0.63:2380/version: dial tcp 192.168.0.63:2380: connect: connection refused)
+2021-03-06 13:41:13.787755 W | etcdserver: cannot get the version of member aa9ac53bcb1de8c6 (Get http://192.168.0.63:2380/version: dial tcp 192.168.0.63:2380: connect: connection refused)
+2021-03-06 13:41:14.130602 W | rafthttp: health check for peer aa9ac53bcb1de8c6 could not connect: dial tcp 192.168.0.63:2380: connect: connection refused
+2021-03-06 13:41:14.130679 W | rafthttp: health check for peer aa9ac53bcb1de8c6 could not connect: dial tcp 192.168.0.63:2380: connect: connection refused
+...
+2021-03-06 13:41:25.492675 I | rafthttp: peer aa9ac53bcb1de8c6 became active
+2021-03-06 13:41:25.492718 I | rafthttp: established a TCP streaming connection with peer aa9ac53bcb1de8c6 (stream Message writer)
+2021-03-06 13:41:25.492901 I | rafthttp: established a TCP streaming connection with peer aa9ac53bcb1de8c6 (stream MsgApp v2 writer)
+2021-03-06 13:41:25.493739 I | rafthttp: established a TCP streaming connection with peer aa9ac53bcb1de8c6 (stream Message reader)
+2021-03-06 13:41:25.493797 I | rafthttp: established a TCP streaming connection with peer aa9ac53bcb1de8c6 (stream MsgApp v2 reader)
+raft2021/03/06 13:42:07 INFO: 4eee438bb97e1153 switched to configuration voters=(3752102066758186717 5687557646807077203) learners=(12293354993462667462)
+raft2021/03/06 13:42:15 INFO: 4eee438bb97e1153 switched to configuration voters=(3752102066758186717 5687557646807077203 12293354993462667462)
+...
+2021-03-06 13:42:15.610651 N | etcdserver/membership: promote member aa9ac53bcb1de8c6 in cluster 35d99f7f50aa4509
+~~~
+
+Node03의 etcd Server가 Learner로 추가되고 Follower로 Promte될때 Node01의 etcd Server는 위와 같은 Log를 남긴다.
 
 ### 6. 참조
 
