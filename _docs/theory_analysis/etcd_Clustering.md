@@ -21,7 +21,7 @@ Server는 Raft Algorithm에 따라서 **Leader**와 **Follower**로 동작한다
 
 Server들이 Clustering을 수행하기 위해서는 각 Server는 Cluster에 참여하는 모든 Server의 IP/Port를 알고 있어야한다. Cluster에 참여하는 모든 Server의 IP/Port 정보는 Server의 Parameter를 통해서 **Static**하게 설정될 수도 있고, **Discovery** 기능을 활용하여 각 Server가 스스로 얻어올 수 있도록 설정할 수도 있다. Discovery 기능은 etcd 자체적으로 제공하는 기법과 DNS를 활용한 기법 2가지를 제공하고 있다. 
 
-{% highlight cpp linenos %}
+{% highlight console %}
 # etcd --name infra0 --initial-advertise-peer-urls http://10.0.1.10:2380 \
   --listen-peer-urls http://10.0.1.10:2380 \
   --listen-client-urls http://10.0.1.10:2379,http://127.0.0.1:2379 \
@@ -40,7 +40,7 @@ Server Cluster 내부의 통신은 TLS를 이용하여 암호화 될 수 있다.
 
 #### 1.2. Client Load Balancer
 
-{% highlight cpp linenos %}
+{% highlight console %}
 # etcdctl --endpoints=http://10.0.1.10:2379,http://10.0.1.11:2379,http://10.0.1.12:2379 member list
 {% endhighlight %}
 <figure>
@@ -53,14 +53,14 @@ Client는 어느 Server가 Leader Server인지 알고있지 못한다. 따라서
 
 #### 1.3. Server 추가/삭제
 
-{% highlight cpp linenos %}
+{% highlight console %}
 # etcdctl member add infra2 --peer-urls=http://10.0.1.11:2380
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 3] Server 추가</figcaption>
 </figure>
 
-{% highlight cpp linenos %}
+{% highlight console %}
 # etcdctl member remove [Server ID]
 {% endhighlight %}
 <figure>
@@ -71,7 +71,7 @@ Server Cluster에는 동적으로 Server를 추가하거나 제거할 수 있다
 
 **중요한 점은 Quorum은 실제 Server가 구동/제거 될때가 아니라, etcdctl 명령어를 통해서 Server가 추가/제가 될때 변경된다는 점이다.** 따라서 Server 추가 명령어는 매우 신중하게 실행되어야 한다. 만약 Server Cluster에 Server가 1대일 경우에는 Quorum은 1이기 때문에, Server Cluster에 etcdctl 명령어를 통해서 Server 한대를 추가할 경우 문제업이 추가가 된다. 이때 Server Cluster에는 Server가 2대이기 때문에 Quorum은 2가 된다.
 
-{% highlight cpp linenos %}
+{% highlight console %}
 # etcdctl member add infra2 --peer-urls=http://10.0.1.11:2380
 Member 44e87d9a57243f90 added to cluster 35d99f7f50aa4509
 
