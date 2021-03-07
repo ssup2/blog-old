@@ -97,6 +97,19 @@ Error: context deadline exceeded
 
 #### 1.3.1. Learner
 
+{% highlight console %}
+# etcdctl member add infra2 --learner --peer-urls=http://10.0.1.11:2380
+
+# etcdctl member promote [Server ID]
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 6] Learner로 Server 추가</figcaption>
+</figure>
+
+Raft Algorithm은 Server Cluster에 Server 추가시 Server Cluster의 일부 Server가 비정상 상태라면, 추가된 Server가 Leader Server의 Log를 쫒는 동안 Server Cluster의 가용성의 문제를 일으킬 수 있다. 이러한 문제를 해결하기 위해서 etcd는 Learner라는 상태를 만들었다. Server Cluster에 Server 추가시 learner Option을 명시하면, 추가된 Server는 Learner 상태로 Server Cluster에 추가된다. [Shell 6]은 Learner로 Server를 추가하는 etcdctl의 예제를 보여주고 있다.
+
+Learner 상태의 Server는 Server Cluster에는 포함되어 있지만, Leader Server의 Log를 복제 및 State Machine에 반영하는 동작만을 수행하고 투표에는 참여하지 않는다. etcd 사용자는 Learner Server의 Log 복제가 어느정도 이루어졌다고 판단되면 promote 명령어를 통해서 Learner Server를 Follower Server로 변경할 수 있다.
+
 ### 2. 참조
 
 * [https://etcd.io/docs/v3.4.0/faq/](https://etcd.io/docs/v3.4.0/faq/)
