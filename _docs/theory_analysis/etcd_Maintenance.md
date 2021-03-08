@@ -1,5 +1,5 @@
 ---
-title: etcd Compaction, Defragment
+title: etcd Maintenance
 category: Theory, Analysis
 date: 2021-03-08T12:00:00Z
 lastmod: 2021-03-08T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-etcd의 Compaction, Defragment 기법을 분석한다.
+etcd의 Maintenance를 분석한다.
 
 ### 1. etcd Compaction
 
