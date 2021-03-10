@@ -15,5 +15,6 @@ etcd의 Maintenance를 분석한다.
 
 ### 3. 참조
 
+* [https://etcd.io/docs/v3.4.0/op-guide/maintenance/](https://etcd.io/docs/v3.4.0/op-guide/maintenance/)
 * [https://www.compose.com/articles/how-to-keep-your-etcd-lean-and-mean/](https://www.compose.com/articles/how-to-keep-your-etcd-lean-and-mean/)
 * [https://blog.gojekengineering.com/a-few-notes-on-etcd-maintenance-c06440011cbe](https://blog.gojekengineering.com/a-few-notes-on-etcd-maintenance-c06440011cbe)
