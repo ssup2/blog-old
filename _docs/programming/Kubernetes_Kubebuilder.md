@@ -343,7 +343,7 @@ func (r *MemcachedReconciler) serviceForMemcached(m *memcachedv1.Memcached) *cor
 
 [Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 9,10번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다.
 
-111~115번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 `ownerReferences` 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
+111~115번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
 
 153번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 177번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
 
