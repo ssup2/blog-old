@@ -27,7 +27,7 @@ Kubebuilder는 Kubernetes Controller 개발을 도와주는 SDK이다. 사용자
 
 Reconciler는 제어에 성공한 Object의 경우에는 해당 Object 정보를 폐기한다. 하지만 Reconciler가 제어에 실패한 Object의 경우 해당 Object의 Name/Namespace 정보는 다시 Work Queue로 Requeue되어 저장된다. 이후 특정시간이 지난 다음 Reconciler는 다시 Work Queue로부터 제어에 실패한 Object를 Dequeue하여 다시 제어를 시도 한다. Object 제어에 또 실패한다면 다시 Work Queue로 Requeue 되어, 제어가 성공될때까지 반복하게 된다. Object가 Work Queue에서 대기하는 시간은 Object가 Work Queue에 Requeue되어 저장된 회수에 따라서 Exponentially하게 증가한다.
 
-Kubernetes Client가 이용하는 Kubernetes Cache로 인해서 Reconciler가 Kubernetes Client를 통하여 변경 및 저장한 Object를 다시 Kubernetes Client를 통해서 읽어올 경우, 변경전의 Object를 다시 얻을 수 있다. 이러한 특징으로 인한 문제를 방지하기 위해서는 Reconciler가 수행하는 Object 제어 Logic이 Stateless한 특징, 즉 **멱등성**을 만족시켜야 한다.
+Kubernetes Client가 이용하는 Kubernetes Cache로 인해서 Reconciler가 Kubernetes Client를 통하여 변경 및 저장한 Object를 다시 Kubernetes Client를 통해서 읽어올 경우, 변경전의 Object를 다시 얻을 수 있다. 이러한 특징으로 인한 문제를 방지하기 위해서는 Reconciler가 수행하는 Object 제어 Logic은 여러번 수행되어도 동일한 결과를 얻을수 있는 **멱등성**을 만족시켜야 한다. 즉 Reconciler는 Stateless한 특징을 갖고 있어야 한다.
 
 #### 1.2. Controller Manager HA
 
