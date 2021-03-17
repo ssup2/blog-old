@@ -13,7 +13,7 @@ TCP Connection State를 분석한다.
 
 ![[그림 1] TCP Connection State Diagram]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Connection_State_Diagram.PNG)
 
-![[그림 2] TCP Handshake Connection State]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Handshake_Connection_State.PNG){: width="600px"}
+![[그림 2] TCP Handshake Connection State]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Handshake_Connection_State.PNG){: width="550px"}
 
 ### 2. 참조
 
