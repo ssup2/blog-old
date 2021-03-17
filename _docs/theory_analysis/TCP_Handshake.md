@@ -34,7 +34,7 @@ TCP Handshake를 분석한다.
 
 #### 1.2. TCP Reset
 
-![[그림 2] TCP Reset at Connection Start]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Reset_Connection_Start.PNG){: width="550px"}
+![[그림 2] TCP Reset at Connection Start]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_Reset_Connection_Start.PNG){: width="550px"}
 
 {% highlight console %}
 13:32:50.672429 IP 192.168.0.60.33214 > 192.168.0.61.81: Flags [S], seq 292716723, win 64240, options [mss 1460,sackOK,TS val 2672676949 ecr 0,nop,wscale 7], length 0
@@ -44,7 +44,7 @@ TCP Handshake를 분석한다.
 <figcaption class="caption">[Console 2] TCP Reset at Connection Start</figcaption>
 </figure>
 
-![[그림 3] TCP Reset in Connection]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Reset_Connection.PNG){: width="550px"}
+![[그림 3] TCP Reset in Connection]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_Reset_Connection.PNG){: width="550px"}
 
 {% highlight console %}
 14:22:47.003693 IP 192.168.0.60.59904 > 192.168.0.61.80: Flags [S], seq 2377770701, win 64240, options [mss 1460,sackOK,TS val 2675673280 ecr 0,nop,wscale 7], length 0
