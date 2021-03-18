@@ -11,9 +11,9 @@ TCP Handshake를 분석한다.
 
 ### 1. TCP Handshake
 
-#### 1.1. TCP Handshake
+#### 1.1. TCP 3Way, 4Way Handshake
 
-![[그림 1] TCP 3 Way, 4 Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_3way_4way_Handshake.PNG){: width="550px"}
+![[그림 1] TCP 3Way, 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_3way_4way_Handshake.PNG){: width="550px"}
 
 {% highlight console %}
 12:49:33.192719 IP 192.168.0.60.39002 > 192.168.0.61.80: Flags [S], seq 284972257, win 64240, options [mss 1460,sackOK,TS val 2670079469 ecr 0,nop,wscale 7], length 0
@@ -29,8 +29,16 @@ TCP Handshake를 분석한다.
 12:49:33.193842 IP 192.168.0.60.39002 > 192.168.0.61.80: Flags [.], ack 852, win 501, options [nop,nop,TS val 2670079471 ecr 1699876838], length 0
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] TCP 3 way, 4 way Handshake</figcaption>
+<figcaption class="caption">[Console 1] TCP 3Way, 4Way Handshake</figcaption>
 </figure>
+
+[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
+
+[그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Packet을 주고받으며 3Way Handshake를 수행한다. Client는 SYN을 보내고 SYN_SENT 상태가 되며 SYN_SENT 상태는 SYN+ACK Packet을 받거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Packet을 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
+
+SYN Packet을 수신한 Server는 SYN_RECEIVED 상태가 되며 Client로부터 ACK를 받거나 Timeout이 발생할 때까지 유지된다. SYN_RECEIVED Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Packet을 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
+
+ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 상태를 의미한다. 따라서 Client는 ACK Packet을 Server에게 전송한 후에 Data Packet을 바로 전송할 수 있게된다. 만약 Server가 Client의 ACK Packet을 받지 못한 상태에서 Client의 Data Packet을 수신하더라도 문제는 없다. Data Packet에는 TCP Protocol에 의해서 Sequence Number가 포함되어 있고, Data Packet의 Sequence Number가 ACK Packet의 Sequence Number보다 크다면, Server는 Data Packet을 받은 순간 자신이 전송한 SYN+ACK Packet을 Client가 받았다는 것을 간접적으로 알 수 있기 때문이다.
 
 #### 1.2. TCP Reset
 
@@ -68,3 +76,4 @@ TCP Handshake를 분석한다.
 * [http://intronetworks.cs.luc.edu/1/html/tcp.html](http://intronetworks.cs.luc.edu/1/html/tcp.html)
 * [https://unix.stackexchange.com/questions/386536/when-how-does-linux-decides-to-close-a-socket-on-application-kill](https://unix.stackexchange.com/questions/386536/when-how-does-linux-decides-to-close-a-socket-on-application-kill)
 * [https://unix.stackexchange.com/questions/282613/can-you-send-a-tcp-packet-with-rst-flag-set-using-iptables-as-a-way-to-trick-nma](https://unix.stackexchange.com/questions/282613/can-you-send-a-tcp-packet-with-rst-flag-set-using-iptables-as-a-way-to-trick-nma)
+* [https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost](https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost)
