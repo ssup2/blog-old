@@ -32,13 +32,17 @@ TCP Handshake를 분석한다.
 <figcaption class="caption">[Console 1] TCP 3Way, 4Way Handshake</figcaption>
 </figure>
 
-[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
+[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK를 나타낸다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
 
-[그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Packet을 주고받으며 3Way Handshake를 수행한다. Client는 SYN을 보내고 SYN_SENT 상태가 되며 SYN_SENT 상태는 SYN+ACK Packet을 받거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Packet을 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
+[그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Flag를 주고받으며 3Way Handshake를 수행한다. Client는 SYN을 보내고 SYN_SENT 상태가 되며 SYN_SENT 상태는 SYN+ACK Flag를 받거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
 
-SYN Packet을 수신한 Server는 SYN_RECEIVED 상태가 되며 Client로부터 ACK를 받거나 Timeout이 발생할 때까지 유지된다. SYN_RECEIVED Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Packet을 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
+SYN Flag를 수신한 Server는 SYN_RECEIVED 상태가 되며 Client로부터 ACK를 받거나 Timeout이 발생할 때까지 유지된다. SYN_RECEIVED Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
 
-ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 상태를 의미한다. 따라서 Client는 ACK Packet을 Server에게 전송한 후에 Data Packet을 바로 전송할 수 있게된다. 만약 Server가 Client의 ACK Packet을 받지 못한 상태에서 Client의 Data Packet을 수신하더라도 문제는 없다. Data Packet에는 TCP Protocol에 의해서 Sequence Number가 포함되어 있고, Data Packet의 Sequence Number가 ACK Packet의 Sequence Number보다 크다면, Server는 Data Packet을 받은 순간 자신이 전송한 SYN+ACK Packet을 Client가 받았다는 것을 간접적으로 알 수 있기 때문이다.
+ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 상태를 의미한다. 따라서 Client는 ACK Flag를 Server에게 전송한 후에 Data Packet을 바로 전송할 수 있게된다. 만약 Server가 Client의 ACK Flag를 받지 못한 상태에서 Client의 Data Packet을 수신하더라도 문제는 없다. Data Packet에는 TCP Protocol에 의해서 Sequence Number가 포함되어 있고, Data Packet의 Sequence Number가 ACK Flag Packet의 Sequence Number보다 크다면, Server는 Data Packet을 받은 순간 자신이 전송한 SYN+ACK Flag를 Client가 받았다는 것을 간접적으로 알 수 있기 때문이다.
+
+[그림 1]의 아랫부분은 4Way Handshake를 나타낸다. Client 또는 Server의 FIN Flag를 시작으로 FIN, ACK Flag를 서로 주고받으며 4Way Handshake를 수행한다. 
+cat /proc/sys/net/ipv4/tcp_max_orphans
+cat /proc/sys/net/ipv4/tcp_orphan_retries
 
 #### 1.2. TCP Reset
 
@@ -51,6 +55,8 @@ ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 �
 <figure>
 <figcaption class="caption">[Console 2] TCP Reset at Connection Start</figcaption>
 </figure>
+
+TCP RST Flag는 예상치 못한 상황으로 인해서 생성된 TCP Connection을 급하게 종료할때 이용한다. [그림 2]는 Client가 TCP Connection을 생성하기 위해서 잘못된 IP/Port로 Sync Flag를 전송할 경우 발생하는 RST Flag를 나타내고 있고, [Console 2]는 이때의 실제 Packet을 tcpdump 명령어를 통해서 Dump한 모습이다. [Console 2]에서 Flags의 R은 RST Flag를 나타낸다. Client의 SYN Flag를 받은 Server는 RST Flag를 전송하여 바로 Connection을 종료한다.
 
 ![[그림 3] TCP Reset in Connection]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_Reset_Connection.PNG){: width="550px"}
 
@@ -70,6 +76,8 @@ ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 �
 <figure>
 <figcaption class="caption">[Console 3] TCP Reset in Connection</figcaption>
 </figure>
+
+[그림 3]은 TCP Connection이 생성되어 있는 상태에서 Server가 먼저 RST Flag를 전송한 경우를 나타내고 있고, [Console 2]는 이때의 실제 Packet을 tcpdump 명령어를 통해서 Dump한 모습이다. RST Flag를 받은 Client는 더이상의 Handshake 없이 TCP Connection을 종료한다. 
 
 ### 2. 참조
 
