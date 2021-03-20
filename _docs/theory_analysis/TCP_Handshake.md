@@ -13,7 +13,7 @@ TCP Handshake를 분석한다.
 
 #### 1.1. TCP 3Way, 4Way Handshake
 
-![[그림 1] TCP 3Way, 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_3way_4way_Handshake.PNG){: width="550px"}
+![[그림 1] TCP 3Way, 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_3way_4way_Handshake.PNG){: width="750px"}
 
 {% highlight console %}
 12:49:33.192719 IP 192.168.0.60.39002 > 192.168.0.61.80: Flags [S], seq 284972257, win 64240, options [mss 1460,sackOK,TS val 2670079469 ecr 0,nop,wscale 7], length 0
@@ -34,15 +34,25 @@ TCP Handshake를 분석한다.
 
 [그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK를 나타낸다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
 
-[그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Flag를 주고받으며 3Way Handshake를 수행한다. Client는 SYN을 보내고 SYN_SENT 상태가 되며 SYN_SENT 상태는 SYN+ACK Flag를 받거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
+##### 1.1.1. 3Way Handshake
 
-SYN Flag를 수신한 Server는 SYN_RECEIVED 상태가 되며 Client로부터 ACK를 받거나 Timeout이 발생할 때까지 유지된다. SYN_RECEIVED Timeout 값은 OS 설정마다 다르며 Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
+[그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Flag를 주고받으며 3Way Handshake를 수행한다. Client는 connect() System Call을 호출하여 Server에게 SYN Flag를 전송하고 SYN_SENT 상태가 된다. Client의 SYN_SENT 상태는 Server로부터 SYN+ACK Flag를 받거나 Timeout이 발생할 때까지 유지된다.
 
-ESTABLISHED 상태가된 Client, Server는 Data Packet을 전송할 수 있는 상태를 의미한다. 따라서 Client는 ACK Flag를 Server에게 전송한 후에 Data Packet을 바로 전송할 수 있게된다. 만약 Server가 Client의 ACK Flag를 받지 못한 상태에서 Client의 Data Packet을 수신하더라도 문제는 없다. Data Packet에는 TCP Protocol에 의해서 Sequence Number가 포함되어 있고, Data Packet의 Sequence Number가 ACK Flag Packet의 Sequence Number보다 크다면, Server는 Data Packet을 받은 순간 자신이 전송한 SYN+ACK Flag를 Client가 받았다는 것을 간접적으로 알 수 있기 때문이다.
+bind(), listen() System Call을 호출하여 LISTEN 상태가 된 Server는 Client에게 SYN Flag를 받은 다음 accept() System Call을 호출하여 Client에게 SYN+ACK Flag를 전송하고 SYN_RECEIVED 상태가 된다. Server의 SYN_RECEIVED 상태는 Client로부터 ACK 또는 Data Packet을 수신하거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 및 SYN_RECEIVED의 Timeout 값은 OS 설정마다 다르다.
 
-[그림 1]의 아랫부분은 4Way Handshake를 나타낸다. Client 또는 Server의 FIN Flag를 시작으로 FIN, ACK Flag를 서로 주고받으며 4Way Handshake를 수행한다. 
-cat /proc/sys/net/ipv4/tcp_max_orphans
-cat /proc/sys/net/ipv4/tcp_orphan_retries
+Client의 connect() System Call 호출은 Server로부터 SYN+ACK Flag를 수신한 다음에 종료된다. 이후에 Client는 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Server와 Data를 주고 받는다. Server의 accept() System Call 호출은 Client로 부터 ACK 또는 Data Packet을 수신하거나 SYN_RECEIVED의 Timeout에 의해서 종료된다.
+
+Client가 전송한 ACK가 유실되어 Server가 Client의 ACK를 수신하지 못한 상태에서 Client가 전송한 Data Packet만 수신한 경우, Server는 Data Packet의 Sequence Number를 통해서 자신이 전송한 ACK+SYN Flag를 Client가 수신했다는 사실을 간접적으로 알 수 있다. 따라서 Client로부터 Data Packet을 수신하여도 Server의 accept() System Call 호출은 종료되고, Server는 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Client와 Data를 주고 받는다.
+
+##### 1.1.2. 4Way Handshake
+
+[그림 1]의 아랫부분은 4Way Handshake를 나타낸다. Client 또는 Server의 FIN Flag를 시작으로 FIN, ACK Flag를 서로 주고받으며 4Way Handshake를 수행한다. 4Way Handshake를 시작한 Client 또는 Server는 FIN_WAIT_1 상태가 되며 상대로부터 ACK Flag를 받을때 까지 유지된다. FIN Flag를 받은 Client 또는 Server는 ACK Flag를 전송하고 CLOSE_WAIT 상태가 된다. CLOSE_WAIT는 이름에서 유츄할 수 있는것 처럼 Socket이 Close 될때까지 대기를 하는 상태를 의미한다. Socket이 Close가 되려면 App에서 close() System Call을 호출하거나 App Process가 종료되면 Kernel에서 Close한다.
+
+Socket이 Close가 되면 상대에게 FIN Flag를 전송하고 LAST_ACK 상태가 된다. FIN_
+
+이후에 일정 시간이 지난 이후에 상대에게 다시 FIN Flag를 전송하고 LAST_ACK 상태가 된다. 
+
+CLOSE_WAIT는 이름에서 유츄할 수 있는것 처럼 Socket이 Close 될때까지 대기를 하는 상태를 
 
 #### 1.2. TCP Reset
 
@@ -85,3 +95,5 @@ TCP RST Flag는 예상치 못한 상황으로 인해서 생성된 TCP Connection
 * [https://unix.stackexchange.com/questions/386536/when-how-does-linux-decides-to-close-a-socket-on-application-kill](https://unix.stackexchange.com/questions/386536/when-how-does-linux-decides-to-close-a-socket-on-application-kill)
 * [https://unix.stackexchange.com/questions/282613/can-you-send-a-tcp-packet-with-rst-flag-set-using-iptables-as-a-way-to-trick-nma](https://unix.stackexchange.com/questions/282613/can-you-send-a-tcp-packet-with-rst-flag-set-using-iptables-as-a-way-to-trick-nma)
 * [https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost](https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost)
+* [https://tech.kakao.com/2016/04/21/closewait-timewait/](https://tech.kakao.com/2016/04/21/closewait-timewait/)
+* [https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long](https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long)
