@@ -27,13 +27,19 @@ LISTEN 상태는 Server가 Clinet로부터 SYN Flag를 받아서 새로운 Conne
 
 #### 1.2. SYN_SENT
 
-Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
+SYN_SENT 상태는 Closed 상태의 Client가 SYN Flag를 전송하고 전환되는 상태이다. Linux 환경에서 Client는 connect() System Call 호출을 통해서 SYN 상태가 될 수 있다. 또한 Linux 환경에서는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_syn_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_syn_retries"의 기본값은 "6"이다.
 
 #### 1.3. SYN_RECEIVED
 
-Linux의 경우에는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
+SYN_RECEIVED 상태는 LISTEN 상태의 Server가 Client로부터 SYN Flag를 수신할 경우 Client에게 SYN+ACK Flag를 전송한 후 전환되는 상태이다. Linux 환경에서는 Server는 accept() System Call을 호출을 통해서 SYN_RECEIVED 상태가 될 수 있다. 또한 Linux 환경에서는 최대 RTO (Retransmission Timeout) 간격으로 * "/proc/sys/net/ipv4/tcp_synack_retries" 값의 횟수만큼 SYN Flag를 전송하며 대기한다. "/proc/sys/net/ipv4/tcp_synack_retries"의 기본값은 "5"이다.
 
 #### 1.4. ESTABLISHED
+
+ESTABLISHED 상태는 3Way Handshake 이후에 Connection이 맺어져 Server와 Cilent가 되는 상태이다. ESTABLISHED 상태에서 Server와 Client는 Data를 주고 받을 수 있다. Linux 환경에서는 send(), recv() System Call 호출을 통해서 Data를 주고받을 수 있다.
+
+Linux 환경에서는 Socket에 SO_KEEPALIVE Option을 설정할 수 있다. Server 또는 Client는 SO_KEEPALIVE Option이 설정된 Socket으로 오랜 시간동안 Data를 주고 받지 않을 경우, ACK와 함께 Data가 비어있는 Packet인 Probe Packet을 주기적으로 상대방에게 전송하여 TCP Connection이 유효한지 확인한다. Probe Packet을 수신한 Server 또는 Client는 Connection이 아직 유효할 경우 ACK를 전송하고, Connection이 유효하지 않을경우 RST Flag를 전송하여 상대방이 Connection 정보를 제거하도록 만든다. 이러한 기법을 TCP Keepalived라고 명칭한다.
+
+Linux 환경에서는 SO_KEEPALIVE Option이 설정된 Socket에서 "/proc/sys/net/ipv4/tcp_keepalive_time" 값의 시간 만큼 Data를 주고 받지 않는경우에는 Probe Packet을 전송한다. 만약 Probe Packet에 대한 응답을 받지 못하는 경우 최대 "/proc/sys/net/ipv4/tcp_keepalive_probes" 값의 횟수만큼 "/proc/sys/net/ipv4/tcp_keepalive_intvl" 간격으로 Probe Packet을 반복해서 전송한다. "/proc/sys/net/ipv4/tcp_keepalive_time"의 기본값은 7200(초), "/proc/sys/net/ipv4/tcp_keepalive_probes"의 기본값은 9, "/proc/sys/net/ipv4/tcp_keepalive_intvl"의 기본값은 72(초)이다.
 
 #### 1.5. FIN_WAIT_1
 

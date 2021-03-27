@@ -32,27 +32,27 @@ TCP Handshake를 분석한다.
 <figcaption class="caption">[Console 1] TCP 3Way, 4Way Handshake</figcaption>
 </figure>
 
-[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK를 나타낸다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
+[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK Flag를 나타낸다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
 
 ##### 1.1.1. 3Way Handshake
 
 [그림 1]의 윗부분은 3Way Handshake를 나타낸다. Client를 시작으로 SYN, SYN+ACK, ACK Flag를 주고받으며 3Way Handshake를 수행한다. TCP 표준에서는 Client가 먼저 3Way Handshake를 시작하기 때문에 Client를 Active Opener라고 표현하며, Server는 Passive Opener라고 표현한다. Client는 connect() System Call을 호출하여 Server에게 SYN Flag를 전송하고 SYN_SENT 상태가 된다. Client의 SYN_SENT 상태는 Server로부터 SYN+ACK Flag를 받거나 Timeout이 발생할 때까지 유지된다.
 
-bind(), listen() System Call을 호출하여 LISTEN 상태가 된 Server는 Client에게 SYN Flag를 받은 다음 accept() System Call을 호출하여 Client에게 SYN+ACK Flag를 전송하고 SYN_RECEIVED 상태가 된다. Server의 SYN_RECEIVED 상태는 Client로부터 ACK 또는 Data Packet을 수신하거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 및 SYN_RECEIVED의 Timeout 값은 OS 설정마다 다르다.
+bind(), listen() System Call을 호출하여 LISTEN 상태가 된 Server는 Client에게 SYN Flag를 받은 다음 accept() System Call을 호출하여 Client에게 SYN+ACK Flag를 전송하고 SYN_RECEIVED 상태가 된다. Server의 SYN_RECEIVED 상태는 Client로부터 ACK FLAG 또는 Data Packet을 수신하거나 Timeout이 발생할 때까지 유지된다. SYN_SENT의 및 SYN_RECEIVED의 Timeout 값은 OS 설정마다 다르다.
 
-Client의 connect() System Call은 Server로부터 SYN+ACK Flag를 수신한 다음에 종료된다. 이후에 Client는 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Server와 Data를 주고 받는다. Server의 accept() System Call은 Client로 부터 ACK 또는 Data Packet을 수신하거나 SYN_RECEIVED의 Timeout에 의해서 종료된다.
+Client의 connect() System Call은 Server로부터 SYN+ACK Flag를 수신한 다음에 종료된다. 이후에 Client는 Server에게 ACK Flag를 전송하고 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Server와 Data를 주고 받는다. Server의 accept() System Call은 Client로 부터 ACK Flag를 수신하거나 SYN_RECEIVED의 Timeout에 의해서 종료된다.
 
-Client가 전송한 ACK가 유실되어 Server가 Client의 ACK를 수신하지 못한 상태에서 Client가 전송한 Data Packet만 수신한 경우, Server는 Data Packet의 Sequence Number를 통해서 자신이 전송한 ACK+SYN Flag를 Client가 수신했다는 사실을 간접적으로 알 수 있다. 따라서 Client로부터 Data Packet을 수신하여도 Server의 accept() System Call 호출은 종료되고, Server는 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Client와 Data를 주고 받는다.
+Client가 SYN+ACK Flag의 응답으로 전송한 ACK Flag가 유실되어 Server가 ACK Flag를 수신하지 못하는 상태가 발생해도 큰 문제는 발생하지 않는다. 이후에 Client가 Data Packet안에 함께 전송하는 ACK Flag 및 Sequence Number를 통해서 Server는 자신이 전송한 ACK+SYN Flag를 Client가 수신했다는 사실을 간접적으로 알 수 있기 때문이다. 따라서 Client로부터 Data Packet을 수신하여도 Server의 accept() System Call 호출은 종료되고, Server는 ESTABLISHED 상태가 되어 send()/recv() System Call 호출을 통해서 Client와 Data를 주고 받는다.
 
 ##### 1.1.2. 4Way Handshake
 
 [그림 1]의 아랫부분은 Client가 먼저 FIN Flag를 전송하여 수행하는 4Way Handshake를 나타낸다. Client 뿐만 아니라 Server가 먼저 FIN Flag를 전송하여 4Way Handshake를 시작할 수도 있다. TCP 표준에서는 4Way Handshake를 먼저 시작하는 쪽을 Active Closer라고 표현하며, 반대쪽을 Passive Closer라고 표현한다. 따라서 [그림 1]에서 Client가 Active Closer가 되며 Server는 Passive Closer가 된다.
 
-Active Closer에서 close() System Call 호출하거나 Active Closer의 Process가 종료되면 Active Closer가 이용하던 Socket은 Close가 된다. Socket이 Close가 되면 FIN Flag를 상대에게 전송한다. 이후에 Active Closer는 FIN_WAIT_1 상태가 되며 Passive Closer로부터 ACK를 받을때 까지 유지된다. FIN Flag를 받은 Passive Closer는 ACK를 전송하고 CLOSE_WAIT 상태가 된다. 
+Active Closer에서 close() System Call 호출하거나 Active Closer의 Process가 종료되면 Active Closer가 이용하던 Socket은 Close가 된다. Socket이 Close가 되면 FIN Flag를 상대에게 전송한다. 이후에 Active Closer는 FIN_WAIT_1 상태가 되며 Passive Closer로부터 ACK Flag를 받을때 까지 유지된다. FIN Flag를 받은 Passive Closer는 ACK FLAG를 전송하고 CLOSE_WAIT 상태가 된다. 
 
-CLOSE_WAIT는 이름에서 유츄할 수 있는것 처럼 Socket이 Close 될때까지 대기를 하는 상태를 의미한다. 즉 Active Closer와 동일하게 Passive Closer에서 close() System Call 호출하거나 Passive Closer의 Process가 종료되어 Socket이 Close가 되기를 기다리는 상태이다. 이후 Passive Closer의 Socket이 Close되면 Passive Closer는 FIN Flag를 Active Closer에게 전송하고 LASK_ACK 상태가 된다. 이후 Passive Closer는 Active Closer의 ACK를 받고 CLOSE 상태가 된다.
+CLOSE_WAIT는 이름에서 유츄할 수 있는것 처럼 Socket이 Close 될때까지 대기를 하는 상태를 의미한다. 즉 Active Closer와 동일하게 Passive Closer에서 close() System Call 호출하거나 Passive Closer의 Process가 종료되어 Socket이 Close가 되기를 기다리는 상태이다. 이후 Passive Closer의 Socket이 Close되면 Passive Closer는 FIN Flag를 Active Closer에게 전송하고 LASK_ACK 상태가 된다. 이후 Passive Closer는 Active Closer의 ACK Flag를 받고 CLOSE 상태가 된다.
 
-Passive Closer의 ACK와 FIN Flag를 받은 Active Closer는 FIN_WAIT_2 상태 및 TIME_WAIT 상태가 되며 특정 시간 이후에 CLOSE 상태가 된다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 제거된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 안전하게 Connection 종료 및 이후에 생성되는 새로운 Connection에도 영향을 미치지 않기 위한 상태이다.
+Passive Closer의 ACK Flag와 FIN Flag를 받은 Active Closer는 FIN_WAIT_2 상태 및 TIME_WAIT 상태가 되며 특정 시간 이후에 CLOSE 상태가 된다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 제거된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 안전하게 Connection 종료 및 이후에 생성되는 새로운 Connection에도 영향을 미치지 않기 위한 상태이다.
 
 #### 1.2. TCP Reset
 
