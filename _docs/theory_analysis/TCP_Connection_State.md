@@ -19,7 +19,7 @@ TCP Connection State를 분석한다.
 
 따라서 [그림 1]에서 Client가 SYN Flag를 전송하여 SYN_SENT 상태가 되는 과정을 "active open" 동작으로 나타내고 있고, Server가 LISTEN 상태가 되는 과정을 "passive open" 동작으로 나타내고 있다. 이와 유사하게 Client의 4Way Handshake 연관 상태들을 "active close" 과정으로 분류하고 있으며, Server의 4Way Handshake 연관 상태들을 "passive close" 과정으로 분류하고 있다.
 
-2개의 App이 존재하고 있고 각 App은 Server와 Client의 역할을 동시에 수행할 수 있다. 그리고 2개의 App은 LISTEN 상태 이후에 서로에게 SYN Flag를 전송하여 서로 동시에 Connection을 맺으려고 할 수 있다. LISTEN 상태에서 SYN_SENT 상태를 지나 SYN_RECEIVED 상태가 되는 과정은 이와 같은 상황일때 발생한다. 이러한 상황을 "simultaneous open"이라고 표현한다.
+2개의 App이 존재하고 있고 각 App은 Server와 Client의 역할을 동시에 수행할 수 있다. 그리고 2개의 App은 LISTEN 상태 이후에 서로에게 SYN Flag를 전송하여 서로 동시에 Connection을 맺으려고 할 수 있다. LISTEN 상태에서 SYN_SENT 상태를 지나 SYN_RECEIVED 상태가 되는 과정은 이와 같은 상황일때 발생한다. 이러한 상황을 "simultaneous open"이라고 명칭한다. 이와 유사하게 2개의 App이 동시에 Connection을 종료할 수도 있다. 이러한 상황을 "simultaneous close"라고 명칭하며, FIN_WAIT_1 상태에서 CLOSING 상태를 지나 TIME_WAIT 상태로 변경되는 과정에 해당한다.
 
 #### 1.1. LISTEN
 
@@ -39,11 +39,17 @@ ESTABLISHED 상태는 3Way Handshake 이후에 Connection이 맺어져 Server와
 
 Linux 환경에서는 Socket에 SO_KEEPALIVE Option을 설정할 수 있다. Server 또는 Client는 SO_KEEPALIVE Option이 설정된 Socket으로 오랜 시간동안 Data를 주고 받지 않을 경우, ACK와 함께 Data가 비어있는 Packet인 Probe Packet을 주기적으로 상대방에게 전송하여 TCP Connection이 유효한지 확인한다. Probe Packet을 수신한 Server 또는 Client는 Connection이 아직 유효할 경우 ACK를 전송하고, Connection이 유효하지 않을경우 RST Flag를 전송하여 상대방이 Connection 정보를 제거하도록 만든다. 이러한 기법을 TCP Keepalived라고 명칭한다.
 
-Linux 환경에서는 SO_KEEPALIVE Option이 설정된 Socket에서 "/proc/sys/net/ipv4/tcp_keepalive_time" 값의 시간 만큼 Data를 주고 받지 않는경우에는 Probe Packet을 전송한다. 만약 Probe Packet에 대한 응답을 받지 못하는 경우 최대 "/proc/sys/net/ipv4/tcp_keepalive_probes" 값의 횟수만큼 "/proc/sys/net/ipv4/tcp_keepalive_intvl" 간격으로 Probe Packet을 반복해서 전송한다. "/proc/sys/net/ipv4/tcp_keepalive_time"의 기본값은 7200(초), "/proc/sys/net/ipv4/tcp_keepalive_probes"의 기본값은 9, "/proc/sys/net/ipv4/tcp_keepalive_intvl"의 기본값은 72(초)이다.
+Linux 환경에서는 SO_KEEPALIVE Option이 설정된 Socket에서 "/proc/sys/net/ipv4/tcp_keepalive_time" 값의 시간 만큼 Data를 주고 받지 않는경우에는 Probe Packet을 전송한다. 만약 Probe Packet에 대한 응답을 받지 못하는 경우 최대 "/proc/sys/net/ipv4/tcp_keepalive_probes" 값의 횟수만큼 "/proc/sys/net/ipv4/tcp_keepalive_intvl" 간격으로 Probe Packet을 반복해서 전송한다. "/proc/sys/net/ipv4/tcp_keepalive_time"의 기본값은 "7200(초)", "/proc/sys/net/ipv4/tcp_keepalive_probes"의 기본값은 "9", "/proc/sys/net/ipv4/tcp_keepalive_intvl"의 기본값은 "72(초)"이다.
 
 #### 1.5. FIN_WAIT_1
 
+FIN_WAIT_1 상태는 ESTABLISHED 상태의 Active Closer가 종료되면 전환되는 상태이다. Active Closer가 FIN_WAIT_1 상태가 된 이후에 Passive Closer에게 FIN Flag를 전송한다. Linux 환경에서 Active Closer는 close() System Call을 호출하거나 Active Closer의 Process가 종료되면 FIN_WAIT_1 상태가 된다.
+
+또한 Linux 환경에서 FIN_WAIT_1의 Timeout은 존재하지 않으며 Passive Closer로 ACK FLAG를 전달받아 FIN_WAIT_2 상태가 되거나, Linux Kernel이 저장하고 있는 전체 FIN_WAIT_1 상태의 개수가 특정 개수 이상이 되어 Linux Kernel로 부터 제거되기 전까지는 계속 남아 있게된다. Linux Kenrel이 저장할 수 있는 상태의 개수는 "/proc/sys/net/ipv4/tcp_max_orphans"의 값에 설정되어 있다. "/proc/sys/net/ipv4/tcp_max_orphans"의 기본값은 16384이다.
+
 #### 1.6. FIN_WAIT_2
+
+FIN_WAIT_2 상태는 FIN_WAIT_1 상태의 Active Closer가 Passive Closer에게 ACK를 받고 전환되는 상태이다. Linux 환경에서 FIN_WAIT_2 상태는 Passive Closer로부터 FIN Flag를 전달받아 TIME_WAIT 상태가 되거나, Linux Kernel이 설정하고 있는 FIN_WAIT_2의 Timeout 시간이 지날때까지 유지된다. Linux Kernel의 FIN_WAIT_2의 Timeout은 "/proc/sys/net/ipv4/tcp_fin_timeout"에 설정되며 기본값은 "60(초)"이다.
 
 #### 1.7. TIME_WAIT
 
@@ -54,7 +60,7 @@ Linux 환경에서는 SO_KEEPALIVE Option이 설정된 Socket에서 "/proc/sys/n
 cat /proc/sys/net/ipv4/tcp_max_orphans
 cat /proc/sys/net/ipv4/tcp_orphan_retries
 
-#### 1.10. LASK_ACK
+#### 1.10. LAST_ACK
 
 ### 2. 참조
 
