@@ -43,24 +43,31 @@ Linux 환경에서는 SO_KEEPALIVE Option이 설정된 Socket에서 "/proc/sys/n
 
 #### 1.5. FIN_WAIT_1
 
-FIN_WAIT_1 상태는 ESTABLISHED 상태의 Active Closer가 종료되면 전환되는 상태이다. Active Closer가 FIN_WAIT_1 상태가 된 이후에 Passive Closer에게 FIN Flag를 전송한다. Linux 환경에서 Active Closer는 close() System Call을 호출하거나 Active Closer의 Process가 종료되면 FIN_WAIT_1 상태가 된다.
+FIN_WAIT_1 상태는 ESTABLISHED 상태의 Active Closer가 종료되면 전환되는 상태이다. Active Closer가 FIN_WAIT_1 상태가 된 이후에 Passive Closer에게 FIN Flag를 전송한다. Linux 환경에서 Active Closer가 close() System Call을 호출하거나 Active Closer의 Process가 종료되면 Active Closer의 Socket은 Close되기 때문에 Active Closer는 FIN Flag를 전송하고 FIN_WAIT_1 상태가 된다.
 
 또한 Linux 환경에서 FIN_WAIT_1의 Timeout은 존재하지 않으며 Passive Closer로 ACK FLAG를 전달받아 FIN_WAIT_2 상태가 되거나, Linux Kernel이 저장하고 있는 전체 FIN_WAIT_1 상태의 개수가 특정 개수 이상이 되어 Linux Kernel로 부터 제거되기 전까지는 계속 남아 있게된다. Linux Kenrel이 저장할 수 있는 상태의 개수는 "/proc/sys/net/ipv4/tcp_max_orphans"의 값에 설정되어 있다. "/proc/sys/net/ipv4/tcp_max_orphans"의 기본값은 16384이다.
 
 #### 1.6. FIN_WAIT_2
 
-FIN_WAIT_2 상태는 FIN_WAIT_1 상태의 Active Closer가 Passive Closer에게 ACK를 받고 전환되는 상태이다. Linux 환경에서 FIN_WAIT_2 상태는 Passive Closer로부터 FIN Flag를 전달받아 TIME_WAIT 상태가 되거나, Linux Kernel이 설정하고 있는 FIN_WAIT_2의 Timeout 시간이 지날때까지 유지된다. Linux Kernel의 FIN_WAIT_2의 Timeout은 "/proc/sys/net/ipv4/tcp_fin_timeout"에 설정되며 기본값은 "60(초)"이다.
+FIN_WAIT_2 상태는 FIN_WAIT_1 상태의 Active Closer가 Passive Closer에게 ACK FLAG를 수신하고 전환되는 상태이다. Linux 환경에서 FIN_WAIT_2 상태는 Passive Closer로부터 FIN Flag를 전달받아 TIME_WAIT 상태가 되거나, Linux Kernel이 설정하고 있는 FIN_WAIT_2의 Timeout 시간이 지날때까지 유지된다. Linux Kernel의 FIN_WAIT_2의 Timeout은 "/proc/sys/net/ipv4/tcp_fin_timeout"에 설정되며 기본값은 "60(초)"이다.
 
 #### 1.7. TIME_WAIT
 
+TIME_WAIT 상태는 FIN_WAIT_2 상태의 Active Closer가 Passive Closer에게 FIN FLAG를 수신하고 전환되는 상태이다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 제거된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 안전하게 Connection 종료 및 이후에 생성되는 새로운 Connection에도 영향을 미치지 않기 위한 상태이다. 
+
+Linux 환경에서는 TIME_WAIT 상태는 60초 동안 지속되며, Code에 설정되어 있기 때문에 변경할 수 없다. 또한 Linux 환경에서 Socket(Port)이 부족한 경우 TIME_WAIT 상태의 Socket을 재사용 할수 있는 Option을 제공하고 있다. 관련 Option은 "/proc/sys/net/ipv4/tcp_tw_reuse" 값을 "1"로 설정하면 된다.
+
 #### 1.8. CLOSING
+
+CLOSING 상태는 simultaneous close가 발생하여 FIN_WAIT_1 상태의 ACTIVE Closer가 FIN Flag를 수신하였을때 전환되는 상태이다.
 
 #### 1.9. CLOSE_WAIT
 
-cat /proc/sys/net/ipv4/tcp_max_orphans
-cat /proc/sys/net/ipv4/tcp_orphan_retries
+CLOSE_WAIT 상태는 Passive Closer가 Active Closer로부터 FIN Flag를 수신하고 전환되는 상태이다. Linux 환경에서 Passive Closer가 close() System Call을 호출하거나 Passive Closer의 Process가 종료되면 Passive Closer의 Socket은 Close되기 때문에 Passive Closer는 FIN Flag를 전송하고 LASK_ACK 상태가 된다. Linux 환경에서 CLOSE_WAIT 상태는 Timeout이 존재하지 않으며, 반드시 Passive Closer의 Socket이 Close 되어야 LASK_ACK가 되면서 종료된다.
 
 #### 1.10. LAST_ACK
+
+LAST_ACK 상태는 CLOSE_WAIT 상태의 Passive Closer가 FIN Flag를 Active Closer에게 전송한후 이에 대한 ACK를 받기 전까지 유지되는 상태이다.
 
 ### 2. 참조
 
@@ -70,3 +77,4 @@ cat /proc/sys/net/ipv4/tcp_orphan_retries
 * [https://m.blog.naver.com/PostView.nhn?blogId=cmw1728&logNo=220448146710&proxyReferer=https:%2F%2Fwww.google.com%2F](https://m.blog.naver.com/PostView.nhn?blogId=cmw1728&logNo=220448146710&proxyReferer=https:%2F%2Fwww.google.com%2F)
 * [https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long](https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long)
 * [https://stackoverflow.com/questions/2231283/tcp-two-sides-trying-to-connect-simultaneously](https://stackoverflow.com/questions/2231283/tcp-two-sides-trying-to-connect-simultaneously)
+* [https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt)
