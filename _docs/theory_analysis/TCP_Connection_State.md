@@ -13,13 +13,17 @@ TCP Connection State를 분석한다.
 
 ![[그림 1] TCP Connection State Diagram]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Connection_State_Diagram.PNG)
 
-![[그림 2] TCP Handshake Connection State]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Handshake_Connection_State.PNG){: width="550px"}
+![[그림 2] TCP Handshake Connection State]({{site.baseurl}}/images/theory_analysis/TCP_Connection_State/TCP_Handshake_Connection_State.PNG){: width="750px"}
 
 [그림 1]은 TCP Connection State Diagram을 나타내고 있고, [그림 2]는 TCP 3Way Handshake 및 4Way Handshake에 따른 TCP Connection State를 나타내고 있다. TCP 표준에서는 TCP 3Way Handshake 수행시 SYN Flag를 먼저 전송하는 Client를 Active Opener라고 명칭하고, 반대쪽인 Server를 Passive Opener라고 명칭한다. 또한 TCP 표준에서 TCP 4Way Handshake 수행시 FIN Flag를 먼저 전송하는 Client 또는 Server를 Active Closer라고 명칭하며, 반대쪽 Server를 Passive Closer라고 명칭한다. [그림 1]에서는 Client가 Active Closer라고 가정한 상태이다.
 
 따라서 [그림 1]에서 Client가 SYN Flag를 전송하여 SYN_SENT 상태가 되는 과정을 "active open" 동작으로 나타내고 있고, Server가 LISTEN 상태가 되는 과정을 "passive open" 동작으로 나타내고 있다. 이와 유사하게 Client의 4Way Handshake 연관 상태들을 "active close" 과정으로 분류하고 있으며, Server의 4Way Handshake 연관 상태들을 "passive close" 과정으로 분류하고 있다.
 
+2개의 App이 존재하고 있고 각 App은 Server와 Client의 역할을 동시에 수행할 수 있다. 그리고 2개의 App은 LISTEN 상태 이후에 서로에게 SYN Flag를 전송하여 서로 동시에 Connection을 맺으려고 할 수 있다. LISTEN 상태에서 SYN_SENT 상태를 지나 SYN_RECEIVED 상태가 되는 과정은 이와 같은 상황일때 발생한다. 이러한 상황을 "simultaneous open"이라고 표현한다.
+
 #### 1.1. LISTEN
+
+LISTEN 상태는 Server가 Clinet로부터 SYN Flag를 받아서 새로운 Connection을 생성할 수 있는 상태를 의미한다. Linux 환경에서 Server는 Server는 bind(), listen() System Call 호츨을 통해서 LISTEN 상태가 될 수 있다.
 
 #### 1.2. SYN_SENT
 
@@ -53,3 +57,4 @@ cat /proc/sys/net/ipv4/tcp_orphan_retries
 * [http://intronetworks.cs.luc.edu/1/html/tcp.html](http://intronetworks.cs.luc.edu/1/html/tcp.html)
 * [https://m.blog.naver.com/PostView.nhn?blogId=cmw1728&logNo=220448146710&proxyReferer=https:%2F%2Fwww.google.com%2F](https://m.blog.naver.com/PostView.nhn?blogId=cmw1728&logNo=220448146710&proxyReferer=https:%2F%2Fwww.google.com%2F)
 * [https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long](https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long)
+* [https://stackoverflow.com/questions/2231283/tcp-two-sides-trying-to-connect-simultaneously](https://stackoverflow.com/questions/2231283/tcp-two-sides-trying-to-connect-simultaneously)
