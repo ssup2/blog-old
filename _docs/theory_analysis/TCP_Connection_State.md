@@ -35,7 +35,7 @@ SYN_RECEIVED 상태는 LISTEN 상태의 Server가 Client로부터 SYN Flag를 �
 
 #### 1.4. ESTABLISHED
 
-ESTABLISHED 상태는 3Way Handshake 이후에 Connection이 맺어져 Server와 Cilent가 되는 상태이다. ESTABLISHED 상태에서 Server와 Client는 Data를 주고 받을 수 있다. Linux 환경에서는 send(), recv() System Call 호출을 통해서 Data를 주고받을 수 있다.
+ESTABLISHED 상태는 3Way Handshake 이후에 Connection이 맺어져 Server와 Cilent가 되는 상태이다. ESTABLISHED 상태에서 Server와 Client는 Data를 주고 받을 수 있다. Linux 환경에서는 send(), recv() System Call 호출을 통해서 Data를 주고 받을수 있다.
 
 Linux 환경에서는 Socket에 SO_KEEPALIVE Option을 설정할 수 있다. Server 또는 Client는 SO_KEEPALIVE Option이 설정된 Socket으로 오랜 시간동안 Data를 주고 받지 않을 경우, ACK와 함께 Data가 비어있는 Packet인 Probe Packet을 주기적으로 상대방에게 전송하여 TCP Connection이 유효한지 확인한다. Probe Packet을 수신한 Server 또는 Client는 Connection이 아직 유효할 경우 ACK를 전송하고, Connection이 유효하지 않을경우 RST Flag를 전송하여 상대방이 Connection 정보를 제거하도록 만든다. 이러한 기법을 TCP Keepalived라고 명칭한다.
 
