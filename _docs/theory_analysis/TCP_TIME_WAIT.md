@@ -11,6 +11,12 @@ TCP TIME_WAIT 관련 동작을 분석한다.
 
 ### 1. TCP TIME_WAIT
 
+![[그림 1] Packet Delay]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/Packet_Delay.PNG){: width="500px"}
+
+![[그림 2] Lost Last ACK]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/Lost_Last_ACK.PNG){: width="550px"}
+
+![[그림 3] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/Lost_Last_ACK.PNG){: width="700px"}
+
 ### 2. with Linux
 
 #### 2.1. /proc/net/ipv4/tcp_timestamps
