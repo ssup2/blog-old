@@ -52,7 +52,7 @@ Active Closer에서 close() System Call 호출하거나 Active Closer의 Process
 
 CLOSE_WAIT는 이름에서 유츄할 수 있는것 처럼 Socket이 Close 될때까지 대기를 하는 상태를 의미한다. 즉 Active Closer와 동일하게 Passive Closer에서 close() System Call 호출하거나 Passive Closer의 Process가 종료되어 Socket이 Close가 되기를 기다리는 상태이다. 이후 Passive Closer의 Socket이 Close되면 Passive Closer는 FIN Flag를 Active Closer에게 전송하고 LASK_ACK 상태가 된다. 이후 Passive Closer는 Active Closer의 ACK Flag를 받고 CLOSE 상태가 된다.
 
-Passive Closer의 ACK Flag와 FIN Flag를 받은 Active Closer는 FIN_WAIT_2 상태 및 TIME_WAIT 상태가 되며 특정 시간 이후에 CLOSE 상태가 된다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 제거된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 안전하게 Connection 종료 및 이후에 생성되는 새로운 Connection에도 영향을 미치지 않기 위한 상태이다.
+Passive Closer의 ACK Flag와 FIN Flag를 받은 Active Closer는 FIN_WAIT_2 상태 및 TIME_WAIT 상태가 되며 특정 시간 이후에 CLOSE 상태가 된다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 종료된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 이후에 생성되는 새로운 Connection에 영향을 미치지 않기 위한 상태이다.
 
 #### 1.2. TCP Reset
 

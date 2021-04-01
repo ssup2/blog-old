@@ -53,7 +53,7 @@ FIN_WAIT_2 상태는 FIN_WAIT_1 상태의 Active Closer가 Passive Closer에게 
 
 #### 1.7. TIME_WAIT
 
-TIME_WAIT 상태는 FIN_WAIT_2 상태의 Active Closer가 Passive Closer에게 FIN FLAG를 수신하고 전환되는 상태이다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 제거된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 안전하게 Connection 종료 및 이후에 생성되는 새로운 Connection에도 영향을 미치지 않기 위한 상태이다. 
+TIME_WAIT 상태는 FIN_WAIT_2 상태의 Active Closer가 Passive Closer에게 FIN FLAG를 수신하고 전환되는 상태이다. TIME_WAIT 상태는 TCP 표준에는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있다. 즉 Network 상에서 종료된 Connection 관련 Packet(Segment)이 완전히 제거 될때까지 대기하여, 이후에 생성되는 새로운 Connection에 영향을 미치지 않기 위한 상태이다.
 
 Linux 환경에서는 TIME_WAIT 상태는 60초 동안 지속되며, Code에 설정되어 있기 때문에 변경할 수 없다. 또한 Linux 환경에서 Socket(Port)이 부족한 경우 TIME_WAIT 상태의 Socket을 재사용 할수 있는 Option을 제공하고 있다. 관련 Option은 "/proc/sys/net/ipv4/tcp_tw_reuse" 값을 "1"로 설정하면 된다.
 
