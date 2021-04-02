@@ -55,6 +55,8 @@ TIME_WAIT 상태가 짧아져 [그림 1]과 같이 동일한 SEQ로 인해서 �
 
 #### 2.3. /proc/net/ipv4/tcp_tw_recycle
 
+tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. 최소 200ms 만큼 TIME_WAIT 상태가 지속될 수 있다. Linux에서는 TIME_WAIT 상태가 60초 동안 지속되지 않기 때문에 tcp_tw_recycle가 설정되어 있는 경우 TIME_WAIT 상태가 60초 동안 존재하는것 처럼 Simulation을 한다.
+
 ![[그림 3] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/SNAT_SYN_Packet_Drop.PNG){: width="700px"}
 
 ### 3. 참조
