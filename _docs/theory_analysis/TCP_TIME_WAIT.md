@@ -41,15 +41,17 @@ Linux에서는 기본적으로 TIME_WAIT 상태가 60초 동안 지속되도록 
 
 #### 2.1. /proc/net/ipv4/tcp_timestamps
 
-TIME_WAIT 상태로 인하여 Port가 부족한 문제를 해결하기 위한 기법을 이해하기 위해서는 tcp_timestamps 설정을 이해해야 한다. tcp_timestamps 설정은 TCP Packet Header에 Timestamp를 설정하는 Option이다. 기본적으로 "1"로 설정되어 있어 Timestamp를 이용하도록 설정되어 있다.
+TIME_WAIT 상태로 인하여 Port가 부족한 문제를 해결하기 위한 기법을 이해하기 위해서는 tcp_timestamps 설정을 이해해야 한다. tcp_timestamps 설정은 TCP Packet Header에 Timestamp를 설정하는 Option이다. 기본적으로 "1"로 설정되어 있어 Timestamp를 이용하도록 설정되어 있다. Timestamp Field는 Packet 송신자의 Timestamp를 저장하는 "TS Value Field"와 수신한 Packet의 TS Value Field를 복사하여 저장하는 "TS Echo Reply Field"가 존재한다.
 
-TCP Packet의 Timestamp는 Packet Reordering에 쓰인다. 짧은 시간동안 많은 Packet을 한번에 보내는 경우 SEQ의 Overflow로 인해서 Packet의 SEQ가 중복될 수 있다. 이러한 경우 Network의 상황에 따라서 수신부에서는 SEQ가 동일한 Packet을 동시에 수신할 수도 있다. 이 경우 Packet의 SEQ만으로는 Packet Reordering을 수행할 수 없고, Packet의 Timestamp도 참고하여 Reordering을 수행 해야한다. 이처럼 Packet의 SEQ와 Timestamp 둘다 참고하여 Packet Reordering을 하는 기법을 PAWS (TCP Sequence number wrapping) 기법이라고 명칭한다.
+TCP Packet의 Timestamp는 Packet Reordering에 쓰인다. 짧은 시간동안 많은 Packet을 한번에 보내는 경우 SEQ의 Overflow로 인해서 Packet의 SEQ가 중복될 수 있다. 이러한 경우 Network의 상황에 따라서 수신부에서는 SEQ가 동일한 Packet을 동시에 수신할 수도 있다. 이 경우 Packet의 SEQ만으로는 Packet Reordering을 수행할 수 없고, Packet의 Timestamp도 참고하여 Reordering을 수행한다. 이처럼 Packet의 SEQ와 Timestamp 둘다 참고하여 Packet Reordering을 하는 기법을 PAWS (TCP Sequence number wrapping) 기법이라고 명칭한다.
 
 #### 2.2. /proc/net/ipv4/tcp_tw_reuse
 
-tcp_tw_reuse는 TIME_WAIT 상태의 Port를 재사용 할 수 있도록 만든다. [Shell 1]에서 tcp_tw_reuse가 "1" 또는 "2"로 설정되어 있어 재사용이 가능하도록 설정되어 있다면, TIME_WAIT 상태가 끝나지 않더라도 49240 Port를 새로운 Connection을 맺는데 이용할 수 있다. Socket의 "SO_REUSEADDR" Option과 유사한 효과를 준다. Client에서 유용한 설정이며 Listen하는 고정된 Port를 이용하는 Server에서는 설정해도 큰 의미는 없다.
+tcp_tw_reuse는 TIME_WAIT 상태의 Port를 재사용 할 수 있도록 만든다. [Shell 1]에서 tcp_tw_reuse가 "1" 또는 "2"로 설정되어 있어 재사용이 가능하도록 설정되어 있다면, TIME_WAIT 상태가 끝나지 않더라도 192.168.0.61:49240 IP/Port를 새로운 Connection을 맺는데 이용할 수 있다. Socket의 "SO_REUSEADDR" Option과 유사한 효과를 준다. Client에서 유용한 설정이며 Listen하는 고정된 Port를 이용하는 Server에서는 설정해도 큰 의미는 없다.
 
-TIME_WAIT 상태가 짧아져 [그림 1]과 같이 동일한 SEQ로 인해서 발생할 수 있는 문제는 PAWS를 이용하면 해결 할 수 있다. SEQ가 동일하더라도 이전 Connection의 Packet은 지난 Timestamp이기 때문에 무시하고 Drop하면 된다. 따라서 tcp_tw_reuse는 tcp_timestamps과 함께 이용되어야 한다. tcp_timestamps과 함께 이용되는 tcp_tw_reuse는 이용해도 안전한 것으로 알려져 있다.
+TIME_WAIT 상태가 짧아져 [그림 1]과 같이 동일한 SEQ로 인해서 발생할 수 있는 문제는 PAWS를 이용하면 해결 할 수 있다. SEQ가 동일하더라도 이전 Connection의 Packet은 지난 Timestamp이기 때문에 무시하고 Drop하면 된다. [그림 2]와 같이 LASK_ACK가 지속되는 상황도 PAWS를 통해서 해결할 수 있다. Server(Passive Closer)가 LAST_ACK 상태일때 SYN Flag를 수신할 경우, Server는 Packet의 Timestamp를 통해서 Client(Active Closer)가 ACK Flag 이후에 SYN Flag를 전송한 것을 알 수 있다.
+
+따라서 Server는 Client에게 RST Flag를 전송하는 것이 아니라 SYN Flag를 무시한다. 이후에 Server는 FIN Flag 재전송 및 ACK Flag를 수신하여 LAST_ACK 상태에서 벗어난다. 이후에 Client도 SYN Flag 재전송을 통해서 Server와 Connection을 맺게된다. 이러한 이유 때문에 tcp_tw_reuse는 tcp_timestamps을 설정하여 TCP PAWS와 함께 이용되어야 하고, 실제로도 tcp_timestamps과 함께 이용되는 tcp_tw_reuse는 큰 문제가 없는것으로 알려져있다.
 
 #### 2.3. /proc/net/ipv4/tcp_tw_recycle
 
