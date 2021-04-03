@@ -25,13 +25,13 @@ tcp        0      0 192.168.0.61:49240      192.168.0.60:80         TIME_WAIT
 
 [Shell 1]은 Linux에서 TIME_WAIT 상태를 재현하는 과정을 나타내고 있다. curl 명령어는 Server에게 요청을 전송하고 응답을 받은면 먼저 Connection을 종료하는 Active Closer 역할을 수행한다. 따라서 curl 명령어를 수행한 후에 TIME_WAIT 상태를 확인할 수 있다. [Shell 1]에서 curl 명령어는 Local IP/Port로 192.168.0.61:49240를 이용하였기 때문에, 192.168.0.61:49240와 연관된 TIME_WAIT 상태를 확인할 수 있다. 이 TIME_WAIT 상태가 종료되기 전까지 192.168.0.61:49240 IP/Port를 이용하여 192.168.0.60:80로 새로운 Connection을 맺을 수 없다. (다른 Local IP를 이용하여 192.168.0.60:80에 연결할 수 있다면, 다른 Local IP/49240를 통해서 192.168.0.60:80와 새로운 Connection을 맺을수는 있다.)
 
-![[그림 1] Packet Delay]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Packet_Delay.PNG){: width="500px"}
+![[그림 1] Packet Delay]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/Packet_Delay.PNG){: width="500px"}
 
 TIME_WAIT 상태가 짧을 경우에는 Packet Delay가 발생하거나, 4Way Handshake 과정에서 마지막 ACK Flag가 유실될 경우, 새로운 TCP Connection에 영향을 줄 수 있다. [그림 1]은 TIME_WAIT 상태가 짧을 경우 Packet Delay에 의해서 새로운 TCP Connection이 영향을 받는 상황을 나타내고 있다. [그림 1]에서 Client가 전송한 SEQ=3인 Packet이 Server에게 바로 전달되지 않고 Network에 의해서 지연되는 상황에서, Client와 Server가 기존의 Connection을 종료하고 새로운 Connection을 맺었다. 이후에 이전 Connection의 지연된 SEQ=3 Packet이 Server에게 전달되는 상황이다.
 
 대부분의 경우에는 Server가 받아야 하는 SEQ와 지연된 Packet의 SEQ가 다르기 때문에, 지연된 Packet이 Server에게 전달되어도 Server에서는 Drop하기 때문에 문제가 발생하지 않는다. 하지만 [그림 1]의 상황처럼 Server가 수신해야 하는 SEQ와 지연된 Packet의 SEQ가 우연히 동일한 경우에는 Server는 지연된 Packet을 Drop하지 않고 수신할 수 있다. 이 경우 Data 무결성은 깨진다.
 
-![[그림 2] Lost Last ACK in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Lost_Last_ACK.PNG){: width="550px"}
+![[그림 2] Lost Last ACK in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/Lost_Last_ACK.PNG){: width="550px"}
 
 [그림 2]는 TIME_WAIT 상태가 짧을 경우 TCP 4Way Handshake의 마지막 ACK Flag가 Server(Passive Closer)에게 전달되지 않아 Server가 LAST_ACK 상태를 유지하는 상황을 나타내고 있다. TIME_WAIT 상태가 짧을 경우 Server의 LAST_ACK 상태가 Timeout에 의해서 CLOSED 상태로 변경 되기전, Client는 새로운 Connection을 위해서 동일한 Local IP/Port를 이용하여 Server에게 SYN Flag를 전송할 수 있다. 문제는 LAST_ACK 상태의 Server는 SYN Flag를 받을 경우 RST FLAG를 전송하여 Connection 생성을 막기 때문에 새로운 Connection 생성은 실패한다. 이 때문에 Client 입장에서는 예상하지 못한 Connection Error가 발생하는 것을 의미한다.
 
@@ -53,7 +53,7 @@ TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 �
 
 따라서 [그림 1]의 상황에서 Server는 지연된 Packet의 지난 Timestamp를 보고 지연된 Packet을 Drop하게 된다. 만약 지연된 Packet이 SEQ=3인 Packet 이후에 Server에게 전달되어도 Server는 Timestamp를 보고 지연된 Packet을 Drop하게 된다. 즉 동일한 SEQ를 갖는 Packet을 수신하는 상황이 발생하여도 TCP Packet의 Timestamp를 통해서 어느 Packet이 유효한지 알 수 있기 때문에 문제가 되지 않는다.
 
-![[그림 3] Lost Last ACK Recovery in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Lost_Last_ACK_Recovery.PNG){: width="550px"}
+![[그림 3] Lost Last ACK Recovery in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/Lost_Last_ACK_Recovery.PNG){: width="550px"}
 
 [그림 3]의 경우 [그림 2]과 동일한 상황에서 Packet의 Timestamp를 이용하여 Server의 LAST_ACK 상태를 종료하고, Client와 Server가 새로운 Connection을 맺는 과정을 나타내고 있다. [그림 3]이 [그림 2]와 다른점은 Server가 Packet의 Timestamp를 확인을 통해서 Client에게 RST Flag를 전송하는 것이 아니라 SYN Flag를 무시하여 Client에게 아무런 응답 Packet을 전달하지 않는다는 점이다. 따라서 Client의 Connection 시도는 중단되지 않는다.
 
@@ -63,11 +63,11 @@ TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 �
 
 #### 2.3. tcp_tw_recycle (/proc/net/ipv4/tcp_tw_recycle)
 
-tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다. 일반적으로 Connection이 맺어진 Server와 Client 사이에서는 Client가 먼저 Connection을 끊는경우가 많다. 하지만 상황에 따라서는 Server가 먼저 Connection을 종료할 경우도 발생하기 때문에 Server에도 다수의 TIME_WAIT 상태의 Connection이 발생할 수 있다. tcp_tw_recycle은 Server에 설정되어 TIME_WAIT 상태 Connection 누적을 제거하기 위해서 이용된다.
+tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다. 일반적으로 Connection이 맺어진 Server와 Client 사이에서는 Client가 먼저 Connection을 끊는 경우가 많다. 하지만 상황에 따라서는 Server가 먼저 Connection을 종료할 경우도 발생하기 때문에 Server에도 다수의 TIME_WAIT 상태의 Connection이 발생할 수 있다. tcp_tw_recycle은 Server에 설정되어 TIME_WAIT 상태 Connection 누적을 제거하기 위해서 이용된다.
 
 200ms 만큼 TIME_WAIT 상태가 지속될 수 있다. Linux에서는 TIME_WAIT 상태가 60초 동안 지속되지 않기 때문에 tcp_tw_recycle가 설정되어 있는 경우 TIME_WAIT 상태가 60초 동안 존재하는것 처럼 Simulation을 한다.
 
-![[그림 3] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/SNAT_SYN_Packet_Drop.PNG){: width="700px"}
+![[그림 4] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/SNAT_SYN_Packet_Drop.PNG){: width="700px"}
 
 #### 2.4. Socket lingering
 
