@@ -1,5 +1,5 @@
 ---
-title: TCP TIME_WAIT
+title: TCP TIME_WAIT State
 category: Theory, Analysis
 date: 2021-04-05T12:00:00Z
 lastmod: 2021-04-05T12:00:00Z
