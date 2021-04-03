@@ -23,47 +23,62 @@ tcp        0      0 192.168.0.61:49240      192.168.0.60:80         TIME_WAIT
 <figcaption class="caption">[Shell 1] TIME_WAIT</figcaption>
 </figure>
 
-[Shell 1]은 Linux에서 TIME_WAIT 상태를 재현하는 과정을 나타내고 있다. curl 명령어는 Server에게 요청을 전송하고 응답을 받은면 먼저 Connection을 종료하는 Active Closer 역할을 수행한다. 따라서 curl 명령어를 수행한 후에 TIME_WAIT 상태를 확인할 수 있다. [Shell 1]에서 curl 명령어는 Local IP/Port로 192.168.0.61:49240를 이용하였기 때문에, TIME_WAIT 상태에서 Local IP/Port로 192.168.0.61:49240를 출력 하는것을 확인할 수 있다. 이 TIME_WAIT 상태가 종료되기 전까지 192.168.0.61:49240 IP/Port를 이용하여 새로운 Connection을 맺을수 없다. IP가 달라질 경우 49240 Port를 이용하여 새로운 Connection을 맺을 수 잇다.
+[Shell 1]은 Linux에서 TIME_WAIT 상태를 재현하는 과정을 나타내고 있다. curl 명령어는 Server에게 요청을 전송하고 응답을 받은면 먼저 Connection을 종료하는 Active Closer 역할을 수행한다. 따라서 curl 명령어를 수행한 후에 TIME_WAIT 상태를 확인할 수 있다. [Shell 1]에서 curl 명령어는 Local IP/Port로 192.168.0.61:49240를 이용하였기 때문에, 192.168.0.61:49240와 연관된 TIME_WAIT 상태를 확인할 수 있다. 이 TIME_WAIT 상태가 종료되기 전까지 192.168.0.61:49240 IP/Port를 이용하여 192.168.0.60:80로 새로운 Connection을 맺을 수 없다. (다른 Local IP를 이용하여 192.168.0.60:80에 연결할 수 있다면, 다른 Local IP/49240를 통해서 192.168.0.60:80와 새로운 Connection을 맺을수는 있다.)
 
 ![[그림 1] Packet Delay]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Packet_Delay.PNG){: width="500px"}
 
-[그림 1]은 TIME_WAIT 상태가 짧을 경우 Packet Delay에 의해서 새로운 TCP Connection에 영향을 받는 상황을 나타내고 있다. Client가 전송한 SEQ=3인 Packet이 Server에게 바로 전달되지 않고 Network에 의해서 지연되는 상황에서, Client와 Server가 기존의 Connection을 종료하고 새로운 Connection을 맺는 상황이다. 이후에 이전 Connection의 지연된 SEQ=3 Packet이 Server에게 전달될 경우 새로운 Connection에 영향을 줄수 있다.
+TIME_WAIT 상태가 짧을 경우에는 Packet Delay가 발생하거나, 4Way Handshake 과정에서 마지막 ACK Flag가 유실될 경우, 새로운 TCP Connection에 영향을 줄 수 있다. [그림 1]은 TIME_WAIT 상태가 짧을 경우 Packet Delay에 의해서 새로운 TCP Connection이 영향을 받는 상황을 나타내고 있다. [그림 1]에서 Client가 전송한 SEQ=3인 Packet이 Server에게 바로 전달되지 않고 Network에 의해서 지연되는 상황에서, Client와 Server가 기존의 Connection을 종료하고 새로운 Connection을 맺었다. 이후에 이전 Connection의 지연된 SEQ=3 Packet이 Server에게 전달되는 상황이다.
 
-대부분의 경우에는 Server가 받아야 하는 SEQ와 지연된 Packet의 SEQ가 다르기 때문에, 지연된 Packet은 Server에서 Drop되어 처리 되지만, [그림 1]의 상황처럼 우연히 SEQ 번호가 동일한 경우에는 TCP 무결성에 영향을 줄 수 있게 된다.
+대부분의 경우에는 Server가 받아야 하는 SEQ와 지연된 Packet의 SEQ가 다르기 때문에, 지연된 Packet이 Server에게 전달되어도 Server에서는 Drop하기 때문에 문제가 발생하지 않는다. 하지만 [그림 1]의 상황처럼 Server가 수신해야 하는 SEQ와 지연된 Packet의 SEQ가 우연히 동일한 경우에는 Server는 지연된 Packet을 Drop하지 않고 수신할 수 있다. 이 경우 Data 무결성은 깨진다.
 
 ![[그림 2] Lost Last ACK in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Lost_Last_ACK.PNG){: width="550px"}
 
-[그림 2]는 TIME_WAIT 상태가 짧을 경우 TCP 4Way Handshake의 마지막 ACK Flag가 Server(Passive Closer)에게 전달되지 않아 Server가 LAST_ACK 상태를 유지하는 상황을 나타내고 있다. TIME_WAIT 상태가 짧을 경우 Server의 LAST_ACK 상태가 Timeout에 의해서 CLOSED 상태로 변경 되기전, Client는 새로운 Connection을 위해서 동일한 Port를 이용하여 Server에게 SYN Flag를 전송할 수 있다. LAST_ACK 상태의 Server는 SYN Flag를 받을 경우 RST FLAG를 전송하여 Connection 생성을 막기 때문에 Connection 생성에 실패하게 된다.
+[그림 2]는 TIME_WAIT 상태가 짧을 경우 TCP 4Way Handshake의 마지막 ACK Flag가 Server(Passive Closer)에게 전달되지 않아 Server가 LAST_ACK 상태를 유지하는 상황을 나타내고 있다. TIME_WAIT 상태가 짧을 경우 Server의 LAST_ACK 상태가 Timeout에 의해서 CLOSED 상태로 변경 되기전, Client는 새로운 Connection을 위해서 동일한 Local IP/Port를 이용하여 Server에게 SYN Flag를 전송할 수 있다. 문제는 LAST_ACK 상태의 Server는 SYN Flag를 받을 경우 RST FLAG를 전송하여 Connection 생성을 막기 때문에 새로운 Connection 생성은 실패한다. 이 때문에 Client 입장에서는 예상하지 못한 Connection Error가 발생하는 것을 의미한다.
 
 ### 2. with Linux
 
-Linux에서는 기본적으로 TIME_WAIT 상태가 60초 동안 지속되도록 Linux Kernel Code에 설정되어 있다. 비교적 긴 시간이기 때문에 TIME_WAIT 상태가 많아지면 TIME_WAIT 상태가 선점하고 있는 Port로 인해서 이용할 수 있는 Port가 줄어들어 새로운 Connection을 맺지 못하는 문제가 발생할 수 있다. 또한 TIME_WAIT 상태가 많아질수록 Kernel 영역의 Memory를 점유하는 문제도 발생한다. 이러한 문제를 해결하기 위해서 Linux에서는 몇가지 기법을 제공하고 있다.
+Linux에서는 기본적으로 TIME_WAIT 상태가 60초 동안 지속되도록 Linux Kernel Code에 고정값으로 설정되어 있다. 비교적 긴 시간이기 때문에 TIME_WAIT 상태가 많아지면 TIME_WAIT 상태가 선점하고 있는 Local IP/Port로 인해서 이용할 수 있는 Local IP/Port가 존재하지 않아, Client가 새로운 Connection을 맺지 못하는 문제가 발생할 수 있다. 또한 TIME_WAIT 상태가 많아질수록 Kernel 영역의 Memory를 점유하는 문제도 발생한다. 이러한 문제를 해결하기 위해서 Linux에서는 몇가지 기법을 제공하고 있다.
 
-#### 2.1. /proc/net/ipv4/tcp_timestamps
+#### 2.1. tcp_timestamps (/proc/net/ipv4/tcp_timestamps)
 
-TIME_WAIT 상태로 인하여 Port가 부족한 문제를 해결하기 위한 기법을 이해하기 위해서는 tcp_timestamps 설정을 이해해야 한다. tcp_timestamps 설정은 TCP Packet Header에 Timestamp를 설정하는 Option이다. 기본적으로 "1"로 설정되어 있어 Timestamp를 이용하도록 설정되어 있다. Timestamp Field는 Packet 송신자의 Timestamp를 저장하는 "TS Value Field"와 수신한 Packet의 TS Value Field를 복사하여 저장하는 "TS Echo Reply Field"가 존재한다.
+다수의 TIME_WAIT 상태의 Connection으로 인한 문제를 해결하기 위한 기법을 이해하기 위해서는 tcp_timestamps 설정을 이해해야 한다. tcp_timestamps 설정은 TCP Packet Header에 Timestamp를 설정하는 Option이다. 기본적으로 "1"로 설정되어 있어 Timestamp를 이용하도록 설정되어 있다. Timestamp Field는 Packet 송신자의 Timestamp를 저장하는 "TS Value Field"와 수신한 Packet의 TS Value Field를 복사하여 송신자에게 다시 전달하기 위한 목적으로 존재하는 "TS Echo Reply Field"가 존재한다.
 
-TCP Packet의 Timestamp는 Packet Reordering에 쓰인다. 짧은 시간동안 많은 Packet을 한번에 보내는 경우 SEQ의 Overflow로 인해서 Packet의 SEQ가 중복될 수 있다. 이러한 경우 Network의 상황에 따라서 수신부에서는 SEQ가 동일한 Packet을 동시에 수신할 수도 있다. 이 경우 Packet의 SEQ만으로는 Packet Reordering을 수행할 수 없고, Packet의 Timestamp도 참고하여 Reordering을 수행한다. 이처럼 Packet의 SEQ와 Timestamp 둘다 참고하여 Packet Reordering을 하는 기법을 PAWS (TCP Sequence number wrapping) 기법이라고 명칭한다.
+아래에서 설명할 Linux에서 제공하는 tcp_tw_reuse, tcp_tw_recycle 기법은 TCP Header에 Timestamp값이 설정되어 있어야 제대로 동작한다. 따라서 tcp_tw_reuse, tcp_tw_recycle을 제대로 적용하기 위해서는 tcp_timestamps가 설정되어 있어서 TCP Header에 Timestamp 값이 설정되어 있어야 한다.
 
-#### 2.2. /proc/net/ipv4/tcp_tw_reuse
+#### 2.2. tcp_tw_reuse (/proc/net/ipv4/tcp_tw_reuse)
 
-tcp_tw_reuse는 TIME_WAIT 상태의 Port를 재사용 할 수 있도록 만든다. [Shell 1]에서 tcp_tw_reuse가 "1" 또는 "2"로 설정되어 있어 재사용이 가능하도록 설정되어 있다면, TIME_WAIT 상태가 끝나지 않더라도 192.168.0.61:49240 IP/Port를 새로운 Connection을 맺는데 이용할 수 있다. Socket의 "SO_REUSEADDR" Option과 유사한 효과를 준다. Client에서 유용한 설정이며 Listen하는 고정된 Port를 이용하는 Server에서는 설정해도 큰 의미는 없다.
+tcp_tw_reuse는 TIME_WAIT 상태의 Local IP/Port를 재사용 할 수 있도록 만든다. [Shell 1]의 상황에서 만약 tcp_tw_reuse가 "1" 또는 "2"로 설정되어 있었다면, TIME_WAIT 상태가 끝나지 않더라도 192.168.0.61:49240 Local IP/Port를 다시 이용하여 192.168.0.60:80와 새로운 Connection을 맺을 수 있게 된다. 즉 tcp_tw_reuse는 필요할 때마다 Client(Active Opener)의 TIME_WAIT 상태를 짧게 만드어 Local IP/Port를 재사용할 수 있도록 만드는 역활을 수행한다.
 
-TIME_WAIT 상태가 짧아져 [그림 1]과 같이 동일한 SEQ로 인해서 발생할 수 있는 문제는 PAWS를 이용하면 해결 할 수 있다. SEQ가 동일하더라도 이전 Connection의 Packet은 지난 Timestamp이기 때문에 무시하고 Drop하면 된다. [그림 2]와 같이 LASK_ACK가 지속되는 상황도 PAWS를 통해서 해결할 수 있다. Server(Passive Closer)가 LAST_ACK 상태일때 SYN Flag를 수신할 경우, Server는 Packet의 Timestamp를 통해서 Client(Active Closer)가 ACK Flag 이후에 SYN Flag를 전송한 것을 알 수 있다.
+TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 문제는 TCP Packet Header에 포함되어 있는 Timestamp를 통해서 해결할 수 있다. TCP Packet에 Timestamp가 존재하면 Linux는 TCP Packet 수신시 SEQ뿐만 아니라 Timestamp 값도 비교한다. 만약 Timestamp가 지난 Timestamp라면 해당 Packet은 Drop된다.
 
-따라서 Server는 Client에게 RST Flag를 전송하는 것이 아니라 SYN Flag를 무시한다. 이후에 Server는 FIN Flag 재전송 및 ACK Flag를 수신하여 LAST_ACK 상태에서 벗어난다. 이후에 Client도 SYN Flag 재전송을 통해서 Server와 Connection을 맺게된다. 이러한 이유 때문에 tcp_tw_reuse는 tcp_timestamps을 설정하여 TCP PAWS와 함께 이용되어야 하고, 실제로도 tcp_timestamps과 함께 이용되는 tcp_tw_reuse는 큰 문제가 없는것으로 알려져있다.
+따라서 [그림 1]의 상황에서 Server는 지연된 Packet의 지난 Timestamp를 보고 지연된 Packet을 Drop하게 된다. 만약 지연된 Packet이 SEQ=3인 Packet 이후에 Server에게 전달되어도 Server는 Timestamp를 보고 지연된 Packet을 Drop하게 된다. 즉 동일한 SEQ를 갖는 Packet을 수신하는 상황이 발생하여도 TCP Packet의 Timestamp를 통해서 어느 Packet이 유효한지 알 수 있기 때문에 문제가 되지 않는다.
 
-#### 2.3. /proc/net/ipv4/tcp_tw_recycle
+![[그림 3] Lost Last ACK Recovery in 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/Lost_Last_ACK_Recovery.PNG){: width="550px"}
 
-tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. 최소 200ms 만큼 TIME_WAIT 상태가 지속될 수 있다. Linux에서는 TIME_WAIT 상태가 60초 동안 지속되지 않기 때문에 tcp_tw_recycle가 설정되어 있는 경우 TIME_WAIT 상태가 60초 동안 존재하는것 처럼 Simulation을 한다.
+[그림 3]의 경우 [그림 2]과 동일한 상황에서 Packet의 Timestamp를 이용하여 Server의 LAST_ACK 상태를 종료하고, Client와 Server가 새로운 Connection을 맺는 과정을 나타내고 있다. [그림 3]이 [그림 2]와 다른점은 Server가 Packet의 Timestamp를 확인을 통해서 Client에게 RST Flag를 전송하는 것이 아니라 SYN Flag를 무시하여 Client에게 아무런 응답 Packet을 전달하지 않는다는 점이다. 따라서 Client의 Connection 시도는 중단되지 않는다.
+
+이후에 Server는 LAST_ACK 상태를 벗어나기 위해서 FIN Flag를 재전송 한다. Client 입장에서는 FIN Flag가 원하는 응답이 아니기 때문에 Server에게 SYN SYN Flag에 대한 응답으로 RST Flag를 전송한다. RST Flag를 전송받은 Server는 LAST_ACK 상태를 종료한다. Client의 Connection 시도는 중단되지 않았기 때문에 Client는 1초 이후에 다시 SYN Flag를 Server에게 전송하여 Server와 Connection을 맺는다. 이러한 과정은 Client App에게는 노출되지 않고 처리된다.
+
+위에서 언급한 Packet의 Timestamp를 기반하는 기법들을 때문에 실제로도 tcp_timestamps과 함께 이용되는 tcp_tw_reuse는 큰 문제가 없는것으로 알려져있다.
+
+#### 2.3. tcp_tw_recycle (/proc/net/ipv4/tcp_tw_recycle)
+
+tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다. 일반적으로 Connection이 맺어진 Server와 Client 사이에서는 Client가 먼저 Connection을 끊는경우가 많다. 하지만 상황에 따라서는 Server가 먼저 Connection을 종료할 경우도 발생하기 때문에 Server에도 다수의 TIME_WAIT 상태의 Connection이 발생할 수 있다. tcp_tw_recycle은 Server에 설정되어 TIME_WAIT 상태 Connection 누적을 제거하기 위해서 이용된다.
+
+200ms 만큼 TIME_WAIT 상태가 지속될 수 있다. Linux에서는 TIME_WAIT 상태가 60초 동안 지속되지 않기 때문에 tcp_tw_recycle가 설정되어 있는 경우 TIME_WAIT 상태가 60초 동안 존재하는것 처럼 Simulation을 한다.
 
 ![[그림 3] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT/SNAT_SYN_Packet_Drop.PNG){: width="700px"}
 
+#### 2.4. Socket lingering
+
 ### 3. 참조
 
+* [https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
 * [http://docs.likejazz.com/time-wait/](http://docs.likejazz.com/time-wait/)
 * [https://meetup.toast.com/posts/55](https://meetup.toast.com/posts/55)
 * [https://brunch.co.kr/@alden/3](https://brunch.co.kr/@alden/3)
 * [https://stackoverflow.com/questions/8893888/dropping-of-connections-with-tcp-tw-recycle](https://stackoverflow.com/questions/8893888/dropping-of-connections-with-tcp-tw-recycle)
 * [https://man7.org/linux/man-pages/man7/tcp.7.html](https://man7.org/linux/man-pages/man7/tcp.7.html)
 * [https://sunyzero.tistory.com/198](https://sunyzero.tistory.com/198)
+* [https://www.alibabacloud.com/blog/why-are-linux-kernel-protocol-stacks-dropping-syn-packets_595251](https://www.alibabacloud.com/blog/why-are-linux-kernel-protocol-stacks-dropping-syn-packets_595251)
+* [https://tech.kakao.com/2016/04/21/closewait-timewait/](https://tech.kakao.com/2016/04/21/closewait-timewait/)

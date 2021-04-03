@@ -15,6 +15,8 @@ TCP Handshake를 분석한다.
 
 ![[그림 1] TCP 3Way, 4Way Handshake]({{site.baseurl}}/images/theory_analysis/TCP_Handshake/TCP_3way_4way_Handshake.PNG){: width="750px"}
 
+3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다. [그림 1]의 윗부분은 TCP 3Way Handshake를 나타내고 있고, [그림 2]의 아랫부분은 4Way Handshake를 나타내고 있다.
+
 {% highlight console %}
 12:49:33.192719 IP 192.168.0.60.39002 > 192.168.0.61.80: Flags [S], seq 284972257, win 64240, options [mss 1460,sackOK,TS val 2670079469 ecr 0,nop,wscale 7], length 0
 12:49:33.192983 IP 192.168.0.61.80 > 192.168.0.60.39002: Flags [S.], seq 1986854381, ack 284972258, win 65160, options [mss 1460,sackOK,TS val 1699876837 ecr 2670079469,nop,wscale 7], length 0
@@ -32,7 +34,9 @@ TCP Handshake를 분석한다.
 <figcaption class="caption">[Console 1] TCP 3Way, 4Way Handshake</figcaption>
 </figure>
 
-[그림 1]은 TCP 3Way Handshake와 4Way Handshake를 나타내고 있고, [Console 1]은 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK Flag를 나타낸다. 3Way Handshake는 TCP Connection을 생성하기 위한 Handshake이며, 4Way Handshake는 생성되어 있는 TCP Connection을 우아하게 종료하는 Handshake이다.
+[Console 1]은 Linux에서 tcpdump 명령어를 이용하여 TCP 3Way Handshake, 4Way Handshake 수행시 Packet을 Dump한 모습을 나타내고 있다. [Console 1]에서 Flags의 S는 Sync Flag, F는 Fin Flag, Dot(.)은 ACK Flag를 나타낸다. 따라서 [Console 1]의 윗부분은 3Way Handshake 과정을 나타내고 있고, [Console 1]의 아랫 부분은 4Way Handshake 과정을 나타내고 있다.
+
+[Console 1]에서 3Way Handshake는 TCP 표준과 동일하지만, 4Way Handshake는 표준과 다르게 3WAY로 수행하는 것을 확인할 수 있다. Linux에서는 기본적으로 FIN과 ACK를 동시에 보내 Network Bandwidth를 절약하는 방법을 이용하고 있다. 따라서 Linux에서는 4Way Handshake 과정이 실제로 Packet을 4번 주고 받지는 않는다.
 
 ##### 1.1.1. 3Way Handshake
 
@@ -97,3 +101,5 @@ TCP RST Flag는 예상치 못한 상황으로 인해서 생성된 TCP Connection
 * [https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost](https://stackoverflow.com/questions/16259774/what-if-a-tcp-handshake-segment-is-lost)
 * [https://tech.kakao.com/2016/04/21/closewait-timewait/](https://tech.kakao.com/2016/04/21/closewait-timewait/)
 * [https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long](https://stackoverflow.com/questions/25338862/why-time-wait-state-need-to-be-2msl-long)
+* [https://cs.stackexchange.com/questions/76393/tcp-connection-termination-fin-fin-ack-ack](https://cs.stackexchange.com/questions/76393/tcp-connection-termination-fin-fin-ack-ack)
+* [https://stackoverflow.com/questions/30043126/what-is-a-finack-message-in-tcp](https://stackoverflow.com/questions/30043126/what-is-a-finack-message-in-tcp)
