@@ -69,7 +69,11 @@ tcp_tw_recycle은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retr
 
 ![[그림 4] DROP SYN Packet with Client SNAT]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/SNAT_SYN_Packet_Drop.PNG){: width="700px"}
 
-#### 2.4. Socket lingering
+#### 2.4. Socket Lingering (SO_LINGER Socket Option)
+
+Linux에서는 Socket에 SO_LINGER Option을 통해서 Socket Lingering을 수행할 수 있다. SO_LINGER Option이 설정된 Socket을 App에서 close() System Call을 통해서 Close하면, close() System Call은 Socket Buffer에 있는 모든 Data를 상대에게 전송하고 종료될때까지 Blocking 된다. 이때 Blocking은 최대 SO_LINGER Option과 함께 Socket에 넘겨준 시간만큼 대기한다. 만약 최대 시간만큼 대기한 이후에도 Socket Buffer의 모든 Data를 상대에게 전송하지 못한다면, 상대에게 RST Flag를 전송하여 Connection을 강제로 종료한다.
+
+만약 SO_LINGER Option과 함께 넘겨준 시간을 "0"으로 설정하여 Socket을 설정하면, 해당 Socket은 RST Flag를 통하여 강제로 종료되기 때문에 TIME_WAIT 상태가 남지 않게된다. 하지만 SO_LINGER Option은 TIME_WAIT 상태를 줄이기 위한 Option이 아니라 Data 전송 보장을 위해서 제공하는 Option이다. 따라서 일반적인 상황에서는 SO_LINGER Option을 이용한 TIME_WAIT 상태 제거 방법은 권장되지 않는다.
 
 ### 3. 참조
 
