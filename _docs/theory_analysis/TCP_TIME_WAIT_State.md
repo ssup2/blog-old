@@ -121,7 +121,7 @@ tcp_tw_recycle가 설정되면 Server는 Connection이 TIME_WAIT 상태가 되�
 
 Server는 Client A가 전송한 마지막 Timestamp 값인 200을 Server에 저장하고 있는다. 이후에 Client B가 Timestamp 값이 100인 Packet을 전송한다면, Server는 이전과 동일한 Client가 전송한 지연된 Packet이라고 간주하고 Client B의 Packet을 Drop한다. 대부분의 경우 Connection을 맺을때 가장 먼저 전송하는 **SYN Flag**가 이러한 문제로 인해서 Server에서 DROP된다. 따라서 Client는 SYN Flag를 전송하였지만 이에 대한 어떠한 응답도 받지 못하는 상황이 발생한다. 
 
-위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다. [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었다. 따라서 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미 없는 설정이 되어 제거되었다.
+위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다. [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었다. 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 같이 제거되었다.
 
 #### 2.4. Socket Lingering (SO_LINGER Socket Option)
 
