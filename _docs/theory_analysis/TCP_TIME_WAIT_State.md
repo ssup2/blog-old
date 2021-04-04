@@ -95,7 +95,7 @@ OK
 <figcaption class="caption">[Shell 3] TIME_WAIT State through curl(Client) with tcp_tw_reuse</figcaption>
 </figure>
 
-tcp_tw_reuse 설정은 TIME_WAIT 상태의 Connection을 재사용 할 수 있도록 만든다. 주로 Client에 설정되어 Client에 존재하는 TIME_WAIT 상태의 Connection을 재사용하기 위해서 이용된다. [Shell 3]에서는 tcp_tw_reuse을 설정한 다음 [Shell 1]과 같이 동일하게 curl 명령어를 통해서 2번 Server에게 요청을 전송한 과정을 나타내고 있다. [Shell 1]에서는 두번재 curl 요청은 실패했지만, [Shell 3]에서는 tcp_tw_reuse 설정으로 인해서 TIME_WAIT 상태의 192.168.0.61:30000/192.168.0.60:80 Connection을 재사용 할 수 있기 때문에, 두번째 curl 명령어도 성공한 것을 확인할 수 있다.
+tcp_tw_reuse 설정은 TIME_WAIT 상태의 Connection을 재사용 할 수 있도록 만든다. 주로 Client에 설정되어 Client가 경험할 수 있는 Local IP/Port 부족 현상을 해결하여 준다. [Shell 3]에서는 tcp_tw_reuse을 설정한 다음 [Shell 1]과 같이 동일하게 curl 명령어를 통해서 2번 Server에게 요청을 전송한 과정을 나타내고 있다. [Shell 1]에서는 두번재 curl 요청은 실패했지만, [Shell 3]에서는 tcp_tw_reuse 설정으로 인해서 TIME_WAIT 상태의 192.168.0.61:30000/192.168.0.60:80 Connection을 재사용 할 수 있기 때문에, 두번째 curl 명령어도 성공한 것을 확인할 수 있다.
 
 TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 문제는 TCP Packet Header에 포함되어 있는 Timestamp를 통해서 해결할 수 있다. TCP Packet에 Timestamp가 존재하면 Linux는 TCP Packet 수신시 SEQ뿐만 아니라 Timestamp 값도 비교한다. 만약 Timestamp가 오래된 Timestamp라면 해당 Packet은 Drop된다. 따라서 [그림 1]의 상황에서 Server는 지연된 Packet의 오래된 Timestamp를 보고 지연된 Packet을 Drop하게 된다.
 
@@ -109,9 +109,9 @@ TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 �
 
 #### 2.3. tcp_tw_recycle (/proc/sys/net/ipv4/tcp_tw_recycle)
 
-tcp_tw_recycle 설정은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. 주로 Server에 설정되어 Server에 존재하는 TIME_WAIT 상태의 Connection을 제거하기 위해서 이용된다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다.
+tcp_tw_recycle 설정은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. 주로 Server에 설정되어 Server에 존재하는 TIME_WAIT 상태의 Connection을 제거하여 TIME_WAIT 상태의 Connection이 Kernel Memory를 점유하는 문제를 해결하여 준다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다.
 
-tcp_tw_recycle가 설정되면 Server는 Connection이 TIME_WAIT 상태가 되었을때 해당 Connection의 마지막 Timestamp를 저장한다. 이후에 Server가 동일한 IP/Port를 갖는 Client로부터 Packet을 수신하면 Server는 Packet의 Timestamp를 확인하고, Timestamp가 Server가 저장하고 있는 이전 Connection의 마지막 Timestamp와 비교한다. Server가 수신한 Packet의 Timestamp가 Server가 저장하고 있는 마지막 Timestamp보다 작다면 Server는 해당 Packet을 Drop한다. 
+tcp_tw_recycle가 설정되면 Server는 Connection이 TIME_WAIT 상태가 되었을때 해당 Connection의 마지막 Timestamp를 저장한다. 이후에 Server가 동일한 IP/Port를 갖는 Client로부터 Packet을 수신하면 Server는 Packet의 Timestamp를 확인하고, Timestamp가 Server가 저장하고 있는 이전 Connection의 마지막 Timestamp와 비교한다. Server가 수신한 Packet의 Timestamp가 Server가 저장하고 있는 마지막 Timestamp보다 작다면 Server는 해당 Packet을 Drop한다.
 
 이러한 동작을 수행하는 이유는 TIME_WAIT 상태가 짧아지면서 [그림 1]과 같이 지연된 Packet이 발생 하였을때 지연된 Packet을 Drop할 수 있는 간단한 방법이기 때문이다. 하지만 이와 같이 Packet의 Timestamp만을 비교하여 Packet을 Drop하는 방식은 Client가 SNAT되어 Server와 통신하는 Network 환경에서는 문제가 발생할 수 있다.
 
@@ -119,11 +119,11 @@ tcp_tw_recycle가 설정되면 Server는 Connection이 TIME_WAIT 상태가 되�
 
 [그림 4]는 tcp_tw_recycle 설정으로 인해서 Client가 SNAT 되어 Server와 통신하는 경우 발생할 수 있는 문제를 나타내고 있다. Client A와 Client B는 서로 다른 Timestamp를 가지고 있으며 Client A가 Client B보다 높은 Timestamp를 갖고 있는 상황이다. Client A가 먼저 SNAT를 통해서 Server와 Connection을 맺었다. 이후에 Client B도 SNAT를 통해서 Server와 Connection을 맺으려는 상황이다. 이때 Client B도 Client A와 동일한 SRC IP/Port로 SNAT 되었다. 따라서 Server는 Client A와 Client B를 구분하지 못하고 동일한 Client라고 간주한다.
 
-Server는 Client A가 전송한 마지막 Timestamp 값인 200을 Server에 저장하고 있는다. 이후에 Client B가 Timestamp 값이 100인 Packet을 전송한다면, Server는 이전과 동일한 Client가 전송한 지연된 Packet이라고 간주하고 Client B의 Packet을 Drop한다. 대부분의 경우 Connection을 맺을때 가장 먼저 전송하는 **SYN Flag**가 이러한 문제로 인해서 Server에서 DROP된다. 따라서 Client는 SYN Flag를 전송하였지만 이에 대한 어떠한 응답도 받지 못하는 상황이 발생한다. 
+Server는 Client A가 전송한 마지막 Timestamp 값인 200을 Server에 저장하고 있는다. 이후에 Client B가 Timestamp 값이 100인 Packet을 전송한다면, Server는 이전과 동일한 Client가 전송한 지연된 Packet이라고 간주하고 Client B의 Packet을 Drop한다. 대부분의 경우 Connection을 맺을때 가장 먼저 전송하는 **SYN Flag**가 이러한 문제로 인해서 Server에서 DROP된다. 따라서 Client B는 SYN Flag를 전송하였지만 이에 대한 어떠한 응답도 받지 못하는 상황이 발생한다. 
 
 위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다.
 
-tcp_tw_recycle 설정을 이용하지 않으면 Server에서 발생하는 TIME_WAIT 상태의 Connection을 줄일수 있는 방법이 존재하지 않는다. 하지만 Server의 Memory 용량이 크게 늘어나면서 TIME_WAIT 상태의 Connection이 점유하는 Kernel Memory 영역은 과거와 다르게 현재는 큰 문제가 되지 않는 상황이 되었다. 따라서 대부분의 환경에서 tcp_tw_recycle 설정을 이용할 필요가 없다. 또한 [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었는데, 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 Linux Kernel 4.10에서 같이 제거되었다.
+Server의 Memory 용량이 크게 늘어나면서 TIME_WAIT 상태의 Connection이 점유하는 Kernel Memory 영역은 과거와 다르게 현재는 큰 문제가 되지 않는 상황이 되었다. 따라서 대부분의 환경에서 tcp_tw_recycle 설정을 이용할 필요가 없다. 또한 [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었는데, 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 Linux Kernel 4.10에서 같이 제거되었다.
 
 #### 2.4. Socket Lingering (SO_LINGER Socket Option)
 
