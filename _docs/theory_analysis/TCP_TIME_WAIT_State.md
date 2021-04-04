@@ -52,7 +52,7 @@ Empty
 
 일반적으로 Connection이 맺어진 Server와 Client 사이에서는 Client가 먼저 Connection을 종료하는 경우가 많다. 하지만 상황에 따라서는 Server가 먼저 Connection을 종료하는 경우도 발생하기 때문에 Server에도 TIME_WAIT 상태가 발생할 수 있다. 다만 Server에 존재하는 TIME_WAIT 상태의 Connection으로 동일한 새로운 Connection 요청이 들어오면 기존의 TIME_WAIT 상태의 Connection을 제거하고 새로운 Connection을 맺는다. 따라서 Server에 존재하는 TIME_WAIT 상태의 Connection은 Server의 Connection을 방해하지 않는다.
 
-#### 1.1. TIME_WAIT 상태가 짧으면 발생할 수 있는 TCP Connection Issue
+#### 1.1. TCP Connection Issue with Short TIME_WAIT State
 
 ![[그림 1] TCP Connection Issue with Packet Delay]({{site.baseurl}}/images/theory_analysis/TCP_TIME_WAIT_State/Packet_Delay.PNG){: width="500px"}
 
@@ -64,9 +64,9 @@ TIME_WAIT 상태가 짧을 경우에는 Packet Delay가 발생하거나, 4Way Ha
 
 [그림 2]는 TIME_WAIT 상태가 짧을 경우 TCP 4Way Handshake의 마지막 ACK Flag가 Server(Passive Closer)에게 전달되지 않아 Server가 LAST_ACK 상태를 유지하는 상황을 나타내고 있다. TIME_WAIT 상태가 짧을 경우 Server의 LAST_ACK 상태가 Timeout에 의해서 CLOSED 상태로 변경 되기전, Client는 새로운 Connection을 위해서 동일한 Local IP/Port를 이용하여 Server에게 SYN Flag를 전송할 수 있다. 문제는 LAST_ACK 상태의 Server는 SYN Flag를 받을 경우 RST FLAG를 전송하여 Connection 생성을 막기 때문에 새로운 Connection 생성은 실패한다. 이와 같은 이유 때문에 Client 입장에서는 예상하지 못한 Connection Error를 경험하게 된다.
 
-### 2. Linux에서 TIME_WAIT 상태를 줄이는 방법
+### 2. Short TIME_WAIT in Linux
 
-Linux에서는 기본적으로 TIME_WAIT 상태가 60초 동안 지속되도록 Linux Kernel Code에 고정값으로 설정되어 있다. 비교적 긴 시간이기 때문에 TIME_WAIT 상태의 Connection이 많아지면 TIME_WAIT 상태의 Connection이 선점하고 있는 Local IP/Port로 인해서 이용할 수 있는 Local IP/Port가 존재하지 않아, Client가 새로운 Connection을 맺지 못하는 문제가 발생할 수 있다. 또한 TIME_WAIT 상태가 많아질수록 Kernel 영역의 Memory를 점유하는 문제도 발생한다. 이러한 문제를 해결하기 위해서 Linux에서는 몇가지 기법을 제공하고 있다.
+Linux에서는 기본적으로 TIME_WAIT 상태인 Connection은 60초 동안 지속되도록 Linux Kernel Code에 고정값으로 설정되어 있다. 비교적 긴 시간이기 때문에 TIME_WAIT 상태의 Connection이 많아지면 TIME_WAIT 상태의 Connection이 선점하고 있는 Local IP/Port로 인해서 이용할 수 있는 Local IP/Port가 존재하지 않아, Client가 새로운 Connection을 맺지 못하는 문제가 발생할 수 있다. 또한 TIME_WAIT 상태의 Connection이 많아질수록 Kernel 영역의 Memory를 점유하는 문제도 발생한다. 이러한 문제를 해결하기 위해서 Linux에서는 TIME_WAIT 짧게 만들수 있는 몇가지 기법을 제공하고 있다.
 
 #### 2.1. tcp_timestamps (/proc/sys/net/ipv4/tcp_timestamps)
 
@@ -121,7 +121,9 @@ tcp_tw_recycle가 설정되면 Server는 Connection이 TIME_WAIT 상태가 되�
 
 Server는 Client A가 전송한 마지막 Timestamp 값인 200을 Server에 저장하고 있는다. 이후에 Client B가 Timestamp 값이 100인 Packet을 전송한다면, Server는 이전과 동일한 Client가 전송한 지연된 Packet이라고 간주하고 Client B의 Packet을 Drop한다. 대부분의 경우 Connection을 맺을때 가장 먼저 전송하는 **SYN Flag**가 이러한 문제로 인해서 Server에서 DROP된다. 따라서 Client는 SYN Flag를 전송하였지만 이에 대한 어떠한 응답도 받지 못하는 상황이 발생한다. 
 
-위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다. [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었다. 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 같이 제거되었다.
+위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다.
+
+tcp_tw_recycle 설정을 이용하지 않으면 Server에서 발생하는 TIME_WAIT 상태의 Connection을 줄일수 있는 방법이 존재하지 않는다. 하지만 Server의 Memory 용량이 크게 늘어나면서 TIME_WAIT 상태의 Connection이 점유하는 Kernel Memory 영역은 과거와 다르게 현재는 큰 문제가 되지 않는 상황이 되었다. 따라서 대부분의 환경에서 tcp_tw_recycle 설정을 이용할 필요가 없다. 또한 [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었는데, 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 Linux Kernel 4.10에서 같이 제거되었다.
 
 #### 2.4. Socket Lingering (SO_LINGER Socket Option)
 
