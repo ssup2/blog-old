@@ -1,5 +1,5 @@
 ---
-title: AWS EKS Cluster 생성 / aws CLI 이용 / Ubuntu 18.04
+title: AWS EKS Cluster 생성 / eksctl CLI 이용 / Ubuntu 18.04
 category: Record
 date: 2021-04-06T12:00:00Z
 lastmod: 2021-04-06T12:00:00Z
