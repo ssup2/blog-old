@@ -11,11 +11,33 @@ adsense: true
 
 * Ubuntu 18.04 LTS 64bit, root user
 * EKS Cluster
+  * Version 1.18
+  * Subnet 10.0.0.0/16
 * aws CLI
-  * ap-northeast-2 Zone 설정 
-  * 2.1.34 Version
+  * Region ap-northeast-2
+  * Version2.1.34
 
-### 2. SSH Key 생성
+### 2. aws CLI 설치
+
+~~~console
+# curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+# unzip awscliv2.zip
+# sudo ./aws/install
+~~~
+
+aws CLI를 설치한다.
+
+~~~console
+# aws configure
+AWS Access Key ID [None]: <Access Key>
+AWS Secret Access Key [None]: <Secret Access Key>
+Default region name [None]: ap-northeast-2
+Default output format [None]:
+~~~
+
+aws CLI에 인증정보를 설정한다.
+
+### 3. SSH Key 생성
 
 ~~~console
 # aws ec2 create-key-pair --key-name ssup2-eks-ssh --query 'KeyMaterial' --output text > ssup2-eks-ssh.pem
@@ -23,7 +45,7 @@ adsense: true
 
 EKS Node에 SSH로 접근하기 위한 SSH Key를 생성한다.
 
-### 3. IAM Role 생성
+### 4. IAM Role 생성
 
 EKS Control Plan에서 이용할 IAM과 EKS Node에서 이용할 IAM Role을 생성한다.
 
@@ -111,7 +133,7 @@ EOL
 # aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy --role-name ssup2-eks-node-role
 ~~~
 
-### 4. Network 생성
+### 5. Network 생성
 
 EKS Cluster가 이용할 Network를 생성한다.
 
@@ -248,7 +270,9 @@ EKS Cluster가 이용할 VPC를 생성한다.
 }
 ~~~
 
-### 5. EKS Cluster, Node Group 생성
+생성한 VPC의 Routing Table에 Default Gateway를 앞에서 생성한 Gateway로 설정한다.
+
+### 6. EKS Cluster, Node Group 생성
 
 ~~~console
 # aws eks create-cluster --name ssup2-eks-cluster --kubernetes-version 1.18 --role-arn arn:aws:iam::132099918825:role/ssup2-eks-control-plan-role --resources-vpc-config subnetIds=subnet-0c932dea08c167b2c,subnet-075c6fee87669a6cd
@@ -340,7 +364,7 @@ EKS Cluster를 생성한다. EKS Cluster 생성시 위에서 생성했던 Contro
 
 생성한 EKS Cluster 내부에 Node Group을 생성한다.
 
-### 6. EKS Cluster 동작 확인
+### 7. EKS Cluster 동작 확인
 
 생성한 EKS Cluster의 동작을 확인한다.
 
@@ -364,9 +388,9 @@ ip-10-0-1-79.ap-northeast-2.compute.internal    Ready    <none>   69s   v1.18.9-
 
 생성한 EKS Cluster의 Node와 Version을 확인한다.
 
-### 7. EKS Cluster 삭제
+### 8. EKS Cluster 삭제
 
-생성한 EKS Cluster 및 관련 Resource를 모두 제거한다. 생성한 Resource를 역순으로 삭제한다.
+생성한 EKS Cluster 및 관련 Resource를 모두 제거한다. 
 
 ~~~console
 # aws eks delete-nodegroup --cluster-name ssup2-eks-cluster --nodegroup-name ssup2-eks-group
@@ -387,3 +411,5 @@ ip-10-0-1-79.ap-northeast-2.compute.internal    Ready    <none>   69s   v1.18.9-
 
 # aws ec2 delete-key-pair --key-name ssup2-eks-ssh
 ~~~
+
+생성한 Resource들을 생성한 순서의 역순으로 삭제한다.
