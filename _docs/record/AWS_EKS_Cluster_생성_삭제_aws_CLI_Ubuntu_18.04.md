@@ -15,7 +15,7 @@ adsense: true
   * Subnet 10.0.0.0/16
 * aws CLI
   * Region ap-northeast-2
-  * Version2.1.34
+  * Version 2.1.34
 
 ### 2. aws CLI 설치
 
@@ -50,7 +50,7 @@ EKS Node에 SSH로 접근하기 위한 SSH Key를 생성한다.
 EKS Control Plan에서 이용할 IAM과 EKS Node에서 이용할 IAM Role을 생성한다.
 
 ~~~console
-# cat > ssup2-eks-control-plan-role.json <<EOL
+# cat > ssup2-eks-control-plan-role.json << EOL
 {
 	"Version": "2012-10-17",
 	"Statement": [{
@@ -92,7 +92,7 @@ EOL
 EKS Control Plan에서 이용할 IAM Role을 생성 및 설정한다.
 
 ~~~console
-# cat > ssup2-eks-node-role.json <<EOL
+# cat > ssup2-eks-node-role.json << EOL
 {
 	"Version": "2012-10-17",
 	"Statement": [{
