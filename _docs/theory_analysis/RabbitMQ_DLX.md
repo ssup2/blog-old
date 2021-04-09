@@ -35,7 +35,6 @@ Dead Letter가 된 Message의 "x-death" Header에는 Message가 Dead Letter가 �
 * queue : Message가 Dead Letter가 되기전에 존재했던 Queue.
 * exchange : Dead Letter가 된 Message를 마지막으로 처리한 Exchange. 여러번 DLX에 의해서 처리된 Message의 경우 DLX 정보가 저장되어 있을 수 있다.
 
-
 ### 2. 참조
 
 * [https://www.rabbitmq.com/dlx.html](https://www.rabbitmq.com/dlx.html)
