@@ -56,7 +56,7 @@ OAuth 2.0에서의 **Access Token**은 인가 정보만을 포함하고 있는 T
 
 #### 1.4. Refresh Token 이용
 
-Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상태가 되었을경우 **새로운 Access Token**을 발급받기 위해 이용되는 Token이다. Authorization Server는 App에게 Access Token을 **처음** 발급 할 때만 Refresh Token을 같이 전달한다. 따라서 App은 Refresh Token을 저장하고 이용해야 한다. Authorization Server는 Access Token을 반드시 전송할 필요 없다. Refresh Token이 없는 App은 Access Token이 Invaild한 상태가 되면 User에게 요청하여 다시 Access Token을 발급 받아야 한다. Refresh Token은 **Bearer Token**이라고도 불린다. [그림 6]은 App이 Refresh Token을 이용하는 과정을 나타낸다.
+Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상태가 되었을경우 **새로운 Access Token**을 발급받기 위해 이용되는 Token이다. Authorization Server는 App에게 Access Token을 **처음** 발급 할 때만 Refresh Token을 같이 전달한다. 따라서 App은 Refresh Token을 저장하고 이용해야 한다. Authorization Server는 Refresh Token을 반드시 전송할 필요 없다. Refresh Token이 없는 App은 Access Token이 Invaild한 상태가 되면 User에게 요청하여 다시 Access Token을 발급 받아야 한다. Refresh Token은 **Bearer Token**이라고도 불린다. [그림 6]은 App이 Refresh Token을 이용하는 과정을 나타낸다.
 
 ![[그림 6] Refresh Token 이용 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Refresh_Token_Flow.PNG)
 
