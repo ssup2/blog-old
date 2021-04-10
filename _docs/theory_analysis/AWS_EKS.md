@@ -137,6 +137,17 @@ Apr 09 15:55:38 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]:
 <figcaption class="caption">[Console 8] kubelet mount log</figcaption>
 </figure>
 
+{% highlight console %}
+# ls -l /dev/ | grep xvda
+lrwxrwxrwx 1 root root           7 Apr  6 14:36 xvda -> nvme0n1
+lrwxrwxrwx 1 root root           9 Apr  6 14:36 xvda1 -> nvme0n1p1
+lrwxrwxrwx 1 root root          11 Apr  6 14:36 xvda128 -> nvme0n1p128
+lrwxrwxrwx 1 root root           7 Apr  9 15:55 xvdbw -> nvme1n1
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 9] EBS Mount</figcaption>
+</figure>
+
 #### 1.4. Authentication, Authorization
 
 ### 2. 참조

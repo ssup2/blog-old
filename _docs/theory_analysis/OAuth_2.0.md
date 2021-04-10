@@ -11,17 +11,25 @@ adsense: true
 
 ### 1. OAuth 2.0
 
-![[그림 1] Legacy Auth]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Legacy_Auth.PNG){: width="700px"}
+![[그림 1] ID/Password Auth]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/ID_Password_Auth.PNG){: width="700px"}
 
-OAuth은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. [그림 1]은 Legacy App에서의 인가 방법을 나타내고 있다. Legacy App은 User에게 ID, Password를 받아 Server에게 ID, Password를 전송하여 원하는 Resource를 받는다. 이렇게 ID, Password를 이용하여 인가를 수행하는 방식에는 몇가지 문제점이 있다. 먼저 App이 User의 ID, Password를 이용하여 악의적 동작을 수행하더라도 User나 Server에서 App의 악의적 동작을 감지하기 어렵다. 또한 ID, Password만 있으면 User의 모든 Resource를 자유롭게 접근할 수 있기 때문에 App의 Resource 요청을 제한하는 방법도 존재하지 않는다.
+OAuth 2.0은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. 기존의 User의 ID/Password를 통한 예전의 인증/인가 방식의 문제점을 개선하기 위해서 나온 Protocol이다. [그림 1]은 예전에 App에서 접근하던 User의 ID/Password를 통한 인증/인가 방법을 나타내고 있다. App에서 Google, Facebook과 같은 Service Provider의 API를 접근해야 하는 경우, 예전에는 User가 App에게 입력한 ID/Password를 이용하여 Service Provider의 API Server에 요청을 전송하는 방식을 이용했다.
 
-OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발행한 **Access Token**을 이용한다. Access Token에는 **Scope(인가 범위), Timeout(인가 허용 시간)** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있다.
+이와 같은 ID/Password 기반의 Auth 방식은 몇가지 문제점이 존재한다. 먼저 App이 User의 ID/Password를 이용하여 악의적 동작을 수행하더라도 User나 API Server에서는 App의 악의적 동작을 제한하거나 감지할 수 있는 방법이 존재하지 않는다. 또한 App도 입력받은 User의 ID/Password를 저장하고 있어야 하기 때문에 App의 보안에도 많은 신경을 써야한다.
+
+OAuth 2.0을 이용하면 이와같은 문제점들을 해결할 수 있다. OAuth 2.0을 이용하면 App은 User의 ID/Password가 아닌 Authorization Server에게 받은 **Access Token**을 이용하여 API Server에게 접근한다. Access Token에는 **Scope(인가 범위), Timeout(인가 허용 시간)** 등의 인가 정보가 포함되어 있다. 따라서 App은 Access Token을 갖고 있더라도 제한된 시간안에 제한된 Resource만 접근 할 수 있기 때문에 Access Token을 이용하여 App의 악의적 동작을 막을 수 있다. 또한 App은 User의 ID/Password를 저장할 필요가 없기 때문에 App의 보안에도 유리하다.
+
+OAuth 2.0을 이용하는 App들은 대부분 직접 User의 정보를 관리하지 않고 OAuth 2.0을 통해서 Service Provider의 User API에 접근하여 Service Provider가 관리하고 있는 User 정보를 이용한다. 따라서 User가 Service Provider에 회원가입 과정을 통해서 User의 정보를 등록해 놓으면, 해당 User는 OAuth 2.0을 이용하는 다양한 App들을 회원가입 없이 이용할 수 있게 된다.
 
 #### 1.1. Component
 
 ![[그림 2] OAuth 2.0 Component]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="700px"}
 
-[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 Resource Owner라고 표현한다. User Agent는 User의 입력을 받아 App이나 Authorization Server에게 전달하거나, App이나 Authorization Server에게 받은 내용을 User에게 보여주는 역할을 수행한다. 일반적으로 Web 환경에서 User Agent는 Web Brower를 의미한다. App은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각 할 수 있다. Authorization Server는 Access Token을 발급하고 관리하는 Server이다. Resource Server는 User의 Resource를 App에게 제공한다.
+[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 **Resource Owner**라고 명칭한다. 여기서 **Resource**는 Data 정도로 이해하면 된다. **User Agent**는 User의 입력을 받아 App이나 Authorization Server에게 전달하거나, App이나 Authorization Server에게 받은 내용을 User에게 보여주는 역할을 수행한다. 일반적으로 Web 환경에서 User Agent는 Web Brower를 의미한다. **App**은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각할 수 있다.
+
+**Authorization Server**는 Access Token을 발급하고 관리하는 Server이다. API Server는 User의 Resource(Data)를 제공하는 Server를 의미한다. OAuth 2.0에서는 **Resource Server**라고 명칭한다. Authorization Server와 Resource Server는 Service Provider가 제공하는 Server이다.
+
+OAuth 2.0에서의 **Access Token**은 인가 정보만을 포함하고 있는 Token이다. 인증 정보는 포함하고 있지 않는다. App에서 인증정보도 같이 필요한 경우에는 OAuth 2.0에 기반하고 있는 OIDC (OpenID Connect)를 이용해야 한다. OIDC에서는 Authorization Server가 Access Token뿐만 아니라 인가 정보가 포함되어 있는 ID Token을 같이 App에게 전달한다.
 
 #### 1.2. Access Token 발급
 
@@ -29,7 +37,7 @@ OAuth를 이용하는 App은 ID, Password를 이용하지 않고 Server가 발�
 
 * 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Authorization Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
 * 4,5,6 : User Agent는 인가 URL로 이동하면서 인가 Scope 정보 및 App URL도 같이 전달한다. Authorization Server는 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
-* 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID, Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
+* 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID/Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
 * 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
 * 10,11,12 : User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
 
