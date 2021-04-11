@@ -11,7 +11,7 @@ OIDC (OpenID Connect)를 분석한다.
 
 ### 1. OIDC (OpenID Connect)
 
-OIDC는 OAuth 2.0을 기반으로 인증(Authentication)을 수행하는 인증 Layer이다. OAuth 2.0는 인가(Authorization)만을 수행하는 Protocol이기 때문에 인증도 같이 필요한 경우에는 OICD를 도입하여 해결할 수 있다. OIDC는 인증을 위해서 **ID Token**이라고 불리는 추가 Token을 이용한다. ID Token은 App 이용을 위해서 인증 과정을 거친 App 사용자의 정보가 포함된 Token이다. App은 ID Token의 App 사용자 정보를 통해서 현재 App을 누가 이용하고 있는지 확인할 수 있다. OIDC는 ID Token을 바탕으로 SSO (Single Sign On)을 구성할 수 있다.
+OIDC는 OAuth 2.0을 기반으로 인증(Authentication)을 수행하는 인증 Layer이다. OAuth 2.0는 인가(Authorization)만을 수행하는 Protocol이기 때문에 인증도 같이 필요한 경우에는 OICD를 도입하여 해결할 수 있다. OIDC는 인증을 위해서 **ID Token**이라고 불리는 추가 Token을 이용한다. ID Token은 App 이용을 위해서 인증 과정을 거친 App 사용자의 정보가 포함된 Token이다. App은 ID Token의 App 사용자 정보를 통해서 현재 App을 누가 이용하고 있는지 확인할 수 있다. OIDC의 ID Token을 바탕으로 SSO (Single Sign On)을 구성할 수 있다.
 
 ![[그림 1] OIDC의 ID Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OIDC/OIDC_ID_Token_Flow.PNG)
 
