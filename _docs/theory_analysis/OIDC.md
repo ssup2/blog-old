@@ -22,3 +22,4 @@ ID Token은 **JWT**로 구성되어 있다. JWT에는 필요한 Data를 자유�
 ### 2. 참조
 
 * [https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/](https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/)
+* [https://coffeewhale.com/kubernetes/authentication/oidc/2020/05/04/auth03/](https://coffeewhale.com/kubernetes/authentication/oidc/2020/05/04/auth03/)

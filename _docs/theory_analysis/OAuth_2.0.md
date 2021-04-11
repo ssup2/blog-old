@@ -29,8 +29,6 @@ OAuth 2.0을 이용하는 App들은 대부분 직접 User의 정보를 관리하
 
 **Authorization Server**는 Access Token을 발급하고 관리하는 Server이다. API Server는 User의 Resource(Data)를 제공하는 Server를 의미한다. OAuth 2.0에서는 **Resource Server**라고 명칭한다. Authorization Server와 Resource Server는 Service Provider가 제공하는 Server이다.
 
-OAuth 2.0에서의 **Access Token**은 인가 정보만을 포함하고 있는 Token이다. 인증 정보는 포함하고 있지 않는다. App에서 인증정보도 같이 필요한 경우에는 OAuth 2.0에 기반하고 있는 OIDC (OpenID Connect)를 이용해야 한다. OIDC에서는 Authorization Server가 Access Token뿐만 아니라 인가 정보가 포함되어 있는 ID Token을 같이 App에게 전달한다.
-
 #### 1.2. Access Token 발급
 
 ![[그림 3] OAuth 2.0 Access Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Access_Token_Flow.PNG)
@@ -40,6 +38,8 @@ OAuth 2.0에서의 **Access Token**은 인가 정보만을 포함하고 있는 T
 * 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID/Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
 * 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
 * 10,11,12 : User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
+
+OAuth 2.0에서 Access Token은 **인가** 정보만을 포함하고 있는 Token이다. Access Token에는 인증 정보는 포함하고 있지 않기 때문에 Access Token을 알고있는 어떠한 App이든 Access Token이 갖고있는 권한을 이용할 수 있다. App에서 인증 정보도 같이 필요한 경우에는 OAuth 2.0에 기반하고 있는 OIDC (OpenID Connect)를 이용해야 한다. OIDC에서는 Authorization Server가 Access Token뿐만 아니라 인가 정보가 포함되어 있는 ID Token을 같이 App에게 전달한다.
 
 ![[그림 4] Google OAuth 2.0 Authorization UI]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 
