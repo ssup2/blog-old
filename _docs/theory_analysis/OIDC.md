@@ -11,13 +11,19 @@ OIDC (OpenID Connect)를 분석한다.
 
 ### 1. OIDC (OpenID Connect)
 
-OIDC는 OAuth 2.0을 기반으로 인증(Authentication)을 수행하는 인증 Layer이다. OAuth 2.0는 인가(Authorization)만을 수행하는 Protocol이기 때문에 인증도 같이 필요한 경우에는 OICD를 도입하여 해결할 수 있다. OIDC는 인증을 위해서 **ID Token**이라고 불리는 추가 Token을 이용한다. ID Token은 App 이용을 위해서 인증 과정을 거친 App 사용자의 정보가 포함된 Token이다. App은 ID Token의 App 사용자 정보를 통해서 현재 App을 누가 이용하고 있는지 확인할 수 있다. OIDC의 ID Token을 바탕으로 SSO (Single Sign On)을 구성할 수 있다.
+![[그림 1] OIDC Component]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/ID_Password_Auth.PNG){: width="700px"}
+
+OIDC는 OAuth 2.0을 기반으로 **인증(Authentication)**을 수행하는 인증 Protocol이다. OIDC는 SSO (Single Sign On)을 구성하는데 많이 이용되고 있다. OAuth 2.0는 인가(Authorization)만을 수행하는 Protocol이기 때문에 OAuth 2.0 환경에서 인증 시스템도 필요한 경우에는 OIDC를 도입하여 해결할 수 있다. [그림 1]은 Web 환경에서 OIDC를 이용할 경우 OIDC Component를 나타내고 있다.
+
+OIDC는 OAuth 2.0을 기반으로 하기 때문에, OIDC의 Component는 OAuth 2.0 Component와 거의 동일하다. OIDC에서는 App에게 인증 정보를 제공하는 구성 요소를 **Identity(OIDC) Provider**라고 명칭한다. Identity Provider는 OAuth 2.0 관점에서는 인증에 필요한 User 정보를 저장하고 있는 Resource Server와 Authorization Server의 조합으로 구성된다. 여기서 Authorization Server는 App에게 Access Token을 통해서 인가 정보뿐만 아니라 **ID Token**이라고 불리는 Token을 App에게 전달하여 인증 Server의 역활도 수행한다.
+
+#### 1.1. ID Token
+
+OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라고 불리는 Token을 이용한다. ID Token은 **JWT**로 구성되어 있다. App은 JWT를 통해서 ID Token이 Identity Provider가 생성한 Token이라는 것과, ID Token의 내용이 변조되지 않았다는 것을 보장받을 수 있다.
 
 ![[그림 1] OIDC의 ID Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OIDC/OIDC_ID_Token_Flow.PNG)
 
-[그림 1]은 OIDC의 ID Token의 발급 과정을 나타내고 있다. ID Token은 OAuth 2.0에 따라서 사용자 인증을 수행한 Authorization Server에서 Access Token이 발급될때 같이 발급되어 App에게 전달된다. 즉 OIDC가 적용된 OAuth 2.0의 Authorization Server는 인가 Server 역할 뿐만아니라 인증 Server 역할도 수행한다.
-
-ID Token은 **JWT**로 구성되어 있다. JWT에는 필요한 Data를 자유롭게 저장할 수 있다. 또한 JWT를 이용하는 App은 JWT가 갖고 있는 Signature를 통해서 외부의 도움없이 스스로 JWT가 갖고 있는 Data가 유효한 Data인지 확인할 수 있다. 따라서 Authorization Server는 App에서 필요한 사용자 정보를 자유롭게 추가하여 ID Token을 생성할 수 있고, ID Token을 이용하는 App은 Authorization Server의 도움없이 ID Token의 사용자 정보가 유효한 정보인지 확인할 수 있다.
+[그림 1]은 OIDC의 ID Token 발급 과정을 나타내고 있다. ID Token의 발급 과정은 OAuth 2.0의 Access Token을 발급받는 과정과 거의 동일하다. 단 마지막 12번 과정에서 Authorization Server로부터 Access Token 대신 ID Token이 App에게 전달된다는 점이 다르다. 필요에 따라서는 App은 ID Token 뿐만 아니라 OAuth 2.0의 Access Token, Refresh Token도 같이 전달받을 수 있다.
 
 ### 2. 참조
 

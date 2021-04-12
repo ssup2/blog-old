@@ -13,7 +13,7 @@ adsense: true
 
 ![[그림 1] ID/Password Auth]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/ID_Password_Auth.PNG){: width="700px"}
 
-OAuth 2.0은 현재 대부분의 인가 서비스에서 이용하고 있는 인가 Protocol이다. 기존의 User의 ID/Password를 통한 예전의 인증/인가 방식의 문제점을 개선하기 위해서 나온 Protocol이다. [그림 1]은 예전에 App에서 접근하던 User의 ID/Password를 통한 인증/인가 방법을 나타내고 있다. App에서 Google, Facebook과 같은 Service Provider의 API를 접근해야 하는 경우, 예전에는 User가 App에게 입력한 ID/Password를 이용하여 Service Provider의 API Server에 요청을 전송하는 방식을 이용했다.
+OAuth 2.0은 현재 대부분의 인가 서비스에서 이용하고 있는 **인가(Authorization)** Protocol이다. 기존의 User의 ID/Password를 통한 예전의 인증/인가 방식의 문제점을 개선하기 위해서 나온 Protocol이다. [그림 1]은 예전에 App에서 접근하던 User의 ID/Password를 통한 인증/인가 방법을 나타내고 있다. App에서 Google, Facebook과 같은 Service Provider의 API를 접근해야 하는 경우, 예전에는 User가 App에게 입력한 ID/Password를 이용하여 Service Provider의 API Server에 요청을 전송하는 방식을 이용했다.
 
 이와 같은 ID/Password 기반의 Auth 방식은 몇가지 문제점이 존재한다. 먼저 App이 User의 ID/Password를 이용하여 악의적 동작을 수행하더라도 User나 API Server에서는 App의 악의적 동작을 제한하거나 감지할 수 있는 방법이 존재하지 않는다. 또한 App도 입력받은 User의 ID/Password를 저장하고 있어야 하기 때문에 App의 보안에도 많은 신경을 써야한다.
 
@@ -25,9 +25,9 @@ OAuth 2.0을 이용하는 App들은 대부분 직접 User의 정보를 관리하
 
 ![[그림 2] OAuth 2.0 Component]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Component.PNG){: width="700px"}
 
-[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. User는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 **Resource Owner**라고 명칭한다. 여기서 **Resource**는 Data 정도로 이해하면 된다. **User Agent**는 User의 입력을 받아 App이나 Authorization Server에게 전달하거나, App이나 Authorization Server에게 받은 내용을 User에게 보여주는 역할을 수행한다. 일반적으로 Web 환경에서 User Agent는 Web Brower를 의미한다. **App**은 Web 환경이기 때문에 Web Server나, WAS에서 동작하는 App이라고 생각할 수 있다.
+[그림 2]는 Web 환경에서 OAuth 2.0를 이용하여 인가 기능을 구성했을때 구성 요소를 세분화하여 나타낸 그림이다. **User**는 App을 이용하는 이용자를 나타낸다. OAuth 2.0에서는 **Resource Owner**라고 명칭한다. 여기서 **Resource**는 Data 정도로 이해하면 된다. **User Agent**는 User의 입력을 받아 App이나 Authorization Server에게 전달하거나, App이나 Authorization Server에게 전달 받은 내용을 User에게 보여주는 역할을 수행한다. 일반적으로 Web 환경에서 User Agent는 Web Brower를 의미한다.
 
-**Authorization Server**는 Access Token을 발급하고 관리하는 Server이다. API Server는 User의 Resource(Data)를 제공하는 Server를 의미한다. OAuth 2.0에서는 **Resource Server**라고 명칭한다. Authorization Server와 Resource Server는 Service Provider가 제공하는 Server이다.
+**App**은 Authorization Server로부터 Resource 접근 권한을 받으려는 App을 나타낸다. Web 환경이기 때문에 App은 Web Server나, WAS라고 생각할 수 있다. **Authorization Server**는 Access Token을 발급하고 관리하는 Server이다. API Server는 User의 Resource(Data)를 제공하는 Server를 의미한다. OAuth 2.0에서는 **Resource Server**라고 명칭한다. 일반적으로 Authorization Server와 Resource Server는 동일한 Service Provider가 제공한다.
 
 #### 1.2. Access Token
 
