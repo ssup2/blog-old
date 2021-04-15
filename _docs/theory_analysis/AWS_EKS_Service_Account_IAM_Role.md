@@ -11,7 +11,7 @@ AWS EKS Cluster의 Service Account와 AWS IAM Role을 연동하는 과정을 정
 
 ### 1. AWS EKS Service Account와 AWS IAM Role 연동
 
-![[그림 1] B-Tree]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Service_Account_IAM_Role/AWS_EKS_Service_Account_IAM_Role.PNG)
+![[그림 1] AWS EKS Service Account와 AWS IAM Role 연동]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Service_Account_IAM_Role/AWS_EKS_Service_Account_IAM_Role.PNG)
 
 AWS EKS 1.14 Version 이상에서는 EKS (K8s) Cluster의 Service Account에 AWS IAM의 Role을 부여할 수 있는 기능을 제공하고 있다. 이 기능을 통해서 Pod에게 AWS Service에 접근할 수 있는 권한을 줄 수 있다.
 
