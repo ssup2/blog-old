@@ -40,6 +40,8 @@ secrets:
 <figcaption class="caption">[Text 1] Service Account with Role ARN</figcaption>
 </figure>
 
+Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Service Account를 생성해야 한다. 이때 `eks.amazonaws.com/role-arn` Annotation에 부여할 AWS IAM Role의 ARN을 명시해야 한다. [Text 1]은 AWS Load Balancer Controller가 이용하는 Service Account를 나타내고 있다.
+
 #### 1.2. Create Pod
 
 {% highlight yaml %}
@@ -80,7 +82,9 @@ spec:
 <figcaption class="caption">[Text 2] Mutated Pod Spec</figcaption>
 </figure>
 
-#### 1.3. Create/Rotate Token
+EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 2]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 `AWS_DEFAULT_REGION`, `AWS_REGION`, `AWS_ROLE_ARN`, `AWS_WEB_IDENTITY_TOKEN_FILE` 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
+
+#### 1.3. Create/Rotate Service Account Token
 
 {% highlight json %}
 {
@@ -106,8 +110,26 @@ spec:
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 3] Token</figcaption>
+<figcaption class="caption">[Text 3] Service Account Token</figcaption>
 </figure>
+
+{% highlight json %}
+{
+  "iss": "kubernetes/serviceaccount",
+  "kubernetes.io/serviceaccount/namespace": "kube-system",
+  "kubernetes.io/serviceaccount/secret.name": "aws-load-balancer-controller-token-trf5m",
+  "kubernetes.io/serviceaccount/service-account.name": "aws-load-balancer-controller",
+  "kubernetes.io/serviceaccount/service-account.uid": "ceec1768-8be2-4ca9-9a24-f8bf4c1cce20",
+  "sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Text 4] Traditional Service Account Token</figcaption>
+</figure>
+
+[Text 3]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 4]는 AWS Load Balancer Controller Pod에 생성된 **Traditional Service Account Token**의 내용이다.
+
+Inject된 Service Account Token에는 audience, expiration 정보가 포함되어 있다. 또한 각 EKS Cluster는 전용 OIDC Identity Provider를 갖고 있는데, issuer에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다.
 
 #### 1.4. Use Token
 
@@ -132,7 +154,7 @@ spec:
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 4] Role's Trust Relationships</figcaption>
+<figcaption class="caption">[Text 5] Role's Trust Relationships</figcaption>
 </figure>
 
 ### 2. 참조
@@ -145,6 +167,8 @@ spec:
 * [https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection)
 * [https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)
 * [https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-issuer-discovery](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-issuer-discovery)
+* [https://reece.tech/posts/oidc-k8s-to-aws/](https://reece.tech/posts/oidc-k8s-to-aws/)
 * [https://tech.devsisters.com/posts/pod-iam-role/](https://tech.devsisters.com/posts/pod-iam-role/)
 * [https://www.blog-dreamus.com/post/flo-tech-aws-eks%EC%97%90%EC%84%9C%EC%9D%98-iam-%EC%97%AD%ED%95%A0-%EB%B6%84%EB%A6%AC](https://www.blog-dreamus.com/post/flo-tech-aws-eks%EC%97%90%EC%84%9C%EC%9D%98-iam-%EC%97%AD%ED%95%A0-%EB%B6%84%EB%A6%AC)
 * [https://qiita.com/hiyosi/items/feec917d502af8ad8863](https://qiita.com/hiyosi/items/feec917d502af8ad8863)
+* [https://stackoverflow.com/questions/57192079/serviceaccount-token-volume-projection-projected-token-in-path-in-manifest-f](https://stackoverflow.com/questions/57192079/serviceaccount-token-volume-projection-projected-token-in-path-in-manifest-f)
