@@ -129,7 +129,7 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 
 [Text 3]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 4]는 AWS Load Balancer Controller Pod에 생성된 **Traditional Service Account Token**의 내용이다.
 
-Inject된 Service Account Token에는 audience, expiration 정보가 포함되어 있다. 또한 각 EKS Cluster는 전용 OIDC Identity Provider를 갖고 있는데, issuer에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다.
+Inject된 Service Account Token에는 Audience, Expiration 정보가 포함되어 있다. 또한 각 EKS Cluster는 전용 OIDC Identity Provider를 갖고 있는데, issuer에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다.
 
 #### 1.4. Use Token
 
