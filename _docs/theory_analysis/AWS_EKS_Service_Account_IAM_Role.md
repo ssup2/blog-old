@@ -40,7 +40,7 @@ secrets:
 <figcaption class="caption">[Text 1] Service Account with Role ARN</figcaption>
 </figure>
 
-Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Service Account를 생성해야 한다. 이때 `eks.amazonaws.com/role-arn` Annotation에 부여할 AWS IAM Role의 ARN을 명시해야 한다. [Text 1]은 AWS Load Balancer Controller가 이용하는 Service Account를 나타내고 있다.
+Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Service Account를 생성해야 한다. 이때 **eks.amazonaws.com/role-arn** Annotation에 부여할 AWS IAM Role의 ARN을 명시해야 한다. [Text 1]은 AWS Load Balancer Controller가 이용하는 Service Account를 나타내고 있다.
 
 #### 1.2. Create Pod
 
@@ -82,7 +82,7 @@ spec:
 <figcaption class="caption">[Text 2] Mutated Pod Spec</figcaption>
 </figure>
 
-EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 2]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 `AWS_DEFAULT_REGION`, `AWS_REGION`, `AWS_ROLE_ARN`, `AWS_WEB_IDENTITY_TOKEN_FILE` 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
+EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 2]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
 
 #### 1.3. Create/Rotate Service Account Token
 
