@@ -102,52 +102,6 @@ my-nginx   <none>   *       k8s-mygroup-9758714285-724452701.ap-northeast-2.elb.
 `alb.ingress.kubernetes.io/target-type: ip`
 `alb.ingress.kubernetes.io/group.name: my-group`
 
-#### 1.3. Storage
-
-{% highlight console %}
-# kubectl get sc
-NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  3d1h
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Console 7] Ingress with Group</figcaption>
-</figure>
-
-{% highlight console %}
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:32.183634    3801 topology_manager.go:233] [topologymanager] Topology Admit Handler
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:32.336844    3801 reconciler.go:224] operationExecutor.VerifyControllerAttachedVolume started for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837")
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:32.336896    3801 reconciler.go:224] operationExecutor.VerifyControllerAttachedVolume started for volume "default-token-7m864" (UniqueName: "kubernetes.io/secret/6681c826-f599-4549-b2e1-707c69c26837-default-token-7m864") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837")
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: E0409 15:55:32.337007    3801 nestedpendingoperations.go:301] Operation for "{volumeName:kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89 podName: nodeName:}" failed. No retries permitted until 2021-04-09 15:55:32.836974851 +0000 UTC m=+263922.787528156 (durationBeforeRetry 500ms). Error: "Volume has not been added to the list of VolumesInUse in the node's volume status for volume \"pvc-1b5dd043-40fc-4924-b1af-03bfa9630751\" (UniqueName: \"kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89\") pod \"web-1\" (UID: \"6681c826-f599-4549-b2e1-707c69c26837\") "
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:32.841678    3801 reconciler.go:224] operationExecutor.VerifyControllerAttachedVolume started for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837")
-Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: E0409 15:55:32.841780    3801 nestedpendingoperations.go:301] Operation for "{volumeName:kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89 podName: nodeName:}" failed. No retries permitted until 2021-04-09 15:55:33.841752915 +0000 UTC m=+263923.792306216 (durationBeforeRetry 1s). Error: "Volume has not been added to the list of VolumesInUse in the node's volume status for volume \"pvc-1b5dd043-40fc-4924-b1af-03bfa9630751\" (UniqueName: \"kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89\") pod \"web-1\" (UID: \"6681c826-f599-4549-b2e1-707c69c26837\") "
-Apr 09 15:55:33 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:33.844677    3801 reconciler.go:224] operationExecutor.VerifyControllerAttachedVolume started for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837")
-Apr 09 15:55:33 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: E0409 15:55:33.850478    3801 nestedpendingoperations.go:301] Operation for "{volumeName:kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89 podName: nodeName:}" failed. No retries permitted until 2021-04-09 15:55:35.850450415 +0000 UTC m=+263925.801003754 (durationBeforeRetry 2s). Error: "Volume not attached according to node status for volume \"pvc-1b5dd043-40fc-4924-b1af-03bfa9630751\" (UniqueName: \"kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89\") pod \"web-1\" (UID: \"6681c826-f599-4549-b2e1-707c69c26837\") "
-Apr 09 15:55:34 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: {"level":"info","ts":"2021-04-09T15:55:34.244Z","caller":"/usr/local/go/src/runtime/proc.go:203","msg":"CNI Plugin version: v1.7.5 ..."}
-Apr 09 15:55:35 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:35.949997    3801 reconciler.go:224] operationExecutor.VerifyControllerAttachedVolume started for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837")
-Apr 09 15:55:35 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:35.955735    3801 operation_generator.go:1332] Controller attach succeeded for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837") device path: "/dev/xvdbw"
-Apr 09 15:55:36 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:36.050389    3801 operation_generator.go:558] MountVolume.WaitForAttach entering for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837") DevicePath "/dev/xvdbw"
-Apr 09 15:55:37 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:37.050635    3801 attacher.go:189] Successfully found attached AWS Volume "aws://ap-northeast-2a/vol-0c6206285b4820d89" at path "/dev/xvdbw".
-Apr 09 15:55:37 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:37.050689    3801 operation_generator.go:567] MountVolume.WaitForAttach succeeded for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837") DevicePath "/dev/xvdbw"
-Apr 09 15:55:37 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:37.068352    3801 mount_linux.go:366] Disk "/dev/xvdbw" appears to be unformatted, attempting to format as type: "ext4" with options: [-F -m0 /dev/xvdbw]
-Apr 09 15:55:37 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:37.286426    3801 mount_linux.go:376] Disk successfully formatted (mkfs): ext4 - /dev/xvdbw /var/lib/kubelet/plugins/kubernetes.io/aws-ebs/mounts/aws/ap-northeast-2a/vol-0c6206285b4820d89
-Apr 09 15:55:37 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:37.447140    3801 operation_generator.go:596] MountVolume.MountDevice succeeded for volume "pvc-1b5dd043-40fc-4924-b1af-03bfa9630751" (UniqueName: "kubernetes.io/aws-ebs/aws://ap-northeast-2a/vol-0c6206285b4820d89") pod "web-1" (UID: "6681c826-f599-4549-b2e1-707c69c26837") device mount path "/var/lib/kubelet/plugins/kubernetes.io/aws-ebs/mounts/aws/ap-northeast-2a/vol-0c6206285b4820d89"
-Apr 09 15:55:38 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: W0409 15:55:38.128905    3801 pod_container_deletor.go:77] Container "d9165d9862d7d713871f40be45cf4f11224597a85edf68e893a6b3df36e313f9" not found in pod's containers
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Console 8] kubelet mount log</figcaption>
-</figure>
-
-{% highlight console %}
-# ls -l /dev/ | grep xvda
-lrwxrwxrwx 1 root root           7 Apr  6 14:36 xvda -> nvme0n1
-lrwxrwxrwx 1 root root           9 Apr  6 14:36 xvda1 -> nvme0n1p1
-lrwxrwxrwx 1 root root          11 Apr  6 14:36 xvda128 -> nvme0n1p128
-lrwxrwxrwx 1 root root           7 Apr  9 15:55 xvdbw -> nvme1n1
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Console 9] EBS Mount</figcaption>
-</figure>
-
 #### 1.4. Authentication, Authorization
 
 ##### 1.4.1. kubeconfig
