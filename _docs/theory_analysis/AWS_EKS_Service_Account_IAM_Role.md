@@ -127,9 +127,9 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 <figcaption class="caption">[Text 4] Traditional Service Account Token</figcaption>
 </figure>
 
-[Text 3]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 4]는 AWS Load Balancer Controller Pod에 생성된 **Traditional Service Account Token**의 내용이다.
+[Text 3]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 4]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Inject된 Service Account Token에는 Audience(aud), Expiration(exp) 정보가 포함되어 있다. 또한 각 EKS Cluster는 자신만의 **OIDC Identity Provider**를 갖고 있는데, issuer(iss)에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다. 
 
-Inject된 Service Account Token에는 Audience, Expiration 정보가 포함되어 있다. 또한 각 EKS Cluster는 전용 OIDC Identity Provider를 갖고 있는데, issuer에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다.
+Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증 정보를 받아와야 하기 때문에 Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 설계되어야 한다.
 
 #### 1.4. Use Token
 
