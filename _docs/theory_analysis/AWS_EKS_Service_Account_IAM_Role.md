@@ -40,7 +40,35 @@ secrets:
 <figcaption class="caption">[Text 1] Service Account with Role ARN</figcaption>
 </figure>
 
-Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Service Account를 생성해야 한다. 이때 **eks.amazonaws.com/role-arn** Annotation에 부여할 AWS IAM Role의 ARN을 명시해야 한다. [Text 1]은 AWS Load Balancer Controller가 이용하는 Service Account를 나타내고 있다.
+Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Service Account를 생성해야 한다. 이때 **eks.amazonaws.com/role-arn** Annotation에 부여할 AWS IAM Role의 ARN을 명시해야 한다. [Text 1]은 AWS Load Balancer Controller가 이용하는 Service Account를 나타내고 있다. "arn:aws:iam::132099918825:role/eksctl-ssup2-eks-cluster-addon-iamserviceacc-Role1-13GTAZQ9TJV8M" Role을 부여하고 있는것을 확인할 수 있다.
+
+{% highlight json %}
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::132099918825:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53:aud": "sts.amazonaws.com",
+          "oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+        }
+      }
+    }
+  ]
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Text 2] Role's Trust Relationship</figcaption>
+</figure>
+
+[Text 2]는 [Text 1]에서 AWS Load Balancer Controller가 이용하는 Service Account에 부여된 AWS IAM Role의 Trust Relationship을 나타낸다. **Trust Relationship**은 해당 ARN Role을 이용할 수 있는 대상을 제한하는 역활을 수행한다. [Text 2]에서 Principal 항목이 해당 AWS IAM Role을 이용할 수 있는 대상을 나타낸다. 여기에 EKS Cluster의 **OIDC Identity Provider**의 URL이 명시되어 있는것을 확인할 수 있다.
+
+각 EKS Cluster는 자신만의 OIDC Identity Provider를 갖는다. OIDC Identity Provider는 인증을 제공하는 Server이다. 즉 [Text 2]의 Trust Relationship의 Issuer에는 EKS Cluster의 OIDC Identity Provider가 명시되어 있기 때문에, EKS Cluster의 OIDC Identity Provider가 인증한 App은 해당 AWS IAM Role을 이용할 수 있다.
 
 #### 1.2. Create Pod
 
@@ -79,10 +107,10 @@ spec:
 ...
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 2] Mutated Pod Spec</figcaption>
+<figcaption class="caption">[Text 3] Mutated Pod Spec</figcaption>
 </figure>
 
-EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 2]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
+EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
 
 #### 1.3. Create/Rotate Service Account Token
 
@@ -110,7 +138,7 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 3] Service Account Token</figcaption>
+<figcaption class="caption">[Text 4] Service Account Token</figcaption>
 </figure>
 
 {% highlight json %}
@@ -124,38 +152,18 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 4] Traditional Service Account Token</figcaption>
+<figcaption class="caption">[Text 5] Traditional Service Account Token</figcaption>
 </figure>
 
-[Text 3]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 4]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Inject된 Service Account Token에는 Audience(aud), Expiration(exp) 정보가 포함되어 있다. 또한 각 EKS Cluster는 자신만의 **OIDC Identity Provider**를 갖고 있는데, issuer(iss)에는 이 OIDC Identity Provider의 URL이 존재하는 것을 확인할 수 있다. 
+[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Inject된 Service Account Token에는 Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다.
 
-Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증 정보를 받아와야 하기 때문에 Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 설계되어야 한다.
+Issuer에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다. Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 설계되어야 한다.
 
 #### 1.4. Use Token
 
-{% highlight json %}
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "arn:aws:iam::132099918825:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53:aud": "sts.amazonaws.com",
-          "oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
-        }
-      }
-    }
-  ]
-}
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Text 5] Role's Trust Relationships</figcaption>
-</figure>
+Pod 내부의 App은 AWS의 STS로부터 Credential을 얻기 위해서 Inject된 Service Account Token과 권한을 얻으려는 IAM Role의 ARN을 AWS의 STS에게 전송한다. AWS STS는 Token의 Issuer 항목을 통해서 EKS Cluster의 OIDC Identity Provider를 발견하고, OIDC Identity Provider에게 Service Account Token을 인증 받는다. AWS의 STS가 OIDC Identity Provider 발견하고 관련 정보를 얻는 과정은 **OpenID Connect Discovery 1.0** 표준에 의해서 진행된다.
+
+Service Account Token의 인증이 완료되면 STS는 허용되는 IAM Role인지 확인한다. 허용되는 IAM Role이라면 AWS의 STS는 Credential을 Pod 내부의 App에게 전달한다. Pod 내부의 App은 수신한 Credential을 가지고 AWS Service에 접근한다.
 
 ### 2. 참조
 
