@@ -91,7 +91,7 @@ Error: context deadline exceeded
 <figcaption class="caption">[Shell 5] Server 추가/제거 불가능</figcaption>
 </figure>
 
-문제는 Server를 추가하고 실제 Server를 구동하지 않는다면 해당 Server Cluster는 앞으로 Read Only Mode로만 동작할 뿐, Server 추가/삭제 동작 뿐만 아니라 Data Write 동작도 수행할 수 없게 된다. Quorum이 2이기 때문에 추가된 Server가 동작하여 투표할 수 있는 상황이 되어야, Server 추가/삭제 또는 Data Write가 가능하기 때문이다. [Shell 5]는 이러한 상황을 나타내고 있다. infra2 Server를 추가한 다음에 infra2 Server를 실제로 구동하지 않은 상태에서 infra3 Server가 추가되지 않는것을 알 수 있다. 원래의 상태로 돌리기 위해서 infra2 Server를 제거하려고 해도 infra Server가 실제로 동작하고 있지는 않기 때문에 제거되지도 않는다.
+문제는 Server를 추가하고 실제 Server를 구동하지 않는다면 해당 Server Cluster는 앞으로 Read Only Mode로만 동작할 뿐, Server 추가/삭제 동작 뿐만 아니라 Data Write 동작도 수행할 수 없게 된다. Quorum이 2이기 때문에 추가된 Server가 동작하여 투표할 수 있는 상황이 되어야, Server 추가/삭제 또는 Data Write가 가능하기 때문이다. [Shell 5]는 이러한 상황을 나타내고 있다. infra2 Server를 추가한 다음에 infra2 Server를 실제로 구동하지 않은 상태에서 infra3 Server가 추가되지 않는것을 알 수 있다. 원래의 상태로 돌리기 위해서 infra2 Server를 제거하려고 해도 infra2 Server가 실제로 동작하고 있지는 않기 때문에 제거되지도 않는다.
 
 이러한 상황을 막기 위해서 etcd에서는 가능하면 Server 추가는 한대씩 차례차례 동작을 시키면서 추가하는 방법을 권장하고 있다. 또한 Server Cluster의 Server 교체시, 새로운 Server를 먼저 Server Cluster에 추가하고 교체할 Server를 Server Cluster에서 제거하는 방법이 아니라, 먼저 Server Cluster에서 교체할 Server를 제거한 다음 새로운 Server를 Server Cluster에 추가시키도록 권장하고 있다. 새로운 Server를 Server Cluster에 먼저 추가하면 불필요하게 Quorum이 증가하여 위의 문제가 발생할 수 있기 때문이다.
 

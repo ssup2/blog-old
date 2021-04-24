@@ -11,7 +11,7 @@ TCP TIME_WAIT 관련 동작을 분석한다.
 
 ### 1. TCP TIME_WAIT
 
-TIME_WAIT 상태는 Connection을 먼저 종료하는 Active Closer가 Connection 종료 후 도달하는 상태이다. Connection이 종료되었지만 Network에 남아 있을 수 있는 종료된 Connection의 Packet이 완전히 제거 될때까지 대기하여, 이후에 생성되는 새로운 Connection에 영향을 미치지 않기 위하는 용도로 이용되는 상태이다. 이러한 이유로 TCP 표준에서는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있으며, TIME_WAIT 상태가 끝나기 전까지 TIME_WAIT가 선점하고 있는 Local IP/Port를 이용하여 새로운 Conneciton을 맺을수 없다.
+TIME_WAIT 상태는 Connection을 먼저 종료하는 **Active Closer**가 Connection 종료 후 도달하는 상태이다. Connection이 종료되었지만 Network에 남아 있을 수 있는 종료된 Connection의 Packet이 완전히 제거 될때까지 대기하여, 이후에 생성되는 새로운 Connection에 영향을 미치지 않기 위하는 용도로 이용되는 상태이다. 이러한 이유로 TCP 표준에서는 2MSL(2 * Maximum Segment Lifetime)만큼 유지되야 한다고 정의하고 있으며, TIME_WAIT 상태가 끝나기 전까지 TIME_WAIT가 선점하고 있는 Local IP/Port를 이용하여 새로운 Conneciton을 맺을수 없다. Client, Server 모두 Active Closer가 될 수 있다. 따라서 Client, Server에서 모두 TIME_WAIT 상태가 발생할 수 있다.
 
 {% highlight console %}
 (client)$ echo 30000 30000 > /proc/sys/net/ipv4/ip_local_port_range
@@ -107,6 +107,8 @@ TIME_WAIT 상태가 짧아져 발생할 수 있는 [그림 1]과 [그림 2]의 �
 
 이후에 Server는 LAST_ACK 상태를 벗어나기 위해서 FIN Flag를 재전송 한다. Client 입장에서는 FIN Flag가 원하는 응답이 아니기 때문에 Server에게 SYN SYN Flag에 대한 응답으로 RST Flag를 전송한다. RST Flag를 전송받은 Server는 LAST_ACK 상태를 종료한다. Client의 Connection 시도는 중단되지 않았기 때문에 Client는 TCP Retranmission 정책에 의해서 1초 이후에 다시 SYN Flag를 Server에게 전송하여 Server와 Connection을 맺는다. 이러한 과정은 Client App에게는 노출되지 않고 처리된다.
 
+tcp_tw_reuse 설정은 실제로 이용하더라도 TCP Connection에 영향을 주지 않는것으로 알려져 있다. 따라서 대부분의 OS의 Default 값은 이용하도록 설정되어 있다.
+
 #### 2.3. tcp_tw_recycle (/proc/sys/net/ipv4/tcp_tw_recycle)
 
 tcp_tw_recycle 설정은 TIME_WAIT 상태를 60초가 아닌 TCP Connection의 RTO(Retransmission Timeout)만큼 줄여 TIME_WAIT 상태를 매우 짧게 만드는 설정이다. 주로 Server에 설정되어 Server에 존재하는 TIME_WAIT 상태의 Connection을 제거하여 TIME_WAIT 상태의 Connection이 Kernel Memory를 점유하는 문제를 해결하여 준다. Linux에서 최소 RTO는 200ms이기 때문에 tcp_tw_recycle을 설정하면 TIME_WAIT 상태도 최소 200ms만 존재할 수 있다.
@@ -124,6 +126,8 @@ Server는 Client A가 전송한 마지막 Timestamp 값인 200을 Server에 저�
 위와 같은 문제를 막기 위해선는 2개의 Client가 완전히 동일한 Timestamp를 갖고 있어야 한다. 하지만 다수의 Client가 완전히 동일한 Timestamp를 갖는것은 불가능하다. 따라서 Linux Manpage에서도 tcp_tw_recycle은 Client가 SNAT 되는 Network 환경에서 이용하지 않는것을 권장하고 있다.
 
 Server의 Memory 용량이 크게 늘어나면서 TIME_WAIT 상태의 Connection이 점유하는 Kernel Memory 영역은 과거와 다르게 현재는 큰 문제가 되지 않는 상황이 되었다. 따라서 대부분의 환경에서 tcp_tw_recycle 설정을 이용할 필요가 없다. 또한 [Linux Kernel 4.10](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95a22caee396cef0bb2ca8fafdd82966a49367bb)에서는 각 Connection 마다 Random Offset을 갖는 Timestamp를 이용하도록 변경되었는데, 이에 따라 tcp_tw_recycle 설정은 Client의 SNAT 유무에 관계 없이 의미없는 설정이 되어 Linux Kernel 4.10에서 같이 제거되었다.
+
+tcp_tw_recycle 설정은 Client의 SNAT가 발생하는 환경 또는 최신 Kernel에서는 이용할 수 없다. 따라서 Server에 존재하는 TIME_WAIT 상태의 Connection을 tcp_tw_recycle 설정을 통해서 제거하지 못할 수 있다. Server에서 존재하는 TIME_WAIT 상태의 Connection을 제거하는 근본적인 방법은 가능하면 Server가 Active Closer가 되는것이 아니라 Client가 Active Closer가 되도록 Server가 Client가 설계되어야 한다. 즉 Server와 Client의 TCP Connection을 가능하면 Client가 먼저 끊도록 Server와 Client를 개발하여 Server에서 TIME_WAIT 상태의 Connection이 발생하지 않도록 해야한다.
 
 #### 2.4. Socket Lingering (SO_LINGER Socket Option)
 
