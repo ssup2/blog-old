@@ -17,7 +17,7 @@ Kubernetes Authentication 기법중 하나인 Service Account를 분석한다.
 
 Controller Manager : --service-account-private-key-file=/etc/kubernetes/pki/sa.key
 
-{% highlight json %}
+{% highlight console %}
 # kubectl get serviceaccounts default -o yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -90,7 +90,7 @@ spec:
 
 API Server : --service-account-key-file=/etc/kubernetes/pki/sa.pub
 
-{% highlight json %}
+{% highlight console %}
 $ TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
 $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
     "https://kubernetes.default.svc.cluster.local/oapi/v1/users/~" \
