@@ -1,5 +1,5 @@
 ---
-title: AWS EKS (Elastic Kubernetes Service) Storage
+title: AWS EKS Storage
 category: Theory, Analysis
 date: 2021-04-23T12:00:00Z
 lastmod: 2021-04-23T12:00:00Z
@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-AWS EKS(Elastic Kubernetes Service) Storage를 분석한다.
+AWS EKS Storage를 분석한다.
 
-### 1. AWS EKS (Elastic Kubernetes Service) Storage
+### 1. AWS EKS Storage
 
-AWS EKS에서는 AWS에서 제공하는 다양한 EBS (Elastic Block Storage), EFS (Elastic File Storage), FSx에 따라서 다양한 Storage Class를 제공한다. 
+AWS EKS에서는 EBS (Elastic Block Storage), EFS (Elastic File Storage), FSx 기반의 다양한 Storage Class를 제공한다.
 
 #### 1.1. Default Storage Class
 
@@ -24,7 +24,7 @@ gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   f
 <figcaption class="caption">[Console 1] AWS EKS Storage Class</figcaption>
 </figure>
 
-EKS를 설치하면 Default Storage Class로 EBS의 gp2가 설정되어 있다. [Console 1]은 gp2가 설정된 Storage Class를 나타내고 있다. 
+EKS로 Kubernetes Cluster를 구성하면 Default Storage Class로 EBS의 gp2가 설정되어 있다. [Console 1]은 gp2가 설정된 Storage Class를 나타내고 있다.
 
 {% highlight console %}
 # ps -ef | grep kubelet
@@ -34,7 +34,7 @@ root      3801     1  1 Apr06 ?        06:09:14 /usr/bin/kubelet --node-ip=192.1
 <figcaption class="caption">[Console 2] AWS EKS kubelet</figcaption>
 </figure>
 
-EKS Node에 SSH로 접근하여 kubelet의 Parameter를 확인하면 cloud-provider Option이 설정되어 있는것을 확인할 수 있다. [Console 2]는 kubelet의 Parameter를 나타내고 있다. "aws"로 Cloud Provider가 설정되어 있는것을 확인할 수 있다. 따라서 Default Storage Class를 이용할 경우 kubelet에서 Volume Format 및 Mount를 수행하게 된다.
+EKS Node에 SSH로 접근하여 kubelet의 Parameter를 확인하면 cloud-provider Option이 설정되어 있는것을 확인할 수 있다. [Console 2]는 kubelet의 Parameter를 나타내고 있다. "aws"로 Cloud Provider가 설정되어 있는것을 확인할 수 있다.
 
 {% highlight console %}
 Apr 09 15:55:32 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]: I0409 15:55:32.183634    3801 topology_manager.go:233] [topologymanager] Topology Admit Handler
@@ -60,7 +60,7 @@ Apr 09 15:55:38 ip-192-168-75-136.ap-northeast-2.compute.internal kubelet[3801]:
 <figcaption class="caption">[Console 3] AWS EKS kubelet Volume Mount Log</figcaption>
 </figure>
 
-[Console 3]는 VM에 붙은 EBS gp2 Volume을 감지하고, ext4로 Format하고, Mount하는 과정의 kubelet Log를 나타낸다.
+Default Storage Class를 이용할 경우 kubelet에서 Volume Format 및 Mount를 수행하게 된다. [Console 3]는 VM에 붙은 EBS gp2 Volume을 감지하고, ext4로 Format하고, Mount하는 과정의 kubelet Log를 나타낸다.
 
 {% highlight console %}
 # ls -l /dev/ | grep xvda
@@ -73,7 +73,7 @@ lrwxrwxrwx 1 root root           7 Apr  9 15:55 xvdbw -> nvme1n1
 <figcaption class="caption">[Console 4] EBS Mount</figcaption>
 </figure>
 
-[Console 4]는 Node안에서 Node에 Attach된 EBS Volume이 어떻게 보이는지는 나타낸다.
+[Console 4]는 Node안에서 Node에 Attach된 EBS Volume이 어떻게 보이는지는 나타낸다. xvd[*]는 EBS Block Storage를 나타낸다.
 
 ### 2. 참조
 
