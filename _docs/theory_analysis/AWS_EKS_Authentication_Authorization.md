@@ -1,5 +1,5 @@
 ---
-title: AWS EKS Authentication/Authorization
+title: AWS EKS Authentication, Authorization
 category: Theory, Analysis
 date: 2021-04-15T12:00:00Z
 lastmod: 2021-04-15T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-AWS EKS의 Authentication/Authorization를 분석한다.
+AWS EKS의 Authentication, Authorization를 분석한다.
 
 ### 1. AWS Authentication, Authorization
 
