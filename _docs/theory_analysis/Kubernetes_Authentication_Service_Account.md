@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Service Account
+title: Kubernetes Authentication Service Account
 category: Theory, Analysis
 date: 2021-04-25T12:00:00Z
 lastmod: 2021-04-25T12:00:00Z
@@ -7,9 +7,15 @@ comment: true
 adsense: true
 ---
 
-Kubernetes Service Account를 분석한다.
+Kubernetes Authentication 기법중 하나인 Service Account를 분석한다.
 
-### 1. Kubernetes Service Account
+### 1. Kubernetes Authentication Service Account
+
+![[그림 1] Kubernetes Service Account]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Service_Account/Kubernetes_Service_Account.PNG){: width="700px"}
+
+#### 1.1. Create Service Account
+
+Controller Manager : --service-account-private-key-file=/etc/kubernetes/pki/sa.key
 
 {% highlight json %}
 # kubectl get serviceaccounts default -o yaml
@@ -38,6 +44,26 @@ type: kubernetes.io/service-account-token
 * ca.crt : 
 * namespace : 
 
+{% highlight json %}
+{
+  "alg": "RS256",
+  "kid": "DovKx1v1oJHU9-_TMhqvB0X-kEqX6Ex1B0sCplrIicc"
+}
+{
+  "iss": "kubernetes/serviceaccount",
+  "kubernetes.io/serviceaccount/namespace": "default",
+  "kubernetes.io/serviceaccount/secret.name": "default-token-d8wvm",
+  "kubernetes.io/serviceaccount/service-account.name": "default",
+  "kubernetes.io/serviceaccount/service-account.uid": "45d65b20-49d0-40aa-8f6d-0af8a8196db6",
+  "sub": "system:serviceaccount:default:default"
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Text 1] Kubernetes Service Account Token</figcaption>
+</figure>
+
+#### 1.2. Create Pod with Service Account
+
 {% highlight yaml %}
 ...
 spec:
@@ -57,8 +83,12 @@ spec:
       secretName: default-token-d8wvm
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 1] Kubernetes Pod Spec</figcaption>
+<figcaption class="caption">[Text 2] Kubernetes Pod Spec</figcaption>
 </figure>
+
+#### 1.3. Use Service Account
+
+API Server : --service-account-key-file=/etc/kubernetes/pki/sa.pub
 
 {% highlight json %}
 $ TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
@@ -68,29 +98,6 @@ $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Console 2] Kubernetes Service Account 사용</figcaption>
-</figure>
-
-#### 1.1. Service Account 생성 과정
-
-Controller Manager : --service-account-private-key-file=/etc/kubernetes/pki/sa.key
-API Server : --service-account-key-file=/etc/kubernetes/pki/sa.pub
-
-{% highlight json %}
-{
-  "alg": "RS256",
-  "kid": "DovKx1v1oJHU9-_TMhqvB0X-kEqX6Ex1B0sCplrIicc"
-}
-{
-  "iss": "kubernetes/serviceaccount",
-  "kubernetes.io/serviceaccount/namespace": "default",
-  "kubernetes.io/serviceaccount/secret.name": "default-token-d8wvm",
-  "kubernetes.io/serviceaccount/service-account.name": "default",
-  "kubernetes.io/serviceaccount/service-account.uid": "45d65b20-49d0-40aa-8f6d-0af8a8196db6",
-  "sub": "system:serviceaccount:default:default"
-}
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Text 2] Kubernetes Service Account Token</figcaption>
 </figure>
 
 ### 2. 참고
