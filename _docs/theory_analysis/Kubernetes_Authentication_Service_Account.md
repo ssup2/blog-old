@@ -90,7 +90,11 @@ Kubernetes Client에 의해서 Service Account가 생성이 되면, Kubernetes C
 
 [Text 1]에 보면 JWT Token이 RSA256 비대칭 암호화 알고리즘을 이용하여 Signing된 것을 확인할 수 있다. JWT Signing시 이용한 Key는 Controller Manager의 "--service-account-private-key-file" Option을 통해서 지정한다.
 
-#### 1.2. Create Pod with Service Account
+#### 1.3. Create Pod with Service Account
+
+Pod가 생성될때 Service Account를 지정하지 않으면 Pod가 존재하는 Namespace의 "default" Service Account를 이용하도록 Kubernetes가 강제로 설정한다. 이러한 강제 설정은 Kubernetes API Server에 존재하는 ServiceAccount Admission Controller에 의해서 이루어진다. 
+
+Kubernetes Client로부터 Pod 생성 요청을 받은 Kubernetes API Server는 Pod 생성 요청을 ServiceAccount Admission Controller에 전송한다. ServiceAccount Admission Controller는 Pod의 Spec을 변경(Mutation)하여 Pod 내부에서 Service Account를 이용할 수 있도록 만든다.
 
 {% highlight yaml %}
 ...
@@ -114,7 +118,18 @@ spec:
 <figcaption class="caption">[Text 2] Kubernetes Pod Spec</figcaption>
 </figure>
 
-#### 1.3. Use Service Account
+ServiceAccount Admission Controller는 Pod 생성 요청에 포함된 Pod의 Spec을 보고 Spec에 Service Account가 명시되어 있지 않는다면 "default" Service Account를 이용하도록 Pod의 Spec을 변경한다. 또한 Service Account에 포함된 token, ca.crt, namespace를 Pod 내부에서 접근 가능하도록 Volume으로 Mount 하도록 Pod의 Spec을 변경한다. [Text 2]는 ServiceAccount Admission Controller가 변경하는 Pod의 Spec을 나타내고 있다.
+
+{% highlight console %}
+
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 3] Kubernetes Pod 내부에서 token, ca.crt, namespace 확인</figcaption>
+</figure>
+
+Volume이 기본적으로 Mount되는 경로는 "/var/run/secrets/kubernetes.io/serviceaccount"로 설정된다. 따라서 Pod 내부에서 "/var/run/secrets/kubernetes.io/serviceaccount" 경로에 들어가면 token, ca.crt, namespace 파일을 확인할 수 있게된다. 만약 Pod의 Spec에 이용할 Service Account가 명시되어 있다면, ServiceAccount Admission Controller는 명시된 Service Account를 Pod 내부에서 이용할 수 있도록 Volume 관련 Spec만 변경한다.
+
+#### 1.4. Use Service Account
 
 API Server : --service-account-key-file=/etc/kubernetes/pki/sa.pub
 
@@ -125,12 +140,8 @@ $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
     -H "Authorization: Bearer $TOKEN"
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 2] Kubernetes Service Account 사용</figcaption>
+<figcaption class="caption">[Console 4] Kubernetes Service Account 사용</figcaption>
 </figure>
-
-#### 1.4. default Service Account
-
-각 Kubernetes Cluster는 반드시 Default Service Account를
 
 ### 2. 참고
 
