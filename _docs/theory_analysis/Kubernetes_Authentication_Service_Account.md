@@ -121,7 +121,8 @@ spec:
 ServiceAccount Admission Controller는 Pod 생성 요청에 포함된 Pod의 Spec을 보고 Spec에 Service Account가 명시되어 있지 않는다면 "default" Service Account를 이용하도록 Pod의 Spec을 변경한다. 또한 Service Account에 포함된 token, ca.crt, namespace를 Pod 내부에서 접근 가능하도록 Volume으로 Mount 하도록 Pod의 Spec을 변경한다. [Text 2]는 ServiceAccount Admission Controller가 변경하는 Pod의 Spec을 나타내고 있다.
 
 {% highlight console %}
-
+# ls /var/run/secrets/kubernetes.io/serviceaccount
+ca.crt  namespace  token
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Console 3] Kubernetes Pod 내부에서 token, ca.crt, namespace 확인</figcaption>
@@ -131,20 +132,55 @@ Volume이 기본적으로 Mount되는 경로는 "/var/run/secrets/kubernetes.io/
 
 #### 1.4. Use Service Account
 
-API Server : --service-account-key-file=/etc/kubernetes/pki/sa.pub
+Service Account의 Token을 알고 있는 Kubernetes Client (kubectl)은 Service Account의 Token을 Kubernetes API Server에게 전달하여 인증을 진행한다. Service Account의 Token은 **Authorization: Bearer $TOKEN** Header로 전달하면 된다. Service Account의 Token을 전달받은 Kubernetes API Server는 "--service-account-key-file" Option으로 설정된 Key를 이용하여 Token이 유효한지 검증한다.
+
+따라서 Controller Manager의 "--service-account-private-key-file" Option으로 설정된 Key와 Kubernetes API Server의 "--service-account-key-file" Option으로 설정된 Key는 반드시 서로 비대칭 Key Pair 관계를 갖고 있어야한다. 또한 Kubernetes API Server는 Private Root CA 인증서를 이용하기 때문에 Client도 Kubernetes API Server의 Private Root CA 인증서를 갖고 있어야 한다.
+
+##### 1.4.1. in Pod
 
 {% highlight console %}
 $ TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
 $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
-    "https://kubernetes.default.svc.cluster.local/oapi/v1/users/~" \
+    "https://kubernetes.default.svc.cluster.local/api/v1/nodes" \
     -H "Authorization: Bearer $TOKEN"
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Console 4] Kubernetes Service Account 사용</figcaption>
 </figure>
 
+Pod 내부에서는 curl 명령어를 통해서 간단하게 Service Account를 이용할 수 있다. [Console 4]는 Pod 내부에서 curl 명령어를 통해서 Service Account를 이용하는 방법을 나타내고 있다. Pod 내부에서 확인할 수 있는 Service Account의 Token과 Kubernetees API Server의 ca.crt를 이용하면 된다.
+
+##### 1.4.2. in kubeconfig
+
+{% highlight yaml %}
+apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    certificate-authority-data: <K8s_API_SERVER_ROOT_CA_CRT>
+    server: <K8s_API_SERVER_URL>
+  name: my-cluster 
+contexts:
+- context:
+  name: default-context
+  context:
+    cluster: my-cluster
+    user: my-user
+current-context: default-context
+users:
+- name: my-user
+  user:
+    token: <SERVICE_ACCOUNT_TOKEN>
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Text 3] kubeconfig with Service Account</figcaption>
+</figure>
+
+kubeconfig 설정을 통해서 kubectl에서도 Service Account를 이용할 수 있다. [Text 3]은 Service Account를 이용하는 kubeconfig를 나타내고 있다. Service Account의 Token과 Kubernetees API Server의 ca.crt가 명시되어 있는것을 확인할 수 있다.
+
 ### 2. 참고
 
 * [https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod](https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod)
 * [https://docs.openshift.com/container-platform/3.4/dev_guide/service_accounts.html](https://docs.openshift.com/container-platform/3.4/dev_guide/service_accounts.html)
 * [https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)
+* [https://stackoverflow.com/questions/55629894/kubernetes-kubeconfig-with-service-account-token](https://stackoverflow.com/questions/55629894/kubernetes-kubeconfig-with-service-account-token)
