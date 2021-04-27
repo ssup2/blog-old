@@ -140,9 +140,7 @@ Service Account의 Token을 알고 있는 Kubernetes Client (kubectl)은 Service
 
 {% highlight console %}
 $ TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
-    "https://kubernetes.default.svc.cluster.local/api/v1/nodes" \
-    -H "Authorization: Bearer $TOKEN"
+$ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt "https://kubernetes.default.svc.cluster.local/api/v1/nodes" -H "Authorization: Bearer $TOKEN"
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Console 4] Kubernetes Service Account 사용</figcaption>
