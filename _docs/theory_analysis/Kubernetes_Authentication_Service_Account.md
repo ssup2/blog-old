@@ -13,36 +13,9 @@ Kubernetes Authentication 기법중 하나인 Service Account를 분석한다.
 
 ![[그림 1] Kubernetes Service Account]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Service_Account/Kubernetes_Service_Account.PNG){: width="700px"}
 
-#### 1.1. Create Service Account
+Kubernetes의 Service Account는 Kubernetes Cluster 내부에서 Object로 관리되는 계정이다. Service Account는 Pod 안의 App 또는 Kubernetes Cluster의 User가 Kubernetes API Server에게 인증할 때 이용된다. [그림 1]은 Service Account를 생성, Service Account를 Pod에 주입, Service Account를 이용하는 과정을 나타내고 있다.
 
-Controller Manager : --service-account-private-key-file=/etc/kubernetes/pki/sa.key
-
-{% highlight console %}
-# kubectl get serviceaccounts default -o yaml
-apiVersion: v1
-kind: ServiceAccount
-...
-secrets:
-- name: default-token-d8wvm
-
-# kubectl get secrets default-token-d8wvm -o yaml
-apiVersion: v1
-data:
-  ca.crt: (BASE64)
-  namespace: (BASE64)
-  token: (BASE64)
-kind: Secret
-metadata:
-...
-type: kubernetes.io/service-account-token
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Console 1] Kubernetes Service Account 확인</figcaption>
-</figure>
-
-* token : 
-* ca.crt : 
-* namespace : 
+#### 1.1. Service Account
 
 {% highlight json %}
 {
@@ -59,8 +32,63 @@ type: kubernetes.io/service-account-token
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 1] Kubernetes Service Account Token</figcaption>
+<figcaption class="caption">[Text 1] Kubernetes default Service Account Token</figcaption>
 </figure>
+
+각 Service Account는 token, ca.crt, namespace 3가지의 정보를 저장하고 있다. **token**은 Kubernetes API Server에 인증할때 이용하는 Token을 의미한다. **JWT** 형태로 되어 있으며 **만료기간이 없는** 특징을 갖고 있다. [Text 1]은 Kubernetes Cluster의 default Service Account의 token을 Decoding한 결과이다. default Service Account와 관련되 정보가 저장되어 있는것을 확인할 수 있다.
+
+**ca.crt**는 Kubernetes API Server가 이용하는 Private Root CA 인증서를 나타낸다. 따라서 대부분의 경우 모든 Service Account의 ca.crt는 동일하다. ca.crt는 Service Account를 이용하는 Client가 Kubernetes API Server에 접근할때 이용된다. **namespace**는 Service Account가 존재하는 Namespace를 나타낸다. Service Account는 각 Namespace마다 별도로 존재하는 Object이다.
+
+##### 1.1.1. default Service Account
+
+{% highlight console %}
+# kubectl get sa -A | grep default                           [13:42:56]
+cert-manager      default                              1         20d
+default           default                              1         20d
+kube-system       default                              1         20d
+type: kubernetes.io/service-account-token
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] Kubernetes Service Account</figcaption>
+</figure>
+
+Kubernetes에서는 각 Namespace에 "default" 이름을 갖는 Service Account를 자동으로 생성한다. [Console 1]은 각 Namespace 마다 존재하는 "default" Service Account를 나타내고 있다. "default" Service Account는 Pod 생성시 Pod가 이용할 Service Account를 명시하지 않으면 Pod가 기본적으로 이용하는 Service Account이다. Pod가 "kube-system" Namespace에 생성되었고, Pod가 이용하는 Service Account가 명시되지 않았다면, 해당 Pod는 "kube-system" Namespace의 "default" Service Account를 이용하게 된다.
+
+Namespace가 생성될때 "default" Service Account를 생성하거나, Namespace가 제거될때 "default" Service Account를 삭제하는 역활은 Kubernetes Controller Manager의 **serviceacount** Controller가 수행한다.
+
+#### 1.2. Create Service Account
+
+{% highlight console %}
+# kubectl get serviceaccounts default -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+...
+secrets:
+- name: default-token-d8wvm
+
+# kubectl get secrets default-token-d8wvm -o yaml
+apiVersion: v1
+data:
+  ca.crt: (BASE64)
+  namespace: (BASE64)
+  token: (BASE64)
+kind: Secret
+metadata:
+  name: default-token-d8wvm
+...
+type: kubernetes.io/service-account-token
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 2] Kubernetes Service Account 확인</figcaption>
+</figure>
+
+Kubernetes에서 Service Account의 token, ca.crt, namespace는 Service Account에 직접 저장되지 않고, Service Account에 명시되어 있는 Secret에 저장되어 있다. [Console 2]는 "default" Service Account에 명시된 Secret에 저장되어 있는 token, ca.crt, namespace 정보를 확인하는 과정을 나타내고 있다.
+
+Kubernetes Client에 의해서 Service Account가 생성이 되면, Kubernetes Controller Manager의 serviceaccount-token Controller는 생성된 Service Account 정보를 Kubernetes API Server로부터 얻은 다음, token, ca.crt, namespace 정보가 포함된 Secret을 생성한다. 이후에 생성한 Secret의 이름을 Service Account에 저장하여 Service Account 설정을 마친다.
+
+[Text 1]에 보면 JWT Token이 RSA256 비대칭 암호화 알고리즘을 이용하여 Signing된 것을 확인할 수 있다. JWT Signing시 이용한 Key는 Controller Manager의 "--service-account-private-key-file" Option을 통해서 지정한다.
 
 #### 1.2. Create Pod with Service Account
 
@@ -99,6 +127,10 @@ $ curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
 <figure>
 <figcaption class="caption">[Console 2] Kubernetes Service Account 사용</figcaption>
 </figure>
+
+#### 1.4. default Service Account
+
+각 Kubernetes Cluster는 반드시 Default Service Account를
 
 ### 2. 참고
 

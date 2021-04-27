@@ -75,6 +75,10 @@ lrwxrwxrwx 1 root root           7 Apr  9 15:55 xvdbw -> nvme1n1
 
 [Console 4]는 Node안에서 Node에 Attach된 EBS Volume이 어떻게 보이는지는 나타낸다. xvd[*]는 EBS Block Storage를 나타낸다.
 
+#### 1.2. CSI (Container Storage Interface) Storage Class
+
+
+
 ### 2. 참조
 
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html)
