@@ -11,7 +11,7 @@ Client Certificate를 기반으로하는 Kubernetes Authentication 기법을 분
 
 ### 1. Kubernetes Authentication Client Certificate
 
-![[그림 1] Kubernetes Authentication Client Certificate]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Service_Account/Kubernetes_Client_Certificate.PNG){: width="600px"}
+![[그림 1] Kubernetes Authentication Client Certificate]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Client_Certificate/Kubernetes_Client_Certificate.PNG){: width="600px"}
 
 ### 2. 참고
 
