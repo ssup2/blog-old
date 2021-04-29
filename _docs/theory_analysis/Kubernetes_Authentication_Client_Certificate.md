@@ -17,7 +17,7 @@ Kubernetes는 Client 인증서 기반의 인증 기법을 제공한다. [그림 
 
 Client의 인증서에는 하나의 CN (Common Name)과 다수의 O (Organization) 항목이 존재한다. **Kubernetes에서는  CN 항목의 값을 User의 이름으로 인식하며, O 항목의 값은 Group의 이름으로 인식한다.**  따라서 Client 인증서를 통해서 인증한 Client에게 Role을 부여하기 위해서는 Client 인증서에 있는 User 또는 Group에게 Role을 부여하면 된다. [그림 1]의 Client 인증서에는 User의 이름으로 "ssup2"가 설정되어 있고, Group의 이름으로 "system:masters"와 "kube"가 설정되어 있다.
 
-{% highlight json %}
+{% highlight yaml %}
 kind: RoleBinding
 metadata:
   name: ssup2-user-role-binding
@@ -35,7 +35,7 @@ roleRef:
 <figcaption class="caption">[Text 1] Kubernetes default Service Account Token</figcaption>
 </figure>
 
-{% highlight json %}
+{% highlight yaml %}
 kind: RoleBinding
 metadata:
   name: kube-group-role-binding
