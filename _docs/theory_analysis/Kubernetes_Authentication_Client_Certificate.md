@@ -11,7 +11,7 @@ Client 인증서를 기반으로하는 Kubernetes Authentication 기법을 분�
 
 ### 1. Kubernetes Authentication Client Certificate
 
-![[그림 1] Kubernetes Authentication Client Certificate]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Client_Certificate/Kubernetes_Client_Certificate.PNG){: width="600px"}
+![[그림 1] Kubernetes Authentication Client Certificate]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Client_Certificate/Kubernetes_Authentication_Client_Certificate.PNG){: width="600px"}
 
 Kubernetes는 Client 인증서 기반의 인증 기법을 제공한다. [그림 1]은 Client 인증서 기반의 인증 기법을 나타내고 있다. Client의 인증서는 client_ca.crt CA 인증서 Signing을 통해서 생성한다. Kubernetes API Server는 client_ca.crt 인증서를 "--client-ca-file" Option을 통해서 얻는다. Client가 Client의 인증서와 함께 Kubernetes API Server에 접근하면 Kubernetes API Server는 Client의 인증서를 client_ca.crt CA 인증서를 통해 유효한지 확인한다.
 

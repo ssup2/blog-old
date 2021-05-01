@@ -78,3 +78,4 @@ Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상�
 * [http://jlabusch.github.io/oauth2-server/index.html](http://jlabusch.github.io/oauth2-server/index.html)
 * [https://opentutorials.org/course/2473/16571](https://opentutorials.org/course/2473/16571)
 * [https://db-blog.web.cern.ch/blog/luis-rodriguez-fernandez/2017-04-oracle-jet-ords-oauth2](https://db-blog.web.cern.ch/blog/luis-rodriguez-fernandez/2017-04-oracle-jet-ords-oauth2)
+* [https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
