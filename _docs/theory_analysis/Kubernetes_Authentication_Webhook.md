@@ -13,6 +13,9 @@ Webhook 기반 Kubernetes Authentication 기법을 분석한다.
 
 ![[그림 1] Kubernetes Authentication Service Account]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Webhook/Kubernetes_Authentication_Webhook.PNG){: width="700px"}
 
+Kubernetes는 Webhook 기반의 인증 기법을 제공한다. Webhook 기반의 인증 기법은 다양한 형태의 외부 인증서버와 연동할 수 있다는 장점을 갖고 있다. 
+[그림 1]은 Webhook 기반의 Kubernetes 인증 기법을 나타내고 있다. Kubernetes Client (kubectl)은 외부 인증서버에게 인증과정을 통해서 Token을 얻어온다. Token을 얻은 Kubernetes Client는 Token을 **Authorization: Bearer $TOKEN** Header를 통해서 Kuberenetes API Server에 전달한다. Token을 전달받은 Kubernetes API Server는 외부의 인증 서버에게 Token 정보가 포함된 TokenReview Object를 전달하여 인증받는다.
+
 {% highlight yaml %}
 apiVersion: v1
 kind: Config
