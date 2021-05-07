@@ -7,28 +7,13 @@ comment: true
 adsense: true
 ---
 
-AWS EKS의 Authentication/Authorization를 분석한다.
+AWS EKS의 Network 및 Load Balancer를 분석한다.
 
 ### 1. AWS EKS Network
 
-{% highlight console %}
-$ kubectl -n kube-system get pod
-NAME                                          READY   STATUS    RESTARTS   AGE
-aws-load-balancer-controller-bc59445f-l4brz   1/1     Running   0          2d23h
-aws-node-kwdxc                                1/1     Running   0          2d23h
-aws-node-r475d                                1/1     Running   0          2d23h
-aws-node-tmc8g                                1/1     Running   0          2d23h
-aws-node-zpnjs                                1/1     Running   0          2d23h
-coredns-6fb4cf484b-d8spf                      1/1     Running   0          2d23h
-coredns-6fb4cf484b-wzfvp                      1/1     Running   0          2d23h
-kube-proxy-ldxj4                              1/1     Running   0          2d23h
-kube-proxy-p2hjg                              1/1     Running   0          2d23h
-kube-proxy-pbgs4                              1/1     Running   0          2d23h
-kube-proxy-vtf68                              1/1     Running   0          2d23h
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Console 1] Pods in kube-system namespace</figcaption>
-</figure>
+![[그림 1] AWS EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Network.PNG)
+
+![[그림 2] AWS EKS Pod, LB Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_LB_Network.PNG)
 
 #### 1.1. Network
 
@@ -105,3 +90,5 @@ my-nginx   <none>   *       k8s-mygroup-9758714285-724452701.ap-northeast-2.elb.
 ### 2. 참조
 
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html)
+* [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html)
+* [https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html](https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html)
