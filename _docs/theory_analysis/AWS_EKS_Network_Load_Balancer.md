@@ -11,7 +11,7 @@ AWS EKS의 Network 및 Load Balancer를 분석한다.
 
 ### 1. AWS EKS Network
 
-![[그림 1] AWS EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Network.PNG)
+![[그림 1] AWS EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Network.PNG){: width="700px"}
 
 ![[그림 2] AWS EKS Pod, LB Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_LB_Network.PNG)
 
