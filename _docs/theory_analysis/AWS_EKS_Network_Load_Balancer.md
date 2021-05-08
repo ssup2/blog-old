@@ -99,6 +99,8 @@ my-nginx-ipv4   LoadBalancer   10.100.51.23   k8s-default-mynginxi-f9350243cc-a7
 
 ![[그림 4] AWS EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_ALB.PNG)
 
+EKS Cluster에서는 **Ingress**를 생성하면 ALB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB와 동일하게 Target Type이 존재하며, Packet의 경로도 동일하다. [그림 4]는 EKS Cluster에서 ALB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
+
 {% highlight console %}
 # kubectl get ingress
 NAME       CLASS    HOSTS   ADDRESS                                                                      PORTS   AGE
@@ -107,6 +109,13 @@ my-nginx   <none>   *       k8s-default-mynginx-290ac4e9b9-1853125440.ap-northea
 <figure>
 <figcaption class="caption">[Console 5] Ingress without Group</figcaption>
 </figure>
+
+[Console 5]는 Ingress는 ALB를 이용하는 Ingress의 상태를 나타내고 있다. Ingress가 ALB를 이용하도록 설정하기 위해서는 Ingress에 다음과 같은 Annotation을 설정해야 한다.
+
+* ALB Class 설정 (필수) : "kubernetes.io/ingress.class: alb"
+* ALB Public Network 연결 : "alb.ingress.kubernetes.io/scheme: internet-facing"
+* ALB Instance Target Type : "alb.ingress.kubernetes.io/target-type: instance"
+* ALB IP Target Type : "alb.ingress.kubernetes.io/target-type: ip"
 
 {% highlight console %}
 # kubectl get ingress
@@ -117,10 +126,9 @@ my-nginx   <none>   *       k8s-mygroup-9758714285-724452701.ap-northeast-2.elb.
 <figcaption class="caption">[Console 6] Ingress with Group</figcaption>
 </figure>
 
-`kubernetes.io/ingress.class: alb`
-`alb.ingress.kubernetes.io/scheme: internet-facing`
-`alb.ingress.kubernetes.io/target-type: ip`
-`alb.ingress.kubernetes.io/group.name: my-group`
+ALB는 여러 Ingress를 하나의 VIP로 이용할 수 있는 Group 기능을 제공한다. [Console 6]는 Group 기능을 이용한 Ingress의 상태를 나타내고 있다. Group 기능을 이용하기 위해서는 아래의 Annotation을 설정해야 한다.
+
+* ALB Group 이름 : "alb.ingress.kubernetes.io/group.name: <group-name>"
 
 ### 2. 참조
 
