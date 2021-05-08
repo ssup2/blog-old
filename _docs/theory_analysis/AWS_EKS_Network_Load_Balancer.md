@@ -21,9 +21,9 @@ Node의 VPC는 반드시 2개 이상의 서로 다른 Availability Zone에 소�
 
 EKS Cluster 외부에 존재하는 App Client가 EKS Cluster 내부에 존재하는 App Server에 접근하기 위해서는 EKS Load Balancer가 설정하는 AWS의 Load Balancer (NLB, CLB, ALB)를 통해야 한다.
 
-![[그림 2] AWS EKS Pod, LB Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_LB_Network.PNG)
+![[그림 2] AWS EKS Pod Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network.PNG){: width="500px"}
 
-[그림 2]는 EKS Cluster 내부에 존재하는 Pod 및 EKS Cluster의 Load Balancer 관점에서의 Network 구성을 나타내고 있다. EKS Clsuter 구성시 기본적으로 설치되는 **AWS VPC CNI**는 Pod를 위한 Overlay Network를 구성하지 않고 Node가 소속되어 있는 Subnet을 같이 이용한다. 따라서 Pod의 IP는 Pod가 위치하는 Node의 Subnet에 소속된다. [그림 2]에서 Node A는 "192.168.0.0/24" Subnet에 소속되어 있기 때문에 Node A에 존재하는 Pod도 "192.168.0.0/24" Subnet에 소속되어 있는것을 확인할 수 있다.
+[그림 2]는 EKS Cluster 내부에 존재하는 Pod의 Network를 나타내고 있다. EKS Clsuter 구성시 기본적으로 설치되는 **AWS VPC CNI**는 Pod를 위한 Overlay Network를 구성하지 않고 Node가 소속되어 있는 Subnet을 같이 이용한다. 따라서 Pod의 IP는 Pod가 위치하는 Node의 Subnet에 소속된다. [그림 2]에서 Node A는 "192.168.0.0/24" Subnet에 소속되어 있기 때문에 Node A에 존재하는 Pod도 "192.168.0.0/24" Subnet에 소속되어 있는것을 확인할 수 있다.
 
 {% highlight console %}
 # kubectl get node
@@ -48,7 +48,19 @@ my-nginx-5dc4865748-m5fhq   1/1     Running   0          7m51s   192.168.63.206 
 
 ### 2. AWS EKS Load Balancer
 
-##### 2.1. CLB (Classic Load Balancer)
+EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Server에 접근하기 위해서는 EKS Load Balancer를 이용해야한다. EKS Cluster에서는 AWS에서 제공하는 Load Balancer인 CLB, NLB, ALB 모든 Load Balancer를 이용할 수 있다. 
+
+##### 2.1. CLB (Classic Load Balancer), NLB (Network Load Balancer)
+
+![[그림 3] AWS EKS CLB, NLB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_CLB_NLB.PNG)
+
+EKS Cluster에서는 **LoadBalancer Service**를 생성하면 CLB 또는 NLB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB 이용시 Packet의 경로는 **Target Type**이라고 불리는 설정과 LoadBalancer Service의 **ExternalTrafficPolicy** 설정에 따라 변경된다. [그림 2]는 EKS Cluster에서 CLB, NLB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
+
+Target Type은 CLB, NLB에서 전송하는 Packet의 Dst IP/Port를 어떻게 설정할지 결정하는 설정이다. Target Type에는 **Instance** Type과 **IP** Type이 존재한다. Instance Type은 CLB, NLB 모두 이용가능하다. Instance Type의 경우에는 CLB, NLB가 전송하는 Packet의 Dst IP/Port를 LoadBalancer Service의 **NodePort**로 설정하고 전송한다. 이후에 Node가 LoadBalancer Service의 NodePort를 통해서 수신한 Packet은 kube-proxy가 설정한 iptables/IPVS Rule에 의해서 Packet은 Pod로 전달된다.
+
+Instance Type의 경우에는 LoadBalancer Service의 ExternalTrafficPolicy 설정에 따라서 CLB, NLB가 전송하는 Packet의 Target Node가 달라진다. **Cluster**로 설정되어 있는 경우에 CLB, NLB는 모든 Node를 대상으로 LoadBalancer Service의 NodePort를 이용하여 Worker Node의 Health Check를 수행한다. 이후에 정상 상태의 모든 Node들에게 Packet을 분배하여 전송한다. **Local**로 설정되어 있는 경우 모든 Node를 대상으로 LoadBalancer Service의 **HealthCheckNodePort**를 통해서 Node에 Target Pod가 동작하는지 점검한다. 이후에 Target Pod가 동작하는 Node들에게만 Packet을 분배하여 전송한다.
+
+IP Type의 경우에는 NLB만 이용 가능하다. IP Type의 경우에는 NLB가 전송하는 Packet의 Dst IP/Port를 Target Pod로 설정하고 전송한다. 이후에 Node가 Target Pod의 IP/Port를 Dst IP/Port로 갖고 있는 Packet을 수신한다면, AWS VPC CNI가 설정한 Routing Table에 의해서 Node는 해당 Packet을 Pod로 바로 전송한다.
 
 {% highlight console %}
 # kubectl get service
@@ -56,10 +68,8 @@ NAME       TYPE           CLUSTER-IP     EXTERNAL-IP                            
 my-nginx   LoadBalancer   10.100.51.23   ad39ba2b8a05d44d2b88e3e11c9706b7-1845382141.ap-northeast-2.elb.amazonaws.com   80:30686/TCP   11m
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 3] Node, Pod Address</figcaption>
+<figcaption class="caption">[Console 2] CLB, Instance Target Example</figcaption>
 </figure>
-
-##### 2.2. NLB (Network Load Balancer)
 
 {% highlight console %}
 # kubectl get service
@@ -67,12 +77,27 @@ NAME       TYPE           CLUSTER-IP     EXTERNAL-IP                            
 my-nginx   LoadBalancer   10.100.51.23   ad39ba2b8a05d44d2b88e3e11c9706b7-033c32321465326e.elb.ap-northeast-2.amazonaws.com   80:30686/TCP   22m
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 4] Node, Pod Address</figcaption>
+<figcaption class="caption">[Console 3] NLB, Instance Target Example</figcaption>
 </figure>
 
-`service.beta.kubernetes.io/aws-load-balancer-type: nlb`
+{% highlight console %}
+# kubectl get service
+NAME            TYPE           CLUSTER-IP     EXTERNAL-IP                                                                         PORT(S)          AGE
+my-nginx-ipv4   LoadBalancer   10.100.51.23   k8s-default-mynginxi-f9350243cc-a75a0e7eb684cc04.elb.ap-northeast-2.amazonaws.com   8080:30686/TCP   22m
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 4] NLB, IP Target Example</figcaption>
+</figure>
 
-##### 2.3. ALB (Application Load Balancer)
+[Console 2]는 CLB와 Instance Target을 이용할 경우, [Console 3]는 NLB와 Instance Target 이용할 경우, [Console 4]는 NLB와 IP Target을 이용할 경우의 LoadBalancer Service를 나타내고 있다. LoadBalancer Service에 다음과 같은 Annotation 설정을 통해서 어떤 LB를 이용할지와 어떤 Target Type을 이용할지 설정할 수 있다.
+
+* CLB + Instance Type : "service.beta.kubernetes.io/aws-load-balancer-type: clb"
+* NLB + Instance Type : "service.beta.kubernetes.io/aws-load-balancer-type: nlb"
+* NLB + IP Type : "service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip"
+
+##### 2.2. ALB (Application Load Balancer)
+
+![[그림 4] AWS EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_ALB.PNG)
 
 {% highlight console %}
 # kubectl get ingress
@@ -102,3 +127,4 @@ my-nginx   <none>   *       k8s-mygroup-9758714285-724452701.ap-northeast-2.elb.
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html)
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html)
 * [https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html](https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html)
+* [https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)
