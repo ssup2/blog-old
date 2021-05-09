@@ -91,6 +91,6 @@ Synchronized Keyword는 일반 Instance와 같이 이용될 수 있다. [Code 2]
 
 ### 3. 참조
 
-* [http://www.javacreed.com/undestanding-threads-monitors-and-locks/](http://www.javacreed.com/understanding-threads-monitors-and-locks/)
+* [https://en.wikipedia.org/wiki/Monitor_(synchronization)](https://en.wikipedia.org/wiki/Monitor_(synchronization))
 * [http://christian.heinleins.net/apples/sync/](http://christian.heinleins.net/apples/sync/)
 * [http://egloos.zum.com/iilii/v/4071694](http://egloos.zum.com/iilii/v/4071694)
