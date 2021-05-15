@@ -1,5 +1,5 @@
 ---
-title: Java Design Pattern, Factory Method, Abstract Factory
+title: Java Design Pattern Factory
 category: Programming
 date: 2021-05-15T12:00:00Z
 lastmod: 2021-05-15T12:00:00Z
