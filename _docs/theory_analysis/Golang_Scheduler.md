@@ -11,7 +11,7 @@ Golang의 Scheduler를 분석한다.
 
 ### 1. Golang Scheduler
 
-![[그림 1] Golang Scheduler]({{site.baseurl}}/images/theory_analysis/Golang_Scheduler/Golang_Scheduler.PNG)
+![[그림 1] Golang Scheduler]({{site.baseurl}}/images/theory_analysis/Golang_Scheduler/Golang_Scheduler.PNG){: width="700px"}
 
 ### 2. 참조
 
