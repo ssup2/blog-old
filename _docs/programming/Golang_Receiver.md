@@ -1,8 +1,8 @@
 ---
 title: Golang Receiver
 category: Programming
-date: 2021-01-17T12:00:00Z
-lastmod: 2021-01-17T12:00:00Z
+date: 2021-05-17T12:00:00Z
+lastmod: 2021-05-17T12:00:00Z
 comment: true
 adsense: true
 ---
