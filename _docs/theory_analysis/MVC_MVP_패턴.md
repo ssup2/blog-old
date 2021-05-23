@@ -34,3 +34,5 @@ MVP 패턴은 Model, View, Presenter 3가지로 구성된다. MVC 패턴과는 �
 ### 3. 참조
 
 * [http://hackersstudy.tistory.com/71](http://hackersstudy.tistory.com/71)
+* [https://gmlwjd9405.github.io/2018/11/05/mvc-architecture.html](https://gmlwjd9405.github.io/2018/11/05/mvc-architecture.html)
+* [https://programmers.tistory.com/entry/JSP-MVC-model2](https://programmers.tistory.com/entry/JSP-MVC-model2)

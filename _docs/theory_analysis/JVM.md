@@ -43,7 +43,7 @@ Parent Delegation Model로 인해서 Class Loader는 자연스럽게 계층을 �
 Runtime Memory는 JVM이 관리하는 Memory 영역이다. Method Area, Heap, Stack, PC Register, Native Method Stack으로 구성되어 있다.
 
 * Method Area : Method의 Bytecode가 올라가는 영역이다. 또한 static 변수도 Method Area에서 관리된다.
-* Heap : new 문법으로 생성하는 Instance들이 올라가는 영역이다. 좀더 정확히 표현하면 Instance의 변수들이 Heap에서 관리 된다.
+* Heap : new 문법으로 생성하는 Instance들이 올라가는 영역이다. 좀더 정확히 표현하면 Instance의 변수들이 Heap에서 관리 된다. String Liternal이 저장되는 String Constant Pool도 Heap에 위치한다.
 * Stack : 지역 변수들이 올라가는 영역이다. Thread가 Method를 Call하면 그에 따른 새로운 Stack Frame을 생성하고, 지역 변수를 할당한다. 해당 Method의 동작이 종료되면 할당했던 Stack Frame을 해제하고 이전의 Stack Frame을 이용한다. 각 Thread 별로 전용 Stack 공간을 갖는다. Stack을 이용하여 각 Thread의 Context를 유지한다고 할 수 있다.
 * PC Register : PC (Program Counter) Register 영역은 각 Thread가 실행할 다음 Bytecode의 주소를 관리하는 영역이다. 따라서 Stack 처럼 각 Thread는 전용 PC Register를 갖고 있다.
 * Native Method Stack : Native Method, 즉 CPP 처럼 Native 언어로 작성된 Method를 의미한다. Native Method를 실행 할때는 별도의 Native Method Stack을 이용하여 Native Method의 지역 변수를 관리한다. Stack과 유사하게 각 Thread 전용 PC Register를 갖고 있다.
