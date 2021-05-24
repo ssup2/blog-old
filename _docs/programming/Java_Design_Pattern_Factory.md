@@ -11,7 +11,7 @@ Java로 구현하는 Factory Pattern을 분석한다.
 
 ### 1. Java Factory Pattern
 
-Factory Pattern은 객체 생성 과정을 외부에 노출시키지 않고 싶을때 이용되는 Pattern이다. Factory Pattern은 Simple Factory Pattern, Factory Method Pattern, Abstract Factory Pattern 3가지 Pattern이 존재한다.
+**Factory Pattern은 객체 생성 과정을 외부에 노출시키지 않고 싶을때 이용되는 Pattern이다.** Factory Pattern은 Simple Factory Pattern, Factory Method Pattern, Abstract Factory Pattern 3가지 Pattern이 존재한다.
 
 {% highlight java linenos %}
 // product
@@ -184,7 +184,7 @@ public class AbstractProductFactory {
 }
 
 // main
-public class main {
+public class Main {
     public static void main(String[] args) {
         bookFactory = new AbstractProductFactory(new BookFactory());
         phoneFactory = new AbstractProductFactory(new PhoneFactory());
