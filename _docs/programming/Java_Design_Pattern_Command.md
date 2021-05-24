@@ -20,4 +20,4 @@ Java로 구현하는 Command Pattern을 정리한다.
 
 ### 2. 참조
 
-* [https://www.tutorialspoint.com/design_pattern/strategy_pattern.htm](https://www.tutorialspoint.com/design_pattern/strategy_pattern.htm)
+* [https://www.tutorialspoint.com/design_pattern/command_pattern.htm](https://www.tutorialspoint.com/design_pattern/command_pattern.htm)
