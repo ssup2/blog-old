@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Java로 구현하는 Strategy Pattern을 분석한다.
+Java로 구현하는 Strategy Pattern을 정리한다.
 
 ### 1. Java Strategy Pattern
 
@@ -56,7 +56,6 @@ public class Main {
         operatorAdd.execute(10, 5); // 5
     }
 }
-
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 1] Java Strategy Pattern</figcaption>

@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Java로 구현하는 Factory Pattern을 분석한다.
+Java로 구현하는 Factory Pattern을 정리한다.
 
 ### 1. Java Factory Pattern
 
