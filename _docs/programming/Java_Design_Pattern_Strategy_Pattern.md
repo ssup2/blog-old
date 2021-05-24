@@ -11,7 +11,7 @@ Java로 구현하는 Strategy Pattern을 분석한다.
 
 ### 1. Java Strategy Pattern
 
-**Strategy Pattern은 서로 다른 알고리즘(Strategy)을 별도의 Class로 정의하고, 정의한 Class를 서로 교환해서 사용할 수 있도록 만든는 Pattern을 의미한다.** 다양한 알고리즘을 유연하게 변경하고 싶을때 Strategy Pattern이 이용된다.
+**Strategy Pattern은 서로 다른 알고리즘(Strategy)을 별도의 Class로 정의하고, 정의한 Class를 서로 교환해서 사용할 수 있도록 만든는 Pattern을 의미한다.** 다양한 알고리즘을 유연하게 변경하면서 이용하고 싶을때 Strategy Pattern이 이용된다.
 
 {% highlight java linenos %}
 // operation
