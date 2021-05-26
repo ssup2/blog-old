@@ -17,19 +17,19 @@ MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대
 
 ##### 1.1. Two-Phase Commit
 
-![[그림 1] Two-Phase Commit]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit.PNG){: width="600px"}
+![[그림 1] Two-Phase Commit]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit.PNG){: width="550px"}
 
-![[그림 2] Two-Phase Commit Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit_Failed.PNG){: width="600px"}
+![[그림 2] Two-Phase Commit Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit_Failed.PNG){: width="550px"}
 
 ##### 1.2. SAGA Pattern
 
-![[그림 3] SAGA Chreography Pattern]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Chreography.PNG){: width="700px"}
+![[그림 3] SAGA Chreography Pattern]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Chreography.PNG){: width="650px"}
 
-![[그림 4] SAGA Chreography Pattern Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Chreography_Failed.PNG){: width="700px"}
+![[그림 4] SAGA Chreography Pattern Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Chreography_Failed.PNG){: width="650px"}
 
-![[그림 5] SAGA Chreography Pattern]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration.PNG){: width="700px"}
+![[그림 5] SAGA Chreography Pattern]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration.PNG){: width="650px"}
 
-![[그림 6] SAGA Chreography Pattern Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration_Failed.PNG){: width="700px"}
+![[그림 6] SAGA Chreography Pattern Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration_Failed.PNG){: width="650px"}
 
 ### 2. 참조
 
