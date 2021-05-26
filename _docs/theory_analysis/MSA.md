@@ -1,5 +1,5 @@
 ---
-title: Micro Service Architecture (MSA)
+title: MSA (Micro Service Architecture)
 category: Theory, Analysis
 date: 2018-04-04T12:00:00Z
 lastmod: 2018-04-04T12:00:00Z
@@ -7,23 +7,23 @@ comment: true
 adsense: true
 ---
 
-Micro Service Architecture (MSA)를 분석한다.
+MSA (Micro Service Architecture)를 분석한다.
 
-### 1. Micro Service Architecture (MSA)
+### 1. MSA (Micro Service Architecture)
 
-Micro Service Architecture (MSA)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 복잡한 App을 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
+MSA (Micro Service Architecture)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 복잡한 App을 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
 
 #### 1.1. Monolithic vs MSA
 
-![[그림 1] Monolithic Architecture]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/Monolithic_Architecture.PNG){: width="700px"}
+![[그림 1] Monolithic Architecture]({{site.baseurl}}/images/theory_analysis/MSA/Monolithic_Architecture.PNG){: width="700px"}
 
 [그림 1]은 기존의 Monolithi Architecture를 나타내고 있다. Monolithic Architecture는 여러개의 Service들이 하나의 WAR 파일에 들어가 WAR 파일 단위로 WAS에 배포되어 동작한다. 또한 모든 Service들이 하나의 DB를 공유한다.
 
-Monolithic Architecture는 Service들의 경계가 모호하고 DB도 공유하는 구조이기 때문에 Service간의 의존성 및 DB 의존성이 높다. 따라서 Service가 변경되거나 DB가 변경되면 연관된 많은 Service들도 같이 변경되어야 한다. 모호한 Service 경계는 Service를 개발하는 팀의 구성 및 역할도 모호하게 만든다. WAR 파일 단위로 Service가 배포되기 때문에 운영중 특정 Service에 부하가 몰려 Scale Out이 필요한 경우, Scale Out이 불필요한 Service들도 같이 배포된다. 이에 따라 Service 배포 시간이 늘어나는 문제점도 갖고있다.
+Monolithic Architecture는 Service들의 경계가 모호하고 DB도 공유하는 구조이기 때문에 Service간의 의존성 및 DB 의존성이 높다. 따라서 Service가 변경되거나 DB가 변경되면 연관된 많은 Service들도 같이 변경되어야 한다. 모호한 Service 경계는 Service를 개발하는 팀의 구성 및 역할도 모호하게 만든다. WAR 파일 단위로 Service가 배포되기 때문에 운영중 특정 Service에 부하가 몰려 Scale Out이 필요한 경우 Scale Out이 불필요한 Service들도 같이 배포되며, 이에 따라 불필요하게 다른 Service에도 영향을 줄 수 있다는 단점을 갖고 있다.
 
 하지만 단순한 구조로 인하여 빠른 개발과, 쉬운 배포가 가능하다는 특징을 갖고 있다. 또한 하나의 DB를 공유하기 때문에 DB Transaction 기능을 이용하여 Race Condition 방지, Service Rollback 등을 쉽게 처리 할 수 있는 장점을 가지고 있다. 따라서 큰 큐모의 Service 개발이 아닌 경우에는 Monolithic Architecture가 유리하다.
 
-![[그림 2] MSA Architecture]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/MSA_Architecture.PNG){: width="600px"}
+![[그림 2] MSA Architecture]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture.PNG){: width="600px"}
 
 [그림 2]는 MSA를 나타내고 있다. 각 Service들은 독립된 Server와 DB에서 동작한다. Service는 Service가 가지고 있는 Business Logic만을 이용하여 구성될 수 있지만, 필요에 따라 여러 Service들을 조합으로도 구성 될 수도 있다. Service 사이의 통신은 일반적으로 RabbitMQ 같은 Message Queue를 이용한다. Message Queue는 개발 언어 및 환경에 비교적 덜 의존적이면서도 안전하게 Message를 송수신 할 수 있는 수단이다. Message Queue를 통해 Service 개발자는 Service 사이의 통신에 많은 신경을 쓸 필요 없이 Business Logic에 집중 할 수 있게 된다.
 
@@ -37,23 +37,15 @@ Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Que
 
 일반적으로 MSA 구축시 Service를 App에 바로 노출시키지 않고 API Gateway를 통해 노출시킨다. 따라서 App의 모든 Service 요청을 API Gateway를 거친다. 이러한 API Gateway의 특징을 이용해 API Gateway는 App이 요청한 Service를 적절한 Server에 **Routing**하거나 **Load Balancing** 할 수 있다. 또한 여러개의 **Service를 조합**하여 새로운 Service를 App에게 제공하는 기능도 수행한다. API Gateway는 다수의 Service들이 공통적으로 실행해야하는 **공통 Logic**을 수행할때도 이용한다. 가장 많이 이용하는 공통 Logic이 Service 인증/인가이다.
 
-위에서 언급한것 처럼 MSA는 Service 제공시 다수의 Service를 조합하여 새로운 Service를 제공하는 형태도 가능하다. 이러한 Service의 조합은 대부분 API Gateway에서 이루어진다. 문제는 Service의 개수가 많아지고 조합이 다양해질수록 Service의 조합을 위한 Logic이 복잡해진다는 점이다. 그렇지 않아도 많은 기능을 수행하는 API Gateway에 과도한 Service 조합 기능까지 수행하면 API Gateway가 Monolithic Architecture가 된다는 문제가있다.
+위에서 언급한것 처럼 MSA는 Service 제공시 다수의 Service를 조합하여 새로운 Service를 제공하는 형태도 가능하다. 이러한 Service의 조합은 대부분 API Gateway에서 이루어진다. 문제는 Service의 개수가 많아지고 조합이 다양해질수록 Service의 조합을 위한 Logic이 복잡해진다는 점이다. 그렇지 않아도 많은 기능을 수행하는 API Gateway에 과도한 Service 조합 기능까지 수행하면 API Gateway가 Monolithic Architecture가 된다는 문제가 있다.
 
-![[그림 3] Service Type]({{site.baseurl}}/images/theory_analysis/Micro_Service_Architecture/Service_Type.PNG){: width="700px"}
+![[그림 3] Service Type]({{site.baseurl}}/images/theory_analysis/MSA/Service_Type.PNG){: width="700px"}
 
-이러한 문제를 해결하기 위해서 Service를 특징에 따라 분류하고 Service 조합 Logic을 여러 Service에 분류해야 한다. [그림 3]은 Service Type을 Core/Atomic Service, Composite/Integration Service, API/Edge Service로 분류하고 Service Type별 관계도를 나타내고 있다.
+이러한 문제를 해결하기 위해서 Service를 특징에 따라 분류하고 Service 조합 Logic을 여러 Service로 분산하여 해결 할 수 있다. [그림 3]은 Service를 Core/Atomic Service, Composite/Integration Service, API/Edge Service Service Type으로 분류하고 Service Type별 관계도를 나타내고 있다. 각 Service Type은 아래와 같은 의미를 갖는다.
 
 * Core/Atomic Service : Core Business Logic이나 Atomic한 Business Logic을 수행하는 Service이다.
 * Composite/Integration Service : Core/Atomic Service를 조합하여 구성한 Service이다.
 * API/Edge Service : Core/Atomic Service, Composite/Integration Service를 조합하여 App에게 노출되는 Service이다. API Gateway의 역할도 수행한다.
-
-#### 1.3. Transaction
-
-MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대로 활용하기 어렵다. 따라서 MSA 설계시 Service 사이의 Consistency 유지를 위한 Transaction 처리에 많은 고민이 필요하다. 첫번째 방법은 DB에서 제공하는 분산 Transaction을 이용하는 방법이다. 하지만 분산 Transaction은 Consistency 보장을 위해 너무 많은 성능 희생이 필요하다. 또한 분산 Transaction을 이용하더라도 완전한 Consistency를 제공하지는 못한다.
-
-따라서 MSA에서는 성능 희생을 최소화 하면서 어느정도 Consistency를 유지하는 방식, 즉 **Eventual Consistency**를 유지하는 방식을 이용한다. Eventual Consistency를 유지하는 방법은 크게 2가지가 있다. 첫번째 방법은 실패한 Transaction을 LOG로 기록했다가 나중에 다시 실행하는 방법이다. 하나의 Transaction이라도 성공했으면 성공으로 간주하는 방법이다. 두번째 방법은 실패한 Transaction은 그대로 놔두고 성공한 Transaction을 원래대로 되돌리는 **Compensating Transaction**을 수행하는 방법이다. 하나의 Transaction이라도 실패할 경우 실패로 간주하고 원래의 상태로 돌리는 방법이다. 만약 Compensating Transaction의 수행이 실패하면 LOG에 기록되고 나중에 다시 수행된다.
-
-2가지 방법 모두 Transaction을 LOG에 기록하고 나중에 수행하는 방식을 이용하기 때문에 완전한 Transaction을 보장하지는 못한다. 만약 반드시 다수의 Service Logic들이 하나의 완전한 Transaction안에서 실행되어야 한다면, 다수의 Service들을 하나의 Service로 구성하고 하나의 DB를 공유하는 방식으로 변경하는것이 좋다.
 
 ### 2. 참조
 
