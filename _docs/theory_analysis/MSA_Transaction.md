@@ -41,6 +41,8 @@ Prepare 단계가 완료가 되었어도, Commit 단계에서 실패가 발생�
 
 ### 2. 참조
 
+* [https://developers.redhat.com/blog/2018/10/01/patterns-for-distributed-transactions-within-a-microservices-architecture#possible_solutions](https://developers.redhat.com/blog/2018/10/01/patterns-for-distributed-transactions-within-a-microservices-architecture#possible_solutions)
+* [https://developer.ibm.com/depmodels/microservices/articles/use-saga-to-solve-distributed-transaction-management-problems-in-a-microservices-architecture/](https://developer.ibm.com/depmodels/microservices/articles/use-saga-to-solve-distributed-transaction-management-problems-in-a-microservices-architecture/)
 * [http://blog.neonkid.xyz/243](http://blog.neonkid.xyz/243)
 * [https://microservices.io/patterns/data/saga.html](https://microservices.io/patterns/data/saga.html)
 * [https://hyunsoori.tistory.com/9](https://hyunsoori.tistory.com/9)
