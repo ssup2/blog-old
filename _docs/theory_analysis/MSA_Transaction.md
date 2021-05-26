@@ -19,7 +19,13 @@ MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대
 
 ![[그림 1] Two-Phase Commit]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit.PNG){: width="550px"}
 
+Two-Phase Commit은 분산 Transiaction 기법이다. 의미 그대로 **Prepare**, **Commit** 2단계로 나누어 Transaction을 진행한다. [그림 1]은 MSA에 적용한 Two-Phase Commit을 나타내고 있다. Order Service가 Payment, Stock, Delivery Service와 함께 Transaction을 수행하고 싶다면, Order Service는 Payment, Stock, Delivery Service가 제공하는 Prepare API를 통해서 Transaction 준비를 요청한다.
+
+이후에 Order Service가 Payment, Stock, Delivery Service에게 모두 준비가 완료되었다는 응답을 받으면 Payment, Stock, Delivery Service가 제공하는 Commit API를 통해서 실제 Transaction 수행을 요청한다. 이후에 Order Service가 Payment, Stock, Delivery Service에게 Commit 완료 응답을 받게되면 Transaction이 종료된다.
+
 ![[그림 2] Two-Phase Commit Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit_Failed.PNG){: width="550px"}
+
+[그림 2]는 Two-Pahse Commit이 실패하는 경우를 나타내고 있다. Order Service가 Payment, Stock, Delivery Service의 Prepare API를 통해서 Prepare 요청을 전송하였지만, Delivery Service에게는 응답을 받지 못한 상황을 나타내고 있다. 이 경우 Order Service는 Payment, Stock Service가 제공하는 Abort Service를 통해서 Abort를 요청하여 Transaction을 중단한다.
 
 ##### 1.2. SAGA Pattern
 
@@ -38,3 +44,4 @@ MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대
 * [https://hyunsoori.tistory.com/9](https://hyunsoori.tistory.com/9)
 * [https://www.howtodo.cloud/microservice/2019/06/19/microservice-transaction.html](https://www.howtodo.cloud/microservice/2019/06/19/microservice-transaction.html)
 * [https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/](https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/)
+* [https://www.s-core.co.kr/insight/view/msa-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%95%84%EC%88%98-%EC%82%AC%ED%95%AD-%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%EA%B3%BC/](https://www.s-core.co.kr/insight/view/msa-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EA%B4%80%EB%A6%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%95%84%EC%88%98-%EC%82%AC%ED%95%AD-%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%EA%B3%BC/)
