@@ -29,11 +29,13 @@ Two-Phase Commit은 분산 Transiaction 기법이다. 의미 그대로 **Prepare
 
 Prepare 단계가 완료가 되었어도, Commit 단계에서 실패가 발생할 수 있다. 이 경우는 Commit에 실패한 서비스가 성공할때 까지 반복해서 호출하거나, 서비스 관리자가 직접 완료되지 못한 Transaction을 처리해야 한다. 이러한 이유 때문에 Two-Phases Commit은 완전한 Transaction을 보장하지는 못한다.
 
-Two-Phase Commit을 쉽게 구현하기 위해서는 DB가 제공하는 Two-Phase Commit 기능을 이용해야 한다. 문제는 하나의 Transaction으로 묶기는 Service들이 이용하는 모든 DB가 동일한 종류의 DB를 이용해야 하고, DB에서 Two-Phase Commit을 지원해야 한다. 그렇지 않으면 Service의 Logic으로 Two-Phase Commit을 구현해야 하는데 이럴경우 구현 복잡도가 너무 높아지는 단점이 존재한다.
+Two-Phase Commit을 구현하기 위해서는 DB가 제공하는 Two-Phase Commit 기능을 이용해야 한다. 문제는 하나의 Transaction으로 묶기는 Service들이 이용하는 모든 DB가 동일한 종류의 DB를 이용해야 하고, DB에서 Two-Phase Commit을 지원해야 한다. 일반적으로 RDBMS에서만 Two-Phase Commit을 지원하기 때문에 NoSQL DB를 이용하는 Service도 같이 하나의 Transaction에 묶여야 한다면 Two-Phase Commit을 적용할 수 없다.
 
-일반적으로 RDBMS에서만 Two-Phase Commit을 지원하기 때문에 NoSQL DB를 이용하는 Service도 같이 하나의 Transaction에 묶여야 한다면 Two-Phase Commit을 적용하기 쉽지 않다. 또한 Two-Phase Commit은 Sync Call 기반의 방식이기 때문에 Service 사이의 강결합이 발생하고, Service의 Throughput을 낮추는 주요 원인이 되기도 한다. 이러한 이유 때문에 MSA에서는 Two-Phase Commit 보다는 SAGA Pattern을 많이 이용한다.
+또한 Two-Phase Commit은 Sync Call 기반의 방식이기 때문에 Service 사이의 강결합이 발생하고, Service의 Throughput을 낮추는 주요 원인이 되기도 한다. 따라서 대부분의 MSA에서는 Two-Phase Commit 보다는 SAGA Pattern을 많이 이용한다. Two-Phase Commit은 SAGA Pattern 보다 강한 Consistency를 제공하기 때문에, Two-Phase Commit을 이용할 수 있는 환경에서는 강한 Consistency를 위해서 SAGA Pattern 대신 선택되어 이용될 수 있다.
 
 ##### 1.2. SAGA Pattern
+
+SAGA Pattern은 Eventually 
 
 ![[그림 3] SAGA Chreography Pattern]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Chreography.PNG){: width="650px"}
 
