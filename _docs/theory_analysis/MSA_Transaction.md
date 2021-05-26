@@ -11,7 +11,7 @@ Micro Service Architecture (MSA)를 분석한다.
 
 ### 1. MSA Transaction
 
-MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대로 활용하기 어렵다. 따라서 MSA 설계시 Service 사이의 Consistency 유지를 위한 Transaction 처리에 많은 고민이 필요하다. MSA에서 Transaction을 구현하는 방법에는 **Two-Phase Commit**을 이용하는 방식과 **SAGA Pattern**을 방식이 존재한다. 
+MSA는 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 제대로 활용하기 어렵다. 따라서 MSA 설계시 Service 사이의 Consistency 유지를 위한 Transaction 처리에 많은 고민이 필요하다. MSA에서 Transaction을 구현하는 방법에는 **Two-Phase Commit**을 이용하는 방식과 **SAGA Pattern**을 방식이 존재한다.
 
 두 방식 모두 완전한 Transaction을 보장하지는 못한다. 만약 반드시 다수의 Service Logic들이 하나의 완전한 Transaction안에서 실행되어야 한다면, 다수의 Service들을 하나의 Service로 구성하고 하나의 DB를 공유하는 방식으로 변경하는 것이 좋다.
 
@@ -25,7 +25,9 @@ Two-Phase Commit은 분산 Transiaction 기법이다. 의미 그대로 **Prepare
 
 ![[그림 2] Two-Phase Commit Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/Two_Phase_Commit_Failed.PNG){: width="550px"}
 
-[그림 2]는 Two-Pahse Commit이 실패하는 경우를 나타내고 있다. Order Service가 Payment, Stock, Delivery Service의 Prepare API를 통해서 Prepare 요청을 전송하였지만, Delivery Service에게는 응답을 받지 못한 상황을 나타내고 있다. 이 경우 Order Service는 Payment, Stock Service가 제공하는 Abort Service를 통해서 Abort를 요청하여 Transaction을 중단한다.
+[그림 2]는 Two-Phase Commit이 실패하는 경우를 나타내고 있다. Order Service가 Payment, Stock, Delivery Service의 Prepare API를 통해서 Prepare 요청을 전송하였지만, Delivery Service에게는 응답을 받지 못한 상황을 나타내고 있다. 이 경우 Order Service는 Payment, Stock Service가 제공하는 Abort Service를 통해서 Abort를 요청하여 Transaction을 중단한다.
+
+Prepare 단계가 완료가 되었어도, Commit 단계에서 실패가 발생할 수 있다. 이 경우는 Commit에 실패한 서비스가 성공할때 까지 반복해서 호출하거나, 서비스 관리자가 직접 완료되지 못한 Transaction을 처리해야 한다. 이러한 이유 때문에 TWo-Phases Commit은 완전한 Transaction을 보장하지는 못한다.
 
 ##### 1.2. SAGA Pattern
 
