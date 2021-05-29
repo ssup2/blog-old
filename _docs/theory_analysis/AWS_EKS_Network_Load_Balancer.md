@@ -46,7 +46,7 @@ my-nginx-5dc4865748-m5fhq   1/1     Running   0          7m51s   192.168.63.206 
 
 [Console 1]은 실제 EKS Cluster Node의 IP와 EKS Cluster Pod의 IP를 나타내고 있다. ip-192-168-46-6.ap-northeast-2.compute.internal, ip-192-168-48-175.ap-northeast-2.compute.internal Node는 "192.168.32.0/19" Subnet에 소속되어 있고, ip-192-168-75-136.ap-northeast-2.compute.internal, ip-192-168-90-3.ap-northeast-2.compute.internal Node는 "192.168.64.0/19" Subnet에 소속되어 있다. 각 Node에 존재하는 Pod들도 해당 Subnet에 소속되어 있는것을 확인할 수 있다.
 
-![[그림 3] AWS EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network_Node.PNG)
+![[그림 3] AWS EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network_Node.PNG){: width="600px"}
 
 [그림 3]은 Node 내부에서 Pod Network가 어떻게 구성되는지를 나타내고 있다. Node 내부에서 Pod Network 구성은 EKS CNI (Container Network Interface) Plugin이 담당한다. Node에 할당되어 있는 eth0는 Node가 생성될때 Node가 기본적으로 이용하는 Network Interface이다. eth1, eth2는 EKS CNI Plugin이 AWS에게 요청하여 동적으로 생성하는 ENI (Elastic Network Interface)이다. 여기에는 Pod의 IP가 **Secondary IP**로 할당이 된다. 따라서 Subnet에서 Dest IP가 Pod IP인 Packet이 전송되는 경우 해당 Packet은 목적지 Pod가 존재하는 Node로 Packet이 전송된다. Node로 전송된 Pod IP가 Dest IP로 설정된 Packet은 Node의 Routing Table에 따라서 다시 Pod로 전송된다.
 
