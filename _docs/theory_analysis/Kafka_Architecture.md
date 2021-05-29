@@ -41,7 +41,7 @@ Consumer Group은 다수의 Consumer를 묶어 하나의 Topic을 다수의 Cons
 
 ![[그림 3] Partition와 Consumer Group의 관계]({{site.baseurl}}/images/theory_analysis/Kafka_Architecture/Kafka_Partition_Consumer.PNG){: width="750px"}
 
-[그림 3]은 같은 Topic에 있는 Partiton의 개수와 같은 Consumer Group에 있는 Consumer의 개수에 따른 관계도를 나타내고 있다. Partition과 Consumer는 N:1의 관계이다. 같은 Consumer Group에 있는 Consumer들은 하나의 Partition을 동시에 같이 이용할 수 없다. 즉 Partition 보다 Consumer의 개수가 많으면 Message를 처리하지 않는 Consume각 생기게 된다. 따라서 Consumer Group을 이용할 경우 Topic의 Partiton 개수도 반드시 같이 고려되야 한다.
+[그림 3]은 같은 Topic에 있는 Partiton의 개수와 같은 Consumer Group에 있는 Consumer의 개수에 따른 관계도를 나타내고 있다. Partition과 Consumer는 N:1의 관계이다. 같은 Consumer Group에 있는 Consumer들은 하나의 Partition을 동시에 같이 이용할 수 없다. 즉 Partition 보다 Consumer의 개수가 많으면 Message를 처리하지 않는 Consume가 생기게 된다. 따라서 Consumer Group을 이용할 경우 Topic의 Partiton 개수도 반드시 같이 고려되야 한다.
 
 각 Consumer Group에는 **Consumer Leader**가 존재하며 Consumer Group의 Consumer들을 관리하는 역할을 수행한다. 또한 Consumer Leader는 Kafka Broker와 협력하여 Consumer와 Topic을 Mapping하는 작업을 수행한다. Consumer와 Topic을 Mapping 작업은 Consumer Group의 일부 Consumer가 죽었을 경우, Parition이 추가될 경우, Consumer Group에 Consumer가 추가되었을 경우 등 다양한 Event 발생시 수행된다.
 

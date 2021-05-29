@@ -46,15 +46,25 @@ my-nginx-5dc4865748-m5fhq   1/1     Running   0          7m51s   192.168.63.206 
 
 [Console 1]은 실제 EKS Cluster Node의 IP와 EKS Cluster Pod의 IP를 나타내고 있다. ip-192-168-46-6.ap-northeast-2.compute.internal, ip-192-168-48-175.ap-northeast-2.compute.internal Node는 "192.168.32.0/19" Subnet에 소속되어 있고, ip-192-168-75-136.ap-northeast-2.compute.internal, ip-192-168-90-3.ap-northeast-2.compute.internal Node는 "192.168.64.0/19" Subnet에 소속되어 있다. 각 Node에 존재하는 Pod들도 해당 Subnet에 소속되어 있는것을 확인할 수 있다.
 
+![[그림 3] AWS EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network_Node.PNG)
+
+[그림 3]은 Node 내부에서 Pod Network가 어떻게 구성되는지를 나타내고 있다. Node 내부에서 Pod Network 구성은 EKS CNI (Container Network Interface) Plugin이 담당한다. Node에 할당되어 있는 eth0는 Node가 생성될때 Node가 기본적으로 이용하는 Network Interface이다. eth1, eth2는 EKS CNI Plugin이 AWS에게 요청하여 동적으로 생성하는 ENI (Elastic Network Interface)이다. 여기에는 Pod의 IP가 **Secondary IP**로 할당이 된다. 따라서 Subnet에서 Dest IP가 Pod IP인 Packet이 전송되는 경우 해당 Packet은 목적지 Pod가 존재하는 Node로 Packet이 전송된다. Node로 전송된 Pod IP가 Dest IP로 설정된 Packet은 Node의 Routing Table에 따라서 다시 Pod로 전송된다.
+
+Pod Network가 ENI 및 ENI에 할당되는 Secondary IP를 이용하는 방식이기 때문에, 하나의 Node에 생성될 수 있는 최대 Pod의 개수는 Node에 생성 될수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수에 따라서 결정된다. Node에 생성될 수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수는 Node의 사양(Flavor)에 따라서 달라진다. 사양이 높을 수록 생성될 수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수가 많아지기 때문에 생성 할수 있는 Pod의 개수도 늘어난다.
+
+> Node의 최대 ENI 개수 × (ENI에 설정될 수 있는 최대 IP 개수 - 1)
+
+Node의 사양에 따른 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수는 [가이드](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)에서 확인할 수 있으며, 최대로 할당할 수 있는 Pod의 개수는 위의 공식에 의해서 계산할 수 있다. Node에 Pod가 하나도 존재하지 않더라도 EKS CNI Plugin은 무조건 하나의 ENI를 Node에 생성해 둔다.
+
 ### 2. AWS EKS Load Balancer
 
 EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Server에 접근하기 위해서는 EKS Load Balancer를 이용해야한다. EKS Cluster에서는 AWS에서 제공하는 Load Balancer인 CLB, NLB, ALB 모든 Load Balancer를 이용할 수 있다. 
 
 ##### 2.1. CLB (Classic Load Balancer), NLB (Network Load Balancer)
 
-![[그림 3] AWS EKS CLB, NLB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_CLB_NLB.PNG)
+![[그림 4] AWS EKS CLB, NLB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_CLB_NLB.PNG)
 
-EKS Cluster에서는 **LoadBalancer Service**를 생성하면 CLB 또는 NLB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB 이용시 Packet의 경로는 **Target Type**이라고 불리는 설정과 LoadBalancer Service의 **ExternalTrafficPolicy** 설정에 따라 변경된다. [그림 2]는 EKS Cluster에서 CLB, NLB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
+EKS Cluster에서는 **LoadBalancer Service**를 생성하면 CLB 또는 NLB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB 이용시 Packet의 경로는 **Target Type**이라고 불리는 설정과 LoadBalancer Service의 **ExternalTrafficPolicy** 설정에 따라 변경된다. [그림 4]는 EKS Cluster에서 CLB, NLB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
 
 Target Type은 CLB, NLB에서 전송하는 Packet의 Dst IP/Port를 어떻게 설정할지 결정하는 설정이다. Target Type에는 **Instance** Type과 **IP** Type이 존재한다. Instance Type은 CLB, NLB 모두 이용가능하다. Instance Type의 경우에는 CLB, NLB가 전송하는 Packet의 Dst IP/Port를 LoadBalancer Service의 **NodePort**로 설정하고 전송한다. 이후에 Node가 LoadBalancer Service의 NodePort를 통해서 수신한 Packet은 kube-proxy가 설정한 iptables/IPVS Rule에 의해서 Packet은 Pod로 전달된다.
 
@@ -97,9 +107,9 @@ my-nginx-ipv4   LoadBalancer   10.100.51.23   k8s-default-mynginxi-f9350243cc-a7
 
 ##### 2.2. ALB (Application Load Balancer)
 
-![[그림 4] AWS EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_ALB.PNG)
+![[그림 5] AWS EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_ALB.PNG)
 
-EKS Cluster에서는 **Ingress**를 생성하면 ALB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB와 동일하게 Target Type이 존재하며, Packet의 경로도 동일하다. [그림 4]는 EKS Cluster에서 ALB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
+EKS Cluster에서는 **Ingress**를 생성하면 ALB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB와 동일하게 Target Type이 존재하며, Packet의 경로도 동일하다. [그림 5]는 EKS Cluster에서 ALB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
 
 {% highlight console %}
 # kubectl get ingress
@@ -136,3 +146,4 @@ ALB는 여러 Ingress를 하나의 VIP로 이용할 수 있는 Group 기능을 �
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html)
 * [https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html](https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html)
 * [https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)
+* [https://github.com/aws/amazon-vpc-cni-k8s](https://github.com/aws/amazon-vpc-cni-k8s)
