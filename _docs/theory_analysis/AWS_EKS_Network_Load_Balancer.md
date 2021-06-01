@@ -48,7 +48,7 @@ my-nginx-5dc4865748-m5fhq   1/1     Running   0          7m51s   192.168.63.206 
 
 ![[그림 3] AWS EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network_Node.PNG){: width="600px"}
 
-[그림 3]은 Node 내부에서 Pod Network가 어떻게 구성되는지를 나타내고 있다. Node 내부에서 Pod Network 구성은 EKS CNI (Container Network Interface) Plugin이 담당한다. Node에 할당되어 있는 eth0는 Node가 생성될때 Node가 기본적으로 이용하는 Network Interface이다. eth1, eth2는 EKS CNI Plugin이 AWS에게 요청하여 동적으로 생성하는 ENI (Elastic Network Interface)이다. 여기에는 Pod의 IP가 **Secondary IP**로 할당이 된다. 따라서 Subnet에서 Dest IP가 Pod IP인 Packet이 전송되는 경우 해당 Packet은 목적지 Pod가 존재하는 Node로 Packet이 전송된다. Node로 전송된 Pod IP가 Dest IP로 설정된 Packet은 Node의 Routing Table에 따라서 다시 Pod로 전송된다.
+[그림 3]은 Node 내부에서 Pod Network가 어떻게 구성되는지를 나타내고 있다. Node 내부에서 Pod Network 구성은 EKS CNI (Container Network Interface) Plugin이 담당한다. Node에 할당되어 있는 eth0는 Node가 생성될때 Node가 기본적으로 이용하는 Network Interface이다. eth1, eth2는 EKS CNI Plugin이 AWS에게 요청하여 동적으로 생성하는 ENI (Elastic Network Interface)이다. 여기에는 Pod의 IP가 **Secondary IP**로 할당이 된다. 따라서 Subnet에서 Dest IP가 Pod IP인 Packet이 전송되는 경우 해당 Packet은 목적지 Pod가 존재하는 Node로 Packet이 전송된다. 이후에 해당 Packet은 Node의 Routing Table에 따라서 다시 Pod로 전송된다.
 
 Pod Network가 ENI 및 ENI에 할당되는 Secondary IP를 이용하는 방식이기 때문에, 하나의 Node에 생성될 수 있는 최대 Pod의 개수는 Node에 생성 될수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수에 따라서 결정된다. Node에 생성될 수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수는 Node의 사양(Flavor)에 따라서 달라진다. 사양이 높을 수록 생성될 수 있는 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수가 많아지기 때문에 생성 할수 있는 Pod의 개수도 늘어난다.
 
@@ -58,7 +58,7 @@ Node의 사양에 따른 ENI의 개수 및 각 ENI에 할당할 수 있는 Secon
 
 ### 2. AWS EKS Load Balancer
 
-EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Server에 접근하기 위해서는 EKS Load Balancer를 이용해야한다. EKS Cluster에서는 AWS에서 제공하는 Load Balancer인 CLB, NLB, ALB 모든 Load Balancer를 이용할 수 있다. 
+EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Server에 접근하기 위해서는 EKS Load Balancer를 이용해야한다. EKS Cluster에서는 AWS에서 제공하는 Load Balancer인 CLB, NLB, ALB 모든 Load Balancer를 이용할 수 있다.
 
 ##### 2.1. CLB (Classic Load Balancer), NLB (Network Load Balancer)
 
