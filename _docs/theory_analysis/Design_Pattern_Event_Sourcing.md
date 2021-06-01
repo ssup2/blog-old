@@ -19,7 +19,9 @@ Event Sourcing Pattern은 발생하는 **모든 Event를 저장**하고, 저장�
 
 #### 1.1. Snapshot
 
-#### 1.1. with CQRS Pattern
+Snaptshot은 Event Store에서 수행하는 동작으로 Snapshot을 찍을경우 Event Projection을 수행하여 현재의 상태 정보를 저장한다. 이후에 Event Projection 수행시 모든 Event를 대상으로 Projection을 수행하는 것이 아니라 Snapshot과 Snapshot 이후의 Event만을 Projection하여 Read 동작의 부하를 줄일 수 있다.
+
+#### 1.2. with CQRS Pattern
 
 ![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/Design_Pattern_Event_Sourcing/Event_Sourcing_Pattern.PNG){: width="600px"}
 
