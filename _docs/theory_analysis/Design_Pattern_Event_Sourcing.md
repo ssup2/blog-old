@@ -25,9 +25,9 @@ Snaptshot은 Event Store에서 수행하는 동작으로 Snapshot을 찍을경�
 
 ![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/Design_Pattern_Event_Sourcing/Event_Sourcing_Pattern.PNG){: width="600px"}
 
-CQRS Pattern은 Command Responsibility과 Qeury Responsibility를 분리하는 Pattern을 의미한다. 즉 Create, Update, Delete 동작과 Read 동작을 분리하는 Pattern이다. Event Sourcing Pattern을 CQRS Pattern에 적용하면 [그림 2]와 같이 구성된다. [그림 2]는 Event Sourcing Pattern을 이용하는 Order Service에 CQRS Pattern을 적용한 그림을 나타낸다.
+CQRS Pattern은 Command Responsibility과 Qeury Responsibility를 분리하는 Pattern을 의미한다. 즉 Create, Update, Delete 동작(Model)과 Read 동작(Model)을 분리하는 Pattern이다. Event Sourcing Pattern을 CQRS Pattern에 적용하면 [그림 2]와 같이 구성된다. [그림 2]는 Event Sourcing Pattern을 이용하는 Order Service에 CQRS Pattern을 적용한 그림을 나타낸다.
 
-Order Service의 Create, Update, Delete 동작은 Event Store에 Event를 저장하는 동작만을 수행한다. 이후에 Event Store를 감시하는 Event Deliver는 추가된 Event를 Message Queue를 통해서 Event Processing Handler에게 전달한다. Event Processing Handler는 Event를 Read Database에 반영하여 Projection 동작을 수행한다. Order Service의 Get 동작은 Read Database에서 현재의 상태를 얻어오는 동작만을 수행한다.
+Order Service의 Create, Update, Delete 동작은 Event Store에 Event를 저장하는 동작만을 수행한다. 이후에 Event Store를 감시하는 Event Deliver는 추가된 Event를 Message Queue를 통해서 Event Processing Handler에게 전달한다. Event Processing Handler는 Event를 Read Database에 반영하여 Projection 동작을 수행한다. Order Service의 Get 동작은 Read Database에서 **현재의 상태**를 얻어오는 동작만을 수행한다.
 
 Event Store에 Event가 기록되어도 바로 Read Database에 반영되지 않기 때문에 일시적으로 Create, Update, Delete 동작과 Read 동작의 정합성이 깨질 수 있다. 하지만 Read Database를 이용하기 때문에 빠른 Read 동작이 가능해진다. Event Sourcing Pattern을 이용할 경우 Data의 일시적 정합성이 불일치해도 관계없는 Service라면 CQRS Pattern을 적용할 수 있다.
 
