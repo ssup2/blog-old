@@ -19,7 +19,7 @@ CQRS (Command and Query Responsibility Segregation) Pattern은 의미 그대로 
 
 ![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/Design_Pattern_CQRS/Event_Sourcing_Pattern.PNG){: width="600px"}
 
-CQRS Pattern을 이용하는 대표적인 곳이 Event Sourcing Pattern이다. [그림 2]는 Event Sourcing Pattern을 이용하는 Order Service에 적용한 CQRS Pattern을 나타내고 있다. Event Soucing Pattern에서 Event는 CQRS Pattern의 Command와 일치한다. Create, Update, Delete Order 동작을 통해서 생성된 Event는 Event Store에 저장되며, Message Queue를 통해서 Read Database에 비동기 적으로 Event가 반영된다. 이후에 Read Order 동작은 Read Database에 저장된 Order의 상태 정보를 이용한다.
+CQRS Pattern을 이용하는 대표적인 곳이 Event Sourcing Pattern이다. [그림 2]는 Event Sourcing Pattern을 이용하는 Order Service에 적용한 CQRS Pattern을 나타내고 있다. Event Soucing Pattern에서 Event는 CQRS Pattern의 Command와 일치한다. Create, Update, Delete Order 동작을 통해서 생성된 Event는 Event Store에 저장되며, Message Queue를 통해서 Read Database에 비동기 적으로 Event가 반영(Projection)된다. 이후에 Read Order 동작은 Read Database에 저장된 Order의 상태 정보를 이용한다.
 
 ### 2. 참조
 
