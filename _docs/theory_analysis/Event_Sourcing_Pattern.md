@@ -11,7 +11,7 @@ Event Sourcing Pattern을 분석한다.
 
 ### 1. Event Sourcing Pattern
 
-![[그림 1] Event Sourcing vs Normal CRUD]({{site.baseurl}}/images/theory_analysis/Design_Pattern_Event_Sourcing/Event_Sourcing_Normal_CRUD.PNG){: width="500px"}
+![[그림 1] Event Sourcing vs Normal CRUD]({{site.baseurl}}/images/theory_analysis/Event_Sourcing_Pattern/Event_Sourcing_Normal_CRUD.PNG){: width="500px"}
 
 Event Sourcing Pattern은 발생하는 **모든 Event를 저장**하고, 저장한 Event를 바탕으로 Data 조작을 수행하는 Pattern이다. [그림 1]은 주문 정보를 저장할때 DB를 이용하는 일반적인 CRUD 방식과 Event Store를 이용하는 Event Sourcing 방법을 나타내고 있다. 일반적인 CRUD 방식은 DB에 현재의 주문 상태 정보만을 저장한다. 반면 Event Sourcing 방법은 발생하는 모든 주문 정보를 저장한다.
 
@@ -23,7 +23,7 @@ Snaptshot은 Event Store에서 수행하는 동작으로 Snapshot을 찍을경�
 
 #### 1.2. CQRS Pattern
 
-![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/Design_Pattern_Event_Sourcing/Event_Sourcing_Pattern.PNG){: width="600px"}
+![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/Event_Sourcing_Pattern/Event_Sourcing_Pattern.PNG){: width="600px"}
 
 CQRS Pattern은 Command Responsibility과 Qeury Responsibility를 분리하는 Pattern을 의미한다. 즉 Create, Update, Delete 동작(Model)과 Read 동작(Model)을 분리하는 Pattern이다. Event Sourcing Pattern을 CQRS Pattern에 적용하면 [그림 2]와 같이 구성된다. [그림 2]는 Event Sourcing Pattern을 이용하는 Order Service에 CQRS Pattern을 적용한 그림을 나타낸다.
 
