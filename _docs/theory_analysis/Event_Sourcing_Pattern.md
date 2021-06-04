@@ -1,5 +1,5 @@
 ---
-title: Design Pattern Event Sourcing
+title: Event Sourcing Pattern
 category: Theory, Analysis
 date: 2021-06-02T12:00:00Z
 lastmod: 2021-06-02T12:00:00Z
