@@ -17,15 +17,15 @@ DB의 Partitioning, Sharding을 분석한다.
 
 #### 2.1. Hashing
 
-![[그림 2] DB Sharding Hash]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Hash.PNG){: width="600px"}
+![[그림 2] DB Sharding Hash]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Hash.PNG){: width="500px"}
 
 #### 2.2. Range
 
-![[그림 3] DB Sharding Range]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Range.PNG){: width="600px"}
+![[그림 3] DB Sharding Range]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Range.PNG){: width="500px"}
 
 #### 2.3. List
 
-![[그림 4] DB Sharding List]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_List.PNG){: width="600px"}
+![[그림 4] DB Sharding List]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_List.PNG){: width="500px"}
 
 ### 3. 참조
 
