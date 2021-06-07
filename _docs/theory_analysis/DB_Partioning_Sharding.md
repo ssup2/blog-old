@@ -11,13 +11,21 @@ DB의 Partitioning, Sharding을 분석한다.
 
 ### 1. DB Partitioning
 
+![[그림 1] DB Partitioning]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Partitioning.PNG){: width="700px"}
+
 ### 2. DB Sharding
 
 #### 2.1. Hashing
 
+![[그림 2] DB Sharding Hash]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Hash.PNG){: width="600px"}
+
 #### 2.2. Range
 
+![[그림 3] DB Sharding Range]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_Range.PNG){: width="600px"}
+
 #### 2.3. List
+
+![[그림 4] DB Sharding List]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Sharding_List.PNG){: width="600px"}
 
 ### 3. 참조
 
