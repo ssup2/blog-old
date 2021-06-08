@@ -11,7 +11,7 @@ DB의 Partitioning, Sharding을 분석한다.
 
 ### 1. DB Partitioning
 
-![[그림 1] DB Partitioning]({{site.baseurl}}/images/theory_analysis/DB_Partitioning_Sharding/DB_Partitioning.PNG)
+![[그림 1] DB Partitioning]({{site.baseurl}}/images/theory_analysis/DB_Partitioning/DB_Partitioning.PNG)
 
 Partitioning은 성능, 가용성, 유지 보수의 용이성을 위해서 하나의 Table을 여러개의 Table로 분리하는 기법이다. Table이 분리 되는 만큼 Table의 Data도 별도의 Disk 공간으로 분리가 된다. Partitioning은 **Vertical Partitioning**과 **Horizontal Paritioning**이 존재한다. [그림 1]은 Vertical Partitioning과 Horizontal Paritioning을 나타내고 있다.
 
