@@ -11,9 +11,15 @@ Consistent Hashing을 분석한다.
 
 ### 1. Consistent Hashing
 
+![[그림 1] Consistent Hashing]({{site.baseurl}}/images/theory_analysis/Consistent_Hashing/Consistent_Hashing.PNG){: width="700px"}
+
 #### 1.1. Ring Consistent Hashing
 
+![[그림 2] Ring Consistent Hashing]({{site.baseurl}}/images/theory_analysis/Consistent_Hashing/Ring_Consistent_Hashing.PNG){: width="700px"}
+
 #### 1.2. Jump Consistent Hashing
+
+![[그림 3] Jump Consistent Hashing]({{site.baseurl}}/images/theory_analysis/Consistent_Hashing/Jump_Consistent_Hashing.PNG){: width="700px"}
 
 ### 2. 참조
 
