@@ -1,5 +1,5 @@
 ---
-title: Consistent_Hashing
+title: Consistent Hashing
 category: Theory, Analysis
 date: 2021-06-05T13:42:00Z
 lastmod: 2021-06-05T13:42:00Z
