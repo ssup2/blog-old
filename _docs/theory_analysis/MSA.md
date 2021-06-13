@@ -25,7 +25,7 @@ Monolithic Architecture에서는 운영 중 특정 Module만 부하가 몰려 Sc
 
 하지만 Monolithic Architecture는 단순한 구조로 인하여 빠른 개발과, 쉬운 배포가 가능하다는 특징을 갖고 있다. 또한 하나의 DB를 공유하기 때문에 DB Transaction 기능을 이용하여 Race Condition 방지, Service Rollback 등을 쉽게 처리 할 수 있는 장점을 가지고 있다. 따라서 큰 큐모의 개발이 아닌 경우에는 Monolithic Architecture가 일반적으로 유리하다.
 
-**MSA**는 Business Logic을 수행하는 다수의 Service와 다수의 DB로 구성된다. 각 Service는 일반적으로 별도의 DB를 이용한다. 따라서 각 DB는 반드시 동일한 DB를 이용할 필요가 없으며 Service가 수행하는 Business Logic에 맞는 DB를 선택하여 이용이 가능하다. 물론 필요에 따라서는 서로 다른 Service가 하나의 DB를 공유 할 수도 있다. [그림 1]에서 Service B와 Servicd D는 RDBMS를 이용하고 있고 Service C는 NoSQL을 이용하고 있는것을 확인 할 수 있다.
+**MSA**는 Business Logic을 수행하는 다수의 Service와 다수의 DB로 구성된다. 각 Service는 일반적으로 별도의 DB를 이용한다. 따라서 각 DB는 반드시 동일한 종류의 DB를 이용할 필요가 없으며 Service가 수행하는 Business Logic에 맞는 DB (RDBMS, NoSQL)를 선택하여 이용이 가능하다. 물론 필요에 따라서는 서로 다른 Service가 하나의 DB를 공유 할 수도 있다. Service를 구성하는 기술 Stack도 다양하게 선택하여 구성할 수 있다.
 
 Service는 필요에 따라서 다른 Service를 호출할 수 있다. Service 호출은 각 Service가 제공하는 Interface를 통해서 호출한다. 일반적으로는 Network 기반의 REST API, GRPC를 Service의 Interface로 많이 이용하고 있다. 이러한 Network 기반의 Service Interface는 Service 사이의 경계를 명확하게 만든다. [그림 1]에서 Service A는 Service B와 Service C를 조합을 통해서 제공되는 Service를 나타내고 있다.
 
