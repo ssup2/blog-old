@@ -11,41 +11,57 @@ MSA (Micro Service Architecture)를 분석한다.
 
 ### 1. MSA (Micro Service Architecture)
 
-MSA (Micro Service Architecture)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 복잡한 App을 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
+MSA (Micro Service Architecture)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
 
-#### 1.1. Monolithic vs MSA
+#### 1.1. Monolithic Architecture vs MSA
 
-![[그림 1] Monolithic Architecture]({{site.baseurl}}/images/theory_analysis/MSA/Monolithic_Architecture.PNG){: width="700px"}
+![[그림 1] Monolithic Architecture vs MSA]({{site.baseurl}}/images/theory_analysis/MSA/Monolithic_MSA.PNG){: width="700px"}
 
-[그림 1]은 기존의 Monolithi Architecture를 나타내고 있다. Monolithic Architecture는 여러개의 Service들이 하나의 WAR 파일에 들어가 WAR 파일 단위로 WAS에 배포되어 동작한다. 또한 모든 Service들이 하나의 DB를 공유한다.
+[그림 1]은 기존의 Monolithic Architecture와 MSA를 나타내고 있다. **Monolithic Architecture**는 특정 기능을 담당하는 Module의 집합으로 구성되며, 각 Module은 하나의 DB를 공유한다. [그림 1]에서 API Server에 모든 Module들이 모여 있고, 모든 Module들이 하나의 DB를 공유하고 있는것을 확인할 수 있다.
 
-Monolithic Architecture는 Service들의 경계가 모호하고 DB도 공유하는 구조이기 때문에 Service간의 의존성 및 DB 의존성이 높다. 따라서 Service가 변경되거나 DB가 변경되면 연관된 많은 Service들도 같이 변경되어야 한다. 모호한 Service 경계는 Service를 개발하는 팀의 구성 및 역할도 모호하게 만든다. WAR 파일 단위로 Service가 배포되기 때문에 운영중 특정 Service에 부하가 몰려 Scale Out이 필요한 경우 Scale Out이 불필요한 Service들도 같이 배포되며, 이에 따라 불필요하게 다른 Service에도 영향을 줄 수 있다는 단점을 갖고 있다.
+Monolithic Architecture는 일반적으로 Module 사이의 경계가 모호하고 다수의 Module이 하나의 Schema를 공유하여 이용하는 경우가 많다. 따라서 일부 Module 또는 DB가 변경되면 연관된 많은 Module들도 같이 변경되어야 한다. 이러한 **Side Effect**는 개발 효율을 떨어트리는 주요 원인중 하나이다. 또한 모호한 Module의 경계는 Module을 개발하는 팀의 구성 및 역활도 모호하게 만들어 팀이 주도적으로 개발을 못하게 만드는 원인이 된다.
 
-하지만 단순한 구조로 인하여 빠른 개발과, 쉬운 배포가 가능하다는 특징을 갖고 있다. 또한 하나의 DB를 공유하기 때문에 DB Transaction 기능을 이용하여 Race Condition 방지, Service Rollback 등을 쉽게 처리 할 수 있는 장점을 가지고 있다. 따라서 큰 큐모의 Service 개발이 아닌 경우에는 Monolithic Architecture가 유리하다.
+Monolithic Architecture에서는 운영 중 특정 Module만 부하가 몰려 Scale Out이 필요한 경우, Scale Out이 불필요한 Module들도 같이 Scale Out이 되어야 하기 때문에 불필요한 자원 낭비가 발생한다. 특정 Module만 교체하고 싶은 상황에서도 모든 Module이 같이 교체되어야 하기 때문에 불필요하게 다른 Module에도 영향을 주게 된다.
 
-![[그림 2] MSA Architecture]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture.PNG){: width="600px"}
+하지만 Monolithic Architecture는 단순한 구조로 인하여 빠른 개발과, 쉬운 배포가 가능하다는 특징을 갖고 있다. 또한 하나의 DB를 공유하기 때문에 DB Transaction 기능을 이용하여 Race Condition 방지, Service Rollback 등을 쉽게 처리 할 수 있는 장점을 가지고 있다. 따라서 큰 큐모의 개발이 아닌 경우에는 Monolithic Architecture가 일반적으로 유리하다.
 
-[그림 2]는 MSA를 나타내고 있다. 각 Service들은 독립된 Server와 DB에서 동작한다. Service는 Service가 가지고 있는 Business Logic만을 이용하여 구성될 수 있지만, 필요에 따라 여러 Service들을 조합으로도 구성 될 수도 있다. Service 사이의 통신은 일반적으로 RabbitMQ 같은 Message Queue를 이용한다. Message Queue는 개발 언어 및 환경에 비교적 덜 의존적이면서도 안전하게 Message를 송수신 할 수 있는 수단이다. Message Queue를 통해 Service 개발자는 Service 사이의 통신에 많은 신경을 쓸 필요 없이 Business Logic에 집중 할 수 있게 된다.
+**MSA**는 Business Logic을 수행하는 다수의 Service와 다수의 DB로 구성된다. 각 Service는 일반적으로 별도의 DB를 이용한다. 따라서 각 DB는 반드시 동일한 DB를 이용할 필요가 없으며 Service가 수행하는 Business Logic에 맞는 DB를 선택하여 이용이 가능하다. 물론 필요에 따라서는 서로 다른 Service가 하나의 DB를 공유 할 수도 있다. [그림 1]에서 Service B와 Servicd D는 RDBMS를 이용하고 있고 Service C는 NoSQL을 이용하고 있는것을 확인 할 수 있다.
 
-MSA의 Service는 독립된 Server와 DB에서 동작하고, Message Queue를 이용하여 Service와 Message 송수신 사이의 의존성을 줄이기 때문에 Service 사이의 경계가 명확하다. 따라서 Service 변경이나 DB 변경의 Side Effect가 적은 편이다. 명확한 Service의 경계는 팀의 구성 및 역할도 명확하게 만들고, 유연한 운영이 가능하도록 만든다.
+Service는 필요에 따라서 다른 Service를 호출할 수 있다. Service 호출은 각 Service가 제공하는 Interface를 통해서 호출한다. 일반적으로는 Network 기반의 REST API, GRPC를 Service의 Interface로 많이 이용하고 있다. 이러한 Network 기반의 Service Interface는 Service 사이의 경계를 명확하게 만든다. [그림 1]에서 Service A는 Service B와 Service C를 조합을 통해서 제공되는 Service를 나타내고 있다.
 
-운영중 특정 Service에 부하가 몰려 Scale Out이 필요한 경우 해당 Service만 Scale Out을 수행하면 된다. Service 변경시에도 변경된 Service만 Deploy를 수행하면 되기 때문에 DevOps시에도 유리하다. 이러한 MSA의 유연성은 유연한 Resource Scale Out이 가능한 Cloud 환경에서 더욱 빛난다. 하지만 Monolithic Architecture에 비해 단점도 분명 존재한다.
+MSA는 Service의 경계와 역활이 명확하기 때문에 팀의 구성 및 팀의 역활도 분명하게 만들어, 각 팀이 적극적인 개발이 가능하도록 만든다는 장점도 갖고 있다. MSA에서는 특정 Service에 부하가 몰릴 경우 부하가 몰린 Service만 Scale Out이 가능하다. 따라서 다른 Service들이 불필요하게 Scale Out될 필요가 없다. 또한 특정 Service를 교체하더라도 나머지 Service에는 영향을 주지 않는다는 장점을 가지고 있다.
 
-Service와 Message 송수신 사이의 의존성을 줄이기 위해 Message Queue를 두었지만, 성능 측면에서 Message Queue는 분명히 Overhead로 작용한다. 또한 Service 단위로 Deploy를 수행하면 되기 때문에 높은 유연성을 갖고 있지만, 반대로 많은 Service들의 Deploy를 관리해야 한다는 단점을 갖고 있다. MSA의 Service Deploy 부분은 반드시 자동화가 병행되어 개발자가 Service Deploy에 너무 많은 시간을 투자하지 않도록 해야한다. Service들을 조합하여 Service를 구성하는 경우 Debugging이 쉽지 않다는 단점도 갖고 있다. 마지막으로 다수의 DB를 이용하기 때문에 DB의 Transaction 기능을 활용한 Service 개발에 제한적인 단점을 갖고 있다.
+MSA는 다수의 Service로 구성되는 만큼 유연하다는 장점을 가지고 있지만, 다수의 Service를 관리해야 하기 때문에, 유지 보수 측면에서는 복잡하다는 단점을 가지고 있다. 이러한 단점을 극복하기 위해서는 개발자가 하나씩 Service 관리를 직접하는 방식이 아니라 별도의 Tool이나 Platform을 이용해야 한다. MSA 구성시 일반적으로 각 Service는 **Container**화 되어 Kubernetes와 같은 **Container Orchestrator**를 통해서 관리된다.
 
-#### 1.2. API Gateway
+또한 MSA는 각 Service가 서로 다른 DB를 이용하기 때문에 Transaction 처리가 힘들어진다는 단점을 가지고 있다. MSA에서 Transaction을 처리하기 위해서는 DB의 **Two-Phase Commit**이나 **SAGA Pattern**을 이용해야 한다. Service의 조합으로 Service를 구성하는 경우 Service의 의존성으로 인해서 Debugging이 쉽지 않다는 단점을 가지고 있다. 이러한 단점은 **Service Mesh** 도입을 통해서 어느정도 해결할 수 있다.
 
-일반적으로 MSA 구축시 Service를 App에 바로 노출시키지 않고 API Gateway를 통해 노출시킨다. 따라서 App의 모든 Service 요청을 API Gateway를 거친다. 이러한 API Gateway의 특징을 이용해 API Gateway는 App이 요청한 Service를 적절한 Server에 **Routing**하거나 **Load Balancing** 할 수 있다. 또한 여러개의 **Service를 조합**하여 새로운 Service를 App에게 제공하는 기능도 수행한다. API Gateway는 다수의 Service들이 공통적으로 실행해야하는 **공통 Logic**을 수행할때도 이용한다. 가장 많이 이용하는 공통 Logic이 Service 인증/인가이다.
+#### 1.2. Service Type
 
-위에서 언급한것 처럼 MSA는 Service 제공시 다수의 Service를 조합하여 새로운 Service를 제공하는 형태도 가능하다. 이러한 Service의 조합은 대부분 API Gateway에서 이루어진다. 문제는 Service의 개수가 많아지고 조합이 다양해질수록 Service의 조합을 위한 Logic이 복잡해진다는 점이다. 그렇지 않아도 많은 기능을 수행하는 API Gateway에 과도한 Service 조합 기능까지 수행하면 API Gateway가 Monolithic Architecture가 된다는 문제가 있다.
+![[그림 2] Service Type]({{site.baseurl}}/images/theory_analysis/MSA/Service_Type.PNG){: width="700px"}
 
-![[그림 3] Service Type]({{site.baseurl}}/images/theory_analysis/MSA/Service_Type.PNG){: width="700px"}
-
-이러한 문제를 해결하기 위해서 Service를 특징에 따라 분류하고 Service 조합 Logic을 여러 Service로 분산하여 해결 할 수 있다. [그림 3]은 Service를 Core/Atomic Service, Composite/Integration Service, API/Edge Service Service Type으로 분류하고 Service Type별 관계도를 나타내고 있다. 각 Service Type은 아래와 같은 의미를 갖는다.
+위에서 언급한것 처럼 MSA는 Service 제공시 다수의 Service를 조합하여 새로운 Service를 제공하는 형태도 가능하다. Service의 역활 및 위치에 따라서 Service를 분류할 수 있다. [그림 2]는 Service를 Core/Atomic Service, Composite/Integration Service, API/Edge Service Service Type으로 분류하고 Service Type별 관계도를 나타내고 있다. 각 Service Type은 아래와 같은 의미를 갖는다.
 
 * Core/Atomic Service : Core Business Logic이나 Atomic한 Business Logic을 수행하는 Service이다.
 * Composite/Integration Service : Core/Atomic Service를 조합하여 구성한 Service이다.
-* API/Edge Service : Core/Atomic Service, Composite/Integration Service를 조합하여 App에게 노출되는 Service이다. API Gateway의 역할도 수행한다.
+* API/Edge Service : Core/Atomic Service, Composite/Integration Service를 조합하여 App에게 노출되는 Service이다. API Gateway에 부하가 높을경우 API Gateway의 일부 역할도 수행할 수 있다.
+
+#### 1.3. with API Gateway
+
+![[그림 3] MSA with API Gateway]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture_API_Gateway.PNG){: width="600px"}
+
+MSA 도입시 같이 도입해야 할 Component로 API Gateway가 있다. API Gateway는 의미 그대로 외부 Client의 요청을 대신 받아 Service에게 전달해주는 Gateway 역활을 수행한다. [그림 2]는 API Gateway를 도입한 MSA를 나타내고 있다. API Gateway는 Client의 모든 요청이 거쳐가는 Component이기 때문에, 모든 Service가 공통적으로 처리해야 하는 **Service의 공통 Logic**을 API Gateway에서 처리할 수 있다.
+
+일반적으로 **인증/인가** 및 **암호화/복호화** 과정을 API Gateway에서 수행한다. [그림 2]의 경우처럼 API Gateway에서 인증/인가 및 암호화/복호화 처리를 수행하면 각 Service는 인증/인가 및 암호화/복호화 처리를 진행할 필요가 없다. 또한 API Gateway는 Client의 요청을 분배하는 **Load Balancer** 역활도 수행한다.
+
+#### 1.4. with Message Queue
+
+![[그림 4] MSA with Message Queue]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture_MQ.PNG){: width="600px"}
+
+MSA 도입시 같이 도입을 검토 해볼만한 Component로 Message Queue가 있다. MSA에서 Message Queue는 Event Queue로 이용된다. 일반적으로 Kafka를 이용하여 Message Queue를 구축한다. [그림 3]은 Message Queue를 도입한 MSA를 나타내고 있다. Service A는 Service B, Service C 호출시 직접 호출하지 않고 Message Queue에게 Event를 Publish한다. 이후에 생성된 Event를 Subscribe 하는 Service B, Service C는 Event를 수신한 다음 Business Logic을 처리한다.
+
+Message Queue가 도입되기 전에 Service A는 Service B, Service C의 존재를 알고 있어야 한다. 하지만 Message Queue를 도입하면서 Service A는 단순히 Event를 Message Queue에게 전달만 하면된다. Service A는 생성한 Event를 Service B, Service C가 이용한다는 정보를 알필요 없다. Service B, Service C 관점에서는 내가 필요한 Event가 생성되었을때 수신만 하면된다. 이처럼 Message Queue를 이용하면 Service 사이의 **의존성**을 낮출 수 있다.
+
+또한 Service B, Service C의 부하가 일시적으로 높은 상태에서 Service A가 Service B, Service C를 직접 호출하는 경우에는 Service B, Service C의 부하를 더 높이게 된다. Message Queue를 도입하면 Service B, Service C는 현재 자신이 처리하고 있는 Event가 완료된 이후에 Message Queue에서 다음 Event를 가져와 처리하는 것이 가능하기 때문에 일시적 부하를 회피할 수 있게 된다. 이처럼 Message Queue를 이용하면 Event Queuing을 통해서 Service의 일시적 부하를 회피할 수 있다.
 
 ### 2. 참조
 
