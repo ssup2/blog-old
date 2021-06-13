@@ -55,7 +55,7 @@ MSA 도입시 같이 도입해야 할 Component로 API Gateway가 있다. API Ga
 
 #### 1.4. with Message Queue
 
-![[그림 4] MSA with Message Queue]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture_MQ.PNG){: width="600px"}
+![[그림 4] MSA with Message Queue]({{site.baseurl}}/images/theory_analysis/MSA/MSA_Architecture_MQ.PNG){: width="500px"}
 
 MSA 도입시 같이 도입을 검토 해볼만한 Component로 Message Queue가 있다. MSA에서 Message Queue는 Event Queue로 이용된다. 일반적으로 Kafka를 이용하여 Message Queue를 구축한다. [그림 3]은 Message Queue를 도입한 MSA를 나타내고 있다. Service A는 Service B, Service C 호출시 직접 호출하지 않고 Message Queue에게 Event를 Publish한다. 이후에 생성된 Event를 Subscribe 하는 Service B, Service C는 Event를 수신한 다음 Business Logic을 처리한다.
 
