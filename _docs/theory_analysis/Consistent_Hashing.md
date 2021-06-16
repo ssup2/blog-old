@@ -29,6 +29,8 @@ Bucket이 추가/제거될 경우 Hash Ring에 존재하는 vBucket도 같이 �
 
 Bucket하나에 다수의 vBucket이 Mapping되는데, vBucket이 필요한 이유는 각 Bucket에 Key를 골고루 분배하기 위해서이다. 만약 [그림 2]의 Hash Ring에 Bucket만 3~4개 존재한다고 생각한다면 문자가 특정 Bucket에만 몰릴수 있다는 사실을 알 수 있다. 일반적으로 vBucket은 Bucket 하나당 1000개 이상을 생성한다. 각 Bucket마다 Bucket과 vBucket의 비율을 조절하여 각 Bucket이 **서로 다른 비율 (Weight)**로 Key를 갖도록 만들 수 있다.
 
+Hash Ring의 대부분의 값 사이에 vBucket이 위치하도록 vBucket을 많이 생성해 둔다면, Hashing 시간 복잡도는 **O(1)**이 된다.
+
 #### 1.2. Jump Consistent Hashing
 
 ![[그림 3] Jump Consistent Hashing]({{site.baseurl}}/images/theory_analysis/Consistent_Hashing/Jump_Consistent_Hashing.PNG){: width="700px"}
@@ -39,11 +41,12 @@ Jump Consistent Hashing은 Ring Consistent Hashing이 vBucket 할당을 위해�
 
 각 Key가 Jump 거리하는 Random이며 Random의 Seed로 Key가 이용된다. 즉 각 Key마다 서로 다른 거리로 Jump를 수행하지만 Bucket의 크기에 따라서 Jump 거리가 변하지는 않는다는 의미다. [그림 3]에서도 Bucket 크기가 변경되어도 각 문자 (Key)마다 Jump 거리는 동일한 것을 확인할 수 있다. Bucket이 추가/제거 될때 Bucket 크기를 넘는 Jump만 영향을 받기 때문에 관련 Bucket의 Key만 이동하는 것을 확인할 수 있다.
 
-Jump Consistent Hashing은 각 Key의 모든 Jump 과정을 저장할 필요 없이, Bucket 크기를 넘기 기전의 위치만 기억하면 되기 때문에 Ring Consistent Hashing과 같이 vBucket의 개념이 필요 없으며, Ring Consistent Hashing에 비해서 적은 Memory 공간을 이용한다. 단 Ring Consistent Hashing와 같이 각 Bucket이 서로 다른 비율로 Key를 갖도록 만들수는 없다. 시간 복잡도는 **ln(n)**이다.
+Jump Consistent Hashing은 각 Key의 모든 Jump 과정을 저장할 필요 없이, Bucket 크기를 넘기 기전의 위치만 기억하면 되기 때문에 Ring Consistent Hashing과 같이 vBucket의 개념이 필요 없으며, Ring Consistent Hashing에 비해서 적은 Memory 공간을 이용한다. 단 Ring Consistent Hashing와 같이 각 Bucket이 서로 다른 비율로 Key를 갖도록 만들수는 없다. Hashing 시간 복잡도는 **O(ln(n))**이다.
 
 ### 2. 참조
 
 * Ring Consistent Hashing : [https://dl.acm.org/doi/abs/10.1145/258533.258660](https://dl.acm.org/doi/abs/10.1145/258533.258660)
+* Ring Consistent Hashing : [https://www.secmem.org/blog/2021/01/24/consistent-hashing/](https://www.secmem.org/blog/2021/01/24/consistent-hashing/)
 * Jump Consistent Hashing : [https://arxiv.org/ftp/arxiv/papers/1406/1406.2294.pdf](https://arxiv.org/ftp/arxiv/papers/1406/1406.2294.pdf)
 * [https://www.joinc.co.kr/w/man/12/hash/consistent](https://www.joinc.co.kr/w/man/12/hash/consistent)
 * [https://itnext.io/introducing-consistent-hashing-9a289769052e](https://itnext.io/introducing-consistent-hashing-9a289769052e)
