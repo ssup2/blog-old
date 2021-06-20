@@ -20,6 +20,12 @@ Golang에서는 OS에서 제공하는 Thread보다 더 경량화된 Thread인 Go
 
 #### 1.1. Goroutine State
 
+Goroutine은 실제로 더욱 다양한 상태를 가지고 있지만 간략하게 나타내면 다음의 3가지 상태로 나타낼 수 있다.
+
+* Waiting : Goroutine이 외부의 Event를 대기하고 있는 상태를 의미한다. 여기서 외부의 Event는 I/O Device 요청 처리 완료, Lock 해제와 같은 Goroutine이 실행 가능하다는걸 알려주는 OS의 Event를 의미한다.
+* Runnable : Goroutine이 실행 가능한 상태를 의미한다.
+* Executing : Goroutine이 실행되고 있는 상태를 의미한다.
+
 #### 1.2. Work Stealing
 
 #### 1.3. Fairness
