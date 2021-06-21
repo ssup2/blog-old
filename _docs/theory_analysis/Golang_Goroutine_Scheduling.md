@@ -43,6 +43,14 @@ LRQ는 일반적인 Queue가 아닌 FIFO (First In, First Out)과 LIFO (Least In
 
 #### 1.3. System Call
 
+각각의 System Call은 Sync 방식과 Async 방식 2가지 방식으로 동작한다. App이 Sync System Call을 호출하는 경우 Sync System Call의 동작이 끝나기 전까지 App은 어떠한 동작도 수행하지 못하고 Blocking 된다. 즉 App을 동작시키는 Thread는 App 동작을 일시 중지하고 System Call 처리를 수행한다. 반대로 App이 Async System Call을 호출하는 경우 App은 Async System Call 호출 후 원하는 동작을 수행할 수 있다. 단 App은 호출한 Async System Call의 동작 완료 Event를 별도로 수신하여 처리해야 한다.
+
+Goroutine 내부에서도 Sync System Call을 호출하는 경우 Goroutine을 동작시키던 Thread는 Goroutine 동작을 일시 중지하고 System Call 처리를 수행한다. 따라서 System Call을 처리하는 동안 해당 Thread는 다른 Goroutine을 동작시키지 못하기 때문에 Goroutine을 효율적으로 처리하지 못하게 된다.
+
+![[그림 3] Sync System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Sync_System_Call.PNG){: width="600px"}
+
+![[그림 4] Async System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Async_System_Call.PNG){: width="600px"}
+
 #### 1.4. Work Stealing
 
 #### 1.5. Fairness
