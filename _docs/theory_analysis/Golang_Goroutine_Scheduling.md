@@ -28,15 +28,17 @@ Goroutine은 실제로 더욱 다양한 상태를 가지고 있지만 간략하�
 
 [그림 1]에서 Net Poller에 존재하는 Goroutine과 Blocking 상태로 존재하는 Goroutine은 Waiting 상태의 Goroutine을 의미한다. GRQ, LRQ에 존재하는 Goroutine은 Runnable 상태의 Goroutine이다. Processor(P)와 Thread(M)과 같이 존재하는 Goroutine은 Executing 상태의 Goroutine이다.
 
-Goroutine은 반드시 Processor(P)와 Thread(M)과 같이 존재할 경우에만 Executing 상태가 된다. 따라서 동시에 최대로 구동시킬수 있는 Goroutine의 개수는 Processor(P)의 개수에 따라서 정해진다. Processor(P)의 개수는 **GOMAXPROCS** 환경 변수의 값으로 결정할 수 있으며, GOMAXPROCS 환경 변수가 설정되지 않으면 기본 값으로는 CPU Core의 개수가 설정되어 모든 CPU Core에서 동시에 Goroutine을 구동시킬수 있도록 만든다.
+Goroutine은 반드시 Processor(P)와 Thread(M)과 같이 존재할 경우에만 Executing 상태가 된다. 따라서 동시에 최대로 구동시킬수 있는 Goroutine의 개수는 Processor(P)의 개수에 따라서 정해진다. Processor(P)의 개수는 **GOMAXPROCS** 환경 변수의 값으로 결정할 수 있으며, GOMAXPROCS 환경 변수가 설정되지 않으면 기본 값으로는 CPU Core의 개수가 설정되어 모든 CPU Core에서 동시에 Goroutine을 구동시킬수 있도록 만든다. [그림 1]에서 GOMAXPROCS 값은 "3"이다.
 
 #### 1.2. Run Queue
 
-#### 1.3. Work Stealing
+![[그림 2] Goroutine Scheduling]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/LRQ.PNG){: width="600px"}
 
-#### 1.4. Fairness
+#### 1.3. System Call
 
-#### 1.5. System Call
+#### 1.4. Work Stealing
+
+#### 1.5. Fairness
 
 ### 2. 참조
 
