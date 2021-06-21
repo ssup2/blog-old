@@ -47,9 +47,9 @@ LRQ는 일반적인 Queue가 아닌 FIFO (First In, First Out)과 LIFO (Least In
 
 Goroutine 내부에서도 Sync System Call을 호출하는 경우 Goroutine을 동작시키던 Thread는 Goroutine 동작을 일시 중지하고 System Call 처리를 수행한다. 따라서 System Call을 처리하는 동안 해당 Thread는 다른 Goroutine을 동작시키지 못하기 때문에 Goroutine을 효율적으로 처리하지 못하게 된다.
 
-![[그림 3] Sync System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Sync_System_Call.PNG){: width="400px"}
+![[그림 3] Sync System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Sync_System_Call.PNG){: width="500px"}
 
-![[그림 4] Async System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Async_System_Call.PNG){: width="400px"}
+![[그림 4] Async System Call]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Async_System_Call.PNG){: width="500px"}
 
 #### 1.4. Work Stealing
 
