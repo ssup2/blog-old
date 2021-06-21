@@ -11,7 +11,6 @@ Golang의 Goroutine Scheduling을 분석한다.
 
 ### 1. Goroutine Scheduling
 
-
 ![[그림 1] Goroutine Scheduling]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/Golang_Goroutine_Scheduling.PNG){: width="700px"}
 
 Golang에서는 OS에서 제공하는 Thread보다 더 경량화된 Thread인 Goroutine을 제공하고 있다. Goroutine은 Golang Runtime에 포함되어 있는 **Golang Scheduler**가 수행하는 Thread Scheduling을 통해서 실행된다. 즉 다수의 Goroutine들이 소수의 Thread위에서 동작하게 된다. [그림 1]은 Goroutine Scheduling 과정을 나타내고 있다. **Goroutine은 G, Processor는 P, Thread는 M**으로 표현되었다. 여기서 Processor는 실제 CPU Core의 개수가 아닌 가상의 Processor (Virtual CPU Core)를 의미한다.
@@ -32,7 +31,15 @@ Goroutine은 반드시 Processor(P)와 Thread(M)과 같이 존재할 경우에�
 
 #### 1.2. Run Queue
 
-![[그림 2] Goroutine Scheduling]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/LRQ.PNG){: width="600px"}
+**LRQ**는 각 Processor(P)마다 존재하는 Run Queue이다. Processor는 자신이 소유하는 LRQ로부터 Goroutine을 하나씩 가져와 구동시킨다. LRQ를 통해서 GRQ에서 발생하는 Race Condition을 줄인다. LRQ가 Thread(M)에 존재하지 않는 이유는 Thread가 LRQ를 소유하게 되면 Thread(M)의 개수가 늘어날수록 LRQ의 개수도 같이 증가하기 때문이다. LRQ의 개수가 너무 많아지면 Work Stealing과 같은 과정의 Overhead도 커지기 때문에 Processor(P)가 LRQ를 소유한다. Processor(P)라는 개념이 도입된 이유가 LRQ의 개수를 줄이기 위해서이다.
+
+![[그림 2] LRQ]({{site.baseurl}}/images/theory_analysis/Golang_Goroutine_Scheduling/LRQ.PNG){: width="600px"}
+
+LRQ는 일반적인 Queue가 아닌 FIFO (First In, First Out)과 LIFO (Least In, First Out)의 결합된 형태를 가지고 있다. LIFO 부분은 Size가 "1"이기 때문에 하나의 Goroutine만 저장된다. [그림 2]는 LRQ의 동작을 나타내고 있다. LRQ에 Goroutine Enqueue시 LIFO 부분에 먼저 Goroutine이 저장이 되고 이후에 FIFO 부분에 Goroutine이 저장된다. 반대로 LRQ에서 Goroutine Dequeue시 LIFO 부분의 Goroutine이 먼저 나오고 이후에 FIFO 부분의 Goroutine이 나온다.
+
+이렇게 LRQ가 설계된 이유는 Goroutine의 Locality를 부여하기 위해서이다. Goroutine에서 새로 Goroutine을 생성하고 생성한 Goroutine이 종료되기를 기다리는 경우, 새로 생성된 Goroutine이 빠르게 실행되고 종료되어야 높은 성능을 얻을 수 있다. Cache 관점까지 고려해보면 새로 생성된 Goroutine은 동일한 Processor에서 실행되야 좋다. 새로 생성된 Goroutine은 기본적으로 Goroutine을 생성한 Processor의 LRQ에 저장된다. 따라서 LRQ의 LIFO 부분을 통해서 새로 생성된 Goroutine은 동일한 Processor에서 빠르게 실행될 수 있다.
+
+**GRQ**는 LRQ에 할당되지 못한 대부분의 Goroutine이 모여있는 Run Queue이다. Executing 상태가 된 Goroutine은 한번에 최대 10ms까지 동작한다. 10ms동안 동작한 Goroutine은 Waiting 상태가되어 GRQ로 이동된다. 또한 Goroutine이 생성되었을때 Goroutine을 생성한 Processor의 LRQ가 가득찬 경우, 생성된 Goroutine은 GRQ에 저장된다.
 
 #### 1.3. System Call
 
