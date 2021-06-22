@@ -57,15 +57,33 @@ Goroutine 내부에서도 Sync System Call을 호출하는 경우 Goroutine을 �
 
 #### 1.4. Work Stealing
 
+{% highlight cpp%}
+runtime.schedule() {
+    // only 1/61 of the time, check the global runnable queue for a G.
+    // if not found, check the local queue.
+    // if not found,
+    //     try to steal from other Ps.
+    //     if not, check the global runnable queue.
+    //     if not found, poll network.
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 1] Goroutine Scheduling Algorithm</figcaption>
+</figure>
+
+Golang Scheduler는 LRQ에 Goroutine이 존재하지 않을 경우 다른 곳으로부터 Goroutine을 가져온다. [Code 1]은 Golang Scheduler가 수행하는 Goroutine Scheduling Algorithm을 나타내고 있다. LRQ에 Goroutine이 없다면 다른 LRQ의 Goroutine이 존재하는지 확인하고, LRQ에 Goroutine이 존재한다면 절반의 Goroutine을 가져온다.
+
+다른 LRQ에도 Goroutine이 존재하지 않는다면, GRC에 Goroutine이 존재하는지 확인하고 존재하면 Goroutine을 가져온다. GRC에도 Goroutine이 존재하지 않는다면 Net Poller에 Goroutine이 존재하는지 확인하고 존재하면 Goroutine을 가져온다. 단 Goroutine의 Locality를 위해서 새로 생성된 Goroutine의 경우에는 3ms동안 Stealing 되지 않도록 제한한다.
+
 #### 1.5. Fairness
 
 ### 2. 참조
 
+* [https://developpaper.com/deep-decryption-of-the-scheduler-of-go-language/](https://developpaper.com/deep-decryption-of-the-scheduler-of-go-language/)
 * [https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
 * [https://www.youtube.com/watch?v=-K11rY57K7k](https://www.youtube.com/watch?v=-K11rY57K7k)
 * [https://morsmachine.dk/netpoller](https://morsmachine.dk/netpoller)
 * [https://www.timqi.com/2020/05/15/how-does-gmp-scheduler-work/](https://www.timqi.com/2020/05/15/how-does-gmp-scheduler-work/)
-* [https://developpaper.com/deep-decryption-of-the-scheduler-of-go-language/](https://developpaper.com/deep-decryption-of-the-scheduler-of-go-language/)
 * [https://rakyll.org/scheduler/](https://rakyll.org/scheduler/)
 * [https://www.programmersought.com/article/42797781960/](https://www.programmersought.com/article/42797781960/)
 * [https://livebook.manning.com/book/go-in-action/chapter-6/11](https://livebook.manning.com/book/go-in-action/chapter-6/11)
