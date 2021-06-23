@@ -1,8 +1,8 @@
 ---
 title: Golang Goroutine Scheduling
 category: Theory, Analysis
-date: 2021-01-18T12:00:00Z
-lastmod: 2021-01-18T12:00:00Z
+date: 2021-06-24T12:00:00Z
+lastmod: 2021-06-24T12:00:00Z
 comment: true
 adsense: true
 ---
