@@ -57,7 +57,7 @@ Goroutine 내부에서도 Sync System Call을 호출하는 경우 Goroutine을 �
 
 #### 1.4. Work Stealing
 
-{% highlight cpp%}
+{% highlight cpp %}
 runtime.schedule() {
     // only 1/61 of the time, check the global runnable queue for a G.
     // if not found, check the local queue.
