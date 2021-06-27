@@ -80,6 +80,14 @@ request* ConsumeReq() {
 <figcaption class="caption">[Code 2] Condition Variable CPP Example on Linux</figcaption>
 </figure>
 
+Condition Variable은 Critical Section에서 진입한 Thread가 특정 조건이 될때까지 대기할때 이용된다. Mutex와 같이 이용되며, 단독으로는 이용되지 못한다. [Code 2]는 Linux에서 동작하는 CPP 기반 Condition Variable을 나타내고 있다. ConsumeReq() 함수에서 Request가 저장되는 Request Queue에 Request가 존재하지 않는다면 pthread_cond_wait() 함수를 통해서 대기 동작을 수행하는것을 확인할 수 있다.
+
+Condition Variable을 이용하여 대기 동작을 수행하는 Thread는 Critical Section 진입시 이용한 Mutex를 Unlock 상태로 만들고 Sleep 상태가 된다. [Code 2]에서 pthread_cond_wait() 함수가 Condition Variable Instance 뿐만 아니라 Mutex Instance도 같이 Parameter로 받는 이유는 Parameter로 받은 Mutex를 Unlock 상태로 만들기 위해서 이다. Mutex를 Unlock 상태로 만들지 않으면 다른 Thread에서 Critical Section에 진입하지 못하기 때문이다.
+
+Condition Variable에서 대기중인 Thread가 아닌 별도의 Process/Thread에서 특정 조건을 완성하면 대기중인 Thread를 깨워서 동작시킬수 있다. Condition Variable에서 대기중인 Thread는 깨어나면서 Critical Section 진입시 이용한 Mutex를 Lock 상태로 만들고 다시 Critical Section에 진입한다. Condition Variable에서 대기중인 Thread가 다수일 경우 하나의 Thread만 깨울수도 있고, 모든 Thread를 깨울수도 있다.
+
+[Code 2]에서 pthread_cond_signal() 함수는 하나의 Thread만 깨우는 함수이고 pthread_cond_broadcast() 함수는 모든 Thread를 깨우는 함수이다. pthread_cond_signal() 함수는 가장 높은 Scheduling 우선순위가 높은 하나의 Thread를 깨운다.
+
 #### 1.4. Monitor
 
 {% highlight cpp %}
@@ -145,6 +153,7 @@ int main() {
 * Mutex : [https://www.joinc.co.kr/w/Site/Thread/Beginning/Mutex](https://www.joinc.co.kr/w/Site/Thread/Beginning/Mutex)
 * Mutex : [http://www.qnx.com/developers/docs/6.5.0/index.jsp?topic=%2Fcom.qnx.doc.neutrino_lib_ref%2Fp%2Fpthread_mutex_unlock.html](http://www.qnx.com/developers/docs/6.5.0/index.jsp?topic=%2Fcom.qnx.doc.neutrino_lib_ref%2Fp%2Fpthread_mutex_unlock.html)
 * Spinlock : [https://seokbeomkim.github.io/posts/locks-in-the-kernel-1/](https://seokbeomkim.github.io/posts/locks-in-the-kernel-1/)
+* Condition Variable : [https://stackoverflow.com/questions/49281906/which-thread-would-be-notified-by-pthread-cond-signal](https://stackoverflow.com/questions/49281906/which-thread-would-be-notified-by-pthread-cond-signal)
 * Condition Variable : [https://elecs.tistory.com/135](https://elecs.tistory.com/135)
 * Semaphore : [https://yebig.tistory.com/305](https://yebig.tistory.com/305)
 * Semaphore : [https://www.joinc.co.kr/w/Site/system_programing/IPC/semaphores](https://www.joinc.co.kr/w/Site/system_programing/IPC/semaphores)
