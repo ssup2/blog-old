@@ -78,5 +78,6 @@ request* consume_req() {
 ### 2. 참조
 
 * Mutex : [https://www.joinc.co.kr/w/Site/Thread/Beginning/Mutex](https://www.joinc.co.kr/w/Site/Thread/Beginning/Mutex)
-* Semaphore : [https://yebig.tistory.com/305](https://yebig.tistory.com/305)
 * Condition Variable : [https://elecs.tistory.com/135](https://elecs.tistory.com/135)
+* Semaphore : [https://yebig.tistory.com/305](https://yebig.tistory.com/305)
+* Semaphore : [https://www.joinc.co.kr/w/Site/system_programing/IPC/semaphores](https://www.joinc.co.kr/w/Site/system_programing/IPC/semaphores)
