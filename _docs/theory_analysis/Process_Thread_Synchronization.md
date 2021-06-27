@@ -18,7 +18,7 @@ int count; // shared resource
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // mutex instance
 
 void increase_count() {
-    pthread_mutex_lock(&mutex);   // lock
+    pthread_mutex_lock(&mutex); // lock
     count++;
     pthread_mutex_unlock(&mutex); // unlock
 }
@@ -34,19 +34,19 @@ void increase_count() {
 
 queue<request*> req_queue; // shared resource
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // mutex instance
-pthread_cond_t cond = PTHREAD_COND_INITIALIZER;    // condition variable instance
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER; // condition variable instance
 
 void produce_req_wakeup_one(request* req) {
-    pthread_mutex_lock(&mutex);   // lock
+    pthread_mutex_lock(&mutex); // lock
     req_queue.enqueue(req);
     pthread_mutex_unlock(&mutex); // unlock
-    pthread_cond_signal(&cond);   // wake up one thread
+    pthread_cond_signal(&cond); // wake up one thread
 }
 
 void produce_req_wakeup_all(request* req) {
-    pthread_mutex_lock(&mutex);    // lock
+    pthread_mutex_lock(&mutex); // lock
     req_queue.enqueue(req);
-    pthread_mutex_unlock(&mutex);  // unlock
+    pthread_mutex_unlock(&mutex); // unlock
     pthread_cond_broadcast(&cond); // wake up all thread
 }
 
@@ -65,6 +65,13 @@ request* consume_req() {
 </figure>
 
 #### 1.3. Semaphore
+
+{% highlight cpp %}
+
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 3] Semaphore Example</figcaption>
+</figure>
 
 #### 1.4. Monitor
 
