@@ -120,6 +120,10 @@ class ReqQueue {
 <figcaption class="caption">[Code 3] Monitor CPP Example on Linux</figcaption>
 </figure>
 
+Monitor는 Mutex와 Condition Variable을 활용하여 추상화된 Process/Thread 동기화 기법이다. Monitor를 이용하면 개발자는 Mutex, Condition Variable를 고려하지 않고 쉽게 Shared Resource를 제어할 수 있게 된다. 일반적으로 CPP, Java와 같은 객체 지향언어에서 많이 이용된다. Java의 모든 Object는 Monitor를 내장하고 있으며 Thread 사이의 Object를 동기화할때 이용한다. Syncronized Keywork, wait(), notify(), notifyAll() 함수들이 모두 Monitor를 기반으로 하고 있다.
+
+[Code 3] Linux에서 동작하는 CPP 기반 Monitor 예제를 나타내고 있다. [Code 2]와 유사하게 Request를 Procduce/Consume 동작을 수행하지만, [Code 3]의 ReqQueue Class를 이용하는 개발자는 Mutex, Condition Variable의 존재를 인식하지 않아도 ProduceReq(), ConsumeReq() 함수를 통해서 Request를 Procduce/Consume 동작을 수행할 수 있다.
+
 #### 1.5. Semaphore
 
 {% highlight cpp %}
