@@ -35,9 +35,13 @@ Mutex의 Lock 함수가 호출되면 해당 Mutex의 상태가 Lock/Unlock 상�
 
 Mutex의 Lock 상태는 Mutex의 Unlock 함수의 호출을 통해서 Unlock 상태가 된다. 이때 Mutex의 Unlock 함수는 반드시 Mutex의 Lock 함수를 통해서 해당 Mutex를 Lock 상태로 만든 Thread에서 호출해야 한다. 즉 Mutex의 Lock 상태는 외부의 Thread에서 Unlock 상태로 변경할 수 없다. 이러한 특징은 Binary Semaphore와의 가장 큰 차이점이다.
 
-Mutex가 Lock 상태에서 Mutex의 Lock 함수를 호출한 Thread는 Sleep 상태로 변경되고 Scheduling Out되어 Mutex가 Unlock 상태가 되기를 대기한다. 이후에 해당 Mutex가 Unlock 상태가 Sleep 상태의 Thread는 깨어나고, Lock 함수가 종료되면서 Critical Section에 진입하게 된다. 만약 동일한 Mutex에 다수의 Thread가 대기중이라면, Linux Mutex의 경우에는 우선순위가 가장 높은 Thread 하나만이 깨어난다.
+Mutex가 Lock 상태에서 Mutex의 Lock 함수를 호출한 Thread는 Sleep 상태로 변경되고 Scheduling Out되어 Mutex가 Unlock 상태가 되기를 대기한다. 이후에 해당 Mutex가 Unlock 상태가 Sleep 상태의 Thread는 깨어나고, Lock 함수가 종료되면서 Critical Section에 진입하게 된다. 만약 동일한 Mutex에 다수의 Thread가 대기중이라면, Linux Mutex의 경우에는 우선순위가 가장 높은 Thread 하나만 깨어난다.
 
 #### 1.2. Spinlock
+
+Spinlock은 Mutex와 동일하게 Lock 함수와 Unlock 함수가 존재하는 Process/Thread 동기화 기법이다. Mutex와의 차이점은 Spinlock의 Lock 함수는 Sleep 상태로 변경되지 않으며, Spinlock이 Unlock 상태까지 계속 검사한다는 점이다. Thread가 Sleep 상태가 되지 않기 때문에 Process/Thread의 Context Switching Overhead가 발생하지 않는 다는 장점이 있지만, Lock 상태가 오래 지속될 경우 불필요한 CPU 낭비가 발생할 수 있다는 단점을 가지고 있다.
+
+따라서 Spinlock은 Critical Section 부분의 실행시간이 매우 짧아 Lock 상태가 짧게 지속될수 있는 경우에만 이용해야 한다. 주로 App Level보다는 Kernel Level에서 이용된다. Linux Kernel의 Spinlock의 경우에는 일시적으로 모든 Interrupt를 Disable 시켜 Context Switching을 막는다.
 
 #### 1.3. Condition Variable
 
