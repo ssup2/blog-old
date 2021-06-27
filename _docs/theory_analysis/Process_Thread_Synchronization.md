@@ -14,8 +14,8 @@ adsense: true
 {% highlight cpp %}
 #include <pthread.h>  
 
-int count; // shared resource
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // mutex instance
+int count; // shared resource
 
 void increase_count() {
     pthread_mutex_lock(&mutex); // lock
@@ -24,7 +24,7 @@ void increase_count() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 1] Mutex Example</figcaption>
+<figcaption class="caption">[Code 1] Mutex CPP Example on Linux</figcaption>
 </figure>
 
 #### 1.2. Condition Variable
@@ -32,9 +32,9 @@ void increase_count() {
 {% highlight cpp %}
 #include <pthread.h>  
 
-queue<request*> req_queue; // shared resource
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; // mutex instance
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER; // condition variable instance
+queue<request*> req_queue; // shared resource
 
 void produce_req_wakeup_one(request* req) {
     pthread_mutex_lock(&mutex); // lock
@@ -61,19 +61,38 @@ request* consume_req() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 2] Condition Variable Example</figcaption>
+<figcaption class="caption">[Code 2] Condition Variable CPP Example on Linux</figcaption>
 </figure>
 
-#### 1.3. Semaphore
+#### 1.3. Monitor
+
+#### 1.4. Semaphore
 
 {% highlight cpp %}
+#include <pthread.h>  
 
+queue<request*> req_queue; // shared resource
+sem_t sem; // semaphore instance
+
+void produce_req(request* req) {
+    sem_wait(sem); // wait and decrease value
+    req_queue.enqueue(req);
+}
+
+request* consume_req() {
+    request* req = req_queue.dequeue();
+    sem_post(sem); // increase value
+    return req;
+}
+
+int main() {
+    sem_init(&sem, 0, 5); // initial value 5
+    ...
+}
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 3] Semaphore Example</figcaption>
+<figcaption class="caption">[Code 3] Semaphore CPP Example on Linux</figcaption>
 </figure>
-
-#### 1.4. Monitor
 
 ### 2. 참조
 
