@@ -35,11 +35,11 @@ eBPF Bytecode는 Kernel Level에서 동작하기 때문에 잘못 작성된 eBPF
 
 bpf() System Call은 eBPF Bytecode 적재 뿐만 아니라 App이 eBPF가 이용하는 Map에 접근할 수 있게 만들어준다. 따라서 App과 eBPF는 Map을 이용하여 통신을 할 수 있다. eBPF와 App사이의 통신은 eBPF가 더욱 다양한 기능을 수행 할 수 있도록 만든다.
 
-#### 1.3. BPF Program Type
+#### 1.3. BPF Program Type, BPF Attach Type
 
 ![[그림 3] eBPF Program Type]({{site.baseurl}}/images/theory_analysis/Linux_BPF/eBPF_Program_Type.PNG){: width="600px"}
 
-**BPF Program Type은 BPF Program이 실행될 수 있는 Hook을 결정한다.** 따라서 BPF Program Type은 BPF Program의 Input Type과 Input Data를 결정한다. 또한 BPF Program Type은 BPF Program이 호출할 수 있는 Kernel Helper Function을 결정한다. [그림 3]은 eBPF Program Type을 나타내고 있다. 앞으로 Kernel에 더욱 많은 Hook이 추가되는 만큼 eBPF Program Type도 추가될 예정이다.
+**BPF Program Type**은 BPF Program이 실행될 수 있는 Hook을 결정한다. 따라서 BPF Program Type은 BPF Program의 Input Type과 Input Data를 결정한다. 또한 BPF Program Type은 BPF Program이 호출할 수 있는 Kernel Helper Function을 결정한다. Hook은 **BPF Attach Type**이라고도 불린다.  [그림 3]은 eBPF Program Type을 나타내고 있다. 앞으로 Kernel에 더욱 많은 Hook이 추가되는 만큼 eBPF Program Type도 추가될 예정이다.
 
 ### 2. 참조
 

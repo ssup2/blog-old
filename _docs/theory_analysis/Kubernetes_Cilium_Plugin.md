@@ -13,13 +13,19 @@ Kubernetes Network Plugin인 Cilium을 분석한다.
 
 ![[그림 1] Cilium 구성요소]({{site.baseurl}}/images/theory_analysis/Kubernetes_Cilium_Plugin/Cilium_Components.PNG){: width="600px"}
 
-Cilium은 **BPF (Berkeley Packet Filter)**를 기반으로 Pod Network를 구축하는 CNI Plugin이다. Kubernetes의 Network Plugin으로 많이 이용되고 있다. [그림 1]은 Kubernetes의 Plugin으로 동작하는 Cilium의 구성요소를 나타내고 있다. 크게 **etcd, cilium-agent, BPF** 3가지로 구성되어 있다. cilium-agent는 모든 Kubernetes Host 위에서 동작하는 cilium Pod안에서 동작한다. cilium Pod은 Host(Node)의 Network Namespace를 이용하기 때문에 cilium Pod안에서 동작하는 App은 Host의 Network 설정을 조회하거나 제어 할 수 있다.
+Cilium은 **BPF (Berkeley Packet Filter)**를 기반으로 Pod Network를 구축하는 CNI Plugin이다. Kubernetes의 Network Plugin으로 많이 이용되고 있다. [그림 1]은 Kubernetes의 Plugin으로 동작하는 Cilium의 구성요소를 나타내고 있다.
 
-* etcd : etcd는 분산 Key-Value store이다. Cilium 구동에 필요한 Network 구성/설정 정보, Cilium 설정 정보 등 다양한 정보를 저장한다. 또한 저장한 key-value값이 변경될 경우 cilium-agent에게 변경 정보를 전달하는 Communication Bus 역할도 수행한다.
+* Kubernetes API Server : Cilium은 Network 설정에 필요한 Pod, Service, Network Policy와 같은 정보를 Kubernetes API Server에게 얻어온다.
 
-* cilium-agent : cilium-agent는 Host의 Network를 설정 및 Monitoring을 하는 Daemon이다. 필요에 따라 BPF를 Linux Kernel에 삽입하고 제어한다. 또한 cilium-agent는 cilium-node-monitor 및 cilium-health 실행한다. cilium-node-monitor는 BPF의 Event를 수신하고 전달한다. cilium-health는 cilium-agent의 상태를 외부의 Host에게 전달하거나, 외부 Host의 cilium-agent의 상태 정보를 얻는다. cilium-agent는 API 또는 cilium CLI를 통해서 제어가 가능하다.
+* Key-value Store : Cilium은 Cilium Component들이 공유하여 이용해야할 정보를 별도의 Key-value Store에 저장하고 이용한다. Cilium 내부에서 관리하는 Policy Identitiy나 VXLAN 이용시 필요한 VTEP (VXLAN Tunnel End Point) 정보들을 Key-value Store에 저장한다. 일반적으로는 etcd를 Key-value Store로 이용한다.
 
-* BPF : BPF는 Linux Kernel 안에서 Packet Routing 및 Filtering을 수행한다. 일반적으로 BPF는 기존의 Linux Netfilter Framework 기반의 iptables 및 Routing Table에 비해서 낮은 Network Stack에서 동작하기 때문에 높은 성능이 가장 큰 장점이다. Cilium은 BPF 이용을 통해서 Netfilter Framework 및 Routing Table의 사용을 최소화하여 Network 성능을 끌어올린다.
+* cilium-agent : cilium-agent는 DaemonSet를 통해서 모든 Host(Node)에서 동작하며 각 Host의 Network 설정 및 Network Monitoring을 수행한다. Host Network Namespace에서 동작한다. Kubernetes API Server 또는 Key-value Store로부터 필요한 정보를 얻어 Host의 Network를 설정한다. 필요에 따라서 동적으로 BPF Program을 Compile 하고 결과물을 BPF에 삽입하여 동작시킨다.
+
+* cilium : cilium은 cilium-agent의 CLI 역활을 수행한다. cilium-agent와 통신하며 cilium-agent를 제어하거나 cilium-agent이 가지고 있는 정보들을 출력하는 역활을 수행한다.
+
+* BPF : BPF는 cilium-agent가 Compile한 Program을 실행하여 Linux Kernel Level에서 Packet Routing 및 Filtering을 수행한다. Cilium은 BPF 이용을 통해서 Netfilter Framework 및 Routing Table의 사용을 최소화하여 Network 성능을 끌어올린다.
+
+* cilium-operator : cilium-operator는 Deployment를 통해서 동작하며 Cluster에서 한번만 Action이 필요한 동작의 경우 모두 cilium-operator가 수행한다. 예를들어 Cluster에서 Host(Node)가 제거 되었을때 제거된 Host와 관련된 정보를 Key-value Store에서 제거하는 GC 역활을 cilium-operator가 수행한다. 다수의 cilium-operator가 동작하는 경우 Active-standby 형태로 동작하며 HA를 수행한다.
 
 #### 1.1. Pod Network
 
