@@ -23,9 +23,9 @@ UUID는 생성 방법에 따라서 Version이 존재한다. TimeStamp 기반의 
 
 ##### 1.1. v1
 
-![[그림 1] UUID v1]({{site.baseurl}}/images/theory_analysis/UUID/UUID_V1.PNG){: width="400px"}
+![[그림 2] UUID v1]({{site.baseurl}}/images/theory_analysis/UUID/UUID_V1.PNG){: width="400px"}
 
-v1 UUID는 Timestamp를 기반으로 UUID를 생성한다. [그림 1]은 v1 UUID의 생성 과정을 나타내고 있다. 앞 부분에는 Timestamp가 쪼개져 UUID에 포함되는 것을 확인할 수 있다. Timestamp는 1582년 10월 15일 자정을 기준으로 100ns마다 1씩 증가하는 값이다. 뒷 부분에는 UUID를 생성하는 Computer의 MAC Address가 저장된다.
+v1 UUID는 Timestamp를 기반으로 UUID를 생성한다. [그림 2]는 v1 UUID의 생성 과정을 나타내고 있다. 앞 부분에는 Timestamp가 쪼개져 UUID에 포함되는 것을 확인할 수 있다. Timestamp는 1582년 10월 15일 자정을 기준으로 100ns마다 1씩 증가하는 값이다. 뒷 부분에는 UUID를 생성하는 Computer의 MAC Address가 저장된다.
 
 이러한 v1 UUID 생성 방법으로 인해서 동일한 Computer에서 동작하는 App이 100ns 동안에 UUID를 여러개 생성하는 경우, 모든 UUID가 동일하게 된다. 따라서 짧은 시간동안 많은 UUID가 생성되는 App은 v1 UUID 사용을 피해야 한다. v1 UUID 뒷 부분에는 Mac Address가 저장되기 때문에 v1 UUID를 통해서 해당 v1 UUID가 어느 Computer에서 생성되었는지 추적할 수 있다.
 
