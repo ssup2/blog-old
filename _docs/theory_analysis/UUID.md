@@ -52,6 +52,17 @@ v5 UUID는 v3 UUID와 동일하지만 MD5 Hahsing Algorithm을 이용하여 Hash
 
 ### 2. with DB
 
+v1/v4 UUID는 DB Table의 PK(Primary Key)로도 많이 이용된다. 일반적인 Interger Type ID를 이용할 경우와 비교하여 장단점이 존재한다. 일반적인 Interger Type ID를 이용할 경우와 비교하여 다음과 같은 장점을 갖는다.
+
+* UUID는 모든 환경에서 Unique 하다는 특징을 갖고 있기 때문에 Table 통합시 UUID 충돌을 걱정할 필요가 없다. 따라서 자유로운 Table 통합이 가능하다. 반대로 하나의 Table을 자유롭게 다수의 Table로 분리하기도 쉽다.
+* UUID의 내용만으로 Data 관련 내용을 추측할 수 없다. 예를들어 Integer Type ID의 값이 100인 User가 있다면 해당 User는 100번째로 생성된 User라는 것을 추측할 수 있지만, UUID는 이러한 추측이 불가능하다.
+* UUID는 반드시 Database에서 생성될 필요가 없다. App에서 생성한 UUID를 DB에서 이용할 수 있다.
+
+일반적인 Interger Type ID를 이용할 경우와 비교하여 다음과 같은 단점을 갖는다.
+
+* UUID의 길이가 긴 많큼 더 많은 저장 공간이 필요하다. Interger Type의 ID는 4Byte 크기를 이용하지만 UUID는 4배더 큰 16Byte의 크기가 필요하다.
+* v1/v4 UUID의 생성이 랜덤하기 때문에 DB에 Insert시 Indexing에 더 많은 시간이 소요된다. DB 관점에서 ID(PK)는 단조증가하는 값이 이상적이다. v1 UUID는 Timestamp 기반이기 때문에 v4 UUID에 비하면 낫지만, v1 UUID도 완전한 단조증가 형태가 아니기 때문에 Integer Type ID에 비해서는 DB Indexing 시간이 더 오래 걸린다.
+
 ### 3. 참조
 
 * [https://en.wikipedia.org/wiki/Universally_unique_identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)
