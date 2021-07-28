@@ -32,7 +32,7 @@ cinder-csi-plugin은 OpenStack Provider Project에 소속되있고 나머지 App
 
 ![[그림 2] Kubernetes OpenStack Cinder CSI Volume Lifecycle]({{site.baseurl}}/images/theory_analysis/Kubernetes_OpenStack_Cinder_CSI_Plugin/OpenStack_Cinder_CSI_Volume_Lifecycle.PNG){: width="500px"}
 
-[그림 2]는 Cinder CSI Plugin에서 지원하는 Cinder Volume의 Lifecycle을 나타내고 있다. Created, Node Ready, Volume Ready, Published 4단계 상태가 존재하는 Volume Lifecycle을 이용한다. 각 단계별로 Cinder Volume Create/Delete, Cinder Volume Attach/Detach, Cinder Volume Format, Mount/Unmount를 진행하는 것을 확인할 수 있다.
+[그림 2]는 Cinder CSI Plugin에서 지원하는 Cinder Volume의 Lifecycle을 나타내고 있다. Created, Node Ready, Volume Ready, Published 4단계 상태가 존재하는 Volume Lifecycle을 이용한다. 각 단계별로 Cinder Volume Create/Delete, Cinder Volume Attach/Detach, Cinder Volume Format, Mount/Unmount, Create/Delete Bind Mount를 진행하는 것을 확인할 수 있다. Bind Mount는 Mount한 Cinder Volume과 Pod의 Volume을 연결하는 과정을 의미한다.
 
 ### 2. 참조
 
