@@ -95,20 +95,22 @@ profile apparmor-example {
 
   /etc/hosts.allow rw,
   /root/test.sh rwix,
+  /root/test_file w,
 
   network tcp,
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 1] apparmor-example Apparmor Profile</figcaption>
+<figcaption class="caption">[파일 1] /etc/apparmor.d/test/apparmor-example Apparmor Profile</figcaption>
 </figure>
 
 [파일 1]은 apparmor-example이란 예제 AppArmor Profile을 나타내고 있다. 다음과 같은 의미를 나타내고 있다.
 
 * net_admin, setuid, setgid Capability를 이용할 수 있다.
 * proc File System을 /mnt/proc 아래의 경로에만 Mount 할 수 있다.
-* /etc/hots.allow 파일을 읽고, 쓸 수 있다.
+* /etc/hots.allow 파일을 읽고 쓸 수 있다.
 * /root/test.sh 파일을 읽고, 쓰고, 실행 할 수 있다.
+* /root/test-file 파일을 쓸수만 있다.
 * tcp Protocol만을 이용 할 수 있다.
 
 {% highlight console %}
@@ -131,37 +133,19 @@ apparmor module is loaded.
 
 [Shell 2]는 작성한 Profile을 apparmor_parser 명령어를 이용하여 AppArmor에 등록하고, aa-status 명령어를 이용하여 Profile 등록을 확인하는 과정을 나타내고 있다. 등록이 완료되면 aa-status 명령어를 통해 apparmor_parser Profile을 확인 할 수 있다.
 
-{% highlight shell %}
-#!/bin/bash
-
-sleep 10000 &
-sleep 10000 &
-ping 127.0.0.1 -c 10
-
-while true; do sleep 1; done
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Code 1] Apparmor Test Script</figcaption>
-</figure>
-
-[Code 1]은 AppArmor Test를 위한 간단한 Script를 나타내고 있다. sleep 명령어는 backgroud로 수행하고, ping 명령어도 수행한다. 그 후 test.sh가 종료되지 않도록 while문을 수행한다.
-
 {% highlight text %}
-# aa-exec -p apparmor-example ./test.sh
-socket: Permission denied
-
-# ps -efZ
-apparmor-example (enforce)      root     20635 30300  0 13:38 pts/26   00:00:00 /bin/bash ./t
-apparmor-example (enforce)      root     20636 20635  0 13:38 pts/26   00:00:00 sleep 10000
-apparmor-example (enforce)      root     20637 20635  0 13:38 pts/26   00:00:00 sleep 10000
-apparmor-example (enforce)      root     20640 20635  0 13:38 pts/26   00:00:00 sleep 1
-unconfined                      root     20641 20611  0 13:38 pts/29   00:00:00 ps -efZ
+# echo test > /root/test_file
+# aa-exec -p apparmor-example cat /root/test_file
+cat: /root/test_file: Permission denied
+# aa-exec -p apparmor-example echo apparmor > /root/test_file
+# cat /root/test_file
+apparmor
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 3] Apparmor 적용</figcaption>
+<figcaption class="caption">[Shell 3] cat, echo 명령어에 Apparmor 적용</figcaption>
 </figure>
 
-[Shell 3]는 aa-exec 명령어로 apparmor_example Profile 적용시켜 test.sh를 실행한 결과를 나타내고 있다.  socket: Permission denied Message를 확인 할 수 있다. apparmor_exmaple Profile은 tcp만 이용할 수 있도록 설정되어 있기 때문에 icmp를 이용하는 ping을 이용 할 수 없기 때문이다. ps -efZ 명령을 통해 test.sh관련 Process들에 appArmor-example Profile이 적용된 것을 확인 할 수 있다.
+[Shell 3]는 aa-exec 명령어로 apparmor_example Profile 적용시켜 "/root/test_file" 파일을 대상으로 읽기/쓰기를 실행하는 예제를 나타내고 있다. Profile에 "/root/test_file" 파일을 대상으로 쓰기 권한만 적용되어 있기 때문에 쓰기 동작은 수행되지만 읽기 동작은 수행되지 않는것을 확인할 수 있다.
 
 ### 2. 참조
 
