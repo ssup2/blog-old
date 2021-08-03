@@ -102,7 +102,7 @@ Raft는 Log를 압축하는 방법으로 **Snapshot**을 이용하고 있다. Sn
 
 #### 1.7. Server Config 변경
 
-Raft는 Server의 Config도 State로 관리된다. 즉 Server 입장에서 Client의 Server Config 변경 요청은 Client State 변경 요청과 동일하다. Client가 전송한 변경된 Server Config는 Leader Log에 먼저 저장되며, Follower들의 동의표를 얻어 State Machine에 Commit 되어야 Server Config도 Server에 적용된다.
+Raft는 Server의 Config도 State Machine의 State로 관리된다. Client가 전송한 변경된 Server Config는 Leader Log에 먼저 저장되며, Log 복제를 통해서 Follower들에게 전파된다. 한가지 차이점은 변경된 Server Config는 Follower들의 동의표를 얻어 Commit 되는 시점이 아니라, 변경된 Server Config가 State Machine에 저장되는 순간 반영된다는 점이다.
 
 #### 1.8. Server Cluster의 Server 추가/제거
 
