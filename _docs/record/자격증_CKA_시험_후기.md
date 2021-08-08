@@ -1,5 +1,5 @@
 ---
-title: 자격증 CKA (Certified Kubernetes Administrator)
+title: 자격증 CKA 시험 후기
 category: Record
 date: 2019-11-01T12:00:00Z
 lastmod: 2020-07-14T12:00:00Z
@@ -20,7 +20,6 @@ adsense: true
 
 * 시험 환경
   * Kuberntes v1.18
-  * Ubunt인
 
 ### 2. 시험 준비
 
