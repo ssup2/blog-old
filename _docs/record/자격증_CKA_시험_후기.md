@@ -20,13 +20,13 @@ adsense: true
 
 * 시험 환경
   * Kuberntes v1.18
-  * Ubuntu
+  * Ubunt인
 
 ### 2. 시험 준비
 
 * 시험 준비물
   * Chrome Browser
-  * Chrome Plugin 
+  * Chrome Plugin
     * https://chrome.google.com/webstore/detail/innovative-exams-screensh
   * Webcam
   * Microphone
@@ -35,11 +35,11 @@ adsense: true
 * 시험 환경 Check
   * https://www.examslocal.com/ScheduleExam/Home/CompatibilityCheck
 
-### 3. 시험전 환경 설정
+### 3. 시험전 확인
 
-* kubectl bash autocompletion 설정
+* kubectl bash autocompletion 동작 확인
   * https://kubernetes.io/docs/reference/kubectl/cheatsheet/
-* tmux 설치
+* tmux 동작 확인
   * https://linuxize.com/post/getting-started-with-tmux/
 
 ### 4. 시험중 알아야할 명렁어
@@ -51,7 +51,12 @@ adsense: true
 * Windows Paste
   * shift + insert
 
-### 5. 참고 후기
+### 5. 시험 후기
+
+* Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 쉽게 합격 가능
+  * https://kodekloud.com/courses/certified-kubernetes-administrator-cka 
+
+### . 참고
 
 * [https://chhanz.github.io/linux/2019/09/30/cka-exam-review/](https://chhanz.github.io/linux/2019/09/30/cka-exam-review/)
 * [https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/](https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/)
