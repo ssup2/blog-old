@@ -16,6 +16,54 @@ adsense: true
 
 ### 1. IAM
 
+* 인증/인가 서비스
+
+#### 1.1. Resource 기반 정책
+
+* AWS Resource에 권한 부여 가능한 정책
+* 특정 AWS Resource에게만 Resource 기반 정책 부여 가능
+  * AWS S3, AWS S3 Graciel
+
+#### 1.2. 자격 증명 (Identity) 기반 정책
+
+* 보안 주체에 권한 부여가 가능한 정
+* AWS 자격 증명
+  * AWS 자체적으로 자격 증명 (Identity) 관리책
+* 연동 자격 증명 
+  * 기업 Directory에 관리되는 자격 증명 (Identity)을 이용하여 AWS Service 이용
+  * 만기가 있는 보안 자격 증명 (Credential)을 발급하고, 보안 자격 증명에 권한을 부여하는 방식 
+
+#### 1.3. 보안 주체
+
+* AWS Resouce에 대해서 작업할 수 있는 주체
+  * IAM 사용자, 연동 사용자, 그룹, IAM Role, 자격 증명 공급자 (Idp)
+* IAM 사용자
+  * 별도의 계정이 아닌 보안 주체
+  * 생성시 모든 AWS Resouce에 대한 권한을 갖고 있지 않음
+
+#### 1.4. 정책
+
+* 하나 이상의 권한으로 구성
+* JSON 형태의 문서
+* 보안 주체 또는 AWS Resource에게 정책을 부여하여 권한 부여
+
+#### 1.5. 권한 적용 순서
+
+* 명시적으로 거부 되어있는가? (Yes/거부) -> 명시적으로 허용 되었는가 (Yes/허용, No/거부)
+
+#### 1.6. Root User
+
+* 모든 권한을 갖고 있는 User
+  * 결제 정보
+  * 개인 Data
+  * AWS Service 구성 상태
+* Root User 이용을 지양하고 별도의 관리자 계정을 생성하여 이용하는것을 권장
+  * IAM 관리자 계정 생성
+  * Root 사용자 자격 증명 잠금
+  * IAM 관리자 계정 이용
+
+#### 1.7.
+
 ### 2. S3
 
 * Object Storage
@@ -271,21 +319,54 @@ adsense: true
 * 다른 Subnet과의 CIDR가 중복 불가
 * CIDR는 변경 불가능, Subnet 생성시 여유롭게 생성하는것을 권장
 * Subnet Type
-  * Public Subnet : Routing Table에 Internet Gateway 정보 포함
-  * Private Subnet : Routing Table에 NAT Gateway 정보 포함
+  * Public Subnet 
+    * 외부 Internet과 통신하는 Subnet
+    * EC2 Instance에 Public IP 부여 가능
+    * Routing Table에 Internet Gateway 정보 포함
+  * Private Subnet 
+    * Routing Table에 다른 Subnet과 연결을 위한 NAT Gateway 정보 포함
+    * 외부 Internet과 Outbound 통신을 위해서는 NAT Gateway를 통해서 Public Subnet과 연결 필요
 
 #### 10.2 Internet Gateway
 
-* 
+* 외부 Internet과 통신 Gateway 역활 수행
+* 수평 확장, 고가용성 지원
 
 #### 10.3 NAT Gateway
 
-* 
+* 다른 Subnet과의 연결 통로
+* 수평 확장, 고가용성 지원 
 
 ### 11. ELB (Elastric Load Balancing)
 
 * Load Balancer
 * Upgrade, Maintenance, High Availability 보장
-* Classic Load Balancer (CLB) : HTTP, HTTPS, TCP를 지원한다. v1, Old Generation Load Balancer이다.
-* Application Load Balancer (ALB) : HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
-* Network Load Balancer (NLB) : TCP, TLS, UDP를 지원한다. v2, New Generation Load Balancer이다.
+* 비정상 Instance 감지 및 Failover 수행
+
+#### 11.1. CLB (Classic Load Balancer)
+
+* HTTP, HTTPS, TCP를 지원. 
+* v1, Old Generation Load Balancer
+
+#### 11.2. NLB (Network Load Balancer)
+
+* TCP, TLS, UDP를 지원
+* v2, New Generation Load Balancer
+
+#### 11.3. ALB (Application Load Balancer)
+
+* Application Load Balancer (ALB)
+* HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
+
+### 12. Route 53
+
+* DNS Server
+* 다중 Region, 고 가용성
+
+#### 12.1 Routing Option
+
+* Round Robin
+* Weighted Round Robin
+* 지연 시간 기반
+* 지리적 위치 기반
+* 장애 대응 기반
