@@ -37,7 +37,9 @@ Two-Phase Commit을 구현하기 위해서는 DB가 제공하는 Two-Phase Commi
 
 SAGA Pattern은 Eventually Consistency를 기반으로 한다. 즉 일시적으로 Consistency가 불일치 할 수 있지만. 시간이 지나면 Consistency를 맞추는 특징을 갖는다. 또한 SAGA Pattern은 Message Queue를 이용한 비동기 기반 Event를 기반의 Pattern이다. 따라서 SAGA Pattern을 적용하기 위해서는 Message Queue가 필요하다. Transaction 도중에 실패가 발생하는 경우 **Compensation Transaction**을 통해서 Transaction 수행 이전으로 되돌리는 Transaction을 이용하는것 또한 SAGA Pattern의 특징이다. SAGA Pattern은 **Choreography** 방식과 **Orchestration** 방식이 존재한다.
 
-##### 1.2.1. Choreography-base
+##### 1.2.1. Message Transaction
+
+##### 1.2.2. Choreography-base
 
 ![[그림 3] SAGA Choreography-base]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Choreography.PNG){: width="600px"}
 
@@ -49,7 +51,7 @@ Choreography 방식에서 중간 Service의 Local Transaction이 실패하는 �
 
 Compensation Transaction까지 고려하면 Choreography 방식에서 각 Service는 다양한 Event Channel을 Subscribe하여 Event를 수신 해야한다는 사실을 알 수 있다. 즉 Service 사이의 의존성 및 Business Logic의 의존성이 높아지는 단점을 가지고 있다. 따라서 Transaction에 연관된 Service의 개수가 많다면, Choreography 방식보다는 Orchestration 방식 이용을 권장한다.
 
-##### 1.2.2. Orchestration-base
+##### 1.2.3. Orchestration-base
 
 ![[그림 5] SAGA Orchestration-base]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration.PNG){: width="600px"}
 
