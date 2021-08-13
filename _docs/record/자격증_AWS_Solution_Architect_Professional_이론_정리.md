@@ -62,8 +62,6 @@ adsense: true
   * Root 사용자 자격 증명 잠금
   * IAM 관리자 계정 이용
 
-#### 1.7.
-
 ### 2. S3
 
 * Object Storage
@@ -370,3 +368,10 @@ adsense: true
 * 지연 시간 기반
 * 지리적 위치 기반
 * 장애 대응 기반
+
+### 13. CloudFront
+
+### 14. ElasticCache
+
+* In-memory Cache
+* Redis, Memcached 제공
