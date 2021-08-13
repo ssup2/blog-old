@@ -72,3 +72,5 @@ Orchestrator가 중앙에서 Transaction을 관리하는 구조기 때문에 Cho
 * [https://hyunsoori.tistory.com/9](https://hyunsoori.tistory.com/9)
 * [https://www.howtodo.cloud/microservice/2019/06/19/microservice-transaction.html](https://www.howtodo.cloud/microservice/2019/06/19/microservice-transaction.html)
 * [https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/](https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/)
+* Outbox Pattern : [https://stackoverflow.com/questions/58476933/group-send-kafka-message-and-db-update-in-one-transaction-in-springboot](https://stackoverflow.com/questions/58476933/group-send-kafka-message-and-db-update-in-one-transaction-in-springboot)
+* Outbox Pattern : [https://debezium.io/blog/2019/02/19/reliable-microservices-data-exchange-with-the-outbox-pattern/](https://debezium.io/blog/2019/02/19/reliable-microservices-data-exchange-with-the-outbox-pattern/)
