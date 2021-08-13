@@ -15,7 +15,9 @@ CQRS (Command and Query Responsibility Segregation) Pattern을 분석한다.
 
 CQRS (Command and Query Responsibility Segregation) Pattern은 의미 그대로 Command Responsibility와 Query Responsibility을 분리하는 Pattern을 의미한다. 여기서 Responsibility는 Model을 의미한다. 즉 Command와 Query가 다른 **Model**을 이용하여 동작하는 방식을 의미한다. 
 
-[그림 1]은 CQRS Pattern을 나타내고 있다. **Command**는 **State, Report**를 변경하는 Create, Update, Delete 동작을 의미하고, **Query**는 State, Report를 Read하는 동작을 의미한다. Command와 Query는 서로 다른 Model로 동작하며, Command Model의 Command가 Query Model로 전파되어 Query Model의 State, Report를 변경한다. [그림 1]에서는 Command Model과 Query Model이 서로다른 Database를 이용하는 것을 나타냈지만, Database에 따라서 하나의 Database에서 처리될 수 있다.
+[그림 1]은 CQRS Pattern을 나타내고 있다. **Command**는 **State, Report**를 변경하는 Create, Update, Delete 동작을 의미하고, **Query**는 State, Report를 Read하는 동작을 의미한다. Command와 Query는 서로 다른 Model로 동작하며, Command Model의 Command가 Query Model로 전파되어 Query Model의 State, Report를 변경한다. 다수의 Command Model의 Command들이 하나의 Query Model로 전파되어 Query Model의 State, Report를 변경할 수도 있다. 
+
+Command Model과 Query Model을 분리할 수 있다는 장점을 가지고 있지만, 일반적인 CRUD Model에 비해서 구현의 복잡도가 올라가고 Command Model에 Command가 Query Model까지 반영하는데 시간이 걸리는 **Replication Lag** 문제가 발생한다는 단점도 존재한다.
 
 ![[그림 2] Event Sourcing Pattern]({{site.baseurl}}/images/theory_analysis/CQRS_Pattern/Event_Sourcing_Pattern.PNG){: width="600px"}
 

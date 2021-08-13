@@ -35,29 +35,31 @@ Two-Phase Commit을 구현하기 위해서는 DB가 제공하는 Two-Phase Commi
 
 #### 1.2. SAGA Pattern
 
-SAGA Pattern은 Eventually Consistency를 기반으로 한다. 즉 일시적으로 Consistency가 불일치 할 수 있지만. 시간이 지나면 Consistency를 맞추는 특징을 갖는다. 또한 SAGA Pattern은 Message Queue를 이용한 비동기 기반 Event를 기반의 Pattern이다. 따라서 SAGA Pattern을 적용하기 위해서는 Message Queue가 필요하다. Transaction 도중에 실패가 발생하는 경우 **Compensation Transaction**을 통해서 Transaction 수행 이전으로 되돌리는 Transaction을 이용하는것 또한 SAGA Pattern의 특징이다. SAGA Pattern은 **Choreography-base**과 **Orchestration-base**가 존재한다.
+SAGA Pattern은 Eventually Consistency를 기반으로 한다. 즉 일시적으로 Consistency가 불일치 할 수 있지만. 시간이 지나면 Consistency를 맞추는 특징을 갖는다. 또한 SAGA Pattern은 Message Queue를 이용한 비동기 기반 Event를 기반의 Pattern이다. 따라서 SAGA Pattern을 적용하기 위해서는 Message Queue가 필요하다. Transaction 도중에 실패가 발생하는 경우 **Compensation Transaction**을 통해서 Transaction 수행 이전으로 되돌리는 Transaction을 이용하는것 또한 SAGA Pattern의 특징이다. SAGA Pattern은 **Choreography** 방식과 **Orchestration** 방식이 존재한다.
 
 ##### 1.2.1. Choreography-base
 
 ![[그림 3] SAGA Choreography-base]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Choreography.PNG){: width="600px"}
 
-Choreography Pattern은 각 Service가 Local Transaction을 수행하고 수행결과를 다른 서비스에게 직접 전파하는 방식이다. [그림 3]은 Choreography Pattern을 나타내고 있다. Message Queue를 통해서 Event가 Order, Payment, Stock, Delivery Service 순서대로 전파되면서 각 Service들이 Local Transaction을 수행한다. 각 Service들이 순서대로 Local Transaction을 수행하기 때문에 일시적으로 Consistency가 불일치 할 수 있다.
+Choreography 방식은 각 Service가 Local Transaction을 수행하고 수행결과를 다른 서비스에게 직접 전파하는 방식이다. [그림 3]은 Choreography Pattern을 나타내고 있다. Message Queue를 통해서 Event가 Order, Payment, Stock, Delivery Service 순서대로 전파되면서 각 Service들이 Local Transaction을 수행한다. 각 Service들이 순서대로 Local Transaction을 수행하기 때문에 일시적으로 Consistency가 불일치 할 수 있다.
 
 ![[그림 4] SAGA Choreography-base Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Choreography_Failed.PNG){: width="600px"}
 
-Choreography Pattern에서 중간 Service의 Local Transaction이 실패하는 경우, Local Transaction에 실패한 Service가 직접 나머지 Service에게 Local Transaction 실패 Event를 직접 전송하여 Compensation Transaction이 발생하도록 만든다. [그림 4]에서는 Stock Service에서 재고 물량 부족으로 Local Transaction이 실패할 경우를 나타내고 있다. Order Service와 Payment Service에게 Local Transaction 실패 Event를 Order, Payment Service에게 전달하여 Compensation Transaction을 수행하도록 만든다.
+Choreography 방식에서 중간 Service의 Local Transaction이 실패하는 경우, Local Transaction에 실패한 Service가 직접 나머지 Service에게 Local Transaction 실패 Event를 직접 전송하여 Compensation Transaction이 발생하도록 만든다. [그림 4]에서는 Stock Service에서 재고 물량 부족으로 Local Transaction이 실패할 경우를 나타내고 있다. Stock Service의 Local Transaction 실패 Event를 수신한 Order, Payment Service는 Compensation Transaction을 수행하도록 만든다.
+
+Compensation Transaction까지 고려하면 Choreography 방식에서 각 Service는 다양한 Event Channel을 Subscribe하여 Event를 수신 해야한다는 사실을 알 수 있다. 즉 Service 사이의 의존성 및 Business Logic의 의존성이 높아지는 단점을 가지고 있다. 따라서 Transaction에 연관된 Service의 개수가 많다면, Choreography 방식보다는 Orchestration 방식 이용을 권장한다.
 
 ##### 1.2.2. Orchestration-base
 
 ![[그림 5] SAGA Orchestration-base]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration.PNG){: width="600px"}
 
-Orchestration Pattern은 각 Service의 Local Transaction을 관리하는 Orchestrator가 존재하는 Pattern이다. [그림 5]는 Orchestration Pattern을 나타내고 있다. Order SAGA Orchestrator가 순서대로 각 Service에게 Event를 전달하여 Local Transaction을 수행하도록 만들고 Transaction 수행 결과를 얻어가면서 Global Transaction을 진행한다. 
-
-Orchestrator가 중앙에서 Transaction을 관리하는 구조기 때문에 Choreography Pattern에 비해서 Transaction Tracking이 편리한 장점을 가지고 있다. 또한 Transaction 과정 중에서 Service가 추가 되더라도 Orchestrator만 변경하면 되기 때문에 Choreography Pattern에 비해서 변경하기 쉬운 장점이 존재한다. 단 Choreography Pattern에 비해서 Transaction 과정중에 Message Queue를 더 많이 이용한다는 단점을 갖고 있다.
+Orchestration 방은 각 Service의 Local Transaction을 관리하는 Orchestrator가 존재하는 방식이다. [그림 5]는 Orchestration 방식을 나타내고 있다. Order SAGA Orchestrator가 순서대로 각 Service에게 Event를 전달하여 Local Transaction을 수행하도록 만들고 Transaction 수행 결과를 얻어가면서 Global Transaction을 진행한다.
 
 ![[그림 6] SAGA Orchestration-base Failed]({{site.baseurl}}/images/theory_analysis/MSA_Transaction/SAGA_Orchestration_Failed.PNG){: width="600px"}
 
 SAGA Orchestration Pattern에서 중간 Service의 Local Transaction이 실패하는 경우 SAGA Orchestrator가 Local Transaction 실패 Event를 다른 Server에게 전송하여 Compensation Transaction이 발생하도록 만든다. [그림 6]에서는 Stock Service에서 재고 물량 부족으로 Local Transaction이 실패할 경우를 나타내고 있다. Local Transaction 실패 Event를 SAGA Orchestrator에게 전달하면 SAGA Orchestrator가 다시 Local Transaction 실패 Event를 Order, Payment Service에게 전달하여 Compensation Transaction을 수행하도록 만든다.
+
+Orchestrator가 중앙에서 Transaction을 관리하는 구조기 때문에 Choreography 방식에 비해서 Transaction Tracking이 편리한 장점을 가지고 있다. 또한 Orchestrator를 제외한 나머지 Service는 Orchestator와 Event를 주고받기 위한 Event Channel만 Subscribe하면 되기 때문에 다른 Service 사이의 의존성 및 Business Logic의 의존성이 Choreography 방식보다 낮다. 단 Choreography 방식에 비해서 Transaction 과정중에 Message Queue를 더 많이 이용한다는 단점을 갖고 있다.
 
 ### 2. 참조
 
