@@ -39,7 +39,7 @@ zsh, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다. 이후 진�
 
 zsh, zsh-completions, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한다. 이후 진행은 **Zsh**에서 진행한다.
 
-### 2. Zsh Plugin 설치
+### 2. Zsh Plugin Download
 
 ~~~console
 # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
@@ -49,21 +49,16 @@ zsh, zsh-completions, oh-my-zsh을 설치하고 기본 Shell을 Zsh로 설정한
 
 zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions을 설치한다.
 
-### 3. Zsh 설정
-
-#### 2.1. Zsh Pure Theme 설치
+### 3. Zsh Plugin 설정
 
 {% highlight viml %}
 ...
-ZSH_THEME="clean"
-...
 plugins=(
-  zsh-syntax-highlighting
-  zsh-autosuggestions
-  zsh-completions
   git
   docker
-  kubectl
+  zsh-completions
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 ...
 {% endhighlight %}
@@ -71,7 +66,7 @@ plugins=(
 <figcaption class="caption">[파일 1] ~/.zshrc</figcaption>
 </figure>
 
-~/.zshrc 파일을 수정하여 Zsh을 설정한다.
+~/.zshrc 파일을 [파일 1]의 내용으로 수정하여 Plugin을 설정한다. 
 
 ### 4. 참조
 
