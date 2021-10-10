@@ -11,7 +11,7 @@ MSA (Micro Service Architecture)를 분석한다.
 
 ### 1. MSA (Micro Service Architecture)
 
-MSA (Micro Service Architecture)는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 구성하는 Architecture를 의미한다. 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
+MSA (Micro Service Architecture)는 **뚜렷한 경계**가 존재하는 **여러개의 작고, 독립적인 Service(기능)**들을 조합하여 구성하는 Architecture를 의미한다. 뚜렷한 경계 속의 작고, 독립적인 Service들은 MSA에게 유연성을 부여한다. 이러한 유연성은 개발 및 운영 과정에 많은 이점을 가져다준다.
 
 #### 1.1. Monolithic Architecture vs MSA
 
