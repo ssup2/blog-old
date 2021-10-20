@@ -13,6 +13,7 @@ adsense: true
 
 ~~~console
 # apt install tmux
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ~~~
 
 apt을 이용하여 tmux를 설치한다.
