@@ -74,7 +74,7 @@ netsh interface ip add address "vEthernet (WSL)" 192.168.10.50 255.255.255.0
 ### 6. Samba Server 접속
 
 Windows OS를 재부팅한 다음에 File Browser에서 다음의 주소로 접속한다.
-* \\192.168.10.100\root
+* \\\\192.168.10.100\root
 
 ### 7. 참고
 
