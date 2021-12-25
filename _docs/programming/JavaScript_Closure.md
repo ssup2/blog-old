@@ -11,7 +11,7 @@ JavaScript Closure를 분석한다.
 
 ### 1. JavaScript Closure
 
-Closure는 함수를 객체화하여 **함수가 상태**를 갖게하는 기법을 의미한다. 함수의 상태가 저장되는 곳은 외부에서 절대로 접근 할 수 없는 공간이기 때문에 의미 그대로 Closure라고 명칭한다. Closure는 일반적으로 함수형 언어에서 지원하는 기법이지만 JavaScritp에서도 Closure를 지원한다.
+Closure는 함수를 객체화하여 **함수가 상태**를 갖게하는 기법을 의미한다. 함수의 상태가 저장되는 곳은 외부에서 절대로 접근 할 수 없는 공간이기 때문에 의미 그대로 Closure라고 명칭한다. Closure는 일반적으로 함수형 언어에서 지원하는 기법이지만 JavaScript에서도 Closure를 지원한다.
 
 {% highlight javascript %}
 function outerFunc(x) {

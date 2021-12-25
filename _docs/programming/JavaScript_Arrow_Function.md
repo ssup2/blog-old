@@ -57,7 +57,7 @@ var arrowObject = {
   }
 }
 arrowObject.callFunction()
-// Print object ojbect
+// Print arrow ojbect
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 2] this with regular function and arrow function</figcaption>
