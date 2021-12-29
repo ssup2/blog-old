@@ -27,7 +27,7 @@ Session Storage에 저장된 Data는 Web Browser의 Window/Tab의 수명과 동�
 
 ![[그림 3] Chrome Cookie]({{site.baseurl}}/images/theory_analysis/Web_Browser_Local_Storage_Session_Storage_Cookie/Chrome_Cookie.PNG){: width="700px"}
 
-Cookie는 Web Browser가 설치된 PC의 Storage를 이용하는 저장공간이지만, 저장되는 Data는 주로 Web Server가 전송하는 Data를 저장하는 저장 공간이다. Web Server는 Web Browser에게 응답을 전송할 때 필요에 따라서 Cookie에 저장될 Data도 같이 전송한다. Web Browser는 Web Server에게 Cookie에 저장될 Data를 전송받으면 Cookie에 저장하고, 이후 Web Server에게 요청을 전송할 때 Cookie에 저장된 Data도 같이 전송한다. 즉 Cookie는 Web Server를 위한 저장 공간이다. 물론 Web Browser에서도 Cookie에 저장된 Data를 활용할 수도 있다.
+Cookie는 Web Browser가 설치된 PC의 Storage를 이용하는 저장공간이지만, 저장되는 Data는 주로 Web Server가 전송하는 Data를 저장하는 저장 공간이다. Web Server는 Web Browser에게 응답을 전송할 때 필요에 따라서 Cookie에 저장될 Data도 같이 전송한다. Web Browser는 Web Server에게 Cookie에 저장될 Data를 전송받으면 Cookie에 저장하고, 이후 Web Server에게 요청을 전송할 때 Cookie에 저장된 Data도 같이 전송한다. 즉 Cookie는 Web Server를 위한 저장 공간이다. Web Browser에서도 Cookie에 저장된 Data를 활용할 수도 있다.
 
 Web Server에서 Cookie가 필요하는 이유는 Web Server가 Web Browser를 인지하여 User에게 Stateful한 환경을 제공하기 위해서이다. HTTP/HTTPS은 Stateless Protocol이기 때문에 단순히 HTTP/HTTPS을 통해서는 Stateful한 동작을 User에게 제공하기 어렵다. Web Server는 Cookie를 통해서 Web Client가 요청 전송시 특정 Data를 같이 전송하도록 만들수 있기 때문에, 이를 활용하여 Web Server는 Web Browser를 구분할 수 있게 되고, User에게 Stateful 환경을 제공할 수 있게 된다.
 
