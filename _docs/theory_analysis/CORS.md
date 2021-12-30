@@ -13,7 +13,7 @@ CORS (Cross-Origin Resource Sharing)을 분석한다.
 
 ![[그림 1] Origin]({{site.baseurl}}/images/theory_analysis/CORS/Origin.PNG){: width="400px"}
 
-![[그림 2] CORS]({{site.baseurl}}/images/theory_analysis/CORS/CORS_Request_Response.PNG){: width="700px"}
+![[그림 2] CORS]({{site.baseurl}}/images/theory_analysis/CORS/CORS_Request_Response.PNG)
 
 ### 2. 참조
 
