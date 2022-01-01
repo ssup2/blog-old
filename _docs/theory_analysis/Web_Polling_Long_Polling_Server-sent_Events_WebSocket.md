@@ -1,21 +1,21 @@
 ---
-title: Polling, Long Polling
+title: Web Polling, Long Polling, Server-sent Events, WebSocket
 category: Theory, Analysis
-date: 2022-01-01T12:00:00Z
-lastmod: 2022-01-01T12:00:00Z
+date: 2022-01-02T12:00:00Z
+lastmod: 2022-01-02T12:00:00Z
 comment: true
 adsense: true
 ---
 
-Polling, Long Polling을 비교 분석한다.
+Polling, Long Polling, Server-sent Events, WebSocket을 비교 분석한다.
 
 ### 1. Polling
 
-
-
 ### 2. Long Polling
 
+### 3. Server-sent Events
 
+### 4. WebSocket
 
 ### 3. 참조
 
