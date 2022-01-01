@@ -15,7 +15,7 @@ WebSocket은 Web Browser와 Server 사이의 **Full-duplex**를 구현가능하�
 
 ![[그림 1] Websocket Handshaking]({{site.baseurl}}/images/theory_analysis/WebSocket/WebSocket_Handshaking.PNG){: width="600px"}
 
-[그림 1]은 WebSocket의 Handshaking 과정을 나타내고 있다. HTTP Procotol에서 WebSocket Protocol의 전환은 HTTP의 Upgrade Protocol에 의해서 이루어진다. Upgrade Protocol은 HTTP에서 다른 Protocol로 전환을 위한 Protocol이다. [그림 1]에서 "Upgrade: websocket", "Connection: Upgrade"와 같은 Upgrade Protocol 관련 Header들을 Web Browser와 Server가 주고 받는것을 확인할 수 있다.
+[그림 1]은 WebSocket의 Handshaking 과정을 나타내고 있다. HTTP Procotol에서 WebSocket Protocol의 전환은 HTTP의 **Upgrade** Protocol에 의해서 이루어진다. Upgrade Protocol은 HTTP에서 다른 Protocol로 전환을 위한 Protocol이다. [그림 1]에서 "Upgrade: websocket", "Connection: Upgrade"와 같은 Upgrade Protocol 관련 Header들을 Web Browser와 Server가 주고 받는것을 확인할 수 있다.
 
 Sec-WebSocket-Key는 Random으로 생성되는 값으로써 Sec-WebSocket-Accept 값을 구할때 이용되는 값이다. Client는 Sec-WebSocket-Accept값을 통해 자신이 요청한 WebSocket Handshaking에 대한 응답인지 확인할 수 있다.
 
