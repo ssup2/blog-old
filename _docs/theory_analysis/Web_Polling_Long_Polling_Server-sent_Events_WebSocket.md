@@ -15,15 +15,15 @@ Polling, Long Polling, Server-sent Events, WebSocket을 비교 분석한다.
 
 ### 2. Long Polling
 
-![[그림 2] Long Polling]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/Long_Polling.PNG){: width="550px"}
+![[그림 2] Long Polling]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/Long_Polling.PNG){: width="600px"}
 
 ### 3. Server-sent Events
 
-![[그림 3] Server-sent Events]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/Server-sent_Events.PNG){: width="550px"}
+![[그림 3] Server-sent Events]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/Server-sent_Events.PNG){: width="600px"}
 
 ### 4. WebSocket
 
-![[그림 4] WebSocket]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/WebSocket.PNG){: width="550px"}
+![[그림 4] WebSocket]({{site.baseurl}}/images/theory_analysis/Web_Polling_Long_Polling_Server-sent_Events_WebSocket/WebSocket.PNG){: width="600px"}
 
 ### 5. 참조
 
