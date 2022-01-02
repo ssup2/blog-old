@@ -13,7 +13,8 @@ RabbitMQ의 DLX(Dead Letter Exchange)를 분석한다.
 
 RabbitMQ DLX(Dead Letter Exchange)는 Dead Letter가 된 Massage를 지정된 Exchange에 전송하는 기능이다. Message가 Dead Letter가 되는 조건은 다음의 3가지가 존재한다.
 
-* Requeue False로 설정되어 있는 Consumer가 reject/nack 응답을 통해서 거절한 Message. Requeue True로 설정되어 있는 Consumer가 reject/nack 응답을 통해서 거절한 Message는 Message가 존재했던 Queue에 다시 Requeue되고 DLX 기능은 동작하지 않는다.
+* Requeue False로 설정되어 있는 Consumer가 reject/nack 응답을 통해서 거절한 Message. 
+  * Requeue True로 설정되어 있는 Consumer가 reject/nack 응답을 통해서 거절한 Message는 Message가 존재했던 Queue에 다시 Requeue되고 DLX 기능은 동작하지 않는다.
 * Per-message TTL (Time to Leave)이 만료한 Message.
 * Queue가 가득차서 버려진 Message.
 
