@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Web Browser와 Server 사이에서 여전하 가장 많잉 이용되는 HTTP/1.1 Procotol은 Web Browser (Client)가 먼저 Server에세 요청을 전달하면 Server가 요청에 대한 응답을 전송하는 단방향 Protocol이다. 이러한 제한된 Web 환경에서 Web Browser와 Server 사이의 실시간 통신을 위한 다양한 우회 기법들이 존재한다. 이와 관련된 Polling, Long Polling, Server-sent Events, WebSocket을 비교 분석한다.
+Web Browser와 Server 사이에서 여전하 가장 많잉 이용되는 HTTP/1.1 Procotol은 Web Browser (Client)가 먼저 Server에세 요청을 전달하면 Server가 요청에 대한 응답을 전송하는 단방향 Protocol이다. 이러한 제한된 Web 환경에서 Web Browser와 Server 사이의 양방향 실시간 통신을 위한 다양한 우회 기법들이 존재한다. 이와 관련된 Polling, Long Polling, Server-sent Events, WebSocket을 비교 분석한다.
 
 ### 1. Polling
 
@@ -28,4 +28,6 @@ Web Browser와 Server 사이에서 여전하 가장 많잉 이용되는 HTTP/1.1
 ### 5. 참조
 
 * [https://medium.com/system-design-blog/long-polling-vs-websockets-vs-server-sent-events-c43ba96df7c1](https://medium.com/system-design-blog/long-polling-vs-websockets-vs-server-sent-events-c43ba96df7c1)
+* [https://codeburst.io/polling-vs-sse-vs-websocket-how-to-choose-the-right-one-1859e4e13bd9](https://codeburst.io/polling-vs-sse-vs-websocket-how-to-choose-the-right-one-1859e4e13bd9)
+* [https://stackoverflow.com/questions/5195452/websockets-vs-server-sent-events-eventsource](https://stackoverflow.com/questions/5195452/websockets-vs-server-sent-events-eventsource)
 * [https://ko.javascript.info/long-polling](https://ko.javascript.info/long-polling)
