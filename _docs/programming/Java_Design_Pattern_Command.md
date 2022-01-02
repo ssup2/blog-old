@@ -15,7 +15,7 @@ Command Pattern은 요청(Command)을 캡슐화 하여 요청자가 요청에 �
 
 * Receiver : 요청을 전달 받아 실제 요청을 처리하는 역활을 수행하는 Class이다.
 * Command : Recevier에게 **구체적인 요청**을 전달하는 역활을 수행하는 Class이다. Command Class는 Command Interface를 구현해야 하며, Receiver Instance를 내포하고 있다.
-* Invoker : Concreate Instance의 집합 Class이다. 요청자는 Invoker를 통해서 Command 객체를 호출하여 Receiver에게 요청을 전달한다.
+* Invoker : Concrete Instance의 집합 Class이다. 요청자는 Invoker를 통해서 Command 객체를 호출하여 Receiver에게 요청을 전달한다.
 
 {% highlight java linenos %}
 // receiver
