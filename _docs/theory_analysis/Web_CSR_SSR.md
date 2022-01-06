@@ -21,7 +21,7 @@ CSR (Client Side Rendering) 기법은 Web Page Rendering을 Client인 Web Browse
 
 ![[그림 2] SSR]({{site.baseurl}}/images/theory_analysis/Web_CSR_SSR/SSR.PNG){: width="700px"}
 
-SSR (Server Side Rendering) 기법은 Web Page Rendering을 Server에서 수행하는 기법을 의미한다. [그림 2]는 SSR을 나타내고 있다. User가 특정 Web Page를 Web Browser를 통해서 Server에게 요청하면, Server는 Server 내부적으로 Rendering을 수행하여 형태를 갖춘 HTML을 Web Browser에게 전송한다. 
+SSR (Server Side Rendering) 기법은 Web Page Rendering을 Server에서 수행하는 기법을 의미한다. [그림 2]는 SSR을 나타내고 있다. User가 특정 Web Page를 Web Browser를 통해서 Server에게 요청하면, Server는 Server 내부적으로 Rendering을 수행하여 형태를 갖춘 HTML을 Web Browser에게 전송한다.
 
 형태를 갖춘 HTML을 수신한 Web Browser는 먼저 User에게 Web Page의 UI를 노출한다. 이때 User는 Web Page의 UI를 볼수만 있을뿐 Web Page를 조작할 수는 없다. 이후에 Web Browser는 Web Page에 필요한 추가적인 JavaScript들을 받은 다음 User가 완전히 Web Page를 이용할 수 있도록 만든다.
 
