@@ -1,6 +1,6 @@
 ---
 title: Programming
-category: Computer
+category: Software
 ---
 
 {% assign docs = site.docs | where: 'category','Programming' | sort: 'title' %}

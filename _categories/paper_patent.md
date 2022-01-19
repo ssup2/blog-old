@@ -1,6 +1,6 @@
 ---
 title: Paper, Patent
-category: Computer
+category: Software
 ---
 
 {% assign docs = site.docs | where: 'category','Paper, Patent' | sort: 'title' %}

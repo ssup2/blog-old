@@ -1,6 +1,6 @@
 ---
 title: Issue
-category: Computer
+category: Software
 ---
 
 {% assign docs = site.docs | where: 'category','Issue' | sort: 'title' %}

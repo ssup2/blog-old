@@ -1,6 +1,6 @@
 ---
 title: 하나씩 익히는 컨테이너
-category: E.T.C
+category: Series
 ---
 
 * [1. 시작하며]({{site.baseurl}}/onebyone_container/1.시작하며)
