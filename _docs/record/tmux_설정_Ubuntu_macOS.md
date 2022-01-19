@@ -29,11 +29,11 @@ brew를 이용하여 tmux를 설치한다.
 ### 2. tmux 설정
 
 {% highlight text %}
-# Set mouse
-setw -g mouse on
-
 # Set screen color
 set -g default-terminal "screen-256color"
+
+# Set mouse
+setw -g mouse on
 
 # Vim-like pane navigation
 bind h select-pane -L
@@ -41,9 +41,16 @@ bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
+# Vim-like search and move on scroll mode
+set-window-option -g mode-keys vi
+
+# Prevent to down scroll after mouse copy
+set -g @yank_action 'copy-pipe'
+
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-yank'
 
 # Initialize TMUX plugin manager
 run -b '~/.tmux/plugins/tpm/tpm'
