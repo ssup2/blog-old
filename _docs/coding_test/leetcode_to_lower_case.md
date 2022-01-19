@@ -14,13 +14,11 @@ adsense: true
 
 * Description
   * 문자열의 소문자를 대문자로 변경
-  
+
 * Type
   * Basic
 
-### Solution
-
-#### Solution 1
+### Solution 1
 
 {% highlight java linenos %}
 class Solution {
@@ -48,6 +46,9 @@ class Solution {
 <figure>
 <figcaption class="caption">Solution 1</figcaption>
 </figure>
+
+* Description
+  * 문자열의 앞부터 하나씩 소문자인지 확인 후, 소문자인 경우 대문자로 변경
 
 * Time Complexity 
   * O(len(str))
