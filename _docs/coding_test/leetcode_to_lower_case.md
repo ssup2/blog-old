@@ -7,15 +7,15 @@ comment: true
 adsense: true
 ---
 
-# Problem
+### Problem
 
 * Link : https://leetcode.com/problems/to-lower-case/
 * Description : 문자열의 소문자를 대문자로 변경
 * Type : Basic
 
-# Solution
+### Solution
 
-## Solution 1
+#### Solution 1
 
 {% highlight java linenos %}
 class Solution {
@@ -44,5 +44,5 @@ class Solution {
 <figcaption class="caption">Solution 1</figcaption>
 </figure>
 
-* Time Complexity :
-* Space Complexity :
+* Time Complexity : O(len(str))
+* Space Complexity : O(len(str))
