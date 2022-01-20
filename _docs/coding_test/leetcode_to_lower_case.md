@@ -52,6 +52,8 @@ class Solution {
 
 * Time Complexity 
   * O(len(str))
+  * len(str) 크기만큼 for Loop 수행
 
 * Space Complexity 
   * O(len(str))
+  * 함수의 입력값으로 len(str) 크기만큼 Memory 이용
