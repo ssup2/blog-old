@@ -16,7 +16,7 @@ adsense: true
   * 문자열의 소문자를 대문자로 변경
 
 * Type
-  * Basic
+  * X
 
 ### Solution 1
 
