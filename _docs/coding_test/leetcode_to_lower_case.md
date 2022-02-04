@@ -56,4 +56,4 @@ class Solution {
 
 * Space Complexity 
   * O(len(str))
-  * 함수의 입력값으로 len(str) 크기만큼 Memory 이용
+  * 함수의 입력값으로 len(str) 크기 만큼 Memory 이용
