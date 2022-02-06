@@ -28,7 +28,7 @@ DB는 생성한 Index를 이용하여 특정 SQL Query의 성능을 높일 수 �
 
 ### 2. Index Type
 
-![[그림 2] DB Indexing]({{site.baseurl}}/images/theory_analysis/DB_Indexing/Cluster_Non-cluster_Index.PNG){: width="700px"}
+![[그림 2] DB Indexing]({{site.baseurl}}/images/theory_analysis/DB_Indexing/Cluster_Non-cluster_Index.PNG){: width="800px"}
 
 Index는 성격과 특징에 따라서 Clustered Index와 Non-clusterd Index로 구분할 수 있다. 두 Index 모두 일반적으로 Disk의 물리적 특성을 고려하여 설계된 자료구조인 **B+ Tree**를 이용하여 Index를 관리하고 검색한다. [그림 2]는 Clustered Index와 Non-clustered Index를 나타내고 있다.
 
