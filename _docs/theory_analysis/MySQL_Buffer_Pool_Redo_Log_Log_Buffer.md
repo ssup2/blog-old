@@ -13,7 +13,7 @@ MySQL의 Buffer Pool, Redo Log 및 Log Buffer를 분석한다.
 
 ![[그림 1] MySQL Buffer Pool, Redo Log, Log Buffer]({{site.baseurl}}/images/theory_analysis/MySQL_Buffer_Pool_Redo_Log_Log_Buffer/Buffer_Pool_Redo_Log_Log_Buffer.PNG){: width="500px"}
 
-[그림 1]은 Transaction을 처리하는 Buffer Pool, Redo Log, Log Buffer을 나타내고 있다. **Buffer Pool**은 MySQL의 DB Engine인 InnoDB가 Table Caching 및 Index Data Caching을 위해 이용하는 Memory 공간이다. Buffer Pool 크기가 클수록 상대적으로 Disk에 접근하는 횟수가 줄어들기 때문에 DB의 성능이 향상된다. Buffer Pool은 Memory 공간이기 때문에 MySQL에 장애가 발생하면 Buffer Pool 내용은 사라지고 Transaction의 유실로 이어질 수 있다. 이러한 유실을 방지하기 위해서 사용되는 File이 **Redo Log**이다. Redo Log는 Transaction 내용을 기록하고 있다가 MySQL 장애발생시 Redo Log에 기록된 Transaction 내용을 바탕으로 MySQL을 장애가 발생하기 이전 시점으로 **Recovery**한다.
+[그림 1]은 Transaction을 처리하는 Buffer Pool, Redo Log, Log Buffer을 나타내고 있다. **Buffer Pool**은 MySQL의 DB Engine인 InnoDB가 **Table Caching** 및 **Index Data Caching**을 위해 이용하는 Memory 공간이다. Buffer Pool 크기가 클수록 상대적으로 Disk에 접근하는 횟수가 줄어들기 때문에 DB의 성능이 향상된다. Buffer Pool은 Memory 공간이기 때문에 MySQL에 장애가 발생하면 Buffer Pool 내용은 사라지고 Transaction의 유실로 이어질 수 있다. 이러한 유실을 방지하기 위해서 사용되는 File이 **Redo Log**이다. Redo Log는 Transaction 내용을 기록하고 있다가 MySQL 장애발생시 Redo Log에 기록된 Transaction 내용을 바탕으로 MySQL을 장애가 발생하기 이전 시점으로 **Recovery**한다.
 
 InnoDB는 Transaction 내용은 계속 Buffer Pool과 Redo Log에 쌓지 않고, 주기적으로 또는 Redo Log가 가득차면 Buffer Pool에 기록된 Transaction 내용을 실제 Disk에 반영한다. 이러한 동작을 **Checkpoint**라고 한다. Redo Log는 2개의 파일을 번갈아가며 이용한다. Redo Log가 가득차면 가득찬 Redo Log는 놔두고 이용하지 않고 있던 Redo Log에 Transaction 내용을 기록한다. 가득찬 Redo Log는 Checkpoint 동작을 수행하고 비워진다.
 
