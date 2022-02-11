@@ -34,7 +34,7 @@ WHERE 조건문에 AND로 여러가지 조건이 추가되는 경우 조건의 �
 
 ### 2. Concatenated Index (결합인덱스)
 
-![[그림 1] DB Table]({{site.baseurl}}/images/theory_analysis/DB_SQL_Query_Index/DB_Table.PNG){: width="500px"}
+![[그림 1] DB Table]({{site.baseurl}}/images/theory_analysis/DB_SQL_Query_Index/DB_Table.PNG){: width="350px"}
 
 [그림 1]은 설명을 위한 가상의 Table을 나타내고 있다. 현재 대부분의 DB에서는 하나의 Field가 아니라 여러개의 Field를 결합하여 Index를 생성하는 기능을 지원하고 있다. 이러한 Index를 **Concatenated Index(결합인덱스)**라고 한다. Concatenated Index 생성시 Field 결합 순서는 매우 중요하다. Field의 결합 순서대로 Record의 값을 붙여 Index를 생성하기 때문이다. [그림 1]에서 Fruit, State Field 순으로 Index를 생성하면 Index에는 OrangeFL값이 들어가고, State, Fruit 순으로 Index를 생성하면 Index에는 FLOrange값이 들어가게 된다.
 
