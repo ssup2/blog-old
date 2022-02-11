@@ -28,11 +28,11 @@ DB는 생성한 Index를 이용하여 특정 SQL Query의 성능을 높일 수 �
 
 #### 1.1. Index Type
 
-![[그림 2] DB Indexing]({{site.baseurl}}/images/theory_analysis/DB_Indexing/Clustered_Non-clustered_Index.PNG){: width="800px"}
+![[그림 2] Index Type]({{site.baseurl}}/images/theory_analysis/DB_Indexing/Clustered_Non-clustered_Index.PNG){: width="800px"}
 
 Index는 성격과 특징에 따라서 Clustered Index와 Non-clustered Index로 구분할 수 있다. 두 Index 모두 일반적으로 Disk의 물리적 특성을 고려하여 설계된 자료구조인 **B+ Tree**를 이용하여 Index를 관리하고 검색한다. [그림 2]는 [그림 1]을 기반으로 Cluster Index와 Non-clustred Index를 나타내고 있다. 아랫 부분은 Clustered Index를 나타내고 있고, 윗 부분은 Non-clustered Index를 나타내고 있다. [그림 2]에서 Clustred, Non-clustered Index 모두 Depth가 깊지 않지만, Index의 크기가 증가하면 B+ Tree 자료구조에 의해서 Index의 Depth도 깊어진다.
 
-**Clustered Index**는 Diks에 저장되는 **실제 Record**를 기반으로 작성된 Index이다. 따라서 Clustred Index를 이용하면 바로 Record에 접근할 수 있다는 장점을 가지고 있다. 반면 Record에서 Clustered Index를 생성한 Field가 변경될 경우 Clustered Index도 같이 변경되어야 하기 때문에 Record 생성, 삭제뿐만 아니라 Record 변경시에도 큰 Overhead가 발생한다는 단점을 가지고 있다. 실제 Record를 기반으로 작성되기 때문에 하나의 Table당 하나의 Clustered Index만 존재할 수 있다는 특징도 갖는다.
+**Clustered Index**는 Disk에 저장되는 **실제 Record**를 기반으로 작성된 Index이다. 따라서 Clustred Index를 이용하면 바로 Record에 접근할 수 있다는 장점을 가지고 있다. 반면 Record에서 Clustered Index를 생성한 Field가 변경될 경우 Clustered Index도 같이 변경되어야 하기 때문에 Record 생성, 삭제뿐만 아니라 Record 변경시에도 큰 Overhead가 발생한다는 단점을 가지고 있다. 실제 Record를 기반으로 작성되기 때문에 하나의 Table당 하나의 Clustered Index만 존재할 수 있다는 특징도 갖는다.
 
 [그림 2]에서 빨간 화살표는 Clustred Index를 통해서 Fruit ID 4번을 갖는 Record에 접근하는 과정을 나타내고 있다. 하나의 Index 조회를 통해서 바로 Record가 위치하고 있는 Page에 접근이 가능한 것을 확인할 수 있다. Record에 접근할때 가장 많이 이용되고, 거의 변경이 일어나지 않는 Primary Key의 Index를 일반적으로 Clustred Index로 생성한다. [그림 2]에서는 Fruit ID를 Primary Key라고 간주하고 있다. 따라서 Fruit ID를 이용하여 Clustred Index를 생성한 모습을 나타내고 있다.
 
