@@ -13,6 +13,7 @@ Index를 활용하는 SQL Query를 정리한다.
 
 {% highlight sql %}
 WHERE state = 'NC'
+WHERE state IN ('NC')
 WHERE state >= 'NC'
 WHERE state < 'NC'
 {% endhighlight %}
@@ -20,7 +21,7 @@ WHERE state < 'NC'
 <figcaption class="caption">[Query 1] Where 단일 조건문</figcaption>
 </figure>
 
-Index를 이용하면 WHERE 조건문을 이용하는 SQL Query의 성능을 향상 시킬 수 있다. [Query 1]은 WHERE 조건문의 예제를 나타내고 있다. 동일한 값을 찾을때 뿐만 아니라, 크거나 작은 값을 찾을때도 Index를 이용한다.
+Index를 이용하면 WHERE 조건문을 이용하는 SQL Query의 성능을 향상 시킬 수 있다. [Query 1]은 WHERE 조건문의 예제를 나타내고 있다. 동일한 값을 찾을때 뿐만 아니라, 크거나 작은 값을 찾을때도 Index를 이용한다. IN 문법의 경우에는 값의 개수가 적을경우에는 Index를 이용하지만, 값의 개수가 많아지는 경우 Index를 이용하지 않게된다. MySQL의 경우에는 "range_optimizer_max_mem_size"의 값과 Data에 사이즈에 따라서 최대 몇개의 값까지 Index를 이용할지 설정할 수 있다.
 
 {% highlight sql %}
 WHERE state = 'NC' AND fruit >= 'Apple' AND fruit < 'Lemon'
@@ -30,7 +31,7 @@ WHERE state > 'NC' AND fruit >= 'Apple' AND fruit < 'Lemon'
 <figcaption class="caption">[Query 2] Where 복수 조건문</figcaption>
 </figure>
 
-WHERE 조건문에 AND로 여러가지 조건이 추가되는 경우 조건의 범위가 가장 작은 Index를 참조해서 Query를 수행한다. Fruit Field의 Index와 State Field의 Index가 각각 존재할때 [Query 2]의 첫번째 Query는 State Field의 Index를 참조한다. State Field의 범위가 'NC'로 정해져 있기 때문이다. 두번째 Query는 Fruit Field의 Index를 참조한다. State Field의 범위는 최소값만 정해져 있지만 Fruit Field의 범위는 최소값, 최대값 둘다 정해져 있기 때문이다.
+WHERE 조건문에 AND 문법으로 여러가지 조건이 추가되는 경우 조건의 범위가 가장 작은 Index 하나를 선택하고, 참조해서 Query를 수행한다. Fruit Field의 Index와 State Field의 Index가 각각 존재할때 [Query 2]의 첫번째 Query는 State Field의 Index를 참조한다. State Field의 범위가 'NC'로 정해져 있기 때문이다. 두번째 Query는 Fruit Field의 Index를 참조한다. State Field의 범위는 최소값만 정해져 있지만 Fruit Field의 범위는 최소값, 최대값 둘다 정해져 있기 때문이다.
 
 ### 2. Concatenated Index (결합인덱스)
 
@@ -63,3 +64,4 @@ DB는 [Query 4]의 수행 과정에서 dept.id 값을 emp Table의 dept_ip Field
 ### 4. 참조
 
 * [https://www.progress.com/tutorials/odbc/using-indexes](https://www.progress.com/tutorials/odbc/using-indexes)
+* [https://hoing.io/archives/24493](https://hoing.io/archives/24493)
