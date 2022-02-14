@@ -31,7 +31,7 @@ PromQL의 Data Type을 정리한다.
 
 #### 1.4. Range Vector
 
-![[그림 7] Range Vector, node_memory_MemAvailable_bytes[1m]]({{site.baseurl}}/images/theory_analysis/PromQL_Data_Type/PromQL_Instant_Vector_Type3.PNG)
+![[그림 7] Range Vector, node_memory_MemAvailable_bytes[1m]]({{site.baseurl}}/images/theory_analysis/PromQL_Data_Type/PromQL_Range_Vector_Type.PNG)
 
 ### 2. 참조
 
