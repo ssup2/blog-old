@@ -1,6 +1,6 @@
 ---
 title: Prometheus with Thanos
-category:
+category: Theory, Analysis
 date: 2020-01-15T12:00:00Z
 lastmod: 2020-01-15T12:00:00Z
 comment: true
