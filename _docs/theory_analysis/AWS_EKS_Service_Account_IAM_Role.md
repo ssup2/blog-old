@@ -66,9 +66,9 @@ Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Servi
 <figcaption class="caption">[Text 2] Role's Trust Relationship</figcaption>
 </figure>
 
-[Text 2]는 [Text 1]에서 AWS Load Balancer Controller가 이용하는 Service Account에 부여된 AWS IAM Role의 Trust Relationship을 나타낸다. **Trust Relationship**은 해당 ARN Role을 이용할 수 있는 대상을 제한하는 역활을 수행한다. [Text 2]에서 Principal 항목이 해당 AWS IAM Role을 이용할 수 있는 대상을 나타낸다. 여기에 EKS Cluster의 **OIDC Identity Provider**의 URL이 명시되어 있는것을 확인할 수 있다.
+[Text 2]는 [Text 1]에서 AWS Load Balancer Controller가 이용하는 Service Account에 부여된 AWS IAM Role의 Trust Relationship을 나타낸다. **Trust Relationship**은 해당 Role을 이용할 수 있는 대상을 제한하는 역활을 수행한다. [Text 2]에서 Principal 항목이 해당 AWS IAM Role을 이용할 수 있는 대상을 나타낸다. 여기에 EKS Cluster의 **OIDC Identity Provider**의 URL이 명시되어 있는것을 확인할 수 있다.
 
-각 EKS Cluster는 자신만의 OIDC Identity Provider를 갖는다. OIDC Identity Provider는 인증을 제공하는 Server이다. 즉 [Text 2]의 Trust Relationship의 Issuer에는 EKS Cluster의 OIDC Identity Provider가 명시되어 있기 때문에, EKS Cluster의 OIDC Identity Provider가 인증한 App은 해당 AWS IAM Role을 이용할 수 있다.
+각 EKS Cluster는 자신만의 고유의 OIDC Identity Provider를 갖는다. OIDC Identity Provider는 인증을 제공하는 Server이다. 즉 [Text 2]의 Trust Relationship에 EKS Cluster의 OIDC Identity Provider가 명시되어 있기 때문에, EKS Cluster의 OIDC Identity Provider가 인증한 App은 해당 AWS IAM Role을 이용할 수 있다.
 
 #### 1.2. Create Pod
 
@@ -94,6 +94,9 @@ spec:
     - mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
       name: aws-iam-token
       readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: aws-load-balancer-controller-token-wq7kf
+      readOnly: true
 ...
   volumes:
   - name: aws-iam-token
@@ -104,13 +107,19 @@ spec:
           audience: sts.amazonaws.com
           expirationSeconds: 86400
           path: token
+  - name: aws-load-balancer-controller-token-wq7kf
+    secret:
+      defaultMode: 420
+      secretName: aws-load-balancer-controller-token-wq7kf
 ...
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Text 3] Mutated Pod Spec</figcaption>
 </figure>
 
-EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller를 나타내고 있다. Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 Service Account Token Injection을 위한 Volume을 Mount하도록 변경한다. Pod Identity Webhook가 추가한 환경 변수 및 Service Account Token은 AWS SDK에서 이용하는 설정들이다.
+EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하는 역활을 수행한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller Pod를 나타내고 있다.
+
+Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 **aws-iam-token** 이름의 Service Account Token Volume을 생성하고 Mount하도록 만든다. Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Token은 AWS SDK에서 이용되는 설정이다. [Text 3]에는 Pod마다 기본적으로 할당되는 Service Account Token 관련 설정도 여전히 존재하는것을 확인 할 수 있다. 이 기본 Service Account Token은 본 글에서는 **Traditional Service Account Token**이라고 명칭한다.
 
 #### 1.3. Create/Rotate Service Account Token
 
@@ -141,6 +150,10 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 <figcaption class="caption">[Text 4] Service Account Token</figcaption>
 </figure>
 
+[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 "aws-iam-token" Service Account Token의 내용을 나타내고 있다. Token은 JWT 형태로 RS256 Algorithm을 이용하여 Encoding되어 있으며, Decoding을 하면 [Text 4]의 내용을 확인할 수 있다. Issuer에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다.
+
+Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 동작되어야 한다.
+
 {% highlight json %}
 {
   "iss": "kubernetes/serviceaccount",
@@ -155,9 +168,7 @@ EKS Control Plane에는 기본적으로 Pod Identity Webhook이 존재한다. Po
 <figcaption class="caption">[Text 5] Traditional Service Account Token</figcaption>
 </figure>
 
-[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 Service Account Token의 내용을 나타내고 있다. Pod Identity Webhook가 Inject하는 Service Account Token은 Kubernetes가 기본적으로 생성하는 **Traditional Service Account Token**과는 다르다. [Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Inject된 Service Account Token에는 Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다.
-
-Issuer에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다. Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 설계되어야 한다.
+Pod Identity Webhook가 Inject하는 "aws-iam-token" 이름의 Service Account Token은 Kubernetes가 기본적으로 생성하는 "Traditional Service Account Token"과의 내용도 다르다. [Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Token은 RS256 Algorithm을 이용하여 Endcoding되어 있으며, Decoding하면 [Text 5]의 내용을 확인할 수 있다. Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다.
 
 #### 1.4. Use Token
 
@@ -180,3 +191,4 @@ Service Account Token의 인증이 완료되면 STS는 허용되는 IAM Role인�
 * [https://www.blog-dreamus.com/post/flo-tech-aws-eks%EC%97%90%EC%84%9C%EC%9D%98-iam-%EC%97%AD%ED%95%A0-%EB%B6%84%EB%A6%AC](https://www.blog-dreamus.com/post/flo-tech-aws-eks%EC%97%90%EC%84%9C%EC%9D%98-iam-%EC%97%AD%ED%95%A0-%EB%B6%84%EB%A6%AC)
 * [https://qiita.com/hiyosi/items/feec917d502af8ad8863](https://qiita.com/hiyosi/items/feec917d502af8ad8863)
 * [https://stackoverflow.com/questions/57192079/serviceaccount-token-volume-projection-projected-token-in-path-in-manifest-f](https://stackoverflow.com/questions/57192079/serviceaccount-token-volume-projection-projected-token-in-path-in-manifest-f)
+* [https://kangwoo.kr/2020/02/13/service-account-token-volume-projection/](https://kangwoo.kr/2020/02/13/service-account-token-volume-projection/)
