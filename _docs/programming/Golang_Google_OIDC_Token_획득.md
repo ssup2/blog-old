@@ -28,6 +28,8 @@ Google Cloud Platform에서 OIDC 기반의 ID Token, OAuth 기반의 Access Toke
 ### 2. Code
 
 {% highlight golang linenos %}
+// Code : https://github.com/coreos/go-oidc/blob/v3/example/idtoken/app.go
+
 func main() {
 	// Init variables
 	ctx := context.Background()
@@ -138,8 +140,6 @@ func main() {
 <figure>
 <figcaption class="caption">[Code 1] Golang Google OIDC Example</figcaption>
 </figure>
-
-* Code : https://github.com/coreos/go-oidc/blob/v3/example/idtoken/app.go
 
 ### 3. ID Token, Access Token
 
