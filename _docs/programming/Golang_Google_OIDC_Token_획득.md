@@ -29,20 +29,19 @@ Google Cloud Platform에서 OIDC 기반의 ID Token, OAuth 기반의 Access Toke
 
 {% highlight golang linenos %}
 // Code : https://github.com/coreos/go-oidc/blob/v3/example/idtoken/app.go
-
 func main() {
 	// Init variables
 	ctx := context.Background()
 
-	// Set OIDC, oauth provider
-	provider, err := oidc.NewProvider(ctx, "https://accounts.google.com")
+	// Set OIDC, oauth oidcProvider
+	oidcProvider, err := oidc.NewProvider(ctx, "https://accounts.google.com")
 	if err != nil {
 		log.Fatal(err)
 	}
 	oauth2Config := oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		Endpoint:     provider.Endpoint(),
+		Endpoint:     oidcProvider.Endpoint(),
 		RedirectURL:  "http://127.0.0.1:3000/auth/google/callback",   // Set redirect url
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "email"}, // Set scope
 	}
@@ -79,24 +78,27 @@ func main() {
 			return
 		}
 
-		// Init ID token verifier
-		oidcConfig := &oidc.Config{
-			ClientID: clientID,
-		}
-		verifier := provider.Verifier(oidcConfig)
+		// Get authorization code from URL
+		authCode := r.URL.Query().Get("code")
 
-		// Get ID token from URL and validate it
-		oauth2Token, err := oauth2Config.Exchange(ctx, r.URL.Query().Get("code"))
+		// Get ID token and access token through authorization code
+		oauth2Token, err := oauth2Config.Exchange(ctx, authCode)
 		if err != nil {
 			http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		// Get and validate ID token
+		oidcConfig := &oidc.Config{
+			ClientID: clientID,
+		}
+		oidcVerifier := oidcProvider.Verifier(oidcConfig)
 		rawIDToken, ok := oauth2Token.Extra("id_token").(string)
 		if !ok {
 			http.Error(w, "No id_token field in oauth2 token.", http.StatusInternalServerError)
 			return
 		}
-		idToken, err := verifier.Verify(ctx, rawIDToken)
+		idToken, err := oidcVerifier.Verify(ctx, rawIDToken)
 		if err != nil {
 			http.Error(w, "Failed to verify ID Token: "+err.Error(), http.StatusInternalServerError)
 			return
@@ -138,8 +140,10 @@ func main() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 1] Golang Google OIDC Example</figcaption>
+<figcaption class="caption">[Code 1] Golang Google OIDC Example App</figcaption>
 </figure>
+
+[Code 1]은 Google OIDC를 이용하여 ID Token과 Access Token을 얻는 Golang App이다. "/" Path에 접속하면 Google Login 및 인가 Web Page로 Redirect 된다. 이후 Google Login 및 인가 Web Page는 Login 및 인과 과정이 완료되면 다시 Golang App의 "/auth/google/callback" Path로 Redirection 및 ID Token 
 
 ### 3. ID Token, Access Token
 
