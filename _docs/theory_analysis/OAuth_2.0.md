@@ -35,15 +35,17 @@ Access Token은 인가 권한을 갖고 있는 Token이다. App은 Access Token�
 
 중요한 점은 Access Token은 인증 정보는 포함되어 있지 않고 오직 **인가** 정보만을 포함하고 있는 Token이다. 즉 Access Token을 이용하면 어떠한 App이던 Access Token의 권한을 이용할 수 있다는 의미다. 따라서 Access Token은 외부에 노출되면 안되며, Access Token은 인증된 App만 얻을 수 있도록 설계되어야 한다. App에서 인증 정보가 필요한 경우에는 OAuth 2.0에 기반하고 있는 OIDC (OpenID Connect)를 이용할 수 있다.
 
+App이 Authorization Server로부터 Access Token을 발급 받기 위해서는 App을 Authorization Server에 반드시 등록해야 한다. App을 Authorization Server에 등록되면 Authorization Server는 **Client ID**와 **Client Secret**을 발급한다. Client ID는 Authorization Server에서 App 구분을 위한 값이고, Client Secret은 Access Token 발급을 위한 값이다. Client Secret은 외부로 노출되면 안된다.
+
 ![[그림 3] OAuth 2.0 Access Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/OAuth_2.0_Access_Token_Flow.PNG)
 
 [그림 3]은 Access Token의 발급 과정을 나타내고 있다.
 
-* 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Authorization Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
-* 4,5,6 : User Agent는 인가 URL로 이동하면서 인가 Scope 정보 및 App URL도 같이 전달한다. Authorization Server는 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
+* 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 Client ID, App에서 필요한 Scope 정보 및 인가 완료 후 App으로 돌아오기 위한 App URL도 같이 보낸다.
+* 4,5,6 : User Agent는 인가 URL로 이동하면서 Client ID, Scope 정보 및 App으로 돌아오기 위한 App URL도 같이 전달한다. Auth Server는 Client ID와 Scope 정보를 확인하고 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
 * 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID/Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
-* 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다.
-* 10,11,12 : User Agent는 App URL로 이동하면서 Auth Code도 같이 전달한다. App은 Auth Code를 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 받을 수 있다.
+* 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 Auth Code와 App으로 돌아갈 App URL을 전달 받는다. Auth Code는 App URL의 Query로 전달된다.
+* 10,11,12 : User Agent는 App URL로 이동한다. App은 URL Query를 통해서 Auth Code를 얻은 다음, 얻은 Auth Code 그리고 Client ID, Client Secret을 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 발급 받는다.
 
 ![[그림 4] Google OAuth 2.0 Authorization UI]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 
@@ -71,7 +73,7 @@ Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상�
 * 1,2,3 : App은 User의 요청을 받아 Access Token을 이용하여 Resource Server에게 Resource를 요청한다.
 * 4,5 : Resource Server는 Authorization Server에게 Access Token이 유요한지 물어본다.
 * 6,7,8 : App이 Access Token이 Invaild 하다는 결과를 받으면 Authorization Server에게 Refresh Token을 이용하여 새로운 Access Token을 받는다.
-* 9 ~ 14 : App은 새로 받은 Access Token을 이용하여 다시 Resource를 요청하고, 받은 Resource를 User Agent를 통해서 Agent에게 전달한다.
+* 9 ~ 14 : App은 새로 받은 Access Token과 Client ID, Client Secret을 이용하여 다시 Resource를 요청하고, 받은 Resource를 User Agent를 통해서 Agent에게 전달한다.
 
 ### 2. 참조
 
@@ -80,3 +82,5 @@ Resource Token은 App이 이용하던 Access Token이 Timeout되어 Invaild 상�
 * [https://db-blog.web.cern.ch/blog/luis-rodriguez-fernandez/2017-04-oracle-jet-ords-oauth2](https://db-blog.web.cern.ch/blog/luis-rodriguez-fernandez/2017-04-oracle-jet-ords-oauth2)
 * [https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/](https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/)
 * [https://medium.com/@pumudu88/google-oauth2-api-explained-dbb84ff97079](https://medium.com/@pumudu88/google-oauth2-api-explained-dbb84ff97079)
+* [http://tutorials.jenkov.com/oauth2/authorization.html](http://tutorials.jenkov.com/oauth2/authorization.html)
+* [https://help.memberclicks.com/hc/en-us/articles/230536287-API-Authorization](https://help.memberclicks.com/hc/en-us/articles/230536287-API-Authorization)
