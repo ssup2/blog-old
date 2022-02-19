@@ -165,6 +165,8 @@ http://127.0.0.1:3000/auth/google/callback?state=HeLK6b0uTARRKUaX4fLqsw&code=4%2
 <figcaption class="caption">[Text 1] Callback URL</figcaption>
 </figure>
 
+[Text 1]은 Redirect URL의 예제를 나타내고 있다. "code" Query에는 Authorization Code, "scope" Query에는 Scope 정보등이 포함되어 있는것을 확인할 수 있다.
+
 {% highlight json %}
 {
     "OAuth2Token": {
@@ -194,6 +196,8 @@ http://127.0.0.1:3000/auth/google/callback?state=HeLK6b0uTARRKUaX4fLqsw&code=4%2
 <figure>
 <figcaption class="caption">[Text 2] Callback Result - Access Token, ID Token</figcaption>
 </figure>
+
+[Text 2]는 ID Token의 Claim과 Access Token의 예제를 나타내고 있다.
 
 ### 4. 참조
 
