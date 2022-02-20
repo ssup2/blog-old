@@ -3,7 +3,7 @@ title: Golang Google OIDC 이용
 category: Programming
 date: 2022-02-16T00:00:00Z
 lastmod: 2022-02-16T00:00:00Z
-comment: true
+comment: tru득
 adsense: true
 ---
 
