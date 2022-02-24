@@ -17,7 +17,13 @@ Golang을 활용하여 Keycloak의 SAML을 이용하고 분석한다.
 
 Docker를 이용하여 Keycloak을 설치한다. Keycloak의 Admin ID/Password는 admin/admin으로 설정한다.
 
-### 2. Code
+### 2. 인증서 생성
+
+~~~console
+# openssl req -x509 -newkey rsa:2048 -keyout myservice.key -out myservice.cert -days 365 -nodes -subj "/CN=myservice.example.com"
+~~~
+
+### 3. Code
 
 {% highlight golang linenos %}
 {% endhighlight %}
@@ -25,7 +31,10 @@ Docker를 이용하여 Keycloak을 설치한다. Keycloak의 Admin ID/Password�
 <figcaption class="caption">[Code 1] Golang Google OIDC Example App</figcaption>
 </figure>
 
-### 3. 참조
+### 4. 참조
 
 * [https://www.keycloak.org/getting-started/getting-started-docker](https://www.keycloak.org/getting-started/getting-started-docker)
 * [https://docs.anchore.com/3.0/docs/overview/sso/examples/keycloak/](https://docs.anchore.com/3.0/docs/overview/sso/examples/keycloak/)
+* [https://github.com/crewjam/saml](https://github.com/crewjam/saml)
+* [https://goteleport.com/blog/how-saml-authentication-works/](https://goteleport.com/blog/how-saml-authentication-works/)
+* [https://www.rancher.co.jp/docs/rancher/v2.x/en/admin-settings/authentication/keycloak/](https://www.rancher.co.jp/docs/rancher/v2.x/en/admin-settings/authentication/keycloak/)
