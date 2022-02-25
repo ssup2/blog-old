@@ -25,7 +25,7 @@ Google Cloud Platform에서 OIDC 기반의 ID Token, OAuth 기반의 Access Toke
 
 [그림 3]과 같이 "웹 애플리케이션" 유형의 Client ID를 생성한다. "이름"은 임의로 지정하면 된다. "리다이렉션 URI"의 경우에는 예제 Code에서 처리할 경로인 "/auth/google/callback"을 명시한다. 생성이 완료되면 **Client ID**와 **Client Secret**을 확인한다.
 
-### 2. Code
+### 2. App Code
 
 {% highlight golang linenos %}
 // Code : https://github.com/coreos/go-oidc/blob/v3/example/idtoken/app.go
@@ -146,7 +146,7 @@ func main() {
 [Code 1]은 Google OIDC를 이용하여 ID Token과 Access Token을 얻는 Golang App이다. 동작 과정은 다음과 같다.
 
 * User가 Golang App의 "/" Path에 접속하면 Golang App은 User를 Google 인증/인가 Web Page로 Redirect 한다.
-* Google 인증/인가 Web Page는 User의 인증 및 인가 과정이 완료되면 다시 Golang App의 "/auth/google/callback" Path로 Redirect 한다. 이 경우 Authorization Code를 URL Query로 같이 전달한다.
+* Google 인증/인가 Web Page는 User의 인증 및 인가 과정이 완료되면 Google 인증/인가 Web Page는 다시 Golang App의 "/auth/google/callback" Path로 Redirect 한다. 이 경우 Authorization Code를 URL Query로 같이 전달한다.
 * User가 Golang App의 "/auth/google/callback" Path로 접속하면 Golang App은 URL에 있는 Authorization Code를 얻은 다음, 얻은 Authorization Code를 통해서 ID Token, Access Token을 얻고 출력한다.
 
 [Code 1]의 각 Line별 설명은 다음과 같다.
