@@ -43,3 +43,4 @@ SAML 2.0을 이용하여 SSO가 구축이되면 User는 Service Provider와의 �
 * [https://en.wikipedia.org/wiki/SAML_2.0](https://en.wikipedia.org/wiki/SAML_2.0)
 * [https://www.samltool.com/generic_sso_res.php](https://www.samltool.com/generic_sso_res.php)
 * [https://stackoverflow.com/questions/28110014/can-saml-do-authorization](https://stackoverflow.com/questions/28110014/can-saml-do-authorization)
+* [https://stackoverflow.com/questions/28117725/sso-saml-redirect-a-user-to-a-specified-landing-page-after-successful-log-in](https://stackoverflow.com/questions/28117725/sso-saml-redirect-a-user-to-a-specified-landing-page-after-successful-log-in)

@@ -24,8 +24,7 @@ SAML의 Service Provider는 인증서가 필요하다. 다음의 명령어로 �
 // Print SAML request
 func samlRequestPrinter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("Header : %+v\n", r.Header)
-		fmt.Printf("Body : %+v\n", r.Body)
+		fmt.Printf("%+v\n", r)
 		next.ServeHTTP(w, r)
 	})
 }
@@ -86,8 +85,15 @@ func main() {
 
 [Code 1]은 SAML Identity Provider를 통해서 User를 인증하고, 인증 과정을 통해서 얻은 SAML Session 정보를 출력하는 SAML Service Provider App이다. 동작 과정은 다음과 같다.
 
-* User가 Service Provider의 "/session" Path에 접속하면 Service Provider는 RequireAccount() Middleware 함수에 의해서 Identity Provider에게 User가 인증을 할 수 있도록 Redirect한다.
-* Identity Provider를 통해서 인증이 완료되면 Identity Provider는 이전에 등록된 Service Provider의 ACS Endpoint인 "/saml/acs"로 User를 다시 Redirect하고, 인증 정보인 SAML Response도 ACS Endpoint에 같이 전송한다.
+* User가 Service Provider의 "/session" Path에 접속하면 Service Provider는 RequireAccount() Middleware 함수를 통해서 SAML Request를 Identity Provider에게 보내어 User가 인증을 할 수 있도록 Redirect한다. SAML Request에는 인증후 User가 요청한 URL 정보도 포함되어 있다. 
+* Identity Provider를 통해서 인증이 완료되면 Identity Provider는 이전에 등록된 Service Provider의 ACS Endpoint인 "/saml/acs"로 User를 다시 Redirect하고, 인증 정보인 SAML Response도 ACS Endpoint에 같이 전송한다. SAML Response에는 SAML Request에 포함된 User가 요청한 URL 정보도 포함되어 있다.
+* Service Provider의 ACS는 SAML Response를 수신한 다음 인증 정보를 확인하고 Web Browser의 Cookie에 인증을 설정한다. 이후에 Service Provider는 SAML Response에 포함된 User가 요청한 URL로 User를 다시 Redirect하여 User가 Service를 이용할 수 있도록 만든다.
+
+[Code 1]의 각 Line별 설명은 다음과 같다.
+
+* Line 3, 51 : samlRequestPrinter() 함수는 ACS로 들어오는 요청을 출력하는 Middleware이다.
+* Line 12 : echoSession() 함수는 SAML이 설정한 Session 정보를 반환하는 함수이다.
+* Line 55 : samlSP.RequireAccount() 함수는 "/session" 경로 접근시 Identity Provider에게 인증을 요청하는 Middleware이다.
 
 ### 3. Service Provider Metadata 추출
 
@@ -118,7 +124,7 @@ Service Provider로부터 추출한 Metadata를 Load하여 [그림 2]와 같이 
 
 [그림 3]과 같이 생성한 Client에 들어가서 Client Signature Required를 Off한다. Service Provider가 이용하는 인증서가 임의의 인증서이기 때문에 Off가 필요하다.
 
-![[그림 4] User Password 설정]({{site.baseurl}}/images/programming/Golang_Keycloak_SAML/Keycloak_User_Role.PNG){: width="700px"}
+![[그림 4] User Password 설정]({{site.baseurl}}/images/programming/Golang_Keycloak_SAML/Keycloak_User_Password.PNG){: width="700px"}
 
 "users" Group을 생성하고 "users" Group 하위에 "user" User를 생성한다. 이후 [그림 4]와 같이 생성한 "user" User의 Password를 "user"로 설정한다.
 
@@ -128,20 +134,22 @@ Service Provider로부터 추출한 Metadata를 Load하여 [그림 2]와 같이 
 
 ### 5. Service Provider 실행
 
-![[그림 6] User Login]({{site.baseurl}}/images/programming/Golang_Keycloak_SAML/Keycloak_User_Role.PNG){: width="700px"}
+![[그림 6] User Login]({{site.baseurl}}/images/programming/Golang_Keycloak_SAML/Keycloak_User_Login.PNG){: width="700px"}
 
 {% highlight text %}
-\{\{http://localhost:8000 1645785920  1645782320 http://localhost:8000 1645782320 G-fbdd108e-94c3-476f-b7c8-02bfd485b3de\} map[Role:[manage-account manage-account-links uma_authorization default-roles-ssup2 offline_access view-profile] SessionIndex:[7f326d03-4635-423b-9477-5c82883920ee::1c978e61-f5b1-4350-8edc-d6618296ab59]] true}
+{ 
+	{
+		http://localhost:8000 1645785920  1645782320 http://localhost:8000 1645782320 G-fbdd108e-94c3-476f-b7c8-02bfd485b3de
+	} 
+	map[Role:[manage-account manage-account-links uma_authorization default-roles-ssup2 offline_access view-profile]
+	SessionIndex:[7f326d03-4635-423b-9477-5c82883920ee::1c978e61-f5b1-4350-8edc-d6618296ab59]] true
+}
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Text 1] Session 정보</figcaption>
 </figure>
 
-Service Provider를 실행하고 "/session" Path에 접근하면 [그림 6]과 같은 Login 화면을 확인할 수 있다. "user/user"로 Login을 수행하면 [Text 1]과 같이 현재의 Session 정보를 확인할 수 있다. Role에 [그림 5]의 Role이 포함되어 있는것을 확인할 수 있다. 
-
-```
-&{Method:POST URL:/saml/acs Proto:HTTP/1.1 ProtoMajor:1 ProtoMinor:1 Header:map[Accept:[text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9] Accept-Encoding:[gzip, deflate, br] Accept-Language:[ko] Cache-Control:[max-age=0] Connection:[keep-alive] Content-Length:[16013] Content-Type:[application/x-www-form-urlencoded] Cookie:[saml_ZeKzq7vzQ7Oghy3cnCf7IpW51dwRQ7gdYRVwPcS0U6DSfwQypZxKn6g9=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAiLCJleHAiOjE2NDU3ODI0MDYsImlhdCI6MTY0NTc4MjMxNiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwIiwibmJmIjoxNjQ1NzgyMzE2LCJzdWIiOiJaZUt6cTd2elE3T2doeTNjbkNmN0lwVzUxZHdSUTdnZFlSVndQY1MwVTZEU2Z3UXlwWnhLbjZnOSIsImlkIjoiaWQtMWMxY2QyMWVlODZlOTdlNmY4Yzg5Y2FkMTU0MmQwNjVlYTQ1NzdhMSIsInVyaSI6Ii9zZXNzaW9uIiwic2FtbC1hdXRobi1yZXF1ZXN0Ijp0cnVlfQ.P49VO5w6WNvXHrQKfL9ZhxJGgNdEFxAQiu3fA-2s8gIUKQXlXpCAEfGXPPWwILtsSMLxjoeTYUsrM9R6LtcvAorn-QKSMVbnhk6BeUK0UxSoi7aVM9TdlpsShmNvs_T9lL3LRoYgH1n2FQVUBXwG0iGk6-5dfLTy4GMabh-463P0ErO-9IP28fOdDuH9fPOgInYwo0-qtFUn1rgxi_G2lqZzqJtpVe9NcAx1mQFttjVBXK1X4Ry_-Uf9aVNEVplXQG0z0B0RKcqh900MWBdKvYS6sSuYnnbzrY8jo-9OAA9pyxZ8B8yamTtppXfhsZYtrGmYLZ8sSWEVnGU1rjmO5Q] Origin:[null] Sec-Ch-Ua:[" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"] Sec-Ch-Ua-Mobile:[?0] Sec-Ch-Ua-Platform:["Windows"] Sec-Fetch-Dest:[document] Sec-Fetch-Mode:[navigate] Sec-Fetch-Site:[same-site] Upgrade-Insecure-Requests:[1] User-Agent:[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36]] Body:0xc000318100 GetBody:<nil> ContentLength:16013 TransferEncoding:[] Close:false Host:localhost:8000 Form:map[] PostForm:map[] MultipartForm:<nil> Trailer:map[] RemoteAddr:[::1]:41652 RequestURI:/saml/acs TLS:<nil> Cancel:<nil> Response:<nil> ctx:0xc000318140}
-```
+Service Provider를 실행하고 "/session" Path에 접근하면 [그림 6]과 같은 Login 화면을 확인할 수 있다. "user/user"로 Login을 수행하면 [Text 1]과 같이 현재의 Session 정보를 확인할 수 있다. Role에 [그림 5]의 Role이 포함되어 있는것을 확인할 수 있다.
 
 ### 6. 참조
 
