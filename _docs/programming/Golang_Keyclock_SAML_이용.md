@@ -131,7 +131,7 @@ Service Provider로부터 추출한 Metadata를 Load하여 [그림 2]와 같이 
 ![[그림 6] User Login]({{site.baseurl}}/images/programming/Golang_Keycloak_SAML/Keycloak_User_Role.PNG){: width="700px"}
 
 {% highlight text %}
-{{http://localhost:8000 1645785920  1645782320 http://localhost:8000 1645782320 G-fbdd108e-94c3-476f-b7c8-02bfd485b3de} map[Role:[manage-account manage-account-links uma_authorization default-roles-ssup2 offline_access view-profile] SessionIndex:[7f326d03-4635-423b-9477-5c82883920ee::1c978e61-f5b1-4350-8edc-d6618296ab59]] true}
+\{\{http://localhost:8000 1645785920  1645782320 http://localhost:8000 1645782320 G-fbdd108e-94c3-476f-b7c8-02bfd485b3de\} map[Role:[manage-account manage-account-links uma_authorization default-roles-ssup2 offline_access view-profile] SessionIndex:[7f326d03-4635-423b-9477-5c82883920ee::1c978e61-f5b1-4350-8edc-d6618296ab59]] true}
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Text 1] Session 정보</figcaption>
