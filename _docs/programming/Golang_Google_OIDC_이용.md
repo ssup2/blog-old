@@ -161,18 +161,28 @@ func main() {
 ![[그림 3] Google 인증]({{site.baseurl}}/images/programming/Golang_Google_OIDC/Google_인증.PNG){: width="500px"}
 
 {% highlight text %}
-https://accounts.google.com/o/oauth2/v2/auth/identifier?client_id=554362356429-cu4gcpn45gb3incmm2v32sofslliffg2.apps.googleusercontent.com&nonce=fpeNwK3Ky2GnFdIV3Jtltw&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fauth%2Fgoogle%2Fcallback&response_type=code&scope=openid%20profile%20email&state=jw9XMDFhPTTBuKx-ugdNXg&flowName=GeneralOAuthFlow
+https://accounts.google.com/o/oauth2/v2/auth/identifier?
+client_id=554362356429-cu4gcpn45gb3incmm2v32sofslliffg2.apps.googleusercontent.com&
+nonce=fpeNwK3Ky2GnFdIV3Jtltw&
+redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fauth%2Fgoogle%2Fcallback&
+response_type=code&
+scope=openid%20profile%20email&
+state=jw9XMDFhPTTBuKx-ugdNXg&flowName=GeneralOAuthFlow
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Text 1] Google 인증 URL</figcaption>
 </figure>
 
-[그림 3]은 Golang App의 "/" Path에 접속하면 Redirect 되어 접속되는 Google 인증 화면이다. [Text 1]은 Google 인증화면 접속시 이용되는 URL을 나타낸다. URL에 Query 형태로 Client ID, Nonce, Callback URL (Redirect URL), Scope 정보가 포함되어 있는것을 확인할 수 있다.
+[그림 3]은 Golang App의 "/" Path에 접속하면 Redirect 되어 접속되는 Google 인증 화면이다. [Text 1]은 Google 인증화면 접속시 이용되는 URL을 나타낸다. URL에 Query 형태로 Client ID, Nonce, Callback URL (Redirect URL), Scope, State 정보가 포함되어 있는것을 확인할 수 있다.
 
 ### 4. ID Token, Access Token
 
 {% highlight text %}
-http://127.0.0.1:3000/auth/google/callback?state=jw9XMDFhPTTBuKx-ugdNXg&code=4%2F0AX4XfWgTtbdukkh8T54TEyGYRQj5X8yeuF7EM6C6BPAJp8164psIkcb3PHjQfIsXPBBYTQ&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=consent
+http://127.0.0.1:3000/auth/google/callback?state=jw9XMDFhPTTBuKx-ugdNXg&
+code=4%2F0AX4XfWgTtbdukkh8T54TEyGYRQj5X8yeuF7EM6C6BPAJp8164psIkcb3PHjQfIsXPBBYTQ&
+scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&
+authuser=0&
+prompt=consent
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Text 2] Callback URL</figcaption>
