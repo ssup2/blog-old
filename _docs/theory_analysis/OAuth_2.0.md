@@ -41,11 +41,11 @@ App이 Authorization Server로부터 Access Token을 발급 받기 위해서는 
 
 [그림 3]은 Access Token의 발급 과정을 나타내고 있다.
 
-* 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 Client ID, App에서 필요한 Scope 정보, 인가 완료 후 App으로 돌아오기 위한 App의 Return URL도 같이 보낸다. Client ID, Scope, Return URL 모두 인가 URL의 URL Query 형태로 전달된다.
-* 4,5,6 : Auth Server는 URL Query로 전달된 Client ID, Scope, Return URL 정보를 바탕으로 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
+* 1,2,3 : App 구동 중 특정 Resource 이용을 위해 User의 인가가 필요한 경우, App은 User Agent에게 Auth Server의 인가 URL로 Redirect 명령을 전달한다. Redirect 명령과 함께 Client ID, App에서 필요한 Scope 정보, 인가 완료 후 App으로 돌아오기 위한 App의 Callback URL도 같이 보낸다. Client ID, Scope, Callback URL 모두 인가 URL의 URL Query 형태로 전달된다.
+* 4,5,6 : Auth Server는 URL Query로 전달된 Client ID, Scope, Callback URL 정보를 바탕으로 User 인증 및 Resource 인가를 위한 적절한 UI를 User Agent에게 전달한다.
 * 7 : User는 UI를 통해서 User 인증 및 Resource 인가 작업을 진행한다. User 인증은 User의 ID/Password를 입력하여 진행하고, Resource 인가 작업은 App에서 요청한 Scope 정보를 보여주는 방식으로 진행된다.
-* 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 **Auth Code**와 App으로 돌아갈 App URL을 전달 받는다. Auth Code는 추후 Access/Refresh Token을 얻기 위한 임시 Token이다. Auth Code도 Return URL의 URL Query 형태로 전달된다.
-* 10,11,12 : User Agent는 App의 Return URL로 이동한다. App은 URL Query를 통해서 Auth Code를 얻은 다음, 얻은 Auth Code 그리고 Client ID, Client Secret을 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 발급 받는다.
+* 8, 9 : User Agent는 인증, 인가 정보를 Auth Sever에게 전달하여 **Auth Code**와 App으로 돌아갈 App URL을 전달 받는다. Auth Code는 추후 Access/Refresh Token을 얻기 위한 임시 Token이다. Auth Code도 Callback URL의 URL Query 형태로 전달된다.
+* 10,11,12 : User Agent는 App의 Callback URL로 이동한다. App은 URL Query를 통해서 Auth Code를 얻은 다음, 얻은 Auth Code 그리고 Client ID, Client Secret을 통해 Resource에 접근 할 수 있는 Access Token과 Access Token을 새로 받을때 이용하는 Refresh Token을 발급 받는다.
 
 ![[그림 4] Google OAuth 2.0 Authorization UI]({{site.baseurl}}/images/theory_analysis/OAuth_2.0/Auth_Google_UI.PNG){: width="600px"}
 

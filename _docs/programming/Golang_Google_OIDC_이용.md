@@ -42,7 +42,7 @@ func main() {
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		Endpoint:     oidcProvider.Endpoint(),
-		RedirectURL:  "http://127.0.0.1:3000/auth/google/callback",   // Set redirect url
+		RedirectURL:  "http://127.0.0.1:3000/auth/google/callback",   // Set callback URL
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "email"}, // Set scope
 	}
 
@@ -156,16 +156,29 @@ func main() {
 * Line 26, 78 : Nonce는 ID Token이 유효한지 검증하는 용도로 이용되는 문자열이다. Nonce가 포함되도록 ID Token을 생성 및 Cookie에 저장하며, Redirect 이후에 얻은 ID Token의 Nonce와 Cookie의 Nonce가 일치하는지 확인한다.
 * Line 52 : Authorization Code는 URL의 "code" Query에 존재한다.
 
-### 3. ID Token, Access Token
+### 3. Google 인증/인가
+
+![[그림 3] Google 인증]({{site.baseurl}}/images/programming/Golang_Google_OIDC/Google_인증.PNG){: width="500px"}
 
 {% highlight text %}
-http://127.0.0.1:3000/auth/google/callback?state=HeLK6b0uTARRKUaX4fLqsw&code=4%2F0AX4XfWj1XzuCgumNoRlYBfzzeCSBzszRvXMlt1uYohiQDOYJ61NrFKIgDmuuOrM5m6JDKw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none
+https://accounts.google.com/o/oauth2/v2/auth/identifier?client_id=554362356429-cu4gcpn45gb3incmm2v32sofslliffg2.apps.googleusercontent.com&nonce=fpeNwK3Ky2GnFdIV3Jtltw&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fauth%2Fgoogle%2Fcallback&response_type=code&scope=openid%20profile%20email&state=jw9XMDFhPTTBuKx-ugdNXg&flowName=GeneralOAuthFlow
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 1] Callback URL</figcaption>
+<figcaption class="caption">[Text 1] Google 인증 URL</figcaption>
 </figure>
 
-[Text 1]은 Redirect URL의 예제를 나타내고 있다. "code" Query에는 Authorization Code, "scope" Query에는 Scope 정보등이 포함되어 있는것을 확인할 수 있다.
+[그림 3]은 Golang App의 "/" Path에 접속하면 Redirect 되어 접속되는 Google 인증 화면이다. [Text 1]은 Google 인증화면 접속시 이용되는 URL을 나타낸다. URL에 Query 형태로 Client ID, Nonce, Callback URL (Redirect URL), Scope 정보가 포함되어 있는것을 확인할 수 있다.
+
+### 4. ID Token, Access Token
+
+{% highlight text %}
+http://127.0.0.1:3000/auth/google/callback?state=jw9XMDFhPTTBuKx-ugdNXg&code=4%2F0AX4XfWgTtbdukkh8T54TEyGYRQj5X8yeuF7EM6C6BPAJp8164psIkcb3PHjQfIsXPBBYTQ&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=consent
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Text 2] Callback URL</figcaption>
+</figure>
+
+[Text 2]은 Redirect URL의 예제를 나타내고 있다. "code" Query에는 Authorization Code, "scope" Query에는 Scope 정보등이 포함되어 있는것을 확인할 수 있다.
 
 {% highlight json %}
 {
@@ -197,7 +210,7 @@ http://127.0.0.1:3000/auth/google/callback?state=HeLK6b0uTARRKUaX4fLqsw&code=4%2
 <figcaption class="caption">[Text 2] Callback Result - Access Token, ID Token</figcaption>
 </figure>
 
-[Text 2]는 ID Token의 Claim과 Access Token의 예제를 나타내고 있다.
+[Text 3]는 ID Token의 Claim과 Access Token의 예제를 나타내고 있다.
 
 ### 4. 참조
 
