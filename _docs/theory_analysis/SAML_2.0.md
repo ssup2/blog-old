@@ -23,17 +23,28 @@ SAML 2.0을 이용하여 SSO가 구축이되면 User는 Service Provider와의 �
 
 **Service Provider**는 의미 그대로 User가 이용하고자 하는 Service를 제공하는 제공자를 나타낸다. 일반적으로 Google, Facebook과 같은 IT 기업에서 제공하는 API Server로 이해해도 된다. **Identity Provider**는 User의 인증/인가 정보를 저장하고 있으며 Service Provider에게 인증/인가 정보를 제공한다. 일반적으로 특정 조직에서 내부적으로 이용하는 인증/인가 Server로 이해해도 된다. Service Provider와 Identity Provider는 일반적으로 서로 다른 기업/조직으로 구성된다.
 
-#### 1.2. Process
+#### 1.3. Process
 
-![[그림 2] SAML 2.0 Process]({{site.baseurl}}/images/theory_analysis/SAML_2.0/SAML_2.0_Process.PNG){: width="700px"}
+SAML 2.0 Component 사이에는 다음의 Request, Response를 주고 받는다.
 
-[그림 2]는 SAML 2.0의 처리 과정을 나타내고 있다.
+* SAML Request : Service Provider가 Identity Provider에게 전달하는 인증 요청이다. XML Format을 이용한다.
+* SAML Response : Identity Provider가 Service Provider에게 전달하는 인증 결과이다. XML Format을 이용한다.
+* Relay State : Service Provider가 Identity Provider에게 SAML Request를 전송할때 같이 전송되며 Identity Provider가 저장하고 있다가, Identity Provider가 Service Provider에게 SAML Response를 전송할때 같이 전송하는 값이다. Service Provider는 SAML Response를 수신한 후 Relay State를 어떠한 동작을 이어서 진행할지 결정한다. Relay State는 주로 User가 가장 먼저 접근을 시도한 Service Provider의 URL을 저장하는 용도로 이용된다. 따라서 Service Provider는 SAML Response를 수신한 이후에 같이 전송되는 Relay State를 통해서 User를 다시 Redirect 시킨다. Relay State의 Format은 SAML 2.0에 정의되어 있지 않다. 따라서 Service Provider마다 다른 Format의 Relay State를 갖게된다.
+
+SAML Request, SAML Response, Relay State를 Service Provider와 Identity Provider 사이에 주고 받기 위해서는, Identity Provider에 Service Provider가 이전에 등록되어 있어야 한다. SAML 2.0은 SAML Request, SAML Response, Relay State를 주고 받는 방식은 HTTP Redirect (URL Query) 또는 HTTP Post 이용하는 방식중에 선택할 수 있다.
+
+##### 1.2.1. Service Provider HTTP Redirect, Identity Provider HTTP Post
+
+![[그림 2] SAML 2.0 Process - Service Provider HTTP Redirect, Identity Provider HTTP Post]({{site.baseurl}}/images/theory_analysis/SAML_2.0/SAML_2.0_Process_SP_Redirect_IdP_Post.PNG){: width="700px"}
+
+[그림 2]는 Service Provider의 경우 HTTP Redirect를 통해서 SAML Request와 Relay State를 Identity Provider에게 전송하고, Identity Provider는 HTTP Post Method의 Body를 통해서 SAML Response와 Relay State를 Service Provider에게 전송하는 과정을 나타내고 있다. SAML 2.0에서 가장 많이 이용되는 형태이다.
 
 * 1,2 : User는 User Agent를 통해서 Service Provider의 URL에 접근하여 Service를 요청한다.
-* 3 : Service Provider는 User Agent로부터 받은 요청에 인증/인가 정보가 없기 때문에, User Agent가 인증/인가 정보를 얻을 수 있도록 SAML Request와 함께 Identitiy Provider로 Redirect 명령을 User Agent에게 전달한다. 여기서 SAML Request는 User 인증 요청를 의미한다. Service Provider는 설정에 의해서 Identity Provider의 위치 및 정보를 이전에 알고 있어야 한다.
-* 4,5,6,7,8,9 : User Agent는 Identity Provider로 접근하여 User에게 인증 UI를 보여주어 User의 Login을 통해서 인증 정보를 Identity Server에게 전달하고 SAML Response를 얻는다. SAML Response에는 인증/인가 정보가 저장되어 있는 Assertion이 포함되어 있다. 또한 User Agent는 Identitiy Provider로부터 SAML Response와 함께 Service Provider의 **ACS (Assertion Consumer Service)**로 Redirect 명령도 전달 받는다. Identity Provider는 설정에 의해서 Service Provider의 ACS 정보를 이전에 알고 있어야 한다.
-* 10, 11 : User Agent는 얻은 SAML Response와 함께 Service Provider의 ACS로 접근한다. Service Provider의 ACS는 SAML Response의 Assertion 정보를 확인하고 User Agent에게 Session 정보를 전달한다. 그리고 원래 User Agent를 처음 접근하려고 했던 Service Provider의 URL로 다시 Redirect 시킨다.
-* 12, 13 : User Agent는 받은 Session 정보를 통해서 Session을 설정하고 처음에 접근하려고 했던 Service URL에 다시 접근하여 Service를 이용한다. Session이 설정된 User Agent는 이후 자유롭게 Service Provider의 Service를 이용할 수 있게 된다.
+* 3 : Service Provider는 User Agent로부터 받은 요청에 인증/인가 정보가 없기 때문에, User Agent가 인증/인가 정보를 얻을 수 있도록 SAML Request, Relay State와 함께 Identitiy Provider로 **HTTP Redirect** 명령을 User Agent에게 전달한다. SAML Request와 Relay State는 Redirect되는 URL의 Query 형태로 전달된다.
+* 4,5 : User Agent는 Identity Provider에 SAML Request, Relay State에 접근한다. Identity Provider는 URL Query에 존재하는 SAML Request와 Relay State를 바탕으로 인증 UI 구성하여 User Agent에게 전송한다.
+* 6,7,8,9 : User가 Login을 수행하면 Identity Provider는 인증 이후에 User Agent가 SAML Response, Relay State를 Service Provider의 **ACS (Assertion Consumer Service)** URL로 **HTTP Post** 요청을 통해서 전달하도록 만든다. SAML Response, Relay State는 Post 요청의 Body로 전송된다.
+* 10, 11 : User Agent는 HTTP Post 요청을 통해서 ACS URL로 접근한다. Service Provider의 ACS는 HTTP Post 요청의 Body에 존재하는 SAML Response의 Assertion 정보를 통해서 Session을 설정한다. 또한 HTTP Post 요청의 Body에 존재하는 Relay State를 통해서 User가 처음 접근을 시도했던 Service Provider의 URL을 찾아내고 다시 Redirect 시킨다.
+* 12, 13 : User Agent는 Service Provider의 ACS가 설정한 Session을 통해서 Service Provider의 Service에 접근한다.
 
 ### 2. 참조
 
