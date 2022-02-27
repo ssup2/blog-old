@@ -222,7 +222,7 @@ prompt=consent
 
 [Text 3]는 ID Token의 Claim과 Access Token의 예제를 나타내고 있다.
 
-### 4. 참조
+### 5. 참조
 
 * [https://www.daleseo.com/google-oidc/](https://www.daleseo.com/google-oidc/)
 * [https://www.daleseo.com/google-oauth/](https://www.daleseo.com/google-oauth/)
