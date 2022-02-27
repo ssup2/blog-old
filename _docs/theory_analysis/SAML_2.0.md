@@ -23,7 +23,7 @@ SAML 2.0을 이용하여 SSO가 구축이되면 User는 Service Provider와의 �
 
 **Service Provider**는 의미 그대로 User가 이용하고자 하는 Service를 제공하는 제공자를 나타낸다. 일반적으로 Google, Facebook과 같은 IT 기업에서 제공하는 API Server로 이해해도 된다. **Identity Provider**는 User의 인증/인가 정보를 저장하고 있으며 Service Provider에게 인증/인가 정보를 제공한다. 일반적으로 특정 조직에서 내부적으로 이용하는 인증/인가 Server로 이해해도 된다. Service Provider와 Identity Provider는 일반적으로 서로 다른 기업/조직으로 구성된다.
 
-#### 1.3. Process
+#### 1.2. Process
 
 SAML 2.0 Component 사이에는 다음의 Request, Response를 주고 받는다.
 
@@ -46,7 +46,7 @@ SAML Request, SAML Response, Relay State를 Service Provider와 Identity Provide
 * 10, 11 : User Agent는 HTTP Post 요청을 통해서 ACS URL로 접근한다. Service Provider의 ACS는 HTTP Post 요청의 Body에 존재하는 SAML Response의 Assertion 정보를 통해서 Session을 설정한다. 또한 HTTP Post 요청의 Body에 존재하는 Relay State를 통해서 User가 처음 접근을 시도했던 Service Provider의 URL을 찾아내고 다시 Redirect 시킨다.
 * 12, 13 : User Agent는 Service Provider의 ACS가 설정한 Session을 통해서 Service Provider의 Service에 접근한다.
 
-### 2. 참조
+### 3. 참조
 
 * [https://developer.okta.com/docs/concepts/saml/](https://developer.okta.com/docs/concepts/saml/)
 * [https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/id_roles_providers_saml.html](https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/id_roles_providers_saml.html)
