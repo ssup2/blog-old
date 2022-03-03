@@ -50,7 +50,7 @@ Instant Vector Type은 질의시에는 **가장 최근 시간에 저장된 값**
 
 Label은 Key-value 형태로 존재하는데 여기서 Label이 갖을수 있는 Value의 종류의 개수는 Label의 Cardinality를 의미한다. [그림 5]에서 모든 값의 "container" Label에는 "node-exporter"라는 하나의 Value를 가지고 있다. 따라서 "container" Label의 Cardinality는 1이다. 반면 "instance" Label에는 "192.168.0.31:9100', "192.168.0.32:9100", "192.168.0.33:9100" 3개의 Value를 가지고 있다. 따라서 "Instance" Label의 Cardinality는 3이다.
 
-Instant Vector Type의 Cardinality는 각 시간별로 갖을수 있는 값의 개수를 의미한다. [그림 5]의 "node_memory_MemAvailable_bytes"는 각 시간별 3개의 값을 가지고 있기 때문에 Cardinality도 3이다. Instant Vector Type의 Cardinality는 Label의 Cardinality에 따라서 결정된다. 3의 Cardinality를 갖는 Label이 하나만 존재한다면 Instant Vector Type의 Cardinality는 3이 되지만, 3의 Cardinality를 Label이 2개 존재한다면 Instant Vector Type의 Cardinality는 9(3*3)이 된다.
+Instant Vector Type의 Cardinality는 각 시간별로 갖을수 있는 값의 개수를 의미한다. [그림 5]의 "node_memory_MemAvailable_bytes"는 각 시간별 3개의 값을 가지고 있기 때문에 Cardinality도 3이다. Instant Vector Type의 Cardinality는 Label의 Cardinality에 따라서 결정된다. 3의 Cardinality를 갖는 Label이 하나만 존재한다면 Instant Vector Type의 Cardinality는 3이 되지만, 3의 Cardinality를 Label이 2개 존재한다면 Instant Vector Type의 Cardinality는 9(3*3)가 된다.
 
 Instant Vector Type의 Cardinality가 높다는 의미는 처리해야할 Data도 많다는 의미이다. Prometheus가 높은 부하를 받는 대부분의 이유는 이러한 높은 Cardinality를 갖는 Instant Vector Type의 Data를 처리하고 있기 때문이다.
 
