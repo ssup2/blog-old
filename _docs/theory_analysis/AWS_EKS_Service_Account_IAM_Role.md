@@ -157,7 +157,7 @@ Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 �
 Service Account Token의 Projected Volume 기능은 Kubernetes API Server에 다음의 Parameter들을 설정하면 이용 가능하다. 아래의 설정들은 Traditional Service Account Token과는 무관하다.
 * service-account-signing-key-file : Service Account Token을 Sign 할 때 이용하는 Key 파일의 경로를 지정합니다.
 * service-account-issuer : Service Account Token의 발급자를 설정합니다. EKS의 Kubernetes API Server에는 [Text 4]의 Issue 항목의 내용인 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
-* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정합니다. EKS의 Kubernetes API Server에는 [Tex t 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
+* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정합니다. EKS의 Kubernetes API Server에는 [Text 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
 
 {% highlight json %}
 {
