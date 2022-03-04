@@ -150,9 +150,14 @@ Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**
 <figcaption class="caption">[Text 4] Service Account Token</figcaption>
 </figure>
 
-[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 "aws-iam-token" Service Account Token의 내용을 나타내고 있다. Token은 JWT 형태로 RS256 Algorithm을 이용하여 Encoding되어 있으며, Decoding을 하면 [Text 4]의 내용을 확인할 수 있다. Issuer에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다.
+[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 "aws-iam-token" Service Account Token의 내용을 나타내고 있다. Token은 JWT 형태로 RS256 Algorithm을 이용하여 Encoding되어 있으며, Decoding을 하면 [Text 4]의 내용을 확인할 수 있다. Issuer(iss) 항목에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience(aud) 항목에는 "sts.amazonaws.com"가 설정되어 있다. Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다.
 
-Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주입은 **Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용되도록 동작되어야 한다.
+Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주기적인 주입은 **Service Account Token의 Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용하도록 동작되어야 한다.
+
+Service Account Token의 Projected Volume 기능은 Kubernetes API Server에 다음의 Parameter들을 설정하면 이용 가능하다. 아래의 설정들은 Traditional Service Account Token과는 무관하다.
+* service-account-signing-key-file : Service Account Token을 Sign 할 때 이용하는 Key 파일의 경로를 지정합니다.
+* service-account-issuer : Service Account Token의 발급자를 설정합니다. EKS의 Kubernetes API Server에는 [Text 4]의 Issue 항목의 내용인 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
+* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정합니다. EKS의 Kubernetes API Server에는 [Tex t 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
 
 {% highlight json %}
 {
@@ -168,7 +173,7 @@ Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 �
 <figcaption class="caption">[Text 5] Traditional Service Account Token</figcaption>
 </figure>
 
-Pod Identity Webhook가 Inject하는 "aws-iam-token" 이름의 Service Account Token은 Kubernetes가 기본적으로 생성하는 "Traditional Service Account Token"과의 내용도 다르다. [Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Token은 RS256 Algorithm을 이용하여 Endcoding되어 있으며, Decoding하면 [Text 5]의 내용을 확인할 수 있다. Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다.
+[Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Token은 RS256 Algorithm을 이용하여 Endcoding되어 있으며, Decoding하면 [Text 5]의 내용을 확인할 수 있다. Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다. Pod Identity Webhook가 Inject하는 "aws-iam-token" 이름의 Service Account Token은 Kubernetes가 기본적으로 생성하는 "Traditional Service Account Token"과의 내용도 다른것을 확인 할 수 있다.
 
 #### 1.4. Use Token
 
