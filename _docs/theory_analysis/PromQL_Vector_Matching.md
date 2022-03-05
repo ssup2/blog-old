@@ -40,10 +40,9 @@ ice_count{color="green", size="big"} 20
 ##### 1.1.1. 모든 Label Matching
 
 {: .newline }
-> [Instanct Vector 1] [Op] [Instanct Vector 2]
-> 
+> **[Instanct Vector 1] [Op] [Instanct Vector 2]**
 > ex) candy_count{} + ice_count{}
-> ex) candy_count{} - ice_count{} <br/>
+> ex) candy_count{} - ice_count{}
 <figure>
 <figcaption class="caption">[문법 1] One-to-one, 모든 Label Matching</figcaption>
 </figure>
@@ -62,8 +61,8 @@ candy_count{} + ice_count{}
 ##### 1.1.2 일부 Label Matching
 
 {: .newline }
-> [Instanct Vector 1] [Op] on([label1], [label2] ...) [Instanct Vector 2]
-> ex) candy_count{} + on(color) ice_count{} <br/>
+> **[Instanct Vector 1] [Op] on([label1], [label2] ...) [Instanct Vector 2]**
+> ex) candy_count{} + on(color) ice_count{}
 <figure>
 <figcaption class="caption">[문법 2] One-to-one, 일부 Label Matching, on</figcaption>
 </figure>
@@ -81,8 +80,8 @@ candy_count{} + on(color) ice_count{}
 </figure>
 
 {: .newline }
-> [Instanct Vector 1] [Op] ignoring([label1], [label2] ...) [Instanct Vector 2]
-> ex) candy_count{} + ignoring(size) ice_count{} <br/>
+> **[Instanct Vector 1] [Op] ignoring([label1], [label2] ...) [Instanct Vector 2]**
+> ex) candy_count{} + ignoring(size) ice_count{}
 <figure>
 <figcaption class="caption">[문법 3] One-to-one, 일부 Label Matching, ignoring</figcaption>
 </figure>
