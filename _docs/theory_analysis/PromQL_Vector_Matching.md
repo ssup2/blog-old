@@ -63,10 +63,7 @@ candy_count{} + ice_count{}
 
 {: .newline }
 > [Instanct Vector 1] [Op] on([label1], [label2] ...) [Instanct Vector 2]
-> [Instanct Vector 1] [Op] ignoring([label1], [label2] ...) [Instanct Vector 2]
-> 
-> ex) candy_count{} + on(color) ice_count{}
-> ex) candy_count{} + ignoring(size) ice_count{} <br/>
+> ex) candy_count{} + on(color) ice_count{} <br/>
 <figure>
 <figcaption class="caption">[문법 2] One-to-one, 일부 Label Matching, on</figcaption>
 </figure>
@@ -81,6 +78,13 @@ candy_count{} + on(color) ice_count{}
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Query 2] One-to-one, 일부 Label Matching, on</figcaption>
+</figure>
+
+{: .newline }
+> [Instanct Vector 1] [Op] ignoring([label1], [label2] ...) [Instanct Vector 2]
+> ex) candy_count{} + ignoring(size) ice_count{} <br/>
+<figure>
+<figcaption class="caption">[문법 3] One-to-one, 일부 Label Matching, ignoring</figcaption>
 </figure>
 
 {% highlight cpp linenos %}
