@@ -149,7 +149,7 @@ candy2_count{color="green", size="small"} 3
 candy2_count{color="green", size="big"} 5
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Instant Vector 3] Candy 2</figcaption>
+<figcaption class="caption">[Instant Vector 3] Candy 2 Count</figcaption>
 </figure>
 
 {% highlight text %}
@@ -161,7 +161,7 @@ ice2_count{color="red", size="medium", flavor="cherry"} 4
 ice2_count{color="green", size="big", flavor="lime"} 6
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Instant Vector 4] Ice 2</figcaption>
+<figcaption class="caption">[Instant Vector 4] Ice 2 Count</figcaption>
 </figure>
 
 [Instant Vector 3]과 [Instant Vector 4]는 One-to-many Vector Matching 설명을 위해서 이용되는 가상의 Instant Vector Type의 Data인 candy2_count, ice2_count를 나타내고 있다.
