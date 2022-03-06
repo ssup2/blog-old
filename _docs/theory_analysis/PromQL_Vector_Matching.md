@@ -217,7 +217,7 @@ candy2_count{} * on(color) group_left(flavor) ice2_count{}
 <figcaption class="caption">[Query 6] One-to-Many, group_left, with Label</figcaption>
 </figure>
 
-[Query 6]의 Query는 [Query 5]의 Query에서 ice2_count의 flavor Label를 group_left에 명시한 부분만 변경되었다. 따라서 Query 결과에도 Matching된 ice2_count의 flavor가 존재하는 것을 확인할 수 있다.
+[Query 6]의 Query는 [Query 5]의 Query에서 ice2_count의 flavor Label를 group_left에 명시한 부분만 변경되었다. 따라서 Query 결과에도 Matching된 ice2_count의 flavor가 존재하는 것을 확인 할 수 있다.
 
 #### 1.3. Many-to-many Vector Matching
 
