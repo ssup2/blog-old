@@ -7,11 +7,15 @@ comment: true
 adsense: true
 ---
 
-PromQL의 Join 문법을 분석한다.
+PromQL의 Vector Matching 문법을 분석한다.
 
 ### 1. PromQL Vector Matching
 
+PromQL의 Vector Matching은 의미 그대로 두개의 Instant Vector Type의 Data를 연산(Matching)시키는 문법이다. PromQL에서 가장 많이 이용되는 문법중 하나이다. Instant Vector Type에 존재하는 하나의 값을 어떻게 연산시키는지에 따라서 One-to-one Matching, One-to-many/Many-to-one Matching, Many-to-many Matching이 존재한다. 여기서 Matching은 값에 존재하는 **Label**을 기준으로 이루어진다.
+
 #### 1.1. One-to-one Vector Matching
+
+One-to-one Vector Matching은 의미그대로 Instant Vector Type에 존재하는 하나의 값을 다른 Instant Vector Type에 존재하는 하나의 값과 1:1로 Matching시켜 연산하는 문법이다. Matching시 모든 Label이 Matching되어야 하는 경우와 일부 Label만 Matching되는 경우로 나눌 수 있다.
 
 {% highlight text %}
 --- query ---
@@ -22,7 +26,7 @@ candy1_count{color="red", size="medium"} 3
 candy1_count{color="green", size="small"} 5
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Instant Vector 1] Candy 1</figcaption>
+<figcaption class="caption">[Instant Vector 1] Candy 1 Count</figcaption>
 </figure>
 
 {% highlight text %}
@@ -34,18 +38,22 @@ ice1_count{color="red", size="medium"} 4
 ice1_count{color="green", size="big"} 6
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Instant Vector 2] Ice 1</figcaption>
+<figcaption class="caption">[Instant Vector 2] Ice 1 Count</figcaption>
 </figure>
+
+[Instant Vector 1]과 [Instant Vector 2]는 One-to-one Vector Matching 설명을 위해서 이용되는 가상의 Instant Vector Type의 Data인 candy1_count, ice2_count를 나타내고 있다.
 
 ##### 1.1.1. 모든 Label Matching
 
 {: .newline }
 > **[Instant Vector] [Op] [Instant Vector]**
 > ex) candy1_count{} + ice1_count{}
-> ex) candy1_count{} - ice1_count{}
+> ex) candy1_count{} * ice1_count{}
 <figure>
 <figcaption class="caption">[문법 1] One-to-one, 모든 Label Matching</figcaption>
 </figure>
+
+[문법 1]은 One-to-one Vector Matching에서 모든 Label을 Matching 시키는 경우의 문법과 예제를 타나내고 있다.
 
 {% highlight text %}
 --- query --- 
@@ -57,6 +65,8 @@ candy1_count{} + ice1_count{}
 <figure>
 <figcaption class="caption">[Query 1] One-to-one, 모든 Label Matching</figcaption>
 </figure>
+
+[Query 1]은 candy1_count와 ice2_count를 대상으로 One-to-one, 모든 Label을 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count의 Cardinality가 3이지만 결과의 Cardinality가 2인 이유는 모든 Label이 Matching하는 경우가 color="blue", size="big" / color="red", size="medium" 2가지 밖에 없기 때문이다. Operand는 "+"이기 때문에 두 값이 더해진다.
 
 ##### 1.1.2 일부 Label Matching
 

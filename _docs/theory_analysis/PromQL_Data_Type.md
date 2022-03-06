@@ -31,7 +31,7 @@ Scalar Type은 의미 그대로 값을 나타내는 Data Type이다. 정수, 실
 
 ![[그림 4] Instant Vector, node_memory_MemAvailable_bytes Graph]({{site.baseurl}}/images/theory_analysis/PromQL_Data_Type/PromQL_Instant_Vector_Type2.PNG)
 
-Instant Vector Type은 **특정 시간별 값**을 저장하고 있는 Data Type이다. 따라서 Instant Vector Type은 Graph로 표현이 가능하다. 각 시간별로 여러개의 값을 가질 수 있다. [그림 4]는 Node Exporter가 노출하는 Node의 가용 Memory 크기를 시간별로 저장하고 있는 "node_memory_MemAvailable_bytes"의 Graph를 나타내고 있다. 각 시간별로 3개의 값을 가지고 있기 때문에 Graph도 3개가 나타난다.
+Instant Vector Type은 **특정 시간대(Timestamp)의** 값을 저장하고 있는 Data Type이다. 따라서 Instant Vector Type은 Graph로 표현이 가능하다. 각 시간별로 여러개의 값을 가질 수 있다. [그림 4]는 Node Exporter가 노출하는 Node의 가용 Memory 크기를 시간별로 저장하고 있는 "node_memory_MemAvailable_bytes"의 Graph를 나타내고 있다. 각 시간별로 3개의 값을 가지고 있기 때문에 Graph도 3개가 나타난다.
 
 ![[그림 5] Instant Vector, node_memory_MemAvailable_bytes]({{site.baseurl}}/images/theory_analysis/PromQL_Data_Type/PromQL_Instant_Vector_Type1.PNG)
 
@@ -60,7 +60,7 @@ Instant Vector Type의 Cardinality가 높다는 의미는 처리해야할 Data�
 
 Range Vector Type은 Instant Vector Type의 값 중에서 **특정 시간대의 모든 값**들을 **배열** 형태로 저장하고 있는 Data Type이다. Range Vector Type은 Instant Vector Type에 [](대괄호)로 나타나는 **Range Selector**를 붙이면 얻을 수 있다. []안에는 시간대의 길이를 명시하면 된다. [그림 7]은 "node_memory_MemAvailable_bytes"의 마지막 1분 동안의 값을 나타내고 있다.
 
-1분 동안에 동일한 Label을 갖는 값이 2개가 존재하기 때문에 [그림 7]의 각 행에 2개의 값이 배열 형태로 존재하는 것을 확인할 수 있다. 각 값의 형태는 [값]@[수집 시간] 형태로 표현된다. Range Vector Type은 특정 시간대의 평균 값이나 증분 값을 얻을때 주로 이용된다. 평균 값을 얻을때는 배열로 저장된 값들의 평균을 구하면되고, 증분 값을 얻을때는 배열로 저장된 값들의 차이를 이용하면 되기 때문이다. Range Vector는 값을 배열 형태로 저장하고 있기 때문에 Graph 형태로 표현이 불가능하다.
+1분 동안에 동일한 Label을 갖는 값이 2개가 존재하기 때문에 [그림 7]의 각 행에 2개의 값이 배열 형태로 존재하는 것을 확인할 수 있다. 각 값의 형태는 [값]@[수집 시간] 형태로 표현된다. 시간이 1분에서 더 늘어난다면 각 행에 포함된는 값의 개수도 늘어나게 된다. Range Vector Type은 특정 시간대의 평균 값이나 증분 값을 얻을때 주로 이용된다. 평균 값을 얻을때는 배열로 저장된 값들의 평균을 구하면되고, 증분 값을 얻을때는 배열로 저장된 값들의 차이를 이용하면 되기 때문이다. Range Vector는 값을 배열 형태로 저장하고 있기 때문에 Graph 형태로 표현이 불가능하다.
 
 ### 2. 참조
 
