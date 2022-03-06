@@ -116,11 +116,11 @@ candy1_count{} - ignoring(size) ice1_count{}
 <figcaption class="caption">[Query 3] One-to-one, 일부 Label Matching, ignoring</figcaption>
 </figure>
 
-[Query 3]은 candy1_count와 ice1_count를 대상으로 on 문법을 이용하여 size Label을 제외한 나머지 Label만을 이용하여 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count 모두 color, size Label만 존재하는 상태에서 size Label만 Matching에서 제외하였기 때문에 colr Label만을 이용하여 Matching을 수행한다. 따라서 [Query 2]의 결과와 [Query 3]의 결과는 일치하게 된다.
+[Query 3]은 candy1_count와 ice1_count를 대상으로 on 문법을 이용하여 size Label을 제외한 나머지 Label만을 이용하여 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count 모두 color, size Label만 존재하는 상태에서 size Label만 Matching에서 제외하였기 때문에 colr Label만을 이용하여 Matching을 수행한다. 따라서 [Query 2]의 결과와 [Query 3]의 결과는 동일하게 된다.
 
 One-to-one 일부 Label Matching시 선택할 수 있는 Label은 반드시 아래의 조건을 만족시켜야 한다. 아래의 조건을 만족시키지 못하면 Query Error가 발생한다.
-* 선택되는 Label의 값은 하나의 Instant Vector Data 내부에서 반드시 중복되면 안된다.
-* 두 Instant Vector Data 사이에서 반드시 1:1 Matching이 되어야 한다.
+* 하나의 Instant Vector Type의 Data 내부에서 선택한 Label의 값은 중복되면 안된다.
+* 두 Instant Vector Type의 Data 사이에서 선택한 Label의 값은 반드시 1:1 Matching이 되어야 한다.
 
 {% highlight text %}
 --- query --- 
@@ -132,7 +132,9 @@ Error
 <figcaption class="caption">[Query 4] One-to-one, 일부 Label Matching, Error</figcaption>
 </figure>
 
-[Query 4]는 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching에 실패하는 경우를 나타내고 있다. size Label 선택시 Error가 발생하는 이유는 ice1_count의 size Label의 값에 "big"이 중복되기 때문이다. candy1_count와 ice1_count를 대상으로 위의 조건을 만족시키는 Label은 color Label만이 유일하다. 만약 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching을 하기 위해서는 One-to-many Matching을 이용해야 한다.
+[Query 4]는 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching에 실패하는 경우를 나타내고 있다. size Label 선택시 Error가 발생하는 이유는 ice1_count의 size Label의 값중 하나인 "big"이 중복되기 때문이다. Label 선택 규칙중 첫번째 규칙에 어긋난다.
+
+candy1_count와 ice1_count를 대상으로 모든 Label 선택 규칙을 만족시키는 Label은 color Label만이 유일하다. 만약 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching을 수행하기 위해서는 One-to-one이 아닌 One-to-many Matching을 이용해야 한다.
 
 #### 1.2. One-to-many(Many-to-one) Vector Matching
 
