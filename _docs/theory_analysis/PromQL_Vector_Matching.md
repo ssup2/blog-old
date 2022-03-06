@@ -132,9 +132,9 @@ Error
 <figcaption class="caption">[Query 4] One-to-one, 일부 Label Matching, Error</figcaption>
 </figure>
 
-[Query 4]는 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching에 실패하는 경우를 나타내고 있다. size Label 선택시 Error가 발생하는 이유는 ice1_count의 size Label의 값에 "big"이 중복되기 때문이다. candy1_count와 ice1_count를 대상으로 위의 조건을 만족시키는 Label은 color Label만이 유일하다.
+[Query 4]는 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching에 실패하는 경우를 나타내고 있다. size Label 선택시 Error가 발생하는 이유는 ice1_count의 size Label의 값에 "big"이 중복되기 때문이다. candy1_count와 ice1_count를 대상으로 위의 조건을 만족시키는 Label은 color Label만이 유일하다. 만약 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching을 하기 위해서는 One-to-many Matching을 이용해야 한다.
 
-#### 1.2. One-to-many, Many-to-one Vector Matching
+#### 1.2. One-to-many(Many-to-one) Vector Matching
 
 {% highlight text %}
 --- query ---
@@ -165,7 +165,7 @@ ice2_count{color="green", size="big", flavor="lime"} 6
 > **[Instant Vector] [Op] on/ignoring([label], ...) group_right [Instant Vector]**
 > ex) candy2_count{} * on(size) group_left ice2_count{}
 <figure>
-<figcaption class="caption">[문법 4] One-to-many, Many-to-one Matching</figcaption>
+<figcaption class="caption">[문법 4] One-to-many Matching</figcaption>
 </figure>
 
 {% highlight text %}
