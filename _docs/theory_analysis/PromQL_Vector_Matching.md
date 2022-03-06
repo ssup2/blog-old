@@ -41,7 +41,7 @@ ice1_count{color="green", size="big"} 6
 <figcaption class="caption">[Instant Vector 2] Ice 1 Count</figcaption>
 </figure>
 
-[Instant Vector 1]과 [Instant Vector 2]는 One-to-one Vector Matching 설명을 위해서 이용되는 가상의 Instant Vector Type의 Data인 candy1_count, ice2_count를 나타내고 있다.
+[Instant Vector 1]과 [Instant Vector 2]는 One-to-one Vector Matching 설명을 위해서 이용되는 가상의 Instant Vector Type의 Data인 candy1_count, ice1_count를 나타내고 있다.
 
 ##### 1.1.1. 모든 Label Matching
 
@@ -66,47 +66,61 @@ candy1_count{} + ice1_count{}
 <figcaption class="caption">[Query 1] One-to-one, 모든 Label Matching</figcaption>
 </figure>
 
-[Query 1]은 candy1_count와 ice2_count를 대상으로 One-to-one, 모든 Label을 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count의 Cardinality가 3이지만 결과의 Cardinality가 2인 이유는 모든 Label이 Matching하는 경우가 color="blue", size="big" / color="red", size="medium" 2가지 밖에 없기 때문이다. Operand는 "+"이기 때문에 두 값이 더해진다.
+[Query 1]은 candy1_count와 ice1_count를 대상으로 One-to-one, 모든 Label을 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count의 Cardinality가 3이지만 결과의 Cardinality가 2인 이유는 모든 Label이 Matching하는 경우가 {color="blue", size="big"}, {color="red", size="medium"} 2가지 밖에 없기 때문이다. Operand는 "+"이기 때문에 두 값이 더해진다.
 
 ##### 1.1.2 일부 Label Matching
 
 {: .newline }
 > **[Instant Vector] [Op] on([label], ...) [Instant Vector]**
 > ex) candy1_count{} + on(color) ice1_count{}
+> ex) candy1_count{} - on(color) ice1_count{}
 <figure>
 <figcaption class="caption">[문법 2] One-to-one, 일부 Label Matching, on</figcaption>
 </figure>
 
+One-to-one Matching에서 일부 Label만 Matching 시키는 경우 Matching 시키는 Label을 명시하는 **on** 문법과 Matching에서 제외시키는 Label을 명시하는 **ignoring** 문법 2가지가 존재한다. [문법 2]는 on 문법을 이용하여 Matching 시키는 Label을 명시하는 경우의 문법과 예제를 나타내고 있다.
+
 {% highlight text %}
 --- query --- 
-candy1_count{} + on(color) ice1_count{}
+candy1_count{} - on(color) ice1_count{}
 --- result ---
-{color="blue"} 3 (1+2)
-{color="red"} 7 (3+4)
-{color="green"} 11 (5+6)
+{color="blue"} -1 (1+2)
+{color="red"} -1 (3+4)
+{color="green"} -1 (5+6)
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Query 2] One-to-one, 일부 Label Matching, on</figcaption>
 </figure>
 
+[Query 2]는 candy1_count와 ice1_count를 대상으로 on 문법을 이용하여 color Label만 Matching하는 경우를 나타내고 있다. candy1_count와 ic2_count의 color Label의 값인 blue, red, green 별로 연산이 이루어진다. Operand가 "-"이기 때문에 빼기 연산을 수행한다.
+
 {: .newline }
 > **[Instant Vector] [Op] ignoring([label], ...) [Instant Vector]**
 > ex) candy1_count{} + ignoring(size) ice1_count{}
+> ex) candy1_count{} / ignoring(size) ice1_count{}
 <figure>
 <figcaption class="caption">[문법 3] One-to-one, 일부 Label Matching, ignoring</figcaption>
 </figure>
 
+[문법 3]은 ignoring 문법을 이용하여 Matching에서 제외시키는 Label을 명시적으로 제외하는 경우의 문법과 예제를 나타내고 있다.
+
 {% highlight text %}
 --- query --- 
-candy1_count{} + ignoring(size) ice1_count{}
+candy1_count{} - ignoring(size) ice1_count{}
 --- result ---
-{color="blue"} 3 (1+2)
-{color="red"} 7 (3+4)
-{color="green"} 11 (5+6)
+{color="blue"} -1 (1-2)
+{color="red"} -1 (3-4)
+{color="green"} -1 (5-6)
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Query 3] One-to-one, 일부 Label Matching, ignoring</figcaption>
 </figure>
+
+[Query 3]은 candy1_count와 ice1_count를 대상으로 on 문법을 이용하여 size Label을 제외한 나머지 Label만을 이용하여 Matching하는 경우를 나타내고 있다. candy1_count와 ice1_count 모두 color, size Label만 존재하는 상태에서 size Label만 Matching에서 제외하였기 때문에 colr Label만을 이용하여 Matching을 수행한다. 따라서 [Query 2]의 결과와 [Query 3]의 결과는 일치하게 된다.
+
+One-to-one 일부 Label Matching시 선택할 수 있는 Label은 반드시 아래의 조건을 만족시켜야 한다. 아래의 조건을 만족시키지 못하면 Query Error가 발생한다.
+* 선택되는 Label의 값은 하나의 Instant Vector Data 내부에서 반드시 중복되면 안된다.
+* 두 Instant Vector Data 사이에서 반드시 1:1 Matching이 되어야 한다.
 
 {% highlight text %}
 --- query --- 
@@ -117,6 +131,8 @@ Error
 <figure>
 <figcaption class="caption">[Query 4] One-to-one, 일부 Label Matching, Error</figcaption>
 </figure>
+
+[Query 4]는 candy1_count와 ice1_count를 대상으로 size Label을 선택하여 Matching에 실패하는 경우를 나타내고 있다. size Label 선택시 Error가 발생하는 이유는 ice1_count의 size Label의 값에 "big"이 중복되기 때문이다. candy1_count와 ice1_count를 대상으로 위의 조건을 만족시키는 Label은 color Label만이 유일하다.
 
 #### 1.2. One-to-many, Many-to-one Vector Matching
 
