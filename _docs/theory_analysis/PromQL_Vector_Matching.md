@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-PromQL의 Vector Matching 문법을 분석한다.
+PromQL의 Vector Matching 문법을 정리한다.
 
 ### 1. PromQL Vector Matching
 
