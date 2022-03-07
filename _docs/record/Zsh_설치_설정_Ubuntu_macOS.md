@@ -56,11 +56,19 @@ zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions을 설치한다.
 plugins=(
   git
   docker
+  kubectl
+  kubectx
   zsh-completions
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
+
+source $ZSH/oh-my-zsh.sh
 ...
+## Prompt
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+PROMPT+='%{$fg_bold[blue]%}k8s:(%{$fg[red]%}$(kubectx_prompt_info)%{$fg_bold[blue]%})%{$reset_color%} ' # k8s context
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 1] ~/.zshrc</figcaption>
