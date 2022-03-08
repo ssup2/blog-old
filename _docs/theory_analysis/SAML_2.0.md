@@ -28,7 +28,7 @@ SAML 2.0을 이용하여 SSO가 구축이되면 User는 Service Provider와의 �
 SAML 2.0 Component 사이에는 다음의 Request, Response를 주고 받는다.
 
 * SAML Request : Service Provider가 Identity Provider에게 전달하는 인증 요청이다. XML Format을 이용한다.
-* SAML Response : Identity Provider가 Service Provider에게 전달하는 인증 결과이다. XML Format을 이용한다.
+* SAML Response : Identity Provider가 Service Provider에게 전달하는 인증 결과이다. XML Format을 이용한다. Assertion 정보가 SAML Response에 포함되어 있다.
 * Relay State : Service Provider가 Identity Provider에게 SAML Request를 전송할때 같이 전송되며 Identity Provider가 저장하고 있다가, Identity Provider가 Service Provider에게 SAML Response를 전송할때 같이 전송하는 값이다. Service Provider는 SAML Response를 수신한 후 Relay State를 어떠한 동작을 이어서 진행할지 결정한다. Relay State는 주로 User가 가장 먼저 접근을 시도한 Service Provider의 URL을 저장하는 용도로 이용된다. 따라서 Service Provider는 SAML Response를 수신한 이후에 같이 전송되는 Relay State를 통해서 User를 다시 Redirect 시킨다. Relay State의 Format은 SAML 2.0에 정의되어 있지 않다. 따라서 Service Provider마다 다른 Format의 Relay State를 갖게된다.
 
 SAML Request, SAML Response, Relay State를 Service Provider와 Identity Provider 사이에 주고 받기 위해서는, Identity Provider에 Service Provider가 이전에 등록되어 있어야 한다. SAML 2.0은 SAML Request, SAML Response, Relay State를 주고 받는 방식은 HTTP Redirect (URL Query) 또는 HTTP Post 이용하는 방식중에 선택할 수 있다.
