@@ -1,5 +1,5 @@
 ---
-title: AWS IAM Admin Group, User 생성 / aws CLI 이용 / Ubuntu 18.04
+title: AWS IAM Policy 생성, 적용 / aws CLI 이용 / Ubuntu 18.04
 category: Record
 date: 2022-03-16T12:00:00Z
 lastmod: 2022-03-16T12:00:00Z
