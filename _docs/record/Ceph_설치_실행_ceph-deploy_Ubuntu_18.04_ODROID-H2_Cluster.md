@@ -57,14 +57,14 @@ cephnode User를 생성한다.
 
 #### 2.2. Deploy Node
 
-~~~console
+{% highlight text %}
 ...
 10.0.0.11 node01
 10.0.0.12 node02
 10.0.0.13 node03
 10.0.0.19 node09
 ...
-~~~
+{% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 1] Deploy Node - /etc/hosts</figcaption>
 </figure>
