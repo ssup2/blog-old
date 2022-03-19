@@ -167,10 +167,20 @@ type MemcachedReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds/finalizers,verbs=update
 
-func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
+// Reconcile is part of the main kubernetes reconciliation loop which aims to
+// move the current state of the cluster closer to the desired state.
+// TODO(user): Modify the Reconcile function to compare the state specified by
+// the Memcached object against the actual cluster state, and then
+// perform operations to make the cluster state reflect the state specified by
+// the user.
+//
+// For more details, check Reconcile and its Result here:
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.11.0/pkg/reconcile
+func (r *MemcachedReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	reqLogger := log.FromContext(ctx).WithValues("req.Namespace", req.Namespace, "req.Name", req.Name)
 	reqLogger.Info("Reconciling Memcached.")
 
@@ -202,10 +212,10 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 			reqLogger.Error(err, "Failed to create new Deployment.", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
 			return ctrl.Result{}, err
 		}
-		// Deployment created successfully - return and requeue
-		// NOTE: that the requeue is made with the purpose to provide the deployment object for the next step to ensure the deployment size is the same as the spec.
-		// Also, you could GET the deployment object again instead of requeue if you wish. See more over it here: https://godoc.org/sigs.k8s.io/controller-runtime/pkg/reconcile#Reconciler
-		return reconcile.Result{Requeue: true}, nil
+		// Ask to requeue after 1 minute in order to give enough time for the
+		// pods be created on the cluster side and the operand be able
+		// to do the next update step accurately.
+		return ctrl.Result{RequeueAfter: time.Minute}, nil
 	} else if err != nil {
 		reqLogger.Error(err, "Failed to get Deployment.")
 		return ctrl.Result{}, err
@@ -220,24 +230,8 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 			reqLogger.Error(err, "Failed to update Deployment.", "Deployment.Namespace", deployment.Namespace, "Deployment.Name", deployment.Name)
 			return ctrl.Result{}, err
 		}
-	}
-
-	// Check if the Service already exists, if not create a new one
-	// NOTE: The Service is used to expose the Deployment. However, the Service is not required at all for the memcached example to work. The purpose is to add more examples of what you can do in your operator project.
-	service := &corev1.Service{}
-	err = r.Client.Get(context.TODO(), types.NamespacedName{Name: memcached.Name, Namespace: memcached.Namespace}, service)
-	if err != nil && errors.IsNotFound(err) {
-		// Define a new Service object
-		ser := r.serviceForMemcached(memcached)
-		reqLogger.Info("Creating a new Service.", "Service.Namespace", ser.Namespace, "Service.Name", ser.Name)
-		err = r.Client.Create(context.TODO(), ser)
-		if err != nil {
-			reqLogger.Error(err, "Failed to create new Service.", "Service.Namespace", ser.Namespace, "Service.Name", ser.Name)
-			return ctrl.Result{}, err
-		}
-	} else if err != nil {
-		reqLogger.Error(err, "Failed to get Service.")
-		return ctrl.Result{}, err
+		// Deployment updated successfully - return and requeue
+		return reconcile.Result{Requeue: true}, nil
 	}
 
 	// Update the Memcached status with the pod names
@@ -254,6 +248,7 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 	podNames := getPodNames(podList.Items)
+	reqLogger.Info("test", "podNames", podNames)
 
 	// Update status.Nodes if needed
 	if !reflect.DeepEqual(podNames, memcached.Status.Nodes) {
@@ -268,75 +263,66 @@ func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	return ctrl.Result{}, nil
 }
 
+// SetupWithManager sets up the controller with the Manager.
 func (r *MemcachedReconciler) SetupWithManager(mgr ctrl.Manager) error {
-    return ctrl.NewControllerManagedBy(mgr).
-        For(&memcachedv1.Memcached{}).
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&memcachedv1.Memcached{}).
 		Owns(&appsv1.Deployment{}).
-        Complete(r)
-}  
+		Complete(r)
+}
 
 // deploymentForMemcached returns a memcached Deployment object
 func (r *MemcachedReconciler) deploymentForMemcached(m *memcachedv1.Memcached) *appsv1.Deployment {
-    ls := labelsForMemcached(m.Name)
-    replicas := m.Spec.Size
+	ls := labelsForMemcached(m.Name)
+	replicas := m.Spec.Size
 
-    dep := &appsv1.Deployment{
-        ObjectMeta: v1.ObjectMeta{
-            Name:      m.Name,
-            Namespace: m.Namespace,
-        },
-        Spec: appsv1.DeploymentSpec{
-            Replicas: &replicas,
-            Selector: &v1.LabelSelector{
-                MatchLabels: ls,
-            },
-            Template: corev1.PodTemplateSpec{
-                ObjectMeta: v1.ObjectMeta{
-                    Labels: ls,
-                },
-                Spec: corev1.PodSpec{
-                    Containers: []corev1.Container{ {
-                        Image:   "memcached:1.4.36-alpine",
-                        Name:    "memcached",
-                        Command: []string{"memcached", "-m=64", "-o", "modern", "-v"},
-                        Ports: []corev1.ContainerPort{ {
-                            ContainerPort: 11211,
-                            Name:          "memcached",
-                        } },
-                    } },
-                },
-            },
-        },
-    }
+	dep := &appsv1.Deployment{
+		ObjectMeta: v1.ObjectMeta{
+			Name:      m.Name,
+			Namespace: m.Namespace,
+		},
+		Spec: appsv1.DeploymentSpec{
+			Replicas: &replicas,
+			Selector: &v1.LabelSelector{
+				MatchLabels: ls,
+			},
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: v1.ObjectMeta{
+					Labels: ls,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{{
+						Image:   "memcached:1.4.36-alpine",
+						Name:    "memcached",
+						Command: []string{"memcached", "-m=64", "-o", "modern", "-v"},
+						Ports: []corev1.ContainerPort{{
+							ContainerPort: 11211,
+							Name:          "memcached",
+						}},
+					}},
+				},
+			},
+		},
+	}
 
-    // Set Memcached instance as the owner of the Deployment.
-    ctrl.SetControllerReference(m, dep, r.Scheme) //todo check how to get the schema
-
-    return dep
+	// Set Memcached instance as the owner of the Deployment.
+	ctrl.SetControllerReference(m, dep, r.Scheme) //todo check how to get the schema
+	return dep
 }
 
-// serviceForMemcached function takes in a Memcached object and returns a Service for that object.
-func (r *MemcachedReconciler) serviceForMemcached(m *memcachedv1.Memcached) *corev1.Service {
-    ls := labelsForMemcached(m.Name)
-    ser := &corev1.Service{
-        ObjectMeta: v1.ObjectMeta{
-            Name:      m.Name,
-            Namespace: m.Namespace,
-        },
-        Spec: corev1.ServiceSpec{
-            Selector: ls,
-            Ports: []corev1.ServicePort{
-                {
-                    Port: 11211,
-                    Name: m.Name,
-                },
-            },
-        },
-    }
+// labelsForMemcached returns the labels for selecting the resources
+// belonging to the given memcached CR name.
+func labelsForMemcached(name string) map[string]string {
+	return map[string]string{"app": "memcached", "memcached_cr": name}
+}
 
-    // Set Memcached instance as the owner of the Service.
-    ctrl.SetControllerReference(m, ser, r.Scheme) //todo check how to get the schema
-    return ser
+// getPodNames returns the pod names of the array of pods passed in
+func getPodNames(pods []corev1.Pod) []string {
+	var podNames []string
+	for _, pod := range pods {
+		podNames = append(podNames, pod.Name)
+	}
+	return podNames
 }
 {% endhighlight %}
 <figure>
