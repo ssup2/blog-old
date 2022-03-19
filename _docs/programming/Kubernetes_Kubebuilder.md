@@ -291,15 +291,19 @@ func (r *MemcachedReconciler) deploymentForMemcached(m *memcachedv1.Memcached) *
 					Labels: ls,
 				},
 				Spec: corev1.PodSpec{
-					Containers: []corev1.Container{{
-						Image:   "memcached:1.4.36-alpine",
-						Name:    "memcached",
-						Command: []string{"memcached", "-m=64", "-o", "modern", "-v"},
-						Ports: []corev1.ContainerPort{{
-							ContainerPort: 11211,
-							Name:          "memcached",
-						}},
-					}},
+					Containers: []corev1.Container{
+						{
+							Image:   "memcached:1.4.36-alpine",
+							Name:    "memcached",
+							Command: []string{"memcached", "-m=64", "-o", "modern", "-v"},
+							Ports: []corev1.ContainerPort{
+								{
+									ContainerPort: 11211,
+									Name:          "memcached",
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -437,4 +441,3 @@ memcached-sample-79ccbbbbcb-wpgzz   1/1     Running   0          3m15s
 * [https://pkg.go.dev/sigs.k8s.io/controller-runtime](https://pkg.go.dev/sigs.k8s.io/controller-runtime)
 * [https://getoutsidedoor.com/2020/05/09/kubernetes-controller-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EA%B8%B0/](https://getoutsidedoor.com/2020/05/09/kubernetes-controller-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EA%B8%B0/)
 * [https://stuartleeks.com/posts/kubebuilder-event-filters-part-2-update/](https://stuartleeks.com/posts/kubebuilder-event-filters-part-2-update/)
-
