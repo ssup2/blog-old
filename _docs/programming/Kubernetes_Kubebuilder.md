@@ -2,7 +2,7 @@
 title: Kubernetes Kubebuilder를 이용한 Operator 개발
 category: Programming
 date: 2019-11-03T12:00:00Z
-lastmod: 2019-11-03T12:00:00Z
+lastmod: 2022-03-15T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -47,17 +47,15 @@ Kubebuilder를 이용하여 Memcached CR을 정의하고, Memcached CR을 제어
 
 개발 환경은 다음과 같다.
 * Ubuntu 18.04 LTS, root user
-* Kubernetes 1.15
-* golang 1.12.2
+* Kubernetes 1.23.4
+* golang 1.17.6
+* kubebuilder 3.3.0
 
 #### 2.2. Kubebuilder 설치
 
 {% highlight console %}
-# os=$(go env GOOS)
-# arch=$(go env GOARCH)
-# curl -sL https://go.kubebuilder.io/dl/2.1.0/${os}/${arch} | tar -xz -C /tmp/
-# sudo mv /tmp/kubebuilder_2.1.0_${os}_${arch} /usr/local/kubebuilder
-# export PATH=$PATH:/usr/local/kubebuilder/bin
+# curl -L -o kubebuilder "https://go.kubebuilder.io/dl/latest/$(go env GOOS)/$(go env GOARCH)"
+# chmod +x kubebuilder && mv kubebuilder /usr/local/bin/
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] Kubebuilder 설치</figcaption>
@@ -71,22 +69,27 @@ Kubebuilder SDK CLI를 설치한다.
 # mkdir -p $GOPATH/src/github.com/ssup2/example-k8s-kubebuilder
 # cd $GOPATH/src/github.com/ssup2/example-k8s-kubebuilder
 # export GO111MODULE=on
-# kubebuilder init --domain cache.example.com
+# kubebuilder init --domain cache.example.com --repo github.com/ssup2/example-k8s-kubebuilder
 # ls
-Dockerfile  Makefile  PROJECT  bin  config  go.mod  go.sum  hack  main.go
+Dockerfile  Makefile  PROJECT  config  go.mod  go.sum  hack  main.go
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. **Makefile**은 make를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Operator 구동을 위한 Kubernetes YAML을 생성하는 역할을 수행한다.
+**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다.  repo는 Git Repo를 의미한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. **Makefile**은 make를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Operator 구동을 위한 Kubernetes YAML을 생성하는 역할을 수행한다.
 
 #### 2.3. Memcached CR, Controller 파일 생성
 
 {% highlight console %}
 # kubebuilder create api --group memcached --version v1 --kind Memcached
+# Create Resource [y/n]
+# y
+# Create Controller [y/n]
+# y
+...
 # ls
-Dockerfile  Makefile  PROJECT  api  bin  config  controllers  go.mod  go.sum  hack  main.go
+Dockerfile  Makefile  PROJECT  api  config  controllers  go.mod  go.sum  hack  main.go
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 3] Project 생성</figcaption>
@@ -160,17 +163,15 @@ Memcached struct위의 subresource:status 주석은 반드시 추가해야한다
 ...
 // MemcachedReconciler reconciles a Memcached object
 type MemcachedReconciler struct {
-    client.Client
-    Log logr.Logger
-    *runtime.Scheme
+	client.Client
+	Scheme *runtime.Scheme
 }
 
 // +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=memcached.cache.example.com,resources=memcacheds/status,verbs=get;update;patch
 
 func (r *MemcachedReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
-	reqLogger := r.Log.WithValues("req.Namespace", req.Namespace, "req.Name", req.Name)
+	reqLogger := log.FromContext(ctx).WithValues("req.Namespace", req.Namespace, "req.Name", req.Name)
 	reqLogger.Info("Reconciling Memcached.")
 
 	// Fetch the Memcached instance
@@ -332,6 +333,7 @@ func (r *MemcachedReconciler) serviceForMemcached(m *memcachedv1.Memcached) *cor
             },
         },
     }
+
     // Set Memcached instance as the owner of the Service.
     ctrl.SetControllerReference(m, ser, r.Scheme) //todo check how to get the schema
     return ser
@@ -343,13 +345,13 @@ func (r *MemcachedReconciler) serviceForMemcached(m *memcachedv1.Memcached) *cor
 
 [Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 9,10번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다.
 
-111~115번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
+109~113번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
 
-153번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 177번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
+151번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 177번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
 
-Reconcile() 함수에 소속된 18~31번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 Kubernetes Client를 이용하여 Memcached CR을 얻는 부분이다. 여기서 주목 해야하는 부분은 21~26번째 줄이다. Memcached CR 정보를 얻으려고 했지만 존재하지 않을 경우에는 해당 Memcached CR이 제거되었다는 의미를 나타낸다. 따라서 Memcached CR이 소유하고 있는 Deployment Resource와 Service Object를 제거하는 Logic이 있어야 하지만, Memcached Controller에서는 해당 Logic이 존재하지 않는다. Deployment/Service Object의 소유자가 제거된 Memached CR인걸 알고 Kubernetes에서 Object GC 과정을 통해서 자동으로 제거해주기 때문이다.
+Reconcile() 함수에 소속된 16~29번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 Kubernetes Client를 이용하여 Memcached CR을 얻는 부분이다. 여기서 주목 해야하는 부분은 19~24번째 줄이다. Memcached CR 정보를 얻으려고 했지만 존재하지 않을 경우에는 해당 Memcached CR이 제거되었다는 의미를 나타낸다. 따라서 Memcached CR이 소유하고 있는 Deployment Resource와 Service Object를 제거하는 Logic이 있어야 하지만, Memcached Controller에서는 해당 Logic이 존재하지 않는다. Deployment/Service Object의 소유자가 제거된 Memached CR인걸 알고 Kubernetes에서 Object GC 과정을 통해서 자동으로 제거해주기 때문이다.
 
-34~52번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 67~81 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 74~94번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
+32~50번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 67~81 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 74~94번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
 
 이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Object를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
