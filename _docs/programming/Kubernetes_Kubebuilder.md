@@ -347,11 +347,11 @@ func (r *MemcachedReconciler) serviceForMemcached(m *memcachedv1.Memcached) *cor
 
 109~113번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
 
-151번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 177번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
+151번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 176번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
 
 Reconcile() 함수에 소속된 16~29번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 Kubernetes Client를 이용하여 Memcached CR을 얻는 부분이다. 여기서 주목 해야하는 부분은 19~24번째 줄이다. Memcached CR 정보를 얻으려고 했지만 존재하지 않을 경우에는 해당 Memcached CR이 제거되었다는 의미를 나타낸다. 따라서 Memcached CR이 소유하고 있는 Deployment Resource와 Service Object를 제거하는 Logic이 있어야 하지만, Memcached Controller에서는 해당 Logic이 존재하지 않는다. Deployment/Service Object의 소유자가 제거된 Memached CR인걸 알고 Kubernetes에서 Object GC 과정을 통해서 자동으로 제거해주기 때문이다.
 
-32~50번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 55~63번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 67~81 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 74~94번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
+32~50번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 53~61번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 65~79 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 83~104번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
 
 이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Object를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
