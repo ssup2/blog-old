@@ -426,7 +426,7 @@ memcached-sample-79ccbbbbcb-wpgzz   1/1     Running   0          3m15s
 <figcaption class="caption">[Shell 6] Memcached Controller Deploy</figcaption>
 </figure>
 
-[Code 5]의 내용처럼 Memecached CR을 생성하여 Memcached를 구동한다.
+[Code 5]의 내용처럼 Memecached CR을 생성하여 Memcached를 구동한다. [Code 5]에서 Spec의 Size가 3이기 때문에, 3개의 Memcached Pod가 구동된다.
 
 ### 3. 참조
 
