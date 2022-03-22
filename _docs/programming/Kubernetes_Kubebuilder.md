@@ -66,8 +66,6 @@ Kubebuilder SDK CLI를 설치한다.
 #### 2.2. Project 생성
 
 {% highlight console %}
-# mkdir -p $GOPATH/src/github.com/ssup2/example-k8s-kubebuilder
-# cd $GOPATH/src/github.com/ssup2/example-k8s-kubebuilder
 # export GO111MODULE=on
 # kubebuilder init --domain cache.example.com --repo github.com/ssup2/example-k8s-kubebuilder
 # ls
@@ -77,7 +75,7 @@ Dockerfile  Makefile  PROJECT  config  go.mod  go.sum  hack  main.go
 <figcaption class="caption">[Shell 2] Project 생성</figcaption>
 </figure>
 
-**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다.  repo는 Git Repo를 의미한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. **Makefile**은 make를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Operator 구동을 위한 Kubernetes YAML을 생성하는 역할을 수행한다.
+**kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. init과 함께 Option으로 들어가는 repo는 Git Repo를 의미한다. **Makefile**은 make 명령어를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Controller 구동을 위한 Kubernetes Manifest를 생성하는 역할을 수행한다.
 
 #### 2.3. Memcached CR, Controller 파일 생성
 
@@ -95,7 +93,7 @@ Dockerfile  Makefile  PROJECT  api  config  controllers  go.mod  go.sum  hack  m
 <figcaption class="caption">[Shell 3] Project 생성</figcaption>
 </figure>
 
-**kubebuilder create api**를 이용하여 API를 생성한다. [Shell 3]은 Kuberbuilder를 이용하여 API를 생성하는 과정을 나타내고 있다. API의 Group, Version, 종류를 지정할 수 있다. Kubernetes에서 API를 생성한다는 의미는 CR(Object)을 생성하고, 생성한 CR을 관리하는 Controller를 생성한다는 의미와 동일하다. api Directory에는 생성한 CR을 Struct로 정의하는 Golang Code가 존재하며, controllers Directory에는 Controller Golang Code가 존재한다.
+**kubebuilder create api** 명령어를 이용하여 API를 생성한다. [Shell 3]은 Kuberbuilder를 이용하여 API를 생성하는 과정을 나타내고 있다. API의 Group, Version, 종류를 지정할 수 있다. Kubernetes에서 API를 생성한다는 의미는 CR(Object)을 생성하고, 생성한 CR을 관리하는 Controller를 생성한다는 의미와 동일하다. api Directory에는 생성한 CR을 Struct로 정의하는 Golang Code가 존재하며, controllers Directory에는 Controller Golang Code가 존재한다.
 
 #### 2.4. Memcached CR 정의
 
@@ -134,9 +132,9 @@ type Memcached struct {
 <figcaption class="caption">[Code 1] api/v1/memcached_types.go</figcaption>
 </figure>
 
-[Shell 3]의 API 생성 과정을 통해서 Memcached CR은 Struct로 api/v1/memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached CR 관련 정보를 직접 추가해야 한다. Spec의 Size는 동작해야하는 Memcached Pod의 개수를 나타내고. Status의 Nodes는 Memcached가 동작하는 Pod의 이름을 나타낸다. 
+[Shell 3]의 API 생성 과정을 통해서 Memcached CR은 Struct로 api/v1/memcached_types.go에 정의된다. [Code 1]처럼 memcached_types.go의 MemcachedSpec Struct와 MemcachedStatus Struct에 Memcached CR 관련 정보를 직접 추가해야 한다. Spec의 Size는 동작해야하는 Memcached Pod의 개수를 나타내고. Status의 Nodes는 Memcached가 동작하는 Pod의 이름을 나타낸다.
 
-Memcached struct위의 subresource:status 주석은 반드시 추가해야한다. Kubebuilder는 subresource:status 주석을 보고 config Directory의 Memcached CR YAML 파일에 Status 정보를 추가하기 때문이다. Memcached CR Struct를 변경한 다음 **make manifests** 명령어를 통해서 변경된 Memcached CR Struct를 Project 전체에 적용시켜야 한다.
+Memcached CR Struct를 변경한 다음에는 반드시 **make install** 명령어를 통해서 변경된 Memcached CR을 Kubernetes Cluster에 반영 (Memached CRD 적용)해야 한다. 또한 **make generate** 명령어를 통해서 Memcached Controller에 이용하는 Memcached CR에 관련 Code를 생성해 두어야 한다.
 
 #### 2.5. Memcached Controller 개발
 
@@ -335,24 +333,42 @@ func getPodNames(pods []corev1.Pod) []string {
 <figcaption class="caption">[Code 3] controllers/memcached_controller.go</figcaption>
 </figure>
 
-[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 9,10번째 줄은 Kubebuilder Annotation이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 적용되는 Role YAML 파일을 생성한다.
+[Code 3]는 Memcached Controller의 핵심 부분을 나타내고 있다. 8~12번째 줄은 Kubebuilder **Annotation**이며 Memcached Controller에 적용되는 Memcached CR에 대한 Role과 Controller 동작에 필요한 Deployment, Pod에 대한 Role을 나타내고 있다. Kubebuilder는 해당 Annotation 정보를 통해서 Memcached Controller에 구동에 필요한 Cluster Role, Cluster Role Binding Manifest를 생성하고 적용한다.
 
-109~113번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Resource가 변경되는 경우, 변경된 Memcached CR 또는 Deployment Resource의 정보가 Reconcile() 함수에게 전달된다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보에는 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다.
+106~112번째 줄은 Memcached CR 또는 Memcached CR이 소유(이용)하고 있는 Deployment Object의 변경을 Watch하는 부분이다. Memcached CR 또는 Memcached CR이 소유하는 Deployment Object가 변경되는 경우, 변경된 Memcached CR의 정보가 Reconcile() 함수에게 전달된다.
 
-151번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있으며, 176번째 줄은 Service Object에 해당 Service Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. 이러한 소유설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
+153번째 줄은 Deployment Object에 해당 Deployment Object를 소유하고 있는 Memcached CR 정보를 저장하는 함수를 나타내고 있다. Memcached CR이 소유하고 있는 Deployment Object의 Meta 정보를 확인해 보면 "ownerReferences" 항목에 해당 Deployment Object를 소유하는 Memcached CR 정보가 저장되어 있다. 이러한 소유(Owner) 설정은 Kubernetes에서 공식적으로 지원하는 기능이며 Object GC(Garbage Collection)를 위해서 필요하다.
 
-Reconcile() 함수에 소속된 16~29번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 Kubernetes Client를 이용하여 Memcached CR을 얻는 부분이다. 여기서 주목 해야하는 부분은 19~24번째 줄이다. Memcached CR 정보를 얻으려고 했지만 존재하지 않을 경우에는 해당 Memcached CR이 제거되었다는 의미를 나타낸다. 따라서 Memcached CR이 소유하고 있는 Deployment Resource와 Service Object를 제거하는 Logic이 있어야 하지만, Memcached Controller에서는 해당 Logic이 존재하지 않는다. Deployment/Service Object의 소유자가 제거된 Memached CR인걸 알고 Kubernetes에서 Object GC 과정을 통해서 자동으로 제거해주기 때문이다.
+Reconcile() 함수에 소속된 16~29번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 Kubernetes Client를 이용하여 Memcached CR을 얻는 부분이다. 여기서 주목 해야하는 부분은 19~24번째 줄이다. Memcached CR 정보를 얻으려고 했지만 존재하지 않을 경우에는 해당 Memcached CR이 제거되었다는 의미를 나타낸다. 따라서 Memcached CR이 소유하고 있는 Deployment Object를 제거하는 Logic이 있어야 하지만, Memcached Controller에서는 해당 Logic이 존재하지 않는다. Deployment Object의 소유자가 제거된 Memached CR인걸 알고 Kubernetes에서 Object GC 과정을 통해서 자동으로 제거해주기 때문이다.
 
-32~50번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 53~61번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 65~79 부분은 Memcached CR을 위한 Kubernetes Service를 생성하는 부분이고, 83~104번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
+27~60번째 줄은 Work Queue로부터 가져온 Memcached CR의 Name/Namespace 정보를 바탕으로 현재 상태의 Deployment Object를 얻는 부분이다. 62~75번째 줄은 Memcached CR의 Replica (Size)와 현재 상태의 Deployment Object의 Replica가 다르다면 Deployment Object의 Replica 개수를 Memcached CR의 Replica에 맞추는 동작을 수행하는 부분이다. 77~101번째 줄은 Memcached CR의 Status 정보를 Update하는 부분이다.
 
-이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Object를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 Requeue Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
+이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Object를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 **Requeue** Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
-#### 2.6. Controller Manager Image 생성 및 Push
+#### 2.6. Memcached Controller Local 구동
+
+{% highlight console %}
+# make run
+/root/git/example-k8s-kubebuilder/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/root/git/example-k8s-kubebuilder/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+go fmt ./...
+go vet ./...
+go run ./main.go
+1.6479643472564068e+09  INFO    controller-runtime.metrics      Metrics server is starting to listen    {"addr": ":8080"}
+1.6479643472568e+09     INFO    setup   starting manager
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] K8s Cluster에 Memcached CRD 생성 및 Local에서 Controller 구동</figcaption>
+</figure>
+
+**make run** 명령어를 통해서 kubeconfig 파일에 설정된 Kubernetes Cluster를 대상으로 Local에서 Controller를 구동할 수 있다. Controller 개발시 유용한 기능이다. [Shell 4]는 "make run" 명령어를 통해서 Local에서 Memcached Controller를 실행하는 모습을 나타내고 있다.
+
+#### 2.6. Memcached Controller Image Build 및 Push
 
 {% highlight golang linenos %}
 ...
 # Image URL to use all building/pushing image targets
-IMG ?= supsup5642/memcached-controller:latest
+IMG ?= ssup2/memcached-controller:latest
 ...
 {% endhighlight %}
 <figure>
@@ -365,37 +381,15 @@ IMG ?= supsup5642/memcached-controller:latest
 # make docker-push
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 4] Controller Manager Image 생성 및 Push</figcaption>
+<figcaption class="caption">[Shell 5] Controller Manager Image 생성 및 Push</figcaption>
 </figure>
 
-[Code 4]의 내용처럼 Makefile에 IMG 이름을 지정하고 [Shell 4]의 명령어들을 통해서 Controller Manager Image를 생성하고, 생성한 Image를 Docker Hub에 Push한다.
+[Code 4]의 내용처럼 Makefile에 IMG 이름을 지정한 이후에 **make docker-build** 명령어를 통해서 Memcached Controller Image를 Build할 수 있다. 또한 **make docker-push** 명령어를 통해서 생성한 Image를 Docker Hub에 Push 할 수 있다. [Shell 5]는 "make docker build", "make docker-push" 명령어를 통해서 Memcached Controller Image Build 및 Push 하는 모습을 나타내고 있다.
 
-#### 2.7. Memcached CRD 생성 및 Memcached Controller Deploy
-
-{% highlight yaml linenos %}
-...
-- apiGroups:
-  - ""
-  resources:
-  - services
-  - pods
-  verbs:
-  - "*"
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - "*"
-...
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Code 5] config/rbac/role.yaml</figcaption>
-</figure>
+#### 2.7. Memcached Controller 배포
 
 {% highlight console %}
-# cd config/manager && kustomize edit set image controller=supsup5642/memcached-controller:latest && cd -
-# kustomize build config/default | kubectl apply -f -
+# make deploy
 # kubectl -n example-k8s-kubebuilder-system get pod
 NAME                                                         READY   STATUS    RESTARTS   AGE
 example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0          3d
@@ -404,7 +398,7 @@ example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0
 <figcaption class="caption">[Shell 5] Controller Manager Deploy</figcaption>
 </figure>
 
-[Code 5]의 내용처럼 Controller Manager에 적용할 Role을 수정하고, [Shell 5]의 내용처럼 kustomize를 이용하여 Memcached CRD를 생성하고 Controller Manager를 구동한다.
+**make deploy** 명령어를 통해서 Build한 Memcached Controller Image를 kubeconfig 파일에 설정된 Kubernetes Cluster에 Pod로 배포할 수 있다. 이때 Memcached Controller 구동에 필요한 Cluster Role, Cluster Role Binding 설정도 같이 이루어 진다. [Shell 5]는 "make deploy" 명령어를 통해서 Memcached Controller Image를 Pod로 배포하는 모습을 나타내고 있다.
 
 #### 2.8. Memcached CR 생성을 통한 Memcached 구동
 
