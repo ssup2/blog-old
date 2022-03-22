@@ -63,7 +63,7 @@ Kubebuilder를 이용하여 Memcached CR을 정의하고, Memcached CR을 제어
 
 Kubebuilder SDK CLI를 설치한다.
 
-#### 2.2. Project 생성
+#### 2.3. Project 생성
 
 {% highlight console %}
 # export GO111MODULE=on
@@ -77,7 +77,7 @@ Dockerfile  Makefile  PROJECT  config  go.mod  go.sum  hack  main.go
 
 **kubebuilder init** 명령어를 통해서 Memcached Oprator Project를 생성한다. [Shell 2]는 Kubebuilder를 이용하여 Project를 생성하는 과정을 나타내고 있다. init과 함께 Option으로 들어가는 domain은 API Group을 위한 Domain을 나타낸다. init과 함께 Option으로 들어가는 repo는 Git Repo를 의미한다. **Makefile**은 make 명령어를 통해서 Controller Compile, Install, Image Build등의 동작을 쉽게 수행할 수 있도록 도와준다. Dockerfile은 Controller Docker Image를 생성할 때 이용되며, config Directory는 **kustomize**를 이용하여 Kubernetes에 Controller 구동을 위한 Kubernetes Manifest를 생성하는 역할을 수행한다.
 
-#### 2.3. Memcached CR, Controller 파일 생성
+#### 2.4. Memcached CR, Controller 파일 생성
 
 {% highlight console %}
 # kubebuilder create api --group memcached --version v1 --kind Memcached
@@ -95,7 +95,7 @@ Dockerfile  Makefile  PROJECT  api  config  controllers  go.mod  go.sum  hack  m
 
 **kubebuilder create api** 명령어를 이용하여 API를 생성한다. [Shell 3]은 Kuberbuilder를 이용하여 API를 생성하는 과정을 나타내고 있다. API의 Group, Version, 종류를 지정할 수 있다. Kubernetes에서 API를 생성한다는 의미는 CR(Object)을 생성하고, 생성한 CR을 관리하는 Controller를 생성한다는 의미와 동일하다. api Directory에는 생성한 CR을 Struct로 정의하는 Golang Code가 존재하며, controllers Directory에는 Controller Golang Code가 존재한다.
 
-#### 2.4. Memcached CR 정의
+#### 2.5. Memcached CR 정의
 
 {% highlight golang linenos %}
 ...
@@ -136,7 +136,7 @@ type Memcached struct {
 
 Memcached CR Struct를 변경한 다음에는 반드시 **make install** 명령어를 통해서 변경된 Memcached CR을 Kubernetes Cluster에 반영 (Memached CRD 적용)해야 한다. 또한 **make generate** 명령어를 통해서 Memcached Controller에 이용하는 Memcached CR에 관련 Code를 생성해 두어야 한다.
 
-#### 2.5. Memcached Controller 개발
+#### 2.6. Memcached Controller 개발
 
 {% highlight golang linenos %}
 ...
@@ -345,7 +345,7 @@ Reconcile() 함수에 소속된 16~29번째 줄은 Work Queue로부터 가져온
 
 이처럼 Reconcile() 함수는 변경된 Memcached CR을 얻고, 얻은 Memcached CR을 바탕으로 Deployment Object를 제어하는 동작을 반복한다. Reconcile() 함수 곳곳에서 Manager Client를 통해서 Resource를 변경한뒤 **Requeue** Option과 함께 return하는 부분을 찾을 수 있다. Resource 변경이 완료되었어도 실제 반영에는 시간이 걸리기 때문에, Requeue Option을 이용하여 일정 시간이 지난후에 다시 Reconcile() 함수가 실행되도록 만들고 있다.
 
-#### 2.6. Memcached Controller Local 구동
+#### 2.7. Memcached Controller Local 구동
 
 {% highlight console %}
 # make run
@@ -363,7 +363,7 @@ go run ./main.go
 
 **make run** 명령어를 통해서 kubeconfig 파일에 설정된 Kubernetes Cluster를 대상으로 Local에서 Controller를 구동할 수 있다. Controller 개발시 유용한 기능이다. [Shell 4]는 "make run" 명령어를 통해서 Local에서 Memcached Controller를 실행하는 모습을 나타내고 있다.
 
-#### 2.6. Memcached Controller Image Build 및 Push
+#### 2.8. Memcached Controller Image Build 및 Push
 
 {% highlight golang linenos %}
 ...
@@ -386,7 +386,7 @@ IMG ?= ssup2/memcached-controller:latest
 
 [Code 4]의 내용처럼 Makefile에 IMG 이름을 지정한 이후에 **make docker-build** 명령어를 통해서 Memcached Controller Image를 Build할 수 있다. 또한 **make docker-push** 명령어를 통해서 생성한 Image를 Docker Hub에 Push 할 수 있다. [Shell 5]는 "make docker build", "make docker-push" 명령어를 통해서 Memcached Controller Image Build 및 Push 하는 모습을 나타내고 있다.
 
-#### 2.7. Memcached Controller 배포
+#### 2.9. Memcached Controller 배포
 
 {% highlight console %}
 # make deploy
@@ -400,7 +400,7 @@ example-k8s-kubebuilder-controller-manager-c6f85fb5d-zjjx7   2/2     Running   0
 
 **make deploy** 명령어를 통해서 Build한 Memcached Controller Image를 kubeconfig 파일에 설정된 Kubernetes Cluster에 Pod로 배포할 수 있다. 이때 Memcached Controller 구동에 필요한 Cluster Role, Cluster Role Binding 설정도 같이 이루어 진다. [Shell 5]는 "make deploy" 명령어를 통해서 Memcached Controller Image를 Pod로 배포하는 모습을 나타내고 있다.
 
-#### 2.8. Memcached CR 생성을 통한 Memcached 구동
+#### 2.10. Memcached CR 생성을 통한 Memcached 구동
 
 {% highlight yaml linenos %}
 apiVersion: memcached.cache.example.com/v1
