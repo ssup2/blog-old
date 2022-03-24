@@ -16,7 +16,7 @@ adsense: true
 
 ### 2. Policy 생성
 
-{% highlight text %}
+{% highlight json %}
 {
   "Version": "2012-10-17",
   "Statement": [
