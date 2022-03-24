@@ -107,6 +107,46 @@ adsense: true
 # aws iam create-access-key --user-name google-oidc
 ~~~
 
+{% highlight json %}
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] assume-role-policy.json</figcaption>
+</figure>
+
+~~~console
+# aws iam create-policy --policy-name assume-role --policy-document file://assume-role-policy.json
+{
+    "Policy": {
+        "PolicyName": "assume-role",
+        "PolicyId": "ANPAUB2QWPR6YRY6MHBEV",
+        "Arn": "arn:aws:iam::278805249149:policy/assume-role",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2022-03-24T16:45:27+00:00",
+        "UpdateDate": "2022-03-24T16:45:27+00:00"
+    }
+}
+~~~
+
+~~~console
+# aws iam attach-user-policy --user-name google-oidc --policy-arn arn:aws:iam::278805249149:policy/assume-role
+~~~
+
 ### 5. Role 이용
 
 ### 6. 참조
