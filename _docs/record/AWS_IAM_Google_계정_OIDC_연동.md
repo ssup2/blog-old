@@ -42,32 +42,30 @@ adsense: true
 </figure>
 
 ~~~console
-# aws iam create-policy --policy-name instance-describe --policy-document file://instance-describe-policy.json
+# aws iam create-role --role-name google-oidc --assume-role-policy-document file://google-oidc-trust-relationship.json
 {
-    "Role": {
-        "Path": "/",
-        "RoleName": "google-oidc",
-        "RoleId": "AROAUB2QWPR6SMALTAXA5",
-        "Arn": "arn:aws:iam::278805249149:role/google-oidc",
-        "CreateDate": "2022-03-24T15:11:16+00:00",
-        "AssumeRolePolicyDocument": {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": {
-                        "Federated": "accounts.google.com"
-                    },
-                    "Action": "sts:AssumeRoleWithWebIdentity",
-                    "Condition": {
-                        "StringEquals": {
-                            "accounts.google.com:aud": "448771483088-25fslbvr9thmmi3acvo3omu0v1j6lqab.apps.googleusercontent.com"
-                        }
-                    }
-                }
-            ]
-        }
-    }
+	"Role": {
+		"Path": "/",
+		"RoleName": "google-oidc",
+		"RoleId": "AROAUB2QWPR66MGSF25FX",
+		"Arn": "arn:aws:iam::278805249149:role/google-oidc",
+		"CreateDate": "2022-03-25T14:24:14+00:00",
+		"AssumeRolePolicyDocument": {
+			"Version": "2012-10-17",
+			"Statement": [{
+				"Effect": "Allow",
+				"Principal": {
+					"Federated": "accounts.google.com"
+				},
+				"Action": "sts:AssumeRoleWithWebIdentity",
+				"Condition": {
+					"StringEquals": {
+						"accounts.google.com:aud": "448771483088-25fslbvr9thmmi3acvo3omu0v1j6lqab.apps.googleusercontent.com"
+					}
+				}
+			}]
+		}
+	}
 }
 ~~~
 
@@ -148,6 +146,10 @@ adsense: true
 ~~~
 
 ### 5. Role 이용
+
+~~~console
+# 
+~~~
 
 ### 6. 참조
 

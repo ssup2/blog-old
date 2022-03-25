@@ -20,7 +20,8 @@ SAML의 Service Provider는 인증서가 필요하다. 다음의 명령어로 �
 ### 2. Service Provider Code
 
 {% highlight golang linenos %}
-// https://github.com/ssup2/golang-Google-SAML/blob/master/main.go
+// https://github.com/ssup2/golang-Keycloak-SAML/blob/master/main.go
+
 // Print SAML request
 func samlRequestPrinter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +84,11 @@ func main() {
 <figcaption class="caption">[Code 1] Golang SAML Service Provider Example</figcaption>
 </figure>
 
-[Code 1]은 SAML Identity Provider를 통해서 User를 인증하고, 인증 과정을 통해서 얻은 SAML Session 정보를 출력하는 SAML Service Provider App이다. 동작 과정은 다음과 같다.
+[Code 1]은 SAML Identity Provider를 통해서 User를 인증하고, 인증 과정을 통해서 얻은 SAML Session 정보를 출력하는 SAML Service Provider App이다. 전체 App Code는 다음의 Repo에서 확인 할 수 있다.
+
+* [https://github.com/ssup2/golang-Keycloak-SAML](https://github.com/ssup2/golang-Keycloak-SAML)
+
+동작 과정은 다음과 같다.
 
 * User가 Service Provider의 "/session" Path에 접속하면 Service Provider는 RequireAccount() Middleware 함수를 통해서 SAML Request를 Identity Provider에게 보내어 User가 인증을 할 수 있도록 Redirect한다. SAML Request에는 인증후 User가 요청한 URL 정보도 포함되어 있다. 
 * Identity Provider를 통해서 인증이 완료되면 Identity Provider는 이전에 등록된 Service Provider의 ACS Endpoint인 "/saml/acs"로 User를 다시 Redirect하고, 인증 정보인 SAML Response도 ACS Endpoint에 같이 전송한다. SAML Response에는 SAML Request에 포함된 User가 요청한 URL 정보도 포함되어 있다.
