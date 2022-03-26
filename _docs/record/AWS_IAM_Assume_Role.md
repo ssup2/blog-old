@@ -37,12 +37,12 @@ adsense: true
 [파일 1]의 내용과 같이 AssumeRole 권한만 갖고 있는 Policy 파일을 작성한다.
 
 ~~~console
-# aws iam create-policy --policy-name assume-role --policy-document file://assume-role-policy.json
+# aws iam create-policy --policy-name assume-role-policy --policy-document file://assume-role-policy.json
 {
     "Policy": {
-        "PolicyName": "assume-role",
+        "PolicyName": "assume-role-policy",
         "PolicyId": "ANPAUB2QWPR6YRY6MHBEV",
-        "Arn": "arn:aws:iam::278805249149:policy/assume-role",
+        "Arn": "arn:aws:iam::278805249149:policy/assume-role-policy",
         "Path": "/",
         "DefaultVersionId": "v1",
         "AttachmentCount": 0,
@@ -54,7 +54,7 @@ adsense: true
 }
 ~~~
 
-[파일 1]을 이용하여 assume-role 이름을 갖는 Policy를 생성한다.
+[파일 1]을 이용하여 assume-role-policy 이름을 갖는 Policy를 생성한다.
 
 ### 3. User 생성, 설정
 
@@ -89,10 +89,10 @@ Role을 Assume을 수행할 assume-role-user User를 생성한다.
 assume-role-user의 Access Key를 생성한다.
 
 ~~~console
-# aws iam attach-user-policy --user-name assume-role-user --policy-arn arn:aws:iam::278805249149:policy/assume-role
+# aws iam attach-user-policy --user-name assume-role-user --policy-arn arn:aws:iam::278805249149:policy/assume-role-policy
 ~~~
 
-assume-role-user User에 assume-role Policy를 부여한다.
+assume-role-user User에 assume-role-policy Policy를 부여한다.
 
 ### 4. Role 생성, 설정
 

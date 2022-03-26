@@ -35,12 +35,12 @@ adsense: true
 </figure>
 
 ~~~console
-# aws iam create-policy --policy-name instance-describe --policy-document file://instance-describe-policy.json
+# aws iam create-policy --policy-name instance-describe-policy --policy-document file://instance-describe-policy.json
 {
     "Policy": {
-        "PolicyName": "instance-describe",
+        "PolicyName": "instance-describe-policy",
         "PolicyId": "ANPAUB2QWPR63Z4G22AZE",
-        "Arn": "arn:aws:iam::278805249149:policy/instance-describe",
+        "Arn": "arn:aws:iam::278805249149:policy/instance-describe-policy",/
         "Path": "/",
         "DefaultVersionId": "v1",
         "AttachmentCount": 0,
@@ -55,36 +55,25 @@ adsense: true
 ### 3. Policy 적용
 
 ~~~console
-# aws iam create-user --user-name instance-describe
+# aws iam create-user --user-name instance-describe-user
 {
     "User": {
         "Path": "/",
-        "UserName": "instance-describe",
-        "UserId": "AIDAUB2QWPR6UAXABYUXE",
-        "Arn": "arn:aws:iam::278805249149:user/instance-describe",
-        "CreateDate": "2022-03-18T13:20:13+00:00"
-    }
-}
-
-# aws iam create-access-key --user-name instance-describe
-{
-    "AccessKey": {
-        "UserName": "instance-describe",
-        "AccessKeyId": "XXXXXXXXXXXXXXXXXXXX",
-        "Status": "Active",
-        "SecretAccessKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "CreateDate": "2022-03-18T13:24:51+00:00"
+        "UserName": "instance-describe-user",
+        "UserId": "AIDAUB2QWPR6Y2ZWFY6HT",
+        "Arn": "arn:aws:iam::278805249149:user/instance-describe-user",
+        "CreateDate": "2022-03-26T16:11:16+00:00"
     }
 }
 ~~~
 
-instance-describe User를 생성하고 Secret을 생성한다.
+instance-describe-user User를 생성하고 Secret을 생성한다.
 
 ~~~console
-# aws iam attach-user-policy --user-name instance-describe --policy-arn arn:aws:iam::278805249149:policy/instance-describe
+# aws iam attach-user-policy --user-name instance-describe-user --policy-arn arn:aws:iam::278805249149:policy/instance-describe
 ~~~
 
-생성한 instance-describe User에 생성한 instance-describe Policy를 붙인다.
+생성한 instance-describe-user User에 생성한 instance-describe-policy/ Policy를 붙인다.
 
 ### 4. Policy 동작 확인
 
@@ -96,7 +85,7 @@ Default region name [None]: ap-northeast-2
 Default output format [None]:
 ~~~
 
-생성한 instance-describe User로 aws CLI를 설정한다.
+생성한 instance-describe-user User로 aws CLI를 설정한다.
 
 ~~~console
 # aws ec2 describe-instances
