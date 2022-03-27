@@ -16,11 +16,11 @@ adsense: true
 
 ### 2. Google 프로젝트 생성, OIDC 설정
 
-![[그림 1] Project 생성]({{site.baseurl}}/images/programming/AWS_IAM_Google_OIDC_Interlock/Google_Create_Project.PNG){: width="700px"}
+![[그림 1] Project 생성]({{site.baseurl}}/images/record/AWS_IAM_Google_OIDC_Interlock/Google_Create_Project.PNG){: width="700px"}
 
-![[그림 2] OAuth 추가]({{site.baseurl}}/images/programming/AWS_IAM_Google_OIDC_Interlock/Google_Create_OIDC_1.PNG){: width="700px"}
+![[그림 2] OAuth 추가]({{site.baseurl}}/images/record/AWS_IAM_Google_OIDC_Interlock/Google_Create_OIDC_1.PNG){: width="700px"}
 
-![[그림 3] OAuth Client ID 생성]({{site.baseurl}}/images/programming/AWS_IAM_Google_OIDC_Interlock/Google_Create_OIDC_2.PNG){: width="700px"}
+![[그림 3] OAuth Client ID 생성]({{site.baseurl}}/images/record/AWS_IAM_Google_OIDC_Interlock/Google_Create_OIDC_2.PNG){: width="700px"}
 
 ### 3. Role 생성, 설정
 
@@ -109,6 +109,16 @@ adsense: true
 
 ### 5. ID Token 획득
 
+아래 Repo의 Program을 실행하여 ID Token을 획득한다.
+
+* [https://github.com/ssup2/golang-Google-OIDC](https://github.com/ssup2/golang-Google-OIDC)
+
+~~~console
+# export GOOGLE_OAUTH2_CLIENT_ID=XXX
+# export GOOGLE_OAUTH2_CLIENT_SECRET=XXX
+# go run main.go
+~~~
+
 {% highlight json %}
 {
 	"OAuth2Token": {
@@ -139,6 +149,8 @@ adsense: true
 <figure>
 <figcaption class="caption">[Text 1] http://127.0.0.1:3000 Result</figcaption>
 </figure>
+
+"http://127.0.0.1:3000"에 접속하고 Google Login을 수행하면 [Text 1]의 내용과 같이 ID Token을 확인 할 수 있다.
 
 ### 6. Assume Role with Web Identity
 
