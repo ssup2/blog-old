@@ -19,7 +19,12 @@ OIDC는 OAuth 2.0을 기반으로 하기 때문에, OIDC의 Component는 OAuth 2
 
 #### 1.1. ID Token
 
-OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라고 불리는 Token을 이용한다. ID Token은 **JWT**로 구성되어 있다. App은 JWT를 통해서 ID Token이 Identity Provider가 생성한 Token이라는 것과, ID Token의 내용이 변조되지 않았다는 것을 보장받을 수 있다.
+OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라고 불리는 Token을 이용한다. ID Token은 **JWT**로 구성되어 있다. App은 JWT를 통해서 ID Token이 Identity Provider가 생성한 Token이라는 것과, ID Token의 내용이 변조되지 않았다는 것을 보장받을 수 있다. ID Token에는 일반적으로 다음과 같은 Claim을 포함하고 있다.
+
+* iss (Issure) : ID Token의 발급자를 의미한다.
+* sub (Subject) : ID Token에 저장된 User의 식별자를 의미한다.
+* aud (Audience) : ID Token을 수신하고 이용하는 주체를 의미한다.
+* exp (Expiration): : ID Token의 만료 시간을 의미한다.
 
 ![[그림 1] OIDC의 ID Token 발급 과정]({{site.baseurl}}/images/theory_analysis/OIDC/OIDC_ID_Token_Flow.PNG)
 
@@ -29,3 +34,5 @@ OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라
 
 * [https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/](https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/)
 * [https://coffeewhale.com/kubernetes/authentication/oidc/2020/05/04/auth03/](https://coffeewhale.com/kubernetes/authentication/oidc/2020/05/04/auth03/)
+* [https://darutk.medium.com/understanding-id-token-5f83f50fa02e](https://darutk.medium.com/understanding-id-token-5f83f50fa02e)
+* [https://benohead.com/blog/2018/07/05/oauth-2-0-openid-connect-explained/](https://benohead.com/blog/2018/07/05/oauth-2-0-openid-connect-explained/)
