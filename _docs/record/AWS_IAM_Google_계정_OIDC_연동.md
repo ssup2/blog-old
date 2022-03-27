@@ -229,3 +229,4 @@ aws CLI를 no-policy-user User로 설정한다. no-policy-user User는 아무런
 ~~~
 
 획득한 AccessKeyID, SecretAccessKey, SessionToken을 이용하여 aws CLI를 설정한다. 이후에 EC2 Describe 동작을 수행하면, 동작하는 것을 확인 할 수 있다.
+
