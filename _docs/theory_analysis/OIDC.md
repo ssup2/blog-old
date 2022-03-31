@@ -19,7 +19,9 @@ OIDC는 OAuth 2.0을 기반으로 하기 때문에, OIDC의 Component는 OAuth 2
 
 #### 1.1. ID Token
 
-OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라고 불리는 Token을 이용한다. ID Token은 **JWT**로 구성되어 있다. App은 JWT를 통해서 ID Token이 Identity Provider가 생성한 Token이라는 것과, ID Token의 내용이 변조되지 않았다는 것을 보장받을 수 있다. ID Token에는 일반적으로 다음과 같은 Claim을 포함하고 있다.
+OIDC는 App에게 User의 인증 정보를 전달하기 위해서 ID Token이라고 불리는 Token을 이용한다. ID Token은 **JWT**로 구성되어 있다. App은 JWT를 통해서 ID Token이 Identity Provider가 생성한 Token이라는 것과, ID Token의 내용이 변조되지 않았다는 것을 보장받을 수 있다. ID Token(JWT)의 Signature 생성은 일반적으로 Identity Provider의 비공개키로 이루어진다. 따라서 ID Token을 검증은 Identity Provider의 공개키를 통해서 이루어진다.
+
+ID Token에는 일반적으로 다음과 같은 Claim을 포함하고 있다.
 
 * iss (Issure) : ID Token의 발급자를 의미한다.
 * sub (Subject) : ID Token에 저장된 User의 식별자를 의미한다.

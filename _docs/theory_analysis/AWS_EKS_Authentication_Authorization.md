@@ -2,14 +2,14 @@
 title: AWS EKS Authentication, Authorization
 category: Theory, Analysis
 date: 2021-04-15T12:00:00Z
-lastmod: 2021-04-15T12:00:00Z
+lastmod: 2022-03-31T12:00:00Z
 comment: true
 adsense: true
 ---
 
 AWS EKS의 Authentication, Authorization를 분석한다.
 
-### 1. AWS Authentication, Authorization
+### 1. AWS EKS Authentication, Authorization
 
 #### 1.1. kubelet
 
@@ -47,10 +47,25 @@ users:
         value: regional
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 11] kubelet</figcaption>
+<figcaption class="caption">[Console 1] kubelet</figcaption>
 </figure>
 
-#### 1.2. kubeconfig
+{% highlight console %}
+{
+	"kind": "ExecCredential",
+	"apiVersion": "client.authentication.k8s.io/v1alpha1",
+	"spec": {},
+	"status": {
+		"expirationTimestamp": "2022-03-31T01:33:44Z",
+		"token": "k8s-aws-v1.aHR0cHM6Ly9zdHMu..."
+	}
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 2] aws eks get-token Output</figcaption>
+</figure>
+
+#### 1.2. kubectl
 
 {% highlight console %}
 apiVersion: v1
@@ -84,7 +99,7 @@ users:
         value: regional
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 10] kubeconfig</figcaption>
+<figcaption class="caption">[Console 3] kubeconfig</figcaption>
 </figure>
 
 #### 1.3. OIDC Provider
@@ -94,3 +109,4 @@ users:
 ### 2. 참조
 
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html)
+* [https://faddom.com/accessing-an-amazon-eks-kubernetes-cluster/](https://faddom.com/accessing-an-amazon-eks-kubernetes-cluster/)
