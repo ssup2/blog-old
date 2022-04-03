@@ -36,7 +36,7 @@ Index는 성격과 특징에 따라서 Clustered Index와 Non-clustered Index로
 
 [그림 2]에서 빨간 화살표는 Clustred Index를 통해서 Fruit ID 4번을 갖는 Record에 접근하는 과정을 나타내고 있다. 하나의 Index 조회를 통해서 바로 Record가 위치하고 있는 Page에 접근이 가능한 것을 확인할 수 있다. Record에 접근할때 가장 많이 이용되고, 거의 변경이 일어나지 않는 Primary Key의 Index를 일반적으로 Clustred Index로 생성한다. [그림 2]에서는 Fruit ID를 Primary Key라고 간주하고 있다. 따라서 Fruit ID를 이용하여 Clustred Index를 생성한 모습을 나타내고 있다.
 
-**Non-clustred Index**는 Disk에 저장되는 실제 Record를 가리키는 **참조(Reference)**를 기반으로 작성된 Index이다. 따라서 Non-clustered Index를 이용하면 Record에 참조에만 접근할 수 있기 때문에, Record를 얻기 위해서는 참조를 통해서 한번더 접근하는 과정이 필요하다. 따라서 Clustered Index와 비교하여 느린 Record 접근이 단점이다. 반면에 Record가 변경되더라도 Non-clustered Index는 변경될 필요가 없다는 장점을 가지고 있다. 또한 하나의 Table에 대해서도 다수의 Non-Clustered Index를 생성할 수 있다는 장점을 가지고 있다.
+**Non-clustered Index**는 Disk에 저장되는 실제 Record를 가리키는 **참조(Reference)**를 기반으로 작성된 Index이다. 따라서 Non-clustered Index를 이용하면 Record에 참조에만 접근할 수 있기 때문에, Record를 얻기 위해서는 참조를 통해서 한번더 접근하는 과정이 필요하다. 따라서 Clustered Index와 비교하여 느린 Record 접근이 단점이다. 반면에 Record가 변경되더라도 Non-clustered Index는 변경될 필요가 없다는 장점을 가지고 있다. 또한 하나의 Table에 대해서도 다수의 Non-Clustered Index를 생성할 수 있다는 장점을 가지고 있다.
 
 [그림 2]의 파란 화살표는 Non-clustered Index를 통해서 NC State를 갖는 Record에 접근하는 과정을 나타내고 있다. Non-clustered Index를 통해서 NC State를 갖는 Fruit ID를 찾은 다음, 다시 Clustered Index를 통해서 실제 Record에 접근하는 것을 확인할 수 있다. [그림 1]의 Index도 Non-clustered Index인걸 알 수 있다. 일반적으로 Primary key를 제외한 나머지 Column에 대해서 생성하는 Index는 Non-clustered Index를 이용한다.
 
