@@ -1,5 +1,5 @@
 ---
-title: AWS EKS Authentication, Authorization
+title: AWS EKS Authentication, Authorization (WIP)
 category: Theory, Analysis
 date: 2021-04-15T12:00:00Z
 lastmod: 2022-03-31T12:00:00Z

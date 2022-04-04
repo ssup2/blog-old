@@ -11,7 +11,7 @@ Kubernetes Authentication 기법중 하나인 Service Account를 분석한다.
 
 ### 1. Kubernetes Authentication Service Account
 
-![[그림 1] Kubernetes Authentication Service Account]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Service_Account/Kubernetes_Service_Account.PNG){: width="700px"}
+![[그림 1] Kubernetes Authentication Service Account]({{site.baseurl}}/images/theory_analysis/Kubernetes_Authentication_Service_Account/Kubernetes_Authentication_Service_Account.PNG){: width="700px"}
 
 Kubernetes의 Service Account는 Kubernetes Cluster 내부에서 Object로 관리되는 계정이다. Service Account는 Pod 안의 App 또는 Kubernetes Cluster의 User가 Kubernetes API Server에게 인증할 때 이용된다. [그림 1]은 Service Account를 생성, Service Account를 Pod에 주입, Service Account를 이용하는 과정을 나타내고 있다.
 

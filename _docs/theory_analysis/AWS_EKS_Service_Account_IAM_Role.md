@@ -13,9 +13,13 @@ AWS EKS Cluster의 Service Account에 AWS IAM Role을 부여하는 과정을 정
 
 ![[그림 1] AWS EKS Service Account에 AWS IAM Role 부여]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Service_Account_IAM_Role/AWS_EKS_Service_Account_IAM_Role.PNG)
 
-AWS EKS 1.14 Version 이상에서는 EKS (K8s) Cluster의 Service Account에 AWS IAM의 Role을 부여할 수 있는 기능을 제공하고 있다. 이 기능을 통해서 AWS IAM Role을 부여받은 Service Account를 이용하는 Pod는 AWS Service를 이용할 수 있게 된다. [그림 1]은 EKS Cluster의 Service Account에 AWS IAM의 Role을 부여하고, 해당 Service Account를 이용하는 Pod를 통해서 AWS Service에 접근하는 과정을 나타내고 있다.
+AWS EKS 1.14 Version 이상에서는 EKS (K8s) Cluster의 Service Account에 AWS IAM의 Role을 부여할 수 있는 기능을 제공하고 있다. 이 기능을 통해서 AWS IAM Role을 부여 받은 Service Account를 이용하는 Pod는 AWS Service를 이용할 수 있게 된다. [그림 1]은 이러한 과정을 Service Account 생성, Pod 생성, Service Account Token 생성/교체, Service Account Token 이용 4단계로 나누어 나타내고 있다. [그림 1]의 주요 구성 요소들은 다음과 같다.
 
-본 과정은 Service Account 생성, Pod 생성, Service Account Token 생성/교체, Service Account Token 이용 4단계로 나누어 설명한다. 설명에는 [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)를 예제로 이용한다. AWS ELK Cluster에서 동작하는 AWS Load Balancer Controller도 NLB (Network Load Balancer), ALB (Application Load Balancer) AWS Service에 접근하여 Load Balancer를 제어해야 하기 때문에 AWS Load Balancer Controller가 이용하는 Service Account에도 본 기능을 이용하여 AWS Role이 부여되어 있기 때문이다.
+* AWS EKS OIDC Identity Provider : 각 EKS Cluster 마다 가지고 있는 전용 OIDC Identity Provider를 나타낸다. AWS IAM에게 신뢰하는 OIDC Provider로 등록(Federate)되어 있다.
+* Pod Identity Webhook : Kubernetes API Server의 Mutating Webhook을 나타낸다. Pod가 Role을 부여 받은 Service Account를 이용하는 경우, Pod 내부에서 Service Account에 부여된 Role을 이용할 수 있도록 Pod의 Spec을 변경하는 역활을 수행한다.
+* Projected SA Token : Role이 부여된 Service Account의 Token을 나타낸다. Kubernetes에서 기본적으로 이용되는 기본 Service Account Token과는 별개의 Token이다. 기본 Service Account Token과 다르게 **만료시간**과 **Audience**가 설정되어 있으며, 주기적으로 Token이 교체된다는 특징을 갖는다.
+
+설명의 예제는 [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)를 이용한다. AWS ELK Cluster에서 동작하는 AWS Load Balancer Controller도 NLB (Network Load Balancer), ALB (Application Load Balancer) AWS Service에 접근하여 Load Balancer를 제어해야 하기 때문에, AWS Load Balancer Controller가 이용하는 Service Account에도 본 기능을 이용하여 AWS Role이 부여되어 있기 때문이다.
 
 #### 1.1. Service Account 생성
 
@@ -66,11 +70,9 @@ Service Account에 AWS IAM Role을 부여하기 위해서는 가장 먼저 Servi
 <figcaption class="caption">[Text 2] Role's Trust Relationship</figcaption>
 </figure>
 
-[Text 2]는 [Text 1]에서 AWS Load Balancer Controller가 이용하는 Service Account에 부여된 AWS IAM Role의 Trust Relationship을 나타낸다. **Trust Relationship**은 해당 AWS IAM Role을 이용하기 위한 조건을 의미한다. 각 EKS Cluster는 자신만의 고유의 OIDC Identity Provider를 갖는데, AWS IAM Role의 Trust Relationship의 Principal 항목에는 EKS Cluster의 OIDC Identity Provider가 명시되어 있다. [Text 2]에서도 EKS Cluster의 **OIDC Identity Provider**의 URL이 명시되어 있는것을 확인할 수 있다.
+[Text 2]는 [Text 1]에서 AWS Load Balancer Controller가 이용하는 Service Account에 부여된 AWS IAM Role의 Trust Relationship을 나타낸다. **Trust Relationship**은 해당 AWS IAM Role을 이용하기 위한 조건을 의미한다. Pricipal 항목은 해당 Role을 부여받기 위해서 누구로부터 인증을 받아야 하는지를 나타낸다. [Text 2]에는 EKS Cluster의 OIDC Identity Provider의 URL이 명시되어 있는것을 확인할 수 있다. 따라서 EKS Cluster 내부에서 동작하는 Pod는 해당 EKS Cluster의 OIDC Identity Provider로부터 인증을 받아야 해당 Role을 부여 받을 수 있다는 것을 의미한다.
 
-Pricipal 항목은 해당 Role을 부여받기 위해서 누구로부터 인증을 받아야 하는지를 나타낸다. 따라서 EKS Cluster 내부에서 동작하는 Pod는 해당 EKS Cluster의 OIDC Identity Provider로부터 인증을 받아야 해당 Role을 부여 받을 수 있다는 것을 의미한다. 인증 정보는 **JWT Token**에 저장되는데, 인증 정보가 포함된 JWT Token을 통해서 Role을 부여받는 동작을 AWS에서는 **AssumeRoleWithWebIdentity**라고 호칭한다. Trust Relationship의 Action에는 Role을 부여 받기 위한 동작이 명시되어 있으며, [Text 2]의 Action 항목에 AssumeRoleWithWebIdentity이 명시되어 있는것을 확인할 수 있다.
-
-Condition에는 JWT Token에 포함되어 있어야 하는 Claim의 조건을 명시한다. [Text 2]에는 aud Claim에 "sts.amazonaws.com", sub Claim에 "system:serviceaccount:kube-system:aws-load-balancer-controller"가 명시되어야 한다는 걸 나타낸다.
+Trust Relationship의 Action에는 Role을 부여 받기 위한 동작이 명시되어 있으며, [Text 2]의 Action 항목에 AssumeRoleWithWebIdentity이 명시되어 있는것을 확인할 수 있다. Projected SA Token은 JWT Token 형태를 갖고 있는데, 인증 정보가 포함된 JWT Token을 통해서 Role을 부여받는 동작을 AWS에서는 **AssumeRoleWithWebIdentity**라고 호칭한다. Condition에는 Projected SA Token에 포함되어 있어야 하는 Claim의 조건을 명시한다. [Text 2]에서는 aud Claim에 "sts.amazonaws.com", sub Claim에 "system:serviceaccount:kube-system:aws-load-balancer-controller"가 명시되어야 한다는 걸 나타낸다.
 
 #### 1.2. Pod 생성
 
@@ -119,14 +121,27 @@ spec:
 <figcaption class="caption">[Text 3] Mutated Pod Spec</figcaption>
 </figure>
 
-Pod 내부에서 AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 Pod가 동작하는 K8s Cluster의 Region, 부여 받는 Role, JWT Token의 위치 정보등이 필요하다. 이러한 필요 정보들은 EKS Control Plane에 존재하는 **Pod Identity Webhook**에 의해서 강제로 Pod에 주입된다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하여 정보를 주입한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller Pod를 나타내고 있다.
+Pod 내부에서 AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 Pod가 동작하는 Kubernetes Cluster의 Region, 부여 받는 Role, JWT Token의 위치 정보등이 필요하다. 이러한 필요 정보들은 EKS Control Plane에 존재하는 **Pod Identity Webhook**에 의해서 강제로 Pod에 주입된다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하여 정보를 주입한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller Pod를 나타내고 있다.
 
-Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 **aws-iam-token** 이름의 Service Account Token Volume을 생성하고 Mount하도록 만든다. Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Token은 AWS SDK에서 이용되는 설정이다. AWS SDK는 설정된 환경 변수의 정보를 통해서 AssumeRoleWithWebIdentity 동작을 수행한다.
+Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 **aws-iam-token 이름의 Service Account Token Volume**을 생성하고 Mount하도록 만든다. AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 인증 정보가 포함된 JWT Token이 필요한데 aws-iam-token 이름의 Volume에 해당 JWT Token이 주입된다. 이 JWT Token도 Service Account의 Token이며, Kubernetes에서 기본적으로 이용되는 Service Account의 JWT Token과는 별개의 Token이다. 본 글에서는 전자를 **Projected Service Account Token**이라고 명칭하며 기본적으로 할당되는 Service Account를 **Traditional Service Account Token**이라고 명칭한다.
 
-[Text 3]에서는 Pod마다 기본적으로 할당되는 Service Account Token 관련 설정도 여전히 존재하는 것을 확인할 수 있다. 이 기본 Service Account Token은 본 글에서는 **Traditional Service Account Token**이라고 명칭한다.
+ 만료를 가지고 있으며 주기적으로 교체 된다는 특징을 가지고 있다. 이 JWT Token을 본 글에서는 Projected Service Account Token
 
-#### 1.3. Create/Rotate Service Account Token
 
+
+Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Token은 AWS SDK에서 이용된다. AWS SDK는 설정된 환경 변수의 정보를 통해서 AssumeRoleWithWebIdentity 동작을 수행한다. [Text 3]에서는 Pod마다 기본적으로 할당되는 Service Account Token 관련 설정도 여전히 존재하는 것을 확인할 수 있다. 이 기본 Service Account Token은 본 글에서는 **Traditional Service Account Token**이라고 명칭한다.
+
+#### 1.3. Service Account Token 생성/교체
+
+AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 OIDC Provider가 발급한 인증 정보가 포함된 JWT 형태의 ID Token을 이용해야 한다. 하지만 Kubernetes API Server는 OIDC Provider로부터 발급한 ID Token을 받지 않고 직접 JWT Token을 생성하여 Pod에 주입시킨다. K8s API Server가 OIDC Provider를 대신하여 JWT Token을 생성하기 위해서는 OIDC Provider가 이용하는 Private/Public Key를 API Server도 가지고 있어야 한다.
+
+Kubernetes API Server에서는 다음의 Parameter들을 설정하여 JWT Token 생성에 필요한 정보를 설정한다.
+* service-account-signing-key-file : Service Account Token을 Sign할 때 이용하는 Key 파일의 경로를 지정한다.
+* service-account-key-file : Sign된 Service Account Token을 검증할때 이용하는 Key 파일의 경로를 지정한다.
+* service-account-issuer : Service Account Token의 발급자인 OIDC Provider의 URL을 설정한다. 연동되는 OIDC Provider는 "OIDC Discovery 1.0" Spec을 지원해야 한다. EKS의 Kubernetes API Server에는 [Text 4]의 Issuer 항목의 내용인 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
+* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정한다. EKS의 Kubernetes API Server에는 [Text 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
+
+JWT Token은 Service 
 
 
 {% highlight json %}
