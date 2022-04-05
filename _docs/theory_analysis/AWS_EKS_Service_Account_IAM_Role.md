@@ -94,6 +94,9 @@ spec:
       value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
     image: amazon/aws-alb-ingress-controller:v2.1.3
 ...
+  serviceAccount: aws-load-balancer-controller
+  serviceAccountName: aws-load-balancer-controller
+...
     volumeMounts:
     - mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
       name: aws-iam-token
@@ -123,26 +126,19 @@ spec:
 
 Pod 내부에서 AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 Pod가 동작하는 Kubernetes Cluster의 Region, 부여 받는 Role, JWT Token의 위치 정보등이 필요하다. 이러한 필요 정보들은 EKS Control Plane에 존재하는 **Pod Identity Webhook**에 의해서 강제로 Pod에 주입된다. Pod Identity Webhook은 AWS IAM Role이 부여된 Service Account를 이용하는 Pod가 생성될때, Pod의 Spec을 변경(Mutate)하여 정보를 주입한다. [Text 3]는 Pod Identity Webhook으로 인해서 변경된 AWS Load Balancer Controller Pod를 나타내고 있다.
 
-Pod Identity Webhook은 **AWS_DEFAULT_REGION**, **AWS_REGION**, **AWS_ROLE_ARN**, **AWS_WEB_IDENTITY_TOKEN_FILE** 환경 변수 및 **aws-iam-token 이름의 Service Account Token Volume**을 생성하고 Mount하도록 만든다. AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 인증 정보가 포함된 JWT Token이 필요한데 aws-iam-token 이름의 Volume에 해당 JWT Token이 주입된다. 이 JWT Token도 Service Account의 Token이며, Kubernetes에서 기본적으로 이용되는 Service Account의 JWT Token과는 별개의 Token이다. 본 글에서는 전자를 **Projected Service Account Token**이라고 명칭하며 기본적으로 할당되는 Service Account를 **Traditional Service Account Token**이라고 명칭한다.
+Pod Identity Webhook은 AWS_DEFAULT_REGION, AWS_REGION, AWS_ROLE_ARN, AWS_WEB_IDENTITY_TOKEN_FILE 환경 변수 및 aws-iam-token 이름의 Projected SA Token Volume을 생성하고 Mount하도록 만든다. aws-iam-token 이름의 Projected SA Token Volume안에 Projected SA Token이 존재한다. Projected SA Token Volume 설정에 만료 시간 및 Audience 설정도 포함되어 있는것을 확인할 수 있다.
 
- 만료를 가지고 있으며 주기적으로 교체 된다는 특징을 가지고 있다. 이 JWT Token을 본 글에서는 Projected Service Account Token
-
-
-
-Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Token은 AWS SDK에서 이용된다. AWS SDK는 설정된 환경 변수의 정보를 통해서 AssumeRoleWithWebIdentity 동작을 수행한다. [Text 3]에서는 Pod마다 기본적으로 할당되는 Service Account Token 관련 설정도 여전히 존재하는 것을 확인할 수 있다. 이 기본 Service Account Token은 본 글에서는 **Traditional Service Account Token**이라고 명칭한다.
+Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Token은 AWS SDK에서 이용된다. AWS SDK는 설정된 환경 변수의 정보를 통해서 AssumeRoleWithWebIdentity 동작을 수행한다. [Text 3]에서는 Pod마다 기본적으로 할당되는 기본 Service Account 설정도 여전히 존재하는 것을 확인할 수 있다.
 
 #### 1.3. Service Account Token 생성/교체
 
 AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 OIDC Provider가 발급한 인증 정보가 포함된 JWT 형태의 ID Token을 이용해야 한다. 하지만 Kubernetes API Server는 OIDC Provider로부터 발급한 ID Token을 받지 않고 직접 JWT Token을 생성하여 Pod에 주입시킨다. K8s API Server가 OIDC Provider를 대신하여 JWT Token을 생성하기 위해서는 OIDC Provider가 이용하는 Private/Public Key를 API Server도 가지고 있어야 한다.
 
-Kubernetes API Server에서는 다음의 Parameter들을 설정하여 JWT Token 생성에 필요한 정보를 설정한다.
+Kubernetes API Server에서는 다음의 Parameter들을 통해서 JWT Token 생성에 필요한 설정을 수행한다.
+
 * service-account-signing-key-file : Service Account Token을 Sign할 때 이용하는 Key 파일의 경로를 지정한다.
 * service-account-key-file : Sign된 Service Account Token을 검증할때 이용하는 Key 파일의 경로를 지정한다.
-* service-account-issuer : Service Account Token의 발급자인 OIDC Provider의 URL을 설정한다. 연동되는 OIDC Provider는 "OIDC Discovery 1.0" Spec을 지원해야 한다. EKS의 Kubernetes API Server에는 [Text 4]의 Issuer 항목의 내용인 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
-* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정한다. EKS의 Kubernetes API Server에는 [Text 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
-
-JWT Token은 Service 
-
+* service-account-issuer : Service Account Token의 발급자인 OIDC Provider의 URL을 설정한다. EKS의 Kubernetes API Server에는 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
 
 {% highlight json %}
 {
@@ -168,38 +164,12 @@ JWT Token은 Service
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 4] Service Account Token</figcaption>
+<figcaption class="caption">[Text 4] Projected SA Token</figcaption>
 </figure>
 
-[Text 4]은 AWS Load Balancer Controller Pod에 Inject된 "aws-iam-token" Service Account Token의 내용을 나타내고 있다. Token은 JWT 형태로 RS256 Algorithm을 이용하여 Encoding되어 있으며, Decoding을 하면 [Text 4]의 내용을 확인할 수 있다. Issuer(iss) Claim에는 EKS Cluster의 OIDC Identity Provider의 URL이 존재한다. Audience(aud) Claim에는 "sts.amazonaws.com"가 설정되어 있다. Subject(sub) Claim에는 AWS Load Balancer를 나타내는 정보가 설정되어 있다.
+[Text 4]은 AWS Load Balancer Controller Pod의 Projected SA Token을 JWT Deconding을 수행 하였을때의 내용을 나타내고 있다. service-account-issuer Parameter에 의해서 Issuer(iss) Claim에는 EKS Cluster의 OIDC Identity Provider의 URL이 설정된다. [Text 3]에서 Audience에 "sts.amazonaws.com" 설정으로 인해서 Audience(aud) Claim에도 "sts.amazonaws.com"가 설정된다. 
 
-Inject된 Service Account Token은 AWS STS(Security Token Service)가 OIDC Identity Provider를 통해서 인증을 받을때 이용하기 때문이다.
-
-Inject된 Service Account Token은 Expiration이 포함되어 있기 때문에 특정 시간이 지나면 만기가 된다. 따라서 kubelet은 주기적으로 AWS EKS API Server를 통해서 serviceaccount-token Controller에게 새로운 Service Account Token을 얻어와 Pod에게 주입한다. 이러한 주기적인 주입은 **Service Account Token의 Projected Volume** 기능을 통해서 이루어진다. Pod 내부의 App도 새롭개 Inject된 Token을 주기적으로 다시 읽어서 이용하도록 동작되어야 한다.
-
-Service Account Token의 Projected Volume 기능은 Kubernetes API Server에 다음의 Parameter들을 설정하면 이용 가능하다. 아래의 설정들은 Traditional Service Account Token과는 무관하다.
-
-* service-account-signing-key-file : Service Account Token을 Sign할 때 이용하는 Key 파일의 경로를 지정한다.
-* service-account-key-file : Sign된 Service Account Token을 검증할때 이용하는 Key 파일의 경로를 지정한다.
-* service-account-issuer : Service Account Token의 발급자인 OIDC Provider의 URL을 설정한다. 연동되는 OIDC Provider는 "OIDC Discovery 1.0" Spec을 지원해야 한다. EKS의 Kubernetes API Server에는 [Text 4]의 Issuer 항목의 내용인 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
-* service-account-api-audiences : Service Account Token을 사용하는 대상을 설정한다. EKS의 Kubernetes API Server에는 [Text 4]의 Audience 항목의 내용인 "sts.amazonaws.com"가 설정되어 있을것으로 예상된다.
-
-{% highlight json %}
-{
-	"issuer": "https://oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53",
-	"jwks_uri": "https://oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53/keys",
-	"authorization_endpoint": "urn:kubernetes:programmatic_authorization",
-	"response_types_supported": ["id_token"],
-	"subject_types_supported": ["public"],
-	"claims_supported": ["sub", "iss"],
-	"id_token_signing_alg_values_supported": ["RS256"]
-}
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Text 5] EKS Cluster의 OIDC Identity Provider 정보</figcaption>
-</figure>
-
-EKS Cluster의 OIDC Identity Provider 또한 OIDC Discvoery 1.0 Spec을 지원한다. OIDC Discovery 1.0 Spec에 따라서 "/.well-known/openid-configuration" URL 접근시 OIDC Provider 관련 정보를 얻을 수 있어야 한다. [Text 5]는 EKS Cluster의 OIDC Identity Provider의 "/.well-known/openid-configuration" URL 접근시 얻을 수 있는 정보를 나타내고 있다.
+AWS Load Balancer Controller는 kube-system Namespace에서 동작하며 aws-load-balancer-controller Service Account를 이용하기 때문에 Subject(sub) Claim에는 관련 내용이 설정된다. Expiration(exp) Claim에 만료시간이 존재하는것도 확인할 수 있다. [Text 3]의 Projected SA Token 내용이 [Text 2]의 Role의 Condition 조건을 만족시키는 것을 확인할 수 있다.
 
 {% highlight json %}
 {
@@ -212,12 +182,10 @@ EKS Cluster의 OIDC Identity Provider 또한 OIDC Discvoery 1.0 Spec을 지원�
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Text 6] Traditional Service Account Token</figcaption>
+<figcaption class="caption">[Text 5] Traditional Service Account Token</figcaption>
 </figure>
 
-[Text 5]는 AWS Load Balancer Controller Pod에 생성된 Traditional Service Account Token의 내용이다. Token은 RS256 Algorithm을 이용하여 Endcoding되어 있으며, Decoding하면 [Text 6]의 내용을 확인할 수 있다. Issuer(iss), Audience(aud), Expiration(exp) 정보가 포함되어 있다. Pod Identity Webhook가 Inject하는 "aws-iam-token" 이름의 Service Account Token은 Kubernetes가 기본적으로 생성하는 "Traditional Service Account Token"과의 내용도 다른것을 확인 할 수 있다.
-
-
+[Text 5]는 AWS Load Balancer Controller Pod에 기본적으로 생성되는 기본 Service Account Token을 JWT Deconding을 수행 하였을때의 내용을 나타내고 있다. [Text 4]의 Projected SA Token과 비교하면 Expiration Claim, Audience Claim을 포함하여 몇개의 Claim이 포함되어 있지 않는것을 확인할 수 있다.
 
 #### 1.4. Use Token
 
