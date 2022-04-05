@@ -1,5 +1,5 @@
 ---
-title: AWS EKS Service Account에 AWS IAM Role 부여 (WIP)
+title: AWS EKS Service Account에 AWS IAM Role 부여
 category: Theory, Analysis
 date: 2021-04-15T12:00:00Z
 lastmod: 2021-04-15T12:00:00Z
@@ -16,6 +16,7 @@ AWS EKS Cluster의 Service Account에 AWS IAM Role을 부여하는 과정을 정
 AWS EKS 1.14 Version 이상에서는 EKS (K8s) Cluster의 Service Account에 AWS IAM의 Role을 부여할 수 있는 기능을 제공하고 있다. 이 기능을 통해서 AWS IAM Role을 부여 받은 Service Account를 이용하는 Pod는 AWS Service를 이용할 수 있게 된다. [그림 1]은 이러한 과정을 Service Account 생성, Pod 생성, Service Account Token 생성/교체, Service Account Token 이용 4단계로 나누어 나타내고 있다. [그림 1]의 주요 구성 요소들은 다음과 같다.
 
 * AWS EKS OIDC Identity Provider : 각 EKS Cluster 마다 가지고 있는 전용 OIDC Identity Provider를 나타낸다. AWS IAM에게 신뢰하는 OIDC Provider로 등록(Federate)되어 있다.
+* Private/Public Key : AWS EKS OIDC Identity Provider와 Kubernetes API 서버는 동일한 Private/Public Key를 공유하여 이용한다.
 * Pod Identity Webhook : Kubernetes API Server의 Mutating Webhook을 나타낸다. Pod가 Role을 부여 받은 Service Account를 이용하는 경우, Pod 내부에서 Service Account에 부여된 Role을 이용할 수 있도록 Pod의 Spec을 변경하는 역활을 수행한다.
 * Projected SA Token : Role이 부여된 Service Account의 Token을 나타낸다. Kubernetes에서 기본적으로 이용되는 기본 Service Account Token과는 별개의 Token이다. 기본 Service Account Token과 다르게 **만료시간**과 **Audience**가 설정되어 있으며, 주기적으로 Token이 교체된다는 특징을 갖는다.
 
@@ -132,12 +133,12 @@ Pod Identity Webhook이 추가한 "AWS_*" 환경 변수 및 "aws-iam-token" Toke
 
 #### 1.3. Service Account Token 생성/교체
 
-AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 OIDC Provider가 발급한 인증 정보가 포함된 JWT 형태의 ID Token을 이용해야 한다. 하지만 Kubernetes API Server는 OIDC Provider로부터 발급한 ID Token을 받지 않고 직접 JWT Token을 생성하여 Pod에 주입시킨다. K8s API Server가 OIDC Provider를 대신하여 JWT Token을 생성하기 위해서는 OIDC Provider가 이용하는 Private/Public Key를 API Server도 가지고 있어야 한다.
+AssumeRoleWithWebIdentity 동작을 수행하기 위해서는 OIDC Provider가 발급한 인증 정보가 포함된 JWT 형태의 ID Token을 이용해야 한다. 하지만 Kubernetes API Server는 OIDC Provider로부터 발급한 ID Token을 받지 않고 직접 JWT Token을 생성하여 Pod에 주입시킨다. K8s API Server가 OIDC Provider를 대신하여 JWT Token을 생성하기 위해서는 OIDC Provider가 이용하는 Private/Public Key를 API Server도 이용한다.
 
 Kubernetes API Server에서는 다음의 Parameter들을 통해서 JWT Token 생성에 필요한 설정을 수행한다.
 
-* service-account-signing-key-file : Service Account Token을 Sign할 때 이용하는 Key 파일의 경로를 지정한다.
-* service-account-key-file : Sign된 Service Account Token을 검증할때 이용하는 Key 파일의 경로를 지정한다.
+* service-account-signing-key-file : Service Account Token을 Sign할 때 이용하는 Key 파일의 경로를 지정한다. EKS Cluster의 OIDC Provider의 Private Key가 지정되어 있을것으로 예상된다.
+* service-account-key-file : Sign된 Service Account Token을 검증할때 이용하는 Key 파일의 경로를 지정한다. EKS Cluster의 OIDC Provider의 Public Key가 지정되어 있을것으로 예상된다.
 * service-account-issuer : Service Account Token의 발급자인 OIDC Provider의 URL을 설정한다. EKS의 Kubernetes API Server에는 EKS Cluster의 OIDC Identity Provider URL이 설정되어 있을것으로 예상된다.
 
 {% highlight json %}
@@ -167,7 +168,7 @@ Kubernetes API Server에서는 다음의 Parameter들을 통해서 JWT Token 생
 <figcaption class="caption">[Text 4] Projected SA Token</figcaption>
 </figure>
 
-[Text 4]은 AWS Load Balancer Controller Pod의 Projected SA Token을 JWT Deconding을 수행 하였을때의 내용을 나타내고 있다. service-account-issuer Parameter에 의해서 Issuer(iss) Claim에는 EKS Cluster의 OIDC Identity Provider의 URL이 설정된다. [Text 3]에서 Audience에 "sts.amazonaws.com" 설정으로 인해서 Audience(aud) Claim에도 "sts.amazonaws.com"가 설정된다. 
+[Text 4]은 AWS Load Balancer Controller Pod의 Projected SA Token을 JWT Deconding을 수행 하였을때의 내용을 나타내고 있다. service-account-issuer Parameter에 의해서 Issuer(iss) Claim에는 EKS Cluster의 OIDC Identity Provider의 URL이 설정된다. [Text 3]에서 Audience에 "sts.amazonaws.com" 설정으로 인해서 Audience(aud) Claim에도 "sts.amazonaws.com"가 설정된다.
 
 AWS Load Balancer Controller는 kube-system Namespace에서 동작하며 aws-load-balancer-controller Service Account를 이용하기 때문에 Subject(sub) Claim에는 관련 내용이 설정된다. Expiration(exp) Claim에 만료시간이 존재하는것도 확인할 수 있다. [Text 3]의 Projected SA Token 내용이 [Text 2]의 Role의 Condition 조건을 만족시키는 것을 확인할 수 있다.
 
@@ -187,11 +188,27 @@ AWS Load Balancer Controller는 kube-system Namespace에서 동작하며 aws-loa
 
 [Text 5]는 AWS Load Balancer Controller Pod에 기본적으로 생성되는 기본 Service Account Token을 JWT Deconding을 수행 하였을때의 내용을 나타내고 있다. [Text 4]의 Projected SA Token과 비교하면 Expiration Claim, Audience Claim을 포함하여 몇개의 Claim이 포함되어 있지 않는것을 확인할 수 있다.
 
-#### 1.4. Use Token
+#### 1.4. Service Account Token 이용
 
-Pod 내부의 App은 AWS의 STS로부터 Credential을 얻기 위해서 Inject된 Service Account Token과 권한을 얻으려는 IAM Role의 ARN을 AWS의 STS에게 전송한다. AWS STS는 Token의 Issuer 항목을 통해서 EKS Cluster의 OIDC Identity Provider를 발견하고, OIDC Identity Provider에게 Service Account Token을 인증 받는다. AWS의 STS가 OIDC Identity Provider 발견하고 관련 정보를 얻는 과정은 **OpenID Connect Discovery 1.0** 표준에 의해서 진행된다.
+Pod 내부의 App은 AssumeRoleWithWebIdentity 동작을 통해서 Credential을 얻기 위해서 Projected SA Token을 AWS STS에게 전송한다. Projected SA Token을 받은 AWS STS는 Token의 Issuer를 확인하고 자신이 신뢰하는 (Federated) OIDC Provider인지 확인한다. 자신이 신뢰하는 OIDC Provider인지 확인이 되었다면, OIDC Provider의 Public Key를 이용하여 Projected SA Token이 유효한지 검사한다. 유효한 Projected SA Token이라고 판단하였다면 AWS STS는 Credential을 Pod 내부의 App에게 전송한다. 이후에 App은 Credential을 이용하여 Role을 부여받고 AWS Service에 접근한다.
 
-Service Account Token의 인증이 완료되면 STS는 허용되는 IAM Role인지 확인한다. 허용되는 IAM Role이라면 AWS의 STS는 Credential을 Pod 내부의 App에게 전달한다. Pod 내부의 App은 수신한 Credential을 가지고 AWS Service에 접근한다.
+Projected SA Token은 실제로 EKS Cluster의 OIDC Provider가 발급한게 아니라 Kubernetes API Server가 발급하였지만, Kubernetes API Server가 EKS Cluster의 OIDC Provider의 Private Key를 이용하여 Projected SA Token을 생성하였기 때문에 AWS STS는 EKS Cluster의 OIDC Provider가 발급한 Token이라고 간주하고 처리한다.
+
+{% highlight text %}
+# aws iam list-open-id-connect-providers
+{
+    "OpenIDConnectProviderList": [
+        {
+            "Arn": "arn:aws:iam::132099918825:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/B0678ED568FC12BBC37256BBA2A4BB53"
+        }
+    ]
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] Federated OIDC Provider 조회</figcaption>
+</figure>
+
+[Console 1]은 AWS IAM을 통해서 신뢰하는 OIDC Provider의 List를 조회하는 모습을 나타낸다. EKS Cluster의 OIDC Provider도 신뢰하는 OIDC Provider로 등록되어 있는것을 확인할 수 있다.
 
 ### 2. 참조
 
