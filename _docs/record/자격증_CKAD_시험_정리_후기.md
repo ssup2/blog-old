@@ -1,8 +1,8 @@
 ---
-title: 자격증 CKA 시험 후기
+title: 자격증 CKA 시험 정리/후기
 category: Record
-date: 2019-11-01T12:00:00Z
-lastmod: 2020-07-14T12:00:00Z
+date: 2022-04-01T12:00:00Z
+lastmod: 2022-04-14T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -10,7 +10,7 @@ adsense: true
 ### 1. 시험 정보
 
 * 시간
-  * 3시간 24문제
+  * 2시간 24문제
 
 * 참고 가능한 Site
   * https://kubernetes.io/docs/home/
@@ -19,14 +19,12 @@ adsense: true
   * 나머지 Site 참고 불가능
 
 * 시험 환경
-  * Kuberntes v1.18
+  * Kuberntes v1.21
 
 ### 2. 시험 준비
 
 * 시험 준비물
   * Chrome Browser
-  * Chrome Plugin
-    * https://chrome.google.com/webstore/detail/innovative-exams-screensh
   * Webcam
   * Microphone
   * 여권
@@ -49,11 +47,13 @@ adsense: true
   * ctrl + insert
 * Windows Paste
   * shift + insert
+* kubectl
+  * 
 
 ### 5. 시험 후기
 
 * Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 쉽게 합격 가능
-  * https://kodekloud.com/courses/certified-kubernetes-administrator-cka 
+  * https://kodekloud.com/courses/certified-kubernetes-application-developer-ckad/
 
 ### . 참고
 
