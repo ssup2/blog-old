@@ -10,7 +10,7 @@ adsense: true
 ### 1. 시험 정보
 
 * 시간
-  * 2시간 24문제
+  * 2시간 21문제
 
 * 참고 가능한 Site
   * https://kubernetes.io/docs/home/
@@ -47,8 +47,6 @@ adsense: true
   * ctrl + insert
 * Windows Paste
   * shift + insert
-* kubectl
-  * 
 
 ### 5. 시험 후기
 
@@ -57,5 +55,4 @@ adsense: true
 
 ### . 참고
 
-* [https://chhanz.github.io/linux/2019/09/30/cka-exam-review/](https://chhanz.github.io/linux/2019/09/30/cka-exam-review/)
-* [https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/](https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/)
+* [https://jyeonth.tistory.com/34](https://jyeonth.tistory.com/34)
