@@ -1,8 +1,8 @@
 ---
-title: 자격증 CKA 시험 정리/후기
+title: 자격증 CKS 시험 정리/후기
 category: Record
-date: 2019-11-01T12:00:00Z
-lastmod: 2020-07-14T12:00:00Z
+date: 2022-04-26T12:00:00Z
+lastmod: 2022-04-26T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -10,16 +10,20 @@ adsense: true
 ### 1. 시험 정보
 
 * 시간
-  * 3시간 24문제
+  * 2시간 16문제
 
 * 참고 가능한 Site
   * https://kubernetes.io/docs/home/
   * https://github.com/kubernetes/
   * https://kubernetes.io/blog/
+  * https://aquasecurity.github.io/trivy/
+  * https://docs.sysdig.com/
+  * https://falco.org/docs/
+  * https://gitlab.com/apparmor/apparmor/-/wikis/Documentation
   * 나머지 Site 참고 불가능
 
 * 시험 환경
-  * Kuberntes v1.18
+  * Kuberntes v1.21
 
 ### 2. 시험 준비
 
@@ -53,9 +57,9 @@ adsense: true
 ### 5. 시험 후기
 
 * Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 합격 가능
-  * https://kodekloud.com/courses/certified-kubernetes-administrator-cka 
+  * https://kodekloud.com/courses/certified-kubernetes-security-specialist-cks/
 
 ### . 참고
 
-* [https://chhanz.github.io/linux/2019/09/30/cka-exam-review/](https://chhanz.github.io/linux/2019/09/30/cka-exam-review/)
-* [https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/](https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/)
+* [https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0](https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0))
+* [https://lifeoncloud.kr/k8s/killersh/](https://lifeoncloud.kr/k8s/killersh/)
