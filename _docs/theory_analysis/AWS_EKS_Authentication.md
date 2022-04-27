@@ -1,5 +1,5 @@
 ---
-title: AWS EKS Authentication
+title: AWS EKS 인증
 category: Theory, Analysis
 date: 2021-04-28T12:00:00Z
 lastmod: 2022-04-28T12:00:00Z
@@ -7,11 +7,11 @@ comment: true
 adsense: true
 ---
 
-AWS EKS의 Authentication 과정을 분석한다.
+AWS EKS의 인증 과정을 분석한다.
 
-### 1. AWS EKS Authentication
+### 1. AWS EKS 인증
 
-![[그림 1] AWS EKS Authentication]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Authentication/AWS_EKS_Authentication.PNG){: width="600px"}
+![[그림 1] AWS EKS 인증]({{site.baseurl}}/images/theory_analysis/AWS_EKS_인증/AWS_EKS_인증.PNG){: width="600px"}
 
 {% highlight yaml %}
 apiVersion: v1
@@ -125,7 +125,7 @@ https://sts.ap-northeast-2.amazonaws.com/?Action=GetCallerIdentity&Version=2011-
 <figcaption class="caption">[Console 3] Get Identity from AWS STS</figcaption>
 </figure>
 
-{% highlight console %}
+{% highlight yaml %}
 apiVersion: v1
 data:
   mapRoles: |
