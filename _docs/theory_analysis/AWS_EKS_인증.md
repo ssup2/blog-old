@@ -51,7 +51,7 @@ users:
 <figcaption class="caption">[파일 1] kubelet kubeconfig</figcaption>
 </figure>
 
-{% highlight console %}
+{% highlight yaml %}
 apiVersion: v1
 clusters:
 - cluster:
