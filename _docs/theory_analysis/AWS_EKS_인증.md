@@ -13,6 +13,8 @@ AWS EKS의 인증 과정을 분석한다.
 
 ![[그림 1] AWS EKS 인증]({{site.baseurl}}/images/theory_analysis/AWS_EKS_인증/AWS_EKS_인증.PNG){: width="600px"}
 
+[그림 1]은 AWS EKS Cluster의 인증 과정을 나타내고 있다. EKS Cluster는 **AWS IAM Authenticator**를 이용하여 인증을 수행한다. AWS IAM Authenticator 기반의 EKS Cluster 인증 기법은 kubectl에서 EKS Cluster의 K8s API Server 접근하거나, Worker Node에서 동작하는 kubelet에서 EKS Cluster의 K8s API Server 접근시에 이용한다.
+
 {% highlight yaml %}
 apiVersion: v1
 clusters:
@@ -53,7 +55,8 @@ users:
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EUXdOakUwTWpneU5Wb1hEVE14TURRd05ERTBNamd5TlZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBSzZqCjliUkZndjFZTWtVSXg3dXlnOTUyRVRkRXlQbzR4Z2hyakwyQjBpazBhUXFVQU5uL21hV0JCUmpNc2RHM3dLdmsKSVZQYnRNcG9DSTY3WnhSOSsvdFhDZGJEZm1GMVhKRllzSld3aTdiNVloQzZXcXNTU3N1TXBpa3JSZTh6UlNGcwpwL3JrNzNmUGs4Z2pOR2pUcWE1ZFlJOFJJcjBpaS9NckZ6eDhqTFl2cGR5cHdsZ3NBTEl4eUF1MEdTajhXb3ZmClErKytwcGh6aU95K2luclBicUI0ZndqWHczeWhGVEJDUHNKSDRuY3JsTHZvWXM2MndJMm5lTlc3VDAzMGhPa04KMzFmOVVmOGdRQlZZTjNnTFhyUE5KTng1Y1dndFR1TFpmQU9FMjZYVkY3dzM1YXhodmRuRWZqRDFad3h4Smg1aAovZEdMR2N4LzJzZjRPZ0Ixb01jQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFDeEZuVGVLUmcrV3JZTVJWNzJScFVkbVVBdTgKdFN4ZHVxVjNIeHFLUXFHdWE2OEhDNkxmQWROcWQ5bWd2Zi9JTzgvdHFocVFNbkxKWXB1bGFDNk01WEFBYk5BdQpxZjJHTFVIaC9JS1ZSMmJUeG1EejFYbEhIaFJuMWhOdnpOZlFycGhJaHBWWG1KbWtGeURINnZjT2lMT2hvQko1CllOUkxpeEN1ei85WCtxcEZsa0lhaUNqcjNZMnNtN0dpMkIyakN6N3FKc3FFT1gralhTNHh0enEvc3NJK0pSL2MKejdvRXJjdnlsVGpCcXVabXF2RnlJYU1kNmlPQk9UQTF2cDFBNE11aVViSktFYWY2ZU4xM0JOanZFMXAxRXJtVgowRVNRWEhvVEg0YnhKNGw1Zmt0VlJ4VFJkTHc0Z0dBSTc5MWlEM0RWQi83ZHF4Vld0cGRIelFNb2VwZz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=            server: https://B0678ED568FC12BBC37256BBA2A4BB53.yl4.ap-northeast-2.eks.amazonaws.com
+    certificate-authority-data: ...
+    server: https://B0678ED568FC12BBC37256BBA2A4BB53.yl4.ap-northeast-2.eks.amazonaws.com
   name: ssup2-eks-cluster.ap-northeast-2.eksctl.io
 contexts:
 - context:
@@ -84,6 +87,10 @@ users:
 <figcaption class="caption">[파일 2] kubectl kubeconfig</figcaption>
 </figure>
 
+[파일 1]은 kubelet의 kubeconfig을 나타내고 있고, [파일 2]은 kubectl의 kubeconfig를 나타내고 있다. 두 kubeconfig 모두 user 부분을 확인해보면 "aws eks get-token" 명령어를 수행하는 것을 확인할 수 있다. "aws eks get-token" 명령어는 "aws eks get-token"을 수행하는 대상이 누구인지 알려주는 AWS STS의 **GetCallerIdentity API의 Presigned URL**을 생성하고, 생성한 URL을 Encoding하여 Token을 생성한다.
+
+Presigned URL은 의미그대로 미리 할당된 URL을 의미한다. AWS STS의 GetCallerIdentity API를 호출하기 위해서는 AccessKey/SecretAccessKey와 같은 Secret이 필요하지만, Presigned URL을 이용하여 GetCallerIdentity API를 호출하면 Secret없이 호출이 가능하다. Token을 통해서 전달되는 GetCallerIdentity API의 Presigned URL은 AWS IAM Authenticator에게 전달되어 "aws eks get-token" 명령어를 호출한 대상이 누구인지 파악하는데 이용된다.
+
 {% highlight console %}
 # aws eks get-token --cluster-name ssup2-eks-cluster
 {
@@ -97,7 +104,7 @@ users:
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] aws eks get-token Output</figcaption>
+<figcaption class="caption">[Console 1] aws eks get-token 명령어 Output</figcaption>
 </figure>
 
 {% highlight console %}
