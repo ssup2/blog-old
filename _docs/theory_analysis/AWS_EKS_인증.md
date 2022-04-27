@@ -173,7 +173,7 @@ AWS IAM Authenticator는 "aws eks get-token" 명령어를 수행한 Identity를 
 
 "aws eks get-token" 명령어을 수행한 Identity와 EKS Cluster의 User/Group과의 Mapping 정보는 kube-system Namespace에 존재하는 **aws-auth** ConfigMap에 저장되어 있다. [파일 3]은 "aws-auth" ConfigMap의 예제를 나타내고 있다. mapUser 항목은 "aws eks get-token" 명령어을 수행한 AWS IAM User와 EKS Cluster의 User/Group을 Mapping을 하는데 이용되며, mapRoles 항목은 "aws eks get-token" 명령어를 수행한 AWS IAM Role과 EKS Cluster의 User/Group을 Mapping 하는데 이용한다.
 
-[파일 3]의 ssup2 AWS IAM User는 EKS Cluster의 admin User 또는 system:master Group에 Mapping된다. EKS Cluster에서 Node Group 생성시 각 Node Group에서 이용하는 AWS IAM Role이 생성되는데, Node Group의 AWS IAM Role도 [파일 3]의 mapRoles 항목에서 확인할 수 있다.
+[파일 3]에서 ssup2 AWS IAM User는 EKS Cluster의 admin User 또는 system:master Group에 Mapping되는걸 확인할 수 있다. EKS Cluster에서 Node Group 생성시 각 Node Group에서 이용하는 AWS IAM Role이 생성되는데, Node Group의 AWS IAM Role도 [파일 3]의 mapRoles 항목에서 확인할 수 있다.
 
 ### 2. 참조
 
