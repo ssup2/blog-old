@@ -13,14 +13,18 @@ adsense: true
   * 2시간 16문제
 
 * 참고 가능한 Site
-  * https://kubernetes.io/docs/home/
-  * https://github.com/kubernetes/
-  * https://kubernetes.io/blog/
-  * https://aquasecurity.github.io/trivy/
-  * https://docs.sysdig.com/
-  * https://falco.org/docs/
-  * https://gitlab.com/apparmor/apparmor/-/wikis/Documentation
+  * Kubernetes
+    * https://kubernetes.io/docs/home/
+    * https://github.com/kubernetes/
+    * https://kubernetes.io/blog/
+  * Trivy
+    * https://aquasecurity.github.io/trivy/
+  * Falco
+    * https://falco.org/docs/
+  * AppArmor
+    * https://gitlab.com/apparmor/apparmor/-/wikis/Documentation
   * 나머지 Site 참고 불가능
+  * CKA, CKAD와 다르게 Kubernetes외의 별도의 Tool도 이용하기 때문에 위의 Site들을 Bookmark에 미리 등록하는것이 좋음
 
 * 시험 환경
   * Kuberntes v1.21
@@ -61,5 +65,6 @@ adsense: true
 
 ### . 참고
 
+* [https://docs.linuxfoundation.org/tc-docs/certification/important-instructions-cks](https://docs.linuxfoundation.org/tc-docs/certification/important-instructions-cks)
 * [https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0](https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0))
 * [https://lifeoncloud.kr/k8s/killersh/](https://lifeoncloud.kr/k8s/killersh/)
