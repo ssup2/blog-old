@@ -51,6 +51,6 @@ adsense: true
 * Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 합격 가능
   * https://kodekloud.com/courses/certified-kubernetes-application-developer-ckad/
 
-### . 참고
+### 6. 참고
 
 * [https://jyeonth.tistory.com/34](https://jyeonth.tistory.com/34)

@@ -55,7 +55,7 @@ adsense: true
 * Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 합격 가능
   * https://kodekloud.com/courses/certified-kubernetes-administrator-cka 
 
-### . 참고
+### 6. 참고
 
 * [https://chhanz.github.io/linux/2019/09/30/cka-exam-review/](https://chhanz.github.io/linux/2019/09/30/cka-exam-review/)
 * [https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/](https://coffeewhale.com/kubernetes/cka/2019/01/13/cak/)

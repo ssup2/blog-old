@@ -63,7 +63,7 @@ adsense: true
 * Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 합격 가능
   * https://kodekloud.com/courses/certified-kubernetes-security-specialist-cks/
 
-### . 참고
+### 6. 참고
 
 * [https://docs.linuxfoundation.org/tc-docs/certification/important-instructions-cks](https://docs.linuxfoundation.org/tc-docs/certification/important-instructions-cks)
 * [https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0](https://velog.io/@jay-side-project/Kubernetes-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95-0-CKS-%EC%A4%80%EB%B9%84%EA%B3%BC%EC%A0%95%EC%9D%84-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0))
