@@ -43,12 +43,13 @@ adsense: true
 
 ### 4. 시험중 알아야할 명렁어
 
-* root 권한 획득
-  * sudo -i
 * Windows Copy
   * ctrl + insert
 * Windows Paste
   * shift + insert
+* kubectl
+  * Resoruce API Version 확인 : kubectl api-resources
+  * Resource Spec/Status 확인 : kubectl explain --recursive <resource>
 
 ### 5. 시험 후기
 

@@ -23,8 +23,8 @@ adsense: true
     * https://falco.org/docs/
   * AppArmor
     * https://gitlab.com/apparmor/apparmor/-/wikis/Documentation
-  * 나머지 Site 참고 불가능
   * CKA, CKAD와 다르게 Kubernetes외의 별도의 Tool도 이용하기 때문에 위의 Site들을 Bookmark에 미리 등록하는것이 좋음
+  * 나머지 Site 참고 불가능
 
 * 시험 환경
   * Kuberntes v1.21
@@ -51,17 +51,34 @@ adsense: true
 
 ### 4. 시험중 알아야할 명렁어
 
-* root 권한 획득
-  * sudo -i
 * Windows Copy
   * ctrl + insert
 * Windows Paste
   * shift + insert
+* kubectl
+  * Resoruce API Version 확인 : kubectl api-resources
+  * Resource Spec/Status 확인 : kubectl explain --recursive <resource>
+* AppArmor
+  * Profile 적용 : apparmor_parser <profile_path>
+  * Profile 확인 : aa-status | grep <profile_name>
+* kubesec
+  * Resource 검사 : kubesec scan <resource>
+* Trivy
+  * Image 검사 : trivy image --severity <UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL> <image_name>
+  * Tar Image 검사 : trivy image --severity <UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL> --input <image_tar>
+* Falco
+  * Falco 시작 : systemctl start falco
+  * Falco Config 설정 변경 : vim /etc/falco/falco.yaml
+  * Falco Config 설정 변경 적용 : systemctl restart falco
+  * Falco Rule 추가/변경 : vim /etc/falco/falco_rules.local.yaml
 
 ### 5. 시험 후기
 
-* Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복하면 합격 가능
+* Kode Cloud에서 개념 이해와 함께 실습 2~3회 반복 필수
   * https://kodekloud.com/courses/certified-kubernetes-security-specialist-cks/
+* CKS 시험 신청시 제공되는 Killer CKS 문제 반복 필수
+  * https://killer.sh/
+* CKA, CKAD에 비해서 난이도가 높으며 실습을 충분히 수행할 것을 권장
 
 ### 6. 참고
 
