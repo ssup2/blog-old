@@ -60,7 +60,7 @@ adsense: true
   * Resource Spec/Status 확인 : kubectl explain --recursive {resource}
 * AppArmor
   * Profile 적용 : apparmor_parser {profile_path}
-  * Profile 확인 : aa-status | grep {profile_name}
+  * Profile 확인 : aa-status \| grep {profile_name}
 * kubesec
   * Resource 검사 : kubesec scan {resource}
 * Trivy
