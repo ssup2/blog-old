@@ -1,8 +1,8 @@
 ---
 title: Programmers / 두 개 뽑아서 더하기
 category: Coding Test
-date: 2022-05-19T12:00:00Z
-lastmod: 2022-05-19T12:00:00Z
+date: 2022-05-16T12:00:00Z
+lastmod: 2022-05-16T12:00:00Z
 comment: true
 adsense: true
 ---
