@@ -58,12 +58,45 @@ class Solution {
 
 * Space Complexity
 
-
 ### Solution 2
 
 {% highlight java linenos %}
+import java.util.Arrays;
 
+class Solution {
+    public int solution(int n) {
+        // Init isPrime array
+        boolean[] isPrime = new boolean[n+1];
+        Arrays.fill(isPrime, true);
+        isPrime[0] = false; // 0 is not prime
+        isPrime[1] = false; // 1 is not prime
+        
+        // Find prime number
+        for (int i = 2; i <= n; i++) {
+            if (isPrime[i]) {
+                for (int j = 2*i; j <= n; j = j + i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        
+        // Get prime number count
+        int count = 0;
+        for (int i = 0; i < isPrime.length; i++) {
+            if (isPrime[i]) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
 {% endhighlight %}
 <figure>
 <figcaption class="caption">Solution 2</figcaption>
 </figure>
+
+* Description
+
+* Time Complexity
+
+* Space Complexity
