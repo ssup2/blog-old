@@ -63,4 +63,5 @@ class Solution {
 
 * Space Complexity
   * O(len(arr))
-  * 함수의 입력값으로 len(arr)의 크기 만큼 Memory 이용
+  * 함수의 입력값으로 정수 Parameter 이용
+용
