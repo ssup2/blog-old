@@ -20,7 +20,7 @@ adsense: true
 
 ### Solution 1
 
-{% highlight java linenos %밍
+{% highlight java linenos %}
 class Solution {
     private static final int[] sumArray = new int[100000 + 1];
     
