@@ -12,7 +12,7 @@ offsetof() Macro 함수를 분석한다.
 ### 1. offsetof()
 
 {% highlight c linenos %}
-#define‬ offsetof(TYPE, MEMBER) ((sizet) &((TYPE *)0)->MEMBER)
+#define offsetof(TYPE, MEMBER) ((sizet) &((TYPE *)0)->MEMBER)
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 1] offsetof() Macro 함수</figcaption>
@@ -28,7 +28,7 @@ offsetof() Macro 함수는 Struct를 구성하는 **Member 변수의 Memory Offs
 
 {% highlight c linenos %}
 #include <stdio.h>
-#define  offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
 struct offset{
     int a;

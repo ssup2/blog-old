@@ -24,3 +24,4 @@ Golang의 pprof 기반 Profiling 기법을 정리한다.
 * [https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/)
 * [https://github.com/google/pprof](https://github.com/google/pprof)
 * [https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18](https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18)
+* [https://go.dev/doc/diagnostics](https://go.dev/doc/diagnostics)
