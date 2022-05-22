@@ -102,8 +102,13 @@ class Position {
 </figure>
 
 * Description
-  * BFS 이용
+  * BFS를 이용하여 탐색
+  * DFS를 이용하여 탐색하면 모든 경로를 탐색후 최단거리 판별이 가능하지만, BFS를 이용하면 모든 경로를 탐색할 필요가 없음
 
 * Time Complexity
+  * O(len(mapX) * len(mapY))
+  * Map을 한번씩만 방문하면서 경로 탐색을 수행하기 때문에 Map의 크기에 비례
 
 * Space Complexity
+  * O(len(mapX) * len(mapY))
+  * 함수의 입력값으로 Map의 크기 만큼 Memory 이용
