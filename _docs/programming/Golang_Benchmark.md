@@ -1,8 +1,8 @@
 ---
 title: Golang Benchmarking
 category: Programming
-date: 2022-05-18T12:00:00Z
-lastmod: 2022-05-18T12:00:00Z
+date: 2022-05-24T12:00:00Z
+lastmod: 2022-05-24T12:00:00Z
 comment: true
 adsense: true
 ---
