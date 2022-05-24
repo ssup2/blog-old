@@ -16,7 +16,7 @@ Golang에서는 Test Code의 Coverage를 확인하는 기능을 제공한다. �
 {% highlight golang %}
 package coverage
 
-func testFunc(n int) int {
+func TestFunc(n int) int {
 	if n < 0 {
 		return -1
 	} else if n == 0 {
@@ -38,12 +38,12 @@ import (
 )
 
 func TestCover(t *testing.T) {
-	result := testFunc(-1)
+	result := TestFunc(-1)
 	if result != -1 {
 		t.Error("Wrong result")
 	}
 
-	result = testFunc(0)
+	result = TestFunc(0)
 	if result != 0 {
 		t.Error("Wrong result")
 	}
