@@ -81,9 +81,9 @@ ok      ssup2.com/test  0.001s  coverage: 80.0% of statements
 
 ![[그림 1] go tool cover Output]({{site.baseurl}}/images/programming/Golang_Test_Coverage/Golang_Test_Coverage.PNG){: width="500px"}
 
-Code Level Coverage를 자세히 확인해 보고 싶을때는 Coverage Profile을 생성하여 이용하면 된다. [Shell 2]는 [Code 2]의 Test를 수행할 때 coverprofile Option을 이용하여 Coverage Profile을 생성하는 모습을 나타낸다. 
+Code Level Coverage를 자세히 확인해 보고 싶을때는 Coverage Profile을 생성하여 이용하면 된다. [Shell 2]는 [Code 2]의 Test를 수행할 때 coverprofile Option을 이용하여 Coverage Profile을 생성하는 모습을 나타낸다.
 
-생성된 Coverage Profile은 "go tool cover" 명령어를 통해서 HTML 파일로 변환이 가능하며, 변환된 HTML 파일을 이용하여 Web Browser에서 쉽게 Coverage를 확인할 수 있다. [그림 1]은 [Code 2]의 생성된 HTML을 나타내고 있다. Test Code에서는 n이 1보다 큰 경우는 없기 때문에 testFunc() 함수의 마지막 부분은 실행되지 않아 Coverage가 100%가 되지 않는 것을 확인할 수 있다.
+생성된 Coverage Profile은 "go tool cover" 명령어를 통해서 HTML 파일로 변환이 가능하며, 변환된 HTML 파일을 이용하여 Web Browser에서 쉽게 Coverage를 확인할 수 있다. [그림 1]은 [Code 2]의 생성된 HTML을 나타내고 있다. Test Code에서는 n이 1보다 큰 경우는 없기 때문에 testFunc() 함수의 마지막 부분은 실행되지 않아 Coverage가 100%가 되지 않는 것을 확인할 수 있다. 파일 단위로 Coverage를 확인할 수 있다.
 
 ### 2. 참조
 
