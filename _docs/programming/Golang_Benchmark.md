@@ -169,7 +169,7 @@ ok      ssup2.com/test  0.006s
 <figcaption class="caption">[Shell 5] Benchmarking with benchtime execute Option</figcaption>
 </figure>
 
-[Shell 4]는 benchtime Option을 통해서 Benchmarking을 최대 몇초동안 수행할지 설정하는 모습을 나타낸다. "s"로 끝나면 초를 의미하기 때문에 [Shell 4]에서는 Benchmarking을 10초 동안 수행한다. [Shell 5]는 benchtime Option을 통해서 Loop를 최대 몇회 수행할지 설정하는 모습을 나타낸다. "x"로 끝나면 Benchmarking Loop를 의미하기 때문에 [Shell 5]에서는 각 Benchimarking 함수는 10번씩만 수행된 것을 확인할 수 있다.
+[Shell 4]는 benchtime Option을 통해서 Benchmarking을 최대 몇초동안 수행할지 설정하는 모습을 나타낸다. "s"로 끝나면 초를 의미하기 때문에 [Shell 4]에서는 Benchmarking을 10초 동안 수행한다. [Shell 5]는 benchtime Option을 통해서 Loop를 최대 몇회 수행할지 설정하는 모습을 나타낸다. "x"로 끝나면 Benchmarking Loop를 의미하기 때문에 [Shell 5]에서는 각 Benchimarking 함수는 10번씩만 Loop를 수행한 것을 확인할 수 있다.
 
 ### 2. 참조
 
