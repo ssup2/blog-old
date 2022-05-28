@@ -1,5 +1,5 @@
 ---
-title: Programmers / 피보나치 수
+title: Programmers / 다음 큰 숫자
 category: Coding Test
 date: 2022-05-16T12:00:00Z
 lastmod: 2022-05-16T12:00:00Z
