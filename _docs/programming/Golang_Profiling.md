@@ -7,15 +7,13 @@ comment: true
 adsense: true
 ---
 
-Golang의 pprof 기반 Profiling 기법을 정리한다.
+Golang의 Profiling 기법을 정리한다.
 
-### 1. Golang pprof Profiling
+### 1. Golang Profiling
 
-#### 1.1. Test Profiling
+#### 1.1. 
 
-#### 1.2. runtime/pprof Package Profiling
-
-#### 1.3. net/http/pprof Package Profiling
+#### 1.2. 
 
 ### 2. 참조
 
