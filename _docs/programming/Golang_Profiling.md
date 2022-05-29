@@ -11,13 +11,21 @@ Golang의 Profiling 기법을 정리한다.
 
 ### 1. Profiling 방법
 
+Golang에서 이용가능한 Profiling 방벙을 정리한다.
+
 #### 1.1. net/http/pprof Package
+
+pprof Package는 Server와 같이 계속 동작중인 App의 Profiling을 위해서 이용되는 Package이다. pprof Package를 이용하면 App에 Profile을 얻을 수 있는 HTTP Endpoint를 간단하게 생성할 수 있다.
 
 #### 1.2. github.com/pkg/profile Package
 
+profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다.
+
 #### 1.3. Unit Test
 
-### 2. Profiling 종류
+Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다.
+
+### 2. Profile 종류
 
 #### 2.1. CPU
 
