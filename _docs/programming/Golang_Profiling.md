@@ -9,23 +9,61 @@ adsense: true
 
 Golang의 Profiling 기법을 정리한다.
 
-### 1. Profiling 방법
+### 1. Profiling 수행 방법
 
-Golang에서 이용가능한 Profiling 방벙을 정리한다.
+Golang에서 이용 가능한 Profiling 수행 방법을 정리한다.
 
 #### 1.1. net/http/pprof Package
 
-pprof Package는 Server와 같이 계속 동작중인 App의 Profiling을 위해서 이용되는 Package이다. pprof Package를 이용하면 App에 Profile을 얻을 수 있는 HTTP Endpoint를 간단하게 생성할 수 있다.
+net/http/pprof Package는 Server와 같이 계속 동작중인 App의 Profiling을 위해서 이용되는 Package이다. pprof Package를 이용하면 App에 Profile을 얻을 수 있는 HTTP Endpoint를 간단하게 생성할 수 있다.
 
-#### 1.2. github.com/pkg/profile Package
+{% highlight golang linenos %}
+package main
 
-profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다.
+import (
+    "http"
+	_ "net/http/pprof"
+    ...
+)
+
+func main() {
+    // Run http server with 8080 port
+	go func() {
+		http.ListenAndServe("localhost:8080", nil)
+	}()
+    ...
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 1] net/http/pprof Package Example</figcaption>
+</figure>
+
+[Code 1]은 net/http/pprof Package의 사용 방법을 나타내고 있다. net/http/pprof Package를 초기화 하고, http Package를 통해서 HTTP Server를 구동하면 된다.
+
+{% highlight golang linenos %}
+func init() {
+	http.HandleFunc("/debug/pprof/", Index)
+	http.HandleFunc("/debug/pprof/cmdline", Cmdline)
+	http.HandleFunc("/debug/pprof/profile", Profile)
+	http.HandleFunc("/debug/pprof/symbol", Symbol)
+	http.HandleFunc("/debug/pprof/trace", Trace)
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 2] net/http/pprof init Function</figcaption>
+</figure>
+
+[Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. 등록된 HTTP Endpoint 중에서 /debug/pprof/profile Endpoint를 통해서 Profile을 획득할 수 있다.
+
+#### 1.2. runtime/pprof Package
+
+runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다.
 
 #### 1.3. Unit Test
 
 Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다.
 
-### 2. Profile 종류
+### 2. Profile 종류, 분석
 
 #### 2.1. CPU
 
@@ -43,7 +81,6 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 
 * [https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
 * [https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz](https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz)
-* [https://github.com/pkg/profile](https://github.com/pkg/profile) 
 * [https://go.dev/doc/diagnostics](https://go.dev/doc/diagnostics)
 * [https://github.com/google/pprof](https://github.com/google/pprof)
 * [https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/)
