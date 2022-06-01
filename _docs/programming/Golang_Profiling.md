@@ -27,9 +27,9 @@ import (
 )
 
 func main() {
-    // Run http server with 8080 port
+    // Run http server with 6060 port
 	go func() {
-		http.ListenAndServe("localhost:8080", nil)
+		http.ListenAndServe("localhost:6060", nil)
 	}()
     ...
 }
@@ -53,7 +53,14 @@ func init() {
 <figcaption class="caption">[Code 2] net/http/pprof init() Function</figcaption>
 </figure>
 
-[Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. 등록된 HTTP Endpoint 중에서 /debug/pprof/profile Endpoint를 통해서 Profile을 획득할 수 있다.
+[Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. [Code 2]에는 나타나지 않지만 Index Handler 하위에도 다양한 Profile을 얻을 수 있는 Endpoint들이 존재한다. 다음의 Endpoint들에서 다음의 Profile들을 얻을 수 있다.
+
+* CPU : http://localhost:6060/debug/pprof/profile?seconds=30
+* Memory Heap : http://localhost:6060/debug/pprof/heap
+* Block : http://localhost:6060/debug/pprof/block
+* Thread Create : http://localhost:6060/debug/pprof/threadcreate
+* Goroutine : http://localhost:6060/debug/pprof/goroutine
+* Mutex : http://localhost:6060/debug/pprof/mutex
 
 #### 1.2. runtime/pprof Package
 
@@ -107,6 +114,8 @@ func main() {
 <figcaption class="caption">[Code 3] runtime/profile Package Example</figcaption>
 </figure>
 
+[Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile, 두 가지 Profile만 얻을 수 있다. CPU Profile을 얻기 위해서는 Profile의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profile의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
+
 #### 1.3. Unit Test
 
 Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다.
@@ -130,6 +139,7 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 * [https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
 * [https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz](https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz)
 * [https://go.dev/doc/diagnostics](https://go.dev/doc/diagnostics)
+* [https://pkg.go.dev/net/http/pprof](https://pkg.go.dev/net/http/pprof)
 * [https://github.com/google/pprof](https://github.com/google/pprof)
 * [https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/)
 * [https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18](https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18)
