@@ -120,17 +120,26 @@ func main() {
 
 Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다.
 
+{% highlight console %}
+# go test ./... -cpuprofile cpu.out -memprofile mem.out -blockprofile block.out -mutexprofile mutex.out
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] Test Profile Example</figcaption>
+</figure>
+
+Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다. [Console 1]은 Profile 생성과 함께 Test를 수행하는 예제를 나타내고 있다. CPU, Memory, Block, Mutex Profile을 얻을 수 있다.
+
 ### 2. Profile 종류, 분석
 
 #### 2.1. CPU
 
-#### 2.2. Heap
+#### 2.2. Memory Heap
 
-#### 2.3. Thread Create
+#### 2.3. Block
 
-#### 2.4. Goroutine
+#### 2.4. Thread Create
 
-#### 2.5. Block
+#### 2.5. Goroutine
 
 #### 2.6. Mutex
 
