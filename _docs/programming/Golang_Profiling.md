@@ -50,7 +50,7 @@ func init() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 2] net/http/pprof init Function</figcaption>
+<figcaption class="caption">[Code 2] net/http/pprof init() Function</figcaption>
 </figure>
 
 [Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. 등록된 HTTP Endpoint 중에서 /debug/pprof/profile Endpoint를 통해서 Profile을 획득할 수 있다.
@@ -58,6 +58,54 @@ func init() {
 #### 1.2. runtime/pprof Package
 
 runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다.
+
+{% highlight golang linenos %}
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"runtime"
+	"runtime/pprof"
+	"time"
+)
+
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file`")
+var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
+
+func main() {
+    flag.Parse()
+
+	// Set CPU profile
+    if *cpuprofile != "" {
+        f, err := os.Create(*cpuprofile)
+        if err != nil {
+            log.Fatal("could not create CPU profile: ", err)
+        }
+        if err := pprof.StartCPUProfile(f); err != nil {
+            log.Fatal("could not start CPU profile: ", err)
+        }
+        defer pprof.StopCPUProfile()
+    }
+
+	// Set memory (heap) profile
+    if *memprofile != "" {
+        f, err := os.Create(*memprofile)
+        if err != nil {
+            log.Fatal("could not create memory profile: ", err)
+        }
+        runtime.GC() // Get up-to-date statistics
+        if err := pprof.WriteHeapProfile(f); err != nil {
+            log.Fatal("could not write memory profile: ", err)
+        }
+        f.Close()
+    }
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 3] runtime/profile Package Example</figcaption>
+</figure>
 
 #### 1.3. Unit Test
 
@@ -85,3 +133,4 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 * [https://github.com/google/pprof](https://github.com/google/pprof)
 * [https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/)
 * [https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18](https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18)
+* [https://riptutorial.com/go/example/25406/basic-cpu-and-memory-profiling](https://riptutorial.com/go/example/25406/basic-cpu-and-memory-profiling)
