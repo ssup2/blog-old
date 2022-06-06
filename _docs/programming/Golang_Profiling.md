@@ -62,7 +62,7 @@ func init() {
 * Goroutine : http://localhost:6060/debug/pprof/goroutine
 * Mutex : http://localhost:6060/debug/pprof/mutex
 
-"seconds" Query String을 통해서 몇초동안 Profiling을 수행할지 설정할 수 있다.
+"seconds" Query String을 통해서 몇 초 동안 Profiling을 수행할지 설정할 수 있다.
 
 * seconds : http://localhost:6060/debug/pprof/profile?seconds=30
 
@@ -133,15 +133,25 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 
 Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다. [Console 1]은 Profile 생성과 함께 Test를 수행하는 예제를 나타내고 있다. CPU, Memory, Block, Mutex Profile을 얻을 수 있다.
 
-### 2. Profile 종류, 분석
+### 2. pprof
+
+{% highlight console %}
+# go tool pprof -http :8080 [Profile HTTP Endpoint]
+# go tool pprof -http :8080 [Profile File]
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] Run pprof with CPU profile</figcaption>
+</figure>
+
+얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http` Option을 같이 설정하면 Web Browser를 통해서 "localhost:8080"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다. [Console 1]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
+
+### 3. Profile 종류, 분석
 
 Profile 종류 및 분석은 아래의 예제 App을 통해서 진행한다. Profile은 net/http/pprof Package를 통해서 6060 Port를 통해서 노출되도록 설정되어 있으며, 부하를 주기 위한 다양한 함수들이 구동되도록 개발되어 있다.
 
 * Example App : [https://github.com/ssup2/golang-pprof-example](https://github.com/ssup2/golang-pprof-example)
 
-얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. "-http :8080" Option을 같이 설정하면 Web Browser를 통해서 "localhost:8080"에 접속하여 시각화된 Profile을 얻을 수 있다.
-
-#### 2.1. CPU
+#### 3.1. CPU
 
 {% highlight golang linenos %}
 package cpu
@@ -186,26 +196,30 @@ func increase2000(n int) int {
 # go tool pprof -http :8080 http://localhost:6060/debug/pprof/profile\?seconds\=30
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] Run pprof with CPU profile</figcaption>
+<figcaption class="caption">[Console 2] Run pprof with CPU profile</figcaption>
 </figure>
 
 CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 4]는 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 1]은 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
 
 ![[그림 1] CPU Profile Top]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Top.PNG){: width="700px"}
 
+[그림 1]은 CPU 사용률이 높은 함수를 순서대로 나타내고 있다.
+
 ![[그림 2] CPU Profile Graph]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Graph.PNG){: width="650px"}
 
-#### 2.2. Memory Heap
+[그림 2]는 CPU 사용률 및 함수 사이의 의존성을 나타내고 있다.
 
-#### 2.3. Block
+#### 3.2. Memory Heap
 
-#### 2.4. Thread Create
+#### 3.3. Block
 
-#### 2.5. Goroutine
+#### 3.4. Thread Create
 
-#### 2.6. Mutex
+#### 3.5. Goroutine
 
-### 3. 참조
+#### 3.6. Mutex
+
+### 4. 참조
 
 * [https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md](https://github.com/DataDog/go-profiler-notes/blob/main/guide/README.md)
 * [https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz](https://hackernoon.com/go-the-complete-guide-to-profiling-your-code-h51r3waz)
