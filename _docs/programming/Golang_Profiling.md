@@ -135,11 +135,11 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 
 ### 2. Profile 종류, 분석
 
-Profile 종류 및 분석은 다음의 예제 App을 통해서 진행한다. Profile은 net/http/pprof Package를 통해서 6060 Port를 통해서 노출되도록 설정되어 있으며, 부하를 주기 위한 다양한 함수들이 구동되도록 개발되어 있다.
+Profile 종류 및 분석은 아래의 예제 App을 통해서 진행한다. Profile은 net/http/pprof Package를 통해서 6060 Port를 통해서 노출되도록 설정되어 있으며, 부하를 주기 위한 다양한 함수들이 구동되도록 개발되어 있다.
 
 * Example App : [https://github.com/ssup2/golang-pprof-example](https://github.com/ssup2/golang-pprof-example)
 
-얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다.
+얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. "-http :8080" Option을 같이 설정하면 Web Browser를 통해서 "localhost:8080"에 접속하여 시각화된 Profile을 얻을 수 있다.
 
 #### 2.1. CPU
 
@@ -190,6 +190,10 @@ func increase2000(n int) int {
 </figure>
 
 CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 4]는 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 1]은 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
+
+![[그림 1] CPU Profile Top]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Top.PNG){: width="600px"}
+
+![[그림 2] CPU Profile Graph]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Graph.PNG){: width="600px"}
 
 #### 2.2. Memory Heap
 
