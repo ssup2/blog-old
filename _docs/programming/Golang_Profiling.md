@@ -221,7 +221,9 @@ CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 5]�
 
 ![[그림 1] CPU Profile Top]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Top.PNG){: width="700px"}
 
-[그림 1]은 CPU 사용률이 높은 함수를 순서대로 나타내고 있다.
+[그림 1]은 CPU 사용률이 높은 함수를 순서대로 나타내고 있다. Increase2000() 함수가 Increase1000() 함수에 비해서 2배더 증가 연산을 수행하는 만큼 Cum도 2배더 높은것을 확인할 수 있다. Increase2000(), Increase1000() 함수 모두 내부에서 함수를 호출하지 않기 때문에 각 함수의 Flat과 Cum이 동일한 것을 알 수 있다. 반면에 IncreaseInt() 함수와 IncreaseIntGoroutine() 함수 내부에서 실행되는 함수는 Goroutine은 별도의 연산을 수행하지 않고, Increase2000(), Increase1000() 함수에 의존하기 때문에 Flat은 매우 낮지만, Cum은 높은것을 확인할 수 있다.
+
+30초 동안의 CPU Profile을 얻었기 때문에 Profiling 중에 IncreaseInt() 함수와 IncreaseIntGoroutine() 함수 내부에 실행되는 함수는 별도의 Goroutine에서 각각 30초 동안 수행되된다. 따라서 전체 총 60초 동안 Goroutine이 수행되며, Increase2000(), Increase1000() 함수의 총 Cum이 약 60초인것을 확인할 수 있다.
 
 ![[그림 2] CPU Profile Graph]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Graph.PNG){: width="650px"}
 
