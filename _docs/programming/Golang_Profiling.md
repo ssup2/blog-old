@@ -156,15 +156,12 @@ func OutterFunc() {
 	i := 0      // step3
 	i++         // step4
 }
-
-func InnerFunc() {
-}
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Code 4] Flat, Cum Example</figcaption>
 </figure>
 
-pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과 **Cum**의 개념을 알고 있어야 한다. [Code 4]는 Flat과 Cum 설명을 위한 예제 Code를 나타내고 있다. Flat은 함수가 직접적으로 수행하는 Action의 부하를 나타낸다. 따라서 [Code 4]에서 Step3, Step4는 Flat에 포함된다. Cum은 함수가 실행되기 위한 모든 Action의 부하를 나타낸다. 다른 함수의 호출로 인해서 발생하는 부하도 Cum에 포함된다. 따라서 [Code 4]에서 Step1 ~ Step4가 Cum에 포함된다.
+pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과 **Cum**의 개념을 알고 있어야 한다. [Code 4]는 Flat과 Cum 설명을 위한 예제 Code를 나타내고 있다. Flat은 함수가 직접적으로 수행하는 Action의 부하를 나타낸다. 따라서 [Code 4]에서 OutterFunc() 함수의 Flat은 Step3, Step4만 포함된다. Cum은 함수가 실행되기 위한 모든 Action의 부하를 나타낸다. 다른 함수의 호출로 인해서 발생하는 부하도 Cum에 포함된다. 따라서 [Code 4]에서 OutterFunc() 함수의 Cum에는 Step1 ~ Step4가 포함된다.
 
 ### 3. Profile 종류, 분석
 
