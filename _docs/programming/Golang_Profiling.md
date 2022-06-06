@@ -135,6 +135,8 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 
 ### 2. pprof
 
+얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http [Port]` Option을 같이 설정하면 Web Browser를 통해서 "localhost:[Port]"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다. 
+
 {% highlight console %}
 # go tool pprof -http :8080 [Profile HTTP Endpoint]
 # go tool pprof -http :8080 [Profile File]
@@ -143,7 +145,7 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 <figcaption class="caption">[Console 1] Run pprof with CPU profile</figcaption>
 </figure>
 
-얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http` Option을 같이 설정하면 Web Browser를 통해서 "localhost:8080"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다. [Console 1]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
+[Console 1]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
 
 ### 3. Profile 종류, 분석
 
