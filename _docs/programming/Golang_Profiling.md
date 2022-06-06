@@ -135,7 +135,7 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 
 ### 2. pprof
 
-얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http [Port]` Option을 같이 설정하면 Web Browser를 통해서 "localhost:[Port]"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다. 
+얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http [Port]` Option을 같이 설정하면 Web Browser를 통해서 "localhost:[Port]"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다.
 
 {% highlight console %}
 # go tool pprof -http :8080 [Profile HTTP Endpoint]
@@ -146,6 +146,25 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 </figure>
 
 [Console 1]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
+
+#### 2.1. Flat, Cum
+
+{% highlight golang linenos %}
+func OutterFunc() {
+	InnerFunc() // step1
+	InnerFunc() // step2
+	i := 0      // step3
+	i++         // step4
+}
+
+func InnerFunc() {
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 4] Flat, Cum Example</figcaption>
+</figure>
+
+pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과 **Cum**의 개념을 알고 있어야 한다. [Code 4]는 Flat과 Cum 설명을 위한 예제 Code를 나타내고 있다. Flat은 함수가 직접적으로 수행하는 Action의 부하를 나타낸다. 따라서 [Code 4]에서 Step3, Step4는 Flat에 포함된다. Cum은 함수가 실행되기 위한 모든 Action의 부하를 나타낸다. 다른 함수의 호출로 인해서 발생하는 부하도 Cum에 포함된다. 따라서 [Code 4]에서 Step1 ~ Step4가 Cum에 포함된다.
 
 ### 3. Profile 종류, 분석
 
@@ -191,7 +210,7 @@ func increase2000(n int) int {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 4] CPU Profiling Example Code</figcaption>
+<figcaption class="caption">[Code 5] CPU Profiling Example Code</figcaption>
 </figure>
 
 {% highlight console %}
@@ -201,7 +220,7 @@ func increase2000(n int) int {
 <figcaption class="caption">[Console 2] Run pprof with CPU profile</figcaption>
 </figure>
 
-CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 4]는 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 1]은 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
+CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 5]는 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 1]은 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
 
 ![[그림 1] CPU Profile Top]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Top.PNG){: width="700px"}
 
