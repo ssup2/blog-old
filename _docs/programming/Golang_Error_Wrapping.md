@@ -11,6 +11,8 @@ Golang의 Error Wrapping 기법을 정리한다.
 
 ### 1. Golang Error Wrapping
 
+#### 1.1. with Standard errors Package
+
 {% highlight golang linenos %}
 
 {% endhighlight %}
@@ -18,9 +20,12 @@ Golang의 Error Wrapping 기법을 정리한다.
 <figcaption class="caption">[Code 1] Golang Error Wrapping</figcaption>
 </figure>
 
+#### 1.2. with github.com/pkg/errors Package
+
 ### 2. 참조
 
 * [https://earthly.dev/blog/golang-errors/](https://earthly.dev/blog/golang-errors/)
 * [https://gosamples.dev/check-error-type/](https://gosamples.dev/check-error-type/)
 * [https://stackoverflow.com/questions/39121172/how-to-compare-go-errors](https://stackoverflow.com/questions/39121172/how-to-compare-go-errors)
+* [https://www.popit.kr/golang-error-stack-trace%EC%99%80-%EB%A1%9C%EA%B9%85/](https://www.popit.kr/golang-error-stack-trace%EC%99%80-%EB%A1%9C%EA%B9%85/)
 * [https://dev-yakuza.posstree.com/ko/golang/error-handling/](https://dev-yakuza.posstree.com/ko/golang/error-handling/)
