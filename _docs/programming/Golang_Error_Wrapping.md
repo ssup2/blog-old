@@ -79,7 +79,7 @@ Golang의 Error Wrapping은 의미 그대로 Error를 다른 Error로 감싸는 
 {% highlight golang linenos %}
 package main
 
-import (
+import (e
 	"errors"
 	"fmt"
 )
@@ -187,7 +187,7 @@ myError false
 <figcaption class="caption">[Console 2] Code 2 Output</figcaption>
 </figure>
 
-Golang 1.13 이후 Version 부터 **fmt.Errorf()** 함수를 통해서 Error Wrapping이 가능하며, Wrapping된 Error는 **errors.Unwrap()** 함수를 통해서 다시 얻을 수 있다. 또한 Wrapping된 Error의 비교는 **errors.Is()** 함수를 통해서 가능하며, Wrapping된 Error의 Assertion은 **errors.As()** 함수를 통해서 가능하다. [Code 2], [Console 2]는 Error Wrapping을 활용하는 예제를 나타내고 있다.
+Golang 1.13 이후 Version 부터 **fmt.Errorf()** 함수를 통해서 Error Wrapping이 가능하며, Wrapping된 Error는 **errors.Unwrap()** 함수를 통해서 다시 얻을 수 있다. 또한 Wrapping된 Error의 비교는 **errors.Is()** 함수를 통해서 가능하며, Wrapping된 Error의 Assertion은 **errors.As()** 함수를 통해서 가능하다. 여기서 fmt Package와 errors Package는 모두 Golang의 Standard Package이다. [Code 2], [Console 2]는 Standard Package를 활용하여 Error Wrapping을 이용하는 예제를 나타내고 있다.
 
 * 37,44: fmt.Errorf() 함수를 통해서 Error Wrapping을 수행한다. 이 경우 반드시 `%w` 문법을 통해서 Error Wrapping을 수행해야 한다. innerError Error가 middleFunc(), outerFunc() 함수를 통해서 2번 Wrapping되는 것을 확인할 수 있다.
 * 54~57: Wrapping된 Error를 errors.Unwrap() 함수를 통해서 하나씩 Unwrapping하며 출력한다.
@@ -296,7 +296,7 @@ func main() {
 --- Cause ---
 cause: innerError
 
---- Stack ---
+--- Stack Trace ---
 innerError
 middleError
 main.middleFunc
@@ -330,6 +330,8 @@ myError false
 <figure>
 <figcaption class="caption">[Console 3] Code 3 Output</figcaption>
 </figure>
+
+Golang의 Standard Package를 활용하여 Error Wrapping을 수행할 경우 단점은 Error가 Code 실제 어디서 발생하는 파악이 어렵다는 단점을 가지고 있다. 이러한 단점은 github.com/pkg/errors Package 이용을 통해서 극복할 수 있다. [Code 3]과 [Console 3]은 github.com/pkg/errors Package를 활용하여 Error Wrapping을 이용하는 모습을 나타내고 있다.
 
 ### 2. 참조
 
