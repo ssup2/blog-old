@@ -334,7 +334,8 @@ myError false
 Golang의 Standard Package를 활용하여 Error Wrapping을 수행할 경우 단점은 Error가 Code 어디서 발생하는 파악이 어렵다는 단점을 가지고 있다. 이러한 단점은 github.com/pkg/errors Package 이용을 통해서 극복할 수 있다. [Code 3]과 [Console 3]은 github.com/pkg/errors Package를 활용하여 Error Wrapping을 이용하는 모습을 나타내고 있다. Standard Package와 사용성은 큰 차이가 없지만 약간의 차이점이 존재한다. github.com/pkg/errors Package를 이용할 경우 Stack Trace 출력이 가능하기 때문에 Error가 Code 어디서 발생하였는지 쉽게 파악이 가능하다.
 
 * 38,45: github.com/pkg/errors.Wrap() 함수를 통해서 Wrapping을 수행한다. Wrapping을 위해서 fmt Package를 이용할 필요가 없다.
-* 56 : github.com/pkg/errors Package에서는 Wrapping된 Error를 하나씩 Unwrapping 하는 함수를 제공하지 않는다. 대신에 가장 내부에 존재하는 Error를 반환하는 Cause() 함수를 제공한다. 참고로 github.com/pkg/errors.Unwrap() 함수가 존재하는데, github.com/pkg/errors.Wrap() 함수를 통해서 Wrapping한 Error가 아니라 fmt Package를 활용하여 Wrapping한 Error를 Unwrapping 하는 함수이다.
+* 56: github.com/pkg/errors Package에서는 Wrapping된 Error를 하나씩 Unwrapping 하는 함수를 제공하지 않는다. 대신에 가장 내부에 존재하는 Error를 반환하는 Cause() 함수를 제공한다. 참고로 github.com/pkg/errors.Unwrap() 함수가 존재하는데, github.com/pkg/errors.Wrap() 함수를 통해서 Wrapping한 Error가 아니라 fmt Package를 활용하여 Wrapping한 Error를 Unwrapping 하는 함수이다.
+* 60: fmt.Printf() 함수와 함께 `%+v` 문법을 이용하여 Wrapping된 Error를 출력하면 Stack Trace도 같이 출력된다.
 
 ### 2. 참조
 
