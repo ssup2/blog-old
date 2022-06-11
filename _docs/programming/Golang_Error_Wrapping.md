@@ -11,14 +11,35 @@ Golang의 Error Wrapping 기법을 정리한다.
 
 ### 1. Golang Error Wrapping
 
-#### 1.1. with Standard errors Package
-
 {% highlight golang linenos %}
+package main
 
+import (
+	"fmt"
+)
+
+func outterFunc() error {
+	if err := innerFunc(); err != nil {
+		return fmt.Errorf("outterError")
+	}
+	return nil
+}
+
+func innerFunc() error {
+	return fmt.Errorf("innerError")
+}
+
+func main() {
+	if err := outterFunc(); err != nil {
+		fmt.Printf("error: %v\n", err)  // error: outterError
+	}
+}
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 1] Golang Error Wrapping</figcaption>
+<figcaption class="caption">[Code 1] Golang Error Example</figcaption>
 </figure>
+
+#### 1.1. with Standard errors Package
 
 #### 1.2. with github.com/pkg/errors Package
 
