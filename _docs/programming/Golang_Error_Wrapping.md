@@ -70,6 +70,10 @@ error: outerError
 <figcaption class="caption">[Console 1] Code 1 Output</figcaption>
 </figure>
 
+Golang의 Error Wrapping은 의미 그대로 Error를 다른 Error로 감싸는 기법이다. Error Wrapping을 통해서 내부 함수가 반환하는 Error를 외부 함수에서도 판별할 수 있게 된다. [Code 1]과 [Console 1]은 Golang에서 Error Wrapping 없이 Error를 처리하는 일반적인 방법을 나타내고 있다. main() 함수에서는 outerFunc() 함수를 호출하면 outerFunc(), middleFunc(), innerFunc() 함수 순서대로 호출이 발생하고, innerFunc() 함수에서 Error를 Return하기 때문에, outerFunc() 함수도 Error를 반환 한다.
+
+문제는 main() 함수에서는 outerFunc() 함수가 반환하는 "outerErr" Error만 확인이 가능할 뿐, middleFunc() 또는 innerFunc() 함수가 반환하는 Error의 내용을 확인할 수가 없다. 이와 같은 문제를 해결하기 위해서 가장 떠오르기 쉬운 방법은, 내부 함수가 반환하는 Error에 따라서 외부 함수의 Error도 달라지게 구현하는 방법이다. 문제는 이렇게 구현하면 외부 함수의 Error 처리 부분이 복잡해 진다. 이러한 문제는 Error Wrapping 기법을 통해서 쉽게 해결이 가능하다.
+
 #### 1.1. with Standard errors Package
 
 {% highlight golang linenos %}
@@ -182,6 +186,13 @@ myError false
 <figure>
 <figcaption class="caption">[Console 2] Code 2 Output</figcaption>
 </figure>
+
+Golang 1.13 이후 Version 부터 **fmt.Errorf()** 함수를 통해서 Error Wrapping이 가능하며, Wrapping된 Error는 **errors.Unwrap()** 함수를 통해서 다시 얻을 수 있다. 또한 Wrapping된 Error의 비교는 **errors.Is()** 함수를 통해서 가능하며, Wrapping된 Error의 Assertion은 **errors.As()** 함수를 통해서 가능하다. [Code 2], [Console 2]는 Error Wrapping을 활용하는 예제를 나타내고 있다.
+
+* 37,44: fmt.Errorf() 함수를 통해서 Error Wrapping을 수행한다. 이 경우 반드시 `%w` 문법을 통해서 Error Wrapping을 수행해야 한다. innerError Error가 middleFunc(), outerFunc() 함수를 통해서 2번 Wrapping되는 것을 확인할 수 있다.
+* 54~57: Wrapping된 Error를 errors.Unwrap() 함수를 통해서 하나씩 Unwrapping하며 출력한다.
+* 60~70: Wrapping된 Error를 errors.Is() 함수를 통해서 비교한다. outerFunc() 함수의 Error 내부에는 innerError Error가 존재하기 때문에, 61 Line의 결과는 True가 된다. 반면에 outerFunc() 함수의 Error 내부에는 myError Error가 존재하지 않기 때문에, 66 Line의 결과는 False가 된다.
+* 73~85: outerErr Error를 errors.As() 함수를 통해서 Assertion을 수행한다. outerFunc() 함수의 Error 내부에는 innerError Error가 존재하기 때문에, 75 Line의 결과는 True가 된다. 반면에 outerFunc() 함수의 Error 내부에는 myError Error가 존재하지 않기 때문에, 78 Line의 결과는 False가 된다.
 
 #### 1.2. with github.com/pkg/errors Package
 
