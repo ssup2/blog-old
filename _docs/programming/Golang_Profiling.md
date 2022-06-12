@@ -11,11 +11,9 @@ Golang의 Profiling 기법을 정리한다.
 
 ### 1. Profiling 수행 방법
 
-Golang에서 이용 가능한 Profiling 수행 방법을 정리한다. Profiling을 통해서 함수별 Resource(CPU, Memory, Mutex, Goroutine, Thread)의 사용률을 얻을수 있다.
+Golang에서 이용 가능한 Profiling 수행 방법을 정리한다. Profiling을 통해서 함수별 Resource (CPU, Memory, Mutex, Goroutine, Thread) 사용률을 얻을수 있다.
 
 #### 1.1. net/http/pprof Package
-
-net/http/pprof Package는 Server와 같이 계속 동작중인 App의 Profiling을 위해서 이용되는 Package이다. pprof Package를 이용하면 App에 Profile을 얻을 수 있는 HTTP Endpoint를 간단하게 생성할 수 있다.
 
 {% highlight golang linenos %}
 package main
@@ -38,7 +36,7 @@ func main() {
 <figcaption class="caption">[Code 1] net/http/pprof Package Example</figcaption>
 </figure>
 
-[Code 1]은 net/http/pprof Package의 사용 방법을 나타내고 있다. net/http/pprof Package를 초기화 하고, http Package를 통해서 HTTP Server를 구동하면 된다.
+net/http/pprof Package는 Server와 같이 계속 동작중인 App의 Profiling을 위해서 이용되는 Package이다. pprof Package를 이용하면 App에 Profile을 얻을 수 있는 HTTP Endpoint를 간단하게 생성할 수 있다. [Code 1]은 net/http/pprof Package의 사용 방법을 나타내고 있다. net/http/pprof Package를 초기화 하고, http Package를 통해서 HTTP Server를 구동하면 된다.
 
 {% highlight golang linenos %}
 func init() {
@@ -53,7 +51,7 @@ func init() {
 <figcaption class="caption">[Code 2] net/http/pprof init() Function</figcaption>
 </figure>
 
-[Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. [Code 2]에는 나타나지 않지만 Index Handler 하위에도 다양한 Profile을 얻을 수 있는 Endpoint들이 존재한다. 다음의 Endpoint들에서 다음의 Profile들을 얻을 수 있다.
+[Code 2]는 net/http/pprof Package 초기화시 호출되는 init() 함수를 나타내고 있다. 5개의 HTTP Endpoint를 HTTP Server에 등록하는 것을 확인할 수 있다. [Code 2]에는 나타나지 않지만 Index Handler 하위에도 다양한 Profile을 얻을 수 있는 Endpoint들이 존재한다. 다음의 Endpoint들을 대상으로 "Get" 요청을 통해서 다음의 Profile들을 얻을 수 있다.
 
 * CPU : http://localhost:6060/debug/pprof/profile
 * Memory Heap : http://localhost:6060/debug/pprof/heap
@@ -66,9 +64,7 @@ func init() {
 
 * seconds : http://localhost:6060/debug/pprof/profile?seconds=30
 
-#### 1.2. runtime/pprof Package
-
-runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다.
+#### 1.3. runtime/pprof Package
 
 {% highlight golang linenos %}
 package main
@@ -118,11 +114,11 @@ func main() {
 <figcaption class="caption">[Code 3] runtime/profile Package Example</figcaption>
 </figure>
 
-[Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile, 두 가지 Profile만 얻을 수 있다. CPU Profile을 얻기 위해서는 Profile의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profile의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
+runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다. [Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile, 두 가지 Profile만 얻을 수 있다.
+
+CPU Profile을 얻기 위해서는 Profile의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profile의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
 
 #### 1.3. Unit Test
-
-Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다.
 
 {% highlight console %}
 # go test ./... -cpuprofile cpu.out -memprofile mem.out -blockprofile block.out -mutexprofile mutex.out
@@ -132,6 +128,61 @@ Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하�
 </figure>
 
 Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다. [Console 1]은 Profile 생성과 함께 Test를 수행하는 예제를 나타내고 있다. CPU, Memory, Block, Mutex Profile을 얻을 수 있다.
+
+#### 1.4. github.com/google/gops Package & gops CLI
+
+{% highlight golang linenos %}
+package main
+
+import (
+	"github.com/google/gops/agent"
+)
+
+func main() {
+    // Run gops agent
+	go func() {
+		agent.Listen(agent.Options{})
+	}()
+	...
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Code 3] github.com/google/gops Package Example</figcaption>
+</figure>
+
+{% highlight console %}
+# gops
+23469 23364 gopls  go1.18.1 /root/go/bin/gopls
+23846 23395 go     go1.18.1 /usr/local/go/bin/go
+23968 23846 main   go1.18.1 /tmp/go-build306237982/b001/exe/main
+24262 23995 gops   go1.18.1 /root/go/bin/gops
+
+# gops pprof-cpu 27081
+Profiling CPU now, will take 30 secs...gops
+Profiling CPU now, will take 30 secs...
+Profile dump saved to: /tmp/cpu_profile2976012992
+Binary file saved to: /tmp/binary3401790069
+File: binary3401790069
+Type: cpu
+Time: Jun 12, 2022 at 11:44pm (KST)
+Duration: 30.18s, Total samples = 85.70s (283.97%)
+Entering interactive mode (type "help" for commands, "o" for options)
+(pprof) 
+
+# gops pprof-heap 27081
+Profile dump saved to: /tmp/heap_profile2558761742
+Binary file saved to: /tmp/binary2141405164
+File: binary2141405164
+Type: inuse_space
+Time: Jun 12, 2022 at 11:48pm (KST)
+Entering interactive mode (type "help" for commands, "o" for options)
+(pprof) 
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] gops CLI Example</figcaption>
+</figure>
+
+github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Profiling을 수행할 수 있다. CPU와 Memory Heap Profile만 얻을 수 있다. [Code 3]은 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 gops 명령어를 통해서 PID를 조회한 다음 gops pprof-cpu, gops pprof-heap 명령어를 통해서 CPU, Memory Profile 획득 및 pprof를 실행한다.
 
 ### 2. pprof
 
@@ -246,6 +297,7 @@ CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 5]�
 * [https://go.dev/doc/diagnostics](https://go.dev/doc/diagnostics)
 * [https://pkg.go.dev/net/http/pprof](https://pkg.go.dev/net/http/pprof)
 * [https://github.com/google/pprof](https://github.com/google/pprof)
+* [https://github.com/google/gops](https://github.com/google/gops)
 * [https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/](https://jvns.ca/blog/2017/09/24/profiling-go-with-pprof/)
 * [https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18](https://medium.com/a-journey-with-go/go-how-does-gops-interact-with-the-runtime-778d7f9d7c18)
 * [https://riptutorial.com/go/example/25406/basic-cpu-and-memory-profiling](https://riptutorial.com/go/example/25406/basic-cpu-and-memory-profiling)
