@@ -11,7 +11,7 @@ Golang의 Profiling 기법을 정리한다.
 
 ### 1. Profiling 수행 방법
 
-Golang에서 이용 가능한 Profiling 수행 방법을 정리한다.
+Golang에서 이용 가능한 Profiling 수행 방법을 정리한다. Profiling을 통해서 함수별 Resource(CPU, Memory, Mutex, Goroutine, Thread)의 사용률을 얻을수 있다.
 
 #### 1.1. net/http/pprof Package
 
