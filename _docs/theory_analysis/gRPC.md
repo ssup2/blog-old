@@ -17,6 +17,8 @@ gRPC는 다양한 환경에서 구동 가능한 RPC (Remote Procedure Call) Fram
 
 #### 1.1. ProtoBuf
 
+ProtoBuf는 Server와 Client 사이에서 구조화된 Data를 쉽게 주고 받을수 있도록, Interface를 정의하고 구조화된 Data를 Serialization하는 역할을 수행한다. REST API에서 Data의 형태로 이용되는 JSON을 대체한다고 이해하면 된다. 다만 JSON과 다르게 ProtoBuf는 Data를 Text 형태가 아닌 Binary 형태로 변환한다.
+
 {% highlight text %}
 message Person {
   string name = 1;
@@ -39,11 +41,11 @@ message Person {
 <figcaption class="caption">[파일 1] addressbook.proto </figcaption>
 </figure>
 
-ProtoBuf는 Server와 Client 사이에서 구조화된 Data를 쉽게 주고 받을수 있도록, Interface를 정의하고 구조화된 Data를 Serialization하는 역할을 수행한다. [파일 1]은 구조화된 Data인 Person Data를 ProtoBuf 규격에 맞게 저장하고 있는 .proto 파일을 나타내고 있다. ProtoBuf는 .proto 파일을 컴파일하여 gRPC Server와 gRPC Client에서 이용할 수 있는 Code를 생성한다. 생성된 Code를 이용하여 Server와 Client는 gRPC를 수행한다.
+[파일 1]은 구조화된 Data인 Person Data를 ProtoBuf 규격에 맞게 저장하고 있는 .proto 파일을 나타내고 있다. ProtoBuf는 .proto 파일을 컴파일하여 gRPC Server와 gRPC Client에서 이용할 수 있는 Code를 생성한다. 생성된 Code를 이용하여 Server와 Client는 gRPC를 수행한다.
 
 #### 1.2. vs HTTP/1.1 + JSON
 
-gRPC가 현재 주목받는 가장큰 이유는 기존의 HTTP/1.1 + JSON Protocol보다 빠르기 때문이다. HTTP/1.1과 JSON은 Text Protocol인 만큼 성능면에서는 불리하다. gRPC에서 이용하는 HTTP/2와 ProtoBuf는 Binray Protocol인만큼 상대적을 적은양의 Packet을 주고 받는다. 또한 gRPC는 HTTP/2에서 지원하는 Connection Multiplexing, Server/Client Streaming을 이용하여 효율성을 좀더 끌어 올리고 있다.
+gRPC가 현재 주목받는 가장큰 이유는 기존의 HTTP/1.1 + JSON Protocol보다 빠르기 때문이다. HTTP/1.1과 JSON은 Text Protocol인 만큼 성능면에서는 불리하다. gRPC에서 이용하는 HTTP/2와 ProtoBuf는 Binray Protocol인 만큼 상대적을 적은양의 Packet을 주고 받는다. 또한 gRPC는 HTTP/2에서 지원하는 Connection Multiplexing, Server/Client Streaming을 이용하여 효율성을 좀더 끌어 올리고 있다.
 
 ### 2. 참조
 
