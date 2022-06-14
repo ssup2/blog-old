@@ -64,18 +64,16 @@ func init() {
 
 * seconds : http://localhost:6060/debug/pprof/profile?seconds=30
 
-#### 1.3. runtime/pprof Package
+#### 1.2. runtime/pprof Package
 
 {% highlight golang linenos %}
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
-	"net/http"
 	"runtime"
 	"runtime/pprof"
-	"time"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file`")
@@ -108,6 +106,7 @@ func main() {
         }
         f.Close()
     }
+	...
 }
 {% endhighlight %}
 <figure>
@@ -147,7 +146,7 @@ func main() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 3] github.com/google/gops Package Example</figcaption>
+<figcaption class="caption">[Code 4] github.com/google/gops Package Example</figcaption>
 </figure>
 
 {% highlight console %}
@@ -157,7 +156,7 @@ func main() {
 23968 23846 main   go1.18.1 /tmp/go-build306237982/b001/exe/main
 24262 23995 gops   go1.18.1 /root/go/bin/gops
 
-# gops pprof-cpu 27081
+# gops pprof-cpu 23968
 Profiling CPU now, will take 30 secs...gops
 Profiling CPU now, will take 30 secs...
 Profile dump saved to: /tmp/cpu_profile2976012992
@@ -169,7 +168,7 @@ Duration: 30.18s, Total samples = 85.70s (283.97%)
 Entering interactive mode (type "help" for commands, "o" for options)
 (pprof) 
 
-# gops pprof-heap 27081
+# gops pprof-heap 23968
 Profile dump saved to: /tmp/heap_profile2558761742
 Binary file saved to: /tmp/binary2141405164
 File: binary2141405164
@@ -179,10 +178,10 @@ Entering interactive mode (type "help" for commands, "o" for options)
 (pprof) 
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] gops CLI Example</figcaption>
+<figcaption class="caption">[Console 2] gops CLI Example</figcaption>
 </figure>
 
-github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Profiling을 수행할 수 있다. CPU와 Memory Heap Profile만 얻을 수 있다. [Code 3]은 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 gops 명령어를 통해서 PID를 조회한 다음 gops pprof-cpu, gops pprof-heap 명령어를 통해서 CPU, Memory Profile 획득 및 pprof를 실행한다.
+github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Profiling을 수행할 수 있다. CPU와 Memory Heap Profile만 얻을 수 있다. [Code 4]는 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 [Console 2]의 내용과 같이 gops 명령어를 통해서 PID를 조회한 다음 gops pprof-cpu, gops pprof-heap 명령어를 통해서 CPU, Memory Profile 획득 및 pprof를 실행한다.
 
 ### 2. pprof
 
@@ -193,10 +192,10 @@ github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계�
 # go tool pprof -http :8080 [Profile File]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] Run pprof with CPU profile</figcaption>
+<figcaption class="caption">[Console 3] Run pprof with CPU profile</figcaption>
 </figure>
 
-[Console 1]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
+[Console 3]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
 
 #### 2.1. Flat, Cum
 
@@ -209,10 +208,10 @@ func OutterFunc() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 4] Flat, Cum Example</figcaption>
+<figcaption class="caption">[Code 5] Flat, Cum Example</figcaption>
 </figure>
 
-pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과 **Cum**의 개념을 알고 있어야 한다. [Code 4]는 Flat과 Cum 설명을 위한 예제 Code를 나타내고 있다. Flat은 함수가 직접적으로 수행하는 Action의 부하를 나타낸다. 따라서 [Code 4]에서 OutterFunc() 함수의 Flat은 Step3, Step4만 포함된다. Cum은 함수가 실행되기 위한 모든 Action의 부하를 나타낸다. 다른 함수의 호출로 인해서 발생하는 부하도 Cum에 포함된다. 따라서 [Code 4]에서 OutterFunc() 함수의 Cum에는 Step1 ~ Step4가 포함된다.
+pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과 **Cum**의 개념을 알고 있어야 한다. [Code 4]는 Flat과 Cum 설명을 위한 예제 Code를 나타내고 있다. Flat은 함수가 직접적으로 수행하는 Action의 부하를 나타낸다. 따라서 [Code 4]에서 OutterFunc() 함수의 Flat은 Step3, Step4만 포함된다. Cum은 함수가 실행되기 위한 모든 Action의 부하를 나타낸다. 다른 함수의 호출로 인해서 발생하는 부하도 Cum에 포함된다. 따라서 [Code 5]에서 OutterFunc() 함수의 Cum에는 Step1 ~ Step4가 포함된다.
 
 ### 3. Profile 종류, 분석
 
@@ -258,17 +257,17 @@ func increase2000(n int) int {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 5] CPU Profiling Example Code</figcaption>
+<figcaption class="caption">[Code 6] CPU Profiling Example Code</figcaption>
 </figure>
 
 {% highlight console %}
 # go tool pprof -http :8080 http://localhost:6060/debug/pprof/profile\?seconds\=30
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 2] Run pprof with CPU profile</figcaption>
+<figcaption class="caption">[Console 4] Run pprof with CPU profile</figcaption>
 </figure>
 
-CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 5]는 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 1]은 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
+CPU Profile을 통해서 함수별 CPU 사용률을 얻을 수 있다. [Code 6]은 CPU Profiling을 위한 예제 Code를 나타내고 있고, [Console 4]는 Example App을 통해서 30초 동안의 CPU Profile을 얻은 다음 pprof를 구동하는 모습을 나타내고 있다.
 
 ![[그림 1] CPU Profile Top]({{site.baseurl}}/images/programming/Golang_Profiling/Profile_CPU_Top.PNG){: width="700px"}
 
