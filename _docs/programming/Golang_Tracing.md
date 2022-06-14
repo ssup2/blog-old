@@ -88,8 +88,10 @@ func main() {
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Code 3] runtime/profile Package Example</figcaption>
+<figcaption class="caption">[Code 3] runtime/trace Package Example</figcaption>
 </figure>
+
+runtime/trace Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Tracing을 위해서 이용되는 Package이다. [Code 3]은 runtime/trace Package의 예제를 나타내고 있다. Trace를 얻기 위해서는 Tracing의 시작 부분에서 Start() 함수를 호출하고, Profile의 끝 부분에서 StopC() 함수를 호출하면 된다.
 
 #### 1.3. Unit Test
 
@@ -140,6 +142,8 @@ Trace dump saved to: /tmp/trace2991957244
 <figure>
 <figcaption class="caption">[Console 2] gops CLI Example</figcaption>
 </figure>
+
+github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Tracing을 수행할 수 있다. [Code 4]는 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 [Console 2]의 내용과 같이 gops 명령어를 통해서 PID를 조회한 다음 gops trace 명령어를 통해서 Trace 획득 및 pprof를 실행한다.
 
 ### 2. pprof
 

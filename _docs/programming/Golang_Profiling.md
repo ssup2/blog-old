@@ -115,7 +115,7 @@ func main() {
 
 runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다. [Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile, 두 가지 Profile만 얻을 수 있다.
 
-CPU Profile을 얻기 위해서는 Profile의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profile의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
+CPU Profile을 얻기 위해서는 Profiling의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profiling의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
 
 #### 1.3. Unit Test
 
