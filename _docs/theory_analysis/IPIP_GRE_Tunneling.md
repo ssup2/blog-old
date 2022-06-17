@@ -25,12 +25,14 @@ IP-in-IP는 IP기반 Tunneling 기법이다. [그림 1]은 IP-in-IP의 Header를
 
 GRE(Generic Routing Encapsulation)는 IP-in-IP와 유사한 방식의 Tunneling Protocol이다. IP-in-IP와 동일하게 원본 Packet에 Outer IP Header를 붙여 Tunneling을 수행한다. IP-in-IP와의 차이점은 원본 IP Header와 Outer IP Header 사이에 **GRE Header**가 추가된다는 점이다. [그림 3]은 GRE Header를 나타내고 있다.
 
-* C : Checksum Bit이며 1일경우 Checksum을 이용한다.
-* K : Key Bit이며 1일경우 Key를 이용한다.
-* S : Sequence Number Bit이며 1일경우 Sequence Number를 이용한다.
+* C : Checksum Bit이며 1일 경우 Checksum을 이용한다.
+* K : Key Bit이며 1일 경우 Key를 이용한다.
+* S : Sequence Number Bit이며 1일 경우 Sequence Number를 이용한다.
+* Checksum : Checksum을 나타낸다.
 * Version : GRE Version을 나타낸다.
-* Protocol Type : 캡슐화된 Packet의 Ethertype을 나타낸다.
-* Key : 필요에 따라 정보를 저장한다.
+* Protocol Type : 캡슐화된 Packet의 Ether Type을 나타낸다.
+* Key : 필요에 따른 Custom 정보를 저장한다.
+* Sequence Number : Sequence 번호를 나타낸다.
 
 GRE Header를 바탕으로 IP-in-IP 보다 좀더 많은 기능을 지원한다. 원본 Packet이 UDP를 이용하더라도 Sequence Number와 Checksum을 이용하여 Packet의 무결성을 검사할 수 있다. 또한 Key값을 이용하여 Packet의 보안을 향상시킬수 있다. IP-in-IP가 지원하지 않는 Multicast도 지원한다.
 
