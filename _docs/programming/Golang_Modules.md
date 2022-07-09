@@ -11,7 +11,7 @@ Golang에서 Package Dependency를 관리하는 기법인 Module을 실습을 �
 
 ### 1. Golang Module
 
-Module은 Package의 집합을 의미한다. 이러한 Module을 관리하는 기능이 **Golang 1.11** 이후부터는 포함되어 있다. Golang은 Module 관리 기능을 이용하여 Package Dependency를 관리한다. Golang Module을 이용하면 Golang 개발자는 더이상 Golang Code를 $GOPATH/src Directory에 두지 않아도 된다. Golang 1.11 Version 이전에는 vgo, dep 같은 별도의 Tool을 이용하여 Package Dependency를 관리하였다.
+Module은 Package의 집합을 의미한다. 이러한 Module을 관리하는 기능이 **Golang 1.11** 이후부터는 포함되어 있다. Golang은 Module 관리 기능을 이용하여 Package Dependency를 관리한다. Golang Module을 이용하면 Golang 개발자는 더이상 Golang Code를 $GOPATH/src Directory에 두지 않아도 된다. Golang 1.11 Version 이전에는 vgo, dep 같은 별도의 Tool을 이용하여 Package Dependency를 관리했었다.
 
 #### 1.1. Module 생성
 
