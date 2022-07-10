@@ -154,10 +154,22 @@ Trace dump saved to: /tmp/trace2991957244
 
 github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Tracing을 수행할 수 있다. [Code 4]는 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키는것을 확인할 수 있다. 이후에 [Console 3]의 내용과 같이 gops 명령어를 통해서 PID를 조회한 다음 gops trace 명령어를 통해서 Trace 획득 및 pprof를 실행한다.
 
-### 2. Trace
+### 2. trace CLI
 
-### 3. Trace 분석 
+{% highlight console %}
+# go tool trace trace.out
+2022/07/10 23:38:41 Parsing trace...
+2022/07/10 23:38:50 Splitting trace...
+2022/07/10 23:38:59 Opening browser. Trace viewer is listening on http://127.0.0.1:36181
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 4] trace CLI Example</figcaption>
+</figure>
 
-### 4. 참조
+얻은 Profile은 Golang 설치시 같이 설치되는 trace CLI를 통해서 시각화가 가능하다. [Console 4]는 trace CLI의 사용법을 나타내고 있다. Trace 추출을 위해서 이용한 App은 아래의 예제 Code를 이용하였다.
+
+* Example App : [https://github.com/ssup2/golang-tracing-example](https://github.com/ssup2/golang-tracing-example)
+
+### 3. 참조
 
 * [https://pkg.go.dev/cmd/trace](https://pkg.go.dev/cmd/trace)
