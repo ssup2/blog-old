@@ -40,9 +40,9 @@ net/http/pprof Package는 Server와 같이 계속 동작중인 App의 Profiling�
 
 {% highlight golang linenos %}
 func init() {
-	http.HandleFunc("/debug/pprof/", Index)
+	http.HandleFunc("/debug/pprof/", Index) // Profile Endpoint for Heap, Block, ThreadCreate, Goroutine, Mutex
 	http.HandleFunc("/debug/pprof/cmdline", Cmdline)
-	http.HandleFunc("/debug/pprof/profile", Profile)
+	http.HandleFunc("/debug/pprof/profile", Profile) // Profile Endpoint for CPU
 	http.HandleFunc("/debug/pprof/symbol", Symbol)
 	http.HandleFunc("/debug/pprof/trace", Trace)
 }
@@ -60,9 +60,23 @@ func init() {
 * Goroutine : http://localhost:6060/debug/pprof/goroutine
 * Mutex : http://localhost:6060/debug/pprof/mutex
 
-"seconds" Query String을 통해서 몇 초 동안 Profiling을 수행할지 설정할 수 있다.
+모든 HTTP Endpoint에 **seconds** Query String를 이용하면 몇 초 동안 Profiling을 수행할지 설정할 수 있다.
 
 * seconds : http://localhost:6060/debug/pprof/profile?seconds=30
+
+{% highlight console %}
+# curl http://localhost:6060/debug/pprof/profile\?seconds\=30 --output cpu.prof
+# curl http://localhost:6060/debug/pprof/heap\?seconds\=30 --output heap.prof
+# curl http://localhost:6060/debug/pprof/block\?seconds\=30 --output heap.prof
+# curl http://localhost:6060/debug/pprof/threadcreate\?seconds\=30 --output heap.prof
+# curl http://localhost:6060/debug/pprof/goroutine\?seconds\=30 --output heap.prof
+# curl http://localhost:6060/debug/pprof/mutex\?seconds\=30 --output mutex.prof
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Console 1] Get Profile File Example</figcaption>
+</figure>
+
+[Console 1]은 HTTP Endpoint를 활용하여 Profile을 얻는 예제를 나타내고 있다.
 
 #### 1.2. runtime/pprof Package
 
@@ -113,7 +127,7 @@ func main() {
 <figcaption class="caption">[Code 3] runtime/profile Package Example</figcaption>
 </figure>
 
-runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다. [Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile, 두 가지 Profile만 얻을 수 있다.
+runtime/profile Package는 CLI (Command Line Interface)와 같이 한번 실행이되고 종료되는 App의 Profiling을 위해서 이용되는 Package이다. [Code 3]은 runtime/profile Package의 예제를 나타내고 있다. runtime/profile Package는 CPU와 Memory Heap Profile 두 가지 Profile만 얻을 수 있다. CPU Profile File은 cpuprofile Option을 통해서 지정한 경로에 생성되며, Memory Heap Profile은 memprofile Option을 통해서 지정한 경로에 생성된다.
 
 CPU Profile을 얻기 위해서는 Profiling의 시작 부분에서 StartCPUProfile() 함수를 호출하고, Profiling의 끝 부분에서 StopCPUProfile() 함수를 호출하면 된다. Memory Profile을 얻기 위해서는 GC() 함수를 호출한 다음 WriteHeapProfile() 함수를 호출하면 된다.
 
@@ -123,10 +137,10 @@ CPU Profile을 얻기 위해서는 Profiling의 시작 부분에서 StartCPUProf
 # go test ./... -cpuprofile cpu.out -memprofile mem.out -blockprofile block.out -mutexprofile mutex.out
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 1] Test Profile Example</figcaption>
+<figcaption class="caption">[Console 2] Test Profile Example</figcaption>
 </figure>
 
-Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다. [Console 1]은 Profile 생성과 함께 Test를 수행하는 예제를 나타내고 있다. CPU, Memory, Block, Mutex Profile을 얻을 수 있다.
+Golang에서는 Unit Test를 수행할때 같이 Profiling 수행도 가능하다. [Console 2]는 Profile 생성과 함께 Test를 수행하는 예제를 나타내고 있다. CPU, Memory, Block, Mutex Profile을 얻을 수 있다. 각 Profile의 경로를 설정하는 것을 확인할 수 있다.
 
 #### 1.4. github.com/google/gops Package & gops CLI
 
@@ -178,24 +192,24 @@ Entering interactive mode (type "help" for commands, "o" for options)
 (pprof) 
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 2] gops CLI Example</figcaption>
+<figcaption class="caption">[Console 3] gops CLI Example</figcaption>
 </figure>
 
-github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Profiling을 수행할 수 있다. CPU와 Memory Heap Profile만 얻을 수 있다. [Code 4]는 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 [Console 2]의 내용과 같이 gops 명령어를 통해서 PID를 조회한 다음 gops pprof-cpu, gops pprof-heap 명령어를 통해서 CPU, Memory Profile 획득 및 pprof를 실행한다.
+github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계속 동작중인 App의 Profiling을 수행할 수 있다. CPU와 Memory Heap Profile만 얻을 수 있다. [Code 4]는 github.com/google/gops Package의 사용법을 나타내고 있다. gops Agent를 구동시키면 된다. 이후에 [Console 3]의 내용과 같이 gops 명령어를 통해서 PID를 조회한 다음 gops pprof-cpu, gops pprof-heap 명령어를 통해서 CPU, Memory Profile 획득 및 pprof를 실행한다.
 
 ### 2. pprof
 
 얻은 Profile은 Golang 설치시 같이 설치되는 [pprof](https://github.com/google/pprof) 도구를 통해서 시각화가 가능하다. `-http [Port]` Option을 같이 설정하면 Web Browser를 통해서 "localhost:[Port]"에 접속하여 시각화된 Profile을 얻을 수 있다. Top, Graph, Flame Graph, Peek와 같은 형태로 시각화를 제공한다.
 
 {% highlight console %}
-# go tool pprof -http :8080 [Profile HTTP Endpoint]
 # go tool pprof -http :8080 [Profile File]
+# go tool pprof -http :8080 [Profile HTTP Endpoint]
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Console 3] Run pprof with CPU profile</figcaption>
+<figcaption class="caption">[Console 4] Run pprof with CPU profile</figcaption>
 </figure>
 
-[Console 3]은 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
+[Console 4]는 pprof 사용법을 나타내고 있다. `-http` Option과 함께 net/http/pprof Package를 통해서 설정되는 Profile HTTP Endpoint나 runtime/pprof Package 또는 Test를 통해서 얻은 Profile File을 지정하면 된다.
 
 #### 2.1. Flat, Cum
 
@@ -217,7 +231,7 @@ pprof를 통해서 시각회된 Profile을 이해하기 위해서는 **Flat**과
 
 Profile 종류 및 분석은 아래의 예제 App을 통해서 진행한다. Profile은 net/http/pprof Package를 통해서 6060 Port를 통해서 노출되도록 설정되어 있으며, 부하를 주기 위한 다양한 함수들이 구동되도록 개발되어 있다.
 
-* Example App : [https://github.com/ssup2/golang-pprof-example](https://github.com/ssup2/golang-pprof-example)
+* Example App : [https://github.com/ssup2/golang-profiling-example](https://github.com/ssup2/golang-profiling-example)
 
 #### 3.1. CPU
 
