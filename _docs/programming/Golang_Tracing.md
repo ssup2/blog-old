@@ -166,13 +166,17 @@ github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계�
 <figcaption class="caption">[Console 4] trace CLI Example</figcaption>
 </figure>
 
-얻은 Profile은 Golang 설치시 같이 설치되는 trace CLI를 통해서 시각화가 가능하다. [Console 4]는 trace CLI의 사용법을 나타내고 있다. Trace 추출을 위해서 이용한 App은 아래의 예제 Code를 이용하였다.
+얻은 Profile은 Golang 설치시 같이 설치되는 trace CLI를 통해서 시각화가 가능하다. [Console 4]는 trace CLI의 사용법을 나타내고 있다. trace CLI를 실행하면 Web URL이 노출된다. Trace 추출을 위해서 이용한 App은 아래의 예제 Code를 이용하였다.
 
 * Example App : [https://github.com/ssup2/golang-tracing-example](https://github.com/ssup2/golang-tracing-example)
 
 ![[그림 1] trace CLI Web Trace]({{site.baseurl}}/images/programming/Golang_Tracing/trace_CLI_Web_Trace.PNG)
 
+[그림 1]은 trace CLI Web의 Trace UI 화면을 나타내고 있다. STATS 항목에서는 위에서 부터 Goroutine의 개수, Memory Heap의 크기, Thread의 개수를 나타내고 있다. PROCS 항목에서는 위에서 부터 Garbage Collection 수행 시간, Network Blocking 시간, 각 Proc에서 수행한 System Call의 수행 시간을 알 수 있다. Proc은 Golang Scheduler에서 관리하는 가상의 Process를 의미하며, Goroutine은 Proc에 할당되어 동작한다.
+
 ![[그림 2] trace CLI Web Mutex Goroutine]({{site.baseurl}}/images/programming/Golang_Tracing/trace_CLI_Web_Goroutine_Mutex01.PNG){: width="700px"}
+
+trace CLI Web에서는 각 Goroutine별 상태 비율도 확인할 수 있다. [그림 2]는 Example App의 Mutex Goroutine의 결과를 나타내고 있다. 이외에 trace CLI Web은 Network Blocking, Synchronization Blocking, System Call Block, Scheduler Latency Profiling 결과도 얻을 수 있다.
 
 ### 3. 참조
 
