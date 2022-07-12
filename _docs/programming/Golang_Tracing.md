@@ -170,6 +170,11 @@ github.com/google/gops Package와 gops CLI를 통해서도 Server와 같이 계�
 
 * Example App : [https://github.com/ssup2/golang-tracing-example](https://github.com/ssup2/golang-tracing-example)
 
+![[그림 1] trace CLI Web Trace]({{site.baseurl}}/images/programming/Golang_Tracing/AMQP_Architecturetrace_CLI_Web_Trace.PNG)
+
+![[그림 2] trace CLI Web Mutex Goroutine]({{site.baseurl}}/images/programming/Golang_Tracing/AMQP_Architecturetrace_CLI_Web_Goroutine_Mutex01.PNG){: width="700px"}
+
 ### 3. 참조
 
 * [https://pkg.go.dev/cmd/trace](https://pkg.go.dev/cmd/trace)
+* [https://programmer.ink/think/golang-performance-test-trace-planing-goang-trace.html](https://programmer.ink/think/golang-performance-test-trace-planing-goang-trace.html)
