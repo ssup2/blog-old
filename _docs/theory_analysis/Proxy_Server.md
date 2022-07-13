@@ -11,7 +11,7 @@ Forward Proxy와 Reverse Proxy를 분석한다.
 
 ### 1. Proxy
 
-![[그림 1] Forward Proxy, Reverse Proxy]({{site.baseurl}}/images/theory_analysis/Proxy_Server/Proxy.PNG)
+![[그림 1] Forward Proxy, Reverse Proxy]({{site.baseurl}}/images/theory_analysis/Proxy_Server/Proxy_Server.PNG)
 
 Proxy Server는 Server, Client 관계에서 Server 또는 Client를 대신하는 역할을 수행하는 Component를 의미한다. Proxy Server는 Client의 요청을 Server 대신 받은 다음, 받은 요청을 Server에게 대신 전달하고, 대신 Server의 응답을 받는다. 이후에 Client에게 Server로부터 받은 응답을 다시 전달하는 방식으로 동작한다. Proxy Server는 어디에 위치하는지에 따라서 Forward Proxy아 Reverse Proxy로 분류할 수 있다. [그림 1]은 Forward Proxy와 Reverse Proxy를 나타내고 있다.
 
