@@ -1,8 +1,8 @@
 ---
 title: DB SQL SELECT FOR UPDATE
 category: Theory, Analysis
-date: 2022-07-22T12:00:00Z
-lastmod: 2022-07-22T12:00:00Z
+date: 2022-07-20T12:00:00Z
+lastmod: 2022-07-20T12:00:00Z
 comment: true
 adsense: true
 ---
