@@ -1,8 +1,8 @@
 ---
 title: TLS, SSL 인증서
 category: Theory, Analysis
-date: 2020-08-26T12:00:00Z
-lastmod: 2020-08-26T12:00:00Z
+date: 2022-07-26T12:00:00Z
+lastmod: 2022-08-26T12:00:00Z
 comment: true
 adsense: true
 ---
