@@ -11,7 +11,7 @@ URI, URL, URN을 분석한다.
 
 ### 1. URI (Uniform Resource Identifier)
 
-![[그림 1] URI, URL, URN 관계]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URI_URL_URN.PNG){: width="400px"}
+![[그림 1] URI, URL, URN 관계]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URI_URL_URN.PNG){: width="300px"}
 
 ### 2. URL (Uniform Resource Locator)
 
