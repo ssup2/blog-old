@@ -1,8 +1,8 @@
 ---
 title: URI, URL, URN
 category: Theory, Analysis
-date: 2022-08-01T12:00:00Z
-lastmod: 2022-08-01T12:00:00Z
+date: 2022-07-29T12:00:00Z
+lastmod: 2022-07-29T12:00:00Z
 comment: true
 adsense: true
 ---
