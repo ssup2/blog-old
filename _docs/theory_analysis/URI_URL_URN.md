@@ -15,11 +15,11 @@ URI, URL, URN을 분석한다.
 
 ### 2. URL (Uniform Resource Locator)
 
-![[그림 1] URL]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URL.PNG){: width="700px"}
+![[그림 2] URL]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URL.PNG){: width="700px"}
 
 ### 3. URN (Uniform Resource Name)
 
-![[그림 1] URN]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URN.PNG){: width="600px"}
+![[그림 3] URN]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URN.PNG){: width="600px"}
 
 ### 4. 참조
 
