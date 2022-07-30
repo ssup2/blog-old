@@ -89,7 +89,7 @@ users:
 
 [파일 1]은 kubelet의 kubeconfig을 나타내고 있고, [파일 2]은 kubectl의 kubeconfig를 나타내고 있다. 두 kubeconfig 모두 user 부분을 확인해보면 "aws eks get-token" 명령어를 수행하는 것을 확인할 수 있다. "aws eks get-token" 명령어는 "aws eks get-token"을 수행하는 Identity(대상)가 누구인지 알려주는 AWS STS의 **GetCallerIdentity API의 Presigned URL**을 생성하고, 생성한 URL을 Encoding하여 Token을 생성한다. 여기서 Identity는 **AWS IAM의 User/Role**을 의미한다.
 
-Presigned URL은 의미그대로 미리 할당된 URL을 의미한다. AWS STS의 GetCallerIdentity API를 호출하기 위해서는 AccessKey/SecretAccessKey와 같은 Secret이 필요하지만, Presigned URL을 이용하여 GetCallerIdentity API를 호출하면 Secret없이 호출이 가능하다. Token을 통해서 전달되는 GetCallerIdentity API의 Presigned URL은 AWS IAM Authenticator에게 전달되어 "aws eks get-token" 명령어를 수행한 Identity이 누구인지 파악하는데 이용된다.
+Presigned URL은 의미 그대로 미리 할당된 URL을 의미한다. AWS STS의 GetCallerIdentity API를 호출하기 위해서는 AccessKey/SecretAccessKey와 같은 Secret이 필요하지만, Presigned URL을 이용하여 GetCallerIdentity API를 호출하면 Secret없이 호출이 가능하다. Token을 통해서 전달되는 GetCallerIdentity API의 Presigned URL은 AWS IAM Authenticator에게 전달되어 "aws eks get-token" 명령어를 수행한 Identity이 누구인지 파악하는데 이용된다.
 
 {% highlight console %}
 # aws eks get-token --cluster-name ssup2-eks-cluster
