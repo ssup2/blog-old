@@ -13,6 +13,14 @@ AWS IAM (Identity and Access Management) 을 분석한다.
 
 #### 1.1. 구성 요소
 
+##### 1.1.1. Policy
+
+##### 1.1.2. User
+
+##### 1.1.3. Group
+
+##### 1.1.4. Role
+
 ### 2. 참조
 
 * [https://www.youtube.com/watch?v=iPKaylieTV8](https://www.youtube.com/watch?v=iPKaylieTV8)
