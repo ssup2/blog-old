@@ -13,7 +13,7 @@ GraphQL을 분석한다.
 
 GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때문에 원하는 Data만 선택하여 얻을수 있다는 장점을 갖으며, 한번에 요청으로 다양한 Data를 얻을수도 있다는 장점도 갖는다. DB의 SQL과 매우 유사한 특징을 갖는다. 일반적으로 REST API의 단점 극복을 위한 용도로 선택되어 이용된다.
 
-#### 1.1. Query
+#### 1.1. Query 특징
 
 {% highlight text %}
 # Query
@@ -33,7 +33,7 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Query 1] Hero Name Query</figcaption>
+<figcaption class="caption">[Query 1] hero name Query</figcaption>
 </figure>
 
 [Query 1]은 간단한 GraphQL Query를 나타내고 있다. GraphQL Query는 JSON과 매우 유사한 형태를 갖고 있으며, 얻고 싶은 **Field 명시**를 통해서 Data를 얻을 수 있다. [Query 1]에서는 hero Field의 name Field를 명시하고 있기 때문에 관련 Data를 얻을 수 있다. Query의 결과는 **JSON 형태**로 출력된다.
@@ -58,10 +58,10 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Query 2] Hero ID, Name Query</figcaption>
+<figcaption class="caption">[Query 2] hero id, name Query</figcaption>
 </figure>
 
-[Query 2]는 [Query 1]과 다르게 Hero Field의 Name Field 뿐만 아니라, ID Field도 가져오는 Query이다. 따라서 Query 결과를 보면 Name Field뿐만 아니라 ID Field의 Data만 가져오는 것을 확인할 수 있다. 이처럼 GraphQL은 SQL의 Select Query에서 원하는 Column Data만 가져올 수 있는것 처럼, 원하는 Field만 명시하여 Data를 얻을 수 있다는 장점을 가지고 있다.
+[Query 2]는 [Query 1]과 다르게 hero Field의 name Field 뿐만 아니라, id Field도 가져오는 GraphQL Query를 나타내고 있다. 따라서 Query 결과를 보면 name Field뿐만 아니라 id Field의 Data만 가져오는 것을 확인할 수 있다. 이처럼 SQL의 Select Query에서 원하는 Column Data만 가져올 수 있는것 처럼, GraphQL도 **원하는 Field만 명시**하여 Data를 얻을 수 있다는 장점을 가지고 있다.
 
 {% highlight text %}
 # Query
@@ -102,15 +102,17 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 <figcaption class="caption">[Query 3] Hero ID, Name, Friends Query</figcaption>
 </figure>
 
-#### 1.2. Resolver
+[Query 3]은 hero Field의 friends Field도 명시하여 hero의 friends 정보도 한번에 가져오는 GraphQL Query를 나타내고 있다. SQL의 Join Query를 통해서 여러 DB Table에 존재하는 Data를 한번에 조회가 가능한것 처럼, GraphQL도 여러 DB Table에 존재하는 Data를 **한번에 조회**할 수 있다는 장점을 가지고 있다.
 
-#### 1.3. Introspection
+#### 1.2. vs REST API
 
-#### 1.4. with HTTP
+### 2. GraphQL Implementation
 
-#### 1.5. vs REST API
+#### 2.1. Resolver
 
-### 2. 참조
+#### 2.2. Introspection
+
+### 3. 참조
 
 * [https://tech.kakao.com/2019/08/01/graphql-basic/](https://tech.kakao.com/2019/08/01/graphql-basic/)
 * [https://hwasurr.io/api/rest-graphql-differences/](https://hwasurr.io/api/rest-graphql-differences/)
