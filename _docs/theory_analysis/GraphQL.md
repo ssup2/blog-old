@@ -36,6 +36,8 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 <figcaption class="caption">[Query 1] Hero Name Query</figcaption>
 </figure>
 
+[Query 1]은 간단한 GraphQL Query를 나타내고 있다. GraphQL Query는 JSON과 매우 유사한 형태를 갖고 있으며, 얻고 싶은 **Field 명시**를 통해서 Data를 얻을 수 있다. [Query 1]에서는 hero Field의 name Field를 명시하고 있기 때문에 관련 Data를 얻을 수 있다. Query의 결과는 **JSON 형태**로 출력된다.
+
 {% highlight text %}
 # Query
 {
@@ -58,6 +60,8 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 <figure>
 <figcaption class="caption">[Query 2] Hero ID, Name Query</figcaption>
 </figure>
+
+[Query 2]는 [Query 1]과 다르게 Hero Field의 Name Field 뿐만 아니라, ID Field도 가져오는 Query이다. 따라서 Query 결과를 보면 Name Field뿐만 아니라 ID Field의 Data만 가져오는 것을 확인할 수 있다. 이처럼 GraphQL은 SQL의 Select Query에서 원하는 Column Data만 가져올 수 있는것 처럼, 원하는 Field만 명시하여 Data를 얻을 수 있다는 장점을 가지고 있다.
 
 {% highlight text %}
 # Query
