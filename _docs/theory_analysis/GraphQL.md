@@ -16,12 +16,14 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 #### 1.1. Query
 
 {% highlight text %}
+# Query
 {
   hero {
     name
   }
 }
----
+
+# Result
 {
   "data": {
     "hero": {
