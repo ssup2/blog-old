@@ -15,6 +15,27 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 
 #### 1.1. Query
 
+{% highlight graphql %}
+{
+  hero {
+    name
+  }
+}
+---
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2"
+    }
+  }
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Query 1] Query</figcaption>
+</figure>
+
+
+
 #### 1.2. Resolver
 
 #### 1.3. Introspection
@@ -29,3 +50,4 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 * [https://hwasurr.io/api/rest-graphql-differences/](https://hwasurr.io/api/rest-graphql-differences/)
 * [https://k0102575.github.io/articles/2020-08/graphql](https://k0102575.github.io/articles/2020-08/graphql)
 * [https://www.holaxprogramming.com/2018/01/20/graphql-vs-restful-api/](https://www.holaxprogramming.com/2018/01/20/graphql-vs-restful-api/)
+* Query : [https://graphql-kr.github.io/learn/queries/](https://graphql-kr.github.io/learn/queries/)
