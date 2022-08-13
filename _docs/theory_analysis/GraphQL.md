@@ -104,15 +104,17 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 
 [Query 3]은 hero Field의 friends Field도 명시하여 hero의 friends 정보도 한번에 가져오는 GraphQL Query를 나타내고 있다. SQL의 Join Query를 통해서 여러 DB Table에 존재하는 Data를 한번에 조회가 가능한것 처럼, GraphQL도 여러 DB Table에 존재하는 Data를 **한번에 조회**할 수 있다는 장점을 가지고 있다.
 
-#### 1.2. vs REST API
-
 ### 2. GraphQL Implementation
 
-#### 2.1. Resolver
+#### 2.1. with HTTP
 
-#### 2.2. Introspection
+#### 2.2. Resolver
 
-### 3. 참조
+#### 2.3. Introspection
+
+### 3. vs REST API
+
+### 4. 참조
 
 * [https://tech.kakao.com/2019/08/01/graphql-basic/](https://tech.kakao.com/2019/08/01/graphql-basic/)
 * [https://hwasurr.io/api/rest-graphql-differences/](https://hwasurr.io/api/rest-graphql-differences/)
