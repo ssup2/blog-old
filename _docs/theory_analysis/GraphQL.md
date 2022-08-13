@@ -33,10 +33,70 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 }
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Query 1] Query</figcaption>
+<figcaption class="caption">[Query 1] Hero Name Query</figcaption>
 </figure>
 
+{% highlight text %}
+# Query
+{
+  hero {
+    id
+    name
+  }
+}
 
+# Result
+{
+  "data": {
+    "hero": {
+      "id": "2001",
+      "name": "R2-D2"
+    }
+  }
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Query 2] Hero ID, Name Query</figcaption>
+</figure>
+
+{% highlight text %}
+# Query
+{
+  hero {
+    name
+    friends {
+      id
+      name
+    }
+  }
+}
+
+# Result
+{
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "friends": [
+        {
+          "id": "1000",
+          "name": "Luke Skywalker"
+        },
+        {
+          "id": "1002",
+          "name": "Han Solo"
+        },
+        {
+          "id": "1003",
+          "name": "Leia Organa"
+        }
+      ]
+    }
+  }
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Query 3] Hero ID, Name, Friends Query</figcaption>
+</figure>
 
 #### 1.2. Resolver
 
