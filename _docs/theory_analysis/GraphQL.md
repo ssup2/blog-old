@@ -13,7 +13,7 @@ GraphQL을 분석한다.
 
 GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때문에 원하는 Data만 선택하여 얻을수 있다는 장점을 갖으며, 한번에 요청으로 다양한 Data를 얻을수도 있다는 장점도 갖는다. DB의 SQL과 매우 유사한 특징을 갖는다. 일반적으로 REST API의 단점 극복을 위한 용도로 선택되어 이용된다.
 
-#### 1.1. Query 특징
+#### 1.1. Query
 
 {% highlight text %}
 # Query
@@ -88,10 +88,6 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
         {
           "id": "1002",
           "name": "Han Solo"
-        },
-        {
-          "id": "1003",
-          "name": "Leia Organa"
         }
       ]
     }
@@ -106,7 +102,28 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 
 ### 2. GraphQL Implementation
 
+GraphQL 구현시 필요한 개념들을 정리한다.
+
 #### 2.1. with HTTP
+
+{: .newline }
+>GET http://api.ssup2.com/graphql?query={hero{name}}
+<figure>
+<figcaption class="caption">[Request 1] GET Request with GraphQL</figcaption>
+</figure>
+
+GraphQL도 REST API와 동일하게 일반적으로 HTTP Protocol을 많이 이용한다.
+
+{: .newline }
+> POST http://api.ssup2.com/graphql
+> {
+>   "query": "...",
+>   "operationName": "...",
+>   "variables": { "myVariable": "someValue", ... }
+> } <br>
+<figure>
+<figcaption class="caption">[Request 2] POST Request with GraphQL</figcaption>
+</figure>
 
 #### 2.2. Resolver
 
@@ -120,4 +137,5 @@ GraphQL은 API Server를 위한 Query 언어이다. **Query 언어**이기 때�
 * [https://hwasurr.io/api/rest-graphql-differences/](https://hwasurr.io/api/rest-graphql-differences/)
 * [https://k0102575.github.io/articles/2020-08/graphql](https://k0102575.github.io/articles/2020-08/graphql)
 * [https://www.holaxprogramming.com/2018/01/20/graphql-vs-restful-api/](https://www.holaxprogramming.com/2018/01/20/graphql-vs-restful-api/)
+* with HTTP : [https://graphql-kr.github.io/learn/serving-over-http/](https://graphql-kr.github.io/learn/serving-over-http/)
 * Query : [https://graphql-kr.github.io/learn/queries/](https://graphql-kr.github.io/learn/queries/)
