@@ -318,6 +318,10 @@ Resolver는 DB와 같은 **외부 Data 저장소로부터 Data를 얻어**와 Gr
 
 ### 3. vs REST API
 
+GraphQL은 REST API와 대비 Data 조회에 특화된 기술이다. REST API의 경우에는 Resource 관련 모든 Data를 조회한 이후에 필요한 Data 추출하여 이용하지만, GraphQL의 경우에는 필요한 Field만 명시하여 조회하고 이용할 수 있기 때문이다. 또한 REST API의 경우에는 여러 URL에 여러번 요청하여 Data를 조회하고 Data를 가공하여 이용하는 경우도 자주 발생하는데, GraphQL은 한번의 요청에 필요한 Data를 모두 조회할 수 있기 때문이다.
+
+Data 조회에 특화되었만 때문에 GraphSQL API Server는 Data Store 또는 Repository와 같은 Data 저장소 역할만을 수행하는 경우가 대부분이고, Business Logic은 GraphSQL API Server가 아니라 GraphSQL Client에서 수행된다. 따라서 Client의 Business Logic이 중요한 Service의 경우에는 GraphQL을 이용하는것이 유리하며, Server에서 Business Logic을 수행하는 경우에는 REST API를 이용하는것이 유리하다.
+
 ### 4. 참조
 
 * [https://tech.kakao.com/2019/08/01/graphql-basic/](https://tech.kakao.com/2019/08/01/graphql-basic/)
