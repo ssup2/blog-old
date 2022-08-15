@@ -296,21 +296,23 @@ GraphQL 구현을 위해서는 GraphQL이 HTTP과 같이 동작하는 방식과 
 {: .newline }
 >GET http://api.ssup2.com/graphql?query={hero{name}}
 <figure>
-<figcaption class="caption">[Request 1] GET Request with GraphQL</figcaption>
+<figcaption class="caption">[HTTP Request 1] GET Request with GraphQL</figcaption>
 </figure>
 
-GraphQL도 REST API와 동일하게 일반적으로 HTTP를  이용한다. [Request 1]은 HTTP Protocol을 활용하여 GraphQL Query를 전송하는 예제를 나타내고 있다. 일반적인 HTTP Protocol 기반 REST API의 경우에는 Resource당 별도의 URL (Endpoint)를 갖는 구조이지만, GraphQL을 이용하는 경우 **단일 URL**을 이용한다. [Request 1]의 경우에는 GraphQL URL로 "/graphql"을 이용하고 있다. GraphQL Query의 경우에는 **Query String**을 이용하여 API Server에게 전달한다.
+GraphQL도 REST API와 동일하게 일반적으로 HTTP를 이용한다. [HTTP Request 1]은 HTTP Protocol을 활용하여 GraphQL Query를 전송하는 예제를 나타내고 있다. 일반적인 HTTP Protocol 기반 REST API의 경우에는 Resource당 별도의 URL (Endpoint)를 갖는 구조이지만, GraphQL을 이용하는 경우 **단일 URL**을 이용한다. [Request 1]의 경우에는 GraphQL URL로 "/graphql"을 이용하고 있다. GraphQL Query의 경우에는 HTTP GET Method와 함께 **Query String**을 이용하여 API Server에게 전달한다.
 
 {: .newline }
 > POST http://api.ssup2.com/graphql
 > {
 >   "query": "...",
->   "operationName": "...",
+>   "operationName": "mutation",
 >   "variables": { "myVariable": "someValue", ... }
 > } <br>
 <figure>
-<figcaption class="caption">[Request 2] POST Request with GraphQL</figcaption>
+<figcaption class="caption">[HTTP Request 2] POST Request with GraphQL</figcaption>
 </figure>
+
+Mutation 또는 Subscription Operation의 경우에는 HTTP POST Method와 함께 Body에 Query 및 Operation 이름을 명시한다. [HTTP Request 2]는 Mutation Operation의 예제를 나타내고 있다.
 
 #### 2.2. Resolver
 
