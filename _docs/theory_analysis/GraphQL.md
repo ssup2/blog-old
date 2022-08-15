@@ -322,6 +322,8 @@ GraphQL은 REST API와 대비 Data 조회에 특화된 기술이다. REST API의
 
 Data 조회에 특화되었만 때문에 GraphSQL API Server는 Data Store 또는 Repository와 같은 Data 저장소 역할만을 수행하는 경우가 대부분이고, Business Logic은 GraphSQL API Server가 아니라 GraphSQL Client에서 수행된다. 따라서 Client의 Business Logic이 중요한 Service의 경우에는 GraphQL을 이용하는것이 유리하며, Server에서 Business Logic을 수행하는 경우에는 REST API를 이용하는것이 유리하다.
 
+NGINX와 같은 L7 Proxy Server는 URL기반 Caching 기법을 제공하는데, GraphQL의 경우에 "/graphql"과 같은 단일 URL을 이용하기 때문에 Resource별로 URL을 가지고 있는 REST API와 다르게 L7 Proxy Server의 Caching 기법을 이용하지 못한다는 단점도 존재한다.
+
 ### 4. 참조
 
 * [https://tech.kakao.com/2019/08/01/graphql-basic/](https://tech.kakao.com/2019/08/01/graphql-basic/)
@@ -336,4 +338,5 @@ Data 조회에 특화되었만 때문에 GraphSQL API Server는 Data Store 또�
 * Introspection : [https://graphql-kr.github.io/learn/introspection/](https://graphql-kr.github.io/learn/introspection/)
 * Introspection : [https://hasura.io/learn/graphql/intro-graphql/introspection/](https://hasura.io/learn/graphql/intro-graphql/introspection/)
 * Online Demo : [https://lucasconstantino.github.io/graphiql-online/](https://lucasconstantino.github.io/graphiql-online/)
+* Online Demo : [https://demo.saleor.io/graphql/](https://demo.saleor.io/graphql/)
 * Online Demo : [https://docs.github.com/en/graphql/overview/explorer](https://docs.github.com/en/graphql/overview/explorer)
