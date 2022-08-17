@@ -13,9 +13,15 @@ Hadoop Ecosystem을 간략하게 정리한다.
 
 #### 1.1. Storage
 
+Storage는 Data를 저장하는 저장소 역할을 수행한다.
+
 ##### 1.1.1. Hadoop HDFS
 
-##### 1.1.2. ALLUXIO
+Hadoop HDFS는 큰 File 저장을 위해서 다수의 Node로 구성된 Distributed Filesystem이다. 고가용성이 특징이며 Seqence Read/Write에 특화되어 있어 Batch Job 수행에 유리한 특징을 갖는다.
+
+##### 1.1.2. Alluxio
+
+Alluxio는 Data Orchestration Layer의 역할을 수행하며 다양한 Storage를 원하는 Interface로 접근하도록 도와주는 역할을 수행하며, Data Caching을 통해서 성능을 올려주는 역할을 수행한다. 지원하는 Storage는 Hadoop HDFS, Ceph와 같은 Distributed Storage/Filesystem을 지원하며 AWS S3, GC Storage와 같은 Cloud Storage도 지원한다. 지원하는 Interface에는 Hadoop HDFS, Java File API, POSIX Interface, AWS S3, REST API 등이 존재한다.
 
 #### 1.2. Resource Management
 
@@ -92,3 +98,6 @@ Hadoop Ecosystem을 간략하게 정리한다.
 ### 2. 참조
 
 * [https://www.cloudduggu.com/hadoop/ecosystem/](https://www.cloudduggu.com/hadoop/ecosystem/)
+* HDFS : [https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
+* Alluxio : [https://www.alluxio.io/](https://www.alluxio.io/)
+* Alluxio : [https://d2.naver.com/helloworld/3863967](https://d2.naver.com/helloworld/3863967)
