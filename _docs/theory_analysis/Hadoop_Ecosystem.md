@@ -25,15 +25,27 @@ Alluxio는 Data Orchestration Layer의 역할을 수행하며 다양한 Storage�
 
 #### 1.2. Resource Management
 
+Resource Management는 Job/Task 수행을 위해서 다수의 Node로 구성된 Cluster의 CPU, Memory Resource 관리 및 Job/Task Scheduling 및 관리 역할을 수행한다.
+
 ##### 1.2.1. Hadoop YARN
 
 ##### 1.2.2. Mesos
 
-#### 1.3. Coordinate & Management
+#### 1.3. Coordinate
 
-##### 1.3.1. Zookeeper
+Coordinate는 Hadoop Ecosystem의 Component들이 이용하는 고가용성의 Configuration 보관소 및 구성 형상을 관리하는 역할을 수행합니다.
 
-##### 1.3.2. Ambari
+##### 1.3.1. ZooKeeper
+
+ZooKeeper는 오랜 시간동안 이용되고 있는 Distributed Coodinator이다. Tree 형태로 Data를 관리하며 Paxos Algorithm을 통해서 Data의 정합성을 관리한다. Hadoop Ecosystem에 존재하는 대부분의 Component들이 Zookeeper를 이용한다.
+
+#### 1.4. Management & Monitoring
+
+Management & Monitoring은 Hadoop Ecosystem의 Component 관리 및 Monitoring 역할을 수행합니다.
+
+##### 1.4.1. Ambari
+
+Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 간편하게 수행할 수 있도록 도와줍니다.
 
 #### 1.4. Scheduler
 
@@ -53,7 +65,9 @@ Alluxio는 Data Orchestration Layer의 역할을 수행하며 다양한 Storage�
 
 ##### 1.6.2. Storm
 
-##### 1.6.3. Flink
+##### 1.6.3. Spark Stream
+
+##### 1.6.4. Flink
 
 #### 1.7. SQL Over Hadoop
 
@@ -101,3 +115,6 @@ Alluxio는 Data Orchestration Layer의 역할을 수행하며 다양한 Storage�
 * HDFS : [https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
 * Alluxio : [https://www.alluxio.io/](https://www.alluxio.io/)
 * Alluxio : [https://d2.naver.com/helloworld/3863967](https://d2.naver.com/helloworld/3863967)
+* Hadoop Yarn vs Mesos : [https://data-flair.training/blogs/comparison-between-apache-mesos-vs-hadoop-yarn/](https://data-flair.training/blogs/comparison-between-apache-mesos-vs-hadoop-yarn/)
+* Ambari : [https://techvidvan.com/tutorials/apache-ambari-tutorial/](https://techvidvan.com/tutorials/apache-ambari-tutorial/)
+* Storm vs Spark Stream : [https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html](https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html)
