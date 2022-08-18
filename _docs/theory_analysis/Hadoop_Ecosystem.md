@@ -91,8 +91,6 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 
 ##### 1.10.2. Flume
 
-##### 1.10.3. 
-
 #### 1.11. Machine Learning
 
 ##### 1.11.1. MADLib
