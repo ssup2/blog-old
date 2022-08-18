@@ -65,13 +65,13 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 
 #### 1.7. Stream Processing
 
-##### 1.7.1. Kafka
+##### 1.7.1. Kafka Streams
 
-##### 1.7.2. Storm
+##### 1.7.2. Spark Streaming
 
-##### 1.7.3. Spark Stream
+##### 1.7.3. Flink
 
-##### 1.7.4. Flink
+##### 1.7.4. Storm
 
 #### 1.8. SQL Over Hadoop
 
@@ -120,3 +120,4 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 * Hadoop Yarn vs Mesos : [https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/](https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/)
 * Ambari : [https://techvidvan.com/tutorials/apache-ambari-tutorial/](https://techvidvan.com/tutorials/apache-ambari-tutorial/)
 * Storm vs Spark Stream : [https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html](https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html)
+* Flink : [https://www.samsungsds.com/kr/insights/flink.html](https://www.samsungsds.com/kr/insights/flink.html)
