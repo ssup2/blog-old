@@ -29,7 +29,11 @@ Resource Management는 Job/Task 수행을 위해서 다수의 Node로 구성된 
 
 ##### 1.2.1. Hadoop YARN
 
+Hadoop YARN은 Hadoop Ecosystem에서 오랜 시간동안 이용되고 있는 Resource Manager이다.
+
 ##### 1.2.2. Mesos
+
+Mesos는 Hadoop Ecosystem 환경뿐만 아니라 다양한 Application, Platform에서 이용 가능한 Resource Manager이다. Hadoop Ecosystem에서도 Mesos를 적용하여 이용가능하다. Hadoop YARN에 대비하여 좀더 다양한 Job/Task Scheduling이 가능하다는 특징을 갖는다.
 
 #### 1.3. Coordinate
 
@@ -113,6 +117,6 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 * HDFS : [https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html)
 * Alluxio : [https://www.alluxio.io/](https://www.alluxio.io/)
 * Alluxio : [https://d2.naver.com/helloworld/3863967](https://d2.naver.com/helloworld/3863967)
-* Hadoop Yarn vs Mesos : [https://data-flair.training/blogs/comparison-between-apache-mesos-vs-hadoop-yarn/](https://data-flair.training/blogs/comparison-between-apache-mesos-vs-hadoop-yarn/)
+* Hadoop Yarn vs Mesos : [https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/](https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/)
 * Ambari : [https://techvidvan.com/tutorials/apache-ambari-tutorial/](https://techvidvan.com/tutorials/apache-ambari-tutorial/)
 * Storm vs Spark Stream : [https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html](https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html)
