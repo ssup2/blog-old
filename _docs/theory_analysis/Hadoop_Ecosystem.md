@@ -59,9 +59,15 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 
 #### 1.6. In-memory Processing
 
+In-memory Processing은 의미 그대로 Data를 Memory 적재한 이후에 처리하는 과정을 의미한다.
+
 ##### 1.6.1. Spark
 
+Spark는 대표적인 In-memory Processing Framework이다. 별도의 Store 기능을 제공하지 않으며 Data 분석에 특화되어 있어 OLAP 용도로 주로 이용된다.
+
 ##### 1.6.2. Ignite
+
+Ignite는 ACID 특성을 보장하는 Key-value Store 기능을 제공하는 In-memory Processing Framework이다. ACID 특성을 제공하는 Key-value Store를 기반으로 OLTP 용도로 주로 이용된다. Ignite가 제공하는 Key-value Store를 기반으로 Spark가 동작하도록 구성도 가능하다.
 
 #### 1.7. Stream Processing
 
@@ -119,5 +125,7 @@ Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 �
 * Alluxio : [https://d2.naver.com/helloworld/3863967](https://d2.naver.com/helloworld/3863967)
 * Hadoop Yarn vs Mesos : [https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/](https://www.linkedin.com/pulse/apache-mesos-vs-hadoop-yarn-whiteboard-walkthrough-jim-scott/)
 * Ambari : [https://techvidvan.com/tutorials/apache-ambari-tutorial/](https://techvidvan.com/tutorials/apache-ambari-tutorial/)
+* Spark : [https://data-flair.training/blogs/spark-in-memory-computing/](https://data-flair.training/blogs/spark-in-memory-computing/)
+* Spark vs Ignite : [https://stackoverflow.com/questions/36036910/apache-spark-vs-apache-ignite](https://stackoverflow.com/questions/36036910/apache-spark-vs-apache-ignite)
 * Storm vs Spark Stream : [https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html](https://blog.udanax.org/2018/04/storm-vs-spark-streaming.html)
 * Flink : [https://www.samsungsds.com/kr/insights/flink.html](https://www.samsungsds.com/kr/insights/flink.html)
