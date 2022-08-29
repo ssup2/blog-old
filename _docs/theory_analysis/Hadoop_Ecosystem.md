@@ -37,7 +37,7 @@ Mesos는 Hadoop Ecosystem 환경뿐만 아니라 다양한 Application, Platform
 
 #### 1.3. Coordinate
 
-Coordinate는 Hadoop Ecosystem의 Component들이 이용하는 고가용성의 Configuration 보관소 및 구성 형상을 관리하는 역할을 수행합니다.
+Coordinate는 Hadoop Ecosystem의 Component들이 이용하는 고가용성의 Configuration 보관소 및 구성 형상을 관리하는 역할을 수행한다.
 
 ##### 1.3.1. ZooKeeper
 
@@ -45,11 +45,11 @@ ZooKeeper는 오랜 시간동안 이용되고 있는 Distributed Coodinator이�
 
 #### 1.4. Management & Monitoring
 
-Management & Monitoring은 Hadoop Ecosystem의 Component 관리 및 Monitoring 역할을 수행합니다.
+Management & Monitoring은 Hadoop Ecosystem의 Component 관리 및 Monitoring 역할을 수행한다.
 
 ##### 1.4.1. Ambari
 
-Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 간편하게 수행할 수 있도록 도와줍니다.
+Ambari는 Hadoopm Ecosystem Component들의 설정 및 Monitoring을 Web에서 간편하게 수행할 수 있도록 도운다.
 
 #### 1.5. Scheduler
 
