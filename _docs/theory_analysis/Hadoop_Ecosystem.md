@@ -71,6 +71,8 @@ Ignite는 ACID 특성을 보장하는 Key-value Store 기능을 제공하는 In-
 
 #### 1.7. Stream Processing
 
+Stream Processing은 Data가 생성되는 시점에 실시간으로 처리하는 방식을 의미한다. Data의 크기를 알수 없고 Data가 언제 끝나는지 알 수 없을때 주로 이용한다. Data를 한번에 모아서 처리하는 Batch Processing과 반대의 개념이다.
+
 ##### 1.7.1. Kafka Streams
 
 ##### 1.7.2. Spark Streaming
