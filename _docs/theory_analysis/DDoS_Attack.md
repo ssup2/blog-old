@@ -40,9 +40,15 @@ Application Layer Attack은 Application Layer Protocol을 활용하여 특정 Se
 
 ### 3. DDoS Attack 기법
 
-#### 3.1. HTTP Flood
+#### 3.1. Sync Flood
 
-#### 3.2. Sync Flood
+Sync Flood는 TCP Protocol의 Handshake시 이용하는 Sync Packet을 활용한 공격 기법이다. TCP 3-Way Handshake에 의해서 공격자로부터 Sync Packet을 받은 Server는 ACK, Sync Packet을 전송하고 공격자로부터 ACK Packet을 대기한다. 하지만 공격자가 ACK Packet을 전송하지 않으면 Server는 ACK를 대기하게 된다.
+
+따라서 공격자가 다수의 ACK Packet만 전송하면 Server는 ACK 대기를 위해서 Server의 TCP Connection 관련 자원을 소비하게되고, 신규 TCP Connection을 생성할 수 없는 상태가되어 장애가 발생하게 한다. Sync Flood 기법은 L4 기반 Protocol Attack Type이며, 일반적으로 TCP ACK Packet을 탐지할 수 있는 L4 기반의 Firewall을 활용하여 공격으로부터 보호한다.
+
+#### 3.2. HTTP Flood
+
+HTTP Flood는 HTTP Procotol을 활용하여 특정 Server/Service에게 다수의 요청을 전송하는 공격 기법이다. 일반적으로 HTTP Protocol의 각 요청을 탐지할 수 있는 L7 기반의 Firewall을 활용하여 공격으로부터 보호한다. HTTP Keepalived Protocol을 이용하면 하나의 TCP Connection 내부에서 다수의 요청을 전송하는 것이 가능하기 때문에, L4 기반의 Firewall을 활용해서는 HTTP Flood를 막을 수 없다.
 
 #### 3.3. ICMP Flood
 
