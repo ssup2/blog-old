@@ -23,6 +23,7 @@ Volumetric Attack은 대용량의 Traffic을 특정 Server/Service에게 전송�
 
 * HTTP Flood
 * DNS Flood
+* DNS Amplification
 * Smurf Attack
 
 #### 2.2. Protocol Attack
@@ -31,6 +32,7 @@ Procotol Attack은 Protocol을 활용하여 Server를 Resource 부족 상태로 
 
 * Sync Flood
 * DNS Flood
+* DNS Amplification
 * Smurf Attack
 
 #### 2.3. Application Layer Attack
@@ -57,7 +59,11 @@ HTTP Flood는 HTTP Procotol을 활용하여 특정 Server/Service에게 다수�
 
 #### 3.3. DNS Flood
 
-#### 3.4. Smurf Attack
+DNS Flood는 특정 DNS Server에게 과도한 요청을 전송하여 DNS Server 장애를 유발시키는 공격 기법이다. IP 통신을 이용하는 대부분의 경우에는 DNS Server를 이용하기 때문에, DNS Server 장애는 장애 영향의 범위가 매우 넓은 장애이다.
+
+#### 3.4. DNS Amplification
+
+#### 3.5. Smurf Attack
 
 Smurf Attack은 ICMP Protocol의 취약점을 이용한 공격 기법이다. ICMP Protocol에서 Client가 Echo Request 요청을 Server에게 전송하면 Server는 Echo Reply로 바로 응답한다. 이러한 Echo Request/Reply 과정에 별도의 Handshake 과정이 없기 때문에 Smurf Attack은 이러한 위약점을 이용하여 공격한다.
 
@@ -73,4 +79,5 @@ ICMP Protocol은 L3 Protocol이기 때문에 L3 기반의 Firewall을 활용하�
 * [https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained](https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained)
 * Sync Flood : [https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/)
 * DNS Flood : [https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/)
+* DNS Amplification : [https://www.cloudflare.com/learning/ddos/dns-amplification-ddos-attack/](https://www.cloudflare.com/learning/ddos/dns-amplification-ddos-attack/)
 * Smurf Attack : [https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/](https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/)
