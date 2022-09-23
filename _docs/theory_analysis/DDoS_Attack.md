@@ -63,6 +63,8 @@ DNS Flood는 특정 DNS Server에게 과도한 요청을 전송하여 DNS Server
 
 #### 3.4. DNS Amplification
 
+
+
 #### 3.5. Smurf Attack
 
 Smurf Attack은 ICMP Protocol의 취약점을 이용한 공격 기법이다. ICMP Protocol에서 Client가 Echo Request 요청을 Server에게 전송하면 Server는 Echo Reply로 바로 응답한다. 이러한 Echo Request/Reply 과정에 별도의 Handshake 과정이 없기 때문에 Smurf Attack은 이러한 위약점을 이용하여 공격한다.
