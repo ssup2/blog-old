@@ -49,15 +49,21 @@ Server는 Half-open Connection 상태의 TCP Connection을 유지하기 위해�
 
 Sync Flood는 이러한 약점을 이용하는 공격 기법이다. 공격자는 Server에게 전송하는 Sync Packet의 Source IP를 유효하지 않는 IP로 변경하여 전송한다. Server는 Sync Packet 수신한 이후에 Sync Packet의 Source IP를 대상으로 Sync + ACK Packet을 전송하지만 유효하지 않는 IP이기 때문에 Server는 ACK Packet을 받지 못하고 ACK Packet을 계속 대기하는 상태가 된다. 공격자가 다수의 Source IP가 변경된 Sync Packet을 보낸다면 Server의 TCP Connection 관련 자원은 고갈되고, Server는 새로운 TCP Connection을 맺을수 없으면서 장애가 발생한다.
 
-TCP는 L4 Protocol이기 때문에 L4 기반의 Firewall을 통해서 Sync Packet을 차단하여 Sync Flood 공격을 어느정도 방어할 수 있다. 또한 Server의 설정을 변경/추가하여 최대 TCP Connection 관련 자원의 개수를 늘리거나 오래된 Half-open 상태의 TCP Connection을 재활용 할 수 있도록 설정하여, Server의 TCP Connection 관련 자원의 고갈을 막아 Sync Flood 공격을 대비하는 방법도 존재한다.
+TCP는 L4 Protocol이기 때문에 L4 기반의 Firewall을 통해서 Sync Packet을 차단하여 Sync Flood 공격으로부터 보호할 수 있다. 또한 Server의 설정을 변경/추가하여 최대 TCP Connection 관련 자원의 개수를 늘리거나 오래된 Half-open 상태의 TCP Connection을 재활용 할 수 있도록 설정하여, Server의 TCP Connection 관련 자원의 고갈을 막아 Sync Flood 공격을 대비하는 방법도 존재한다.
 
 #### 3.2. HTTP Flood
 
-HTTP Flood는 HTTP Procotol을 활용하여 특정 Server/Service에게 다수의 요청을 전송하는 공격 기법이다. 일반적으로 HTTP Protocol의 각 요청을 탐지할 수 있는 L7 기반의 Firewall을 활용하여 공격으로부터 보호한다. HTTP Keepalived Protocol을 이용하면 하나의 TCP Connection 내부에서 다수의 요청을 전송하는 것이 가능하기 때문에, L4 기반의 Firewall을 활용해서는 HTTP Flood를 막을 수 없다.
+HTTP Flood는 HTTP Procotol을 활용하여 특정 Server/Service에게 다수의 요청을 전송하는 공격 기법이다. 일반적으로 HTTP Protocol의 각 요청을 탐지할 수 있는 L7 기반의 Firewall을 활용하여 공격으로부터 보호할 수 있다. HTTP Keepalived Protocol을 이용하면 하나의 TCP Connection 내부에서 다수의 요청을 전송하는 것이 가능하기 때문에, L4 기반의 Firewall을 활용해서는 HTTP Flood를 막을 수 없다.
 
 #### 3.3. DNS Flood
 
 #### 3.4. Smurf Attack
+
+Smurf Attack은 ICMP Protocol의 취약점을 이용한 공격 기법이다. ICMP Protocol에서 Client가 Echo Request 요청을 Server에게 전송하면 Server는 Echo Reply로 바로 응답한다. 이러한 Echo Request/Reply 과정에 별도의 Handshake 과정이 없기 때문에 Smurf Attack은 이러한 위약점을 이용하여 공격한다.
+
+공격자는 공격 대상 Server의 IP를 Source IP로 갖고 Broadcast IP를 Destination IP로 갖는 ICMP Echo Request Packet을 Router에게 전송한다. Router는 Destination이 Broadcast IP이기 때문에 특정 Network의 모든 PC에게 ICMP Echo Request Packet을 전송한다. Source IP가 공격 대상 Server인 Echo Request Packet을 받은 모든 PC는 ICMP Protocol에 의해서 Replay Packet을 공격 대상 Server로 전송한다. 따라서 공격 대상 Server는 자신이 요청하지도 않은 Echo Reply 응답을 불특정 다수의 PC로부터 받게되며 장애를 유발하게 된다.
+
+ICMP Protocol은 L3 Protocol이기 때문에 L3 기반의 Firewall을 활용하여 공격으로부터 보호할 수 있다. Router의 Broadcasting 기능을 꺼서 Smurf Attack을 방지하는 방법도 존재한다.
 
 ### 4. 참조
 
@@ -66,4 +72,5 @@ HTTP Flood는 HTTP Procotol을 활용하여 특정 Server/Service에게 다수�
 * [https://www.onelogin.com/learn/ddos-attack](https://www.onelogin.com/learn/ddos-attack)
 * [https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained](https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained)
 * Sync Flood : [https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/)
+* DNS Flood : [https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/)
 * Smurf Attack : [https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/](https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/)
