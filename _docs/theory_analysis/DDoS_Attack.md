@@ -63,13 +63,17 @@ DNS Flood는 특정 DNS Server에게 과도한 요청을 전송하여 DNS Server
 
 #### 3.4. DNS Amplification
 
+DNS Amplification은 DNS Query Protocol의 취약점을 이용한 공격 기법이다. 공격자는 Spoofing을 통해서 공격 대상 Server의 IP를 Source IP로 갖는 DNS Query를 다수의 DNS Server로 전송한다. DNS Query를 받은 DNS Server는 DNS Query의 공격 대상 Server의 IP로 설정된 Source IP를 보고 공격 대상 Server에게 DNS Reply를 전송한다. 공격자는 다수의 DNS Query를 DNS Server에 전송하여 공격 대상 Server는 DNS Server로부터 많은 DNS Reply를 받게 만들어 장애를 유발시킨다.
 
+DNS Amplification 수행시 공격자는 일반적으로 ANY Type의 DNS Query를 DNS Server에게 전송한다. ANY Type의 DNS Query는 DNS Server가 가지고 있는 특정 Domain의 모든 Record를 전송하기 때문에 DNS Reply의 크기는 일반적으로 매우 큰 크기를 갖기 때문이다. DNS Query의 크기는 크지 않지만 ANY Type을 활용한 DNS Reply의 크기는 훨씬 커지기 때문에 DNS Amplification이라는 명칭이 붙었다.
+
+DNS Query 수행시 DNS는 별도의 인증/인가 과정을 수행하지 않기 때문에 DNS Server 입장에서는 수신한 DNS Query가 정상적인 Query인지 공격을 위한 Query인지 구분하기 어렵다. 또한 DNS Query를 UDP로도 요청할 수 있기 때문에 IP Spoofing도 쉽게 수행이 가능하다.
 
 #### 3.5. Smurf Attack
 
 Smurf Attack은 ICMP Protocol의 취약점을 이용한 공격 기법이다. ICMP Protocol에서 Client가 Echo Request 요청을 Server에게 전송하면 Server는 Echo Reply로 바로 응답한다. 이러한 Echo Request/Reply 과정에 별도의 Handshake 과정이 없기 때문에 Smurf Attack은 이러한 위약점을 이용하여 공격한다.
 
-공격자는 공격 대상 Server의 IP를 Source IP로 갖고 Broadcast IP를 Destination IP로 갖는 ICMP Echo Request Packet을 Router에게 전송한다. Router는 Destination이 Broadcast IP이기 때문에 특정 Network의 모든 PC에게 ICMP Echo Request Packet을 전송한다. Source IP가 공격 대상 Server인 Echo Request Packet을 받은 모든 PC는 ICMP Protocol에 의해서 Replay Packet을 공격 대상 Server로 전송한다. 따라서 공격 대상 Server는 자신이 요청하지도 않은 Echo Reply 응답을 불특정 다수의 PC로부터 받게되며 장애를 유발하게 된다.
+공격자는 IP Spoofing을 통해서 공격 대상 Server의 IP를 Source IP로 갖고 Broadcast IP를 Destination IP로 갖는 ICMP Echo Request Packet을 Router에게 전송한다. Router는 Destination이 Broadcast IP이기 때문에 특정 Network의 모든 PC에게 ICMP Echo Request Packet을 전송한다. Source IP가 공격 대상 Server인 Echo Request Packet을 받은 모든 PC는 ICMP Protocol에 의해서 Replay Packet을 공격 대상 Server로 전송한다. 따라서 공격 대상 Server는 자신이 요청하지도 않은 Echo Reply 응답을 불특정 다수의 PC로부터 받게되며 장애를 유발하게 된다.
 
 ICMP Protocol은 L3 Protocol이기 때문에 L3 기반의 Firewall을 활용하여 공격으로부터 보호할 수 있다. Router의 Broadcasting 기능을 꺼서 Smurf Attack을 방지하는 방법도 존재한다.
 
@@ -82,4 +86,5 @@ ICMP Protocol은 L3 Protocol이기 때문에 L3 기반의 Firewall을 활용하�
 * Sync Flood : [https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/)
 * DNS Flood : [https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/dns-flood-ddos-attack/)
 * DNS Amplification : [https://www.cloudflare.com/learning/ddos/dns-amplification-ddos-attack/](https://www.cloudflare.com/learning/ddos/dns-amplification-ddos-attack/)
+* DNS Amplification : [https://www.geeksforgeeks.org/what-is-a-dns-amplification-attack/](https://www.geeksforgeeks.org/what-is-a-dns-amplification-attack/)
 * Smurf Attack : [https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/](https://www.cloudflare.com/learning/ddos/smurf-ddos-attack/)
