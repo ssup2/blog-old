@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-CORS (Cross-Origin Resource Sharing)을 분석한다.
+CORS (Cross-Origin Resource Sharing) 기법을 분석한다.
 
 ### 1. CORS (Cross-Origin Resource Sharing)
 
