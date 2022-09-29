@@ -11,7 +11,7 @@ title: Ssup2
   * [LinkedIn](https://kr.linkedin.com/in/jungsub-shin-933b82119)
   * [Github](https://github.com/ssup2)
 
-#### Published Achievements
+#### Published Achievement
 
 * Article
   * [K8s cgroupfs 분석/선택](https://tech.kakao.com/2020/06/29/cgroup-driver/)
