@@ -4,11 +4,12 @@ title: Ssup2
 
 #### My Profile
 
-* Name - Shin, Jungsub
-* Skills - Cloud, Container, VM, Embedded System
-* Role - AWS Solutions Architect
-* [LinkedIn](https://kr.linkedin.com/in/jungsub-shin-933b82119)
-* [Github](https://github.com/ssup2)
+* Shin, Jungsub
+* Cloud, Container, VM, Embedded System
+* AWS Solutions Architect
+* Links
+  * [LinkedIn](https://kr.linkedin.com/in/jungsub-shin-933b82119)
+  * [Github](https://github.com/ssup2)
 
 #### Published Achievements
 
