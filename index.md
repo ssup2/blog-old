@@ -13,12 +13,12 @@ title: Ssup2
 
 #### Published Achievements
 
-* Presentation
-  * Programming K8s Controller : [https://tv.kakao.com/channel/3693125/cliplink/414072325](https://tv.kakao.com/channel/3693125/cliplink/414072325)
-
 * Article
   * K8s cgroupfs 분석/선택 : [https://tech.kakao.com/2020/06/29/cgroup-driver/](https://tech.kakao.com/2020/06/29/cgroup-driver/)
-  * network-node-manager 소개 : [https://tech.kakao.com/2021/03/03/network-node-manager/](https://tech.kakao.com/2021/03/03/network-node-manager/)
+  * network-node-manager 소개 : [https://tech.kakao.com/2021/03/03/network-node-manager/](https://tech.kakao.com/2021/03/03/network-node-manager/) <br> <br>
+
+* Presentation
+  * Programming K8s Controller : [https://tv.kakao.com/channel/3693125/cliplink/414072325](https://tv.kakao.com/channel/3693125/cliplink/414072325) <br> <br>
 
 * OpenSource
   * network-node-manager : [https://github.com/kakao/network-node-manager](https://github.com/kakao/network-node-manager)
