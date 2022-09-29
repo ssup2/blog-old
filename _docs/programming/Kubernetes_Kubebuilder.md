@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Kubebuilder를 이용한 Operator 개발
+title: Kubernetes Kubebuilder를 이용한 Controller 개발
 category: Programming
 date: 2019-11-03T12:00:00Z
 lastmod: 2022-03-15T12:00:00Z
