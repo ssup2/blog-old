@@ -1,8 +1,8 @@
 ---
 title: Machine Learning Algorithm 분류
 category: Theory, Analysis
-date: 2019-08-25T12:00:00Z
-lastmod: 2019-08-25T12:00:00Z
+date: 2022-10-01T12:00:00Z
+lastmod: 2022-10-01T12:00:00Z
 comment: true
 adsense: true
 ---
