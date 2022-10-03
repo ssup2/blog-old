@@ -23,8 +23,6 @@ Machine Learning Algorithm은 일반적으로 지도 학습, 비지도 학습, �
 
 ##### 1.1.2. 회귀 (Regression)
 
-##### 1.1.3. 예상 (Forecasting)
-
 #### 1.2. 비지도 학습 (Unsupervised Learning)
 
 비지도 학습 방식은 **입력 Data**만 이용하는 학습 방식이다. 학습을 수행하는 사람이 어떠한 결과를 예측하지 않고 학습을 수행시키기 때문에 비지도 학습이라는 명칭이 붙었다. 비지도 학습 Algorithm은 일반적으로 사람이 예측하지 못한 **Data의 연관성**을 찾는데 이용되며, Data의 연관성을 바탕으로 군집화, 차원 축소의 동작을 수행한다.
@@ -51,3 +49,4 @@ Data Labeling은 의미 그대로 Label이 붙어 있지 않는 Data에 Label을
 
 * [https://www.sas.com/en_gb/insights/articles/analytics/machine-learning-algorithms.html](https://www.sas.com/en_gb/insights/articles/analytics/machine-learning-algorithms.html)
 * [https://opentutorials.org/module/4916/28934](https://opentutorials.org/module/4916/28934)
+* 지도 학습 : [https://aimb.tistory.com/149](https://aimb.tistory.com/149)
