@@ -31,9 +31,14 @@ Machine Learning Algorithm은 일반적으로 지도 학습, 비지도 학습, �
 
 ##### 1.2.1. 군집화 (Clustering)
 
-군집화 Algorithm은 유사한 Data들을 Grouping하는 Algorithm을 의미한다. 사람이 파악하기 힘든 얼굴의 특징을 파악하기 위해서 군집화를 이용할 수 있다.
+군집화 Algorithm은 유사한 Data들을 Grouping하는 Algorithm을 의미한다. 사람 얼굴을 특징에 따라서 Grouping하기 위해서는 군집화 Algorithm을 이용하면 된다.
 
 ##### 1.2.2. 차원 축소 (Dimension Reduction)
+
+차원 축소는 다수의 차원으로 이루어진 Data의 차원을 줄이는 Algorithm을 의미한다. Data의 연관성 파악을 통해서 차원 축소가 가능해진다. 일반적으로 Data의 차원이 줄어들면 학습 시간이 줄어들며 Algorithm의 성능도 증가하기 때문에, 학습에 필요한 Data의 차원을 줄이는 용도로 많이 이용한다. 차원을 줄이는 방법에 따라서 Feature 선택 방법과 Feature 추출 방법이 존재한다. 여기서 Feature는 차원과 동일하다.
+
+* Feature 선택 (Selection) : 불필요한 Feature를 제거한다.
+* Feature 추출 (Extraction) : 다수의 Feature를 대변하는 새로운 Feature를 정의한다.
 
 #### 1.3. 준지도 학습 (Semi-supervised Learning)
 
@@ -54,3 +59,4 @@ Data Labeling은 의미 그대로 Label이 붙어 있지 않는 Data에 Label을
 * [https://www.sas.com/en_gb/insights/articles/analytics/machine-learning-algorithms.html](https://www.sas.com/en_gb/insights/articles/analytics/machine-learning-algorithms.html)
 * [https://opentutorials.org/module/4916/28934](https://opentutorials.org/module/4916/28934)
 * 지도 학습 : [https://aimb.tistory.com/149](https://aimb.tistory.com/149)
+* 차원 축소 : [https://docs.sangyunlee.com/ml/analysis/undefined-1](https://docs.sangyunlee.com/ml/analysis/undefined-1)
