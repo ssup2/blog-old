@@ -14,6 +14,18 @@ adsense: true
 
 ***
 
+### 1. Region, Availability Zone
+
+#### 1.1. Region
+
+* 다수의 Availabiliy Zone을 포함하는 단위
+
+#### 1.1. Availability Zone
+
+* 하나 또는 하나 이상의 Data Center를 의미
+* 각 Availability Zone는 Fault Isolation을 고려하여 설계됨
+  * AZ-1에서 장애가 발생하더라도 AZ-2에는 영향을 미치지 않음
+
 ### 1. IAM
 
 * 인증/인가 서비스
@@ -87,7 +99,7 @@ adsense: true
 #### 2.4. Access Control
 
 * IAM 기반 정책
-* Bucket 기반 정책 (Resource 기반 정책)
+* Bucket 기반 정책 (Resource 기반 정책)
   * Web Console에서 Bucket 단위로 설정
   * Public : 외부 User에게 공개
   * Private : 외부 User에게 비공개
