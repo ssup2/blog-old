@@ -1,5 +1,5 @@
 ---
-title: 자격증 AWS Solutions Architect Professional 이론 정리
+title: 자격증 AWS Solutions Architect Associate 이론 정리
 category: Record
 date: 2019-11-01T12:00:00Z
 lastmod: 2021-08-09T12:00:00Z
@@ -30,6 +30,64 @@ adsense: true
 
 * 인증/인가 서비스
 
+#### 2.1. User
+
+* 사용자를 의미
+* 하나의 User가 다수의 Group에 소속 가능
+
+#### 2.2. Group
+
+* 사용자의 Group을 의미
+* 오직 User만 포함할 수 있으며, 다른 Group을 포함할 수 없음
+
+#### 2.3. Role
+
+* AWS Service, User에게 부여할 수 있으며, Role을 부여받은 AWS Service, User는 Role이 가지고 있는 Policy 권한을 획득
+  * User에게 Role을 부여하는 동작을 Assume라고 명칭함
+
+#### 2.4. Policy
+
+* User, Group, Role에게 부여하는 허용/금지 정책
+* JSON 형태로 구성
+* Least Privilege Principle 권장
+  * 최소한의 권한만을 허용
+
+#### 2.5. Root User
+
+* 모든 권한을 갖고 있는 User
+  * 결제 정보
+  * 개인 Data
+  * AWS 
+* Root User 이용을 지양하고 별도의 관리자 계정을 생성하여 이용하는것을 권장
+  * IAM 관리자 계정 생성
+  * Root 사용자 자격 증명 잠금
+  * IAM 관리자 계정 이용
+* Root User는 MFA(Multi Factor Authentication)를 이용하여 인증하도록 권장
+
+### 3. EC2
+
+* Compute Service
+
+#### 3.1. Instance Type (Flavor)
+
+* Instance Type Format
+  * <FamilyName><GenerationNum>.<Size>
+    * t3.large / c5.xlarge / p3.2xlarge
+* Instance Type
+  * General Purpose : t로 시작
+  * Compute Optimized : c로 시작
+  * Memory Optimized : r,x,z으로 시작
+  * Storage Optimized : i,d,h으로 시작
+* Flavor Scale Up/Down 가능
+* Genration이 높을수록 가성비가 좋아짐
+
+#### 3.2. User Data
+
+* EC2 Instance가 처음 부팅시 오직 한번만 실행되는 Script를 의미
+* root User로 실행됨
+
+---
+
 #### 2.1. Resource 기반 정책
 
 * AWS Resource에 권한 부여 가능한 정책
@@ -38,10 +96,10 @@ adsense: true
 
 #### 2.2. 자격 증명 (Identity) 기반 정책
 
-* 보안 주체에 권한 부여가 가능한 정
+* 보안 주체에 권한 부여가 가능한 정책
 * AWS 자격 증명
   * AWS 자체적으로 자격 증명 (Identity) 관리책
-* 연동 자격 증명 
+* 연동 자격 증명
   * 기업 Directory에 관리되는 자격 증명 (Identity)을 이용하여 AWS Service 이용
   * 만기가 있는 보안 자격 증명 (Credential)을 발급하고, 보안 자격 증명에 권한을 부여하는 방식 
 
@@ -65,14 +123,6 @@ adsense: true
 
 #### 2.6. Root User
 
-* 모든 권한을 갖고 있는 User
-  * 결제 정보
-  * 개인 Data
-  * AWS Service 구성 상태
-* Root User 이용을 지양하고 별도의 관리자 계정을 생성하여 이용하는것을 권장
-  * IAM 관리자 계정 생성
-  * Root 사용자 자격 증명 잠금
-  * IAM 관리자 계정 이용
 
 ### 3. S3
 
@@ -174,14 +224,14 @@ adsense: true
 
 * Flavor Format
   * <FamilyName><GenerationNum>.<Size>
-    * t3.large / c5.xlarge / p3.2xlarge 
+    * t3.large / c5.xlarge / p3.2xlarge
 * Flavor Scale Up/Down 가능
 * Genration이 높을수록 가성비가 좋아짐
 
 #### 4.2. User Data
 
-* EC2 Instance가 **처음 부팅**될때 딱 한번만 실행되는 Script를 의미한다.
-* root User로 실행된다.
+* EC2 Instance가 **처음 부팅**될때 딱 한번만 실행되는 Script를 의미
+* root User로 실행
 
 #### 4.3. Block Storage
 
