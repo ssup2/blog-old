@@ -131,6 +131,16 @@ adsense: true
 * Spread : 다수의 Availability Zone에 분산 배치하여 가용성(High Availability) 확보
 * Partition : 하나의 Availability Zone에서 다수의 Rack(Partition)에 분산
 
+#### 3.7. ENI (Elastic Network Interface)
+
+* VPC에서 하나의 Virtual Network Card를 의미
+* 하나의 Primary Private IPv4와 다수의 Secondary IPv4를
+* 하나의 Private IPv4 하나당 하나의 Elastic IP를 갖을 수 있다.
+* 하나의 Public IP를 갖을 수 있다.
+* 하나 이상의 Security Group에 포함될 수 있다.
+* 하나의 MAC Address를 갖는다.
+* 동일한 Availability Zone 내부의 EC2 Instance 사이에 속성 변경없이 이동이 가능하다. Failover시 유용한 기능이다.
+
 ---
 
 ### 3. S3

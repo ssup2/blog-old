@@ -66,7 +66,7 @@ EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Se
 
 EKS Cluster에서는 **LoadBalancer Service**를 생성하면 CLB 또는 NLB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB 이용시 Packet의 경로는 **Target Type**이라고 불리는 설정과 LoadBalancer Service의 **ExternalTrafficPolicy** 설정에 따라 변경된다. [그림 4]는 EKS Cluster에서 CLB, NLB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
 
-Target Type은 CLB, NLB에서 전송하는 Packet의 Dst IP/Port를 어떻게 설정할지 결정하는 설정이다. Target Type에는 **Instance** Type과 **IP** Type이 존재한다. Instance Type은 CLB, NLB 모두 이용가능하다. Instance Type의 경우에는 CLB, NLB가 전송하는 Packet의 Dst IP/Port를 LoadBalancer Service의 **NodePort**로 설정하고 전송한다. 이후에 Node가 LoadBalancer Service의 NodePort를 통해서 수신한 Packet은 kube-proxy가 설정한 iptables/IPVS Rule에 의해서 Packet은 Pod로 전달된다.
+Target Type은 CLB, NLB에서 전송하는 Packet의 Dst IP/Port를 어떻게 설정할지 결정하는 설정이다. Target Type에는 **Instance Type**과 **IP Type**이 존재한다. Instance Type은 CLB, NLB 모두 이용가능하다. Instance Type의 경우에는 CLB, NLB가 전송하는 Packet의 Dst IP/Port를 LoadBalancer Service의 **NodePort**로 설정하고 전송한다. 이후에 Node가 LoadBalancer Service의 NodePort를 통해서 수신한 Packet은 kube-proxy가 설정한 iptables/IPVS Rule에 의해서 Packet은 Pod로 전달된다.
 
 Instance Type의 경우에는 LoadBalancer Service의 ExternalTrafficPolicy 설정에 따라서 CLB, NLB가 전송하는 Packet의 Target Node가 달라진다. **Cluster**로 설정되어 있는 경우에 CLB, NLB는 모든 Node를 대상으로 LoadBalancer Service의 NodePort를 이용하여 Worker Node의 Health Check를 수행한다. 이후에 정상 상태의 모든 Node들에게 Packet을 분배하여 전송한다. **Local**로 설정되어 있는 경우 모든 Node를 대상으로 LoadBalancer Service의 **HealthCheckNodePort**를 통해서 Node에 Target Pod가 동작하는지 점검한다. 이후에 Target Pod가 동작하는 Node들에게만 Packet을 분배하여 전송한다.
 
