@@ -86,43 +86,52 @@ adsense: true
 * EC2 Instance가 처음 부팅시 오직 한번만 실행되는 Script를 의미
 * root User로 실행됨
 
+#### 3.3. Security Group
+
+* EC2 Instance 앞에 존재하는 L4 Firewall
+* 하나의 Security Group에 다수의 EC2 Instance를 포함
+* Inbound, Outbound Rule 각각 설정 가능
+* Rule에는 Protocol, Dest IP, Dest Port, Security Group에 따라서 Traffic 허용/거부 설정 가능
+* Default 정책
+  * Inbound : 모두 거부
+  * Outbound : 모두 허용
+
+#### 3.4. Spot Instance
+
+* 일시적으로 실행되는 Instance
+  * Current Spot Price는 AWS 가용 EC2 Instance에 따라서 실시간으로 변경
+  * Max Spot Price는 사용자가 설정
+  * "Max Spot Price > Current Spot Price" 상황일 경우에만 실행
+  * "Max Spot Price < Current Spot Price" 상황이 되는 경우 실행되던 Instance는 Stop 또는 Termintate 상태가 됨
+  * Stop, Terminate 상태가 되는것을 특정 시간 (1 ~ 6시간) 동안 방지할 수 있는 Spot Block Type도 존재
+* On-demand Instance에 따라서 최대 90% 비용 절감
+* Batch Job을 처리하는데 적합
+* Spot Request Type
+  * one-time : Spot Instnace를 구동하고 이후에는 관여 X
+  * persistance : Spot Instance를 구동하고 이후에도 Spot Instance가 잘 동작하고 있는지 확인, 만약에 동작하고 있지 않다면 Spot Instance를 다시 생성
+    * persistance Type일 경우 Spot Request를 먼저 제거하고 persistance Type 제거 필요
+* Spot Fleets
+  * 사용자가 원하는 Instance Type, OS, AZ에 따라서 다수의 Spot Instance를 생성
+    * Spot Instance는 단일 AZ, 단일 Flavor만 지정가능
+  * Spot Instance + On-Demand Instance (Optional)
+
+#### 3.5. Elastic IP
+
+* EC2 Instance에 붙이고 땔 수 있는 Public IP
+* Elastic IP는 제거되지 않는 이상 IP가 변경되지 않음
+* 하나의 계정당 기본적으로 5개까지 이용 가능
+  * Quota 증가로 5개 이상 이용 가능
+* Elastic IP 이용 권장 X
+  * Random Public IP + DNS Name 이용 권장
+
+#### 3.6. Placement Group
+
+* EC2 Instance의 배치 전략
+* Cluster : Low Latency를 위해서 하나의 Availability Zone안의 하나의 Rack(Partition)에 배치
+* Spread : 다수의 Availability Zone에 분산 배치하여 가용성(High Availability) 확보
+* Partition : 하나의 Availability Zone에서 다수의 Rack(Partition)에 분산
+
 ---
-
-#### 2.1. Resource 기반 정책
-
-* AWS Resource에 권한 부여 가능한 정책
-* 특정 AWS Resource에게만 Resource 기반 정책 부여 가능
-  * AWS S3, AWS S3 Graciel
-
-#### 2.2. 자격 증명 (Identity) 기반 정책
-
-* 보안 주체에 권한 부여가 가능한 정책
-* AWS 자격 증명
-  * AWS 자체적으로 자격 증명 (Identity) 관리책
-* 연동 자격 증명
-  * 기업 Directory에 관리되는 자격 증명 (Identity)을 이용하여 AWS Service 이용
-  * 만기가 있는 보안 자격 증명 (Credential)을 발급하고, 보안 자격 증명에 권한을 부여하는 방식 
-
-#### 2.3. 보안 주체
-
-* AWS Resouce에 대해서 작업할 수 있는 주체
-  * IAM 사용자, 연동 사용자, 그룹, IAM Role, 자격 증명 공급자 (Idp)
-* IAM 사용자
-  * 별도의 계정이 아닌 보안 주체
-  * 생성시 모든 AWS Resouce에 대한 권한을 갖고 있지 않음
-
-#### 2.4. 정책
-
-* 하나 이상의 권한으로 구성
-* JSON 형태의 문서
-* 보안 주체 또는 AWS Resource에게 정책을 부여하여 권한 부여
-
-#### 2.5. 권한 적용 순서
-
-* 명시적으로 거부 되어있는가? (Yes/거부) -> 명시적으로 허용 되었는가 (Yes/허용, No/거부)
-
-#### 2.6. Root User
-
 
 ### 3. S3
 
