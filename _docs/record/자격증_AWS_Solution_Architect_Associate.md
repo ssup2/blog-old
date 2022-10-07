@@ -152,7 +152,7 @@ adsense: true
 * New Virtualization Technology
 * 더 빠른 Network, EBS Volume 성능 제공
 
-### 4. EC2 Instance Store
+### 4. EC2 Instance Storage
 
 * EC2 Instance 저장소
 
@@ -202,7 +202,19 @@ adsense: true
   * EC2 Instance 중지, 종료, Hibernate 될때
   * 물리 Disk 장애시
 
+#### 4.4. EFS 
 
+* NFS Server
+* NFSv4.1 Protocol 이용
+* File System 크기는 자동으로 증가하며, 사용 용량에 따라서 비용 발생
+* Linux에만 이용 가능
+* Muti AZ, Single AZ 설정 가능
+
+##### 4.4.1. EFS Storage Class
+
+* Storage Tiers
+  * Standard : 표준
+  * Infrequent Access : Data 저장에는 적은 비용을 지불하지만, 저장된 Data 이용시 비용 발생
 
 ### 6. Reference
 
