@@ -141,6 +141,74 @@ adsense: true
 * 하나의 MAC Address를 갖는다.
 * 동일한 Availability Zone 내부의 EC2 Instance 사이에 속성 변경없이 이동이 가능하다. Failover시 유용한 기능이다.
 
+#### 3.8. Hibernate
+
+* EC2 Instance가 Hibernate를 이용하여 Stop 상태 진입시 EC2 Instance Memory의 내용을 Root EBS Volume에 저장하고 종료
+* 이후 EC2 Instance가 Running 상태가 되면 Root EBS Volume에 저장한 EC2 Instance Memory 내용을 바탕으로 빠르게 Stop 상태 이전의 동작 상태로 복구 가능
+* Root EBS Volume에 EC2 Instance Memory 내용이 저장되므로, EC2 Instance의 Root EBS Volume은 암호화 되어야함
+
+#### 3.9. Nitro
+
+* New Virtualization Technology
+* 더 빠른 Network, EBS Volume 성능 제공
+
+### 4. EC2 Instance Store
+
+* EC2 Instance 저장소
+
+#### 4.1. EBS (Elastic Volume Service)
+
+* Network 기반 Volume Storage
+* 하나의 EBS Volume은 동시에 하나의 EC2 Instance에만 Attach 가능
+  * 예외 적으로 io1, io2 Volume은 동시에 여러개의 EC2 Instance에 Attach 가능 (Multi Attach)
+* EBS Volume은 AZ에 종족되며, 동일한 AZ에 위치한 EC2 Instance에만 Attach 가능
+
+##### 4.1.1. EBS Snapshot
+
+* EBS의 특정 상태를 저장
+* EBS는 생성된 Snapshot 상태로 복구 가능
+* Detach하지 않더라도 Snapshot 동작이 가능하지만 권장되지 않음
+* EBS Snapshot을 기반으로 AMI를 생성 가능
+  * EBS Snapshot 상태를 갖는 EC2 Instance 생성은 불가능하며, 반드시 EC2 Snapshot을 기반으로 AMI를 생성하고 생성한 AMI를 이용하여 EC2 Instance를 생성해야함
+
+##### 4.1.2. EBS Volume Type
+
+* gp2, gp3 : General Purpose SSD, Boot Volume으로 이용 가능
+* io1, io2 : Highest-performance SSD, Boot Volume으로 이용 가능, Multi Attach 가능
+* st : Low cost HDD
+* sc : Lowest cost HDD
+
+##### 4.1.3. EBS Encription
+
+* EBS 생성시 Encription 설정 가능
+* Encription 설정시 자동으로 암호화, 복호화 실행
+* Encription Overhead는 낮은편
+
+#### 4.2. AMI (Amazon Machine Image)
+
+* EC2 Instance의 Booting Image
+* EC2 Instance를 원하는 상태로 설정한 이후에 AMI 생성 기능을 통해서 AMI 생성
+  * AMI를 생성하면서 Snapshot 생성도 가능
+* 하나의 AMI에 다수의 EBS Volume 포함 가능
+
+#### 4.3. EC2 Instance Store
+
+* 물리 Disk 기반 Volume Storage
+* EBS보다 빠른 성능을 갖지만 Data는 언제든지 소실될 수 있음
+* Cache와 같이 빠르지만 임시로 Data를 저장하는 경우에 활용
+* 다음의 경우에는 Data가 소실되지 않음
+  * EC2 Instance Reboot
+* 다음의 경우에는 Data가 소실됨
+  * EC2 Instance 중지, 종료, Hibernate 될때
+  * 물리 Disk 장애시
+
+
+
+### 6. Reference
+
+* [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
+* EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
+
 ---
 
 ### 3. S3
