@@ -216,6 +216,29 @@ adsense: true
   * Standard : 표준
   * Infrequent Access : Data 저장에는 적은 비용을 지불하지만, 저장된 Data 이용시 비용 발생
 
+### 5. ELB (Elastic Load Balancer)
+
+* Load 분산
+* 장애(EC2 Instance, AZ, Network)시 고가용성 제거
+* User App의 단일 Endpoint 제공
+* SSL Terminiation 제공
+* Sticky Session 제공
+* Managed Load Balancer
+  * AWS에서 동작 보장 (Upgrade, Maintenance, HA 보장)
+  * 약간의 설정 Options들 제공
+
+#### 5.1. CLB (Classic Load Balancer)
+
+* L4, L7 Load Balancer
+  * TCP + TCP Health Check, HTTP, HTTPS + HTTP Health Check 지원
+* Deprecated
+
+#### 5.2. ALB (Application Load Balancer)
+
+#### 5.3. NLB (Network Load Balancer)
+
+#### 5.4. GLB (Gateway Load Balancer)
+
 ### 6. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
