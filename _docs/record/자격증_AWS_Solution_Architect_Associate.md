@@ -229,17 +229,145 @@ adsense: true
 
 #### 5.1. CLB (Classic Load Balancer)
 
+* Deprecated
 * L4, L7 Load Balancer
   * TCP + TCP Health Check, HTTP, HTTPS + HTTP Health Check 지원
-* Deprecated
+* Cross-Zone Load Balancing
+  * Default Disable, 설정으로 Enable 가능
+  * 추가 비용 발생 X
+* SSL 지원 X
+
 
 #### 5.2. ALB (Application Load Balancer)
 
+* L7 Load Balancer
+  * HTTP/1.1, HTTP/2, WebSocket 지원
+  * Less Latency : 400ms
+* Redirect 지원
+* Routing 정책
+  * URL에 존재하는 Path 기반
+  * URL에 존재하는 Hostname 기반
+  * Quert String, Header 기반
+* ALB Target Group Type
+  * EC2 Instance
+  * ECS Task
+  * Lambda Function
+* 고정된 Hostname을 갖음
+  * XXX.region.elb.amazonaws.com
+* Cross-Zone Load Balancing
+  * 항상 Enable 상태이며 Disable 불가능
+  * 추가 비용 발생 X
+* App Server가 받는 Packet의 Src IP는 ALB IP이기 때문에 App Server는 Packet의 Src IP를 통해서 Client IP를 알 수 없음
+  * X-Forwarded-For Header를 통해서 App Server에게 Client IP를 App Server에게 전달
+  * X-Forwarded-Port Header를 통해서 Client의 Port를 App Server에게 전달
+  * X-Forwarded-Proto Header를 통해서 Client의 Protocol을 App Server에게 전달
+
 #### 5.3. NLB (Network Load Balancer)
 
-#### 5.4. GLB (Gateway Load Balancer)
+* L4 Load Balancer
+  * TCP, UDP 지원
+  * Less Latency : 100ms
+* NLB Target Groups
+  * EC2 Instnace
+  * Private IP Address
+  * ALB
+* Cross-Zone Load Balancing
+  * Default Disable, 설정으로 Enable 가능
+  * 추가 비용 발생
 
-### 6. Reference
+#### 5.4. GWLB (Gateway Load Balancer)
+
+* L3 Load Balancer
+* Packet을 App Server에 전달하기 전에 가로체어 Firewall, 침입 탐지같은 동작을 수행하는 Third Party Network Virtual Appliance에게 전송하는 역할 수행
+* GWLB Target Group
+  * EC2 Instance
+  * Private IP Address
+
+#### 5.5. Sticky Session (Session Affinity)
+
+* 동일한 Client는 언제나 LB 뒤에 존재하는 동일한 App Server에 접속하도록 하는 기법
+  * CLB, ALB에서 이용 가능
+  * Cookie 정보를 활용하여 CLB, ALB는 Packet을 어느 App에 전달할지 결정
+* Cookie 종류
+  * Application-based Cookie
+    * Custom Cookie
+      * ??
+    * Application Cookie
+      * AWSALBAPP 이름의 Cookie 이름 이용
+  * Duration-based Cookie
+    * ??
+
+#### 5.6. SSL
+
+* SSL Termination 지원
+* SNI (Server Name Indication) 지원
+  * ALB, NLB에서만 이용 가능하며 CLB에서는 제공하지 않음
+* 인증서는 ACM (AWS Certificate Manager)에서 관리
+
+#### 5.7. Connection Draining
+
+* CLB에서는 Connection Draining, ALB/NLB에서는 Deregistration Delay라교 명칭
+* DRAINING 상태에 존재하는 Target (EC2 Instance)은 기존의 TCP Connection은 유지되지만, 신규 TCP Connection은 생성되지 않음
+* Draining Timeout을 0초로 설정할 경우 Connection Draining 기능 Disable
+
+#### 5.8. ASG (Auto Scaling Group)
+
+* Scale-out, Scale-in 가능
+  * EC2 Instnace 개수를 Minimum, Disred, Maximum 3가지 관점에서 설정 가능
+  * CloudWatch 기반의 Metric 정보를 바탕으로 Auto Scale-out, Scale-in 수행
+* EC2 Instnace가 장애시 자동 복구
+
+##### 5.8.1. ASG Launch Template
+
+* AGS를 쉽게 생성할 수 있는 Template 제공
+* Luanch Template에는 다음의 정보들이 포함 
+  * AMI + Instance Type
+  * EC2 User Data, EBS Volume
+  * Security Group
+  * SSH Key Pair
+  * IAM Roles for EC2 Instance
+  * Network + Subnet Info
+  * Load Balancer Info
+
+##### 5.8.2. Auto Scailing Policy
+
+* Target Tracking Scailing
+  * AGS Group의 다음의 Metric들이 유지되도록 Scailing 수행
+    * ASG Group에 평균 CPU 사용량
+    * ASG Group의 평균 Inbound Traffic (All EC2 Network Interface)
+    * ASG Group의 평균 Outbound Traffic (All EC2 Network Interface)
+    * ASG Group의 평균 초당 Request
+
+* Simple Scailing
+  * CloudWatch Alarm 기반 정책
+  * Ex) ASG Group 평균 CPU 사용률이 70%가 넘어가면 EC2 Instnace 5개 추가
+  * Ex) ASG Group 평균 CPU 사용률이 40% 미만이면 EC2 Instance 5개 감소
+
+* Step Scailing
+  * CloudWatch Alarm 기반 정책
+  * ???
+
+* Predictive Scailing
+  * 다음의 과거의 Metric을 기반으료 예측하여 Scaling 수행
+    * ASG Group에 평균 CPU 사용량
+    * ASG Group의 평균 Inbound Traffic
+    * SG Group의 평균 Outbound Traffic
+    * ASG Group의 평균 초당 Request
+    * Custom Metric 기반으로 예측
+
+* Scheduled Action
+  * 시간대에 따른 Scaleing 수행
+
+##### 5.8.3. Scailing Cooldown
+
+* Scailing 수행후 다음 Scailing을 수행하기 전까지의 대기 시간
+* Cooldown 기간동안에는 EC2 Instance를 증가시키거나 감소시키지 않음
+
+### 6. RDS
+
+### 7. Elastic Cache
+
+### 8. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
