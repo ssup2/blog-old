@@ -411,6 +411,27 @@ adsense: true
   * Mutli-AZ 설정시 Master RDS Instance Down 불필요
   * Standby RDS Instance는 Snapshot을 기반으로 생성한 다음 Master RDS Instance와의 Data 동기를 수행
 
+#### 6.4. Encryption
+
+* Master RDS Instance, Read Replica RDS Instance는 AWS KMS 기반 AES-256 암호화 가능
+* Master RDS Instance가 암호화하지 않으면 Read Replica RDS Instance도 암호화 되지 않음
+* Snapshot도 Master RDS Instance가 암호화를 수행해야 암호화 수행
+* 암호화 되지 않은 Snapshot은 암호화 가능
+* 암호화 되지 않은 RDS Instance를 암호화 하는 방법
+  * Snapshot 생성
+  * 생성한 Snapshot을 암호화
+  * 암호화된 Snapshot을 바탕으로 RDS Instance 생성
+  * App을 새로 생성된 RDS Instance를 이용하도록 설정 & 기존 RDS Instance 삭제
+* Client, RDS Instance 사이는 SSL을 이용한 암호화 수행
+
+#### 6.5. Network & Access Management
+
+* 일반적으로 Private Subnet에 할당
+  * Security Group을 활용하여 보안성 향상
+* 기존의 IP/Password 기반 인증 가능
+* IAM 기반 인증 가능
+  * RDS Service를 통해서 Token 획득이후 RDS Instance에 접근
+
 ### 7. Elastic Cache
 
 ### 8. Reference
