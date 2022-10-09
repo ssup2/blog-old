@@ -432,6 +432,63 @@ adsense: true
 * IAM 기반 인증 가능
   * RDS Service를 통해서 Token 획득이후 RDS Instance에 접근
 
+#### 6.6. Aurora
+
+* AWS Cloud Optimized RDS
+* MySQL, Progres와 호환
+* Storage의 크기는 10GB로 시작하여 최대 128TB 까지 자동으로 증가
+* 하나의 Master Instance + 최대 15 Read Replica Instance를 갖을 수 있음
+  * Master만 Read/Write 수행 가능
+  * Read Replica는 부하에 따라서 Auto Scaling 수행
+  * Read Replica는 Cross Region 지원
+* 빠른 Failover (30초 미만)
+* 일반 RDS보다 20%정도 더 높은 비용 청구
+
+#### 6.6.1. Storage HA
+
+* 3개의 AZ에 6개의 복제본으로 구성
+  * Write를 수행하기 위해서 4개의 복제본이 필요
+  * Read를 수행하기 위해서 3개의 복제본이 필요
+  * 장애시 Self Healing을 통해서 데이터 복제
+
+#### 6.6.2. Endpoint 
+
+* Writer Endpoint
+  * Master Instance를 가리키는 DNS Record
+* Reader Endpoint
+  * Read Replica Instance들을 가리키는 DNS Reocrd
+  * Read Replica가 Auto Scaling 되면 자동으로 Read Endpoint에 추가/제거 수행
+* Custom Endpoint
+  * 사용자 설정을 통해 일부 Read Replica Instnace들만 가리키는 DNS Record
+  * Data 분석을 위해서 성능이 좋은 Read Replica Instance만 이용할 경우 활용
+
+#### 6.6.3. Serverless
+
+* Client는 Proxy Server (Proxy Fleet)를 통해서 Aurora Instance에 접근
+* 필요에 따라서 자동으로 Aurora Instance를 초기화 하고 Auto Scaling 수행
+* 간혈적으로 DB를 이용하는 경우에 유리
+  * 초당 사용시간에 따라서 비용 청구
+
+#### 6.6.4. Multi-Master
+
+* 다수의 Master Instance가 존재하며 모든 Master Node는 Read/Write 동작 수행
+* 일부 Master Instance가 장애로 동작하지 않더라도, 동작중인 Master Instance를 통해서 지속적인 Write 동작 수행 가능
+* 다수의 Master Instance 중에서 Write 동작을 수행할 Instance 선택은 Client에서 수행
+  * Aurora에서는 Master Instance Load Balancing 기능 제공 X
+
+#### 6.6.5. Global Aurora
+
+* Disaster 복구를 위한 Cross Region Read Replica
+* Primary Region (Read/Write), Secondary Region (Read Only) 존재
+  * Primary Region과 Secondary Region은 비동기로 복제되며 복제 시간은 최대 1초
+  * 최대 5개의 Secondary Region 설정 가능
+  * Primary Region 장애시 Secondary Region이 Primary Region으로 승격 가능
+
+#### 6.6.6. Aurora Machine Learning
+
+* AWS ML Service와 연동하여 SQL Query를 통해서 ML 기반 예측 정보를 가져올 수 있음
+  * Ex) 침입 탐지, 광고 Target, 상품 추천
+
 ### 7. Elastic Cache
 
 ### 8. Reference
@@ -533,113 +590,6 @@ adsense: true
 * 저장 장치를 AWS로 전송받아 저장후 AWS에게 저장 장치를 전달하여 S3에 복사하는 방법
 * 일반적으로 7일 정도 시간이 소요되기 때문에, S3로 Upload가 7일 이상 걸린다면 이용을 고려
 
-### 4. EC2
-
-* Compute Instance 제공
-
-#### 4.1. Flavor
-
-* Flavor Format
-  * <FamilyName><GenerationNum>.<Size>
-    * t3.large / c5.xlarge / p3.2xlarge
-* Flavor Scale Up/Down 가능
-* Genration이 높을수록 가성비가 좋아짐
-
-#### 4.2. User Data
-
-* EC2 Instance가 **처음 부팅**될때 딱 한번만 실행되는 Script를 의미
-* root User로 실행
-
-#### 4.3. Block Storage
-
-* EBS
-  * 비휘발성 Storage
-  * Flavor에 따라서 선택 가능
-  * EBS 최적화 Instance 기능 제공 (Flavor로 선택 가능)
-    * EBS를 위한 추가 Network Bandwidth 할당
-    * EBS와 다른 Traffic 사이의 경합 최소화
-  
-* Instance Storage
-  * 휘발성 Storage
-  * Hypervisor Local Storage 이용
-  * EBS에 비해서 높은 성능
-  * Flavor에 따라서 선택 가능
-
-#### 4.4. File Stroage
-
-* EFS
-  * Linux File Server
-  * NFS Server
-* FSx
-  * Windows File Server
-  * NTFs
-
-#### 4.5. 비용에 따른 
-
-* On-Demand Instance : 예상하지 못한 Event 발생을 대처하기 위해서 예약없이 투입된 Instance를 의미한다. 가장 높은 이용비를 갖는다.
-
-* Reserved Instance
-  * Reserved Instance : 예약된 Instance를 의미한다. On-Demand Instance에 비해서 최대 75% 저렴하다. 1~3년 단위로 예약이 가능하다.
-  * Convertible Reserved : 예약된 Instance이지만 Type을 변경할 수 있다. On-Demand Instance에 비해서 최대 54% 저렴하다.
-  * Scheduled Reserved : 날짜, 주, 월 주기로 예약된 Instance를 의미한다.
-
-* Spot Instance : 언제든지 중단될수 있는 Instance를 의미한다. 가장 저렴한 Instacnce이다. On-Demand Instance에 비해서 최대 90% 저렴하다.
-
-* Dedicated Instance : ??
-
-* Dedicated Host : ??
-
-#### 4.6. Snapshot
-
-* EBS Snapshot 기능을 이용하여 EC2 Snapshot 수행 가능
-* EC2 Snapshot은 S3에 저장
-
-#### 4.7. Placement Groups
-
-* EC2 Instance의 배치 전략을 설정할 수 있다.
-* Cluster : Low Latency를 위해서 하나의 Availability Zone안의 하나의 Rack(Partition)에 위치시킨다.
-* Spread : 다수의 Availability Zone에 분산시켜 가용성(High Availability)을 올린다.
-* Partition : 하나의 Availability Zone에서 다수의 Rack(Partition)에 분산시킨다.
-
-#### 4.8. Security Group
-
-* Default 정책 : 모든 Inboud Traffic은 거부, 모든 Outbound Traffic은 허용한다.
-* Src IP, Dest IP, Security Group 단위로 허용 여부를 설정할 수 있다.
-
-#### 4.9. ENI (Elastric Network Interfaces)
-
-* VPC에서 하나의 Virtual Network Card를 의미한다.
-* 하나의 Primary Private IPv4와 다수의 Secondary IPv4를 갖을 수 있다.
-* 하나의 Private IPv4 하나당 하나의 Elastic IP를 갖을 수 있다.
-* 하나의 Public IP를 갖을 수 있다.
-* 하나 이상의 Security Group에 포함될 수 있다.
-* 하나의 MAC Address를 갖는다.
-* 동일한 Availability Zone 내부의 EC2 Instance 사이에 속성 변경없이 이동이 가능하다. Failover시 유용한 기능이다.
-
-### 5. AMI (Amazon Machine Image)
-
-* EC2 Instance Image
-* Backend Storage로 S3 이용 (Snapshot 동일)
-
-### 6. EBS (Elastic Block Storage)
-
-* Block Storage Service
-* EC2에만 Mount하여 이용 가능
-
-#### 6.1. Type
-
-* 범용 SSD
-  * 용량에 비례하여 IOPS 증가
-* IOPS SSD
-  * 특정 IOPS 이상의 성능이 필요한 경우 이용
-* 최적화된 HDD
-  * 자주 접근하는 Batch Job의 Storage로 유용
-  * 대용량 Data, Streaming, Log 
-  * Boot Volume X
-* Cold HDD
-  * 자주 접근하지 않는 대용량 Data 저장용
-  * Boot Volume X 
-
 ### 7. EFS (Elastic File System)
 
 ### 8. RDS
@@ -658,21 +608,6 @@ adsense: true
 * Document DB
 * Event 기능 제공 (Lambda)
 * Scale Out
-
-#### 9.1 RCU, WCU
-
-#### 9.2. 일관성 Option
-
-* Strongly Consistency
-  * 
-
-* Eventual Consistency
-  * 일시적 불일치 허용 
-
-* Transactional
-  * 
-
-#### 9.3. Global Table
 
 ### 10. Neptune
 
