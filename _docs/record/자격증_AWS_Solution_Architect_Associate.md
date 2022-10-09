@@ -365,6 +365,52 @@ adsense: true
 
 ### 6. RDS
 
+* Managed RDB
+  * 자동 Provisiong, OS Patch 제공
+  * Continuous Backup, Restore 제공
+  * Monitoring Dashboards 제공
+  * Read Replica 쉽게 구성 가능
+  * Multi AZ 쉽게 구성 가능
+  * Scailing 쉽게 가능
+* 다음의 RDB 이용가능
+  * Postgres
+  * MySQL
+  * MariaDB
+  * Oracle
+  * Microsoft SQL Server
+  * Aurora
+
+#### 6.1. Storage Auto Scaling
+
+* RDS Storage 부족시 자동으로 Storage Size 증가 시킴
+* Maximum Stroage Threshold 설정을 통해서 최대 Storage Size 설정 필요
+* 다음의 조건을 충족시 Storage Auto Scailing 수행
+  * 남은 Storage 용량이 10% 미만이고, 5분 이상 지속될 경우
+  * 마지막 Scale Up 수행후 6시간 이후
+
+#### 6.2. Read Replica
+
+* Read 전용 RDS Instance
+* Master RDS Instance와 비동기 Replication 수행
+* Master RDS Instance와 동일 AZ, Cross AZ, Cross Region으로 구성 가능
+  * 동일 AZ, Cross AZ 구성시 Network 비용 발생 X
+  * Cross Region 구성시 Network 비용 발생
+* Read Replica RDS Instance는 Master RDS Instance로 승격 가능
+  * 장애 Recovery를 위한 RDS Instance로 이용 가능 
+  * 비동기 Replication을 수행하기 때문에 Data Loss 발생 가능
+
+#### 6.3. Multi-AZ
+
+* 장애 Recovery를 위한 Standby RDS Instance를 다른 AZ에 생성
+* Standby RDS Instance와 Master RDS Instance와 동기 Replication 수행
+  * 동기 Replication을 수행하기 때문에 Data Loss 발생 X
+* Master RDS Instance와 Standby RDS Instance는 동일한 DNS Record를 이용
+  * Master RDS Instance 장애시 DNS Record IP가 Standby RDS Instance로 변경
+  * Application의 DB 재설정 불필요
+* Multi-AZ 설정은 동적으로 가능
+  * Mutli-AZ 설정시 Master RDS Instance Down 불필요
+  * Standby RDS Instance는 Snapshot을 기반으로 생성한 다음 Master RDS Instance와의 Data 동기를 수행
+
 ### 7. Elastic Cache
 
 ### 8. Reference
