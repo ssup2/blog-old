@@ -489,9 +489,45 @@ adsense: true
 * AWS ML Service와 연동하여 SQL Query를 통해서 ML 기반 예측 정보를 가져올 수 있음
   * Ex) 침입 탐지, 광고 Target, 상품 추천
 
-### 7. Elastic Cache
+### 7. ElasticCache
 
-### 8. Reference
+* Managed Redis, Memcached
+* AWS IAM 기반 인증 기능 제공 X
+
+#### 7.1. Redis
+
+* Mutli-AZ를 활용한 Auto-Failover 지원
+* Read Replica를 활용한 Read Scaling 및 HA 제공
+* AOF (Append Only File)를 활용한 Data 지속성 제공
+* Backup & Restore 기능 제공
+* Single-Thread Architecture
+* 다양한 Data Type 존재
+* ID/Password 기반의 인증 이용
+
+#### 7.2. Memcached
+
+* HA 제공 X
+* Data 지속성 제공 X
+* Backup & Restore 기능 제공 X
+* Multi-Thread Architecture
+* String 단일 Data Type 제공
+* SASL 기반 인증
+
+#### 7.3. ElasticCache Pattern
+
+* Lazy Loading 
+  * 읽은 Data를 Cache에 저장
+  * Cache에 저장된 Data는 유효하지 않을 확률이 존재
+* Write Through
+  * Data를 저장할때 Cache에도 같이 저장
+  * Cache에 저장된 Data는 유효
+* Session Store
+  * Session 정보를 저장
+  * TTL 기능을 활용
+
+### 8. Route 53
+
+### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
