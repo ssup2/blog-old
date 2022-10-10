@@ -527,6 +527,13 @@ adsense: true
 
 ### 8. Route 53
 
+* Managed DNS
+
+#### 8.1. Hosted Zones
+
+* Public Hosted Zone : Public Network
+* Private Hosted Zone : VPC Private Network
+
 ### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
