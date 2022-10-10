@@ -534,6 +534,18 @@ adsense: true
 * Public Hosted Zone : Public Network
 * Private Hosted Zone : VPC Private Network
 
+#### 8.2. CNAME vs Alias
+
+* CNAME
+  * Non-Root Domain 지정 가능
+    * Ex) ssup2.com (Root Domain) 불가능
+  * Root Domain 지정 불가능
+    * Ex) blog.ssup2.com (Non-root Domain) 가능
+* Alias
+* Alias Target
+
+#### 8.3. Routing Policy
+
 ### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
