@@ -19,14 +19,16 @@ URI는 의미 그대로 Resource에게 붙이는 고유한 **식별자**를 의�
 
 ![[그림 2] URL]({{site.baseurl}}/images/theory_analysis/URI_URL_URN/URL.PNG){: width="700px"}
 
-URL은 의미 그대로 Web Resource에게 고유한 위치 정보를 부여하는데 이용한다. [그림 2]는 URL의 예제를 나타낸다. URL의 구성요소는 다음과 같다.
+URL은 의미 그대로 Web Resource에게 고유한 위치 정보를 부여하는데 이용한다. [그림 2]는 URL의 예제를 나타낸다. URL의 구성요소는 다음과 같다. Root Domain 용어의 경우에는 일반적인 의미와 DNS 관점에서의 의미가 다르다. [그림 2]에는 혼돈을 방지하기 위해서 2가지 의미를 모두 나타내고 있다.
 
 * Scheme : 일반적으로 Web Resource에 접근하기 위한 Protocol을 의미한다.
-* Root Domain : 최상위 Domain을 의미한다. 일반적으로 생략하여 이용한다.
-* Top-level Domain : 최상위 Domain 바로 하위의 Domain을 의미한다. ".kr", ".us"와 같은 ccTLD(country code TLD)와 ".com", ".net"과 같은 gTLD(generic TLD)가 존재한다.
-* Second-level Domain : Top-level Domain 하위의 Domain을 의미한다.
-* Subdomain : Second-level 하위 Domain을 의미한다. Subdomain 여러개를 구성하여 다수의 Depth를 갖는 Domain 구성도 가능하다.
-* Port : Web Resource에 접근하기 위한 Port를 의미하며 각 Scheme마다 이용되는 Default Port를 이용하는 경우 생략 가능하다. ex) HTTP/80, HTTPS/443
+* Root Domain (DNS View) : DNS 관점에서 Root Domain은 최상위 Domain을 의미한다. "."으로 나타내며 일반적으로 생략하여 이용한다.
+* Top-level Domain : 최상위 Domain을 의미한다. ".kr", ".us"와 같은 ccTLD(country code TLD)와 ".com", ".net"과 같은 gTLD(generic TLD)가 존재한다.
+* Domain Name / Second-level Domain : Domain 이름을 의미하며, Top-Level Domain의 하위 Domain이기 때문에 Second-level Domain으로도 불린다.
+* Root Domain (Common) : 일반적인 Root Domain은 Domain Name과 Top-level Domain을 묶은걸 의미한다.
+* Subdomain / Third-level Domain : 보조 Domain을 의미하며, Second-level 하위 Domain이기 때문에 Third-level Domain으로도 불린다. Subdomain 여러개를 구성하여 다수의 Depth를 갖는 Domain 구성도 가능하다.
+* FQDN : 모든 Domain을 묶은걸 의미한다.
+* Port : Web Resource에 접근하기 위한 Port를 의미하며 각 Scheme마다 이용되는 Default Port를 이용하는 경우 생략 가능하다. Ex) HTTP/80, HTTPS/443
 * Subdirectory : Domain 하위의 Path를 의미한다. "/" 문자를 이용하여 Depth 표현이 가능하다.
 * Query String : URL을 통해서 Parameter를 Web Resource에게 전달할때 이용한다. "?" 문자로 URL 마지막부터 시작하며 "<key>=<value>" 형태를 갖는다. 다수의 "&" 문자를 이용하여 다수의 Key-Value를 설정할 수 있다.
 

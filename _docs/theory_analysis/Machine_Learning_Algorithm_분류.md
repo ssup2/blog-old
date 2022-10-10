@@ -35,7 +35,7 @@ Machine Learning Algorithm은 일반적으로 지도 학습, 비지도 학습, �
 
 ##### 1.2.2. 차원 축소 (Dimension Reduction)
 
-차원 축소는 다수의 차원으로 이루어진 Data의 차원을 줄이는 Algorithm을 의미한다. Data의 연관성 파악을 통해서 차원 축소가 가능해진다. 일반적으로 Data의 차원이 줄어들면 학습 시간이 줄어들며 Algorithm의 성능도 증가하기 때문에, 학습에 필요한 Data의 차원을 줄이는 용도로 많이 이용한다. 차원을 줄이는 방법에 따라서 Feature 선택 방법과 Feature 추출 방법이 존재한다. 여기서 Feature는 차원과 동일하다.
+차원 축소는 다수의 차원으로 이루어진 Data의 차원을 줄이는 Algorithm을 의미한다. Data의 연관성 파악을 통해서 차원 축소가 가능해진다. 일반적으로 Data의 차원이 줄어들면 학습 시간이 줄어들며 Algorithm의 성능도 증가하기 때문에, 학습에 필요한 Data의 차원을 줄이는 용도로 많이 이용한다. 차원을 줄이는 방법에 따라서 Feature 선택 방법과 Feature 추출 방법이 존재한다. 여기서 Feature는 차원과 동일한 의미를 나타낸다.
 
 * Feature 선택 (Selection) : 불필요한 Feature를 제거한다.
 * Feature 추출 (Extraction) : 다수의 Feature를 대변하는 새로운 Feature를 정의한다.
