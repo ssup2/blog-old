@@ -542,14 +542,27 @@ adsense: true
   * Root Domain 지정 불가능
     * Ex) blog.ssup2.com (Non-root Domain) 가능
 * Alias
-* Alias Target
+  * Non-Root, Root Domain 둘다 지정 가능
+  * 일부 AWS Resource를 대상으로만 설정 가능
+* Alias Target Support
+  * Elastic Load Balancer
+  * CloudFront Distributions
+  * API Gateway
+  * Elastic Beanstalk environments
+  * S3 Websites
+  * VPC Interface Endpoints
+  * Global Accelerator
+  * Route 53 record in the same hosted zone
+  * EC2 DNS name X
 
 #### 8.3. Routing Policy
-
+ 
 ### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
+* Route53 Alias : [https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
+* Route53 Alias : [https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record](https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record)
 
 ---
 
