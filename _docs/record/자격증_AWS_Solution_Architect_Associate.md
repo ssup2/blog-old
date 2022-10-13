@@ -542,9 +542,11 @@ adsense: true
   * Root Domain 지정 불가능
     * Ex) blog.ssup2.com (Non-root Domain) 가능
 * Alias
+  * DNS Procotol에서 제공되지 않는 AWS 내부 Protocol
+  * DNS Client시에는 Query Response시 A 또는 AAAA Record로 응답
   * Non-Root, Root Domain 둘다 지정 가능
   * 일부 AWS Resource를 대상으로만 설정 가능
-* Alias Target Support
+* Supported Alias Target
   * Elastic Load Balancer
   * CloudFront Distributions
   * API Gateway
@@ -553,9 +555,11 @@ adsense: true
   * VPC Interface Endpoints
   * Global Accelerator
   * Route 53 record in the same hosted zone
-  * EC2 DNS name X
+* Not supported Alias Target
+  * EC2 DNS record
+  * RDS DNS record
 
-#### 8.3. Routing Policy
+#### 8.3. Routing Policㅅy
  
 ### 9. Reference
 
