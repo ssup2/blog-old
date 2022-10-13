@@ -559,7 +559,29 @@ adsense: true
   * EC2 DNS record
   * RDS DNS record
 
-#### 8.3. Routing Policㅅy
+#### 8.3. Routing Policy
+
+* Simple
+  * DNS Record에 Mapping되어 있는 모든 IP Address 반환
+* Weighted
+  * DNS Record에 Mapping되어 있는 각 IP Address에 가중치를 부여하며, 가중치의 비율에 따라서 반환되는 IP Address의 비율을 결정
+* Latency Based
+  * Client의 위치에 따라서 Latency가 가장 적은 IP Address 반환
+* Failover
+  * Health Check를 성공한 IP Address 반환
+* Geolocation
+  * Client의 위치에 따라서 설정된 IP Address 반환
+  * Client가 설정된 위치가 이나라면 Default IP Address 반환
+* Muti-Value Answer :
+* Geoproximity : 
+
+#### 8.4. Health Check
+
+* L4, L7 Health Check 지원
+* Health Check Target
+  * Endpoint : App의 Endpoint Health Check 수행
+  * Other Health Check (Calculated Health Check) : 다수의 다른 Endpoint의 Health Check 결과들을 논리 조합(AND, OR, NOT)하여 Health Check 결과를 판단
+  * CloudWatch : Route53은 Public Network에 존재하기 때문에 Private VPC 내부에 존재하는 Endpoint를 Health Check 수행 불가능. 이 경우 Private VPC 내부의 Endpoint를 감시하는 Cloud Watch를 설정하고, Route53은 이 Cloud Watch를 대상으로 Health Check를 수행
  
 ### 9. Reference
 
