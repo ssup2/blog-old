@@ -563,17 +563,26 @@ adsense: true
 
 * Simple
   * DNS Record에 Mapping되어 있는 모든 IP Address 반환
+  * Health Check 이용 불가
 * Weighted
   * DNS Record에 Mapping되어 있는 각 IP Address에 가중치를 부여하며, 가중치의 비율에 따라서 반환되는 IP Address의 비율을 결정
+  * Health Check 이용 가능
 * Latency Based
   * Client의 위치에 따라서 Latency가 가장 적은 IP Address 반환
+  * Health Check 이용 가능
 * Failover
-  * Health Check를 성공한 IP Address 반환
+  * Active-Passive 기반 정책
+  * Health Check가 동작한다면 Primary로 지정된 IP Address 반환, Health Check가 실패한다면 Secondary로 지정된 IP Address 반환
 * Geolocation
   * Client의 위치에 따라서 설정된 IP Address 반환
   * Client가 설정된 위치가 이나라면 Default IP Address 반환
-* Muti-Value Answer :
-* Geoproximity : 
+  * Health Check 이용 가능
+* Geoproximity
+  * Client의 위치와 Bias 값에 의해서 특정 IP Address를 더 편향되게 많이 반환 할수 있도록 설정 가능
+  * Bias 값이 큰 IP Address일수록 더 멀리 떨어져 있는 Client가 이용할 확률이 증가
+* Muti-Value Answer
+  * Health Check를 통해서 응답하는 모든 IP Address 반환
+  * 최대 8개의 IP Address만 반환
 
 #### 8.4. Health Check
 
@@ -763,19 +772,6 @@ adsense: true
 
 * Application Load Balancer (ALB)
 * HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
-
-### 13. Route 53
-
-* DNS Server
-* 다중 Region, 고 가용성
-
-#### 13.1 Routing Option
-
-* Round Robin
-* Weighted Round Robin
-* 지연 시간 기반
-* 지리적 위치 기반
-* 장애 대응 기반
 
 ### 14. CloudFront
 
