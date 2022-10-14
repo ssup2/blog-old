@@ -15,7 +15,7 @@ CORS (Cross-Origin Resource Sharing) 기법을 분석한다.
 
 User가 Web Browser를 통해서 "https://ssup2.com"에 접속하면 Web Browser는 "https://ssup2.com"으로부터 JavaScript를 받아 수행한다. 이때 받은 JavaScript 내부에서는 "https://ssup2.github.io"의 Resource를 받아오는 동작이 포함될 수 있다. 이 경우 Web Browser가 접속한 Origin (https://ssup2.com)이 아닌 Cross-Origin (https://ssup2.github.io)의 Resource를 이용해야하기 때문에, Web Browser는 CORS 기법을 이용해야 한다. Web Browser는 CORS를 통해서 "https://ssup2.github.io"으로 부터 Resource 사용허가를 먼저 받은 다음, "https://ssup2.github.io"의 Resource에 접근한다.
 
-CORS 기법을 통해서 Cross-Origin은 검증되지 않은 임의의 Web Application이 자신의 Resource에 접근하는 것을 방지할 수 있게 되었다. CORS 기법이 존재하기 전에는 보안적 이유로 인해서 Web Application은 Cross-Origin의 Resource에 접근할 수 없었다.
+CORS 기법을 통해서 Cross-Origin은 검증되지 않은 임의의 Web Application이 자신의 Resource에 접근하는 것을 방지할 수 있다. Web Browser가 CORS 기법에 따라서 Resource 이용을 허용, 제한하는 기법이기 때문에 Web Browser 기반의 보안 기법이다. CORS 기법이 존재하기 전에는 보안적 이유로 인해서 Web Application은 Cross-Origin의 Resource에 접근할 수 없었다.
 
 #### 1.1. Origin
 

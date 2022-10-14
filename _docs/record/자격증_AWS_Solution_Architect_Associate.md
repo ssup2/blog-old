@@ -542,14 +542,153 @@ adsense: true
   * Root Domain 지정 불가능
     * Ex) blog.ssup2.com (Non-root Domain) 가능
 * Alias
-* Alias Target
+  * DNS Procotol에서 제공되지 않는 AWS 내부 Protocol
+  * DNS Client시에는 Query Response시 A 또는 AAAA Record로 응답
+  * Non-Root, Root Domain 둘다 지정 가능
+  * 일부 AWS Resource를 대상으로만 설정 가능
+* Supported Alias Target
+  * Elastic Load Balancer
+  * CloudFront Distributions
+  * API Gateway
+  * Elastic Beanstalk environments
+  * S3 Websites
+  * VPC Interface Endpoints
+  * Global Accelerator
+  * Route 53 record in the same hosted zone
+* Not supported Alias Target
+  * EC2 DNS record
+  * RDS DNS record
 
 #### 8.3. Routing Policy
 
-### 9. Reference
+* Simple
+  * DNS Record에 Mapping되어 있는 모든 IP Address 반환
+  * Health Check 이용 불가
+* Weighted
+  * DNS Record에 Mapping되어 있는 각 IP Address에 가중치를 부여하며, 가중치의 비율에 따라서 반환되는 IP Address의 비율을 결정
+  * Health Check 이용 가능
+* Latency Based
+  * Client의 위치에 따라서 Latency가 가장 적은 IP Address 반환
+  * Health Check 이용 가능
+* Failover
+  * Active-Passive 기반 정책
+  * Health Check가 동작한다면 Primary로 지정된 IP Address 반환, Health Check가 실패한다면 Secondary로 지정된 IP Address 반환
+* Geolocation
+  * Client의 위치에 따라서 설정된 IP Address 반환
+  * Client가 설정된 위치가 이나라면 Default IP Address 반환
+  * Health Check 이용 가능
+* Geoproximity
+  * Client의 위치와 Bias 값에 의해서 특정 IP Address를 더 편향되게 많이 반환 할수 있도록 설정 가능
+  * Bias 값이 큰 IP Address일수록 더 멀리 떨어져 있는 Client가 이용할 확률이 증가
+* Muti-Value Answer
+  * Health Check를 통해서 응답하는 모든 IP Address 반환
+  * 최대 8개의 IP Address만 반환
+
+#### 8.4. Health Check
+
+* L4, L7 Health Check 지원
+* Health Check Target
+  * Endpoint : App의 Endpoint Health Check 수행
+  * Other Health Check (Calculated Health Check) : 다수의 다른 Endpoint의 Health Check 결과들을 논리 조합(AND, OR, NOT)하여 Health Check 결과를 판단
+  * CloudWatch : Route53은 Public Network에 존재하기 때문에 Private VPC 내부에 존재하는 Endpoint를 Health Check 수행 불가능. 이 경우 Private VPC 내부의 Endpoint를 감시하는 Cloud Watch를 설정하고, Route53은 이 Cloud Watch를 대상으로 Health Check를 수행
+
+### 9. S3
+
+* 무제한 용량의 Object Storage
+* Strong Consistency 제공
+* 특정 Origin을 허용하거나 모든 Origin 설정 가능
+
+#### 9.1. Bucket
+
+* S3의 최상위 Directory 역할
+  * Bucket 하위의 Bucket은 구성 불가능
+* Globally Unique한 이름 이용
+* Bucket은 특정 Region 생성 (S3는 Global Service X)
+* Naming Convention
+  * 소문자만 이용 가능
+  * _ (Underscore) 이용 불가능
+  * 3~63 글자
+  * IP 이용 불가능
+  * 소문자 및 숫자로만 시작 가능
+
+#### 9.2. Object
+
+* S3의 File 역할
+* 하나의 Key를 가지며 Full Path 역할 수행
+  * s3://<bucket-name>/<object-key>
+  * Ex) s3://ssup2-bucket/root-folder/sub-folder/file.txt
+    * ssup2-bucket : Bucket 이름
+    * root-folder/sub-folder/file.txt : Object Key
+* 하나의 Object는 최대 5TB
+  * 파일이 5TB 이상이면 Multi-Part Upload 기능을 활용하여 하나의 파일을 쪼개서 Upload 가능
+* Metadata
+  * Key-Value 기반
+  * System 또는 User Meta 정보 저장
+* Tag
+  * Key-value 기반
+  * 최대 10개까지 설정 가능
+  * 주로 IAM 기반 인가 설정시 이용
+* Version ID
+  * Bucket의 Versioning 기능 Enable시 각 Object는 Version ID를 갖음
+
+#### 9.3. Versioning 
+
+* Bucket 단위의 Enable/Disable 가능
+* 예상하지 못한 삭제시 복구, 기존 Version으로의 Rollback 가능
+* Version 기능 Disable -> Enable 변경으로 인해서 Verion을 갖고 있지 않는 Object는 Null Version으로 표기
+
+#### 9.4. Encryption
+
+* 암호화 방법
+  * SSE-S3 : AWS S3 Service에서 관리하는 암호화 Key 이용
+    * Server Side Encrpytion
+    * AES-256 암호화
+    * HTTP Request Header에 "x-amz-server-side-encryption":"AES256" 설정
+  * SSE-KMS : AWS KMS Service에서 관리하는 암호화 Key 이용
+    * Server Side Encrpytion
+    * HTTP Request Header에 "x-amz-server-side-encryption":"aws:kms" 설정
+  * SSE-C : 자신만의 암호화 Key 이용
+    * AWS에서 암호화 Key 관리 X
+    * HTTPS 이용
+    * 모든 HTTP Header에 암호화 Key를 설정하여 전송
+  * Client Side 암호화
+    * Data를 송신하기전에 Client에서 직접 암호화 수행
+    * Data를 수신하기전에 Client에서 집접 복호화 수행
+* 전송중 암호화
+  * HTTPS를 이용한 SSL/TLS 이용
+  * HTTP를 통해서 암호화 없이 전송도 가능하지만 HTTPS를 이용하는것을 권장
+
+#### 9.5. Security
+
+* User Base
+  * IAM Policy를 이용하여 설정
+* Resource Base
+  * 다수의 Account에 공통적으로 적용
+  * Object Access Control List : Object 단위로 권한 설정
+  * Bucket Access Control List : Bucket 단위로 권한 설정
+* S3 Object에 접근이 필요하기 위해서 다음과 같은 조건 만족 필요
+  * (User IAM Role Allow OR Resource Policy Allow) AND 명시적 Deny
+* VPC 내부에서 Endpoint 제공
+* S3 Access Log는 다른 S3 Bucket에 저장 가능
+* AWS CloudTrail의 Log 저장소로 S3를 이용
+* MFA Delete: Object 제거시 MFA를 이용하도록 강제 가능
+* Pre-Signed URL: 일정시간 동안 유효한 URL을 생성
+
+#### 9.6. Websites
+
+* Static Webserver 기능 제공
+* URL
+  * <bucket-name>.s3-website-<AWS-region>.amazonaws.com
+  * <bucket-name>.s3-website.<AWS-region>.amazonaws.com
+* Error
+  * 403 Error 발생시 권한 확인 필요
+
+### 10. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
+* Route53 Alias : [https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
+* Route53 Alias : [https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record](https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record)
 
 ---
 
@@ -703,44 +842,3 @@ adsense: true
 
 * 다른 Subnet과의 연결 통로
 * 수평 확장, 고가용성 지원 
-
-### 12. ELB (Elastric Load Balancing)
-
-* Load Balancer
-* Upgrade, Maintenance, High Availability 보장
-* 비정상 Instance 감지 및 Failover 수행
-
-#### 12.1. CLB (Classic Load Balancer)
-
-* HTTP, HTTPS, TCP를 지원. 
-* v1, Old Generation Load Balancer
-
-#### 12.2. NLB (Network Load Balancer)
-
-* TCP, TLS, UDP를 지원
-* v2, New Generation Load Balancer
-
-#### 12.3. ALB (Application Load Balancer)
-
-* Application Load Balancer (ALB)
-* HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
-
-### 13. Route 53
-
-* DNS Server
-* 다중 Region, 고 가용성
-
-#### 13.1 Routing Option
-
-* Round Robin
-* Weighted Round Robin
-* 지연 시간 기반
-* 지리적 위치 기반
-* 장애 대응 기반
-
-### 14. CloudFront
-
-### 15. ElasticCache
-
-* In-memory Cache
-* Redis, Memcached 제공
