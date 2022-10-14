@@ -595,6 +595,8 @@ adsense: true
 ### 9. S3
 
 * 무제한 용량의 Object Storage
+* Strong Consistency 제공
+* 특정 Origin을 허용하거나 모든 Origin 설정 가능
 
 #### 9.1. Bucket
 
@@ -681,10 +683,6 @@ adsense: true
 * Error
   * 403 Error 발생시 권한 확인 필요
 
-#### 9.7. CORS
-
-
- 
 ### 10. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
