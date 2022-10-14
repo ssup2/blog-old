@@ -671,6 +671,19 @@ adsense: true
 * AWS CloudTrail의 Log 저장소로 S3를 이용
 * MFA Delete: Object 제거시 MFA를 이용하도록 강제 가능
 * Pre-Signed URL: 일정시간 동안 유효한 URL을 생성
+
+#### 9.6. Websites
+
+* Static Webserver 기능 제공
+* URL
+  * <bucket-name>.s3-website-<AWS-region>.amazonaws.com
+  * <bucket-name>.s3-website.<AWS-region>.amazonaws.com
+* Error
+  * 403 Error 발생시 권한 확인 필요
+
+#### 9.7. CORS
+
+
  
 ### 10. Reference
 
