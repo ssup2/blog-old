@@ -591,8 +591,53 @@ adsense: true
   * Endpoint : App의 Endpoint Health Check 수행
   * Other Health Check (Calculated Health Check) : 다수의 다른 Endpoint의 Health Check 결과들을 논리 조합(AND, OR, NOT)하여 Health Check 결과를 판단
   * CloudWatch : Route53은 Public Network에 존재하기 때문에 Private VPC 내부에 존재하는 Endpoint를 Health Check 수행 불가능. 이 경우 Private VPC 내부의 Endpoint를 감시하는 Cloud Watch를 설정하고, Route53은 이 Cloud Watch를 대상으로 Health Check를 수행
+
+### 9. S3
+
+* 무제한 용량의 Object Storage
+
+#### 9.1. Bucket
+
+* S3의 최상위 Directory 역할
+  * Bucket 하위의 Bucket은 구성 불가능
+* Globally Unique한 이름 이용
+* Bucket은 특정 Region 생성 (S3는 Global Service X)
+* Naming Convention
+  * 소문자만 이용 가능
+  * _ (Underscore) 이용 불가능
+  * 3~63 글자
+  * IP 이용 불가능
+  * 소문자 및 숫자로만 시작 가능
+
+#### 9.2. Object
+
+* S3의 File 역할
+* 하나의 Key를 가지며 Full Path 역할 수행
+  * s3://<bucket-name>/<object-key>
+  * Ex) s3://ssup2-bucket/root-folder/sub-folder/file.txt
+    * ssup2-bucket : Bucket 이름
+    * root-folder/sub-folder/file.txt : Object Key
+* 하나의 Object는 최대 5TB
+  * 파일이 5TB 이상이면 Multi-Part Upload 기능을 활용하여 하나의 파일을 쪼개서 Upload 가능
+* Metadata
+  * Key-Value 기반
+  * System 또는 User Meta 정보 저장
+* Tag
+  * Key-value 기반
+  * 최대 10개까지 설정 가능
+  * 주로 IAM 기반 인가 설정시 이용
+* Version ID
+  * Bucket의 Versioning 기능 Enable시 각 Object는 Version ID를 갖음
+
+#### 9.3. Versioning 
+
+* Bucket 단위의 Enable/Disable 가능
+* 예상하지 못한 삭제시 복구, 기존 Version으로의 Rollback 가능
+* Version 기능 Disable -> Enable 변경으로 인해서 Verion을 갖고 있지 않는 Object는 Null Version으로 표기
+
+#### 9.4. Encryption
  
-### 9. Reference
+### 10. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
