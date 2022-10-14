@@ -636,6 +636,25 @@ adsense: true
 * Version 기능 Disable -> Enable 변경으로 인해서 Verion을 갖고 있지 않는 Object는 Null Version으로 표기
 
 #### 9.4. Encryption
+
+* 암호화 방법
+  * SSE-S3 : AWS S3 Service에서 관리하는 암호화 Key 이용
+    * Server Side Encrpytion
+    * AES-256 암호화
+    * HTTP Request Header에 "x-amz-server-side-encryption":"AES256" 설정
+  * SSE-KMS : AWS KMS Service에서 관리하는 암호화 Key 이용
+    * Server Side Encrpytion
+    * HTTP Request Header에 "x-amz-server-side-encryption":"aws:kms" 설정
+  * SSE-C : 자신만의 암호화 Key 이용
+    * AWS에서 암호화 Key 관리 X
+    * HTTPS 이용
+    * 모든 HTTP Header에 암호화 Key를 설정하여 전송
+  * Client Side 암호화
+    * Data를 송신하기전에 Client에서 직접 암호화 수행
+    * Data를 수신하기전에 Client에서 집접 복호화 수행
+* 전송중 암호화
+  * HTTPS를 이용한 SSL/TLS 이용
+  * HTTP를 통해서 암호화 없이 전송도 가능하지만 HTTPS를 이용하는것을 권장
  
 ### 10. Reference
 
