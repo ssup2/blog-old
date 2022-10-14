@@ -655,6 +655,22 @@ adsense: true
 * 전송중 암호화
   * HTTPS를 이용한 SSL/TLS 이용
   * HTTP를 통해서 암호화 없이 전송도 가능하지만 HTTPS를 이용하는것을 권장
+
+#### 9.5. Security
+
+* User Base
+  * IAM Policy를 이용하여 설정
+* Resource Base
+  * 다수의 Account에 공통적으로 적용
+  * Object Access Control List : Object 단위로 권한 설정
+  * Bucket Access Control List : Bucket 단위로 권한 설정
+* S3 Object에 접근이 필요하기 위해서 다음과 같은 조건 만족 필요
+  * (User IAM Role Allow OR Resource Policy Allow) AND 명시적 Deny
+* VPC 내부에서 Endpoint 제공
+* S3 Access Log는 다른 S3 Bucket에 저장 가능
+* AWS CloudTrail의 Log 저장소로 S3를 이용
+* MFA Delete: Object 제거시 MFA를 이용하도록 강제 가능
+* Pre-Signed URL: 일정시간 동안 유효한 URL을 생성
  
 ### 10. Reference
 
@@ -815,31 +831,3 @@ adsense: true
 
 * 다른 Subnet과의 연결 통로
 * 수평 확장, 고가용성 지원 
-
-### 12. ELB (Elastric Load Balancing)
-
-* Load Balancer
-* Upgrade, Maintenance, High Availability 보장
-* 비정상 Instance 감지 및 Failover 수행
-
-#### 12.1. CLB (Classic Load Balancer)
-
-* HTTP, HTTPS, TCP를 지원. 
-* v1, Old Generation Load Balancer
-
-#### 12.2. NLB (Network Load Balancer)
-
-* TCP, TLS, UDP를 지원
-* v2, New Generation Load Balancer
-
-#### 12.3. ALB (Application Load Balancer)
-
-* Application Load Balancer (ALB)
-* HTTP, HTTPS, WebScoket를 지원한다. v2, New Generation Load Balancer이다.
-
-### 14. CloudFront
-
-### 15. ElasticCache
-
-* In-memory Cache
-* Redis, Memcached 제공
