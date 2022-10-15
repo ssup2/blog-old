@@ -11,6 +11,12 @@ Machine Learning Workflow을 정리한다.
 
 ### 1. Machine Learning Workflow
 
+#### 1.1. Data Preparation
+
+#### 1.2. Model Training
+
+#### 1.3. Model Deployment
+
 ### 2. 참고
 
 * [https://github.com/solliancenet/Azure-Machine-Learning-Dev-Guide/blob/master/creating-machine-learning-pipelines/machine-learning-pipelines.md](https://github.com/solliancenet/Azure-Machine-Learning-Dev-Guide/blob/master/creating-machine-learning-pipelines/machine-learning-pipelines.md)
@@ -21,3 +27,8 @@ Machine Learning Workflow을 정리한다.
 * [https://towardsdatascience.com/machine-learning-pipelines-with-kubeflow-4c59ad05522](https://towardsdatascience.com/machine-learning-pipelines-with-kubeflow-4c59ad05522)
 * [http://blog.skby.net/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-machine-learning-pipeline/](http://blog.skby.net/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-machine-learning-pipeline/)
 * [https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f](https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f)
+* Data Valdiation, Data Cleaning : [https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth](https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth)
+* Data Feature Engineering : [http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering](http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering)
+* Model Selection : [https://tensorflow.blog/2017/03/30/model-evaluation-selection-and-algorithm-selection/](https://tensorflow.blog/2017/03/30/model-evaluation-selection-and-algorithm-selection/)
+* Model Validation, Model Testing : [https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set](https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set)
+* Model Parameter, Model Hyper-parameter : [https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/](https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/)
