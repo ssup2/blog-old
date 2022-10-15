@@ -11,7 +11,7 @@ Machine Learning Workflow을 정리한다.
 
 ### 1. Machine Learning Workflow
 
-![[그림 1] Machine Learning Workflow]({{site.baseurl}}/images/theory_analysis/Machine_Learning_Workflow/Machine_Learning_Workflow.PNG){: width="600px"}
+![[그림 1] Machine Learning Workflow]({{site.baseurl}}/images/theory_analysis/Machine_Learning_Workflow/Machine_Learning_Workflow.PNG){: width="650px"}
 
 #### 1.1. Data Preparation
 
