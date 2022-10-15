@@ -11,6 +11,8 @@ Machine Learning Workflow을 정리한다.
 
 ### 1. Machine Learning Workflow
 
+![[그림 1] Websocket Handshaking]({{site.baseurl}}/images/theory_analysis/Machine_Learning_Workflow/Machine_Learning_Workflow.PNG){: width="600px"}
+
 #### 1.1. Data Preparation
 
 #### 1.2. Model Training
@@ -29,6 +31,7 @@ Machine Learning Workflow을 정리한다.
 * [https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f](https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f)
 * Data Valdiation, Data Cleaning : [https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth](https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth)
 * Data Feature Engineering : [http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering](http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering)
-* Model Selection : [https://tensorflow.blog/2017/03/30/model-evaluation-selection-and-algorithm-selection/](https://tensorflow.blog/2017/03/30/model-evaluation-selection-and-algorithm-selection/)
+* Machine Learning Algorithm, Model : [https://www.linkedin.com/pulse/difference-between-algorithm-model-machine-learning-yahya-abi-haidar/](https://www.linkedin.com/pulse/difference-between-algorithm-model-machine-learning-yahya-abi-haidar/)
 * Model Validation, Model Testing : [https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set](https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set)
+* Model Hyper-parameter : [https://medium.com/@f2005636/evaluating-machine-learning-models-hyper-parameter-tuning-2d7076349a6c](https://medium.com/@f2005636/evaluating-machine-learning-models-hyper-parameter-tuning-2d7076349a6c)
 * Model Parameter, Model Hyper-parameter : [https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/](https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/)
