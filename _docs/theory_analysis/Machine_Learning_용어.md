@@ -32,4 +32,5 @@ Machine Learning 관련 용어들을 간략하게 정리한다.
 
 ### 2. 참고
 
+* Feature Engineering, Hyperparameter Tuning : [https://stats.stackexchange.com/questions/448757/difference-between-feature-engineering-and-hyperparameter-optimizations](https://stats.stackexchange.com/questions/448757/difference-between-feature-engineering-and-hyperparameter-optimizations)
 * Model Validation, Model Testing : [https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set](https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set)
