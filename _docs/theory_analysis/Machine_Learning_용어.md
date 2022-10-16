@@ -22,12 +22,10 @@ Machine Learning 관련 용어들을 간략하게 정리한다.
 * Training Data : Training을 위한 Data를 의미한다. 일반적으로 전체 Data의 60% 정도를 Training Data로 분류하고 이용한다.
 * Validation Data : Training이 완료된 Model을 검증을 위한 Data를 의미힌다. 검증의 의미는 Model의 정확도 및 성능을 평가하는 단계를 의미한다. 일반적으로 전체 Data의 20% 정도를 Validation Data로 분류하고 이용한다.
 * Test Data : 검증이 완료된 Model의 성능 및 정확도 Test를 위한 Data를 의미한다. 일반적으로 전체 Data의 20% 정도를 Test Data로 분류하고 이용한다.
-* Regression : 
-* Classification : 
-* Linear Regression : 
-* Logistic Regression : 
-* Neural Network :
-* Deep Learning : 
+* Linear Regression : 연속적인 값중에서 하나의 값을 예측하는 과정을 의미한다. 
+* Logistic Regression : Linear Regression을 통해 얻은 예측값을 Sigmoid 함수를 통해서 0~1의 사이값으로 변환하는 기법을 의미한다.
+* Neural Network : 사람의 뇌 구조를 모방하여 만든 Network를 의미한다. 일반적으로 Input Layer, Output Layer 그리고 Input Layer, Output Layer 사이에 존재하는 Hidden Layer로 구성되어 있으며, 각 Layer의 Node들은 Neural을 의미한다.
+* Deep Learning : Neural Network를 활용한 Machine Learning 기법을 의미한다.
 * Decision Tree : 
 
 ### 2. 참고
