@@ -51,6 +51,7 @@ adsense: true
 * JSON 형태로 구성
 * Least Privilege Principle 권장
   * 최소한의 권한만을 허용
+* IAM Policy Simulator를 통해서 Policy Simulation 가능
 
 #### 2.5. Root User
 
@@ -151,6 +152,14 @@ adsense: true
 
 * New Virtualization Technology
 * 더 빠른 Network, EBS Volume 성능 제공
+
+#### 3.10. Metadata
+
+* EC2 Instance 내부에서 "http://169.254.169.254/latest"로 접근하여 EC2 Instance의 Meta 정보 확인 가능
+* 다음의 정보들 확인 가능
+  * Instance-IP
+  * Local-IPv4
+  *  
 
 ### 4. EC2 Instance Storage
 
