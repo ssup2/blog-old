@@ -15,9 +15,32 @@ Machine Learning Workflow을 정리한다.
 
 #### 1.1. Data Preparation
 
+Data Preparation 과정은 Model 학습 및 검증을 위한 Data를 준비하는 과정을 나타낸다.
+
+* Data Tranforamtion : 
+* Data Cleaning :
+* Data Normalization : 
+* Data Featurization : 
+* Data Validation : 
+* Data Split : 
+
 #### 1.2. Model Training
 
+Model Training 과정은 준비된 Data를 가지고 Model을 생성, 학습, 검증하는 과정을 의미한다.
+
+* Algorithm Selection : 
+* Model Hyperparameter Tuning : 
+* Model Training : 
+* Model Validation :
+* Model Testing :
+
 #### 1.3. Model Deployment
+
+Test가 완료된 Model을 배포하고 모니터링하는 과정을 의미한다.
+
+* Model Deployment : Test가 완료된 Model을 실제로 배포하는 과정을 의미한다.
+* Model Monitoring : 배포된 Model의 정확도, 성능 등의 Model 지표를 Monitoring 하는 과정을 의미한다.
+* Model Retraining : Monitoring을 통해서 얻은 Model 지표를 바탕으로 필요에 따라서 다시 학습하는 과정을 의미한다.
 
 ### 2. 참고
 
