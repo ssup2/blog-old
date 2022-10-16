@@ -155,11 +155,12 @@ adsense: true
 
 #### 3.10. Metadata
 
-* EC2 Instance 내부에서 "http://169.254.169.254/latest"로 접근하여 EC2 Instance의 Meta 정보 확인 가능
+* EC2 Instance 내부에서 "http://169.254.169.254/latest"로 접근하여 EC2 Instance의 Meta 정보들 확인 가능
 * 다음의 정보들 확인 가능
   * Instance-IP
   * Local-IPv4
-  *  
+  * IAM
+  * ETC...
 
 ### 4. EC2 Instance Storage
 
@@ -679,6 +680,8 @@ adsense: true
   * (User IAM Role Allow OR Resource Policy Allow) AND 명시적 Deny
 * VPC 내부에서 Endpoint 제공
 * S3 Access Log는 다른 S3 Bucket에 저장 가능
+  * S3 Access Log를 다른 S3 Bucket이 아니라 자기 자신으로 설정할 경우 Logging Loop가 발생하기 때문
+  * 저장된 Access Log는 AWS Athena를 통해서 분석 가능
 * AWS CloudTrail의 Log 저장소로 S3를 이용
 * MFA Delete: Object 제거시 MFA를 이용하도록 강제 가능
 * Pre-Signed URL: 일정시간 동안 유효한 URL을 생성
@@ -691,6 +694,38 @@ adsense: true
   * <bucket-name>.s3-website.<AWS-region>.amazonaws.com
 * Error
   * 403 Error 발생시 권한 확인 필요
+
+#### 9.10. Replication
+
+* Region 사이의 복제 기능 제공
+  * 비동기 복제 수행
+  * CRR (Cross Region Replication)
+  * SRR (Same Region Replication)
+* Source S3 Bucket은 반드시 Versioning 기능 Enable 필요
+* S3에게 IAM 권한 설정 필요
+* Replication을 설정한 이후 새로 생성된 Object에 대해서만 복제 수행
+  * 기존의 Object들은 S3 Batch Replication을 통해서 복제 수행 가능
+* Delete 동작
+  * Source Object 삭제시 복제본 Object도 삭제할지 설정 가능
+  * Source Object의 특정 Version 삭제시 복제되지 않음
+* Replication Chain 구성 불가능
+
+#### 9.11. Pre-signed URL
+
+* 임시로 Download, Upload가 가능한 임시 URL 생성 가능
+  * Download : CLI, SDK를 통해서 생성 가능
+  * Upload : SDK를 통해서만 생성 가능
+* 기본적으로 3600초의 유효시간을 갖으며 Pre-signed URL 생성시 유효시간 설정 가능
+
+#### 9.12. Storage Class
+
+* Standard Class
+  * General Purpose
+  * 종종 접근하여 이용
+  * 99.99% Availability
+  * Low Latency, High Throughput
+* Standard Infrequent Access Class (Standard-IA)
+  * Standard Class보다 낮은 비용
 
 ### 10. Reference
 
