@@ -721,11 +721,19 @@ adsense: true
 
 * Standard Class
   * General Purpose
-  * 종종 접근하여 이용
+  * 종종 접근하여 이용하는 경우
   * 99.99% Availability
   * Low Latency, High Throughput
+  * Usage Example : Big Data 분석, Content 배포
 * Standard Infrequent Access Class (Standard-IA)
+  * 낮은 빈도로 접근하는 경우 이용
   * Standard Class보다 낮은 비용
+  * 99.9% Availability
+  * Usage Example : Disaster Recovery, Backup
+* One Zone Infraquent Access (S3 One Zone-IA)
+  * 95.9% Availability
+  * 단일 AZ에 저장하는 방식이라 AZ 손실시 Data 손실로 이어짐
+  * Usage Example : 임시 Backup, 재생성이 가능한 Data Backup
 
 ### 10. Reference
 
