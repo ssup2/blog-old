@@ -719,19 +719,25 @@ adsense: true
 
 #### 9.12. Storage Class
 
-* Standard Class
-  * General Purpose
-  * 종종 접근하여 이용하는 경우
-  * 99.99% Availability
-  * Low Latency, High Throughput
-  * Usage Example : Big Data 분석, Content 배포
+* Storage Class에 따라서 가격, 성능, 가용성 차이를 갖음
+* 모든 Storage Class는 99.999999999% 내구성 보장
+
+##### 9.12.1. General Purpose
+
+* 종종 접근하여 이용하는 경우 이용
+* 99.99% 가용성 보장
+* Low Latency, High Throughput
+* Usage Example : Big Data 분석, Content 배포
+
+##### 9.12.2. Infrequent Access
+
+* 낮은 빈도로 접근하지만 빠른 접근이 필요한 경우 이용
+* Standard Class보다 낮은 비용
 * Standard Infrequent Access Class (Standard-IA)
-  * 낮은 빈도로 접근하는 경우 이용
-  * Standard Class보다 낮은 비용
-  * 99.9% Availability
+  * 99.9% 가용성
   * Usage Example : Disaster Recovery, Backup
-* One Zone Infraquent Access (S3 One Zone-IA)
-  * 95.9% Availability
+* One Zone Infraquent Access Class (S3 One Zone-IA)
+  * 95.9% 가용성
   * 단일 AZ에 저장하는 방식이라 AZ 손실시 Data 손실로 이어짐
   * Usage Example : 임시 Backup, 재생성이 가능한 Data Backup
 
