@@ -17,22 +17,22 @@ Machine Learning Workflow을 정리한다.
 
 Data Preparation 과정은 Model 학습 및 검증을 위한 Data를 준비하는 과정을 나타낸다.
 
-* Data Tranforamtion : 
-* Data Cleaning :
-* Data Normalization : 
-* Data Featurization : 
-* Data Validation : 
-* Data Split : 
+* Data Tranforamtion : Data를 가공하기 편리한 형태로 변형하고, 변형한 Data를 다시 적재하는 과정을 의미한다.
+* Data Cleaning : 학습, 검증, Test에 불필요한 Data를 제거한다.
+* Data Normalization : 일부 Data의 편차가 너무 큰 경우에 편차를 0~1 사이의 값으로 변환하여, 특정 Data로 인해서 다른 Data의 특성이 학습에 제대로 반영되지 않도록 도와주는 과정을 의미한다.
+* Data Featurization : Data로부터 Model에 이용할 Feature를 추출하는 작업을 의미한다. 특정 Data를 Feature로 그대로 이용하는 경우가 많고, Data에 존재하지 않지만 Data를 기반으로 새로운 Feature를 생성하는 과정도 포함한다.
+* Data Validation : Data 이용전 최종 검증 단계를 의미한다.
+* Data Split : 검증된 Data를 학습, 검증, Test를 위해서 분류하는 단계를 의미한다. 일반적으로 학습 Data는 60%, 검증 Data는 20%, Test Data는 20%로 분류한다.
 
 #### 1.2. Model Training
 
 Model Training 과정은 준비된 Data를 가지고 Model을 생성, 학습, 검증하는 과정을 의미한다.
 
-* Algorithm Selection : 
-* Model Hyperparameter Tuning : 
-* Model Training : 
-* Model Validation :
-* Model Testing :
+* Algorithm Selection : 어떠한 Machine Learning Algorithm을 이용할지 선택하는 과정을 의미한다.
+* Model Hyperparameter Tuning : 선택한 Algorithm을 바탕으로 Model을 구성하고, 구성한 Model의 Hyperparameter를 어떻게 설정할지 결정한다.
+* Model Training : 구성한 Model을 학습하여 Model의 Parameter를 결정한다. 학습은 Data Split 과정을 통해서 분류한 학습 Data를 이용한다.
+* Model Validation : 학습된 Model을 검증한다. 검증을 통해서 Model의 정확도, 성능등의 Model 지표를 검토하고 요구 조건에 충족되는지 판단한다. 검증은 Data Split 과정을 통해서 분류한 검증 Data를 이용한다.
+* Model Testing : 학습, 검증에 이용되지 않은 Data를 활용하여 검증된 Model이 실제 어떻게 동작할지를 Test를 수행하는 과정을 의미한다. Data Split 과정을 통해서 분류된 Test Data를 이용한다.
 
 #### 1.3. Model Deployment
 
