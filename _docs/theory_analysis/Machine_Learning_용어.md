@@ -26,7 +26,7 @@ Machine Learning 관련 용어들을 간략하게 정리한다.
 * Logistic Regression : Linear Regression을 통해 얻은 예측값을 Sigmoid 함수를 통해서 0~1의 사이값으로 변환하는 기법을 의미한다.
 * Neural Network : 사람의 뇌 구조를 모방하여 만든 Network를 의미한다. 일반적으로 Input Layer, Output Layer 그리고 Input Layer, Output Layer 사이에 존재하는 Hidden Layer로 구성되어 있으며, 각 Layer의 Node들은 Neural을 의미한다.
 * Deep Learning : Neural Network를 활용한 Machine Learning 기법을 의미한다.
-* Decision Tree : 
+* Decision Tree : Node는 조건을 의미하며 Leaf는 의사 결정으로 구성되는 Tree. 일반적으로 지도학습의 분류, 회귀용도로 이용되며, Training을 통해서 Decision Tree를 구성한다.
 
 ### 2. 참고
 
