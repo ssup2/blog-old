@@ -11,7 +11,7 @@ Machine Learning 관련 용어들을 간략하게 정리한다.
 
 ### 1. Machine Learning Term
 
-* Model : Training(학습)을 통해서 예측을 수행하는 함수를 의미한다.
+* Model : Training을 통해서 예측을 수행하는 함수를 의미한다.
 * Feature : Data를 기반으로 추출한 Model의 입력값을 의미한다.
 * Feature Engineering : Model의 가장 적합한 Input Variable 집합을 찾는 과정이다. 기존의 Feature들을 기반으로 새로운 Feature를 추출하고, 추가하는 과정도 Feature Engineering의 과정에 포함된다.
 * Parameter : Model Training을 통해서 설정되는 Model 내부의 값들을 의미한다.
