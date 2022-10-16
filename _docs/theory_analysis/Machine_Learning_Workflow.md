@@ -18,11 +18,11 @@ Machine Learning Workflow을 정리한다.
 Data Preparation 과정은 Model 학습 및 검증을 위한 Data를 준비하는 과정을 나타낸다.
 
 * Data Tranforamtion : Data를 가공하기 편리한 형태로 변형하고, 변형한 Data를 다시 적재하는 과정을 의미한다.
-* Data Cleaning : 학습, 검증, Test에 불필요한 Data를 제거한다.
+* Data Cleaning : 부정확한 Data를 제거하거나 수정하는 과정을 의미한다.
 * Data Normalization : 일부 Data의 편차가 너무 큰 경우에 편차를 0~1 사이의 값으로 변환하여, 특정 Data로 인해서 다른 Data의 특성이 학습에 제대로 반영되지 않도록 도와주는 과정을 의미한다.
 * Data Featurization : Data로부터 Model에 이용할 Feature를 추출하는 작업을 의미한다. 특정 Data를 Feature로 그대로 이용하는 경우가 많고, Data에 존재하지 않지만 Data를 기반으로 새로운 Feature를 생성하는 과정도 포함한다.
-* Data Validation : Data 이용전 최종 검증 단계를 의미한다.
-* Data Split : 검증된 Data를 학습, 검증, Test를 위해서 분류하는 단계를 의미한다. 일반적으로 학습 Data는 60%, 검증 Data는 20%, Test Data는 20%로 분류한다.
+* Data Validation : Featurization Data를 이용전 최종 검증 단계를 의미한다. 일반적으로 Data의 Type, 범위, 형태 등을 검증한다.
+* Data Split : 검증된 Featurization Data를 학습, 검증, Test를 위해서 분류하는 단계를 의미한다. 일반적으로 학습 Data는 60%, 검증 Data는 20%, Test Data는 20%로 분류한다.
 
 #### 1.2. Model Training
 
@@ -52,8 +52,8 @@ Test가 완료된 Model을 배포하고 모니터링하는 과정을 의미한�
 * [https://towardsdatascience.com/machine-learning-pipelines-with-kubeflow-4c59ad05522](https://towardsdatascience.com/machine-learning-pipelines-with-kubeflow-4c59ad05522)
 * [http://blog.skby.net/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-machine-learning-pipeline/](http://blog.skby.net/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-machine-learning-pipeline/)
 * [https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f](https://towardsdatascience.com/industrializing-ai-machine-learning-applications-with-kubeflow-5687bf56153f)
-* Data Valdiation, Data Cleaning : [https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth](https://stackoverflow.com/questions/71044465/what-is-the-difference-between-data-validation-and-data-cleaning-and-what-areth)
 * Data Feature Engineering : [http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering](http://www.incodom.kr/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5/feature_engineering)
+* Data Cleaning : [https://en.wikipedia.org/wiki/Data_cleansing](https://en.wikipedia.org/wiki/Data_cleansing)
 * Machine Learning Algorithm, Model : [https://www.linkedin.com/pulse/difference-between-algorithm-model-machine-learning-yahya-abi-haidar/](https://www.linkedin.com/pulse/difference-between-algorithm-model-machine-learning-yahya-abi-haidar/)
 * Model Validation, Model Testing : [https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set](https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set)
 * Model Hyper-parameter : [https://medium.com/@f2005636/evaluating-machine-learning-models-hyper-parameter-tuning-2d7076349a6c](https://medium.com/@f2005636/evaluating-machine-learning-models-hyper-parameter-tuning-2d7076349a6c)
