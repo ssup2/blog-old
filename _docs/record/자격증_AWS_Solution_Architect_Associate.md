@@ -721,6 +721,7 @@ adsense: true
 
 * Storage Class에 따라서 가격, 성능, 가용성 차이를 갖음
 * 모든 Storage Class는 99.999999999% 내구성 보장
+* Object 단위로 설정 가능
 
 ##### 9.12.1. General Purpose
 
@@ -740,6 +741,48 @@ adsense: true
   * 95.9% 가용성
   * 단일 AZ에 저장하는 방식이라 AZ 손실시 Data 손실로 이어짐
   * Usage Example : 임시 Backup, 재생성이 가능한 Data Backup
+
+##### 9.12.3. Glacier Storage Class
+
+* Archiving, Backup을 위한 저비용 Storage
+* Object 저장 비용은 낮지만, Object 검색시 비용 발생
+
+##### 9.12.4. Glacier Instant Retrieval Class
+
+* Milisecond 단위의 검색 속도
+* 최소 90일 기간의 저장 비용이 청구
+
+##### 9.12.5. Glacier Flexisble Retrieval Class
+
+* Data 검색에 오랜시간이 소모되며, 아래와 같은 설정에 따라서 필요 검색시간이 달라짐
+  * Expedited : 1~5분, 비용 발생
+  * Standard : 3~5시간, 비용 발생
+  * Bulk : 5~12시간, 무료
+* 최소 90일 기간의 저장 비용 청구
+
+##### 9.12.6. Glacier Deep Archive
+
+* Data 검색에 가장 오랜시간 소모되며, 아래와 같은 설정에 따라서 필요 검색시간이 달라짐
+  * Standard : 12시간
+  * Bulk : 48시간
+* 최소 180일 기간의 저장 비용 청구
+
+##### 9.12.7. Intelligent-Tiering
+
+* Object의 사용량에 따라서 자동으로 Tier를 변경
+* Tier 변경시 무료
+* 다음과 같은 Tier가 존재
+  * Frequent Access Tier : Default Tier, 자동 설정
+  * Infrequent Access Tier : 30일동안 Object에 접근이 없을시, 자동 설정
+  * Archive Instant Access Tier : 90일동안 Object에 접근이 없을시, 자동 설정
+  * Archive Access Tier : 90일에서 700일 이상 접근하지 않을시, Optional
+  * Deep Archive Access Tier : 180일에서 700일 이상 접근하지 않을시, Optional
+
+##### 9.12.8. Storage Class 이동
+
+* Transition Action : Object가 생성되고 경과된 시간에 따라서 자동으로 Storage Class를 변경
+* Expiration Action : Object가 생성되고 경과된 시간이 지나면 자동으로 Object 삭제
+* Action Target : Action은 Object Tag 또는 Object Path Prefix (s3://mybucket/music/*)에 따라서 설정 가능
 
 ### 10. Reference
 
