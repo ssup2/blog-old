@@ -809,6 +809,13 @@ adsense: true
 
 * S3 Object를 위한 Serverless Query Service
 * TB Scan당 5$ 지불
+  * Object를 압축하거나 Object의 Data를 Column 형태로 저장하여 Scan 비용 절감 가능
+
+#### 9.16. Glacier Vault Lock
+
+* WORM (Write Once Read Many) 구현
+* Object 생성후 Lock을 걸어 설정 가능
+* Compliance 충족을 위해서
 
 ### 10. Reference
 
