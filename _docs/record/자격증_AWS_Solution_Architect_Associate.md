@@ -817,162 +817,44 @@ adsense: true
 * Object 생성후 Lock을 걸어 설정 가능
 * Compliance 충족을 위해서
 
-### 10. Reference
+### 10. CloudFront
+
+* CDN Service
+* Shield Service, WAF와 함께 DDoS 공격 방지 가능
+
+#### 10.1. Origin
+
+* 다음의 Origin을 이용 가능
+* S3
+  * S3 Object Caching 수행
+  * S3의 Upload 경로로도 사용 가능
+  * OAI (Origin Access ID)를 활용하여 S3의 Object에 접근
+* Custom Origin : HTTP Protocol을 이용하면 Origin으로 이용 가능
+  * ALB, EC2 Instance, S3 Website, HTTP Backend API
+* Origin Group 기능 제공
+  * Primary Origin이 동작하지 않을 경우 Secondary Origin을 이용하도록 설정 가능
+
+#### 10.2. Geo Restriction
+
+  * 국가 단위로 Content에 접근 가능한 Whitelist, Content에 접근 불가능한 Blacklist 존재
+  * 국가의 기준은 3rd Party의 Geo-IP DB를 기반으로 결정
+
+#### 10.3. Pricing
+
+* Edge Location에 따라서 이용 가격이 다름
+* Price Class
+  * Caching을 수행하는 Edge Location의 개수를 줄여 비용 절감 가능
+  * Class ALL : 모든 Edge Location을 이용하며, 가장 높은 비용
+  * Class 200 : 가장 비싼 Region을 제외한 나머지 Region들을 포함
+  * Class 100 : 제일 저렴한 Region만 포함
+
+### 11. Global Accelerator
+
+* Edge Location의 전용 Network를 통해서 AWS 다른 Region에 빠르게 접근
+
+### 12. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
 * Route53 Alias : [https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
 * Route53 Alias : [https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record](https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record)
-
----
-
-### 3. S3
-
-* Object Storage
-* Size Limit가 존재하지 않음
-* Static Data 저장소
-  * Object Update시 Object 전체를 다시 Upload를 수합해야 때문에 Update가 잘 발생하지 않는 Static Data 저장에 적합
-  * 분석용 Data Store
-  * 백업용 Store
-
-#### 3.1. Bucket
-
-* Bucket 이름 중복 불가능
-
-#### 3.2. 용량
-
-* 각 Object의 용량은 최대 5TB
-* Object의 개수 무제한
-
-#### 3.3. Replication
-
-* Region 단위 복제 수행
-
-#### 3.4. Access Control
-
-* IAM 기반 정책
-* Bucket 기반 정책 (Resource 기반 정책)
-  * Web Console에서 Bucket 단위로 설정
-  * Public : 외부 User에게 공개
-  * Private : 외부 User에게 비공개
-  * Limited Access : 특정 User
-* CORS 기능 제공
-
-#### 3.5. 비용
-
-* 비용 발생
-  * 사용하고 있는 Size 비례, 단위는 GB
-  * Region 경계를 넘어서 Object 송수신
-    * 다른 Region 또는 외부 Internet으로 전송시 발생
-
-* 비용 발생 X
-  * Region 내부에서의 Object 송수신
-    * CloudFront <-> S3 사이의 송수신  
-
-#### 3.6. Storage Class
-
-* S3 Standard
-  * 표준 Class
-* S3 Standard IA 
-  * 저장 비용은 감소하지만 Access 비용은 증가
-  * 자주 접근하지 않는 Object를 이용하는 경우 유리
-* S3 One Zone IA
-  * 하나의 Region에서만 Object를 저장
-  * 저장 비용 감소
-* Glacier
-  * Cold Data 저장소
-  * Object를 압축해서 저장
-  * 압축된 Object를 이용하기 위해서는 복원과정 필요
-  * 복원이된 Object는 일정 기간동안 S3에서 Access 가능
-* S3 Inteligent Tiering
-  * Maching Learning 기반으로 Pattern을 분석하여 적절한 Storage Class로 이용
-  * Pattern 분석 비용 발생
-
-#### 3.7. Event Trigger 수행
-
-* Lamba Service Event Trigger 역활 수행
-
-#### 3.8. Static Web Server 기능 제공
-
-* Bucket 단위로 Static Web Server 기능 On/Off 가능
-* Bucket 권한을 Public으로 설정 필요
-* 하나의 Bucket당 하나의 Web Server만 제공 가능
-
-#### 3.9. Versioning
-
-* 이전 Data를 저장하는 Versioning 기능 제공
-* Versioning으로 인해 늘어난 용량 만큼 비용 청구
-
-#### 3.10. Multi Part Upload
-
-* 사용자가 지정한 크기로 파일을 쪼개어 병렬로 Upload 기능
-* 병렬로 Upload된 이후에 S3 내부에서 통합
-* Web Console 지원 X
-
-#### 3.11. Transfer Accelation
-
-* CloudFront Edge를 통해서 AWS 내부 Backbone Network를 활용하여 Object Upload 가능
-
-#### 3.12. Snowball, Snowmobile
-
-* 저장 장치를 AWS로 전송받아 저장후 AWS에게 저장 장치를 전달하여 S3에 복사하는 방법
-* 일반적으로 7일 정도 시간이 소요되기 때문에, S3로 Upload가 7일 이상 걸린다면 이용을 고려
-
-### 7. EFS (Elastic File System)
-
-### 8. RDS
-
-* RDBMS Service
-* Scale Out 자동 수행
-
-#### 8.1. DB Engine
-
-* MySQL, PostreSQL, Aurora 지원
-* MySQL, PostreSQL은 사용자가 관리해야하는 부분 발생
-* Aurora는 사용자가 관리를 최소화 하는 방향으로 발전중
-
-### 9. DynamoDB
-
-* Document DB
-* Event 기능 제공 (Lambda)
-* Scale Out
-
-### 10. Neptune
-
-* Graph DB
-
-### 11 VPC (Virtual Private Network)
-
-* Private Netowrk 구성
-* 하나의 Region을 선택하여 생성
-* 하나의 Region 내부 다수의 AZ에서 동시에 이용 가능
-* 각 계정마다 각 Region에 5개의 VPC 생성 가능 (Soft Limit)
-* 각 VPC 마다 하나의 Routing Table 지원
-
-#### 11.1 Subnet
-
-* 하나의 VPC 내부에 존재
-* 하나의 AZ에 존재
-* 각 Subnet마다 하나의 Routing Table과 연결 가능
-  * 다수의 Routing Table 하나를 여러개의 Subnet이 이용 가능
-  * Subnet에 Routing Table이 설정되어 있지 않으면 VPC Routing Table 이용
-* 다른 Subnet과의 CIDR가 중복 불가
-* CIDR는 변경 불가능, Subnet 생성시 여유롭게 생성하는것을 권장
-* Subnet Type
-  * Public Subnet 
-    * 외부 Internet과 통신하는 Subnet
-    * EC2 Instance에 Public IP 부여 가능
-    * Routing Table에 Internet Gateway 정보 포함
-  * Private Subnet 
-    * Routing Table에 다른 Subnet과 연결을 위한 NAT Gateway 정보 포함
-    * 외부 Internet과 Outbound 통신을 위해서는 NAT Gateway를 통해서 Public Subnet과 연결 필요
-
-#### 11.2 Internet Gateway
-
-* 외부 Internet과 통신 Gateway 역활 수행
-* 수평 확장, 고가용성 지원
-
-#### 11.3 NAT Gateway
-
-* 다른 Subnet과의 연결 통로
-* 수평 확장, 고가용성 지원 
