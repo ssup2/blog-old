@@ -783,6 +783,12 @@ adsense: true
 * Transition Action : Object가 생성되고 경과된 시간에 따라서 자동으로 Storage Class를 변경
 * Expiration Action : Object가 생성되고 경과된 시간이 지나면 자동으로 Object 삭제
 * Action Target : Action은 Object Tag 또는 Object Path Prefix (s3://mybucket/music/*)에 따라서 설정 가능
+* S3 Analysics 기능을 통해서 언제 Standard Class에서 Standard IA Class로 변경하면 좋을지 분석 가능
+
+##### 9.12.9. Performance
+
+* 100~200ms의 지연을 보장하도록 S3 내부에서 Automatically Scaling 수행
+* Prefix당 3500 PUT/COPY/POST/DELETE, 5500 GET/HEAD Request per Seconds 성능 지원
 
 ### 10. Reference
 
