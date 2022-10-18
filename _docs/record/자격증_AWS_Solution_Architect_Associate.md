@@ -785,10 +785,30 @@ adsense: true
 * Action Target : Action은 Object Tag 또는 Object Path Prefix (s3://mybucket/music/*)에 따라서 설정 가능
 * S3 Analysics 기능을 통해서 언제 Standard Class에서 Standard IA Class로 변경하면 좋을지 분석 가능
 
-##### 9.12.9. Performance
+#### 9.13. Performance
 
 * 100~200ms의 지연을 보장하도록 S3 내부에서 Automatically Scaling 수행
-* Prefix당 3500 PUT/COPY/POST/DELETE, 5500 GET/HEAD Request per Seconds 성능 지원
+* 하나의 Prefix당 3500 PUT/COPY/POST/DELETE, 5500 GET/HEAD Request per Seconds 성능 제공
+  * 하나의 Bucket 내부에 Prefix 제한이 존재하지 않음
+  * 다수의 Prefix를 사용하는 형태로 구성하여 성능 증가 가능
+* SSE-KMS를 이용하여 암호화를 수행하는 경우, SSE-KMS 성능에 따라서 S3도 영향을 받음
+  * Region에 따라서 5500, 10000, 30000 request for second의 성능 제한이 존재
+* Edge Location의 전용선을 통해서 더 빠르게 S3에 Upload 가능
+* Byte-Range Fetch
+  * Object의 특정 영역만 Download 가능
+  * 서로 다른 영역을 대상으로 동시에 Byte-Range Fetch를 수행하여 Download 성능 증가 가능
+  * Object의 일정 부분만 검색 가능
+
+#### 9.14. Event
+
+* S3의 동작을 Event로 생성하여 전파 가능
+* 다음의 Service로 전파가 가능
+  * SNS, SQS, Lambda Function, Event Bridge
+
+#### 9.15. Athena
+
+* S3 Object를 위한 Serverless Query Service
+* TB Scan당 5$ 지불
 
 ### 10. Reference
 
