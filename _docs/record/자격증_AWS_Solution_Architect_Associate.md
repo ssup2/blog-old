@@ -848,9 +848,38 @@ adsense: true
   * Class 200 : 가장 비싼 Region을 제외한 나머지 Region들을 포함
   * Class 100 : 제일 저렴한 Region만 포함
 
-### 11. Global Accelerator
+#### 10.4. Global Accelerator
 
 * Edge Location의 전용 Network를 통해서 AWS 다른 Region에 빠르게 접근
+
+### 11. Storage
+
+#### 11.1. AWS Snow Family
+
+* Portable Device를 활용하여 Data Migration, Edge Computing 수행
+* 용량 기능에 따라서 다음의 장비들로 구성
+  * Snowcone : Data Migration, Edge Computing 지원
+  * Snowball : Data Migration, Edge Computing 지원 
+  * Snowmobile : Data Migration 지원
+* OpsHub를 Labtop에 설치하여 장비를 손쉽게 관리 가능
+* Glacier로 Data Migration을 진행하기 위해서는 Data를 S3에 먼져 저장한 이후 Glacier로 전환
+
+#### 11.2. FSx
+
+* 3rd Party High Performance Filesystem을 제공하기 위한 서비스
+  * for Windows File Server
+  * for NetApp ONTAP
+
+#### 11.3. Storage Gateway
+
+* On-premise 환경에서 S3를 접근을 도와주는 징검다리 역할
+* On-Premise의 File, Volume, Tapes와 AWS의 EBS, S3, Glacier를 연결하는 징검다리 역할 수행
+* File Gateway 
+  * S3 Standard, S3 Standard-IA, Glacier을 On-Premis 환경에서 NFS, SMB Protocol로 접근 가능
+* Volume Gateway 
+  * S3를 On-Premis 환경에서 iSCSI로 접근 가능
+  * S3 Snapshot을 통해서 
+* 
 
 ### 12. Reference
 
