@@ -950,6 +950,68 @@ adsense: true
 
 #### 12.2. SNS
 
+* Pub-Sub Service
+* Producer만 Message 송신 가능
+* Topic당 최대 12500000 구독 가능
+* 가능한 Subscriber
+  * SQS, Lambda, Kinesis Data, Firehose, Emails, SMS, Mobile Notification, HTTP Endpoints
+* Filter 기능을 이용하여 일부 Subscriber에게만 Message 전송 가능
+
+##### 12.1. FIFO Topic
+
+* 순서를 보장하는 Topic
+* Group ID를 활용하여 Ordering 수행
+* Deduplication ID를 활용하여 Deduplication 수행
+* SQS Topic만 Subscription 가능
+
+#### 12.3. Kinesis
+
+* 실시간 Streaming Data Collect, Process, Analyze Service
+  * Application Log, Metrics, IoT Telemetry
+* Kinesis Data Stream : Data Stream 구성
+* Kinesis Data Firehose : Data Stream을 Data Store에 저장 
+* Kinesis Data Analytics : Data Stream을 SQL, Apache Flink를 이용하여 분석
+* Kinesis Video Streams : Video Stream 구성
+
+##### 12.3.1. Kinesis Data Stream
+
+* Shard
+  * Shard 개수에 따라서 병렬 처리르 통해서 성능 증가 가능
+  * 하나의 Shard는 1MB/sec or 1000 Msg/sec 수신 가능
+  * 하나의 Shard는 2MB/sec 송신 가능
+* Record
+  * Input : Partition Key, Data Blob (최대 1MB) 구성
+  * Output : Partition Key, Sequence Number, Data Blob 구성
+* Data 보관 기간은 1일부터 365일 설정 가능
+* Data 재처리 가능
+* Data가 Kinesis에 들어가면 제거 불가능
+* 동일한 Partition Key를 갖는 Data는 동일한 Shard로 전송 (Ordering)
+* Capacity Mode
+  * Provisioned Mode
+    * Shard의 개수를 수동으로 설정 가능
+    * Shard의 개수 및 Shard가 Provisioning된 시간에 따라서 비용 청구
+  * On-demend Mode
+    * Capacity 설정 불필요
+    * 30일 동안의 사용량을 보고 AutoScailing 수행
+    * Stream 개수, Stream이 이용된 시간, Data 송수신량에 따라서 비용 청구
+
+##### 12.3.2. Kinesis Data Firehose
+
+* Managed Service
+* Near Real Time
+  * 최소 60초 딜레이
+  * 최소 32MB를 한번에 전송
+* Store Target
+  * AWS : Redshift, S3, ElasticSearch
+  * 3rd Party : Splunk, MongoDB, DataDog, NewRelic
+  * Custom HTTP Endpoint 생성 가능
+* 다양한 Data Format, Conversion, Transforamtion, Compress 지원
+* Lambda를 활용한 Custom Transformation 가능
+
+##### 12.3.3. Kinesis Data Analytics
+
+* Managed Service
+
 ### 13. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
