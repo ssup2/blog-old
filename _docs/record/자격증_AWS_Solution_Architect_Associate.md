@@ -874,12 +874,18 @@ adsense: true
 
 * On-premise 환경에서 S3를 접근을 도와주는 징검다리 역할
 * On-Premise의 File, Volume, Tapes와 AWS의 EBS, S3, Glacier를 연결하는 징검다리 역할 수행
+* Storage Gatewy Type
+  * EC2
+  * 
 * File Gateway 
-  * S3 Standard, S3 Standard-IA, Glacier을 On-Premis 환경에서 NFS, SMB Protocol로 접근 가능
+  * S3 Standard, S3 Standard-IA, Glacier을 On-Premise 환경에서 NFS, SMB Protocol로 접근 가능
 * Volume Gateway 
-  * S3를 On-Premis 환경에서 iSCSI로 접근 가능
-  * S3 Snapshot을 통해서 
-* 
+  * S3를 On-Premise 환경에서 iSCSI로 접근 가능
+  * 2가지 형태의 Volume 제공
+    * Cached Volume : 자주 접근하는 Data만 Volume Gateway에 위치시키고 자주 이용되지 않는 Data는 S3에 저장
+    * Stored Volume : 전체 Data를 Volume Gateway에 위치시키고 주기적으로 EBS Snapshot을 생성하여 Backup 수행
+* Tape Gateway
+  * S3, Glacier를 iSCSI로 접근 가능
 
 ### 12. Reference
 
