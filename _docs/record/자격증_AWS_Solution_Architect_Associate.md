@@ -874,9 +874,9 @@ adsense: true
 
 * On-premise 환경에서 S3를 접근을 도와주는 징검다리 역할
 * On-Premise의 File, Volume, Tapes와 AWS의 EBS, S3, Glacier를 연결하는 징검다리 역할 수행
-* Storage Gatewy Type
-  * EC2
-  * 
+* Storage Gateway Type
+  * VM 기반 : VMware, Hyper-V, Linux KVM, EC2
+  * Hardware 기반 : 전용 Hardware 임대 가능
 * File Gateway 
   * S3 Standard, S3 Standard-IA, Glacier을 On-Premise 환경에서 NFS, SMB Protocol로 접근 가능
 * Volume Gateway 
