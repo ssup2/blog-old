@@ -907,9 +907,12 @@ adsense: true
 * 하나의 Message당 최대 256KB 제한
 * At Least Once QoS 보장
 * Message의 순서는 변경될 수 있음
+* Delay 기능 지원
 
 ##### 12.1.1. Consumer
 
+* Polling을 통해서 Message 존재 확인 (Event 기반 X)
+  * Long Polling 기능 제공
 * 한번에 최대 10개의 Message 수신 가능
 * Message 수신 및 동작 수행후 DeleteMessage API를 통해서 Message 삭제 필요 (ACK)
 * CloudWatch Metric Queue Length -> CloudWatch Alarm -> ASG Scaling 형태로 구성하여 Consumer Autoscaling 구성 가능
@@ -920,12 +923,32 @@ adsense: true
   * In-flight Encription : HTTPS 이용
   * At-rest Encription : KMS Key 이용
   * Client가 자체적으로 Encryption/Decryption 수행 가능
-* Access Control : IAM Policy로 제어
-* SQS Access Policy 제공
+* Access Control
+  * IAM Policy 제어
+  * SQS Access Policy 제공 : Cross-Account Access 활용시 유용
+
+##### 12.1.3. Message Visibility Timeout
+
+* 특정 Consumer가 Message를 수신한뒤 Message를 삭제하지 않아도 Message Visibility Timeout 시간동안에는 다른 Consumer들도 해당 Message 확인 불가능
+* Message Visibility Timeout 시간이 지나면 다른 Consumer들도 Message 확인이 가능하며, Message 처리도 가능
+  * Message가 Queue로 다시 Requeue 된다고 간주해도 무방
+  * Message를 처음 수신한 Consumer가 Message Visibility Timeout 내에 Messsage 처리 및 삭제를 수행하지 않으면, 다른 Consumer가 Message를 여러번 처리할 수 있음
+* Default 30초
+
+##### 12.1.4. Dead Letter Queue
+
+* Message Visibility Timeout이 초과하여 Requeue되는 횟수가 MaximumRecevies를 초과하는 경우 Message는 Dead Letter Queue로 전송
+* Debugging, 장애 처리를 위해 이용
+* Redrive : Dead Letter Queue에 저장되어 있는 Message를 다시 원래의 Queue로 전송하는 기능
+
+##### 12.1.5. FIFO Queue
+
+* Message 순서 보장
+* Exactly-Once QoS 지원
+* 수신 300 msg/s, 송신 3000 msg/s 성능 제한
+* 일반 Queue에 비해서 성능은 떨어지지만, Message 순서 유지 및 Exactly-Once QoS를 이용하고 싶을때 활용
 
 #### 12.2. SNS
-
-#### 12.3. 
 
 ### 13. Reference
 
