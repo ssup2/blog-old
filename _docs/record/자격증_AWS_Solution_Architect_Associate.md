@@ -887,7 +887,18 @@ adsense: true
 * Tape Gateway
   * S3, Glacier를 iSCSI로 접근 가능
 
-### 12. Reference
+#### 11.4. Transfer Family
+
+* S3, EFS을 FTP Protocol을 통해서 이용가능
+* 지원하는 Protocol : FTP, FTPS, SFTP
+* Managed Service
+* Endpoint 개수 + 전송 Data양에 따라서 비용 부과
+* 지원하는 인증 방법 : Microsoft Active Directory, LDAP, Okta, Cognito
+* User -> Route 53 -> Transfer Family --(IAM Role)--> S3, EFS 형태로 구성
+
+### 12. Messaging
+
+### 13. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
