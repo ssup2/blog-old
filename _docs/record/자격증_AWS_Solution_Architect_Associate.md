@@ -898,6 +898,35 @@ adsense: true
 
 ### 12. Messaging
 
+#### 12.1. SQS
+
+* Queue Service
+* 무제한 Throughput
+* Low Latency (< 10ms)
+* Message는 기본 4일동안 보관하며 설정을 통해서 최대 14일까지 보존 가능
+* 하나의 Message당 최대 256KB 제한
+* At Least Once QoS 보장
+* Message의 순서는 변경될 수 있음
+
+##### 12.1.1. Consumer
+
+* 한번에 최대 10개의 Message 수신 가능
+* Message 수신 및 동작 수행후 DeleteMessage API를 통해서 Message 삭제 필요 (ACK)
+* CloudWatch Metric Queue Length -> CloudWatch Alarm -> ASG Scaling 형태로 구성하여 Consumer Autoscaling 구성 가능
+
+##### 12.1.2. Security
+
+* Encryption
+  * In-flight Encription : HTTPS 이용
+  * At-rest Encription : KMS Key 이용
+  * Client가 자체적으로 Encryption/Decryption 수행 가능
+* Access Control : IAM Policy로 제어
+* SQS Access Policy 제공
+
+#### 12.2. SNS
+
+#### 12.3. 
+
 ### 13. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
