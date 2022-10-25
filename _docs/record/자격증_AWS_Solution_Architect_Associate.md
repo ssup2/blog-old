@@ -1203,7 +1203,58 @@ adsense: true
   * 추가 비용을 내고 1분 간격으로 Metric 수집
 * 사용자의 Custom Metric도 정의 및 직접 API를 통해서 직접 Push 가능
 
+#### 16.2. CloudWatch Dashboard
+
+* Dashboard는 Global Resource
+* Dashboard는 다른 계정 또는 다른 Region의 Graph도 포함시킬 수 있음
+* AWS 계정이 없는 제 3자에게 공유 가능
+  * Email 주소, Amazon Cognito 이용
+* 3개의 Dashboard까지 무료, 이후에는 한달에 3$
+
 #### 16.2. CloudWatch Log
+
+* Log 수집 서비스
+* Log Group이 존재하며 Group 이름은 일반적으로 App/Service 이름으로 이용
+* Log 만료기간 설정 가능
+  * 30일, 만료 X
+* Log Target
+  * S3, Kinesis Data Stream, Kinesis Data Firehose, AWS Lambda, ElasticSearch
+* Log Source
+  * SDK, CloudWatch Log Agent
+    * CloudWatch Log는 기본적으로 EC2에 설치되어 있지않고, 사용자가 직접 설치 필요 
+  * Elastic Beanstalk, ECS, AWS Lambda, VPC Flow Logs, API Gateway
+
+#### 16.3. CloudWatch Alarms
+
+#### 16.4. CloudWatch Events
+
+#### 16.5. EventBridge
+
+#### 16.6. CloudTrail
+
+* User의 AWS 활동 기록을 Logging 수행
+  * SDK, CLI, Console, IAM Users & Roles
+* 활동 기록 Log를 CloudWatch Log나 S3에 저장도 가능
+* 모든 Region 또는 단일 Region을 대상으로 기록 가능
+* CloudTrail Event
+  * Management Event : 기본적으로 활성화 되어 있음
+  * Data Event : 기본적으로 비활성화 되어 있음 (Event 기록에 많은 용량이 필요하기 때문)
+
+##### 16.6.1. CloudTrail Insight
+
+* CloudTrail 활동 기록 Log를 바탕으로 수상한 행동 탐지
+* 탐지한 행동 Event는 다음의 곳으로 전달
+  * CloudTrail Console
+  * S3 Bucket
+  * EventBridge
+
+#### 16.7. Config
+
+* 현재의 Configuration이 올바른지 검토 기능 제공
+  * 검토 Rule을 사용자가 생성
+* Configuration의 변화를 기록하는 기능 제공
+* Configuration 변화를 SNS로 수신 가능
+* Region단위 Service이기 때문에 필요한 Region마다 설정 필요
 
 ### 17. Security, Encrpytion
 
