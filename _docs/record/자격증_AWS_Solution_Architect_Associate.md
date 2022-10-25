@@ -1008,11 +1008,11 @@ adsense: true
 * 다양한 Data Format, Conversion, Transforamtion, Compress 지원
 * Lambda를 활용한 Custom Transformation 가능
 
-#### 13. Container
+### 13. Container
 
-#### 14. Serverless
+### 14. Serverless
 
-##### 14.1. Lambda
+#### 14.1. Lambda
 
 * Virtual Function : Server 관리 불필요
 * 실행시간 제한 : 짧은 실행만 수행 가능
@@ -1027,7 +1027,7 @@ adsense: true
 * Container Image 지원
   * Lambda Runtime API를 지원하도록 Contianer Image 지원시, 해당 Container Image를 Lambda에서 구동 가능
 
-##### 14.1.1. Lambda Integration
+###### 14.1.1. Lambda Integration
 
 * 다양한 AWS Service와의 연계 지원
 * API Gateway : Upstream으로 Lambda 호출
@@ -1059,7 +1059,82 @@ adsense: true
 * 빠른 응답의 Application 개발시 이용 가능
 * CDN Contents Customization 가능
 
-##### 14.2. DynamoDB
+#### 14.2. DynamoDB
+
+* Managed NoSQL Database
+* Multiple AZ 제공
+* 초당 만개 이상의 요청 처리, 100TB 저장공간
+* IAM을 이용한 인증,인가 제공
+* DynamoDB Streams를 활용한 Event Driven Programming 가능
+* Low-cost & Auto-scaling 기능 제공
+* Standard, IA (Infrequent Access) Table Class 제공
+
+##### 14.2.1. Table, Item, Attribute
+
+* DynamoDB는 Table의 구성으로 이루어져 있음
+* Table은 하나의 Primary Key
+* Table은 무한대의 Item을 갖을수 있음
+* 각각의 Item(행)은 Atribute(열)을 갖을 수 있음
+  * Attribute는 계속 동적으로 추가 가능
+* Item의 크기는 최대 400KB
+* Data Type
+  * Scalar : String, Number, Binary, Boolean, Null
+  * Document : List, Map
+  * Set : String Set, Number Set, Binary Set
+* Table
+  * Partition Key : 
+  * Sork Key :
+* TTL (Time To Live) 기능 제공
+* Index
+  * Partition Key, Sort Key를 제외한 나머지 Attribute Query를 수행하기 위해서는 Index 생성 필요
+  * GSI (Global Secondary Index), LSI (Local Secondary Indexes)
+* Transaction
+  * 다수의 Data 변경 Operation을 하나의 Transaction으로 처리 가능
+
+##### 14.2.2. Capacity Mode
+
+* Provisioned Mode
+  * Default Mode
+  * 초당 Read/Write 횟수 지정
+  * RCU (Read Capacity Units), WCU (Write Capacility Unit)만큼 비용 청구
+  * RCU & WCU를 대상으로 Auto-scaliing을 수행 가능
+  * 예측 가능한 Workload에 적합
+
+* On-Demand Mode
+  * Read/Write 자동으로 Scale Up/Down 수행
+  * 용량 예측 불필요
+  * Provisioned Mode에 비해서 2~3배 비쌈
+  * 예측하기 힘든 Workload에 적합
+
+##### 14.2.3. DynamoDB Accelerator (DAX)
+
+* DynamoDB를 위한 Memory Cache Service
+* Microseconds Latency 지원
+* App의 Logic 수정없이 적용 가능
+* Default 5분 TTL
+* vs ElasticCache
+  * DAX : Object 단위 Caching, Query & Scan Caching
+  * ElastiCache : Aggregation Result 저장
+
+##### 14.2.4. DynamoDB Streams
+
+* Item Level의 변경 (Create/Update/Delete)을 Stream으로 수신 가능
+* Stream Target
+  * Kinesis Data Streams
+  * AWS Lambda
+  * Kinesis Client Library Application
+* Stream은 최대 24시간 지속
+* Usage Case
+  * Item 변경 Event 기반 Logic 처리
+  * 분석
+  * 다양한 Data Store에 저장 (ElasticSearch)
+  * Cross-region Replication
+
+##### 14.2.5. DynamoDB Global Tables
+
+* 다수의 Region에 Active-Active Replication을 구성
+* 모든 Region의 DynamoDB에서 Read, Write 수행가능
+* DynamoDB Streams 기능 활성화가 반드시 필요
 
 ##### 14.3. API Gateway
 
