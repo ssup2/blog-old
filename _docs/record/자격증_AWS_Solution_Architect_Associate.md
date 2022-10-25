@@ -1012,6 +1012,55 @@ adsense: true
 
 #### 14. Serverless
 
+##### 14.1. Lambda
+
+* Virtual Function : Server 관리 불필요
+* 실행시간 제한 : 짧은 실행만 수행 가능
+* 필요할때만 실행 가능하며, 실행한 시간만큼 비용 청구
+* Autoscaling 지원
+* 다양한 AWS Service와의 연계 지원
+* CloudWatch를 통한 Monitoring 지원
+* 최대 10GB까지 Memory 할당 가능
+  * 더 많은 Memory 크기를 할당할 수록 CPU, Network의 성능도 증가
+* 다음의 언어 지원
+  * Node.js, Python, Java, C#, Golang, C#, Ruby, Custom API (Community Supported)
+* Container Image 지원
+  * Lambda Runtime API를 지원하도록 Contianer Image 지원시, 해당 Container Image를 Lambda에서 구동 가능
+
+##### 14.1.1. Lambda Integration
+
+* 다양한 AWS Service와의 연계 지원
+* API Gateway : Upstream으로 Lambda 호출
+* Kinesis : Lambda를 활용하여 Data 변환
+* DynamoDB : DynamoDB에서 Event 발생시 Lambda 호출
+* S3 : S3에서 Event 발싱시 Lambda 호출
+* CloudFront : Lambda Edge
+* EventBridge : EventBridge에서 Event 발생시 Lambda 호출
+* CloudWatch : ??
+* SNS : SNS에서 Event 송신시 Lambda 호출
+* SQS : SQS에서 Message 송신시 Lambda 호출
+* Cognito : Congino에서 Event 발생시 Lambda 호출
+
+##### 14.1.2. Lambda Limit
+
+* Execution
+  * Memory : 128MB ~ 10GB
+  * Maximum Execution Time : 15분
+  * Maximum Env : 4KB
+  * Disk Capacity : tmp DIR : 512MB
+  * Concurrency Executions : 1000
+* Deployment
+  * Compressed Deployment Size (.zip): 50MB
+  * Uncompressed Deployment Size : 250MB
+
+##### 14.1.3. Lambda Edge
+
+* Edge Location에서 Lambda 실행
+* 빠른 응답의 Application 개발시 이용 가능
+* CDN Contents Customization 가능
+
+##### 14.2. DynamoDB
+
 #### 15. Database
 
 #### 16. Monitoring, Auth
