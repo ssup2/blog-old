@@ -1192,7 +1192,18 @@ adsense: true
 
 ### 15. Database
 
-### 16. Monitoring, Auth
+### 16. Monitoring, Audit
+
+#### 16.1. CloudWatch Metric
+
+* 모든 AWS Service는 고유의 Metric 값을 소유
+* Metric은 Namespace에 종속
+* Metric당 최대 10개의 Dimension 존재
+* EC2 Instance는 기본적으로 5분 간격으로 Metric 수집
+  * 추가 비용을 내고 1분 간격으로 Metric 수집
+* 사용자의 Custom Metric도 정의 및 직접 API를 통해서 직접 Push 가능
+
+#### 16.2. CloudWatch Log
 
 ### 17. Security, Encrpytion
 
