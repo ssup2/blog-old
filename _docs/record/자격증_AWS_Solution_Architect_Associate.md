@@ -1138,7 +1138,33 @@ adsense: true
 
 #### 14.3. API Gateway
 
-* 
+* Managed Service
+* WebSocket Protocol 지원
+* API Versioning 지원
+* 환경 (Dev, Stage, Prod) 지원
+* API Key 생성 지원
+* Request Throttling 지원
+* Swagger, Open API 기반 Import, Export 기능 지원
+* API를 기반으로 SDK를 생성하거나, API Spec 생성 가능
+* Request, Response를 필요에 따라 변경 및 검증 가능
+* Response 응답 가능
+
+##### 14.3.1. Integration
+
+* Lambda의 Reverse-Proxy 역할 수행
+* HTTP Protocol 기반 Backend Server 역할 수행
+* 모든 AWS API를 API Gateway를 통해서 노출 가능
+
+##### 14.3.2. Endpoint Type
+
+* Edge-Optimized
+  * Global Client를 위한 Type
+  * API Gateway는 하나의 Region에 위치하며, Edge Location을 통해서 외부 Region의 요청을 받음
+* Regional
+  * Client는 오직 API Gateway와 동일한 Region에 위치
+  * Edge Location 활용 정책을 사용자가 설정
+* Private
+  * VPC 내부에서만 접근 가능
 
 #### 14.4. Cognito
 
