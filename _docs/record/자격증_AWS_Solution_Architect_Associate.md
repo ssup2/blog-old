@@ -1136,21 +1136,23 @@ adsense: true
 * 모든 Region의 DynamoDB에서 Read, Write 수행가능
 * DynamoDB Streams 기능 활성화가 반드시 필요
 
-##### 14.3. API Gateway
+#### 14.3. API Gateway
 
-##### 14.4. Cognito
+* 
 
-#### 15. Database
+#### 14.4. Cognito
 
-#### 16. Monitoring, Auth
+### 15. Database
 
-#### 17. Security, Encrpytion
+### 16. Monitoring, Auth
 
-#### 18. Network
+### 17. Security, Encrpytion
 
-#### 19. Migration
+### 18. Network
 
-#### 20. Machine Learning
+### 19. Migration
+
+### 20. Machine Learning
 
 ### 21. Reference
 
