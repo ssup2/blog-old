@@ -1008,11 +1008,23 @@ adsense: true
 * 다양한 Data Format, Conversion, Transforamtion, Compress 지원
 * Lambda를 활용한 Custom Transformation 가능
 
-##### 12.3.3. Kinesis Data Analytics
+#### 13. Container
 
-* Managed Service
+#### 14. Serverless
 
-### 13. Reference
+#### 15. Database
+
+#### 16. Monitoring, Auth
+
+#### 17. Security, Encrpytion
+
+#### 18. Network
+
+#### 19. Migration
+
+#### 20. Machine Learning
+
+### 21. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
