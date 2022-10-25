@@ -1061,6 +1061,10 @@ adsense: true
 
 ##### 14.2. DynamoDB
 
+##### 14.3. API Gateway
+
+##### 14.4. Cognito
+
 #### 15. Database
 
 #### 16. Monitoring, Auth
