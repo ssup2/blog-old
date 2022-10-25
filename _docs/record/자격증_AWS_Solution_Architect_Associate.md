@@ -1233,12 +1233,19 @@ adsense: true
 
 #### 17.2. SSM Parameter Store
 
-* Configuration, Secret 저장소
+* Parameter (Configuration, Secret) 저장소
 * KMS를 이용한 암호화 기능 제공
 * Serverless, Scalable, Durable, 쉬운 SDK를 갖고 있음
 * Tracking 기능 제공
 * CloudWatch Event로 변경 감지가능
 * CloudFormation과 결합 가능
+* Directory 형태로 Parameter 관리 가능 Ex) Vault
+* Parameter Policies
+  * 만료시 자동 삭제
+  * 만료시 CloudWatch로 Event 전송
+  * 특정 기간동안 Parameter가 변경되지 않으면 CloudWatch로 Event 전송
+
+#### 17.3. Secret Manager
 
 ### 18. Network
 
