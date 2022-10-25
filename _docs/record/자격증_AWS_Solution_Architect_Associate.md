@@ -1166,7 +1166,27 @@ adsense: true
 * Private
   * VPC 내부에서만 접근 가능
 
+##### 14.3.3. Security
+
+* IAM을 통해서 API 접근 인가 설정 가능
+* Lambda Authorizer
+  * Header의 인증 Token을 Lambda에서 수신하고 Lambda 내부에서 인증,인가 동작 수행
+  * Lambda는 User에게 적용할 위한 IAM Policy를 Return
+* Congito User Pool
+  * Congnito에 저장되어 있는 User 정보를 통해서 인증 검증 가능
+  * 인증만 수행 가능
+
 #### 14.4. Cognito
+
+* User Pool
+  * User 정보를 저장하고 있는 Pool
+* Federated Identity Pool
+  * ??
+
+#### 14.5. SAM (Serverless Application Model)
+
+* Serverless Application 개발 및 배포 Framework
+* YAML 형태로 배포 가능
 
 ### 15. Database
 
