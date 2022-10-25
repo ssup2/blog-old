@@ -1247,6 +1247,68 @@ adsense: true
 
 #### 17.3. Secret Manager
 
+* Secret 저장에 특화 (vs SSM Parameter Store)
+* Secret Rotate 기능 제공
+  * Rambda를 활용하여 Rotate 수행시 암호도 자동 생성하도록 지원
+* RDS Secret 관리용으로 이용 가능
+
+#### 17.4. CloudHSM
+
+* 암호화 Hardware Module
+* SSE-C 유형의 암호화를 구현
+
+#### 17.5. Sheid
+
+* Standard
+  * L3/L4 Layer 기반 DDoS 보호
+  * Sync/UDP Flooding, Reflection Attack 방지
+  * 무료
+* Shield Advanced 
+  * 추가 비용을 좀더 다양한 Resource를 대상으로 정교한 DDoS 공격 보호
+  * 보호 Target : Amazone EC2, ELB, CloudFront, Global Accelerator, Route 53
+  * DRP (DDoS Response Team) 접근 가능
+  * DDoS 공격으로 인해서 더 많은 비용 요금이 청구되었다면, 더 청구된 비용만금 캄면 가능
+
+#### 17.6. WAF (Web Application Firewall)
+
+* Layer7 Firewall
+* Target : ALB, API Gateway, CloudFront
+* Web ACL 기능 제공
+  * ACL Rule : IP Address, HTTP Header, HTTP Body, URI 포함
+  * SQL Injection, Cross-Site Scripting 공격 방지
+  * 특정 국가 Block
+  * Rate-based Rule 설정 가능
+
+#### 17.7. Firewall Manager
+
+* Organization의 Shield, WAF를 중앙 집중식으로 관리 기능 제공
+* 공통 Rule 설정 기능 제공
+
+#### 17.8. GuardDuty
+
+* AWS 계정을 보호하는 서비스
+* Machine Learning 기반으로 이상 동작 탐지
+  * CloudTrail Event Log, VPC Flow Log, DNS Log, Kubernetes Audit Log를 기반으로 탐지 수행
+* CloudWatch Event를 통해서 이상 탐자시 노티를 받을 수 있음
+* 암호화페 공격보호 가능
+
+#### 17.9. Inspector
+
+* 구성된 AWS Infra의 보안 평가 서비스
+* 보안 평가 Target
+  * EC2 Instance
+    * EC2 Instance에 설치된 SSM Agent를 통해서 보안 평가 수행
+    * 의도하지 않은 Network 접근 가능
+    * OS 취약점 검사
+  * Contaienr Image in ECR
+    * Contaienr Image가 ECR에 Push되는 경우 Image 검사 수행
+* 검사 결과는 Security Hub에 취합, 또는 Event Bridge에 전송
+
+#### 17.10. Amazone Macie
+
+* Machine Learning Pattern Matching 알고리즘을 통해서 민감한 Data가 존재하는지 탐색
+* 탐색 결과를 CloudWath Events, EventBridge로 전송 가능
+
 ### 18. Network
 
 ### 19. Migration
