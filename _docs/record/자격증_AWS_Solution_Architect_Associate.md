@@ -1186,13 +1186,59 @@ adsense: true
 #### 14.5. SAM (Serverless Application Model)
 
 * Serverless Application 개발 및 배포 Framework
-* YAML 형태로 배포 가능
+* YAML 파일을 통해서 설정
+* Lambda, API Gateway, DynamoDB Local 구동을 지원하여 쉬운 개발일 가능하도록 지원
+* CodeDeploy를 활용하여 Lambda 배포 지원
 
 ### 15. Database
 
 ### 16. Monitoring, Auth
 
 ### 17. Security, Encrpytion
+
+#### 17.1. KMS (Key Management Service)
+
+* Key 관리 Service
+* 다양한 AWS Service에서 Key 필요시 대부분 KMS Service를 활용
+* CLI, SDK를 통해서도 이용 가능
+* CMK (Custom Master Key) Type
+  * Symmetric (AES-256)
+  * Asymmetric (RSA & ECC Key Pairs)
+* CMK (Custom Master Key) Type
+  * AWS Managed Service Default CMK : Free
+  * User Keys created in KMS : $1 month
+  * User Keys imported : $1/month
+* Key Management Action : Create, Rotation Policy 설정, Disable/Enable
+* Key 사용을 CloudTrail을 통해서 감시 가능
+* KMS에 접근하기 위해서는 User에게 Key Policy 할당이 필요하며 IAM 설정도 필요
+* KMS Key는 특정 Region에 종속되며, Region 사이의 이동 불가능
+  * Region 사이의 복사한 Data가 KMS로 암호화 되어있다면, Data 복사이후 새로운 KMS key로 다시 암호화 필요
+
+#### 17.1.1. Key Rotate
+
+* Automate Key Rotate
+  * Customer-managed CMK만을 대상으로 Automatic Key Rotate 기능 이용 가능
+  * 1년 주기로 Key Rotate 수행
+    * 주기는 변경되지 않음
+  * Key Rotate를 수행한 이후에도 동일한 CMK ID를 갖음
+  * Rotate 이후에도 Rotate 이전의 Key는 하위 호완성을 위해서 지원
+
+* Manual Key Rotate
+  * 새로운 Key를 생성하여 사용자가 원할때 Key Rotate를 수행
+  * 새로운 Key를 생성하였기 때문에 다른 CMK ID를 갖음
+  * 기존 Key를 그대로 유지해야 이전 Data 복호화 가능
+  * App은 CMK ID가 아니라 Alias를 통해서 접근하는 것을 권장
+    * 새로운 Key 생성후 이전 Key에 붙어 있던 Alias를 새로운 Key에게 할당
+    * Manual Key Rotate 수행시 CMK ID가 변경되는데, App이 Alias를 통해서 Key를 변경한다면 App 수정 불필요
+
+#### 17.2. SSM Parameter Store
+
+* Configuration, Secret 저장소
+* KMS를 이용한 암호화 기능 제공
+* Serverless, Scalable, Durable, 쉬운 SDK를 갖고 있음
+* Tracking 기능 제공
+* CloudWatch Event로 변경 감지가능
+* CloudFormation과 결합 가능
 
 ### 18. Network
 
