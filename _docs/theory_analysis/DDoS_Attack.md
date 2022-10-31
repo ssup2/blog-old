@@ -80,7 +80,7 @@ ICMP Protocol은 L3 Protocol이기 때문에 L3 기반의 Firewall을 활용하�
 ### 4. 참조
 
 * [https://www.akamai.com/ko/our-thinking/ddos](https://www.akamai.com/ko/our-thinking/ddos)
-* [https://www.imperva.com/learn/ddos/ddos-attacks/](https://www.imperva.com/learn/ddos/ddos-attacks/고
+* [https://www.imperva.com/learn/ddos/ddos-attacks/](https://www.imperva.com/learn/ddos/ddos-attacks/]
 * [https://www.onelogin.com/learn/ddos-attack](https://www.onelogin.com/learn/ddos-attack)
 * [https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained](https://cybersecurity.att.com/blogs/security-essentials/types-of-ddos-attacks-explained)
 * Sync Flood : [https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/](https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/)

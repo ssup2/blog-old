@@ -247,7 +247,6 @@ adsense: true
   * 추가 비용 발생 X
 * SSL 지원 X
 
-
 #### 5.2. ALB (Application Load Balancer)
 
 * L7 Load Balancer
@@ -301,11 +300,11 @@ adsense: true
 * Cookie 종류
   * Application-based Cookie
     * Custom Cookie
-      * ??
+      * TODO
     * Application Cookie
       * AWSALBAPP 이름의 Cookie 이름 이용
   * Duration-based Cookie
-    * ??
+    * TODO
 
 #### 5.6. SSL
 
@@ -350,12 +349,13 @@ adsense: true
 
 * Simple Scailing
   * CloudWatch Alarm 기반 정책
-  * Ex) ASG Group 평균 CPU 사용률이 70%가 넘어가면 EC2 Instnace 5개 추가
-  * Ex) ASG Group 평균 CPU 사용률이 40% 미만이면 EC2 Instance 5개 감소
+  * Metric이 특정 값을 도달하면 EC2 Instance 추가, 삭제 수행
+  * Ex) ASG Group 평균 CPU 사용률이 70% 이상이면 EC2 Instnace 5개 추가, 40% 미만이면 5개 감소
 
 * Step Scailing
   * CloudWatch Alarm 기반 정책
-  * ???
+  * Metric이 구간에 따라서 EC2 Instance 추가, 삭제 수행
+  * Ex) ASG Group 평균 CPU 사용률이 70% 이상일 경우 EC2 Instance 10개 추가, 60% 이상일 경우 5개 추가, 40% 미만이면 5개 감소, 30% 미만일 경우 10개 감소
 
 * Predictive Scailing
   * 다음의 과거의 Metric을 기반으료 예측하여 Scaling 수행
@@ -1010,6 +1010,50 @@ adsense: true
 
 ### 13. Container
 
+#### 13.1. ECS
+
+##### 13.1.1. ECS Launch Type
+
+* EC2 Launch Type
+  * EC2 Instance에 Container가 구동되는 방식
+  * EC2 Instance Provisioning, 유지보수 필요
+  * EC2 Instnace 내부적으로 ECS Agent를 구동중
+  * IAM Role
+    * EC2 Instance Profile : ECS Agent가 이용하는 Role, ECS Service API 호출/Container Log CloudWatch로 전송/ECR으로부터 Docker Image Pull 허용
+    * ECS Task Role : ECS Task를 위한 Role, Task별 별도의 Role 할당 가능
+* Fargate Launch Type
+  * Infra Provsioning 불필요 (Serverless)
+  * Task에 필요한 CPU / Memory만큼 Fargate를 활용하여 구동
+
+##### 13.1.2. Load Balancer
+
+* ALB : L7 Protocol을 이용하는 대부분의 Service에 적용 가능
+* NLB : High Throughput을 위해서 이용, AWS Private Link와 연동하기 위해서 이용
+* CLB : 이용을 권장하지 않음, Fargate와 연동 불가능
+* Auto S
+
+##### 13.1.3. Volumes
+
+* 일반적으로 EFS를 이용하도록 권장
+  * 다중 AZ 지원
+  * Serverless 특징
+* FSx For Lustre 지원 X
+
+##### 13.1.4. Auto Scaling
+
+* Service Auto Scailing
+  * 부하에 따라서 ECS Task를 자동으로 Scaling 하는 기능
+* EC2 Auto Scailing
+  * ECS Task 부하에 따른 EC2 Instance를 자동으로 Scaling 하는 기능
+  * ASG 방식 : Auto Scailing Group을 활용하여 Scailing 수행
+  * Cluster Capacity Provider 방식 : EC2 Instance에 ECS Task를 생성할 가용 Resource가 없는 경우 새로운 EC2 Instance Scailing Out 수행
+
+##### 13.1.5. Rolling Update
+
+* Minimum Health Percent, Maximum Percent 각각 설정 가능
+* Ex) Min 50%, Max 100% : 4개의 Task가 동작하고 있다면 Old Version 2개 제거, New Version 2개 생성, Old Version 2개 제거, New Version 2개 생성 과정 진행
+* Ex) Min 100%, Max 150% : 4개의 Task가 동작하고 있다면 Old Version 2개 제거, New Version 2개 생성, 
+
 ### 14. Serverless
 
 #### 14.1. Lambda
@@ -1036,7 +1080,7 @@ adsense: true
 * S3 : S3에서 Event 발싱시 Lambda 호출
 * CloudFront : Lambda Edge
 * EventBridge : EventBridge에서 Event 발생시 Lambda 호출
-* CloudWatch : ??
+* CloudWatch : TODO
 * SNS : SNS에서 Event 송신시 Lambda 호출
 * SQS : SQS에서 Message 송신시 Lambda 호출
 * Cognito : Congino에서 Event 발생시 Lambda 호출
@@ -1181,7 +1225,7 @@ adsense: true
 * User Pool
   * User 정보를 저장하고 있는 Pool
 * Federated Identity Pool
-  * ??
+  * TODO
 
 #### 14.5. SAM (Serverless Application Model)
 
@@ -1383,3 +1427,4 @@ adsense: true
 * EC2 Instance vs AMI : [https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac](https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac)
 * Route53 Alias : [https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
 * Route53 Alias : [https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record](https://serverfault.com/questions/906615/what-is-an-amazon-route53-alias-dns-record)
+* Auto Scaliing Policy : [https://tutorialsdojo.com/step-scaling-vs-simple-scaling-policies-in-amazon-ec2/](https://tutorialsdojo.com/step-scaling-vs-simple-scaling-policies-in-amazon-ec2/)
