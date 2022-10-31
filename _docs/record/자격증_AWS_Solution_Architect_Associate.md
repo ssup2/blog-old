@@ -1132,8 +1132,8 @@ adsense: true
   * Document : List, Map
   * Set : String Set, Number Set, Binary Set
 * Table
-  * Partition Key : 
-  * Sork Key :
+  * Partition Key : TODO
+  * Sork Key : TODO
 * TTL (Time To Live) 기능 제공
 * Index
   * Partition Key, Sort Key를 제외한 나머지 Attribute Query를 수행하기 위해서는 Index 생성 필요
