@@ -1052,7 +1052,13 @@ adsense: true
 
 * Minimum Health Percent, Maximum Percent 각각 설정 가능
 * Ex) Min 50%, Max 100% : 4개의 Task가 동작하고 있다면 Old Version 2개 제거, New Version 2개 생성, Old Version 2개 제거, New Version 2개 생성 과정 진행
-* Ex) Min 100%, Max 150% : 4개의 Task가 동작하고 있다면 Old Version 2개 제거, New Version 2개 생성, 
+* Ex) Min 100%, Max 150% : 4개의 Task가 동작하고 있다면 New Version 2개 생성, Old Version 2개 제거, New Version 2개 생성, Old Version 2개 제거 과정 진행
+
+#### 13.2. ECR (Elastic Container Registry)
+
+* Container Image 저장소
+* Private, Public Repository : https://gallery.ecr.aws/
+* Backend Storage로 S3 이용
 
 ### 14. Serverless
 
