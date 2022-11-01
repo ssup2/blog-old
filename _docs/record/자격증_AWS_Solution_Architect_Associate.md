@@ -1521,6 +1521,66 @@ adsense: true
 
 ### 18. Network
 
+#### 18.1. VPC (Virtual Private Cloud)
+
+* 걔정마다 Default VPC 존재
+* 하나의 계정에 최대 5개의 VPC까지 생성 가능 (Softlimit)
+* CIDR
+  * Min CIDR : /28 (16 IP Address)
+  * Max CIDR : /16 (65536 IP Address)
+* VPC는 Private Network이기 때문에 다음의 Network 영역만 할당 가능
+  * 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8)
+  * 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12)
+  * 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16)
+* VPC끼리 CIDR가 겹치면 안됨
+* 하나의 VPC당 하나의 VPC Router 존재
+
+#### 18.2. Subnet
+
+* Subnet Reserved IP
+  * 모든 Subnet마다 5개의 예약된 IP가 존재
+  * Subnet의 CIDR가 10.0.0.0/24일 경우
+  * 10.0.0.0 : Network Address
+  * 10.0.0.1 : VPC Router
+  * 10.0.0.3 : DNS Server
+  * 10.0.0.255 : Broadcast Address, VPC 내부에서는 Broadcast 미지원하기 때문에 실제 이용 X
+
+#### 18.3. Internet Gateway
+
+* VPC 내부에 존재하는 Resource (EC2)를 외부 Internet과 통신하게 도와주는 통로
+* Managed Service
+* 하나의 VPC에는 하나의 Internet Gateway만 붙일 수 있음
+
+#### 18.4. Bastion Hosts
+
+* Public Subnet에 존재한는 공용 Host
+* Private Subnet에 존재하는 EC2 Instance에 접근하도록 도와줌
+* Security Group을 통해서 22 Port만 허용하도록 설정 필요
+
+#### 18.5. NAT Gateway
+
+* Elastic IP 할당 필요
+* Managed Service
+* 일반적으로 Public Subnet에 위치시켜 Private Subnet에 존재하는 EC2 Instance들이 Internet Gateway를 통해서 Internet을 이용할 수 있도록 구성
+* NAT Gateway는 하나의 AZ 내부에서만 Resilient를 유지, AZ 장애시에는 동작하지 못함
+  * 따라서 AZ마다 별도의 NAT Gateway를 구성하여 고가용성 확보
+
+#### 18.6. Reachability Analyzer
+
+* 2개의 Endpoint 사이의 Connectivity를 분석할 수 있음
+* 실제 Packet을 전송하는 방식이 아니라, Network 설정을 통해서만 분석 수행
+
+#### 18.7. VPC Peering
+
+* 2개의 VPC를 연결
+* 연결하는 VPC의 CIDR가 겹치면 안됨
+* VPC Peering은 Not Transitive
+  * A - B - C 형태로 VPC Peering을 통해서 VPC가 연결되어 있더라도 A - C VPC 사이에 통신을 하기 위해서는 A - C 사이의 VPC도 설정 필요
+
+#### 18.8. VPC Endpoint
+
+* 
+
 ### 19. Migration
 
 ### 20. Machine Learning
