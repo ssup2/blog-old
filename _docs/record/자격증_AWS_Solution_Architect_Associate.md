@@ -1594,7 +1594,8 @@ adsense: true
 
 #### 18.9. VPC Flow
 
-* 
+* VPC의 Packet 흐름을 Logging
+  * VPC Flow, Subnet Flow, ENI Flow
 
 ### 19. Migration
 
