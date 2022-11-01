@@ -1579,7 +1579,18 @@ adsense: true
 
 #### 18.8. VPC Endpoint
 
-* 
+* VPC 내부에 존재하지 않는 AWS Service에 접근하기 위한 통로
+  * Ex) DynamoDB, SNS
+* Managed Service
+* Endpoint Type
+  * Interface Endpoint
+    * ENI를 Provisioning하여 Endpoint 제공
+    * 대부분의 AWS Service에 접근 가능
+    * Security Group 설정 필요
+  * Gateway Endpoint
+    * Gateway를 통해서 Endpoint 제공
+    * Routing Table 설정 필요
+    * S3, DynamoDB 설정
 
 ### 19. Migration
 
