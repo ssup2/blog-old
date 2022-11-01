@@ -1595,7 +1595,20 @@ adsense: true
 #### 18.9. VPC Flow
 
 * VPC의 Packet 흐름을 Logging
-  * VPC Flow, Subnet Flow, ENI Flow
+  * VPC Flow, Subnet Flow, ENI Flow 확인 가능
+* Packet Monitoring, Trouble Shooting시 유용
+* Log는 S3 또는 CloudWatch로 전송 가능
+
+#### 18.10. Site-to-Site VPN
+
+* AWS의 VPC와 기업의 Private Network를 연결하는 VPN
+* VGW (Virtual Private Gateway) : VPC 내부에서 VPN과 연결되는 Gateway
+* Customer Gateway : 기업 내부에서 VPN과 연결되는 Software Application 또는 물리 장치
+* VPC에서 Route Propagation 옵션 반드시 설정 필요
+* 다수의 기업와 VPC 하나가 연결될 수 있음
+  * 이 경우 기업사이에도 VGW를 통해서 통신 가능
+
+#### 18.11. Direct Connect
 
 ### 19. Migration
 
