@@ -1669,6 +1669,24 @@ adsense: true
 
 ### 19. Migration
 
+#### 19.1. DMS (Database Migration Service)
+
+* Migration 중에도 Src Database 이용 가능
+* 이기종간 Database Migration 지원
+  * SCT (Schema Conversion Tool)를 통해서 Schema 변환도 지원
+* CDC (Continuous Data Replication) 방식
+* Migration Task 수행을 위해서 EC2 Instance 생성 필요
+
+#### 19.2. Data Sync
+
+* On-Premises와 AWS 사이의 Data 동기화 수행
+  * On-Premises Target : NFS, SMB
+  * AWS Target : S3, EFS, FSx
+  * On-Premises에 AWS DataSync Agent 설치 필요
+* 동기화 주기는 시간, 날짜, 주간으로 설정 가능
+* AWS 사이의 동기화도 수행 가능
+  * EFS Region A - EFS Region B
+
 ### 20. Machine Learning
 
 ### 21. Reference
