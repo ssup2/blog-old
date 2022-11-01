@@ -1590,7 +1590,11 @@ adsense: true
   * Gateway Endpoint
     * Gateway를 통해서 Endpoint 제공
     * Routing Table 설정 필요
-    * S3, DynamoDB 설정
+    * S3, DynamoDB Serivce 접근시 이용
+
+#### 18.9. VPC Flow
+
+* 
 
 ### 19. Migration
 
