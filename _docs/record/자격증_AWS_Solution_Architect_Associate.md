@@ -1337,9 +1337,46 @@ adsense: true
 
 #### 16.3. CloudWatch Alarms
 
+* 어떠한 Metric이든 Alarm으로 Trigger 가능
+  * Log의 경우에도 Metric 지표로 변환이 가능하며, 변환된 Metric을 통해서 Alarm 설정 가능
+* Alarm 상태
+  * OK : Alarm이 Trigger되지 않음
+  * INSUFFICIENT_DATA : 상태를 결정할 Data가 부족
+  * ALARM : Alarm이 Trigger됨
+* Period
+  * Metric을 Check하는 주기 설정 가능
+  * 10초, 30초 그리고 60초 주기로 설정 가능
+* 주요 Metric Target
+  * EC2 Instance
+  * Auto Scailing
+  * SNS 
+
 #### 16.4. CloudWatch Events
 
+* AWS Service로부터 Event 수신 가능
+* Event Source
+  * Compute : Lambda, Batch, ECS Task
+  * Integration : SQS, SNS, Kinesis Data Stream, Kinesis Data Firehose
+  * Orchestration : Step Functions, CodePipeline, CodeBuild
+  * Maintenance : SSM, EC2 Actions
+
 #### 16.5. EventBridge
+
+* Cloudwatch Event의 확장 Service
+* Event Bus Type
+  * Default Event Bus : AWS Service가 생성하는 Event Bus
+  * Partner Event Bus : AWS 기반의 SaaS Service로 부터 발생하는 Event Bus
+  * Custom Event Bus : 사용자 App의 Event Bus
+* 다른 AWS 계정에서도 권한 설정을 통해서 Event Bus 이용 가능
+* Event Bus로 전송한 Event를 Archiving 할수 있으며, Archive된 Event를 다시 재생 가능
+* Schema Registry 
+  * Event의 Schema를 추론하여 EventBridge가 저장
+  * 추론을 통해 얻은 Schema는 App에서 편리하게 Event의 Data를 이용할 수 있도록 Struct로 제공
+  * Schema Version 관리 지원
+* Resource-based Policy 적용 가능
+  * EventBus 단위로 정책 설정 가능
+  * 다른 계정으로부터 전송되는 Event 허용, 차단 가능
+  * AWS Region에 따라서도 Event 허용, 차단 가능
 
 #### 16.6. CloudTrail
 
