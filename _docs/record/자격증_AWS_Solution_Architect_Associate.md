@@ -1242,6 +1242,64 @@ adsense: true
 
 ### 15. Database
 
+* RDBMS : RDS, Aurora
+* NoSQL : DynamoDB (JSON), ElasticCache (Key/Value), Neptune (Graphs)
+* Object Store : S3 / Glacier
+* Data Warehouse : Redshift, Athena
+* Search : ElasticSearch (JSON)
+* Graphs : Neptune
+
+#### 15.1. Redshift
+
+* PostgreSQL 기반 OLTP Database
+* Columnar Storage
+* MPP (Massively Parallel Query)를 활용한 병렬 Query 처리
+* S3, DynamoDB, DMS와 같은 별도의 Database에서 Data를 Load
+  * Amazon Kinesis를 활용한 Data Load
+  * S3에서 직접 복사하여 Data Loading
+  * EC2 In JDBC Driver를 활용하여 Data Loading
+* 1개의 Node부터 128개의 Node까지 이용가능, 노드당 최대 128TB 이용가능
+* Node Type
+  * Leader Node : Query Plan, Result Aggregation 수행
+  * Compute Node : Query 수행 및 결과를 Leader Node로 전송
+* Redshift Spectrum : S3의 Object를 대상으로 바로 Query를 수행
+* VPC Routing : VPC를 통해서 Data Copy, Unload 수행 가능
+
+##### 15.1.1. Snapshot & DR
+
+* Multi-AZ Mode 존재 X
+* Snapshot은 S3에 저장됨
+* 생성된 Snapshot을 통해서 새로운 Redshift Cluster를 생성하여 복구 가능
+* 생성한 Snapshot을 주기적으로 다른 Region으로 복사하도록 설정 가능
+
+#### 15.2. Glue
+
+* ETL (Extract, Transform, Load) Service
+  * Redshift로 Load
+* Serverless Service
+* Glue Data Catalog
+  * Crawler : S3, RDS, DynamoDB와 같은 Data Store의 Meta Data 수집
+  * Glue Data Catalog : Crawler가 수집한 Meta Data를 저장
+  * Meta Data : Table 정보, Data Type, Column 정보
+  * 저장된 Meta Data는 Athena, Redshift Spectrum, EMR에서 이용 가능
+
+#### 15.3. Neptune
+
+* Graph Database
+  * High relation data
+  * Social Networking
+  * Wikipedia
+* 3개의 AZ를 활용하며, 최대 15개의 Read Replica 지원
+* S3를 통한 Backup 지원
+
+#### 15.4. OpenSearch
+
+* 모든 Field를 대상으로 검색수행 가능
+  * Big Data 분석용으로 많이 이용
+* Kinesis Data Firehose, AWS IoT, CloudWatch Log와 통합제공
+* Cognito, IAM, KMS encryion, SSL & VPC를 활용한 보안 기법 제공
+* OpenSearch Dashboard 제공
+
 ### 16. Monitoring, Audit
 
 #### 16.1. CloudWatch Metric
