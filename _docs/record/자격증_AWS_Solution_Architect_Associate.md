@@ -1289,6 +1289,7 @@ adsense: true
   * High relation data
   * Social Networking
   * Wikipedia
+* Managed Service
 * 3개의 AZ를 활용하며, 최대 15개의 Read Replica 지원
 * S3를 통한 Backup 지원
 
@@ -1296,6 +1297,8 @@ adsense: true
 
 * 모든 Field를 대상으로 검색수행 가능
   * Big Data 분석용으로 많이 이용
+* EC2 Cluster를 통해서 구성
+  * EC2 Instance Node에 따라 과금
 * Kinesis Data Firehose, AWS IoT, CloudWatch Log와 통합제공
 * Cognito, IAM, KMS encryion, SSL & VPC를 활용한 보안 기법 제공
 * OpenSearch Dashboard 제공
