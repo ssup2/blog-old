@@ -1683,9 +1683,19 @@ adsense: true
   * On-Premises Target : NFS, SMB
   * AWS Target : S3, EFS, FSx
   * On-Premises에 AWS DataSync Agent 설치 필요
-* 동기화 주기는 시간, 날짜, 주간으로 설정 가능
+* 동기화 주기는 시간, 일간, 주간으로 설정 가능
 * AWS 사이의 동기화도 수행 가능
   * EFS Region A - EFS Region B
+
+#### 19.3. Backup
+
+* Storage Service를 S3로 백업 진행
+  * Target : EC2, EBS, S3, RDS, DynamoDB, DocumentDB, EFS, Aurora, Neptune, FSx, Storage Gateway
+* Cross Account 지원
+* Cross Region 지원
+* Backup Vault Lock 지원
+  * WORM (Write Once Read Many) 정책
+  * Vault Lock이 걸린 Backup의 경우에 삭제 불가능
 
 ### 20. Machine Learning
 
