@@ -1550,6 +1550,8 @@ adsense: true
 * VPC 내부에 존재하는 Resource (EC2)를 외부 Internet과 통신하게 도와주는 통로
 * Managed Service
 * 하나의 VPC에는 하나의 Internet Gateway만 붙일 수 있음
+* IPv4의 경우에는 NAT 수행 O, IPv6의 경우에는 NAT 수행 X
+  * AWS에서 할당하는 IPv6 Address는 Public IP Address이기 때문에 NAT 수행 불필요
 
 #### 18.4. Bastion Hosts
 
@@ -1564,6 +1566,7 @@ adsense: true
 * 일반적으로 Public Subnet에 위치시켜 Private Subnet에 존재하는 EC2 Instance들이 Internet Gateway를 통해서 Internet을 이용할 수 있도록 구성
 * NAT Gateway는 하나의 AZ 내부에서만 Resilient를 유지, AZ 장애시에는 동작하지 못함
   * 따라서 AZ마다 별도의 NAT Gateway를 구성하여 고가용성 확보
+* IPv4만 이용 가능하며, IPv6는 Egress-only Internet Gateway를 이용해야함
 
 #### 18.6. Reachability Analyzer
 
@@ -1601,7 +1604,7 @@ adsense: true
 
 #### 18.10. Site-to-Site VPN
 
-* AWS의 VPC와 기업의 Private Network를 연결하는 VPN
+* AWS의 VPC와 기업의 Private Network를 Public Network를 통해서 연결하는 VPN
 * VGW (Virtual Private Gateway) : VPC 내부에서 VPN과 연결되는 Gateway
 * Customer Gateway : 기업 내부에서 VPN과 연결되는 Software Application 또는 물리 장치
 * VPC에서 Route Propagation 옵션 반드시 설정 필요
@@ -1609,6 +1612,60 @@ adsense: true
   * 이 경우 기업사이에도 VGW를 통해서 통신 가능
 
 #### 18.11. Direct Connect
+
+* AWS의 VPC와 기업의 Private Network를 Private Network를 통해서 연결
+  * VGW (Virtual Private Gateway) : VPC 내부에서 VPC와 Direct Connection Location을 연결하는 Gateway
+  * Direct Connection Endpoint : Direct Connection Location에서 Direct Connection Location과 VPC를 연결
+  * Customer, Partner Router : Direct Connection Location에서 Direct Connection Location과 기업의 Network 연결
+  * S3와 같이 Public Endpoint를 접근하는 경우 Direct Connection Endpoint에서 VGW의 경로가 아닌 Direct Connection Endpoint에서 Public Endpoint로 접근
+  * Direct Connection Location에 Direct Connection Endpoint, Customer, Partner Router를 두개 이상두어 고가용성 구성 가능
+* Direct Connect Gateway : Direct Connect을 통해서 다른 Region에 접근하고 싶은경우 이용
+* Connection Type
+  * Dedicated Connection
+    * 1Gpbs, 10Gpbs
+    * 고객에게 할당된 전용 Ethernet Port를 통해서 연결
+  * Hosted Connection
+    * 50Mbps, 500Mbps to 10Gbps
+    * Capacity는 요구사항에 따라서 변경 가능
+* 암호화 수행 X
+  * VPN + IPSec를 통해서 별도의 암호화 설정 가능
+  * 보안성은 향상되지만 구성이 복잡해짐
+
+#### 18.12. PrivateLink
+
+* 원하는 VPC를 PrivateLink를 이용하여 다른 VPC에게 노출가능
+* NLB - ENI를 서로 다른 VPC에 위치시키고 AWS Private Link로 연결 수행
+  * NLB가 Multiple AZ에 위치한다면 ENI도 각 AZ마다 위치해야함
+
+#### 18.13. Transit Gateway
+
+* 다수의 VPC를 하나의 Transit Gateway에 연결 가능
+  * Direct Connect Gateway, Site-to-Site VPN도 연결 가능
+* Traffic 제어 가능
+* Regional Resource
+* 다른 Account에게 공유 가능
+  * RAM (Resource Access Manager)를 통해서 공유 가능
+  * Peer Transit
+* IP Multicast 지원
+* Site-to-Stie VPN을 다수 연결하여 기업과 VPC 사이의 연결의 대역폭을 확장하는데 이용
+  * ECMP기반
+
+#### 18.14. IPv6
+
+* VPC에서 IPv6를 Enable시켜 Dual Stack Mode 가능
+  * IPv4는 Disable 불가능
+* VPC가 Daul Stack으로 동작하는경우 해당 VPC에 EC2 Instance가 붙는경우 IPv4, IPv6 두개의 IP가 할당 가능
+* IPv6 Address는 Public IP Address를 할당받음
+
+#### 18.15. Egress-only Internet Gateway
+
+* IPv6만을 위한 Engress Gateway
+* IPv4는 이용 불가능, IPv4의 Nat Gateway 비슷한 역할 수행
+* VPC에 할당하여 이용
+  * NAT Gateway는 Subnet에 할당하기 때문에 약간은 다른 구조
+* Managed Service
+* NAT 수행 X
+  * AWS의 IPv6는 Public IPv6이기 때문에 NAT 수행 X
 
 ### 19. Migration
 
