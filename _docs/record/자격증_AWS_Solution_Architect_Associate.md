@@ -1699,6 +1699,19 @@ adsense: true
 
 ### 20. Machine Learning
 
+* Rekognition : 사진이나 영상에서 사물과 사람을 인식
+* Transcibe : 목소리를 Text로 변환
+* Polly : Text를 목소리로 변환
+* Translate : 언어 변역
+* Lex : Amazon Alexa 기능 제공
+* Connect : 전화 상담
+* Comprehend : NPL (Natural Language Processing)
+* SageMaker : ML Model 구축을 적용을 위한 개발, 운영 환경 제공
+* Forecast : 미래를 예측하는 기능
+* Kendra : Document Search 기능
+* Personalize : 개인 추천 기능
+* Textract : Scan된 문서에서 Text 추출
+
 ### 21. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-solutions-architect-associate](https://www.udemy.com/course/best-aws-certified-solutions-architect-associate)
