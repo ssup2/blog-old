@@ -39,7 +39,18 @@ General Purpose Type중에서 Fixed Perforamnce Instance는 의미 그대로 고
 
 ### 2. Pricing
 
+#### 2.1. On-Demand
+
+#### 2.2. Spot Instance
+
+#### 2.3. Reserved Instnace
+
+#### 2.4. Savings Plan
+
+#### 2.5. Dedicated Host
+
 ### 3. 참조
 
 * EC2 Instance Type : [https://aws.amazon.com/ec2/instance-types/](https://aws.amazon.com/ec2/instance-types/)
 * Steal Time : [https://stackoverflow.com/questions/20133739/amazon-aws-micro-instance-with-100-cpu-and-unresponsive](https://stackoverflow.com/questions/20133739/amazon-aws-micro-instance-with-100-cpu-and-unresponsive)
+* Pricing : [https://aws.amazon.com/ec2/pricing/](https://aws.amazon.com/ec2/pricing/)
