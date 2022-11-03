@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-AWS IAM (Identity and Access Management) 을 분석한다.
+AWS IAM (Identity and Access Management)을 정리힌다.
 
 ### 1. AWS IAM (Identity and Access Management)
 
