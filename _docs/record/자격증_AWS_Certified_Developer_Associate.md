@@ -53,6 +53,19 @@ adsense: true
 
 ### 3. CloudFront
 
+* CDN Service
+* DDoS 보호
+
+#### 3.1. CloudFront Origin
+
+* S3 Bucket
+  * S3 Object Caching 수행 가능
+  * "OAI (Origin Access Identity)"를 이용하여 Security 강화 가능
+  * Cloud Front를 통해서 S3 Object Upload도 가능
+* Custom Origin
+  * HTTP Protocol을 지원하는 Resource는 CloudFront Origin으로 이용 가능
+  * Ex) ALB, EC2 Instance, HTTP Backend Server 
+  
 ### 4. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
