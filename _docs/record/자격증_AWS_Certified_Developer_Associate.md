@@ -64,7 +64,39 @@ adsense: true
   * Cloud Front를 통해서 S3 Object Upload도 가능
 * Custom Origin
   * HTTP Protocol을 지원하는 Resource는 CloudFront Origin으로 이용 가능
-  * Ex) ALB, EC2 Instance, HTTP Backend Server 
+  * Ex) ALB, EC2 Instance, HTTP Backend Server
+
+#### 3.2. Caching Invalidation
+
+* Caching된 정보는 TTL 설정을 통해서 얼만큼 유지 될지 설정 가능
+* 명시적으로 Invalid API 호출을 통해서 Caching된 정보 갱신 가능
+
+#### 3.3. Security
+
+* 국가 단위로 Blacklist, Whitelist 설정 가능
+* Client -> Edge Location
+  * HTTPS 기반 암호화 가능
+  * 정책 : HTTPS Only, HTTP to HTTPS Redirect를 통해서 HTTP 사용 억제 가능
+* Edge Location -> Origin
+  * HTTPS 기반 암호화 가능
+  * 정책 : HTTPS Only, Match Viwer (Client -> Edge Location 사이가 HTTP일 경우 HTTP, HTTPS일 경우 HTTPS)
+
+#### 3.4. Signed URL, Signed Cookie
+
+* Cloud Front의 Data를 특정 User에게만 노출하고 싶은경우 Signed URL, Signed Cookie 이용 가능
+* Signed URL, Signed Cookie에는 다음의 정보가 포함되어 있음
+  * TTL, 접근 가능한 IP Range, Signer
+* Signed URL 
+  * 각 File마다 하나의 URL이 필요
+* Signed Cookie
+  * 하나의 Cookie로 다수의 File 접근 가능
+* CloudFront Signed URL vs S3 Pre-Signed URL
+  * TODO
+* Signer Type
+  * Trusted Key Group (현재 권장 Recommand)
+    * Private Key : Application에서 URL Sign으로 이용
+    * Public Key : CloudFront에서 Sign한 URL 검증용으로 이용
+  * CloudFront Key Pair를 갖고 있는 계정 이용 (기본 방식, 권장 X)
   
 ### 4. Reference
 
