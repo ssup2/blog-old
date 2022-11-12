@@ -1,8 +1,8 @@
 ---
 title: 자격증 AWS Solutions Architect Associate 이론 정리
 category: Record
-date: 2019-11-01T12:00:00Z
-lastmod: 2021-08-09T12:00:00Z
+date: 2022-11-01T12:00:00Z
+lastmod: 2022-11-01T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -197,6 +197,7 @@ adsense: true
 #### 4.2. AMI (Amazon Machine Image)
 
 * EC2 Instance의 Booting Image
+* EC2 Instance Snapshot
 * EC2 Instance를 원하는 상태로 설정한 이후에 AMI 생성 기능을 통해서 AMI 생성
   * AMI를 생성하면서 Snapshot 생성도 가능
 * 하나의 AMI에 다수의 EBS Volume 포함 가능
