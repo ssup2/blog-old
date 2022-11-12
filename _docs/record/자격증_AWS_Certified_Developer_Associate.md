@@ -169,8 +169,8 @@ adsense: true
   * Client -> ELB -> ENI -> ECS Task의 경로로 Traffic 흐름
   * ENI와 ECS가 1:1로 Mapping되는 구조이기 대문에 각 ENI는 단일 Port만 이용가능 하며 단일 Port만 열려있으면 되기 때문에 보안에 유리
 
-#### 4.7. Elastic Beanstalk
+### 5. Elastic Beanstalk
   
-### 5. Reference
+### 6. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
