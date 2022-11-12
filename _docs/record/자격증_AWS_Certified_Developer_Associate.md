@@ -97,7 +97,80 @@ adsense: true
     * Private Key : Application에서 URL Sign으로 이용
     * Public Key : CloudFront에서 Sign한 URL 검증용으로 이용
   * CloudFront Key Pair를 갖고 있는 계정 이용 (기본 방식, 권장 X)
+
+### 4. ECS
+
+* Container Orchestator Service
+* ALB, NLB 연동 지원
+* EFS 사용 권장
+
+#### 4.1. Launch Type
+
+* EC2 Launch Type
+  * EC2 Instance 관리 필요
+  * EC2 Instance 내부에는 ECS Agent가 동작
+* Fargate Luanch Type
+  * Serverless
+  * EC2 Instance 관리 불필요
+
+#### 4.2. IAM Role
+
+* ECS Agent는 EC2 Instance Profile을 이용하여 IAM을 통해서 ECS, ECR, CloudWatch 호출
+  * EC2 Launch Type일 경우만 해당
+* ECS Task를 위한 전용 Role 할당 가능
+
+#### 4.3. Component
+
+* Task
+  * 하나 또는 다수의 Container를 의미
+  * 환경 변수을 통해서 Task에 Parameter 전달 가능
+    * Hardcoding
+    * SSM Parameter Store, Secret Manager의 값을 읽어서 환경 변수로 전달 가능
+  * Task 내부의 Container 사이의 Data 공유를 위한 Volume 설정 가능 (Bind Mount)
+    * EC2 Launch Type : EC2 Instance에 Data가 저장되기 때문에 EC2 Lifecycle에 따라서 Data의 Lifecycle도 저장, Volume Size도 EC2 Instance Type에 따라 결정
+    * Fargate Launch Type : Volume Sie가 20GB가 Default이며 최대 200GB까지 이용 가능
+* Service
+  * Task의 집합
+  * AutoScaling 지원
+  * Task의 개수 유지 및 Rolling Update 지원
+  * Load Balancer에 Service 단위로 연결 가능
+
+#### 4.4. Auto Scaling
+
+* Service를 대상으로 Auto Scaling 지원
+* AWS Application Auto Scaling을 기반으로 동작
+* 다음의 Metric 활용
+  * ECS Service에 소속되어 있는 Task의 평균 CPU 사용량
+  * ECS Service에 소속되어 있는 Task의 평균 Memory 사용량
+  * ECS Service에 소속되어 있는 Task당 ALB가 보내는 평균 요청량
+* 다음의 Algorithm 지원
+  * Target Tracking : CloudWatch Metric이 특정 값을 충족시키도록 Scale In/Out 수행
+  * Step Scailing : CloudWatch Alarm이 발생할때 마다 단계적으로 Scale In/Out 수행
+  * Scheduled Scaling : Data/Time에 맞추어 Scale In/Out 수행
+* EC2 Launch Type을 이용하는 경우 EC2 Instance도 Scaling 수행 필요
+  * ASG를 활용하여 EC2 Instance Scaling 수행
+    * ASG Group의 평균 CPU 사용률 기반
+    * ECS Cluster Capacity Provider 기반 Task 수행에 필요한 CPU/Memory가 부족할시 Scaling Out 수행
+
+#### 4.5. Rolling Update
+
+* Minimum Health Percent, Maximum Percent 각각 설정 가능
+* Ex) Min 50%, Max 100% : 4개의 Task가 동작하고 있다면 Old Version 2개 제거, New Version 2개 생성, Old Version 2개 제거, New Version 2개 생성 과정 진행
+* Ex) Min 100%, Max 150% : 4개의 Task가 동작하고 있다면 New Version 2개 생성, Old Version 2개 제거, New Version 2개 생성, Old Version 2개 제거 과정 진행
+
+#### 4.6. Load Balancing Packet Flow
+
+* EC2 Launch Type
+  * Client -> ELB -> EC2 Instance -> ECS Task의 경로로 Traffic 흐름 
+  * EC2는 ELB로부터 Traffic을 받기 위해서 Host Port를 Mapping
+  * EC2 Instance에 각 Task는 서로 Host Port를 이용하며 Random으로 부여됨
+  * Host Port가 Random으로 부여되기 때문에 ELB -> EC2 Instance 사이에는 모든 Port가 열려있어야 하며 보안에 취약
+* Fargate Launch Type
+  * Client -> ELB -> ENI -> ECS Task의 경로로 Traffic 흐름
+  * ENI와 ECS가 1:1로 Mapping되는 구조이기 대문에 각 ENI는 단일 Port만 이용가능 하며 단일 Port만 열려있으면 되기 때문에 보안에 유리
+
+#### 4.7. Elastic Beanstalk
   
-### 4. Reference
+### 5. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)

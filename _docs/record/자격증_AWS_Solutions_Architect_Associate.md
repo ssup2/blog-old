@@ -696,7 +696,7 @@ adsense: true
 * Error
   * 403 Error 발생시 권한 확인 필요
 
-#### 9.10. Replication
+#### 9.7. Replication
 
 * Region 사이의 복제 기능 제공
   * 비동기 복제 수행
@@ -711,27 +711,27 @@ adsense: true
   * Source Object의 특정 Version 삭제시 복제되지 않음
 * Replication Chain 구성 불가능
 
-#### 9.11. Pre-signed URL
+#### 9.8. Pre-signed URL
 
 * 임시로 Download, Upload가 가능한 임시 URL 생성 가능
   * Download : CLI, SDK를 통해서 생성 가능
   * Upload : SDK를 통해서만 생성 가능
 * 기본적으로 3600초의 유효시간을 갖으며 Pre-signed URL 생성시 유효시간 설정 가능
 
-#### 9.12. Storage Class
+#### 9.9. Storage Class
 
 * Storage Class에 따라서 가격, 성능, 가용성 차이를 갖음
 * 모든 Storage Class는 99.999999999% 내구성 보장
 * Object 단위로 설정 가능
 
-##### 9.12.1. General Purpose
+##### 9.10.1. General Purpose
 
 * 종종 접근하여 이용하는 경우 이용
 * 99.99% 가용성 보장
 * Low Latency, High Throughput
 * Usage Example : Big Data 분석, Content 배포
 
-##### 9.12.2. Infrequent Access
+##### 9.10.2. Infrequent Access
 
 * 낮은 빈도로 접근하지만 빠른 접근이 필요한 경우 이용
 * Standard Class보다 낮은 비용
@@ -743,17 +743,17 @@ adsense: true
   * 단일 AZ에 저장하는 방식이라 AZ 손실시 Data 손실로 이어짐
   * Usage Example : 임시 Backup, 재생성이 가능한 Data Backup
 
-##### 9.12.3. Glacier Storage Class
+##### 9.10.3. Glacier Storage Class
 
 * Archiving, Backup을 위한 저비용 Storage
 * Object 저장 비용은 낮지만, Object 검색시 비용 발생
 
-##### 9.12.4. Glacier Instant Retrieval Class
+##### 9.10.4. Glacier Instant Retrieval Class
 
 * Milisecond 단위의 검색 속도
 * 최소 90일 기간의 저장 비용이 청구
 
-##### 9.12.5. Glacier Flexisble Retrieval Class
+##### 9.10.5. Glacier Flexisble Retrieval Class
 
 * Data 검색에 오랜시간이 소모되며, 아래와 같은 설정에 따라서 필요 검색시간이 달라짐
   * Expedited : 1~5분, 비용 발생
@@ -761,14 +761,14 @@ adsense: true
   * Bulk : 5~12시간, 무료
 * 최소 90일 기간의 저장 비용 청구
 
-##### 9.12.6. Glacier Deep Archive
+##### 9.10.6. Glacier Deep Archive
 
 * Data 검색에 가장 오랜시간 소모되며, 아래와 같은 설정에 따라서 필요 검색시간이 달라짐
   * Standard : 12시간
   * Bulk : 48시간
 * 최소 180일 기간의 저장 비용 청구
 
-##### 9.12.7. Intelligent-Tiering
+##### 9.10.7. Intelligent-Tiering
 
 * Object의 사용량에 따라서 자동으로 Tier를 변경
 * Tier 변경시 무료
@@ -779,14 +779,14 @@ adsense: true
   * Archive Access Tier : 90일에서 700일 이상 접근하지 않을시, Optional
   * Deep Archive Access Tier : 180일에서 700일 이상 접근하지 않을시, Optional
 
-##### 9.12.8. Storage Class 이동
+##### 9.10.8. Storage Class 이동
 
 * Transition Action : Object가 생성되고 경과된 시간에 따라서 자동으로 Storage Class를 변경
 * Expiration Action : Object가 생성되고 경과된 시간이 지나면 자동으로 Object 삭제
 * Action Target : Action은 Object Tag 또는 Object Path Prefix (s3://mybucket/music/*)에 따라서 설정 가능
 * S3 Analysics 기능을 통해서 언제 Standard Class에서 Standard IA Class로 변경하면 좋을지 분석 가능
 
-#### 9.13. Performance
+#### 9.11. Performance
 
 * 100~200ms의 지연을 보장하도록 S3 내부에서 Automatically Scaling 수행
 * 하나의 Prefix당 3500 PUT/COPY/POST/DELETE, 5500 GET/HEAD Request per Seconds 성능 제공
@@ -800,19 +800,19 @@ adsense: true
   * 서로 다른 영역을 대상으로 동시에 Byte-Range Fetch를 수행하여 Download 성능 증가 가능
   * Object의 일정 부분만 검색 가능
 
-#### 9.14. Event
+#### 9.12. Event
 
 * S3의 동작을 Event로 생성하여 전파 가능
 * 다음의 Service로 전파가 가능
   * SNS, SQS, Lambda Function, Event Bridge
 
-#### 9.15. Athena
+#### 9.13. Athena
 
 * S3 Object를 위한 Serverless Query Service
 * TB Scan당 5$ 지불
   * Object를 압축하거나 Object의 Data를 Column 형태로 저장하여 Scan 비용 절감 가능
 
-#### 9.16. Glacier Vault Lock
+#### 9.14. Glacier Vault Lock
 
 * WORM (Write Once Read Many) 구현
 * Object 생성후 Lock을 걸어 설정 가능
@@ -1031,7 +1031,6 @@ adsense: true
 * ALB : L7 Protocol을 이용하는 대부분의 Service에 적용 가능
 * NLB : High Throughput을 위해서 이용, AWS Private Link와 연동하기 위해서 이용
 * CLB : 이용을 권장하지 않음, Fargate와 연동 불가능
-* Auto S
 
 ##### 13.1.3. Volumes
 
