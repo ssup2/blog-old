@@ -47,6 +47,10 @@ adsense: true
 
 #### 2.3. Signing Request
 
+* 대부분의 API 호출시 Access Key, Secret Access key를 이용하여 요청에 Signing 필요
+* SDK, CLI를 통한 AWS API 호출시 SDK, CLI 내부적으로 Signing을 알아서 수행
+* AWS API를 직접 호출시 "SigV4" 방식으로 요청을 Signing하여 전송
+
 ### 3. CloudFront
 
 ### 4. Reference
