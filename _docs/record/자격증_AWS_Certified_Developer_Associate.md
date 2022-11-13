@@ -239,6 +239,43 @@ adsense: true
 * Certificate 지정은 Web Console에서 지정하거나, .ebextensions/securelistner-alb.config 파일에 지정 가능
 * Certificate는 ACM 또는 CLI를 통해서 설정 가능
 
-### 6. Reference
+### 6. CI/CD
+
+#### 6.1. CodeCommit
+
+* Git Repository Service
+* Managed Service
+* VPC 내부에 존재
+* IAM과 인가/인가 연계 가능
+* KMS Key로 암호화 수행
+* Repository 공유를 위해서 IAM Role + STS를 통해서 공유
+* Event는 SNS 또는 Chatbot을 통해서 외부로 전달 가능
+
+#### 6.2. CodePipeline
+
+* Workflow Service
+* Stage Type
+  * Source : CodeCommit, EC#, S3, Bitbucket, Github
+  * Build : CodeBuild, Jenkins, CloudeBees, TeamCity
+  * Test : CodeBuild, AWS Device Farm
+  * Deploy : CodeDeploy, Elastic Beanstalk, CloudFormation, ECS, S3
+* 각 Stage은 직렬 또는 병렬로 수행 가능
+* Manual Approval 기능도 제공
+* Artifacts
+  * 각 Stage의 결과물을 Artifact라고 명칭
+  * Artifact는 S3에 저장되며 다음 Stage로 전달 가능
+* 각 Stage 처리 과정은 CloudWatch Event, Event Bridge를 통해서 전달 받을 수 있음
+
+#### 6.3. CodeBuild
+
+#### 6.4. CodeDeploy
+
+#### 6.5. CodeStar
+
+#### 6.6. CodeArtifact
+
+#### 6.7. CodeGuru
+
+### 7. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
