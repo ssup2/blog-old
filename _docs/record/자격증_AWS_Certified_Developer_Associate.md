@@ -161,7 +161,7 @@ adsense: true
 #### 4.6. Load Balancing Packet Flow
 
 * EC2 Launch Type
-  * Client -> ELB -> EC2 Instance -> ECS Task의 경로로 Traffic 흐름 
+  * Client -> ELB -> EC2 Instance -> ECS Task의 경로로 Traffic 흐름
   * EC2는 ELB로부터 Traffic을 받기 위해서 Host Port를 Mapping
   * EC2 Instance에 각 Task는 서로 Host Port를 이용하며 Random으로 부여됨
   * Host Port가 Random으로 부여되기 때문에 ELB -> EC2 Instance 사이에는 모든 Port가 열려있어야 하며 보안에 취약
@@ -179,9 +179,66 @@ adsense: true
 * 다양한 언어 지원 : Ex) Go, Java, Java with Tomcat, .Net Core, Node.js, PHP...
 * Tier
   * 배포 형상을 의미
-  * Web Server Tier : EC2 Instance가 ASG로 묶여 있고, ELB로부터 Traffic 수신
-  * Worker Tier : EC2 Instance가 ASG로 묶여 있고, ELB로부터 Traffic 수신
-  
+  * Web Server Tier : EC2 Instance가 ASG로 묶여 있고, ELB로부터 Traffic 수신하여 처리 
+  * Worker Tier : EC2 Instance가 ASG로 묶여 있고, SQS로부터 Job을 수신하여 처리
+* CloudFormation을 기반으로 동작
+
+#### 5.1. Deployment Mode
+
+* All at once : 한번에 모든 New Version App 배포, 일시적 App 중단 발생
+* Rolling : 소수의 Old Version App을 New Version App으로 점차적으로 교체, 배포한 New Version App이 정상 상태가 되어야 다음 Old Version App이 배포 수행, Old Version App을 먼저 제거하고 제거한 만큼 New Version App을 구동하는 방식이기 때문에 New Version App 개수 + Old Version App의 개수는 변하지 않음
+* Rolling with Additional Batches : Rolling 방식과 유사하지만 New Version App을 먼저 생성하고 Old Version App을 제거하는 방식이기 때문에 일시적으로 New Version App 개수 + Old Version App의 개수 증가
+* Immutable : 새로운 AGS를 생성하고 생성한 ASG에 New Version App을 모두 구동한 이후 Swap 방식으로 한번에 교체
+* Blue/Green : Elastic Beanstalk에서 지원하는 방식은 아니지만 수동으로 Blue/Green 배포 수행 가능. 별도의 배포 환경을 생성하고 생성한 배포환경에 New Version App을 구동. 이후에 Route53을 이용하여 Traffic을 점차적으로 New Version App으로 넘김
+
+#### 5.2. Configuration
+
+* zip 파일 에 배포할 Code가 위치
+* Elastic Beanstalk의 설정은 zip 파일 내부에서도 설정 가능
+* zip 파일의 .ebextensions 하위 Dir에 위치
+* YAML, JSON Format 둘다 지원
+* .config 확장자를 가지고 있어야함
+  * Ex) logging.config
+* option_setting 파일을 통해서 Default 설정 변경 가능
+* Elastic Beanstalk는 CloudFormation을 기반으로 하고 있기 때문에 .ebextensions Dir하위에 CloudFormation 설정파일을 두어 AWS Resource 배포 가능
+
+#### 5.3. Cloning
+
+* Clone을 통해서 동일한 환경 구축 가능
+  * 모든 Resource를 그대로 복제
+* Test 환경 구축시 용이
+* Clone 이후에는 독립적으로 설정 변경 가능
+
+#### 5.4. Migration
+
+* ELB Migration
+  * ELB 환경 구성 이후에는 ELB Type 변경은 불가능
+  * ELB Type을 변경하기 위해서는 ELB를 제외한 나머지 Resource만 Clone을 수한한 이후에 Route53을 통해서 Traffic Migration을 수행
+* RDS Migration
+  * RDS를 Elastic Beanstalk로 생성시에 Elastic Beanstalk 삭제시 RDS도 같이 삭제되는 문제 발생
+  * RDS를 유지하면서 App만 별도의 환경을 Migration 하기 위해서 다음의 과정 수행
+    * RDS가 존재하는 Elastic Beanstalk의 설정을 변경하여 삭제시 RDS는 삭제하지 않도록 변경
+    * 새로운 환경의 Elastic Beanstalk를 생성, 이경우 RDS는 새로 생성하지 않도록 설정하며 기존의 RDS를 이용하도록 설정
+    * Route53을 이용하여 새로 생성한 Elastic Beanstalk로 Traffic을 전달하도록 설정
+    * 기존의 Elastic Beanstalk 삭제
+
+#### 5.5. with Docker
+
+* Single Docker Mode
+  * EC2 Instance에 Docker를 설치하고 단일 Container만 실행
+  * Dockerfile 또는 Dockerrun.aws.json 파일을 통해서 EC2 Instance에 실행할 Container Image 및 설정 가능
+* Multi Docker Container
+  * EC2 Instance에 다수의 Container를 실행
+  * Elastic Beanstalk에서 ECS Cluster를 생성하고 이용
+  * Dockerrun.aws.json 파일을 통해서 ECS Task 정의 가능
+  * Container Image는 사전에 ECR과 같은 Registry에 저장되어 있어야 한다.
+
+#### 5.6. HtTPS Certificate 설정
+
+* ALB에 Certificate 지정을 통해서 HTTPS 이용 가능
+* Certificate 지정은 Web Console에서 지정하거나, .ebextensions/securelistner-alb.config 파일에 지정 가능
+* Certificate는 ACM 또는 CLI를 통해서 설정 가능
+
 ### 6. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
