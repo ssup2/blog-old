@@ -170,6 +170,17 @@ adsense: true
   * ENI와 ECS가 1:1로 Mapping되는 구조이기 대문에 각 ENI는 단일 Port만 이용가능 하며 단일 Port만 열려있으면 되기 때문에 보안에 유리
 
 ### 5. Elastic Beanstalk
+
+* 개발자 관점의 배포 환경 구축 및 배포 Service
+* EC2, ASG, ELB, RDS와 같은 일반적으로 이용되는 Service 모두를 Elastic Beanstalk를 통해서 빠르게 구성 가능
+* Elastic Beanstalk 이용은 무료지만, Elastic Beanstalk로 구성된 Service 비용은 지불 필요
+* App Version 관리 지원
+* 다양한 배포 환경 구성 가능 : Ex) Dev, Stage, Prod...
+* 다양한 언어 지원 : Ex) Go, Java, Java with Tomcat, .Net Core, Node.js, PHP...
+* Tier
+  * 배포 형상을 의미
+  * Web Server Tier : EC2 Instance가 ASG로 묶여 있고, ELB로부터 Traffic 수신
+  * Worker Tier : EC2 Instance가 ASG로 묶여 있고, ELB로부터 Traffic 수신
   
 ### 6. Reference
 
