@@ -321,10 +321,20 @@ adsense: true
 
 #### 6.5. CodeStar
 
+* Github, CodeCommit, CodeBuild, CodeDeploy, CloudFormation, CodePipeline, CloudWatch 등의 Service 조합을 도와주는 Service
+
 #### 6.6. CodeArtifact
+
+* Software Package 저장소
+* VPC 내부에 위치
 
 #### 6.7. CodeGuru
 
-### 7. Reference
+* ML 기반 Code Review Service
+* Profiler 기능 제공
+
+### 8. CloudFormation
+
+### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
