@@ -268,7 +268,56 @@ adsense: true
 
 #### 6.3. CodeBuild
 
+* Code 위치 : CodeCommit, S3, Bitbucket, Github
+* Code에 존재하는 buildspec.yml 파일을 통해서 Build 수행
+* Output Log는 S3 또는 CloudWatch Logs에 저장되어 확인 가능
+* CloudWatch Metric을 이용하여 Build 관련 통계 확인 가능
+* CloudWatch Events를 이용하여 실패한 Build에 대해 Notification 가능
+* CloudWatch Alarms를 이용하여 Thresholds를 넘긴 Build에 대해서 Notification 가능
+* Build는 Container 내부에서 수행되며, Build를 수행하는 Container의 Image는 Customize 가능
+* Local 환경에서도 구동할 수 있도록 제공
+  * Docker, CodeBuild-Agent 설치 필요
+* 기본적으로 VPC 외부에서 Build를 수행하지만, VPC 지정을 통해서 VPC 외부에서도 Build 가능
+  * VPC 내부의 Resource에 접근해야할 경우 이용
+
+##### 6.3.1. buildspec.yaml
+
+* 반드시 Code의 Root에 위치
+* Env : 환경 변수
+  * variables : plaintext 이용
+  * parameter-store : SSM Parameter Store의 저장값 이용
+  * secrets-manager : Secret Manager의 저장값 이용
+* Phases : 명령어 정의
+  * install : Build Dependency 해결을 위한 명령어
+  * pre_build : Build 수행전 마지막 명령어
+  * Build : Build 수행을 위한 명령어
+  * post_build : Build 수행후 실행하는 명령어
+* Artifacts : S3에 Upload 되어야하는 파일
+* Cache : Build 성능 향상을 위해 Caching 되어야 하는 File
+
 #### 6.4. CodeDeploy
+
+* App을 다수의 EC2 Instance, On-premise Server에 배포
+* EC2 Instance, On-premise Server에 CodeDeploy Agent 설치 필요
+* appspec.yml 파일을 통해서 배포 수행
+* 배포 Group (EC2 Instance), 배포 Type (Once At A Time, Half At A Time, All At Once, Custom), IAM Instance Profile, App Revision등 지정 가능
+
+##### 6.4.1. CodeDeploy Agent
+
+* CodeDeploy Agent는 Polling을 통해서 CodeDeploy Service에게 배포할 App이 있는지 확인하고
+* 배포해애햘 App이 있다면 Code + appspec.yml 파일을 Download한 이후에 배포 수행
+
+##### 6.4.2. appspec.yml
+
+* files : Source Code를 어디서 받을지 지정
+* hooks : 배포를 어떻게 진행할지 설정
+  * ApplicationStop
+  * DownloadBundle
+  * BeforeInstall
+  * Install
+  * AfterInstall
+  * ApplicationStart
+  * ValidateService : 정상적으로 배포가 되었는지 확인, 반드시 설정 필요
 
 #### 6.5. CodeStar
 
