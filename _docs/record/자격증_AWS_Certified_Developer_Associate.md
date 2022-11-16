@@ -333,8 +333,8 @@ adsense: true
 * ML 기반 Code Review Service
 * Profiler 기능 제공
 
-### 8. CloudFormation
+### 7. CloudFormation
 
-### 9. Reference
+### 8. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
