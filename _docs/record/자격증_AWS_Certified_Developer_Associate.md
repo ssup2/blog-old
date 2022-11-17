@@ -338,12 +338,28 @@ adsense: true
 * IaC Service
 * Stack을 생성하고, 생성한 Stack에 원하는 최종 Infra 형상을 Code로 저장하면 CloudFormation에서 Infra 자동 생성
 * Infra 형상을 변경하고 싶다면, 변경된 최종 Infra 형상을 Stack에 저장하면 CloudFormation에서 기존 Infra 형상과 비교하여 변경된 부분을 자동으로 탐지하고 Infra 변경 수행
-  * Cloud Formation에서 탐지한 변경된 부분을 Changet Set이라고 명칭
+  * Cloud Formation에서 탐지한 변경된 부분을 ChangeSet이라고 명칭
 * Stack을 삭제한 경우 Stack에 포함된 모든 Resource들도 삭제 수행
 * 대부분의 AWS Resource를 CloudFormation을 통해서 생성 가능
+* Parameter 기능을 활용하여 변수화 가능
+* Mapping 기능을 활용하여 고정값(Const) 이용 가능
+* 출력을 지원하며 출력값은 다른 Stack에서 전달받아 이용 가능
+* 조건문 지원
+* 내장 함수 지원
+* Nested Stack 지원
+  * Stack 내부에 Stack을 가질수 있음
+  * Stack 재사용성을 위해서 이용
+* CloudFormation을 통해 생성된 Resource를 User가 직접 변경 가능
+  * 변경된 Resource를 Drift라고 명칭하며, Drift를 확인하는 기능 제공
 
-#### 7.1. 
+#### 7.1. Rollback
 
-### 8. Reference
+* Stack 생성중 Error가 발생하면 모든 Resource 삭제 수행후 종료
+* Stack Update중 Error가 발생하면 Update전 상태로 되돌리고 종료
+* Rollback Option은 Enable/Disable 가능
+
+### 8. X-Ray
+
+### 9. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
