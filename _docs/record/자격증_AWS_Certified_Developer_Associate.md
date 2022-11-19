@@ -416,8 +416,53 @@ adsense: true
 
 * CloudTrail의 활동 기록을 바탕으로 비정상 동작 탐지 수행
 * 비정상 동작 탐지시 CloudTrail Insights Event를 발생
-* CloudTrail Insights Events는 
+* CloudTrail Insights Events는 CloudTrila Console, S3 Bucket, EventBridge로 전송 가능
 
-### 10. Reference
+### 10. Lambda
+
+* Function as as Service
+* 동기 호출, 비동기 호출 지원
+
+#### 10.1. with ALB, API Gateway
+
+* ALB, API Gateway 뒤에 Lambda 추가 가능
+* HTTP Request는 JSON으로 변환되어 오며, Lambda에서 JSON을 반환하면 다시 HTTP로 변환되어 Response 전송
+* URL Query, HTTP Header에 동일한 Key를 기반으로 여러 Value가 설정되어 있을경우, 여러 Value들을 Array 형태로 Lambda에게 전달
+
+#### 10.2. Lambda Edge
+
+* Lambda를 Edge Location에서 실행
+* 빠른 반응의 App 구현 가능
+* 다음의 4곳에 Lambda를 위치 시켜 CDN Contents 변경 가능
+  * Request : User -> CloudFront 사이
+  * Request : CloudFront -> Origin 사이
+  * Response : Origin -> CloudFront 사이
+  * Response : CloudFront -> User 사이
+
+#### 10.3. Async 호출
+
+* S3, SNS, CloudWatch Event외 기타 Service에서 Async 호출 이용
+* 호출 요청은 Lambda Service 내부의 EventQueue에 저장되며 하나씩 가져와 실행
+* Lambda 함수 수행 실패시 최대 3번 Retry를 시도하며 1분, 2분 대기후 실행
+  * Retry로 인해서 여러번 호출 될 수 있기 때문에 Lambda 함수 수행시 멱등성을 갖도록 개발 되어야 함
+  * Dead-letter Queue 이용 가능 (SQS, SNS로 실행 실패 Event 전송)
+* Destination 기능 제공 
+  * Lambda 함수 수행 결과를 외부로 전송 가능
+  * SQS, SNS, Lambda, EventBridge Bus
+  * 현재 AWS에서는 Dead-letter Queue보다 Destination 기능 이용 권장
+
+#### 10.4. with S3
+
+* Sync 기반 : S3 -> SQS -> Lambda
+* Async 기반 : S3 -> Lambda
+* S3 모든 Event를 받고 싶다면 S3 Versioning 기능 활성화 필요
+
+#### 10.5. with Event Source Mapping
+
+* TODO
+
+#### 10.6. with IAM
+
+### 11. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
