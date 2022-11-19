@@ -360,6 +360,64 @@ adsense: true
 
 ### 8. X-Ray
 
-### 9. Reference
+* Tracing Service
+* 지원 Service : AWS Lambda, Elastic Beanstalk, ECS, ELB, API Gateway, EC2 Instances
+* 적용 방법
+  * X-Ray SDK를 App 내부에서 이용
+  * EC2 Instance에 X-Ray Daemon 설치
+
+#### 8.1. X-Ray Concepts
+
+* Segments : Application, Service에서 X-Ray에게 전송하는 최소 정보
+* Subsegments : Segment에 좀더 자세한 정보를 붙여야할 경우 Segment 하위에 붙는 정보
+* Trace : Segment의 집합으로 구성되는 추적 정보
+* Sampling : X-Ray에게 정보를 전달하는 빈도수, X-Ray에게 많은 정보를 보낼수록 비용 증가
+* Annotation : Trace의 Indexing에 이용되는 Key-Value Pair, Filter를 이용하여 Indexing된 Trace 검색 가능
+* Metadata : Index되지 않는 Key-Value Pair, 검색에도 이용 불가능
+
+#### 8.2. Sampling Rules
+
+* X-Ray에게 더 많은 Trace를 전송할 수록 비용 증가
+* Sampling Rule 변경은 X-Ray 중앙에서 설정하며, App에서는 변경 불필요
+* Reservior : 초당 X-Ray로 전송되어야 Trace 정보
+  * Ex) reservior 5 : 초당 5개의 Trace를 전송
+* Rate : Reservior를 초과하는 Trace를 전송하는 비율
+
+#### 8.3. with ECS
+
+* X-Ray Daemon을 2가지 형태로 구성 가능
+* X-Ray Daemon Container : X-Ray Daemon을 모든 EC2 Instance에 하나씩 Container 형태로 구성
+* Sidecar : X-Ray Daemon을 App Container의 Sidecar로 구성, Fargate 이용시 Sidecar 형태로만 구성 지원
+
+### 9. CloudTrail
+
+* AWS Account 관련 모든 활동(Event)을 기록하는 Service
+  * Console, SDK, CLI, AWS Service
+* Default로 활성화 되어 있음
+* 활동 기록은 기본적으로 90일 동안 저장
+* 90일 이상 저장하기 위해서는 CloudWatch Logs 또는 S3로 전송하여 저장 필요
+* 활동 기록을 S3에 저장한 이후에 Athena를 활용하여 분석 가능
+
+#### 9.1. CloudTrail Event (활동)
+
+* CloudTrail에서 저장하는 Event
+* Management Event
+  * AWS Resource의 형상, 설정을 바꾸는 Event
+  * Management Event은 CloudTraild에서 기본적으로 기록하도록 설정
+  * Ex) Subnet Create
+* Data Event
+  * AWS Resource에 Data CRUD Event
+  * Data Event는 CloudTrail에서 기본적으로 기록하지 않도록 설정 (설정시 많은 Event가 기록되기 때문)
+  * Ex) S3 GetObject, S3 DeleteObject, S3 PutObject
+* CloudTrail Insights Event
+  * CloudTrail Insights에서 발생시키는 Event
+
+#### 9.1. CloudTrail Insights
+
+* CloudTrail의 활동 기록을 바탕으로 비정상 동작 탐지 수행
+* 비정상 동작 탐지시 CloudTrail Insights Event를 발생
+* CloudTrail Insights Events는 
+
+### 10. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
