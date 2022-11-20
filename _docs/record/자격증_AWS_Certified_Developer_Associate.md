@@ -423,6 +423,7 @@ adsense: true
 * Function as as Service
 * 동기 호출, 비동기 호출 지원
 * Key-value String 기반 환경 변수 기능 제공
+  * 최대 4KB
 * CloudWatch Logs, Metrics를 통하여 Log 및 Metric 수집 가능
 * X-Ray 연동을 해서 Tracing 가능
 * Lambda 함수의 Timeout은 기본 3초이며 최대 15분까지 설정 가능
@@ -509,6 +510,7 @@ adsense: true
 * Context EX) DB Connection, HTTP Client, SDK Client
 * Context 공유를 통해서 Lambda 함수 초기화 시간을 줄일 수 있음
 * /tmp Directory도 Context로 활용 가능
+  * 최대 512MB 이용
 
 #### 10.10. Concurrency & Throttling
 
@@ -528,6 +530,47 @@ adsense: true
   * Java : .jar
 * ZIP 파일을 통해 Lambda에 직접 Upload, 50MB 초과시 S3를 활용
 * Native Library는 ZIP 파일에 추가 필요, AWS SDK는 별도의 추가 필요 없음
+
+#### 10.12. with CloudFormation
+
+* CloudFormation을 통해서 Lambda 함수 생성 가능
+* Code.ZipFile 방식
+  * CloudFormation Template에 Code를 직접 명시하는 방식
+  * Dependency 명시가 불가능 하기 때문에 Dependency가 없는 간단한 Code만 가능
+* S3 방식
+  * S3에 Lambda 함수 Code 및 Dependency를 저장하고 이용하는 방식
+  * S3 Bucket, S3 Key, S3 Object Version (S3 Versioning 기능이 활성화 된 경우) 명시 필요
+  * 다른 Account에 공유 가능
+
+#### 10.13. Layer
+
+* TODO
+* Custom Runtime 지원
+* Code 재사용 이용
+
+#### 10.14. Container Image
+
+* Container Image로 구성된 Lambda 함수를 구동 가능
+* Container Image는 최대 10GB
+* Container Image의 Base Image가 반드시 Lambda Runtime을 지원해야 함
+
+#### 10.15. Version & Alias
+
+* Versioning 기능 제공
+  * Version = Code + Configuration
+* Alias 
+  * 특정 Version을 지정하는 별칭 기능
+  * Lambda 함수 개발자는 Alias를 통해서 User가 특정 Version의 Lamba 함수만 이용하도록 제한 가능
+
+#### 10.16. Limitation
+
+* Memory : 128MB ~ 10GB
+* Exeuction Time : 900seconds
+* Env : 4KB
+* Disk Capacity (/tmp) : 512MB
+* Concurreny Exeuction : 1000
+* Lambda 함수 Deployment Size : 50MB
+* Uncompressed Deployment : 250MB
 
 ### 11. Reference
 
