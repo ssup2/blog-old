@@ -520,6 +520,15 @@ adsense: true
   * Async 호출시 : Dead-letter Queue로 전송
 * Provisioned Concurreny 방지 : 미리 Lambda 함수들을 초기화하여 Cold Start 방지
 
+#### 10.11. Code Dependency
+
+* Lambda 함수 Build를 위한 Package도 같이 제공 필요
+  * Node.js : node_modules
+  * Python : pip --target
+  * Java : .jar
+* ZIP 파일을 통해 Lambda에 직접 Upload, 50MB 초과시 S3를 활용
+* Native Library는 ZIP 파일에 추가 필요, AWS SDK는 별도의 추가 필요 없음
+
 ### 11. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
