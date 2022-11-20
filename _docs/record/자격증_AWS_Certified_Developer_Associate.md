@@ -422,6 +422,10 @@ adsense: true
 
 * Function as as Service
 * 동기 호출, 비동기 호출 지원
+* Key-value String 기반 환경 변수 기능 제공
+* CloudWatch Logs, Metrics를 통하여 Log 및 Metric 수집 가능
+* X-Ray 연동을 해서 Tracing 가능
+* Lambda 함수의 Timeout은 기본 3초이며 최대 15분까지 설정 가능
 
 #### 10.1. with ALB, API Gateway
 
@@ -457,11 +461,64 @@ adsense: true
 * Async 기반 : S3 -> Lambda
 * S3 모든 Event를 받고 싶다면 S3 Versioning 기능 활성화 필요
 
-#### 10.5. with Event Source Mapping
+#### 10.5. Event Source Mapping
 
-* TODO
+* Kinesis Data, SQS, DynamoDB Streams와 같이 Client의 Polling이 필요한 경우 이용
+* Lambda 내부에서 Polling 수행, Event 발생시 Event 처리
+* with Stream
+  * Kinesis Streams, DynamoDB Streams의 경우
+  * 각 Shard마다 별도의 Interator를 생성하여 Polling 수행
+  * Shard마다 최대 10개의 Batch 수행 가능
+  * Error 발생시 기본적으로 다시 성공할때까지 Batch 반복 수행, 무기한 Retry 발생 가능
+    * Old Event 버리기, Retry 횟수 제한, Event 분활 처리와 같은 방법으로 해결 가능
+    * 버려진 Event는 SQS, SNS로 전송 가능
+* with Queue
+  * SQS, SQS FIFO의 경우
+  * Long Polling을 통해서 Labmda는 Event 수신
+  * 처리에 실패한 Event는 SQS를 Dead-letter Queue로 이용 가능
 
-#### 10.6. with IAM
+#### 10.6. 권한
+
+* IAM 기반
+  * Account User가 Lambda 함수를 실행하는 경우 이용
+  * Lambda 함수를 위한 Role을 생성하고 붙임
+* Resource Based Policy
+  * 다른 Account User 또는 AWS Service가 Lambda 함수를 실행해야하는 경우 이용
+
+#### 10.7. Network
+
+* Default
+  * AWS 내부에서 관리하는 전용 Lambda Network에서 Lambda 함수 실행
+  * 외부 Internet 접근 가능, Account 내부의 VPC 접근 불가능
+* With VPC
+  * Lambda 함수가 ENI를 통해서 VPC 내부에 접근 가능하도록 설정 가능
+  * Private Subnet, Public Subnet 설정 가능
+  * Internet 접근은 VPC 내부의 NAT Gateway를 통해서 접근
+    * Lambda함수가 Public Subnet에 위치하고 있더라도 Internet 접근은 NAT Gateway를 통해서 접근
+
+#### 10.8. Spec
+
+* Lambda 함수는 128MB ~ 10GB 이용가능
+* Memory를 많이 이용할 수록 더 많은 vCPU Credit을 할당 받을 수 있음
+  * 1729MB를 이용하면 하나의 vCPU를 할당 받는 효과
+  * 1729MB 이후에는 하나 이상의 vCPU를 이용함. 따라서 Function이 Multi-thread를 이용하도록 수정 권장
+
+#### 10.9. Context
+
+* 동일한 Lamda 함수 사이의 Context를 공유하는 기능 제공
+* Context EX) DB Connection, HTTP Client, SDK Client
+* Context 공유를 통해서 Lambda 함수 초기화 시간을 줄일 수 있음
+* /tmp Directory도 Context로 활용 가능
+
+#### 10.10. Concurrency & Throttling
+
+* 각 계정마다 Region당 최대 1000까지 동시에 실행 가능
+  * Support Ticket을 열어 1000개 이상 Quota 증설 가능
+* 함수마다 최대 몇개까지 동시에 실행할 수 있는지 설정 가능
+* 최대 실행개수를 넘어가면 Throttling 발생
+  * Sync 호출시 : 429 Error
+  * Async 호출시 : Dead-letter Queue로 전송
+* Provisioned Concurreny 방지 : 미리 Lambda 함수들을 초기화하여 Cold Start 방지
 
 ### 11. Reference
 
