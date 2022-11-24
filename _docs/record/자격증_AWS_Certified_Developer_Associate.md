@@ -572,6 +572,138 @@ adsense: true
 * Lambda 함수 Deployment Size : 50MB
 * Uncompressed Deployment : 250MB
 
-### 11. Reference
+### 11. DynamoDB
+
+* Multi-AZ 기반 High Availabilty 보장
+* 초당 10만 요청 처리가능
+* 빠르고 균일한 성능 보장
+* IAM과 완전히 통합
+* Auto Scailing 수행
+* Managed
+* PartiQL이라는 Query 언어 지원
+* VPC 내부에서는 VPC Endpoint를 통해서 접근
+* KMS를 이용한 저장 Data 암호화, SSL/TLS를 이용한 송수신 Data 암호화
+* Point-in-time Recovery 지원 (성능 저하 X)
+* DynamoDB를 Local에서 이용할 수 있는 DynamoD Local 지원 
+
+#### 11.1 Table, Primary Key, Item
+
+* Primary Key
+  * 각 Table에는 Primary Key 필요
+  * Partition Key로만 구성
+    * Partition Key는 Unique 해아함
+  * Parititon Key + Sort Key
+    * Partition Key + Sort Key 조합은 Unique 해야함
+* Item (Row)
+  * 무한한 생성 가능
+  * Attribute (Column) 존재
+    * 계속 추가가 가능하며, Null 값도 저장 가능
+  * 최대 크기는 400 KB
+  * Scalar (String, Number, Binary, Boolean, Null), Document Type (List, Map), Set (String, Number, Binary)
+* Partition Key
+  * Item이 저장되는 물리적 위치를 결정
+    * Partition Key를 Hashing하여 실제 물리적 위치를 결정
+  * Primary Key로 이용
+
+#### 11.2. Read/Write Capacity Modes
+
+* Provisioned Mode (Default)
+  * 초당 Read/Write 요청 횟수 지정
+    * RCU, WCU 단위로 설정
+  * Capacity를 계획하고 이용
+  * 설정한 RCU, WCU보다 더 많은 요청을 수행할 경우 일시적으로 Burst Capacity를 활용하여 처리 가능
+  * Burst Capacity도 다 이용한 경우 "ProvisionedThroughputExceededException" 발생
+  * WCU
+    * One write per second for an item up to 1 KB in size
+    * Ex) 10 items per seconds with item size 2KB : 10 * (2/1) = 20 WCU
+    * Ex) 6 items per seconds with item size 4.5KB : 6 * (5/1) = 30 WCU
+  * RCU
+    * One stronly consistent read per seconds up to 4KB
+    * Ex) 10 stronly consistent read per second, with item size 4KB : 10 * (4/4) = 10 RCU
+    * Two eventaully consistent reads per seconds up to 4KB
+    * Ex) 16 eventually consistent read per second, with item size 12KB : (16/2) * (12/4) = 24 RCU
+* On-Demand Mode
+  * Read/Write Automatically Scale Up/Down 수행
+  * Capacity Plan 불필요
+  * Provisioned Mode보다 더 많은 비용 청구
+    * 2.5배 정도 비쌈
+  * WRU, RRU 단위의 요청 수행
+    * WCU, RCU와 동일한 단위
+
+#### 11.3. Throttling
+
+* 원인
+  * Hot Keys : 하나의 Partition Key로만 요청이 몰릴 경우
+  * Hot Partitions : 하나의 Partition으로만 요청이 몰릴 경우
+  * Very Large Items : RCU, WCU를 초과하는 경우
+* 해결 방안
+  * Exponential Backkoff 수행
+  * Parition Key 분배
+  * DynamoDB Accelerator (DAX) 활용
+
+#### 11.4. Index
+
+* LSI (Local Secondary Index)
+  * Alternative Sort Key
+    * String, Nuber, Binary Type으로만 생성 가능
+  * Table당 최대 5개까지 생성 가능
+  * Table 생성시에만 설정 가능
+  * LSI를 대상으로 Query 수행 가능
+* GSI (Global Secondary Index)
+  * Alternative Primary Key
+    * String, Nuber, Binary Type으로만 생성 가능
+  * Query 성능 향상
+  * Table 생성 이후에 추가 가능
+
+#### 11.5. Optimistic Locking
+
+* Conditional Writes 요청을 이용한 Optimistic Locking을 이용할 수 있다.
+* Client는 GetItem 명령을 통해서 Item의 Version 정보를 얻어온뒤, Version 정보와 함께 Conditional Writes 요청 수행
+* Conditional Writes 요청에 포함된 Version과 현재 Item의 Version이 동일해야지만 Write 성공, 다르면 Write 실패
+
+#### 11.6. DynamoDB Accelerator (DAX)
+
+* DynamoDB를 위한 Cache Server
+* Managed Service
+* Client는 변경 불필요
+* 너무 많은 Read 요청으로 인한 Hot Key 문제 해결 가능
+* Default TTL 5분, 변경 가능
+* DAX Cluster는 별도의 Provisioning을 수행해야 하며 최대 10개의 Node까지 Cluster로 구성 가능
+  * 고 가용성을 위해서 Multi-AZ 구성 권장
+* vs ElastiCache
+  * DAX : Item Caching 수행
+  * ElastiCache : 검사 결과를 Caching
+
+#### 11.7. DynamoDB Streams
+
+* Iteam 변경 내역을 Stream으로 전환하여 제공
+* Kinesis Data Streams으로 전송
+* Stream은 최대 24시간 동안 보존 가능
+* Usage Case
+  * Item 변화 감지
+  * 분석
+  * Data를 다른 Data Store에 저장
+  * ElasticSearch에 저장 및 분석
+  * Cross-region Replication
+
+#### 11.8. DynamoDB TTL
+
+* TTL 기능 제공
+* WCU를 이용하지 않음
+* TTL 시간은 Unix Epoch Timestamp 값을 갖는 Number 값의 Attribute로 설정
+* 만료된 Item은 즉시 삭제되지는 않으며, 최대 48시간 경과 가능
+* 만료되었지만 삭제되지 않은 Item은 조회 가능, 따라서 Client에서 Filtering 수행 필요
+
+#### 11.9. DynamoDB Transction
+
+* 다수의 Operation을 all-or-nothing 방식으로 동작시켜 Transaction 구현
+* 2배의 WCR, RCU 이용
+
+#### 11.10. With S3
+
+* 400KB 이상의 Item 저장시 : Item을 S3에 저장하고, DynamoDB에는 S3 URL 저장
+* S3 Object Meta 정보 저장 : S3 -> Lambda -> DynamoDB 형태로 구성하여 S3에 저장되는 Object의 Meta 정보를 DynamoDB에 저장
+
+### 12. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
