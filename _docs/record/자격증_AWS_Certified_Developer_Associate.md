@@ -704,6 +704,39 @@ adsense: true
 * 400KB 이상의 Item 저장시 : Item을 S3에 저장하고, DynamoDB에는 S3 URL 저장
 * S3 Object Meta 정보 저장 : S3 -> Lambda -> DynamoDB 형태로 구성하여 S3에 저장되는 Object의 Meta 정보를 DynamoDB에 저장
 
-### 12. Reference
+### 12. API Gateway
+
+* WebSocket 지원
+* Versioning 지원
+* 다양한 환경 지원 (Dev, Test, Prod)
+* 인증, 인가 지원
+* API Key 생성 및 Throttling 지원
+* Swagger, OpenAPI Import를 통해서 빠르게 API 정의 가능
+* Request, Response 변형 및 검증
+* SDK 생성 및 API Spec 생성
+* Response Caching
+* Serverless, Managed
+
+#### 12.1. Target
+
+* Lambda
+* HTTP
+  * Internal HTTP API, ALB : API Gateway의 Rate limiting, Caching, 인증/인가, API Key 기능을 활용하기 위해서
+* AWS Service
+  * AWS Step Function 노출, SQS로 Message 전송
+
+#### 12.2. Endpoint Type (API Gateway 배포 Type)
+
+* Edge-Optimized
+  * Global Client를 위한 설정
+  * API Gateway는 하나의 Region에만 배포
+  * Client의 요청은 CloudFront Edge Location을 통해서 배포가 되어있는 API Gateway로 전달
+* Regional
+  * Client와 API Gateway가 동일한 Region에 잇을경우 이용
+  * CloudFront 설정은 필요에 따라서 별도로 진행
+* Private
+  * VPC 내부에서 ENI를 통해서만 접근 가능
+
+### 13. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
