@@ -708,13 +708,14 @@ adsense: true
 
 * WebSocket 지원
 * Versioning 지원
-* 다양한 환경 지원 (Dev, Test, Prod)
+* Stage 지원 (Dev, Test, Prod)
 * 인증, 인가 지원
 * API Key 생성 및 Throttling 지원
 * Swagger, OpenAPI Import를 통해서 빠르게 API 정의 가능
 * Request, Response 변형 및 검증
 * SDK 생성 및 API Spec 생성
 * Response Caching
+* Canary 지원
 * Serverless, Managed
 
 #### 12.1. Target
@@ -736,6 +737,90 @@ adsense: true
   * CloudFront 설정은 필요에 따라서 별도로 진행
 * Private
   * VPC 내부에서 ENI를 통해서만 접근 가능
+
+#### 12.3. Integration Types
+
+* AWS
+  * AWS Service의 API와 통합시 이용
+  * Mapping Template을 활용한 Request, Response 수정 가능
+  * Mapping Template 설정 필수
+* AWS_PROXY
+  * Lambda와 통합시 이용
+  * Client의 요청을 그대로 Lambda에게 전송하며 Response 변경 불가능
+  * Mapping Template 설정 불필요
+* HTTP
+  * 내부의 HTTP Backend Server와 통합시 이용
+  * Mapping Template을 활용한 Request, Response 수정 가능
+  * Mapping Template 설정 필수
+* HTTP_PROXY
+  * 내부의 HTTP Backend Server와 통합시 이용
+  * Client의 요청을 그대로 Lambda에게 전송하며 Reponse 변경 불가능
+  * Mapping Template 설정 불필요
+* MOCK
+  * Backend로 요청을 전달하지 않고 API Gateway에서 응답
+  * 개발 및 Test 용도
+* Mapping Template
+  * Request, Respones 변경 역할 수행
+  * Query String Parameter 변경 가능
+  * Body 변경 가능
+  * Header 추가 가능
+  * VTL (Velocity Template Language) 언어를 활용한 Template 기능 제공
+  * Output Filtering 기능 제공
+  * JSON to XML 변환 가능 (for SOAP)
+
+#### 12.4. Caching
+
+* TTL : 300 seconds (0 ~ 3600s)
+* Stage마다 설정 가능
+* Method마다 Overide하여 설정 가능
+* Caching 정보 암호화 기능 제공
+* Caching 크기는 0.5GB ~ 237GB 이용 가능
+* 비용이 비싸며 Production에서만 사용을 권장
+
+#### 12.5. API Key & Usage Plan
+
+* API Key
+  * 임의의 문자열 값
+  * 요청에 허용된 API Key 값을 Header에 포함하고 있어야 요청 성공 가능
+  * API Key값에 따라 설정된 Usage Plan에 따라서 사용량 제한 가능
+  * Rotation 기능 X
+* Usage Plan
+  * 이용가능한 API 설정 가능
+  * 사용량 제한 가능 (Throttling & Quota)
+
+#### 12.6. Monitoring
+
+* Logging : CloudWatch Logs를 통해서 Log 수집 가능
+* Tracing : X-Ray를 통해서 Tracing 정보 수집 가능
+* Metric : CloudWatch Metrics를 통해서 Metric 수집 가능
+  * CacheHitCount & CacheMissCount
+  * Count: API 호출 횟수
+  * IntegrationLatency: API Gateway, Backend 사이의 요청, 수신 Latency 
+  * Latency : Client, Backend 사이의 요청, 수신 Latency
+  * 4XXError & 5XXError
+
+#### 12.7. Throttling
+
+* Account Throttling
+  * 10000 RPS 제한
+  * Soft Limit이며 요청을 통해서 증가 가능
+  * Limit 초과시 429 (TooManyRequests) Error 발생
+* Stage Throttling & Method Throttling 설정 가능
+* Usage Plan을 통한 Throttling 설정 가능
+
+#### 12.8. 인증, 인가
+
+* IAM
+  * 동일 Account를 내부에서의 인증, 인가를 위한 IAM User, Role 기반 설정
+  * Cross Account를 위한 Resource Policy 기반 설정
+  * 인증, 인가 설정 가능
+* Cognito
+  * Cognito의 User Pool 기반 인증
+  * Google, Facebook과 같이 OIDC, SAML을 제공하는 Identity Provider와 연동하여 User Pool 구성 가능
+  * 인가는 App에서 구현 필요
+* Custom Authorizer
+  * Lambda를 활용하여 Custom Token을 처리하여 인증, 인가 구현
+  * 뛰어난 유연성 장점
 
 ### 13. Reference
 
