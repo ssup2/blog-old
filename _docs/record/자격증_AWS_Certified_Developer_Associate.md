@@ -834,6 +834,22 @@ adsense: true
 * WebSocket API
   * TODO
 
-### 13. Reference
+### 13. SAM
+
+* Serverless Application 개발을 위한 Framework Service
+* YAML 기반 Configuration
+* Backend로 CloudFormation을 이용
+* CodeDeploy를 활용하여 Lambda 배포 수행
+* Lambda, API Gateway, DynamoDB를 Local에서 구동가능하게 도와주어 개발 환경 구축
+* SAM CLI + AWS Toolkit을 이용하여 개발 및 배포 수행
+
+#### 13.1. Deployment Process
+
+* SAM Template + Code
+* --(sam build)--> CloudFormation Template + App Code
+* --(sam package)--> Zip in S3
+* --(sam deploy)--> Lambda + API Gateway + DynamoDB via CloudFormation
+
+### 14. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
