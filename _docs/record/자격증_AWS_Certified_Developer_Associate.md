@@ -822,6 +822,18 @@ adsense: true
   * Lambda를 활용하여 Custom Token을 처리하여 인증, 인가 구현
   * 뛰어난 유연성 장점
 
+#### 12.9. API Type
+
+* HTTP API
+  * REST API보다 저렴한 가격
+  * OIDC 기반 인증 기능 제공
+  * Usage Plan, API Key 기능 X
+* REST API
+  * OIDC 기반 인증을 제외한 대부분의 기능 제공
+  * HTTP API 보다 높은 가격
+* WebSocket API
+  * TODO
+
 ### 13. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
