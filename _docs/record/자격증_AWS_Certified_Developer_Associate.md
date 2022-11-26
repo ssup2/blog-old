@@ -932,6 +932,17 @@ adsense: true
 
 * TODO
 
-### 17. Reference
+### 19. Directory Service
+
+* Managed Microsoft AD
+  * On-premise AD Server와 AWS AD Server가 Trust 관계를 맺음
+  * On-premise 환경에서는 On-premise AD Server가 AWS 환경에서는 AWS AD Server가 인증 담당
+* AD Connector
+  * On-premise AD Server의 Proxy 생성
+  * AWS 환경에서 AD Conntector를 통해서 On-premise AD Server를 이용
+* Simple AD
+  * On-premise Server를 고려하지 않는 단독 AD Server
+
+### 20. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
