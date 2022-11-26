@@ -896,11 +896,21 @@ adsense: true
   * DynamoDB
   * SNS, SQS
   * 다른 Step Function
-* Workflow는 다음의 장소에서 수행
-  * EC2, Amazon ECS, On-premises
 * JSON 형태로 작성
 * 시각화 지원
 * Workflow 수행 대상
+
+#### 16.1. Error Handling
+
+* Retry
+  * 다시 시도
+  * Default Retry Count 3, 0으로 설정시 Retry 시도 X
+* Catch
+  * Error 발생시 Error를 위한 별도의 Task 수행
+
+#### 16.2. Step Functions Type
+
+
 
 ### 17. Reference
 
