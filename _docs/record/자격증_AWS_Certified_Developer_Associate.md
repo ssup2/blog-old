@@ -859,7 +859,7 @@ adsense: true
 
 * Service, App을 위한 Identity Service
 * User Pool 기능 제공
-* Identitiy Pood 기능 제공 : 외부 Identity Provider와의 연계 가능
+* Identitiy Pool 기능 제공 : 외부 Identity Provider와의 연계 가능
 
 #### 15.1. User Pools
 
@@ -868,10 +868,22 @@ adsense: true
 * Password Reset
 * Email & Phone Number Verification
 * Multi-factor Authentication
-* Federated Identities : Facebook, Google, SAML
+* Federated Identities : Facebook, Google, SAML, OIDC
 * JWT 기반 인증 가능
 * ALB를 통한 인증 연동 가능
 * 중간 중간 Lambda 함수를 호출하여 Custom 인증 과정 수행 가능
+
+#### 15.2. Identity Pools
+
+* Identity Pool에 다음의 Pool 구성 가능
+  * Public Provider (Amazon, Facebook, Google, Apple)
+  * Cognito User Pool
+  * OIDC, SAML Identity Provider
+* User는 Identity Pool로 설정된 곳으로 Login후 Token을 얻고, 얻은 Token을 Cognito Identity Pool에 전달하여 STS로부터 임시 Credential을 발급 받음
+  * 발급받은 Credential을 이용하여 AWS Service에 접근 가능
+* User Pools을 이용한 연동 방법
+  * Identity Pool -> Google, Apple, Amazon, OIDC, SAML, Cognito User Pool
+  * Identity Pool -> Cognito User Pool -> Google, Apple, Amazon, OIDC, SAML
 
 ### 16. Reference
 
