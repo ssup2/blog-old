@@ -885,6 +885,23 @@ adsense: true
   * Identity Pool -> Google, Apple, Amazon, OIDC, SAML, Cognito User Pool
   * Identity Pool -> Cognito User Pool -> Google, Apple, Amazon, OIDC, SAML
 
-### 16. Reference
+### 16. Step Functions
+
+* Workflow 구성 Service
+* 하나의 Action을 Task라고 정의
+* 다음의 Service들과 연동하여 Task 구성 가능
+  * Lambda 함수
+  * AWS Batch Job
+  * ECS Task
+  * DynamoDB
+  * SNS, SQS
+  * 다른 Step Function
+* Workflow는 다음의 장소에서 수행
+  * EC2, Amazon ECS, On-premises
+* JSON 형태로 작성
+* 시각화 지원
+* Workflow 수행 대상
+
+### 17. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
