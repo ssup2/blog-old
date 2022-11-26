@@ -850,6 +850,29 @@ adsense: true
 * --(sam package)--> Zip in S3
 * --(sam deploy)--> Lambda + API Gateway + DynamoDB via CloudFormation
 
-### 14. Reference
+### 14. CDK
+
+* Programming Launguage를 통해서 CloudFormation Template 생성 Service
+* JavaScript, TypeScript, Python, Java, .NET
+
+### 15. Cognito
+
+* Service, App을 위한 Identity Service
+* User Pool 기능 제공
+* Identitiy Pood 기능 제공 : 외부 Identity Provider와의 연계 가능
+
+#### 15.1. User Pools
+
+* Service, App을 위한 Serverless User Database Service
+* Simple Login 기능 제공
+* Password Reset
+* Email & Phone Number Verification
+* Multi-factor Authentication
+* Federated Identities : Facebook, Google, SAML
+* JWT 기반 인증 가능
+* ALB를 통한 인증 연동 가능
+* 중간 중간 Lambda 함수를 호출하여 Custom 인증 과정 수행 가능
+
+### 16. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
