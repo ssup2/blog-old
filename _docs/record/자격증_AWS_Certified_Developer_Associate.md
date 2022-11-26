@@ -910,7 +910,27 @@ adsense: true
 
 #### 16.2. Step Functions Type
 
+* Standard
+  * 길고 느린 Workflow 수행시 이용
+  * Duration: 1 Year
+  * 초당 2000번 수행 지원
+  * Express에 비해 비쌈
+  * Exactly-Once
+* Express
+  * 짧고 여러번 실행되는 Workflow 수행시 이용
+  * Duration: 5 min
+  * 초당 100000번 수행 지원
+  * Standard에 비해 저렴
+  * At-least-once
 
+### 17. AppSync
+
+* GraphQL Service
+* Backend로 DynamoDB 이용
+
+### 18. Amplify
+
+* TODO
 
 ### 17. Reference
 
