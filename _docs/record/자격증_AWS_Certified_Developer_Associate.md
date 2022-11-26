@@ -943,6 +943,16 @@ adsense: true
 * Simple AD
   * On-premise Server를 고려하지 않는 단독 AD Server
 
-### 20. Reference
+### 20. Security
+
+#### 20.1. KMS
+
+#### 20.2. SSM Parameter Store
+
+#### 20.3. Secrets Manager
+
+#### 20.4. Certificate Manager
+
+### 22. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
