@@ -987,7 +987,7 @@ adsense: true
 #### 20.4. Certificate Manager
 
 * SSL/TLS 인증서 관리 Service
-* 
+* ALB 와의 연계 지원
 
 ### 22. Reference
 
