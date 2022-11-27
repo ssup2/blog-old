@@ -947,11 +947,47 @@ adsense: true
 
 #### 20.1. KMS
 
+* Key Management Service
+* IAM 과의 연동 지원
+* AWS Service에서 암호화를 위한 Key 필요시 대부분 KMS를 이용
+* 최대 4KB의 Data만 암호화 지원
+  * 4KB 이상의 Data 암호화를 위해 GeneratedDataKey API 호출을 통한 Envelop Encription 기법 이용 
+* Regional Resource
+* 사용자는 Key값을 직접 볼수 없으며, Key를 지정해 암호화/복호화만 수행 가능
+  * 암호화시 Key 지정 필요
+  * 암호화된 Data에 암호화에 이용한 Key 정보가 포함되어 있기 때문에, 복호화시에는 Key 지정 불필요
+* Symmetric Key
+  * AES-256 기반
+* Asymmetric Key
+  * RSA & ECC 기반
+  * 공개키로 암호화, 비공개키로 복구화
+  * 일반적으로 KMS에 접근하지 못하는 App이 암호화하는 경우 이용
+
 #### 20.2. SSM Parameter Store
+
+* Configuration Manage Service
+* KMS를 이용한 암호화 기능 제공
+* Verisoning 기능 제공
+* CloudWatch를 활용한 Event 수신 가능
+  * 만료전 Event 전송 가능
+  * 일정기간 동안 변경되지 않을경우 Event 전송 가능
+* TTL 설정 가능
+* Tier
+  * Free Tier : 최대 10000개, Max Size 4KB
+  * Advanced Tier : 최대 100000개, Max Size 8KB
 
 #### 20.3. Secrets Manager
 
+* 암호 저장 Service
+* KMS를 이용한 암호 저장
+* 암호 Rotate 기능 제공
+  * Lambda 함수를 활용한 자동 생성 & Rotation (SSM Parameter의 경우 Rotation 기능 X)
+* RDS, Redshift, DocumentDB 와의 통합 기능 제공
+
 #### 20.4. Certificate Manager
+
+* SSL/TLS 인증서 관리 Service
+* 
 
 ### 22. Reference
 
