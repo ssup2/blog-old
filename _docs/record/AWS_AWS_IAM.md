@@ -1,5 +1,5 @@
 ---
-title: AWS IAM (Identity and Access Management)
+title: AWS AWS IAM (Identity and Access Management)
 category: Theory, Analysis
 date: 2022-07-30T12:00:00Z
 lastmod: 2022-07-30T12:00:00Z
@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-AWS IAM (Identity and Access Management)을 정리힌다.
+AWS의 AWS IAM (Identity and Access Management) Service를 정리힌다.
 
 ### 1. AWS IAM (Identity and Access Management)
 
