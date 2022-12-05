@@ -1,5 +1,5 @@
 ---
-title: certbot 인증서 생성 / AWS Amazon Route53
+title: AWS Certificate Manager 인증서 생성, Import / certbot 이용
 category: Record
 date: 2022-12-04T12:00:00Z
 lastmod: 2022-12-04T12:00:00Z
