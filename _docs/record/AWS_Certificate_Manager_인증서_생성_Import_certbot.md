@@ -30,7 +30,7 @@ $ sudo /opt/certbot/bin/pip install certbot-dns-route53
 
 ```
 $ aws iam create-user --user-name letsencrypt
-$ {
+{
     "User": {
         "Path": "/",
         "UserName": "letsencrypt",
