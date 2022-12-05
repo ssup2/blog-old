@@ -107,7 +107,7 @@ my-nginx-ipv4   LoadBalancer   10.100.51.23   k8s-default-mynginxi-f9350243cc-a7
 
 ##### 2.2. ALB (Application Load Balancer)
 
-![[그림 5] Amazon EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_Network_Load_Balancer/Amazon_EKS_ALB.PNG)
+![[그림 5] Amazon EKS ALB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/Amazon_EKS_ALB.PNG)
 
 EKS Cluster에서는 **Ingress**를 생성하면 ALB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB와 동일하게 Target Type이 존재하며, Packet의 경로도 동일하다. 단 Instance Type을 이용할 경우 Ingress에 연결된 Service를 NodePort 또는 LoadBalancer Type으로 설정하여 Service에 NodePort가 반드시 할당되어야 한다. Instance Type의 경우 ALB에서 Serivce의 NodePort로 Packet을 전송하기 때문이다. [그림 5]는 EKS Cluster에서 ALB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
 
