@@ -1,0 +1,46 @@
+---
+title: certbot 인증서 생성 / AWS Amazon Route53
+category: Record
+date: 2022-12-04T12:00:00Z
+lastmod: 2022-12-04T12:00:00Z
+comment: true
+adsense: true
+---
+
+### 1. 실행 환경
+
+* Macbook, Monterey
+
+### 2. certbot 설치
+
+```
+$ sudo python3 -m venv /opt/certbot/
+$ sudo /opt/certbot/bin/pip install --upgrade pip
+$ sudo /opt/certbot/bin/pip install certbot
+$ sudo ln -s /opt/certbot/bin/certbot /usr/local/bin/certbot
+$ sudo /opt/certbot/bin/pip install certbot-dns-route53
+```
+
+### 2. letsencrypt IAM User 생성
+
+### 3.
+
+```
+$ mkdir ~/.aws
+$ cat <<EOF > ~/.aws/credentials
+[letsencrypt]
+aws_access_key_id={AWS_Access_ID}
+aws_secret_access_key={AWS_Secret_Key}
+EOF
+```
+
+### 3. 인증서 생성
+
+```
+$ sudo /opt/certbot/bin/pip install certbot-dns-route53
+```
+
+### 3. 참조
+
+* [https://certbot.eff.org/instructions?ws=other&os=pip](https://certbot.eff.org/instructions?ws=other&os=pip)
+* [https://www.skyer9.pe.kr/wordpress/?p=823](https://www.skyer9.pe.kr/wordpress/?p=823)

@@ -11,7 +11,7 @@ AWS의 Amazon EKS의 인증 과정을 분석한다.
 
 ### 1. AWS EKS 인증
 
-![[그림 1] AWS EKS 인증]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_인증/Amazon_EKS_인증.PNG){: width="650px"}
+![[그림 1] AWS EKS 인증]({{site.baseurl}}/images/theory_analysis/AWS_EKS_인증/Amazon_EKS_인증.PNG){: width="650px"}
 
 [그림 1]은 AWS EKS Cluster의 인증 과정을 나타내고 있다. EKS Cluster는 **AWS IAM Authenticator**를 이용하여 인증을 수행한다. AWS IAM Authenticator 기반의 EKS Cluster 인증 기법은 kubectl에서 EKS Cluster의 K8s API Server 접근하거나, Worker Node에서 동작하는 kubelet에서 EKS Cluster의 K8s API Server 접근시에 이용한다.
 

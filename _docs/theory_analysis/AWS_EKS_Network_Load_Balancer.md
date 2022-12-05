@@ -11,7 +11,7 @@ Amazon EKS의 Network 및 Load Balancer를 분석한다.
 
 ### 1. Amazon EKS Network
 
-![[그림 1] Amazon EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_Network_Load_Balancer/Amazon_EKS_Network.PNG){: width="700px"}
+![[그림 1] Amazon EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/Amazon_EKS_Network.PNG){: width="700px"}
 
 [그림 1]은 Amazon EKS의 Network 구성을 나타내고 있다. EKS Control Plane과 Node는 별도의 VPC (Network)에 소속되어 있다. Control Plane의 VPC 외부에서의 Control Plane의 접근은 Control Plane에 존재하는 LB (VIP)를 통합 접근만 허용된다. Control Plane의 LB는 기본적으로는 Public Network에 노출되도록 설정된다. 따라서 Public Network에 연결된 일반 PC에서 Kubernetes Client (kubectl)를 통해서 Control Plane의 Kubernetes API Server에 접근할 수 있다.
 
@@ -21,7 +21,7 @@ Node의 VPC는 반드시 2개 이상의 서로 다른 Availability Zone에 소�
 
 EKS Cluster 외부에 존재하는 App Client가 EKS Cluster 내부에 존재하는 App Server에 접근하기 위해서는 EKS Load Balancer가 설정하는 AWS의 Load Balancer (NLB, CLB, ALB)를 통해야 한다.
 
-![[그림 2] Amazon EKS Pod Network]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_Network_Load_Balancer/Amazon_EKS_Pod_Network.PNG){: width="500px"}
+![[그림 2] Amazon EKS Pod Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/Amazon_EKS_Pod_Network.PNG){: width="500px"}
 
 [그림 2]는 EKS Cluster 내부에 존재하는 Pod의 Network를 나타내고 있다. EKS Clsuter 구성시 기본적으로 설치되는 **AWS VPC CNI**는 Pod를 위한 Overlay Network를 구성하지 않고 Node가 소속되어 있는 Subnet을 같이 이용한다. 따라서 Pod의 IP는 Pod가 위치하는 Node의 Subnet에 소속된다. [그림 2]에서 Node A는 "192.168.0.0/24" Subnet에 소속되어 있기 때문에 Node A에 존재하는 Pod도 "192.168.0.0/24" Subnet에 소속되어 있는것을 확인할 수 있다.
 
@@ -46,7 +46,7 @@ my-nginx-5dc4865748-m5fhq   1/1     Running   0          7m51s   192.168.63.206 
 
 [Console 1]은 실제 EKS Cluster Node의 IP와 EKS Cluster Pod의 IP를 나타내고 있다. ip-192-168-46-6.ap-northeast-2.compute.internal, ip-192-168-48-175.ap-northeast-2.compute.internal Node는 "192.168.32.0/19" Subnet에 소속되어 있고, ip-192-168-75-136.ap-northeast-2.compute.internal, ip-192-168-90-3.ap-northeast-2.compute.internal Node는 "192.168.64.0/19" Subnet에 소속되어 있다. 각 Node에 존재하는 Pod들도 해당 Subnet에 소속되어 있는것을 확인할 수 있다.
 
-![[그림 3] Amazon EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_Network_Load_Balancer/AWS_Amazon_EKS_Pod_Network_Node.PNG){: width="600px"}
+![[그림 3] Amazon EKS Pod Network in Node]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_Amazon_EKS_Pod_Network_Node.PNG){: width="600px"}
 
 [그림 3]은 Node 내부에서 Pod Network가 어떻게 구성되는지를 나타내고 있다. Node 내부에서 Pod Network 구성은 EKS CNI (Container Network Interface) Plugin이 담당한다. Node에 할당되어 있는 eth0는 Node가 생성될때 Node가 기본적으로 이용하는 Network Interface이다. eth1, eth2는 EKS CNI Plugin이 AWS에게 요청하여 동적으로 생성하는 ENI (Elastic Network Interface)이다. 여기에는 Pod의 IP가 **Secondary IP**로 할당이 된다. 따라서 Subnet에서 Dest IP가 Pod IP인 Packet이 전송되는 경우 해당 Packet은 목적지 Pod가 존재하는 Node로 Packet이 전송된다. 이후에 해당 Packet은 Node의 Routing Table에 따라서 다시 Pod로 전송된다.
 
@@ -62,7 +62,7 @@ EKS Cluster 외부에 존재하는 App Clinet에서 EKS Cluster 내부의 App Se
 
 ##### 2.1. CLB (Classic Load Balancer), NLB (Network Load Balancer)
 
-![[그림 4] Amazon EKS CLB, NLB]({{site.baseurl}}/images/theory_analysis/AWS_Amazon_EKS_Network_Load_Balancer/Amazon_EKS_CLB_NLB.PNG)
+![[그림 4] Amazon EKS CLB, NLB]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/Amazon_EKS_CLB_NLB.PNG)
 
 EKS Cluster에서는 **LoadBalancer Service**를 생성하면 CLB 또는 NLB를 이용하여 EKS Cluster 외부에서 Service에 접근할 수 있게 된다. CLB, NLB 이용시 Packet의 경로는 **Target Type**이라고 불리는 설정과 LoadBalancer Service의 **ExternalTrafficPolicy** 설정에 따라 변경된다. [그림 4]는 EKS Cluster에서 CLB, NLB 이용시 설정에 따른 Packet의 경로를 나타내고 있다.
 
