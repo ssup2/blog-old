@@ -1,5 +1,5 @@
 ---
-title: AWS Amazon EC2
+title: AWS EC2
 category: Theory, Analysis
 date: 2022-07-30T12:00:00Z
 lastmod: 2022-07-30T12:00:00Z

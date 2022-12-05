@@ -1,5 +1,5 @@
 ---
-title: AWS Amazon EKS Service Account에 AWS IAM Role 부여
+title: AWS EKS Service Account에 AWS IAM Role 부여
 category: Theory, Analysis
 date: 2021-04-15T12:00:00Z
 lastmod: 2022-07-28T12:00:00Z
@@ -11,7 +11,7 @@ AWS EKS Cluster의 Service Account에 AWS IAM Role을 부여하는 과정을 정
 
 ### 1. AWS EKS Service Account에 AWS IAM Role 부여 (IRSA)
 
-![[그림 1] AWS EKS Service Account에 AWS IAM Role 부여]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Service_Account_IAM_Role/Amazon_EKS_Service_Account_IAM_Role.PNG)
+![[그림 1] AWS EKS Service Account에 AWS IAM Role 부여]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Service_Account_IAM_Role/AWS_EKS_Service_Account_IAM_Role.PNG)
 
 AWS EKS 1.14 Version 이상에서는 EKS (K8s) Cluster의 Service Account에 AWS IAM Role을 부여할 수 있는 기능을 제공하고 있다. 이 기능을 통해서 AWS IAM Role을 부여 받은 Service Account를 이용하는 Pod는 AWS Service를 이용할 수 있게 된다. [그림 1]은 이러한 과정을 Service Account 생성, Pod 생성, Service Account Token 생성/교체, Service Account Token 이용 4단계로 나누어 나타내고 있다. [그림 1]의 주요 구성 요소들은 다음과 같다.
 

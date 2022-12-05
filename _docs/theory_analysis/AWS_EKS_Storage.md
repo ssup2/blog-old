@@ -1,5 +1,5 @@
 ---
-title: AWS Amazon EKS Storage
+title: AWS EKS Storage
 category: Theory, Analysis
 date: 2021-04-23T12:00:00Z
 lastmod: 2021-04-23T12:00:00Z
