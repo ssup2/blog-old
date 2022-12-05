@@ -11,7 +11,7 @@ adsense: true
 
 * Macbook, Monterey
 
-### 2. certbot 설치
+### 2. certbot, certbot-dns-route53 Plugin 설치
 
 ```
 $ sudo python3 -m venv /opt/certbot/
@@ -21,26 +21,92 @@ $ sudo ln -s /opt/certbot/bin/certbot /usr/local/bin/certbot
 $ sudo /opt/certbot/bin/pip install certbot-dns-route53
 ```
 
-### 2. letsencrypt IAM User 생성
-
-### 3.
+### 3. letsencrypt IAM User 생성 & 설정, Access Key 생성
 
 ```
-$ mkdir ~/.aws
-$ cat <<EOF > ~/.aws/credentials
+$ aws iam create-user --user-name letsencrypt
+$ {
+    "User": {
+        "Path": "/",
+        "UserName": "letsencrypt",
+        "UserId": "AIDA2S2LVTEOIYTEXDCLM",
+        "Arn": "arn:aws:iam::727618787612:user/letsencrypt",
+        "CreateDate": "2022-12-05T03:37:20+00:00"
+    }
+}
+
+$ aws iam create-access-key --user-name letsencrypt
+{
+    "AccessKey": {
+        "UserName": "letsencrypt",
+        "AccessKeyId": "{AWS_Access_ID"},
+        "Status": "Active",
+        "SecretAccessKey": "{AWS_Secret_Key}",
+        "CreateDate": "2022-12-05T03:38:49+00:00"
+    }
+}
+```
+
+### 4. letsencrypt IAM User에 Policy 적용
+
+{% highlight json %}
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ListHostedZones",
+        "route53:GetChange",
+        "route53:ChangeResourceRecordSets"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 1] letsencrypt-policy.json</figcaption>
+</figure>
+
+```
+$ aws iam create-policy --policy-name letsencrypt-policy --policy-document file://letsencrypt-policy.json
+{
+    "Policy": {
+        "PolicyName": "letsencrypt-policy",
+        "PolicyId": "ANPA2S2LVTEOK36NCEQX6",
+        "Arn": "arn:aws:iam::727618787612:policy/letsencrypt-policy",
+        "Path": "/",
+        "DefaultVersionId": "v1",
+        "AttachmentCount": 0,
+        "PermissionsBoundaryUsageCount": 0,
+        "IsAttachable": true,
+        "CreateDate": "2022-12-05T04:03:02+00:00",
+        "UpdateDate": "2022-12-05T04:03:02+00:00"
+    }
+}
+
+$ aws iam attach-user-policy --user-name letsencrypt --policy-arn arn:aws:iam::727618787612:policy/letsencrypt-policy
+```
+
+### 5. 인증서 생성
+
+{% highlight text %}
 [letsencrypt]
 aws_access_key_id={AWS_Access_ID}
 aws_secret_access_key={AWS_Secret_Key}
-EOF
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] AWS Credential</figcaption>
+</figure>
+
+```
+$ sudo certbot certonly --dns-route53 -n -d "aws-playground.dev" -d "*.aws-playground.dev" --email supsup5642@gmail.com --agree-tos
 ```
 
-### 3. 인증서 생성
-
-```
-$ sudo /opt/certbot/bin/pip install certbot-dns-route53
-```
-
-### 3. 참조
+### 6. 참조
 
 * [https://certbot.eff.org/instructions?ws=other&os=pip](https://certbot.eff.org/instructions?ws=other&os=pip)
 * [https://www.skyer9.pe.kr/wordpress/?p=823](https://www.skyer9.pe.kr/wordpress/?p=823)
