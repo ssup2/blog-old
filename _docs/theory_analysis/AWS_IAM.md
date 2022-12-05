@@ -1,5 +1,5 @@
 ---
-title: AWS AWS IAM (Identity and Access Management)
+title: AWS IAM (Identity and Access Management)
 category: Theory, Analysis
 date: 2022-07-30T12:00:00Z
 lastmod: 2022-07-30T12:00:00Z
