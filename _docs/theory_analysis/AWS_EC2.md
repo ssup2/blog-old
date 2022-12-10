@@ -1,5 +1,5 @@
 ---
-title: AWS EC2
+title: AWS EC2 (Elastic Cloud Compute)
 category: Theory, Analysis
 date: 2022-07-30T12:00:00Z
 lastmod: 2022-07-30T12:00:00Z
@@ -14,7 +14,7 @@ adsense: true
 
 ***
 
-Amazon EC2 Service를 정리한다. EC2 Service는 AWS에서 Instance(Server)를 생성하여 Computing 자원을 제공하는 Service이다.
+AWS의 EC2 (Elastic Compute Cloud) Service를 정리한다. EC2 Service는 AWS에서 Instance(Server)를 생성하여 Computing 자원을 제공하는 Service이다.
 
 ### 1. Instance Type
 

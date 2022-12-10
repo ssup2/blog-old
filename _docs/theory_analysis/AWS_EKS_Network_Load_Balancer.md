@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-Amazon EKS의 Network 및 Load Balancer를 분석한다.
+AWS EKS의 Network 및 Load Balancer를 분석한다.
 
 ### 1. Amazon EKS Network
 
@@ -143,6 +143,7 @@ ALB는 여러 Ingress를 하나의 VIP로 이용할 수 있는 Group 기능을 �
 ### 2. 참조
 
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/what-is-eks.html)
+* [https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/](https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
 * [https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eks-networking.html)
 * [https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html](https://docs.aws.amazon.com/eks/latest/userguide/pod-networking.html)
 * [https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)

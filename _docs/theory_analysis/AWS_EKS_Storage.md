@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-AWS EKS Storage를 분석한다.
+AWS EKS의 Storage를 분석한다.
 
 ### 1. AWS EKS Storage
 

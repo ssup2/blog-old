@@ -7,7 +7,7 @@ comment: true
 adsense: true
 ---
 
-AWS의 Amazon EKS의 인증 과정을 분석한다.
+AWS의 EKS의 인증 과정을 분석한다.
 
 ### 1. AWS EKS 인증
 
