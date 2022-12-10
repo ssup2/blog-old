@@ -13,13 +13,15 @@ AWS EKS의 Network 및 Load Balancer를 분석한다.
 
 ![[그림 1] Amazon EKS Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Network.PNG){: width="700px"}
 
-[그림 1]은 Amazon EKS의 Network 구성을 나타내고 있다. EKS Control Plane과 Node는 별도의 VPC (Network)에 소속되어 있다. Control Plane의 VPC 외부에서의 Control Plane의 접근은 Control Plane에 존재하는 LB (VIP)를 통합 접근만 허용된다. Control Plane의 LB는 기본적으로는 Public Network에 노출되도록 설정된다. 따라서 Public Network에 연결된 일반 PC에서 Kubernetes Client (kubectl)를 통해서 Control Plane의 Kubernetes API Server에 접근할 수 있다.
+[그림 1]은 Amazon EKS의 Network 구성을 나타내고 있다. EKS Control Plane과 Node는 별도의 VPC (Network)에 소속되어 있다. Control Plane은 다수의 AZ로 구성되어 고가용성을 제공한다. Control Plane 내부에 위치하는 Kubernetes API Server들은 External Network에 대한 노출 여부를 설정할 수 있다. External Network에 노출시키지 않는다면 Kubernetes API Server는 Node VPC 내부에서만 접근할 수 있다.
 
-Node에서 동작하는 kubelet, kube-proxy 같은 Kubernetes Component들도 Public Network를 통해서 Control Plane에 접근한다. 따라서 Node의 VPC에서도 Public Network를 이용할 수 있도록 설정되어 있어야 한다. 반대로 Control Plane의 LB가 AWS 내부의 Private Network에만 노출되도록 설정할 수도 있다. 이 경우 Public Network에서 Kubernetes Client를 이용할 수 없고, Node의 VPC와 Control Plane의 VPC가 서로 통신할 수 있도록 설정되어 있어야 한다.
+Kubernetes Client (kubectl, kubelet)에서 Kubernetes API Server에 접근하는 경로는 Kubernetes Client의 위치에 따라서 달라진다. Kubernetes Client가 External Network에 존재하는 경우에는 Kubernetes API Server를 묶는 Kubernetes API Load Balancer를 통해서 임의의 Kubernetes API Server에 접근한다. Kubernetes Client가 EKS Node VPC 내부에서 Kubernetes API Server에 접근하는 경우에는 동일한 AZ의 ENI를 통해서 동일한 AZ의 Kubernetes API Server에 접근한다.
 
-Node의 VPC는 반드시 2개 이상의 서로 다른 Availability Zone에 소속되어 있는 Subnet 2개가 존재해야 한다. 그렇지 않으면 EKS Cluster를 생성할 수 없다. 동일한 Node Group에 소속되어 있어도 각 Node는 다수의 Subnet에 분배되어 생성된다. 따라서 특정 Availability Zone이 장애가 발생하여도 Node Group의 일부 Node는 여전히 이용할 수 있게 된다. [그림 1]에서도 Node Group A,B의 Node들이 서로 다른 Subnet에 소속되어 있는것을 확인할 수 있다.
+Kubernetes Client의 위치마다 Network 경로를 다르게 설정할 수 있는 이유는 Route 53을 적절하게 활용하기 때문이다. Kubernetes API Server에는 "xxx.eks.amazonaws.com" 형태의 Domain을 할당한다. Route 53은 External Network 내부에서 Kubernetes API Server의 Domain을 질의하는 경우에는 Kubernetes API LB의 IP를 반환하고, EKS Node VPC AZ 내부에서 Kubernetes API Server의 Domain을 질의하는 경우에는 동일한 AZ의 ENI의 IP를 반환한다.
 
-EKS Cluster 외부에 존재하는 App Client가 EKS Cluster 내부에 존재하는 App Server에 접근하기 위해서는 EKS Load Balancer가 설정하는 AWS의 Load Balancer (NLB, CLB, ALB)를 통해야 한다.
+Node Group을 생성할 경우 Node Group이 이용할 AZ를 설정할 수 있으며, 다수의 AZ를 이용하도록 설정할 경우 Node Group의 Node들은 다수의 AZ를 대상으로 골고루 분배된다. 따라서 특정 AZ의 장애가 발생하여도 Node Group의 일부 Node들은 여전히 이용할 수 있게되어 App Service의 고가용성을 확보할 수 있다. [그림 1]에서도 Node Group A,B의 Node들이 서로 다른 Subnet에 소속되어 있는것을 확인할 수 있다.
+
+EKS Cluster 외부에 존재하는 App Service Client가 EKS Cluster 내부에 존재하는 App Service Server에 접근하기 위해서는 EKS Load Balancer가 설정하는 AWS의 Load Balancer (NLB, CLB, ALB)를 통해야 한다.
 
 ![[그림 2] Amazon EKS Pod Network]({{site.baseurl}}/images/theory_analysis/AWS_EKS_Network_Load_Balancer/AWS_EKS_Pod_Network.PNG){: width="500px"}
 
@@ -54,7 +56,7 @@ Pod Network가 ENI 및 ENI에 할당되는 Secondary IP를 이용하는 방식�
 
 > Node의 최대 ENI 개수 × (ENI에 설정될 수 있는 최대 IP 개수 - 1)
 
-Node의 사양에 따른 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수는 [가이드](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)에서 확인할 수 있으며, 최대로 할당할 수 있는 Pod의 개수는 위의 공식에 의해서 계산할 수 있다. Node에 Pod가 하나도 존재하지 않더라도 EKS CNI Plugin은 무조건 하나의 ENI를 Node에 생성해 둔다.
+Node의 사양에 따른 ENI의 개수 및 각 ENI에 할당할 수 있는 Secondary IP의 개수는 [Guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)에서 확인할 수 있으며, 최대로 할당할 수 있는 Pod의 개수는 위의 공식에 의해서 계산할 수 있다. Node에 Pod가 하나도 존재하지 않더라도 EKS CNI Plugin은 무조건 하나의 ENI를 Node에 생성해 둔다.
 
 ### 2. Amazon EKS Load Balancer
 
