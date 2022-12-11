@@ -23,10 +23,22 @@ AWS의 EFS (Elastic File System) Service를 정리힌다. EFS Service는 AWS에�
 
 #### 2.1. Standard
 
+![[그림 1] Amazon EKS Standard]({{site.baseurl}}/images/theory_analysis/AWS_EFS/AWS_EFS_Standard.PNG){: width="700px"}
+
 #### 2.2. One-Zone
 
-### 3. Replication
+![[그림 2] Amazon EKS One-Zone]({{site.baseurl}}/images/theory_analysis/AWS_EFS/AWS_EFS_One-Zone.PNG){: width="700px"}
 
-### 4. 참고
+### 3. Performance
+
+TODO
+
+### 4. Replication
+
+### 5. Backup
+
+TODO
+
+### 6. 참고
 
 * [https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html](https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html)
