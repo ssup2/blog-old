@@ -53,6 +53,10 @@ TODO
 
 ### 4. Replication
 
+AWS EFS는 **Region 사이의 비동기 복제**인 Cross-region Replication을 지원한다. 원본 EFS Server에 Cross-region Replication을 설정하는 순간 별도의 복제본 EFS Server가 생성되며, 복제본 EFS Server는 Read-only Mode로 동작한다. 이후에 원본 EFS Server와 복제본 사이의 Cross-region Replication 설정을 제거하는 순간 복제본은 원본과 연관성이 없는 **완전히 독립된** EFS Server로 동작하며 Writable Mode로 전환된다.
+
+Cross-region Replication 설정을 제거한 이후에는 원본 EFS Server와 복제 EFS Server 모두 각각 Cross-region Replication을 설정을 통해서 별도의 복제본 생성이 가능하다. Cross-region Replication 설정은 동시에 하나의 복제본을 대상으로만 Replication을 수행할 수 있다.
+
 ### 5. Backup
 
 TODO
