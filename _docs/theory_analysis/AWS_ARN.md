@@ -29,9 +29,9 @@ AWS ARN은 AWS에서 관리하는 Resource의 이름을 의미한다. [Text 1]�
 * Resource-ID : AWS Resource에게 부여되는 고유 ID를 의미한다.
 
 {: .newline }
-> arn:aws:iam::123456789012:user/johndoe - IAM User
-> arn:aws:sns:us-east-1:123456789012:example-sns-topic-name - SNS Topic
-> arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0e9801d129EXAMPLE - VPC
+> IAM User : arn:aws:iam::123456789012:user/ssup2
+> SNS Topic : arn:aws:sns:us-east-1:123456789012:example-sns-topic-name
+> VPC : arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0e9801d129EXAMPLE
 <figure>
 <figcaption class="caption">[Text 2] AWS ARN Examples</figcaption>
 </figure>
@@ -41,8 +41,8 @@ AWS ARN은 AWS에서 관리하는 Resource의 이름을 의미한다. [Text 1]�
 #### 1.1. Wildcard
 
 {: .newline }
-> arn:aws:ec2:*:*:volume/*
-> arn:aws:ec2:*:*:instance/*
+> ALL EC2 Volumes : arn:aws:ec2:*:*:volume/*
+> ALL EC2 Instances : arn:aws:ec2:*:*:instance/*
 <figure>
 <figcaption class="caption">[Text 3] AWS ARN Wildcard Examples</figcaption>
 </figure>
