@@ -13,8 +13,8 @@ AWS의 ARN (Amazon Resource Number)을 정리한다.
 
 {: .newline }
 > arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-ID]
-> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]/[Resource-ID] <br/>
-> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]:[Resource-ID] <br/>
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]/[Resource-ID]<br/>
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]:[Resource-ID]<br/>
 <figure>
 <figcaption class="caption">[Text 1] AWS ARN Format</figcaption>
 </figure>
@@ -27,6 +27,16 @@ AWS ARN은 AWS에서 관리하는 Resource의 이름을 의미한다. [Text 1]�
 * Account-ID : 각 AWS Account마다 부여되는 공유의 Account ID를 의미한다.
 * Resource-Type : AWS Resource의 Type을 의미한다. "user", "vpc"와 같이 AWS Resource를 소문자로 변환하여 이용한다.
 * Resource-ID : AWS Resource에게 부여되는 고유 ID를 의미한다.
+
+{: .newline }
+> arn:aws:iam::123456789012:user/johndoe - IAM User
+> arn:aws:sns:us-east-1:123456789012:example-sns-topic-name - SNS Topic<br/>
+> arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0e9801d129EXAMPLE - VPC<br/>
+<figure>
+<figcaption class="caption">[Text 2] AWS ARN Examples</figcaption>
+</figure>
+
+[Text 2]는 AWS ARN의 예제들을 나타내고 있다.
 
 #### 1.1. Wildcard
 
