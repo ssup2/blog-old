@@ -1,8 +1,8 @@
 ---
 title: AWS ARN (Amazon Resource Number)
-category: 
-date: 2022-07-30T12:00:00Z
-lastmod: 2022-07-30T12:00:00Z
+category: Theory, Analysis
+date: 2022-12-16T12:00:00Z
+lastmod: 2022-12-16T12:00:00Z
 comment: true
 adsense: true
 ---
