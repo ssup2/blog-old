@@ -12,9 +12,9 @@ AWS의 ARN (Amazon Resource Number)을 정리한다.
 ### 1. AWS ARN
 
 {: .newline }
-> arn:<Partition>:<Service>:<Region>:<Account-ID>:<Resource-ID>
-> arn:<Partition>:<Service>:<Region>:<Account-ID>:<Resource-Type>/<Resource-ID> <br/>
-> arn:<Partition>:<Service>:<Region>:<Account-ID>:<Resource-Type>:<Resource-ID> <br/>
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-ID]
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]/[Resource-ID] <br/>
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]:[Resource-ID] <br/>
 <figure>
 <figcaption class="caption">[Text 1] AWS ARN Format</figcaption>
 </figure>
