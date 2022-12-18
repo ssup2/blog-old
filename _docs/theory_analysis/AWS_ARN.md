@@ -13,7 +13,7 @@ AWS의 ARN (Amazon Resource Number)을 정리한다.
 
 {: .newline }
 > arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-ID]
-> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]/[Resource-ID]<br/>
+> arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]/[Resource-ID]
 > arn:[Partition]:[Service]:[Region]:[Account-ID]:[Resource-Type]:[Resource-ID]
 <figure>
 <figcaption class="caption">[Text 1] AWS ARN Format</figcaption>
@@ -30,7 +30,7 @@ AWS ARN은 AWS에서 관리하는 Resource의 이름을 의미한다. [Text 1]�
 
 {: .newline }
 > arn:aws:iam::123456789012:user/johndoe - IAM User
-> arn:aws:sns:us-east-1:123456789012:example-sns-topic-name - SNS Topic<br/>
+> arn:aws:sns:us-east-1:123456789012:example-sns-topic-name - SNS Topic
 > arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0e9801d129EXAMPLE - VPC
 <figure>
 <figcaption class="caption">[Text 2] AWS ARN Examples</figcaption>
@@ -39,6 +39,15 @@ AWS ARN은 AWS에서 관리하는 Resource의 이름을 의미한다. [Text 1]�
 [Text 2]는 AWS ARN의 예제들을 나타내고 있다.
 
 #### 1.1. Wildcard
+
+{: .newline }
+> arn:aws:ec2:*:*:volume/*
+> arn:aws:ec2:*:*:instance/*
+<figure>
+<figcaption class="caption">[Text 3] AWS ARN Wildcard Examples</figcaption>
+</figure>
+
+AWS ARN은 Wildcard 문법을 지원하며, Wildcard 문법을 통해서 다수의 ARN을 표현할 수 있다. [Text 3]은 Wildcard의 사용 예제를 나타내고 있다. 주로 AWS IAM Policy 설정시 많이 이용된다. "arn:aws:ec2:*:*:instance/s*"와 같이 특정 구성요소의 일부에만 Wildcard를 적용할 수 없다.
 
 ### 2. 참조
 
