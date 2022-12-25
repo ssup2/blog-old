@@ -38,7 +38,9 @@ TODO
 
 TODO
 
-### 5. REST API
+### 5. Throughput
+
+### 6. REST API
 
 TODO
 
