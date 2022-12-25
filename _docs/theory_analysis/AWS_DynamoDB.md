@@ -18,6 +18,8 @@ AWS의 DynamoDB Service를 분석한다. DynamoDB Service는 Managed Key-value D
 
 ### 1. Table
 
+![[그림 1] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_BaseTable.PNG){: width="700px"}
+
 #### 1.1. Partition Key
 
 #### 1.2. Sorted Key
@@ -30,9 +32,13 @@ TODO
 
 ### 3. Secondary Index
 
-#### 3.1. GSI (Global Secondary Index)
+#### 3.1. LSI (Local Secondary Index)
 
-#### 3.2. LSI (Local Secondary Index)
+![[그림 2] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_LSI.PNG){: width="650px"}
+
+#### 3.2. GSI (Global Secondary Index)
+
+![[그림 3] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_GSI.PNG){: width="600px"}
 
 ### 4. Consistency
 
@@ -46,11 +52,11 @@ TODO
 
 TODO
 
-### 6. 참조
+### 7. 참조
 
 * [https://www.youtube.com/watch?v=I7zcRxHbo98](https://www.youtube.com/watch?v=I7zcRxHbo98)
 * [https://www.hardcoded.se/2021/01/20/graphql-api-with-appsync-and-dynamodb/](https://www.hardcoded.se/2021/01/20/graphql-api-with-appsync-and-dynamodb/)
-* [https://emshea.com/post/part-1-dynamodb-single-table-design](https://emshea.com/post/part-1-dynamodb-single-table-design)
+* Single Table Design : [https://emshea.com/post/part-1-dynamodb-single-table-design](https://emshea.com/post/part-1-dynamodb-single-table-design)
 * Secondary Index : [https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html)
 * Secondary Index : [https://www.dynamodbguide.com/local-or-global-choosing-a-secondary-index-type-in-dynamo-db](https://www.dynamodbguide.com/local-or-global-choosing-a-secondary-index-type-in-dynamo-db)
 * Secondary Index : [https://stackoverflow.com/questions/21381744/difference-between-local-and-global-indexes-in-dynamodb](https://stackoverflow.com/questions/21381744/difference-between-local-and-global-indexes-in-dynamodb)
