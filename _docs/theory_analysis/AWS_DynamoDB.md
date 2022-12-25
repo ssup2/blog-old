@@ -18,13 +18,11 @@ AWS의 DynamoDB Service를 분석한다. DynamoDB Service는 Managed Key-value D
 
 ### 1. Table
 
-![[그림 1] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_BaseTable.PNG){: width="700px"}
+![[그림 1] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_BaseTable.PNG)
 
-#### 1.1. Partition Key
+#### 1.1. Primary Key
 
-#### 1.2. Sorted Key
-
-#### 1.3. Primary Key
+#### 1.2. Attribute
 
 ### 2. Data Type
 
@@ -34,11 +32,11 @@ TODO
 
 #### 3.1. LSI (Local Secondary Index)
 
-![[그림 2] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_LSI.PNG){: width="650px"}
+![[그림 2] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_LSI.PNG){: width="700px"}
 
 #### 3.2. GSI (Global Secondary Index)
 
-![[그림 3] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_GSI.PNG){: width="600px"}
+![[그림 3] DynamoDB Base Table]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_GSI.PNG){: width="650px"}
 
 ### 4. Consistency
 
