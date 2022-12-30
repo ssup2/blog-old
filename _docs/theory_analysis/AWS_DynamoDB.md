@@ -40,9 +40,15 @@ Sort Key는 이름 그대로 Disk 내부의 Partition에서 Column을 정렬하�
 
 #### 1.2. Attribute
 
+Attribute는 RDMBS에서 Column 역할을 수행한다. 각 Row마다 다른 Attribute를 갖을 수 있다. [그림 1]에서 첫번째 Row에서는 "Email Address", "Total Amount", "Phone"을 Attribute를 갖고 있고, 두번째 Row에서는 "Purchase Price", "Purchase Count"를 Attribute로 가지고 있다. 서로 다른 Attribute를 갖고 있는 것을 확인할 수 있다.
+
 ### 2. Data Type
 
-TODO
+DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
+
+* Scalar : String, Binary, Boolean, Null
+* Document : List, Map
+* Set : Sets
 
 ### 3. Secondary Index
 
@@ -64,9 +70,15 @@ TODO
 
 ### 6. DAX (DynamoDB Accelerator)
 
+TODO
+
 ### 7. TTL
 
+TODO
+
 ### 8. Locking
+
+TODO
 
 ### 9. REST API
 
