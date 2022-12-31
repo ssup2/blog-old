@@ -50,9 +50,15 @@ Attribute는 Table의 **Column** 역할을 수행한다. 각 Item마다 다른 A
 
 ### 2. Secondary Index
 
+Secondary Index는 Table 생성시 Sort Key로 인해서 생성되는 Index와 별개의 Index가 필요할 경우 이용할 수 있는 기능이다. LSI (Local Secondary Index)와 GSI (Global Secondary Index)가 존재한다. Secondary Index의 경우에도 Partition Key와 Sort Key의 조합으로 구성된 Primary Key가 반드시 존재하며, Secondary Index를 생성하기 위해서 참조하는 원본의 Table을 **Base Table**이라고 명칭한다.
+
 #### 2.1. LSI (Local Secondary Index)
 
 ![[그림 2] DynamoDB LSI]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_LSI.PNG){: width="700px"}
+
+[그림 2]은 [그림 1]의 Table을 Base Table로 하여 생성한 LSI의 예제를 나타내고 있다. LSI의 Partition Key는 반드시 Base Table의 Partition Key와 동일해야 한다. 하지만 Sort Key의 경우에는 Base Table의 임의의 Attribute를 선택하여 이용할 수 있다. [그림 2]에서도 [그림 1]과 Partition Key는 "PK"로 동일하지만, Sort Key는 Base Table의 "Created Date" Attribute를 "LSI_SK"라는 이름으로 이용하고 있다.
+
+LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성이 가능하며, (Base) Table 생성 이후에는 생성, 삭제가 불가능하다. 
 
 #### 2.2. GSI (Global Secondary Index)
 
