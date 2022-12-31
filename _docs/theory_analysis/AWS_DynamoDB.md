@@ -58,7 +58,9 @@ Secondary Index는 Table 생성시 Sort Key로 인해서 생성되는 Index와 �
 
 [그림 2]은 [그림 1]의 Table을 Base Table로 하여 생성한 LSI의 예제를 나타내고 있다. LSI의 Partition Key는 반드시 Base Table의 Partition Key와 동일해야 한다. 하지만 Sort Key의 경우에는 Base Table의 임의의 Attribute를 선택하여 이용할 수 있다. [그림 2]에서도 [그림 1]과 Partition Key는 "PK"로 동일하지만, Sort Key는 Base Table의 "Created Date" Attribute를 "LSI_SK"라는 이름으로 이용하고 있다.
 
-LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성이 가능하며, (Base) Table 생성 이후에는 생성, 삭제가 불가능하다. 
+LSI 구성시 Base Table의 전체 또는 일부 Attribute들을 Projection 수행을 통해서 LSI의 Projected Attribute로 가져올 수 있다. [그림 2]에서는 "Email Address", "Purchase Price", "Purchase Count", "Count" 4개의 Attribute를 Projected Attribute로 이용하고 있다. LSI의 경우에는 Projected Attribute로 존재하지 않더라도 Base Table에서 Attribute를 가져올 수 있는 장점을 가지고 있다. 하지만 Base Table을 한번더 읽으면서 비용이 추가적으로 발생하고 성능도 느려지는 문제가 있기 때문에, LSI를 이용하는 경우에는 가능하면 Projected Attribute만 이용하는 것이 권장된다.
+
+Email LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성이 가능하며, (Base) Table 생성 이후에는 생성, 삭제가 불가능하다. 또한 LSI에서 하나의 Partiton의 크기는 10GB를 넘지 못한다는 제약조건을 가지고 있다. 하지만 **Strongly-Consistency Read**를 지원한다는 장점을 가지고 있다.
 
 #### 2.2. GSI (Global Secondary Index)
 
@@ -68,7 +70,7 @@ LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성�
 
 DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
 
-* Scalar : String, Binary, Boolean, Null
+* Scalar : String, Number, Binary, Boolean, Null
 * Document : List, Map
 * Set : String Set, Number Set, Binary Set
 
