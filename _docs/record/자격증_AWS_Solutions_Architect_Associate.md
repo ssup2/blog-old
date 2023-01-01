@@ -977,11 +977,11 @@ adsense: true
 ##### 12.3.1. Kinesis Data Stream
 
 * Shard
-  * Shard 개수에 따라서 병렬 처리르 통해서 성능 증가 가능
+  * Shard 개수에 따라서 병렬 처리를 통해서 성능 증가 가능
   * 하나의 Shard는 1MB/sec or 1000 Msg/sec 수신 가능
   * 하나의 Shard는 2MB/sec 송신 가능
 * Record
-  * Input : Partition Key, Data Blob (최대 1MB) 구성
+  * Input : Partition Key, Data Blob (최대 1MB) 구를를
   * Output : Partition Key, Sequence Number, Data Blob 구성
 * Data 보관 기간은 1일부터 365일 설정 가능
 * Data 재처리 가능
@@ -1477,11 +1477,11 @@ adsense: true
   * 추가 비용을 좀더 다양한 Resource를 대상으로 정교한 DDoS 공격 보호
   * 보호 Target : Amazone EC2, ELB, CloudFront, Global Accelerator, Route 53
   * DRP (DDoS Response Team) 접근 가능
-  * DDoS 공격으로 인해서 더 많은 비용 요금이 청구되었다면, 더 청구된 비용만금 캄면 가능
+  * DDoS 공격으로 인해서 더 많은 비용 요금이 청구되었다면, 더 청구된 비용만금 감면 가능
 
 #### 17.6. WAF (Web Application Firewall)
 
-* Layer7 Firewall
+* Layer7 Firewal감감
 * Target : ALB, API Gateway, CloudFront
 * Web ACL 기능 제공
   * ACL Rule : IP Address, HTTP Header, HTTP Body, URI 포함
@@ -1514,7 +1514,7 @@ adsense: true
     * Contaienr Image가 ECR에 Push되는 경우 Image 검사 수행
 * 검사 결과는 Security Hub에 취합, 또는 Event Bridge에 전송
 
-#### 17.10. Amazone Macie
+#### 17.10. Amazon Macie
 
 * Machine Learning Pattern Matching 알고리즘을 통해서 민감한 Data가 존재하는지 탐색
 * 탐색 결과를 CloudWath Events, EventBridge로 전송 가능
