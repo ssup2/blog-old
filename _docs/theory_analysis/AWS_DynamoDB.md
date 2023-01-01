@@ -60,25 +60,19 @@ Secondary Index는 Table 생성시 Sort Key로 인해서 생성되는 Index와 �
 
 LSI 구성시 Base Table의 전체 또는 일부 Attribute들을 Projection 수행을 통해서 LSI의 Projected Attribute로 가져올 수 있다. [그림 2]에서는 "Email Address", "Purchase Price", "Purchase Count", "Count" 4개의 Attribute를 Projected Attribute로 이용하고 있다. LSI의 경우에는 Projected Attribute로 존재하지 않더라도 Base Table에서 Attribute를 가져올 수 있는 장점을 가지고 있다. 하지만 Base Table을 한번더 읽으면서 비용이 추가적으로 발생하고 성능도 느려지는 문제가 있기 때문에, LSI를 이용하는 경우에는 가능하면 Projected Attribute만 이용하는 것이 권장된다.
 
-Email LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성이 가능하며, (Base) Table 생성 이후에는 생성, 삭제가 불가능하다. 또한 LSI에서 하나의 Partiton의 크기는 10GB를 넘지 못한다는 제약조건을 가지고 있다. 하지만 **Strongly-Consistency Read**를 지원한다는 장점을 가지고 있다.
+LSI의 Read 동작은 Base Table의 RCU (Read Capacity Unit)를 소모한다. Base Table의 Write 동작이 발생하면 LSI에도 Write된 내용이 반영되며 이경우에도 Base Table의 WCU (Write Capacity Unit)를 소모하며, Base Table, LSI 두번 Write를 수행하기 때문에 WCU도 두배 많이 소모된다.
+
+LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성이 가능하며, (Base) Table 생성 이후에는 생성, 삭제가 불가능하다. 또한 하나의 Base Table당 최대 5개의 LSI만 생성 가능하며, LSI의 하나의 Partiton의 크기는 10GB를 넘지 못한다는 제약조건을 가지고 있다. 하지만 LSI는 **Strongly-Consistency Read**를 지원하고, Base Table의 RCU, WCU를 소모하기 때문에 Provisioned Capacity Mode를 이용하는 경우 별도의 RCU, WCU를 소모하는 GSI에 대비하여 비용 절감효과를 얻을 수 있다는 장점을 가지고 있다.
 
 #### 2.2. GSI (Global Secondary Index)
 
 ![[그림 3] DynamoDB GSI]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_GSI.PNG){: width="650px"}
 
-### 3. Data Type
-
-DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
-
-* Scalar : String, Number, Binary, Boolean, Null
-* Document : List, Map
-* Set : String Set, Number Set, Binary Set
-
-### 4. Consistency
+### 3. Capacity Mode
 
 TODO
 
-### 5. Throughput
+### 4. Consistency
 
 TODO
 
@@ -89,6 +83,14 @@ TODO
 ### 7. TTL
 
 TODO
+
+### 4. Data Type
+
+DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
+
+* Scalar : String, Number, Binary, Boolean, Null
+* Document : List, Map
+* Set : String Set, Number Set, Binary Set
 
 ### 8. Locking
 
@@ -101,7 +103,6 @@ TODO
 ### 10. 참조
 
 * [https://www.youtube.com/watch?v=I7zcRxHbo98](https://www.youtube.com/watch?v=I7zcRxHbo98)
-* [https://www.hardcoded.se/2021/01/20/graphql-api-with-appsync-and-dynamodb/](https://www.hardcoded.se/2021/01/20/graphql-api-with-appsync-and-dynamodb/)
 * Single Table Design : [https://emshea.com/post/part-1-dynamodb-single-table-design](https://emshea.com/post/part-1-dynamodb-single-table-design)
 * Secondary Index : [https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html)
 * Secondary Index : [https://www.dynamodbguide.com/local-or-global-choosing-a-secondary-index-type-in-dynamo-db](https://www.dynamodbguide.com/local-or-global-choosing-a-secondary-index-type-in-dynamo-db)
