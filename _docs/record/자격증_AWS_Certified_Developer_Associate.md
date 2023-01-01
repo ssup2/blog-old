@@ -498,7 +498,7 @@ adsense: true
   * Lambda 함수가 ENI를 통해서 VPC 내부에 접근 가능하도록 설정 가능
   * Private Subnet, Public Subnet 설정 가능
   * Internet 접근은 VPC 내부의 NAT Gateway를 통해서 접근
-    * Lambda함수가 Public Subnet에 위치하고 있더라도 Internet 접근은 NAT Gateway를 통해서 접근
+    * Lambda 함수가 Public Subnet에 위치하고 있더라도 Internet 접근은 NAT Gateway를 통해서 접근
 
 #### 10.8. Spec
 
@@ -563,6 +563,7 @@ adsense: true
   * Version = Code + Configuration
 * Alias 
   * 특정 Version을 지정하는 별칭 기능
+  * 다수의 Version을 지정할 수 있으며, 다수의 Version 지정시 각 Version별 Traffic Weight 설정 가능 (Canary)
   * Lambda 함수 개발자는 Alias를 통해서 User가 특정 Version의 Lamba 함수만 이용하도록 제한 가능
 
 #### 10.16. Limitation
@@ -954,7 +955,7 @@ adsense: true
 * IAM 과의 연동 지원
 * AWS Service에서 암호화를 위한 Key 필요시 대부분 KMS를 이용
 * 최대 4KB의 Data만 암호화 지원
-  * 4KB 이상의 Data 암호화를 위해 GeneratedDataKey API 호출을 통한 Envelop Encription 기법 이용 
+  * 4KB 이상의 Data 암호화를 위해 GeneratedDataKey API 호출을 통한 Envelope Encription 기법 이용 
 * Regional Resource
 * 사용자는 Key값을 직접 볼수 없으며, Key를 지정해 암호화/복호화만 수행 가능
   * 암호화시 Key 지정 필요
@@ -991,10 +992,6 @@ adsense: true
 
 * SSL/TLS 인증서 관리 Service
 * ALB 와의 연계 지원
-
-### 21. Dump
-
-* https://dumps.kr/dumps/amazon-dva-c01/1
 
 ### 22. Reference
 

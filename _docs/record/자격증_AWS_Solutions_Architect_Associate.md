@@ -913,7 +913,14 @@ adsense: true
 ##### 12.1.1. Consumer
 
 * Polling을 통해서 Message 존재 확인 (Event 기반 X)
-  * Long Polling 기능 제공
+  * Short Polling
+    * WaitTimeSeconds = 0 or ReceiveMessageWaitTimeSeconds = 0
+    * 일부 Queue만 확인하며 Message가 존재하지 않더라도 빈 Message 반환
+    * 일부 Queue만 확인하기 때문에 Queue에 Message가 존재하고 있더라도 Client에 당장 전달되지 않을 수 있음
+  * Long Polling
+    * WaitTimeSeconds > 0 or ReceiveMessageWaitTimeSeconds > 0
+    * 모든 Queue를 확인하며 최소 하나의 Message가 존재할 경우, Max Message 개수에 도달할 경우, 설정한 Timeout이 도달할 경우에 반환
+    * Receive Message 요청 횟수를 줄여 비용 감소 가능
 * 한번에 최대 10개의 Message 수신 가능
 * Message 수신 및 동작 수행후 DeleteMessage API를 통해서 Message 삭제 필요 (ACK)
 * CloudWatch Metric Queue Length -> CloudWatch Alarm -> ASG Scaling 형태로 구성하여 Consumer Autoscaling 구성 가능
@@ -1422,7 +1429,7 @@ adsense: true
 * Key 사용을 CloudTrail을 통해서 감시 가능
 * KMS에 접근하기 위해서는 User에게 Key Policy 할당이 필요하며 IAM 설정도 필요
 * KMS Key는 특정 Region에 종속되며, Region 사이의 이동 불가능
-  * Region 사이의 복사한 Data가 KMS로 암호화 되어있다면, Data 복사이후 새로운 KMS key로 다시 암호화 필요
+  * Region 사이의 복사한 Data가 KMS로 암호화 되어있다면, Data 복사 이후 새로운 KMS key로 다시 암호화 필요
 
 #### 17.1.1. Key Rotate
 
