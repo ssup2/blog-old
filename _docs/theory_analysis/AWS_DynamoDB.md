@@ -68,6 +68,8 @@ LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성�
 
 ![[그림 3] DynamoDB GSI]({{site.baseurl}}/images/theory_analysis/AWS_DynamoDB/AWS_DynamoDB_GSI.PNG){: width="650px"}
 
+[그림 3]은 [그림 1]의 Table을 Base Table로 하여 생성한 GSI의 예제를 나타내고 있다. GSI의 Partition Key와 Sort Key는 Base Table의 임의의 Attribute를 선택하여 구성할 수 있다.
+
 ### 3. Capacity Mode
 
 TODO

@@ -233,7 +233,7 @@ adsense: true
   * Dockerrun.aws.json 파일을 통해서 ECS Task 정의 가능
   * Container Image는 사전에 ECR과 같은 Registry에 저장되어 있어야 한다.
 
-#### 5.6. HtTPS Certificate 설정
+#### 5.6. HTTPS Certificate 설정
 
 * ALB에 Certificate 지정을 통해서 HTTPS 이용 가능
 * Certificate 지정은 Web Console에서 지정하거나, .ebextensions/securelistner-alb.config 파일에 지정 가능
@@ -280,9 +280,12 @@ adsense: true
 * 기본적으로 VPC 외부에서 Build를 수행하지만, VPC 지정을 통해서 VPC 외부에서도 Build 가능
   * VPC 내부의 Resource에 접근해야할 경우 이용
 
-##### 6.3.1. buildspec.yaml
+##### 6.3.1. buildspec.yml
 
-* 반드시 Code의 Root에 위치
+* Build 방법 정의
+* 경로
+  * Default : Code Root의 buildspec.yml
+  * User의 설정을 통해서 특정 파일 지정도 가능
 * Env : 환경 변수
   * variables : plaintext 이용
   * parameter-store : SSM Parameter Store의 저장값 이용
