@@ -992,6 +992,10 @@ adsense: true
 * SSL/TLS 인증서 관리 Service
 * ALB 와의 연계 지원
 
+### 21. Dump
+
+* https://dumps.kr/dumps/amazon-dva-c01/1
+
 ### 22. Reference
 
 * [https://www.udemy.com/course/best-aws-certified-developer-associate/](https://www.udemy.com/course/best-aws-certified-developer-associate/)
