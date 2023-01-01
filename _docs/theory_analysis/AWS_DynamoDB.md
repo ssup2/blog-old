@@ -72,7 +72,15 @@ LSI는 (Base) Table을 생성할 경우에만 설정을 통해서 같이 생성�
 
 TODO
 
-### 4. Consistency
+### 4. Data Type
+
+DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
+
+* Scalar : String, Number, Binary, Boolean, Null
+* Document : List, Map
+* Set : String Set, Number Set, Binary Set
+
+### 5. Consistency
 
 TODO
 
@@ -83,14 +91,6 @@ TODO
 ### 7. TTL
 
 TODO
-
-### 4. Data Type
-
-DynamoDB의 Data Type은 Scalar, Document, Set 3가지로 분류할 수 있다. 각 분류마다 아래의 Data Type들이 존재한다.
-
-* Scalar : String, Number, Binary, Boolean, Null
-* Document : List, Map
-* Set : String Set, Number Set, Binary Set
 
 ### 8. Locking
 
