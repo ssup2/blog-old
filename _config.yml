@@ -7,6 +7,7 @@ url: https://ssup2.github.io
 baseurl:
 google_analytics_key: UA-77446431-3
 show_full_navigation: true
+future: true
 
 # -----
 # Build
