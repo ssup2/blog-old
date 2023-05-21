@@ -17,9 +17,16 @@ Spark Architecture를 분석한다.
 
 #### 1.1. Spark Core
 
-Spark Core는 데이터를 분산처리 하는 역할을 수행한다. 
+Spark Core는 Data를 Task 단위로 분산하여 처리하는 역할을 수행한다. Task는 Spark의 RDD (Resillient Distributed Data)로 구성된다. Task 수행을 위한 Resource(CPU, Memory)는 Spark Standalone을 이용하여 구축이 가능하며 Hadoop YARN, Mesos, Kubernetes와 같이 별도의 Resource Manager 이용도 가능하다. Storage는 Data가 저장되는 공간을 의미하며 HDFS, Gluster FS, Amazon S3등을 지원한다. Spark Core는 Java, Scala, Python, R 언어로 API를 제공한다.
 
 #### 1.2. Library
+
+Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도와주는 역할을 수행한다. Library는 다양한 개발 언어를 통해서 이용할 수 있다. Library는 Spark SQL, MLib, GraphX, Streaming으로 구분지을 수 있다.
+
+* Spark SQL : SQL Query를 통해서 정형화되어 있는 Data를 Spark의 DataFrame으로 가져오고 
+* MLib : 
+* GraphX : 
+* Streaming : 
 
 ### 2. Spark Runtime Architecture
 
