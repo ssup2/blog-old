@@ -34,7 +34,7 @@ Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도�
 
 [그림 2]는 Spark Runtime Architecture를 나타내고 있다. Driver Program의 SparkContext, Cluster Manager, Worker Node의 Executor로 구성되어 있다.
 
-* SparkContext : SparkContext는 작업에 대한 전반적인 정보를 가지고 있는 객체이다. 작업을 Task로 분리하며 분리된 Task는 SparkContext 내부의 Scheulder를 통해서 Executor로 전송하여 실행된다. RDD도 SparkContext를 통해서 생성된다. SparkContext의 객체는 Driver Program에 의해서 초기화 된다. Driver Program는 main() 함수 호출을 통해서 Spark Runtime을 초기화하는 역할을 수행한다.
+* SparkContext : SparkContext는 작업에 대한 전반적인 정보를 가지고 있는 객체이다. 작업을 Task로 분리하며 분리된 Task는 SparkContext 내부의 Scheulder를 통해서 Executor로 전송하여 실행된다. RDD도 SparkContext를 통해서 생성된다. SparkContext의 객체는 Driver Program에 의해서 초기화 된다. Driver Program는 main() 함수 호출을 통해서 Spark Application을 초기화하는 역할을 수행한다.
 
 * Cluster Manager : SparkContext가 요구하는 Resource (CPU, Memory)를 갖는 Spark Executor를 실행하고 관리하는 역할을 수행한다.
 
