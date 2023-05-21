@@ -23,10 +23,10 @@ Spark Core는 Data를 Task 단위로 분산하여 처리하는 역할을 수행�
 
 Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도와주는 역할을 수행한다. Library는 다양한 개발 언어를 통해서 이용할 수 있다. Library는 Spark SQL, MLib, GraphX, Streaming으로 구분지을 수 있다.
 
-* Spark SQL : SQL Query를 통해서 정형화되어 있는 Data를 Spark의 DataFrame으로 가져오고 
-* MLib : 
-* GraphX : 
-* Streaming : 
+* Spark SQL : SQL Query를 통해서 정형화되어 있는 Data를 Spark의 DataFrame으로 가져오고, Data를 조회하는 기능을 제공한다. DataFrame은 Spark SQL에서 정형화된 Data 처리를 위한 자료구조이다. Hive를 통해서 정형화된 Data를 Datafame으로 가져올 수 있으며, JDBC/ODBC도 지원하기 때문에 Database에 접근하여 정형화된 Data를 DataFrame으로 가져올 수 있다.
+* MLib : Machine Learning이나 통계에 필요한 알고리즘을 제공한다.
+* GraphX : Graphic Data 처리를 위한 알고리즘을 제공한다.
+* Streaming : Kafka, Flume과 같은 Streaming Source로부터 Streaming Data를 실시간으로 수신하고 처리하는 기능을 제공한다. 시간별 RDD의 집합으로 구성되는 Dstream 자료구조를 활용하여 Data를 처리한다.
 
 ### 2. Spark Runtime Architecture
 
