@@ -35,10 +35,10 @@ Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도�
 [그림 2]는 Spark Runtime Architecture를 나타내고 있다. Spark Application에서 동작하는 Spark Context, Cluster Manager, Worker Node의 Executor로 구성되어 있다.
 
 * Spark Context : 
-* Cluster Manager : Spark Context가 요구하는 Resource를 할당한다.
+* Cluster Manager : Spark Context가 요구하는 Resource (CPU, Memory)를 이용할 수 있는 Spark Executor를 실행하고 관리하는 역할을 수행한다.
 * Executor : Executor는 하나의 Spark Context에 귀속되며 다수의 Spark Context와 공유되지 않는다. 따라서 각각의 Spark Application은 동일한 Cluster Manager를 이용하더라도 독립되어 실행된다.
 
-### 3. 참ㅇ
+### 3. 참조
 
 * [https://www.interviewbit.com/blog/apache-spark-architecture/](https://www.interviewbit.com/blog/apache-spark-architecture/)
 * [https://spark.apache.org/docs/latest/cluster-overview.html](https://spark.apache.org/docs/latest/cluster-overview.html)
