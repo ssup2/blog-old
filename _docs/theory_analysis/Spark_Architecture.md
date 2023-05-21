@@ -32,11 +32,13 @@ Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도�
 
 ![[그림 2] Spark Runtime Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Architecture/Spark_Runtime_Architecture.PNG){: width="550px"}
 
-[그림 2]는 Spark Runtime Architecture를 나타내고 있다. Spark Application에서 동작하는 Spark Context, Cluster Manager, Worker Node의 Executor로 구성되어 있다.
+[그림 2]는 Spark Runtime Architecture를 나타내고 있다. Driver Program의 SparkContext, Cluster Manager, Worker Node의 Executor로 구성되어 있다.
 
-* Spark Context : 
-* Cluster Manager : Spark Context가 요구하는 Resource (CPU, Memory)를 이용할 수 있는 Spark Executor를 실행하고 관리하는 역할을 수행한다.
-* Executor : Executor는 하나의 Spark Context에 귀속되며 다수의 Spark Context와 공유되지 않는다. 따라서 각각의 Spark Application은 동일한 Cluster Manager를 이용하더라도 독립되어 실행된다.
+* SparkContext : SparkContext는 작업에 대한 전반적인 정보를 가지고 있는 객체이다. 작업을 Task로 분리하며 분리된 Task는 SparkContext 내부의 Scheulder를 통해서 Executor로 전송하여 실행된다. RDD도 SparkContext를 통해서 생성된다. SparkContext의 객체는 Driver Program에 의해서 초기화 된다. Driver Program는 main() 함수 호출을 통해서 Spark Runtime을 초기화하는 역할을 수행한다.
+
+* Cluster Manager : SparkContext가 요구하는 Resource (CPU, Memory)를 갖는 Spark Executor를 실행하고 관리하는 역할을 수행한다.
+
+* Executor : Executor는 SparkContext로부터 Task를 받아 수행하고 그 결과를 반환하는 역할을 수행한다. Executor는 SparkContext의 요청에 의해서 Cluster Manager로부터 생성되며, 생성이 완료된 Executor는 SparkContext로 접속하여 SparkContext로부터 실행할 Task를 대기한다. Executor는 하나의 SparkContext에 귀속되며 다수의 SparkContext와 공유되지 않는다. 따라서 각각의 Spark Application은 동일한 Cluster Manager를 이용하더라도 독립되어 실행된다. 따라서 SparkContext가 종료되면 Executor도 같이 종료된다.
 
 ### 3. 참조
 
