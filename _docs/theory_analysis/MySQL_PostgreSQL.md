@@ -1,5 +1,5 @@
 ---
-title: MySQL vs PostgresSQL
+title: MySQL vs PostgreSQL
 category: Theory, Analysis
 date: 2018-12-14T12:00:00Z
 lastmod: 2018-12-14T12:00:00Z
@@ -7,9 +7,9 @@ comment: true
 adsense: true
 ---
 
-MySQL의 HA(High Availabilty)를 위한 Replicaiton 기법들을 분석한다.
-
 ### 1. MySQL vs PostgresSQL
+
+MySQL과 PostgresSQL을 비교 분석하고 정리한다.
 
 #### 1.1. Client Connection
 
