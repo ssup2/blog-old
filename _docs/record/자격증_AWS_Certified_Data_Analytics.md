@@ -135,6 +135,19 @@ adsense: true
 
 #### 2.2. Kinesis Data Firehose
 
+* AWS Service, 3rd Party Application에 Data 적재
+* Fully Managed Service : Auto-scaling 지원
+* Near Real Time : 최소 60초 지연 발생
+* 압축 지원 : GZIP, ZIP, SNAPPY
+* Producer
+  * SDK KPL, Kinesis Agent, Kinesis Data Streams, Amazon CloudWatch, AWS IoT
+  * 하나의 Record 당 최대 1MB
+* Consumer
+  * Amazon S3, Amazon OpenSearch, Datadog, splunk, New Relic, MongoDB, HTTP Endpoints
+  * Batch Write 수행
+* Transformation
+  * Lambda를 활용하여 Data 변환 가능
+
 ### 3. Processing
 
 ### 4. 참고
