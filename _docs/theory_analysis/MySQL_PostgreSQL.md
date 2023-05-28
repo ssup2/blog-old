@@ -7,9 +7,9 @@ comment: true
 adsense: true
 ---
 
-### 1. MySQL vs PostgresSQL
+MySQL과 PostgreSQL을 비교 분석한다.
 
-MySQL과 PostgresSQL을 비교 분석하고 정리한다.
+### 1. MySQL vs PostgresSQL
 
 #### 1.1. Client Connection
 
