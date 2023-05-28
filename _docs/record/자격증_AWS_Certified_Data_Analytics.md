@@ -14,7 +14,13 @@ adsense: true
 
 ***
 
-### 1. Collection
+### 1. Base
+
+아래의 정리된 내용을 바탕으로 부족한 내용 정리
+
+* [AWS Solutions Architecture Assosicate](https://ssup2.github.io/record/%EC%9E%90%EA%B2%A9%EC%A6%9D_AWS_Solutions_Architect_Associate/)
+
+### 2. Collection
 
 * RealTime : 실시간 Data 수집
   * Kinesis data Streams (KDS)
@@ -29,7 +35,7 @@ adsense: true
   * Snowball
   * Data Pipeline
 
-### 1.1. Kinesis Data Streams
+#### 2.1. Kinesis Data Streams
 
 * 다수의 Shard로 구성
 * Retention : 1 ~ 365 Days
@@ -55,7 +61,7 @@ adsense: true
   * VPC 내부에서 VPC Endpoint를 통해서 접근 가능
   * CloudTrail을 통한 추적
 
-#### 1.1.1. Kinesis Producer
+##### 2.1.1. Kinesis Producer
 
 * Ex) Application, SDK KPL, Kinesis Agent, CloudWatch Logs, AWS IoT, Kinesis Data Analytics
 * 성능
@@ -83,7 +89,7 @@ adsense: true
   * KPL 기반
   * Data 전처리 지원
 
-#### 1.1.2. Kinesis Consumer
+##### 2.1.2. Kinesis Consumer
 
 * Ex) Application, AWS Lambda, Kinesis Data Firehose, Kinesis Data Analytics
 * 성능
@@ -110,7 +116,7 @@ adsense: true
   * De-aggreagte되어 Lamba 함수에게 전달
   * Batch 사이즈 지정 가능
 
-#### 1.1.3. Kinesis Scailing
+##### 2.1.3. Kinesis Scailing
 
 * Shard 추가
   * Shard 추가시 기존의 Parent Shard를 대체하는 다수의 Child Shard가 생성
@@ -119,7 +125,7 @@ adsense: true
 * Shard 통합
   * Chart 통합시 기존 다수의 Parent Shard를 대체하는 하나의 Child Shard 생성
 
-#### 1.1.4. Deplicated Records
+##### 2.1.4. Deplicated Records
 
 * Producer
   * 일시적 Network 장애로 인해서 동일한 Record가 중복되어 Stream에 저장될 수 있음
@@ -127,10 +133,10 @@ adsense: true
 * Consumer
   * Data에 Unique ID를 집어 넣어, 동일한 Data를 수신하여도 중복 처리되지 않도록 App Logic 처리
 
-#### 1.1.4. Kinesis Security
+#### 2.2. Kinesis Data Firehose
 
-### 1.2. Kinesis Data Firehose
+### 3. Processing
 
-### 2. 참고
+### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
