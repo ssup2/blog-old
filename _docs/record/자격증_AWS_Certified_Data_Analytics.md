@@ -150,6 +150,39 @@ adsense: true
 
 ### 3. Processing
 
+#### 3.1. Glue
+
+* Serverless ETL 수행
+* S3, RDS, Redshift의 Data 처리 가능
+* Glue Crawler
+  * S3의 Data로 부터 Schema 생성
+  * 생성된 Schema는 Glue Data Catalog에 저장
+* Glue Data Catalog
+  * Schema 정보 저장소
+  * 사용자의 입력 또는 Glue Crawler를 통해서 생성 가능
+  * EMR Hive의 Metastore를 Glue Data Catalog로 변환 가능
+  * EMR Hive에서 Hive의 Metastore로 제공 가능
+* Glue Studio : Glue Job을 Visual Interface를 통해서 처리
+* Glue Data Quality
+  * Data의 품질 평가 및 검사 서비스
+  * DQDL (Data Quality Definition Language) 이용하여 규칙 정의
+  * Glue Studio에서 이용 가능
+
+#### 3.2. Glue DataBrew
+
+#### 3.3. Lake Formation
+
+* Data Lake (S3)의 Data 접근 권한 관리
+* Data Monitoring 기능 제공
+* Data 변환 기능 제공
+* Glue 기반
+
+#### 3.4. Amazon Security Lake
+
+* Data 보안 중앙화
+* Multi Account, On-premise 환경포함 Data 정규화
+* Data Life-cycle 관리
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
