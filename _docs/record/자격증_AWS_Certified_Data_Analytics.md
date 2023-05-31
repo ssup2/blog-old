@@ -250,7 +250,11 @@ adsense: true
 * 사용자가 크기 지정 가능
 * 하나의 Region 내부에서만 Task 처리
 
-#### 3.5.6. 
+#### 3.5.6. EMR Spark
+
+* Kinesis와 Spark Streaming 연동 가능
+* Spark를 통해서 처리한 Data를 Redshift에 저장 가능
+* Athena Console에서 Spark 실행을 통해서 Data 분석 가능
 
 ### 4. 참고
 

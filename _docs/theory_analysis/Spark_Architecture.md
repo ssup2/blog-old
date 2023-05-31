@@ -29,7 +29,7 @@ Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도�
  DataFrame으로 가져올 수 있다.
 * MLib : Machine Learning이나 통계에 필요한 알고리즘을 제공한다. Regression, Clustering, Classification, Collaborative Filtering, Pattern Mining 등의 알고리즘을 이용할 수 있다. HDFS, HBase 등의 Hadoop 기반의 System에서 Data를 읽고 처리할 수 있다.
 * GraphX : Graphic Data 처리를 위한 알고리즘을 제공한다. 현재는 거의 이용되지 않는다.
-* Streaming : Kafka, Flume과 같은 Streaming Source로부터 Streaming Data를 실시간으로 수신하고 처리하는 기능을 제공한다. 시간별 RDD의 집합으로 구성되는 Dstream를 활용하여 Data를 처리한다.
+* Streaming : Kafka, Flume과 같은 Streaming Source로부터 Streaming Data를 실시간으로 수신하고 처리하는 기능을 제공한다. 시간별 RDD의 집합으로 구성되는 Dstream를 활용하여 Data를 처리한다. Dstream을 DataFrame으로 변환하여 처리도 가능하다.
 
 ### 2. Spark Runtime Architecture
 
