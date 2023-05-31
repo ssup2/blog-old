@@ -250,6 +250,8 @@ adsense: true
 * 사용자가 크기 지정 가능
 * 하나의 Region 내부에서만 Task 처리
 
+#### 3.5.6. 
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
