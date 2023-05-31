@@ -183,6 +183,57 @@ adsense: true
 * Multi Account, On-premise 환경포함 Data 정규화
 * Data Life-cycle 관리
 
+#### 3.5. EMR
+
+* EC2 기반 관리형 Hadoop Framework
+  * Spark, HBase, Presto, Flink
+  * EMR Notebooks 
+
+#### 3.5.1. EMR Cluster
+
+* Master Node
+  * Task 상태 추적, Cluster 상태 관리 
+* Core Node
+  * HDFS 제공, Task 수행
+  * Multi Node Cluster의 경우에 반드시 하나 이상의 Core Node가 존재
+    * 일부 Hadoop Echo System에서 여전히 HDFS가 이용되기 때문
+  * Scale Up&Down이 가능하지만 Data Loss Risk 가능성 존재
+* Task Node
+  * Task 수행
+  * HDFS와 같이 Data를 저장하고 있지 않기 때문에 제거시에도 Data Loss Risk가 존재하지 않음
+  * Spot Instance 이용에 적합
+* Transient vs Long-Running Cluster
+  * Transient Cluster
+    * Task 수행 완료후 Cluster 제거
+    * Batch Job에 적합
+  * Long-running Cluster
+    * RI Instance를 이용하여 Stream Task 수행
+    * Spot Instnace를 이용하여 Batch Task 수행
+* Task 제출
+  * Master Node에 직접 접근하여 Task 제출
+  * AWS Console을 통해서 Task 제출
+
+#### 3.5.2. EMR with AWS Services
+
+* S3에 Input Data, Output Data 저장 수행
+* CloudWatch를 통해서 Performance Monitoring 수행
+* IAM을 통해서 인가 관리 수행
+* CloudTrail을 통해서 Audit 수행
+* AWS Data Pipeline, AWS Step Function을 통해서 Task Scheduling, Workflow 구성
+
+#### 3.5.3. EMR Stroage
+
+* HDFS
+  * Core Node의 Cluster로 구성
+  * EMR Cluster의 Life-cycle과 동일, EMR Cluster 제거시 HDFS의 데이터도 삭제됨
+  * EMRFS보다 빠른 성능을 보이기 때문에 임시 Data를 저장하는 Caching 용도의 사용 권장
+* EMRFS
+  * S3 기반 Filesystem
+  * EMR Cluster와 별개의 Life-cycle를 갖음, EMR Cluster 제거시에도 Data 보존
+  * S3에서 Strong Consisteny 보장
+* Local Filesystem
+  * 임시 Cache 용도로 이용
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
