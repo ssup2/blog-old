@@ -234,6 +234,22 @@ adsense: true
 * Local Filesystem
   * 임시 Cache 용도로 이용
 
+#### 3.5.4. EMR Managed Scailing
+
+* EMR Automatic Scailing
+  * CloudWatch Metric 기반
+  * Instance Group만 지원
+* EMR Managed Scailing
+  * Instance Group, Instance Fleet 지원
+  * Spark, Hive, YARN Workload 지원
+
+#### 3.5.5. EMR Serverless
+
+* Spark, Hive, Presto 지원
+* Cluster 크기를 자동으로 관리
+* 사용자가 크기 지정 가능
+* 하나의 Region 내부에서만 Task 처리
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
