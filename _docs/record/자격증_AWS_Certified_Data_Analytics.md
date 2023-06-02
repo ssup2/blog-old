@@ -256,6 +256,40 @@ adsense: true
 * Spark를 통해서 처리한 Data를 Redshift에 저장 가능
 * Athena Console에서 Spark 실행을 통해서 Data 분석 가능
 
+#### 3.5.7. EMR Hive
+
+* SQL(HiveQL)을 이용하여 HDFS, EMRFS에 저장된 Data 조회 가능 
+* MapReduce, Tez를 기반으로 SQL을 분산 처리 수행
+* OLAP에 적합
+* User Defined Function, Thrift, JDBC/ODBC Driver 지원
+* Metastore
+  * Data Structure 정보
+  * Column 이름, Type 정보
+  * 기본적으로 Master Node의 MySQL에 Metastore를 저장
+  * AWS 환경에서는 Glue Data Catalog, Amazon RDS에 저장하는 방안을 권고
+* AWS Service와 연동
+  * S3로 부터 Load Data, Write Data 수행 가능
+  * S3로 부터 Script Load 가능
+
+#### 3.5.8. EMR Apache Pig
+
+* Mapper, Reducer 작성을 빠르게 도와주는 Script 환경 제공
+* SQL-like Syntax를 이용하여 Map, Reduce 단계 수행
+* User Define 함수 제공 (UDF's)
+* MapReduce, Tez를 기반으로 분산 처리 수행
+* AWS Service와 연동
+  * S3 Data Query 수행 가능
+  * S3로 부터 JAR, Script Load 가능
+
+#### 3.5.9. EMR Hbase
+
+* Non-relational, Petabyte-scale Database
+* HDFS 및 Google BigTable 기반
+* Memory에서 연산 처리 수행
+* AWS Service와 연동
+  * EMRFS을 통한 S3 데이터 저장 지원
+  * S3로 Backup 가능
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
