@@ -310,12 +310,33 @@ adsense: true
   * Neural Network 구성 Platform 
   * EMR에 포함
 
-#### 3.5.12. Security
+#### 3.5.12. EMR Security
 
-* IAM Policy
-* IAM Role
-* Kerberos
-* SSH
+* 다양한 인증/인가 방법 이용 가능
+  * AM Policy, IAM Role, Kerberos, SSH
+* Block Public Access
+  * Public Access 접근 차단 
+
+#### 3.6. AWS Data Pipeline
+
+* S3, RDS, DynamoDB, Redshift, EMR을 Data 전송 목적지로 설정 가능
+* Task 의존성 관리
+* Task 재시도 및 실패 Notify
+* Cross-region Pipeline 지원
+* Precondition Check 지원
+* On-premise Data Source 지원
+* 고가용성 제공
+* 다양한 Activity 제공
+  * EMR, Hive, Copy, SQL, Script
+
+#### 3.7. AWS Step Functions
+
+* Workflow 서비스
+* 쉬운 시각화 기능 제공
+* Error Handling, Retry 기능 제공
+* Audit 기능 제공
+* 임의의 기간 동안 Wait 기능 제공
+* 
 
 ### 4. 참고
 
