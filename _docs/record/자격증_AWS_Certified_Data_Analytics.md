@@ -290,6 +290,11 @@ adsense: true
   * EMRFS을 통한 S3 데이터 저장 지원
   * S3로 Backup 가능
 
+#### 3.5.10. EMR Presto
+
+* 다양한 Big Data Database에 연결 가능
+* HDFS, S3, Cassandra, MongoDB, HBase, SQL, Redshift, Teradata
+
 ### 4. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
