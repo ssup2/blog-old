@@ -294,6 +294,28 @@ adsense: true
 
 * 다양한 Big Data Database에 연결 가능
 * HDFS, S3, Cassandra, MongoDB, HBase, SQL, Redshift, Teradata
+* OLAP Task에 적합
+
+#### 3.5.11. EMR Hue, Splunk, Flume
+
+* Hue
+  * EMR Cluster 관리를 위한 Web Interface 제공
+  * IAM과 통합 기능 제공
+  * HDFS과 S3 사이의 Data 이동 기능 제공
+* Splunk
+* Flume
+  * Log Aggregation Platform
+  * HDFS, Hbase 기반
+* MXNet
+  * Neural Network 구성 Platform 
+  * EMR에 포함
+
+#### 3.5.12. Security
+
+* IAM Policy
+* IAM Role
+* Kerberos
+* SSH
 
 ### 4. 참고
 
