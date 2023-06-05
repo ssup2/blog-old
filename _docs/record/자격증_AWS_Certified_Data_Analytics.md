@@ -336,8 +336,34 @@ adsense: true
 * Error Handling, Retry 기능 제공
 * Audit 기능 제공
 * 임의의 기간 동안 Wait 기능 제공
-* 
 
-### 4. 참고
+### 4. Analytics
+
+#### 4.1. Kinesis Analytics
+
+* 실시간 Data 처리 Service
+* 구성 요소
+  * Input Stream : Data가 인입되는 Stream
+  * Reference Table : Data 처리시 참조하는 Table, S3의 Data Join 수행 가능
+  * Output Stream : 처리된 Data를 내보내는 Stream
+  * Error Stream : Data 처리시 발생한 Data를 내보내는 Stream
+* with Lambda
+  * Lambda를 Data의 목적지로 지정 가능
+  * Data를 변경하고 AWS Service에 전달
+* with Apache Flink
+  * Apache Flink Framework 지원
+  * SQL Query 대신 Flink Application 작성
+  * Serverless
+    * Auto-scailing 수행
+    * KPU 단위로 비용 측정
+    * 1 KPU = 1 vCPU, 4 Memory
+  * 구성 요소
+    * Flink Source : MSK, Kinesis Data Streams
+    * Flink Datastream API
+    * Flink Sink : S3, Kinesis Datastream, Kinesis Datafirehorse
+  * RANDOM_CUT_FOREST
+    * Abnormal Detection 수행 SQL 함수
+
+### 5. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
