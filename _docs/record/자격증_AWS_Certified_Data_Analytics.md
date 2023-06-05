@@ -364,6 +364,34 @@ adsense: true
   * RANDOM_CUT_FOREST
     * Abnormal Detection 수행 SQL 함수
 
+#### 4.2. OpenSearch
+
+* ElasticSearch 기반 검색 엔진
+* Scalable
+* Lucene 기반
+* 활용 방안
+  * Full-text Search
+  * Log Analytics
+  * Application Monitoring
+  * Security Analytics
+  * Clickstream Analytics
+* Concept
+  * Document : 검색할 대상, Full-Text 뿐만 아니라 JSON 구조도 지원
+  * Types : Schema 정의, 현재는 잘 이용되고 있지 않음
+  * Indices
+    * Inverted Index로 구성
+    * 다수의 Shard로 구성되며, 분산 처리 수행
+    * Primary Shard : Read/Write 수행
+    * Replica Shard : Read만 수행 가능하며 다수의 Replica 구성시 Load Balancing 수행
+* Fully-managed (Not Serverless)
+* 다운 타임없이 Scale in/out 수행
+* 다양한 AWS Service와 연동
+  * S3 Bucket
+  * Kinesis Data Streams
+  * DynamoDB Streams
+  * CloudWatch, CloudTrail
+  * Zone Awareness
+
 ### 5. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
