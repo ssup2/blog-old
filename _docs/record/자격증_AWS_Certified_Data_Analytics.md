@@ -391,6 +391,30 @@ adsense: true
   * DynamoDB Streams
   * CloudWatch, CloudTrail
   * Zone Awareness
+* Options
+  * Dedicated Master Node : Node의 개수 및 Spec
+  * Domains : Cluster 구동을 위한 모든 정보들을 의미 (설정 정보)
+  * S3 기반 Snapshot 기능 제공
+  * Zone Awareness
+* Security
+  * Resource-based Policy
+  * Identity-based Policy
+  * IP-based Policy
+  * Request Sining
+  * Private Cluster in VPC
+  * Dashboard Secuirty
+    * AWS Cognito
+    * Outside VPC
+      * SSH Tunnel
+      * Reserve Proxy on EC2 Instance
+      * VPC Direct Connect
+      * VPN
+* OTLP Task에 적합하지 않음
+  * Transaction 기능 미제공
+
+#### 4.2.1. Index Management
+
+
 
 ### 5. 참고
 
