@@ -414,7 +414,50 @@ adsense: true
 
 #### 4.2.1. Index Management
 
+* Storage Type
+  * Hot Storage
+    * Fastest Store, 하지만 높은 비용
+    * EBS, Instance Store
+    * Default Store
+  * Ultra Warm Storage
+    * S3 + Caching 기반
+    * Dedicated Master Node 필요
+    * Log, Immutable Data와 같이 Write가 적은 경우 이용에 유리
+  * Cold Storage
+    * S3 기반
+    * 오래된 또는 주기적인 Data 저장시 이용에 유리
+    * Dedicated Master Node 필요, UltraWarm 활성화 필요
+    * T2, T3 Instance Type에서 이용 불가능
+  * Storage Type 사이의 Data Migration 가능
+* Index State Management (ISM)
+  * 오래된 Index의 경우 삭제
+  * Index를 Read-only로 변환
+  * Index를 Hot -> Ultrawarm -> Cold Storage로 이동
+  * Replica 개수 감소
+  * Index 자동 Snapshot
+  * Rollup을 통해서 Index 요약
+    * 비용 절감
+  * 30 ~ 48분 간격을 실행
+  * 실행 완료시 Notification 전송
+* Cross-cluster Replication 기능 제공
+  * 고가용성 확보
+  * Follower Index는 Leader Index로부터 Data를 가져와 동기화 수행
+* Stability
+  * 3개의 Dedicated Master Node 이용 권장
+  * Disk 용량 관리
+  * 적잘한 Shard 개수 선택
+    * ??
+  
+#### 4.2.2. Performance
 
+* Memory Pressure 발생 시
+  * Shard의 불균형 분배 되었을 경우
+  * Shard가 너무 많을 경우
+* JVMMemoryPressure 발생시 오래되고 이용되지 않는 Index 삭제 수행
+
+#### 4.2.3. Serverless
+
+* 
 
 ### 5. 참고
 
