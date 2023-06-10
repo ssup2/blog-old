@@ -455,9 +455,31 @@ adsense: true
   * Shard가 너무 많을 경우
 * JVMMemoryPressure 발생시 오래되고 이용되지 않는 Index 삭제 수행
 
-#### 4.2.3. Serverless
+#### 4.3. Athena
 
-* 
+* S3를 위한 SQL Query Service
+* Presto 기반
+* Serverless
+* 다양한 Format 지원
+  * CSV, TSV, JSON, ORC, Parquet, Avro, Snappy, Zlib, LZO, Gzip
+* Glue Data Catalog를 통해서 Athena는 Metadata 수집
+* 다양한 활용 용도
+  * App Log 분석을 위한 Ad-hoc Query
+  * Redshift에 Data 적재 전, Data 분석을 위한 Query
+  * CloudTrail, CloudFront, VPC, ELB Log 분석
+  * QuickSight와 통합
+* Workgroups 기능 제공
+  * Workgroups 단위로 Query 접근 권한, 비용 추적 가능
+  * IAM, CloudWatch, SNS과의 통합 가능
+  * Workgroup 마다 다음의 설정 가능
+    * Query History, Data Limit, IAM Policy, 암호화 설정
+* 비용
+  * TB당 5달러
+  * 성공 또는 취소한 Query 당 비용 청구
+  * 실패한 Query는 비용 청구 X
+  * DDL 비용 청구 X
+  * Columnar Format 이용시 비용 절감 및 성능 이점
+  * Glue, S3는 별개의 비용 청구 이용
 
 ### 5. 참고
 
