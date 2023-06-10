@@ -491,6 +491,12 @@ adsense: true
 
 #### 4.4. Redshift
 
+* OLAP을 위한 서비스
+* SQL, ODBC, JDBC 인터페이스 제공
+* Scale-up/down On-demand 방식
+* Built-int Replication
+* CloudWatch, CloudTrail 기반 Monitoring
+
 ### 5. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
