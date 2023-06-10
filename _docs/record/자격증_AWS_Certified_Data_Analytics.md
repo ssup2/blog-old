@@ -461,7 +461,7 @@ adsense: true
 * Presto 기반
 * Serverless
 * 다양한 Format 지원
-  * CSV, TSV, JSON, ORC, Parquet, Avro, Snappy, Zlib, LZO, Gzip
+  * CSV, TSV, JSON, ORC (Columnar), Parquet (Columnar), Avro, Snappy, Zlib, LZO, Gzip
 * Glue Data Catalog를 통해서 Athena는 Metadata 수집
 * 다양한 활용 용도
   * App Log 분석을 위한 Ad-hoc Query
@@ -480,6 +480,16 @@ adsense: true
   * DDL 비용 청구 X
   * Columnar Format 이용시 비용 절감 및 성능 이점
   * Glue, S3는 별개의 비용 청구 이용
+* 성능
+  * Columnar Format 이용시 성능 이점
+  * 큰 용량의 적은 파일로 구성되어야 성능 이점
+  * Partition 기능 활용
+* Transaction
+  * Iceberg를 통해서 이용 가능
+    * Table Type에 ICEBERG 지정
+  * Lake Formation의 Governed Table을 통해서도 Transaction 기능 이용 가능
+
+#### 4.4. Redshift
 
 ### 5. 참고
 
