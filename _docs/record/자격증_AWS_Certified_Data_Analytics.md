@@ -496,6 +496,15 @@ adsense: true
 * Scale-up/down On-demand 방식
 * Built-int Replication
 * CloudWatch, CloudTrail 기반 Monitoring
+* Architecture
+  * Leader Node
+    * Client의 Query 수신 및 병렬처리 Plan 수립
+    * 수립한 병렬처리 Plan에 따라서 Compute Node에게 Task 분배 및 처리 결과 수집
+  * Compute Node
+    * 최대 128개의 컴퓨트 노드 구성 가능
+    * Type
+      * Dense Storage : HDD와 저비용 큰 용량의 Storage를 갖고 있는 Type
+      * Dense Compute : Compute 성능에 초점을 맞춘 Type
 
 ### 5. 참고
 
