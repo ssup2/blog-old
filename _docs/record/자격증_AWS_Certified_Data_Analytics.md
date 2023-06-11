@@ -546,9 +546,22 @@ adsense: true
 * WLM (Workload Management)
   * Query Queue
   * Query에 우선순위를 부여하여 관리
+  * 기본 5개의 Queue 이용
+  * 최대 8개의 Queue 구성 가능
+  * 각 Queue는 Concurrency Level이 존재하며 50까지 설정 가능
+  * Query 특징에 따라서 자동으로 Concurrency Level을 조정해주며, 수동으로도 설정 가능
 * Concurrency Scaling
   * Cluster를 추가하여 Query 처리
   * WLM에 쌓여 있는 Query를 추가된 Cluster에게 전송 및 처리
+* SQA (Short Query Acceleration)
+  * WLM의 Short Query를 위한 Queue를 이용
+  * Read-only Query, CREATE TALBE AS Query에 적용
+  * Short 기준 시간 설정 가능
+* VACUUM
+  * VACUUM FULL : 
+  * VACUUM DELETE ONLY :
+  * VACUUM SORT ONLY :
+  * VACUUM REINDEX :
 
 ### 5. 참고
 
