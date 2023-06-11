@@ -539,6 +539,16 @@ adsense: true
   * UNLOAD : 처리된 결과를 S3에 복제 수행
   * S3 Auto-copy : S3에 Data 변경시 Redshift에 자동으로 복제 수행
   * Aurora zero-ETL Integration : Aurora에서 Redshift로 데이터 자동 복제
+  * Redshift Injestion
+  * DBLINK : RDS와 연결하여 Data 복제 수행
+* AWS Service와 통합
+  * S3, DMS, EMR, EC2, Data Pipeline
+* WLM (Workload Management)
+  * Query Queue
+  * Query에 우선순위를 부여하여 관리
+* Concurrency Scaling
+  * Cluster를 추가하여 Query 처리
+  * WLM에 쌓여 있는 Query를 추가된 Cluster에게 전송 및 처리
 
 ### 5. 참고
 
