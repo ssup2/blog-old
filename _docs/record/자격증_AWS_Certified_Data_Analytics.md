@@ -528,6 +528,16 @@ adsense: true
   * Even : Round-robin에 따라서 자동으로 Data 분배
   * Key : Key, Hasing 기반으로 Data 분배
   * All : Data를 모든 Compute Node에 복제
+* Sort Key
+  * Sort Key에 따라서 Disk에 정령되어 저장
+  * Compound : 다수의 Column을 조합하여 Sort Key로 이용
+  * Interleaved : ??
+* Data 복제 명령어
+  * COPY
+    * S3, EMR, DynamoDB 원격 Host에서 Data 복제 수행
+    * 병렬로 데이터 복제 수행
+  * UNLOAD
+    * 데이터 복제 수행
 
 ### 5. 참고
 
