@@ -562,6 +562,10 @@ adsense: true
   * VACUUM DELETE ONLY :
   * VACUUM SORT ONLY :
   * VACUUM REINDEX :
+* Resize
+  * Elastic Resize
+  * Classic Resize
+  * Snapshot, Retore, Resize
 
 ### 5. 참고
 
