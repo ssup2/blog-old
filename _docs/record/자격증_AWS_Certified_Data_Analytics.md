@@ -521,7 +521,13 @@ adsense: true
   * RA3 Cluster의 경우만 Multi-AZ 지만 (DS2는 Single AZ)
 * Scaling
   * Vertical, Horizontal Scailing 수행
-  * Scailing 수행시 새로운 클러스터가 생성되어 넘어가는 형태
+  * Scailing 수행시 새로운 클러스터가 생성되어 Data가 넘어가는 형태 (일시적 Downtime 발생)
+* Data Distribution Style
+  * Data를 Compute Node에 어떻게 분배할지 결정
+  * Auto : 자동으로 Data 크기에 따라서 Data 분배
+  * Even : Round-robin에 따라서 자동으로 Data 분배
+  * Key : Key, Hasing 기반으로 Data 분배
+  * All : Data를 모든 Compute Node에 복제
 
 ### 5. 참고
 
