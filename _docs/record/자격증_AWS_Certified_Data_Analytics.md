@@ -505,6 +505,23 @@ adsense: true
     * Type
       * Dense Storage : HDD와 저비용 큰 용량의 Storage를 갖고 있는 Type
       * Dense Compute : Compute 성능에 초점을 맞춘 Type
+* Spectrum
+  * S3에 있는 Data 직접 접근
+  * Concurrney 제한
+  * 수평 확장 지원
+  * Storage, Compute 분리
+* 성능
+  * MPP (Massively Parallel Processing)
+  * Columnar Data Storage
+  * Column Compression
+* Durability
+  * Cluster 내부에서 Data 복제 발생
+  * S3로 Data 백업 수행
+  * 장애가 발생한 Node 자동 복구 수행
+  * RA3 Cluster의 경우만 Multi-AZ 지만 (DS2는 Single AZ)
+* Scaling
+  * Vertical, Horizontal Scailing 수행
+  * Scailing 수행시 새로운 클러스터가 생성되어 넘어가는 형태
 
 ### 5. 참고
 
