@@ -532,12 +532,13 @@ adsense: true
   * Sort Key에 따라서 Disk에 정령되어 저장
   * Compound : 다수의 Column을 조합하여 Sort Key로 이용
   * Interleaved : ??
-* Data 복제 명령어
+* Data 복제
   * COPY
     * S3, EMR, DynamoDB 원격 Host에서 Data 복제 수행
     * 병렬로 데이터 복제 수행
-  * UNLOAD
-    * 데이터 복제 수행
+  * UNLOAD : 처리된 결과를 S3에 복제 수행
+  * S3 Auto-copy : S3에 Data 변경시 Redshift에 자동으로 복제 수행
+  * Aurora zero-ETL Integration : Aurora에서 Redshift로 데이터 자동 복제
 
 ### 5. 참고
 
