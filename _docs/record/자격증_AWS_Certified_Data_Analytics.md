@@ -609,6 +609,10 @@ adsense: true
   * Embedding 가능
   * Active Directory, Cognito, SSO를 통한 인증
   * Javascript SDK, QuickSight API 제공
+* ML 기능
+  * 이상 탐지 기능
+  * 예측 기능
+  * 추천되는 Insight 기능 제공
 
 ### 6. 참고
 
