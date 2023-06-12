@@ -613,6 +613,8 @@ adsense: true
   * 이상 탐지 기능
   * 예측 기능
   * Insight 추천 기능
+* Quicksight Q
+  * 자연어 기반 Query 수행
 
 ### 6. 참고
 
