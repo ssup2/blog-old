@@ -580,6 +580,7 @@ adsense: true
   * Optimize Costs & Performance
   * 쉬운 개발 & Test 환경 구축 가능
   * 쉬운 Ad-hoc 환경 구성 가능
+  * Snapshot 기능 활용 가능
 
 ### 5. 참고
 
