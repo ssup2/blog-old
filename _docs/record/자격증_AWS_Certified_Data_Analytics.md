@@ -612,7 +612,7 @@ adsense: true
 * ML 기능
   * 이상 탐지 기능
   * 예측 기능
-  * 추천되는 Insight 기능 제공
+  * Insight 추천 기능
 
 ### 6. 참고
 
