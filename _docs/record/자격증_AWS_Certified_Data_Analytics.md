@@ -564,8 +564,22 @@ adsense: true
   * VACUUM REINDEX :
 * Resize
   * Elastic Resize
+    * 빠르게 Node 추가/제거 가능
+    * 몇 분동안 Cluster Down 발생, Connection Open 유지
+    * DC2, RA3 Node에 대해서 Node 추가/제거에 제한 존재
   * Classic Resize
-  * Snapshot, Retore, Resize
+    * 기존의 Resize 방식
+    * 몇시간 정도 Cluster가 Read-only Mode로 동작
+  * Snapshot
+    * Snapshot을 수행하고 새로운 Size의 Cluster 생성
+* Security
+  * HSM (Hardware Security Module) 이용
+  * User, Group에게 Privilige 권한 부여
+* Redshift Serverless
+  * EC2 Instance 관리 불필요
+  * Optimize Costs & Performance
+  * 쉬운 개발 & Test 환경 구축 가능
+  * 쉬운 Ad-hoc 환경 구성 가능
 
 ### 5. 참고
 
