@@ -584,7 +584,31 @@ adsense: true
 
 ### 5. Visualization
 
+#### 5.1. QuickSight
 
+* Data 시각화
+* Pagenation 기능 제공
+* Alert 기능 제공
+* Serverless
+* Data Source
+  * Redshift, Aurora/RDS, Athena, OpenSearch, IoT Analytics, Files (Excel, CSV, TSV)
+* SPICE : QuickSight에서 이용하는 In-memory Engine
+* Ad-hoc Query에 특화
+* Security
+  * Multi-factor Auth
+  * VPC Connectivity
+  * Row-level Security
+  * Private VPC Access
+  * Quicksight는 기본적으로 동일 Region의 Data Source에만 접근 가능
+* Pricing
+  * 연간 구독, 매달 구독
+  * Extra SPICE Capacity 이용시 추가 비용 청구
+* Dashboard
+  * Read-only
+  * 외부에 공유 가능
+  * Embedding 가능
+  * Active Directory, Cognito, SSO를 통한 인증
+  * Javascript SDK, QuickSight API 제공
 
 ### 6. 참고
 
