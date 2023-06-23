@@ -564,12 +564,14 @@ adsense: true
   * VACUUM REINDEX :
 * Resize
   * Elastic Resize
-    * 빠르게 Node 추가/제거 가능
+    * 빠르게 Node 추가/제거 또는 Node Type 변경 (DS2 to RA3) 수행 가능
+    * 변경 가능한 노드 대수 제한 존재 (2, 4, 6, 8...)
     * 몇 분동안 Cluster Down 발생, Connection Open 유지
-    * DC2, RA3 Node에 대해서 Node 추가/제거에 제한 존재
   * Classic Resize
     * 기존의 Resize 방식
-    * 몇시간 정도 Cluster가 Read-only Mode로 동작
+    * Node 추가/제거, Node Type 변경 가능
+    * 자유롭게 노드 대수 설정 가능
+    * 신규 Cluster를 생성하고 기존의 Cluster에서 Data를 복제하는 방식이기 때문에 몇시간 정도 Cluster가 Read-only Mode로 동작
   * Snapshot
     * Snapshot을 수행하고 새로운 Size의 Cluster 생성
 * Security
@@ -619,3 +621,4 @@ adsense: true
 ### 6. 참고
 
 * [https://www.udemy.com/course/aws-data-analytics/](https://www.udemy.com/course/aws-data-analytics/)
+* [https://hevodata.com/learn/redshift-elastic-resize/](https://hevodata.com/learn/redshift-elastic-resize/)
