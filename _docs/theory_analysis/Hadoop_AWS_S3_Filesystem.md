@@ -1,8 +1,8 @@
 ---
 title: Hadoop AWS S3 Filesystem
 category: Theory, Analysis
-date: 2023-06-24T12:00:00Z
-lastmod: 2023-06-24T12:00:00Z
+date: 2023-06-23T12:00:00Z
+lastmod: 2023-06-23T12:00:00Z
 comment: true
 adsense: true
 ---
