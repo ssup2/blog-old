@@ -1,5 +1,5 @@
 ---
-title: 자격증 AWS Certified Data Analytics
+title: 자격증 AWS Certified Data Analytics 이론 정리
 category: Record
 date: 2023-05-29T12:00:00Z
 lastmod: 2023-05-29T12:00:00Z
