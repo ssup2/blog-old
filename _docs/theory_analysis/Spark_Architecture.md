@@ -26,7 +26,6 @@ Cluster Manager는 Task를 수행하는 역할을 수행하며, Spark만을 이�
 Library는 Spark Core를 기반으로 다양한 Type의 Workload 처리를 도와주는 역할을 수행한다. Library는 다양한 개발 언어를 통해서 이용할 수 있다. Library는 Spark SQL, MLib, GraphX, Streaming으로 구분지을 수 있다.
 
 * Spark SQL : 행과 열로 구성된 Data를 처리하기 위해서 생긴 DataFrame 자료 구조를 제공한다. DataFrame에 저장된 Data는 Spark SQL Query를 통해서 조회가 가능하다. Hive를 통해서 행과 열로 구성된 Data를 Dataframe으로 가져올 수 있으며, JDBC/ODBC도 지원하기 때문에 Database에 저장된 Schema도 Dataframe으로 가져올 수 있다.
- DataFrame으로 가져올 수 있다.
 * MLib : Machine Learning이나 통계에 필요한 알고리즘을 제공한다. Regression, Clustering, Classification, Collaborative Filtering, Pattern Mining 등의 알고리즘을 이용할 수 있다. HDFS, HBase 등의 Hadoop 기반의 System에서 Data를 읽고 처리할 수 있다.
 * GraphX : Graphic Data 처리를 위한 알고리즘을 제공한다. 현재는 거의 이용되지 않는다.
 * Streaming : Kafka, Flume과 같은 Streaming Source로부터 Streaming Data를 실시간으로 수신하고 처리하는 기능을 제공한다. 시간별 RDD의 집합으로 구성되는 Dstream를 활용하여 Data를 처리한다. Dstream을 DataFrame으로 변환하여 처리도 가능하다.
