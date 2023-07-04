@@ -29,7 +29,7 @@ S3A는 S3N과의 하위 호환성을 지원한다. 따라서 S3N을 이용하는
 
 ### 2. EMRFS on EMR Cluster
 
-AWS의 EMR Cluster에서는 EMRFS을 통해서 S3를 저장소로 이용 가능하다. EMR Cluster 내부의 App에서 "s3://", "s3a://" URL로 시작하는 File 접근시 EMRFS을 이용한다. 따라서 "s3://", "s3a://" 동일한 URL을 이용하여도 일반적인 Hadoop Cluster 또는 EMR Cluster인지에 따라서 내부 동작이 다르다. EMRFS의 경우에는 "s3a://" 보다 "s3://" 이용을 권장하고 있으며, "s3a://"을 지원하지 않는다. 내부적으로 "EMR S3-optimized Comitter"를 이용한다.
+AWS의 EMR Cluster에서는 EMRFS을 통해서 S3를 저장소로 이용 가능하다. EMR Cluster 내부의 App에서 "s3://", "s3a://" URL로 시작하는 File 접근시 EMRFS을 이용한다. 따라서 "s3://", "s3a://" 동일한 URL을 이용하여도 일반적인 Hadoop Cluster 또는 EMR Cluster인지에 따라서 내부 동작이 다르다. EMRFS의 경우에는 "s3a://" 보다 "s3://" 이용을 권장하고 있으며, "s3a://"을 지원하지 않는다. 내부적으로 "EMR S3-optimized Committer"를 이용한다.
 
 ### 3. 참고
 
