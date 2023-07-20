@@ -19,7 +19,7 @@ Data Plan의 Envoy는 모든 App Pod의 별도의 Container안에서 동작하�
 
 ![[그림 2] Istio Architecture After v1.5]({{site.baseurl}}/images/theory_analysis/Istio_Architecture/Istio_Architecture_1.5.PNG){: width="750px"}
 
-Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]는 v1.5 Version 이후의 Istio Architecture를 나타내고 있다. Pliot, Mixer, Citadel이 Istiod라고 불리는 하나의 Component(Binary)로 통합되었고, Mixer는 Deprecated 되었다.
+Istio는 v1.5 Version 이후부터 Architecture가 변경되었다. [그림 2]는 v1.5 Version 이후의 Istio Architecture를 나타내고 있다. Pliot, Galley, Citadel이 Istiod라고 불리는 하나의 Component(Binary)로 통합되었고, Mixer는 Deprecated 되었다.
 
 Mixer가 수행하던 App 사이의 Packet 허용 정책은 Envoy의 기능 및 Citadel의 보안 기능으로 대체되었다. Mixer가 수행하던 Rate Limiting도 Envoy의 기능을 이용하도록 변경되었다. Mixer가 수집하던 pilot-agent 및 Envoy의 Metric 정보는 Prometheus, Jeager에서 직접 수집하도록 변경되었다.
 
