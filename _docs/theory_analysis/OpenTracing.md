@@ -45,8 +45,15 @@ Span은 다른 Span을 호출할 경우 SpanContext라고 불리는 Data도 같�
 
 Baggage는 하나의 Trace 내부에서 Span 사이에 공유(전달)되어야 하는 Data를 저장하는 공간이다. Baggage는 Key-Value Pair로 구성되어 있다.
 
-### 2. 참조
+### 2. Protocol
+
+OpenTracing을 지원하는 Protocol은 [Trace-Context HTTP Headers](https://github.com/w3c/trace-context/tree/main/spec)과 [B3 HTTP Headers](https://github.com/openzipkin/b3-propagation)가 존재한다. 두 Protocol 모두 현재 많이 이용되고 있는 Protocol이다.
+
+### 3. 참조
 
 * [https://opentracing.io/docs/overview/](https://opentracing.io/docs/overview/)
 * [https://opentracing.io/docs/overview/spans/](https://opentracing.io/docs/overview/spans/)
 * [https://github.com/opentracing/specification/blob/master/specification.md](https://github.com/opentracing/specification/blob/master/specification.md)
+* [https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md](https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md)
+* [https://github.com/openzipkin/b3-propagation](https://github.com/openzipkin/b3-propagation)
+* [https://github.com/w3c/trace-context/tree/main/spec](https://github.com/w3c/trace-context/tree/main/spec)
