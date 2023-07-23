@@ -7,10 +7,8 @@ comment: true
 adsense: true
 ---
 
-EMR on EKS를 분석한다.
+EMR on EKS를 분석한다. 
 
 ### 1. EMR on EKS
 
 ### 2. 참조
-
-* 
