@@ -1,6 +1,6 @@
 ---
 title: AWS Spark on EKS
-category: 
+category: Theory, Analysis
 date: 2023-07-22T12:00:00Z
 lastmod: 2023-07-22T12:00:00Z
 comment: true
