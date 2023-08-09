@@ -19,7 +19,7 @@ Spark에서 Kubernetes Cluster를 대상으로 Spark Job을 제출하는 방법�
 
 ![[그림 1] spark-submit CLI Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-submit_Architecture.PNG){: width="600px"}
 
-spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]은 spark-submit CLI으로 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI를 통해서 Driver Pod가 생성이 되고, Driver Pod에서는 다시 Executor Pod를 생성하여 Spark Job을 처리한다. spark-submit으
+spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]은 spark-submit CLI으로 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI를 통해서 Driver Pod가 생성이 되고, Driver Pod에서는 다시 Executor Pod를 생성하여 Spark Job을 처리한다. spark-submit CLI를 통한 Spark Job의 상세한 설정은 "--conf" Parameter  또는 "--properties-file" Parameter를 통해서 [Property](https://spark.apache.org/docs/latest/configuration.html) 설정이 가능하다.
 
 {% highlight shell %}
 spark-submit \
@@ -67,11 +67,15 @@ data:
 <figcaption class="caption">[파일 1] Driver Pod ConfigMap Example</figcaption>
 </figure>
 
-[파일 1]은 Driver Pod를 위한 ConfigMap을 나타내고 있다.
+[파일 1]은 Driver Pod를 위한 ConfigMap을 나타내고 있다. spark-submit CLI를 실행하면서 설정을 통해서 Driver Pod의 Event Log의 경로 설정이 가능하다. 일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster의 Pod로 동작하는 Spark History Server에 의해서 시각화 할 수 있다.
 
 ##### 1.1.2. Spark Operator
 
 ![[그림 2] Spark Operator Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-operator_Architecture.PNG)
+
+Spark Operator는 Spark Job 제출을 Kubernetes Object로 정의하도록 도와주는 도구이다. [그림 2]는 Spark Operator를 통해서 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI의 Architecture와 비교시 가장 큰 차이점은 User가 spark-submit CLI를 이용하지 않고 SparkApplication, ScheduledSparkApplication Object를 정의하여 Spark Job을 제출한다는 점이다.
+
+SparkApplication, ScheduledSparkApplication 모두 Spark Operator가 제공하는 고유의 Object이다. SparkApplication은 Add-hoc 형태로 하나의 Spark Job을 제출하는 경우 이용하며, ScheduledSparkApplication Object는 Cron과 깉이 주기적으로 Spark Job을 제출해야하는 경우 이용한다.
 
 {% highlight yaml linenos %}
 apiVersion: sparkoperator.k8s.io/v1beta2
