@@ -19,7 +19,7 @@ Spark에서 Kubernetes Cluster를 대상으로 Spark Job을 제출하는 방법�
 
 ![[그림 1] spark-submit CLI Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-submit_Architecture.PNG){: width="600px"}
 
-spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]은 spark-submit으로 Spark Job 제출시 Architecture를 나타내고 있다.
+spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]은 spark-submit CLI으로 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI를 통해서 Driver Pod가 생성이 되고, Driver Pod에서는 다시 Executor Pod를 생성하여 Spark Job을 처리한다. spark-submit으
 
 {% highlight shell %}
 spark-submit \
@@ -32,8 +32,10 @@ spark-submit \
  local:///usr/lib/spark/examples/jars/spark-examples.jar 20
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[Shell 1] spark-submit Example</figcaption>
+<figcaption class="caption">[Shell 1] spark-submit CLI Example</figcaption>
 </figure>
+
+[Shell 1]은 Kubernetes Cluster에 spark-submit CLI를 통해서 Spark Job을 제출하는 예제를 나타내고 있다. Spark Job이 실행되는 Kubernetes Cluster 정보 및 Driver Pod, Spark Job 구동에 필요한 설정들을 spark-submit CLI의 Parameter로 설정한다. spark-submit CLI는 Driver Pod 및 Spark Job 구동에 필요한 정보를 ConfigMap으로 생성한 다음, 생성한 ConfigMap을 Driver Pod의 Volume으로 Mount하여 Driver Pod 내부의 Driver가 참조할 수 있도록 만든다.
 
 {% highlight yaml linenos %}
 apiVersion: v1
@@ -65,6 +67,8 @@ data:
 <figcaption class="caption">[파일 1] Driver Pod ConfigMap Example</figcaption>
 </figure>
 
+[파일 1]은 Driver Pod를 위한 ConfigMap을 나타내고 있다.
+
 ##### 1.1.2. Spark Operator
 
 ![[그림 2] Spark Operator Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-operator_Architecture.PNG)
@@ -81,12 +85,48 @@ spec:
   image: gcr.io/spark/spark:v3.1.1
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar
+  driver:
+    cores: 1
+    memory: 512m
+  executor:
+    cores: 1
+    instances: 1
+    memory: 512m
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] SparkApplication Example</figcaption>
 </figure>
 
-### 2. Timeout
+{% highlight yaml linenos %}
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: ScheduledSparkApplication
+metadata:
+  name: spark-pi-scheduled
+  namespace: default
+spec:
+  schedule: "@every 5m"
+  concurrencyPolicy: Allow
+  successfulRunHistoryLimit: 1
+  failedRunHistoryLimit: 3
+  template:
+    type: Scala
+    mode: cluster
+    image: gcr.io/spark/spark:v3.1.1
+    mainClass: org.apache.spark.examples.SparkPi
+    mainApplicationFile: local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar
+    driver:
+      cores: 1
+      memory: 512m
+    executor:
+      cores: 1
+      instances: 1
+      memory: 512m
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 2] ScheduledSparkApplication Example</figcaption>
+</figure>
+
+### 2. Executor Timeout
 
 ### 3. Scheduler
 
