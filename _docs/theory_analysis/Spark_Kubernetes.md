@@ -101,6 +101,8 @@ spec:
 <figcaption class="caption">[파일 2] SparkApplication Example</figcaption>
 </figure>
 
+[파일 2]는 SparkApplication의 예제를 나타내고 있다. Spec 부분에 Spark Job을 수행하기 위한 설정들이 존재하는 것을 확인할 수 있다.
+
 {% highlight yaml linenos %}
 apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: ScheduledSparkApplication
@@ -127,12 +129,18 @@ spec:
       memory: 512m
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 2] ScheduledSparkApplication Example</figcaption>
+<figcaption class="caption">[파일 3] ScheduledSparkApplication Example</figcaption>
 </figure>
+
+[파일 3]은 ScheduledSparkApplication의 예제를 나타내고 있다. ScheduledSparkApplication의 Spec의 Template 부분은 SparkApplication의 Spec 부분과 동일하다. 다만 ScheduledSparkApplication은 Spec에 위치한 Schedule, Concurrency Policy 등은 ScheduledSparkApplication에서만 이용이 가능하다.
 
 ### 2. Executor Timeout
 
 ### 3. Scheduler
+
+#### 3.1. Yunicorn
+
+#### 3.2. 
 
 ### 4. 참조
 
