@@ -35,8 +35,8 @@ spark-submit \
  --executor-memory 512m \
  --conf spark.kubernetes.namespace=spark \
  --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
- --conf spark.kubernetes.container.image=895885662937.dkr.ecr.us-west-2.amazonaws.com/spark/emr-6.10.0:latest \
- local:///usr/lib/spark/examples/jars/spark-examples.jar 20
+ --conf spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest \
+ local:///opt/spark/examples/src/main/python/pi.py
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[Shell 1] spark-submit CLI Example</figcaption>
@@ -99,7 +99,32 @@ data:
 
 [파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후에 Driver로 부터 Task를 받아 처리한다.
 
-[그림 1]의 빨간색 화살표는 Spark Driver의 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. spark-submit CLI로 Spark Job을 제출하는 경우 Spark Driver의 Event Log를 어디에 저장할지 지정이 가능하다. 일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster에 설치된 Spark History Server에 의해서 시각화된다.
+{% highlight shell %}
+spark-submit \
+ --master k8s://87C2A505AF21618F97F402E454E530AF.yl4.ap-northeast-2.eks.amazonaws.com \
+ --deploy-mode cluster \
+ --class org.apache.spark.examples.SparkPi \
+ --driver-cores 1 \
+ --driver-memory 512m \
+ --num-executors 1 \
+ --executor-cores 1 \
+ --executor-memory 512m \
+ --conf spark.kubernetes.namespace=spark \
+ --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
+ --conf spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest \
+ local:///opt/spark/examples/src/main/python/pi.py
+ --conf spark.eventLog.enabled=true \
+ --conf spark.eventLog.dir=s3a://ssup2-spark/history \
+ --conf spark.kubernetes.driver.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
+ --conf spark.kubernetes.driver.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
+ --conf spark.kubernetes.executor.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
+ --conf spark.kubernetes.executor.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] spark-submit CLI with Event Log Example</figcaption>
+</figure>
+
+[그림 1]의 빨간색 화살표는 Spark Driver의 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. spark-submit CLI로 Spark Job을 제출하는 경우 [Shell 2]와 같이 Spark Driver의 Event Log를 어디에 저장할지 지정이 가능하다. 일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster에 설치된 Spark History Server에 의해서 시각화된다.
 
 ##### 1.1.2. Spark Operator
 
@@ -161,7 +186,7 @@ spec:
       memory: 512m
 {% endhighlight %}
 <figure>
-<figcaption class="caption">[파일 3] ScheduledSparkApplication Example</figcaption>
+<figcaption class="caption">[파일 4] ScheduledSparkApplication Example</figcaption>
 </figure>
 
 [파일 4]는 ScheduledSparkApplication의 예제를 나타내고 있다. ScheduledSparkApplication의 Spec의 Template 부분은 SparkApplication의 Spec 부분과 동일하다. 다만 ScheduledSparkApplication은 Spec에 위치한 Schedule, Concurrency Policy 등은 ScheduledSparkApplication에서만 이용이 가능하다.
