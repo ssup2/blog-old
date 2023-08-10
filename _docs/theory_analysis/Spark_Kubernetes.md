@@ -97,9 +97,9 @@ data:
 <figcaption class="caption">[파일 2] Executor Pod ConfigMap Example</figcaption>
 </figure>
 
-[파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후에 Driver로 부터 Task를 받아 처리한다. 
+[파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후에 Driver로 부터 Task를 받아 처리한다.
 
-일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster의 Pod로 동작하는 Spark History Server에 의해서 시각화 할 수 있다.
+[그림 1]의 빨간색 화살표는 Spark Driver의 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. spark-submit CLI로 Spark Job을 제출하는 경우 Spark Driver의 Event Log를 어디에 저장할지 지정이 가능하다. 일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster에 설치된 Spark History Server에 의해서 시각화된다.
 
 ##### 1.1.2. Spark Operator
 
