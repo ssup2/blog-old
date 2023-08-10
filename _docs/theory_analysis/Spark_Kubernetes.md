@@ -191,7 +191,7 @@ spec:
 
 [파일 4]는 ScheduledSparkApplication의 예제를 나타내고 있다. ScheduledSparkApplication의 Spec의 Template 부분은 SparkApplication의 Spec 부분과 동일하다. 다만 ScheduledSparkApplication은 Spec에 위치한 Schedule, Concurrency Policy 등은 ScheduledSparkApplication에서만 이용이 가능하다.
 
-Spark Operator 이용시 spark-submit CLI를 이용할 경우와 다른 또 한가지는 Spark Driver에서 제공하는 Web UI를 User가 접근할 수 있도록 Service 및 Ingress를 생성해 준다는 점이다.
+Spark Operator 이용 시 spark-submit CLI를 이용할 경우와 다른 또 한가지는 차이점은, Spark Operator는 Spark Driver에서 제공하는 Web UI를 User가 접근할 수 있도록 Service 및 Ingress를 생성해 준다는 점이다. [그림 2]의 초록색 화살표는 Spark Driver의 Service, Ingress를 통해서 사용자가 Spark Web UI에 접근하는 과정을 나타내고 있다.
 
 ### 2. Executor Timeout
 
