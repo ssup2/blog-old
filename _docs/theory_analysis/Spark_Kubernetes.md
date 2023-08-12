@@ -132,7 +132,7 @@ spark-submit \
 
 Spark Operator는 Spark Job 제출을 Kubernetes Object로 정의하도록 도와주는 도구이다. [그림 2]는 Spark Operator를 통해서 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI의 Architecture와 비교시 가장 큰 차이점은 User가 spark-submit CLI를 이용하지 않고 SparkApplication, ScheduledSparkApplication Object를 정의하여 Spark Job을 제출한다는 점이다.
 
-SparkApplication, ScheduledSparkApplication 모두 Spark Operator가 제공하는 고유의 Object이다. SparkApplication은 Add-hoc 형태로 하나의 Spark Job을 제출하는 경우 이용하며, ScheduledSparkApplication Object는 Cron과 깉이 주기적으로 Spark Job을 제출해야하는 경우 이용한다. SparkApplication, ScheduledSparkApplication Object가 생성되면 Spark Operator 내부에 존재하는 spark-submit CLI가 Spark Job 제출을 수행한다. SparkApplication, ScheduledSparkApplication의 상세한 Spec은 [Operator API Page](https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html)에서 확인할 수 있다.
+SparkApplication, ScheduledSparkApplication 모두 Spark Operator가 제공하는 고유의 Object이다. SparkApplication은 Ad-hoc 형태로 하나의 Spark Job을 제출하는 경우 이용하며, ScheduledSparkApplication Object는 Cron과 깉이 주기적으로 Spark Job을 제출해야하는 경우 이용한다. SparkApplication, ScheduledSparkApplication Object가 생성되면 Spark Operator 내부에 존재하는 spark-submit CLI가 Spark Job 제출을 수행한다. SparkApplication, ScheduledSparkApplication의 상세한 Spec은 [Operator API Page](https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html)에서 확인할 수 있다.
 
 {% highlight yaml linenos %}
 apiVersion: sparkoperator.k8s.io/v1beta2
