@@ -168,7 +168,7 @@ On-Demand Capacity Reservation은 현재부터 특정 기간까지 특정 Instan
 
 Reserved Instance와 차이점은 Reserved Instance는 1년 또는 3년 2가지만 약정 기간을 설정할 수 있지만, On-Demand Capacity Reservation은 현재부터 특정 날짜까지 자유롭게 예약이 가능하다. 또한 Reserved Instance는 약정 기간까지 EC2 Instance를 이용하겠다라는 계약이지 실제 EC2 Instance 예약하고 선점하지 않는다. 반면 On-Demand Capacity Reservation는 계약 기간만큼 실제 EC2 Instance를 예약하고 선점하여 다른 사용자가 이용하지 못하도록 한다.
 
-### 3. 참조
+### 5. 참조
 
 * EC2 Instance Type : [https://aws.amazon.com/ec2/instance-types/](https://aws.amazon.com/ec2/instance-types/)
 * Steal Time : [https://stackoverflow.com/questions/20133739/amazon-aws-micro-instance-with-100-cpu-and-unresponsive](https://stackoverflow.com/questions/20133739/amazon-aws-micro-instance-with-100-cpu-and-unresponsive)
