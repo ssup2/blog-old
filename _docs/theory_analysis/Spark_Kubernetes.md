@@ -1,8 +1,8 @@
 ---
 title: Spark on Kubernetes
 category: Theory, Analysis
-date: 2023-06-16T12:00:00Zpus
-lastmod: 2023-06-16T12:00:00Z
+date: 2023-08-12T12:00:00Zpus
+lastmod: 2023-08-12T12:00:00Z
 comment: true
 adsense: true
 ---
@@ -197,9 +197,15 @@ Spark Operator 이용 시 spark-submit CLI를 이용할 경우와 다른 또 한
 
 Kubernetes의 Default Scheduler는 단순히 각 Pod 단위로 Scheduling을 수행할 뿐 Pod 사이의 관계까지 고려하여 Scheduling을 수행하지 않는다. Kubernetes에서는 이러한 단점을 완화시키기 위해서 Third-party Scheduler 또는 사용자가 직접 Customer Scheduler를 개발하고 이용할 수 있도록 도와주는 Multiple Scheduler 기능을 제공한다.
 
-Spark Application의 경우 Driver Pod가 Executor Pod들을 직접 생성하여 이용한다는 특징 때문에 Batch Scheduling 기법이 유용하며, Shuffle 연산에 의해서 Executor Pod 사이의 많은 Data를 주고 받는다는 특징 때문에 Application-aware Scheduling 기법이 유용하다. 이러한 Scheduling 기법들은 일반적으로 YuniKorn, Volcano와 같은 Third-party Scheduler를 통해서 이용할 수 있다. 
+Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 Executor Pod들을 직접 생성하여 이용한다는 특징으로 인해서 다수의 Pod를 한번에 Scheduling하는 Batch Scheduling 기법이 유용한 경우가 많다. 또한 Spark Job의 Shuffle 연산에 의해서 Executor Pod들은 서로 많은 Data를 주고 받는다는 특징 때문에, Executor Pod들을 가능한 동일한 Node에 배치시키는 Application-aware Scheduling 기법이 유용한 경우가 많다. 이러한 Scheduling 기법들은 일반적으로 YuniKorn, Volcano와 같은 Third-party Scheduler를 통해서 이용할 수 있다.
 
 #### 2.1. Batch Scheduling
+
+Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 직접 Executor Pod들을 직접 생성한다는 특징을 갖는다. 이는 Kubernetes Cluster에서 Cluster Auto-scailing을 이용하고 있지 않는다면 Driver가 생성한 Executor Pod들이 Resource 부족으로 생성에 실패할 수 있다는걸 의미한다. Driver Pod가 생성된 이후에 Resource 부족으로 인해서 모든 Executor Pod들의 생성이 실패한다면, Spark Job 처리 실패뿐만 아니라 Driver Pod 구동에 이용한 Resource의 불필요한 낭비도 발생하게 된다.
+
+이러한 문제가 발생하는 이유는 Spark Job이 제출된 시점에는 Driver Pod만 생성이 되고, Driver Pod가 생성한 Executor Pod들을 Driver Pod 내부에서 이용한다는 사실을 Kubernetes의 Default Scheduler가 인지하지 못하기 때문이다. Driver Pod와 모든 Executor Pod가 이용 가능한 Resource를 확보할 경우에만 한번에 모든 Pod들을 Scheduling하는 Batch Scheduling 기법을 이용하면 이러한 문제를 해결할 수 있다.
+
+Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-scaler가 동작하고 있는 환경에서도 빠르게 Spark Job을 처리할 수 있도록 도와준다. Batch Scheduling을 이용하지 않는다면 Driver Pod가 생성되면서 Cluster Auto-scailing이 한번 발생하고 이후에 Executor Pod들이 생성되면서 Auto-scailing이 발생하여 총 2번의 Auto-scailing이 발생한다. 하지만 Batch Scheduling을 이용하면 한번의 Auto-scailing으로 Driver Pod와 Executor Pod들이 필요한 Resource를 확보할 수 있기 때문이다.
 
 #### 2.2. Application-awre Scheduling
 
