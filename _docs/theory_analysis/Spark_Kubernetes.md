@@ -97,7 +97,7 @@ data:
 <figcaption class="caption">[파일 2] Executor Pod ConfigMap Example</figcaption>
 </figure>
 
-[파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후에 Driver로 부터 Task를 받아 처리한다.
+[파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
 
 {% highlight shell %}
 spark-submit \
@@ -193,7 +193,15 @@ spec:
 
 Spark Operator 이용 시 spark-submit CLI를 이용할 경우와 다른 또 한가지는 차이점은, Spark Operator는 Spark Driver에서 제공하는 Web UI를 User가 접근할 수 있도록 Service 및 Ingress를 생성해 준다는 점이다. [그림 2]의 초록색 화살표는 Spark Driver의 Service, Ingress를 통해서 사용자가 Spark Web UI에 접근하는 과정을 나타내고 있다.
 
-### 2. Scheduler
+### 2. Scheduler for Spark
+
+Kubernetes의 Default Scheduler는 단순히 각 Pod 단위로 Scheduling을 수행할 뿐 Pod 사이의 관계까지 고려하여 Scheduling을 수행하지 않는다. Kubernetes에서는 이러한 단점을 완화시키기 위해서 Third-party Scheduler 또는 사용자가 직접 Customer Scheduler를 개발하고 이용할 수 있도록 도와주는 Multiple Scheduler 기능을 제공한다.
+
+Spark Application의 경우 Driver Pod가 Executor Pod들을 직접 생성하여 이용한다는 특징 때문에 Batch Scheduling 기법이 유용하며, Shuffle 연산에 의해서 Executor Pod 사이의 많은 Data를 주고 받는다는 특징 때문에 Application-aware Scheduling 기법이 유용하다. 이러한 Scheduling 기법들은 일반적으로 YuniKorn, Volcano와 같은 Third-party Scheduler를 통해서 이용할 수 있다. 
+
+#### 2.1. Batch Scheduling
+
+#### 2.2. Application-awre Scheduling
 
 ### 3. 참조
 
