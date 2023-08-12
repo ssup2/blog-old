@@ -141,11 +141,11 @@ metadata:
   name: spark-pi
   namespace: default
 spec:
-  type: Scala
+  type: Python
   mode: cluster
-  image: gcr.io/spark/spark:v3.1.1
-  mainClass: org.apache.spark.examples.SparkPi
-  mainApplicationFile: local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar
+  image: "public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest"
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  sparkVersion: "3.1.1"
   driver:
     cores: 1
     memory: 512m
@@ -172,11 +172,11 @@ spec:
   successfulRunHistoryLimit: 1
   failedRunHistoryLimit: 3
   template:
-    type: Scala
+    type: Python
     mode: cluster
-    image: gcr.io/spark/spark:v3.1.1
-    mainClass: org.apache.spark.examples.SparkPi
-    mainApplicationFile: local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar
+    image: "public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest"
+    mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+    sparkVersion: "3.1.1"
     driver:
       cores: 1
       memory: 512m
