@@ -17,7 +17,7 @@ Spark에서 Kubernetes Cluster를 대상으로 Spark Job을 제출하는 방법�
 
 ##### 1.1.1. spark-submit CLI
 
-![[그림 1] spark-submit CLI Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-submit_Architecture.PNG){: width="600px"}
+![[그림 1] spark-submit CLI Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-submit_Architecture.PNG){: width="700px"}
 
 spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]의 파링색 화살표는 spark-submit CLI를 통해서 Spark Job이 Kubernetes Cluster로 제출될 경우 Spark Job의 처리 과정을 나타내고 있다.
 
