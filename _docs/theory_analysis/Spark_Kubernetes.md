@@ -197,7 +197,7 @@ Spark Operator 이용 시 spark-submit CLI를 이용할 경우와 다른 또 한
 
 Kubernetes의 Default Scheduler는 단순히 각 Pod 단위로 Scheduling을 수행할 뿐 Pod 사이의 관계까지 고려하여 Scheduling을 수행하지 않는다. Kubernetes에서는 이러한 단점을 완화시키기 위해서 Third-party Scheduler 또는 사용자가 직접 Customer Scheduler를 개발하고 이용할 수 있도록 도와주는 Multiple Scheduler 기능을 제공한다.
 
-Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 Executor Pod들을 직접 생성하여 이용한다는 특징으로 인해서 다수의 Pod를 한번에 Scheduling하는 **Batch Scheduling** 기법이 유용한 경우가 많다. 또한 Spark Job의 Shuffle 연산에 의해서 Executor Pod들은 서로 많은 Data를 주고 받는다는 특징 때문에, Executor Pod들을 가능한 동일한 Node에 배치시키는 **Application-aware Scheduling** 기법이 유용한 경우가 많다. 이러한 Scheduling 기법들은 일반적으로 **YuniKorn**, **Volcano**와 같은 Third-party Scheduler를 통해서 이용할 수 있다.
+Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 Executor Pod들을 직접 생성하여 이용한다는 특징으로 인해서 다수의 Pod를 한번에 Scheduling하는 **Batch Scheduling** 기법이 유용한 경우가 많다. 또한 Spark Job의 Shuffle 연산에 의해서 Executor Pod들은 서로 많은 Data를 주고 받는다는 특징 때문에, Executor Pod들을 가능한 동일한 Node에 배치시키는게 가능한 **Application-aware Scheduling** 기법이 유용한 경우가 많다. 이러한 Scheduling 기법들은 일반적으로 **YuniKorn**, **Volcano**와 같은 Third-party Scheduler를 통해서 이용할 수 있다.
 
 #### 2.1. Batch Scheduling
 
