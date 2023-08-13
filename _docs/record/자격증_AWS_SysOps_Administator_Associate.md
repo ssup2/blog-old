@@ -29,6 +29,24 @@ adsense: true
     * Partition 장애시 다른 Partition에 영향을 주지 않음
     * 각 AZ당 7개의 Partition이 존재하며, 각 Partition당 최대 100개의 EC2 Instance 존재 가능
 
+  * Luanch Exception
+    * InstanceLimitExcceded
+      * Region에서 이용가능한 vCPU 개수 초과
+      * Service Quota로 증설 요청 가능
+    * InsufficientInstanceCapacity
+      * AZ에 이용가능한 Instance가 존재하지 않음
+      * AWS의 Resource 부족 문제
+      * 다른 Instance Type, 다른 AZ로 선택 생성하여 문제 우회 가능
+    * Instance Terminates Immediately
+      * EBS Volume Limit에 도달, EBS Snapshot 충동, EBS Volume이 암호화 되어 있지만 KMS 접근 권한이 없을 경우
+
+  * Metric
+    * without CloudWatch Agent
+      * 5분 간격으로 Metric 수집, 1분 간격으로 Metric 수집 변경 가능 하지만 추가 비용 발생
+      * CPU 사용률, Network I/O, Disk I/O Instance 상태 정보 수집 가능
+    * with CloudWatch Agent
+      * Memory 사용륭, Disk 사용률, Process 상태 (procstat Plugin)
+
 ### 3. 참고
 
 * [https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate](https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate)
