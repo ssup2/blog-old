@@ -46,6 +46,15 @@ adsense: true
       * CPU 사용률, Network I/O, Disk I/O Instance 상태 정보 수집 가능
     * with CloudWatch Agent
       * Memory 사용륭, Disk 사용률, Process 상태 (procstat Plugin)
+      * 수집 간격 설정 가능 (최소 간격 1초)
+
+  * Status Check
+    * System Status Check
+      * AWS System의 문제 검사 (Hypervisor, System Power..)
+      * 문제 발생시 Instance를 Stop -> Start 시켜 복구 가능 (새로운 Hypervisor로 EC2 Instance Migration 수행)
+    * Instance Status Check
+      * EC2 Instance의 설정 문제 또는 EC2 Instance 내부의 문제 검사
+      * 문제 발생시 관련 설정 변경 및 Instance 재시작을 통한 문제 복구 수행
 
 ### 3. 참고
 
