@@ -65,6 +65,86 @@ adsense: true
 * AMI Tag를 활용하여 Production 환경에서는 Production Tag가 붙어있는 AMI만 이용하도록 강제 가능
   * IAM Permission 활용 및 AWS Config 활용
 
-### 4. 참고
+### 4. Systems Manager
+
+* EC2 Instance, On-premise System 관리 기능 수행
+* 문제 탐지
+* Patch 수행
+* Windows, Linux에서 실행
+* CloudWatch Metric, Dashboard와 연동해서 동작
+* AWS Config와 연동 수행
+* 공짜 이용
+* EC2 Instance에 Agent 설치 필요
+  * Amazon Linux2, Ubuntu에 기본 설치
+* EC2 Instance에 SSM Action 수행 권한을 갖는 Role이 할당되어 있어야함
+
+#### 4.1. SSM Resource Group
+
+* Tag 기반으로 Resource Group 지정 생성 가능
+
+#### 4.2. SSM Document & Run Command
+
+* JSON, YAML 포맷 형태
+* Parameter 지정
+* Action 정의
+* Run Command
+  * Document 또는 Command 실행
+  * 다수의 EC2 Instance 대상으로 실행 가능 (with Resource Group)
+  * IAM, CloudTrail과 곹ㅇ함
+  * SSH 불필요
+  * 수행 결과는 CloudWatch, S3에 저장
+  * SNS를 통해서 상태 전송 가능
+  * EventBridge를 통해서 수행 가능
+
+#### 4.3. SSM Automation
+
+* 공통적으로 수행하는 유지, 배포 작업을 도와주는 서비스
+  * Ex) Restart Instance, Create AMI, EBS Snapshot
+* Automation Runbook
+  * Automation을 위한 Document
+  * Pre-defined 또는 User가 직접 제작 가능
+
+#### 4.4. SSM Parameter Store
+
+* Config 또는 Secret을 암호화 하여 저장하는 Storage (with KMS)
+* Serverless
+* Versioning 지원
+* CloudFormation과 통합
+* Directory 형태로 계층을 이룸
+* Advanced Tier (유료)
+  * Parameter Policy 지정 가능
+  * Expiration, ExpirationNotification, NoChangeNotification 지정 가능
+
+#### 4.5. SSM Inventory
+
+* EC2 Instance, On-premise Metadata 수집
+* Metadata
+  * Software, OS Driver, OS Update, Running Services
+* S3 저장 및 Athena Query + QuickSight를 통해서 시각화 가능
+* Metadata 수집 주기 설정 가능
+
+#### 4.6. SSM Stage Manager
+
+* EC2 Instance, On-premise 관리를 위한 여러 동작들을 묶어서 자동화 기능 제공
+* 언제 관리 동작을 수행할지 시간 설정 가능
+
+#### 4.7. SSM Patch Manager
+
+* EC2 Instance, On-premise Patch 수행
+* Patch는 On-demand 또는 Maintenance Windows 시간에 수행
+* Patch 수행 이후 결과 보고서 발행
+* Patch Baseline
+  * 수행할 Patch와 수행하면 안되는 Patch 정의
+  * 사용자가 Custom Patch Baseline 작성 가능
+  * 기본적으로 Critical Patch나 보안 관련 Patch는 설치 되도록 설정되어 있음
+
+#### 4.8. SSM Session Manager
+
+* EC2 Instance, On-premise에 Shell 접근 기능 제공
+* SSH 방식 X, Bastion Host 불필요, SSH Key 불필요
+* Session Log는 S3, CloudWatch Log에 저장 가능
+* CloudTrail에 StartSession Event 기록이 남음
+
+### 5. 참고
 
 * [https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate](https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate)
