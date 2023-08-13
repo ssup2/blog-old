@@ -205,7 +205,7 @@ Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driv
 
 이러한 문제가 발생하는 이유는 Spark Job이 제출된 시점에는 Driver Pod만 생성이 되고, Driver Pod가 생성한 Executor Pod들을 Driver Pod 내부에서 이용한다는 사실을 Kubernetes의 Default Scheduler가 인지하지 못하기 때문이다. Driver Pod와 모든 Executor Pod가 이용 가능한 Resource를 확보할 경우에만 한번에 모든 Pod들을 Scheduling하는 Batch Scheduling 기법을 이용하면 이러한 문제를 해결할 수 있다.
 
-Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-scaler가 동작하고 있는 환경에서도 빠르게 Spark Job을 처리할 수 있도록 도와준다. Batch Scheduling을 이용하지 않는다면 Driver Pod가 생성되면서 Cluster Auto-scailing이 한번 발생하고 이후에 Executor Pod들이 생성되면서 Auto-scailing이 발생하여 총 2번의 Auto-scailing이 발생한다. 하지만 Batch Scheduling을 이용하면 한번의 Auto-scailing으로 Driver Pod와 Executor Pod들이 필요한 Resource를 확보할 수 있기 때문이다.
+Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-scaler가 동작하고 있는 환경에서도 빠르게 Spark Job을 처리할 수 있도록 도와준다. Batch Scheduling을 이용하지 않는다면 Driver Pod가 생성되면서 Cluster Auto-scailing이 한번 발생하고 이후에 Executor Pod들이 생성되면서 Auto-scailing이 발생하여 총 2번의 Auto-scailing이 발생한다. 반면에 Batch Scheduling을 이용하면 한번의 Auto-scailing으로 Driver Pod와 Executor Pod들이 필요한 Resource를 확보할 수 있기 때문에 Auto-scailing의 발생 횟수를 줄일 수 있다.
 
 ### 2. 참조
 

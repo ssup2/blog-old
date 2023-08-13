@@ -52,10 +52,19 @@ adsense: true
     * System Status Check
       * AWS System의 문제 검사 (Hypervisor, System Power..)
       * 문제 발생시 Instance를 Stop -> Start 시켜 복구 가능 (새로운 Hypervisor로 EC2 Instance Migration 수행)
+        * CloudWatch Alarm과의 연동을 통해서 자동으로 Recover 하도록 구성 가능
+        * Auto Scaling Group을 통해서 자동적으로 북구 되도록 구성 가능
     * Instance Status Check
       * EC2 Instance의 설정 문제 또는 EC2 Instance 내부의 문제 검사
       * 문제 발생시 관련 설정 변경 및 Instance 재시작을 통한 문제 복구 수행
 
-### 3. 참고
+### 3. AMI
+
+* No Reboot Option과 함께 EC2 Instance 재시작 없이 AMI 생성 가능
+* EC2 Image Builder를 통한 Image 제작 가능
+* AMI Tag를 활용하여 Production 환경에서는 Production Tag가 붙어있는 AMI만 이용하도록 강제 가능
+  * IAM Permission 활용 및 AWS Config 활용
+
+### 4. 참고
 
 * [https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate](https://www.udemy.com/course/ultimate-aws-certified-sysops-administrator-associate)
