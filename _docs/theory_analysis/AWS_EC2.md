@@ -115,7 +115,7 @@ Amazon EBS는 AWS에서 제공하는 Volume Storage Service이다. Network 기�
 
 #### 3.2. Instance Store
 
-Instance Store는 EC2 Instance가 이용 가능한 임시 Store이다. EC Instance의 Host(Hypervisor)의 Storage를 이용하기 때문에, Amazon EBS에 비해서 빠른 성능이 가장 큰 장점이다. 하지만 Instance Store에 저장된 Data는 고가용성을 제공하지 않으며 하나의 EC2 Instance에만 붙일 수 있기 때문에 민첩성이 떨어지는 단점을 가지고 있다. 따라서 임시로 Data 저장이 필요한 경우에만 Instance Store를 이용해야 한다.
+Instance Store는 EC2 Instance가 이용 가능한 임시 Store이다. EC Instance의 Host(Hypervisor)의 Storage를 이용하기 때문에, Amazon EBS에 비해서 빠른 성능이 가장 큰 장점이다. 하지만 Instance Store에 저장된 Data는 고가용성을 제공하지 않으며 하나의 EC2 Instance에만 붙일 수 있기 때문에 민첩성이 떨어지는 단점을 가지고 있다. 따라서 임시로 Data 저장이 필요한 경우에만 Instance Store를 이용해야 한다. Instance Store는 EC2 Instance가 Stop, Terminate, Hibernate 될경우 모든 Data를 잃는다.
 
 Storage Optimized Instance Type의 Instance Store의 성능이 가격대비 가장 높은 특징을 가지고 있다. Instance Store는 일부 지원하는 Instance Type의 EC2 Instance에만 붙일 수 있으며, Instance Type마다 다른 성능을 보여준다. 자세한 내용은 아래의 링크에서 확인할 수 있다.
 
