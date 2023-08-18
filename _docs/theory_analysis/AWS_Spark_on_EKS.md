@@ -8,9 +8,11 @@ adsense: true
 ---
 
 AWS EKS Cluster에서 Spark Application 동작을 분석한다. AWS EKS Cluster에서 Spark Application을 동작시키기 위해서는 
-Spark에서 제공하는 spark-submit CLI를 이용하는 방식과 EMR on EKS에서 제공하는 StartJobRun API를 이용하는 방식 2가지가 존재한다.
+Spark에서 제공하는 spark-submit CLI 및 Spark Operator를 이용하는 방식과 EMR on EKS에서 제공하는 StartJobRun API를 이용하는 방식 2가지가 존재한다.
 
-### 1. spark-submit CLI
+### 1. spark-submit CLI & Spark Operator
+
+Spark
 
 ### 2. StartJobRun API
 
