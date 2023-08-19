@@ -98,32 +98,6 @@ data:
 
 [파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
 
-{% highlight shell %}
-spark-submit \
- --master k8s://87C2A505AF21618F97F402E454E530AF.yl4.ap-northeast-2.eks.amazonaws.com \
- --deploy-mode cluster \
- --driver-cores 1 \
- --driver-memory 512m \
- --num-executors 1 \
- --executor-cores 1 \
- --executor-memory 512m \
- --conf spark.kubernetes.namespace=spark \
- --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
- --conf spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest \
- --conf spark.eventLog.enabled=true \
- --conf spark.eventLog.dir=s3a://ssup2-spark/history \
- --conf spark.kubernetes.driver.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
- --conf spark.kubernetes.driver.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
- --conf spark.kubernetes.executor.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
- --conf spark.kubernetes.executor.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
- local:///opt/spark/examples/src/main/python/pi.py
-{% endhighlight %}
-<figure>
-<figcaption class="caption">[Shell 2] spark-submit CLI with Event Log Example</figcaption>
-</figure>
-
-[그림 1]의 빨간색 화살표는 Spark Driver의 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. spark-submit CLI로 Spark Job을 제출하는 경우 [Shell 2]와 같이 Spark Driver의 Event Log를 어디에 저장할지 지정이 가능하다. 일반적으로는 HDFS 또는 AWS S3에 Event Log를 저장한다. 저장된 Event Log는 Kubernetes Cluster에 설치된 Spark History Server에 의해서 시각화된다.
-
 ##### 1.1.2. Spark Operator
 
 ![[그림 2] Spark Operator Architecture]({{site.baseurl}}/images/theory_analysis/Spark_Kubernetes/spark-operator_Architecture.PNG)
@@ -191,19 +165,86 @@ spec:
 
 Spark Operator 이용 시 spark-submit CLI를 이용할 경우와 다른 또 한가지는 차이점은, Spark Operator는 Spark Driver에서 제공하는 Web UI를 User가 접근할 수 있도록 Service 및 Ingress를 생성해 준다는 점이다. [그림 2]의 초록색 화살표는 Spark Driver의 Service, Ingress를 통해서 사용자가 Spark Web UI에 접근하는 과정을 나타내고 있다.
 
-#### 1.2. Scheduler for Spark
+#### 1.2. Pod Template
+
+#### 1.3. Spark History Server
+
+Spark History Server는 Spark Driver 또는 Spark Executor가 남기는 Event Log를 시각화 해주는 역할을 수행한다. Kubernetes Cluster 환경에서 Spark History Server는 별도의 Pod로 동작한다. Spark Job이 제출과 함께 Config 설정을 통해서 Spark Driver가 Event Log Enable 및 Event Log를 남길 경로를 지정할 수 있다. Kubernetes Cluster 환경에서는 일반적으로 PVC 또는 AWS의 S3와 같은 외부의 Object Storage를 Event Log의 저장소로 이용한다.
+
+{% highlight shell %}
+spark-submit \
+ --master k8s://87C2A505AF21618F97F402E454E530AF.yl4.ap-northeast-2.eks.amazonaws.com \
+ --deploy-mode cluster \
+ --driver-cores 1 \
+ --driver-memory 512m \
+ --num-executors 1 \
+ --executor-cores 1 \
+ --executor-memory 512m \
+ --conf spark.kubernetes.namespace=spark \
+ --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
+ --conf spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest \
+ --conf spark.eventLog.enabled=true \
+ --conf spark.eventLog.dir=s3a://ssup2-spark/history \
+ --conf spark.kubernetes.driver.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
+ --conf spark.kubernetes.driver.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
+ --conf spark.kubernetes.executor.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secrets:key \
+ --conf spark.kubernetes.executor.secretKeyRef.AWS_SECRET_ACCESS_KEY=aws-secrets:secret \
+ local:///opt/spark/examples/src/main/python/pi.py
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 2] spark-submit CLI with Event Log Example</figcaption>
+</figure>
+
+[그림 1]의 빨간색 화살표는 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. spark-submit CLI로 Spark Job을 제출하는 경우 [Shell 2]와 같이 eventLog.dir 설정을 통해서 Event Log를 어디에 저장할지 지정이 가능하다.
+
+{% highlight yaml linenos %}
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: spark-pi
+  namespace: default
+spec:
+  type: Python
+  mode: cluster
+  image: "public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest"
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  sparkVersion: "3.1.1"
+  sparkConf:
+    spark.eventLog.enabled: "true"
+    spark.eventLog.dir: "s3a://ssup2-spark/history"
+    spark.kubernetes.driver.secretKeyRef.AWS_ACCESS_KEY_ID: "aws-secrets:key"
+    spark.kubernetes.driver.secretKeyRef.AWS_SECRET_ACCESS_KEY : "aws-secrets:secret"
+    spark.kubernetes.executor.secretKeyRef.AWS_ACCESS_KEY_ID: "aws-secrets:key"
+    spark.kubernetes.executor.secretKeyRef.AWS_SECRET_ACCESS_KEY : "aws-secrets:secret"
+  driver:
+    cores: 1
+    memory: 512m
+  executor:
+    cores: 1
+    instances: 1
+    memory: 512m
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[파일 5] SparkApplication Example</figcaption>
+</figure>
+
+[그림 2]의 빨간색 화살표도 Event Log를 Spark History Server를 통해서 사용자에게 전달되는 과정을 나타내고 있다. [파일 5]는 Event Log를 설정한 SparkApplication을 나타내고 있다.
+
+#### 1.4. Scheduler for Spark
 
 Kubernetes의 Default Scheduler는 단순히 각 Pod 단위로 Scheduling을 수행할 뿐 Pod 사이의 관계까지 고려하여 Scheduling을 수행하지 않는다. Kubernetes에서는 이러한 단점을 완화시키기 위해서 Third-party Scheduler 또는 사용자가 직접 Customer Scheduler를 개발하고 이용할 수 있도록 도와주는 Multiple Scheduler 기능을 제공한다.
 
 Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 Executor Pod들을 직접 생성하여 이용한다는 특징으로 인해서 다수의 Pod를 한번에 Scheduling하는 **Batch Scheduling** 기법이 유용한 경우가 많다. 또한 Spark Job의 Shuffle 연산에 의해서 Executor Pod들은 서로 많은 Data를 주고 받는다는 특징 때문에, Executor Pod들을 가능한 동일한 Node에 배치시키는게 가능한 **Application-aware Scheduling** 기법이 유용한 경우가 많다. 이러한 Scheduling 기법들은 일반적으로 **YuniKorn**, **Volcano**와 같은 Third-party Scheduler를 통해서 이용할 수 있다.
 
-##### 1.2.1. Batch Scheduling
+##### 1.4.1. Batch Scheduling
 
 Kubernetes Cluster에 Spark Job이 제출되는 경우 Driver Pod 내부의 Driver가 직접 Executor Pod들을 직접 생성한다는 특징을 갖는다. 이는 Kubernetes Cluster에서 Cluster Auto-scailing을 이용하고 있지 않는다면 Driver가 생성한 Executor Pod들이 Resource 부족으로 생성에 실패할 수 있다는걸 의미한다. Driver Pod가 생성된 이후에 Resource 부족으로 인해서 모든 Executor Pod들의 생성이 실패한다면, Spark Job 처리 실패뿐만 아니라 Driver Pod 구동에 이용한 Resource의 불필요한 낭비도 발생하게 된다.
 
 이러한 문제가 발생하는 이유는 Spark Job이 제출된 시점에는 Driver Pod만 생성이 되고, Driver Pod가 생성한 Executor Pod들을 Driver Pod 내부에서 이용한다는 사실을 Kubernetes의 Default Scheduler가 인지하지 못하기 때문이다. Driver Pod와 모든 Executor Pod가 이용 가능한 Resource를 확보할 경우에만 한번에 모든 Pod들을 Scheduling하는 Batch Scheduling 기법을 이용하면 이러한 문제를 해결할 수 있다.
 
 Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-scaler가 동작하고 있는 환경에서도 빠르게 Spark Job을 처리할 수 있도록 도와준다. Batch Scheduling을 이용하지 않는다면 Driver Pod가 생성되면서 Cluster Auto-scailing이 한번 발생하고 이후에 Executor Pod들이 생성되면서 Auto-scailing이 발생하여 총 2번의 Auto-scailing이 발생한다. 반면에 Batch Scheduling을 이용하면 한번의 Auto-scailing으로 Driver Pod와 Executor Pod들이 필요한 Resource를 확보할 수 있기 때문에 Auto-scailing의 발생 횟수를 줄일 수 있다.
+
+#### 1.5. Monitoring with Prometheus
 
 ### 2. 참조
 
