@@ -315,7 +315,30 @@ Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-sc
 
 #### 1.5. Monitoring with Prometheus
 
+Spark 3.0 Version 부터 Driver는 Executor로부터 Metric을 받아 ":4040/metrics/executors/prometheus" 경로로 Executor의 Metric을 노출시킬 수 있다. 노출되는 Executor Metric은 [Link](https://spark.apache.org/docs/latest/monitoring.html#executor-metrics)에서 확인할 수 있습니다.
 
+{% highlight shell %}
+spark-submit \
+ --master k8s://87C2A505AF21618F97F402E454E530AF.yl4.ap-northeast-2.eks.amazonaws.com \
+ --deploy-mode cluster \
+ --driver-cores 1 \
+ --driver-memory 512m \
+ --num-executors 1 \
+ --executor-cores 1 \
+ --executor-memory 512m \
+ --conf spark.kubernetes.namespace=spark \
+ --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
+ --conf spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest \
+ --conf spark.ui.prometheus.enabled=true \
+ --conf spark.kubernetes.driver.annotation.prometheus.io/scrape=true \
+ --conf spark.kubernetes.driver.annotation.prometheus.io/path=/metrics/executors/prometheus \
+ --conf spark.kubernetes.driver.annotation.prometheus.io/port=4040 \
+{% endhighlight %}
+<figure>
+<figcaption class="caption">[Shell 4] spark-submit CLI with Event Log Example</figcaption>
+</figure>
+
+Prometheus에서 Executor Pod에 몇가지 Annotation을 붙이면 Promethues에서 자동으로 Target을 Discovery 하고 Metric을 수집하도록 만들 수 있다. [Shell 4]는 Prometheus로 Metric을 자동으로 노출시키는 예제를 나타내고 있다.
 
 ### 2. 참조
 
@@ -325,4 +348,7 @@ Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-sc
 * Spark Configuration : [https://spark.apache.org/docs/latest/configuration.html](https://spark.apache.org/docs/latest/configuration.html)
 * Spark Pod Template Example : [https://docs.aws.amazon.com/emr/latest/EMR-on-EKS-DevelopmentGuide/pod-templates.html](https://docs.aws.amazon.com/emr/latest/EMR-on-EKS-DevelopmentGuide/pod-templates.html)
 * Spark Operator API Spec : [https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html](https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html)
+* Spark Executor Metric : [https://spark.apache.org/docs/latest/monitoring.html#executor-metrics](https://spark.apache.org/docs/latest/monitoring.html#executor-metrics)
+* Spark Monitoring with Prometheus : [http://jason-heo.github.io/bigdata/2021/01/31/spark30-prometheus.html](http://jason-heo.github.io/bigdata/2021/01/31/spark30-prometheus.html)
 * Spark Monitoring with Prometheus : [https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-1/](https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-1/)
+* Spark Monitoring with Prometheus : [https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-2/](https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-2/)
