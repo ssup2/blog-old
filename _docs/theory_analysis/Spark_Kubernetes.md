@@ -338,7 +338,7 @@ spark-submit \
 <figcaption class="caption">[Shell 4] spark-submit CLI with Event Log Example</figcaption>
 </figure>
 
-Prometheus에서 Executor Pod에 몇가지 Annotation을 붙이면 Promethues에서 자동으로 Target을 Discovery 하고 Metric을 수집하도록 만들 수 있다. [Shell 4]는 Prometheus로 Metric을 자동으로 노출시키는 예제를 나타내고 있다.
+Prometheus에서 Executor Pod에 몇가지 Annotation을 붙이면 Promethues에서 자동으로 Target을 Discovery 하고 Metric을 수집하도록 만들 수 있다. [Shell 4]는 Prometheus로 Metric을 자동으로 노출시키는 예제를 나타내고 있다. Spark Config 부분에서 Promtheus를 활성화 하고 Annotation을 붙여 Prometheus가 자동으로 Driver Metric을 가져갈 수 있도록 만들고 있다.
 
 ### 2. 참조
 
