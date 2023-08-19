@@ -21,7 +21,7 @@ Spark에서 Kubernetes Cluster를 대상으로 Spark Job을 제출하는 방법�
 
 spark-submit CLI는 Spark에서 Spark Job 제출을 위한 도구이며, Kubernetes Cluster를 대상으로도 Spark Job 제출이 가능하다. [그림 1]의 파랑색 화살표는 spark-submit CLI를 통해서 Spark Job이 Kubernetes Cluster로 제출될 경우 Spark Job의 처리 과정을 나타내고 있다.
 
-spark-submit CLI으로 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI를 통해서 Driver Pod가 생성이 되고, Driver Pod에서는 다시 Executor Pod를 생성하여 Spark Job을 처리한다. spark-submit CLI를 통한 Spark Job의 상세한 설정은 "--conf" Parameter  또는 "--properties-file" Parameter를 통해서 [Property](https://spark.apache.org/docs/latest/configuration.html) 설정이 가능하다.
+spark-submit CLI으로 Spark Job 제출시 Architecture를 나타내고 있다. spark-submit CLI를 통해서 Driver Pod가 생성이 되고, Driver Pod에서는 다시 Executor Pod를 생성하여 Spark Job을 처리한다. spark-submit CLI를 통한 Spark Job의 상세한 설정은 "\-\-conf" Parameter  또는 "\-\-properties-file" Parameter를 통해서 [Property](https://spark.apache.org/docs/latest/configuration.html) 설정이 가능하다.
 
 {% highlight shell %}
 spark-submit \
@@ -41,9 +41,7 @@ spark-submit \
 <figcaption class="caption">[Shell 1] spark-submit CLI Example</figcaption>
 </figure>
 
-[Shell 1]은 Kubernetes Cluster에 spark-submit CLI를 통해서 Spark Job을 제출하는 예제를 나타내고 있다. Spark Job이 실행되는 Kubernetes Cluster 정보 및 Driver/Executor Pod, Spark Job 구동에 필요한 설정들을 spark-submit CLI의 Parameter로 설정한다. 또는 별도의 설정 파일을 생성하고 "--properties-file" Parameter를 통해서도 설정할 수 있다. Spark Job 관련 설정들은 [Property Site](https://spark.apache.org/docs/latest/configuration.html)에서 확인 가능하다.
-
-spark-submit CLI는 실행되면 가장 먼저 Driver Pod 및 Spark Job 구동에 필요한 설정 정보 정보를 Driver ConfigMap으로 생성한다. 이후에 Driver Pod를 생성하면서 이전에 생성한 Driver ConfigMap을 Driver Pod의 Volume으로 설정하여, Driver Pod 내부의 Driver가 Driver ConfigMap의 내용을 참조할 수 있도록 만든다.
+[Shell 1]은 Kubernetes Cluster에 spark-submit CLI를 통해서 Spark Job을 제출하는 예제를 나타내고 있다. spark-submit CLI는 실행되면 가장 먼저 Driver Pod 및 Spark Job 구동에 필요한 설정 정보 정보를 Driver ConfigMap으로 생성한다. 이후에 Driver Pod를 생성하면서 이전에 생성한 Driver ConfigMap을 Driver Pod의 Volume으로 설정하여, Driver Pod 내부의 Driver가 Driver ConfigMap의 내용을 참조할 수 있도록 만든다.
 
 {% highlight yaml linenos %}
 apiVersion: v1
