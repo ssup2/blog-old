@@ -315,6 +315,8 @@ Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-sc
 
 #### 1.5. Monitoring with Prometheus
 
+
+
 ### 2. 참조
 
 * [https://spark.apache.org/docs/latest/running-on-kubernetes.html](https://spark.apache.org/docs/latest/running-on-kubernetes.html)
@@ -323,3 +325,4 @@ Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-sc
 * Spark Configuration : [https://spark.apache.org/docs/latest/configuration.html](https://spark.apache.org/docs/latest/configuration.html)
 * Spark Pod Template Example : [https://docs.aws.amazon.com/emr/latest/EMR-on-EKS-DevelopmentGuide/pod-templates.html](https://docs.aws.amazon.com/emr/latest/EMR-on-EKS-DevelopmentGuide/pod-templates.html)
 * Spark Operator API Spec : [https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html](https://googlecloudplatform.github.io/spark-on-k8s-operator/docs/api-docs.html)
+* Spark Monitoring with Prometheus : [https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-1/](https://dzlab.github.io/bigdata/2020/07/03/spark3-monitoring-1/)
