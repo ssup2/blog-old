@@ -40,4 +40,4 @@ AWS의 EMR Cluster에서는 EMRFS을 통해서 S3를 저장소로 이용 가능�
 * S3A Contribution : [https://aws.amazon.com/ko/blogs/opensource/community-collaboration-the-s3a-story/](https://aws.amazon.com/ko/blogs/opensource/community-collaboration-the-s3a-story/)
 * S3N Bucket File Write 예제 : [https://blog.voidmainvoid.net/229](https://blog.voidmainvoid.net/229)
 * S3A Committer : [https://hadoop.apache.org/docs/r3.1.1/hadoop-aws/tools/hadoop-aws/committers.html](https://hadoop.apache.org/docs/r3.1.1/hadoop-aws/tools/hadoop-aws/committers.html)
-* EMFFS S3-optimized Committer : [https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-s3-optimized-committer.html](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-s3-optimized-committer.html)
+* EMRFS S3-optimized Committer : [https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-s3-optimized-committer.html](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-s3-optimized-committer.html)
