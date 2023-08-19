@@ -313,7 +313,7 @@ Batch Scheduling 기법을 이용하면 Kubernetes Cluster에서 Cluster Auto-sc
 
 #### 1.5. Monitoring with Prometheus
 
-Spark 3.0 Version 부터 Driver는 Executor로부터 Metric을 받아 ":4040/metrics/executors/prometheus" 경로로 Executor의 Metric을 노출시킬 수 있다. 노출되는 Executor Metric은 [Link](https://spark.apache.org/docs/latest/monitoring.html#executor-metrics)에서 확인할 수 있습니다.
+Spark 3.0 Version 부터 Driver는 Executor로부터 Metric을 받아 ":4040/metrics/executors/prometheus" 경로로 Executor의 Metric을 노출시킬 수 있다. 노출되는 Executor Metric은 [Link](https://spark.apache.org/docs/latest/monitoring.html#executor-metrics)에서 확인할 수 있다.
 
 {% highlight shell %}
 spark-submit \
