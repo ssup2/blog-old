@@ -116,7 +116,7 @@ metadata:
 <figcaption class="caption">[파일 2] Executor Pod ConfigMap Example</figcaption>
 </figure>
 
-이후에 Driver는 Driver ConfigMap의 내용을 참고하여 Executor ConfigMap을 Volume으로 이용하는 Executor Pod를 생성한다. [파일 2]는 Executor ConfigMap의 예제를 나타내고 있다. Driver는 Executor에 별도의 설정이 필요한 경우에만 Property를 Executor ConfigMap에 생성하며, [파일 2]의 경우에는 별도의 Property 설정이 필요하지 않기 때문에 내용이 비어있는 것을 확인할 수 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
+이후에 Driver는 Driver ConfigMap의 내용을 참고하여 Executor ConfigMap을 Volume으로 이용하는 Executor Pod를 생성한다. [파일 2]는 Executor ConfigMap의 예제를 나타내고 있다. Driver는 Executor에 별도의 설정이 필요한 경우에만 Property를 Executor ConfigMap에 생성한다. [파일 2]의 경우에는 별도의 Property 설정이 필요하지 않기 때문에 내용이 비어있는 것을 확인할 수 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
 
 ##### 1.1.2. Spark Operator
 
