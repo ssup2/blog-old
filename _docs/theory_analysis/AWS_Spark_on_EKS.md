@@ -27,7 +27,7 @@ StartJobRun API는 EMR on EKS 환경에서 Spark Job을 제출하는 API이다. 
 
 ![[그림 1] Spark on EKS Architecture with StartJobRun API]({{site.baseurl}}/images/theory_analysis/AWS_Spark_on_EKS/Spark_EKS_Architecture_StartJobRun_API.PNG)
 
-[그림 1]은 하나의 Virtual Cluster가 있는 EKS Cluster에 StartJobRun API를 통해서 Spark Job을 제출할 경우의 Architecture를 나타내고 있다. StartJobRun API를 호출하면 Virtual Cluster와 Mapping 되어 있는 Namespace에 job-runner Pod가 생성되며, job-runner Pod 내부에서 spark-submit CLI가 동작한다. 즉 **StartJobRun API 방식도 내부적으로는 spark-submit CLI를 이용**하여 Spark Job을 제춣하는 방식이며, spark-submit CLI를 어떻게 이용하는지를 파악하면 StartJobRun API가 어떻게 동작하는지 알 수 있다.
+[그림 1]은 하나의 Virtual Cluster가 있는 EKS Cluster에 StartJobRun API를 통해서 Spark Job을 제출할 경우의 Architecture를 나타내고 있다. StartJobRun API를 호출하면 Virtual Cluster와 Mapping 되어 있는 Namespace에 job-runner Pod가 생성되며, job-runner Pod 내부에서 spark-submit CLI가 동작한다. 즉 **StartJobRun API 방식도 내부적으로는 spark-submit CLI를 이용**하여 Spark Job을 제춣하는 방식이다.
 
 ### 3. 참조
 
