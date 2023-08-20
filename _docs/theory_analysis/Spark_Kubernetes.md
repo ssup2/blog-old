@@ -258,7 +258,7 @@ spark-submit \
 
 #### 1.3. Spark History Server
 
-Spark History Server는 Spark Driver 또는 Spark Executor가 남기는 Event Log를 시각화 해주는 역할을 수행한다. Kubernetes Cluster 환경에서 Spark History Server는 별도의 Pod로 동작한다. Spark Job이 제출과 함께 Config 설정을 통해서 Spark Driver가 Event Log Enable 및 Event Log를 남길 경로를 지정할 수 있다. Kubernetes Cluster 환경에서는 일반적으로 PVC 또는 AWS의 S3와 같은 외부의 Object Storage를 Event Log의 저장소로 이용한다.
+Spark History Server는 Spark Driver 또는 Spark Executor가 남기는 Event Log를 시각화 해주는 역할을 수행한다. Kubernetes Cluster 환경에서 Spark History Server는 별도의 Pod로 동작한다. Spark Job이 제출과 함께 Config 설정을 통해서 Spark Driver의 Event Log 활성화 및 Event Log를 남길 위치를 지정할 수 있다. Kubernetes Cluster 환경에서는 일반적으로 PVC 또는 AWS의 S3와 같은 외부의 Object Storage를 Event Log의 저장소로 이용한다.
 
 {% highlight shell %}
 spark-submit \
