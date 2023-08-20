@@ -48,53 +48,75 @@ apiVersion: v1
 data:
   spark.kubernetes.namespace: spark
   spark.properties: |
-    #Java properties built from Kubernetes config map with name: spark-drv-8b9fd589dcfc5820-conf-map
-    #Thu Aug 10 10:07:52 KST 2023
+    #Java properties built from Kubernetes config map with name: spark-drv-ba5ad08a119168fa-conf-map
+    #Sun Aug 20 15:10:56 KST 2023
     spark.executor.memory=512m
     spark.driver.port=7078
     spark.driver.memory=512m
     spark.master=k8s\://https\://87C2A505AF21618F97F402E454E530AF.yl4.ap-northeast-2.eks.amazonaws.com
     spark.submit.pyFiles=
     spark.driver.cores=1
-    spark.app.name=org.apache.spark.examples.SparkPi
+    spark.app.name=pi.py
     spark.executor.cores=1
-    spark.kubernetes.resource.type=java
+    spark.kubernetes.resource.type=python
     spark.submit.deployMode=cluster
-    spark.driver.host=org-apache-spark-examples-sparkpi-4fb69989dcfc505e-driver-svc.spark.svc
+    spark.driver.host=pi-py-d30f398a1191624d-driver-svc.spark.svc
     spark.driver.blockManager.port=7079
-    spark.app.id=spark-e3d8c4a199e44163936889b3ebda2ed7
+    spark.app.id=spark-ee85f8f3ee0b4a3ebf355860e3f4930c
     spark.kubernetes.namespace=spark
-    spark.app.submitTime=1691629670418
-    spark.kubernetes.container.image=895885662937.dkr.ecr.us-west-2.amazonaws.com/spark/emr-6.10.0\:latest
-    spark.kubernetes.memoryOverheadFactor=0.1
+    spark.app.submitTime=1692511855108
+    spark.kubernetes.container.image=public.ecr.aws/r1l5w1y9/spark-operator\:3.2.1-hadoop-3.3.1-java-11-scala-2.12-python-3.8-latest
+    spark.kubernetes.memoryOverheadFactor=0.4
     spark.kubernetes.submitInDriver=true
     spark.kubernetes.authenticate.driver.serviceAccountName=spark
-    spark.kubernetes.driver.pod.name=org-apache-spark-examples-sparkpi-4fb69989dcfc505e-driver
+    spark.kubernetes.driver.pod.name=pi-py-d30f398a1191624d-driver
     spark.executor.instances=1
-    spark.jars=local\:///usr/lib/spark/examples/jars/spark-examples.jar
-...
+immutable: true
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-08-20T06:10:57Z"
+  name: spark-drv-ba5ad08a119168fa-conf-map
+  namespace: spark
+  ownerReferences:
+  - apiVersion: v1
+    controller: true
+    kind: Pod
+    name: pi-py-d30f398a1191624d-driver
+    uid: 4c0e60c2-6764-4724-9755-edf8f3b61873
+  resourceVersion: "16540791"
+  uid: be65c68c-cd50-4af9-8398-045785d2f991
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 1] Driver Pod ConfigMap Example</figcaption>
 </figure>
 
-[파일 1]은 Driver ConfigMap 예제를 나타내고 있다. Driver/Executor Pod 및 Spark Job 관련 설정들이 저장되어 있는것을 확인할 수 있다. Driver Pod 내부의 Driver는 Driver ConfigMap의 내용을 참고하여 Executor Pod 내부의 Executor가 참고할 Executor ConfigMap을 생성한다. 또한 Executor에게 Driver Pod의 IP 정보를 제공하기 위해서 Driver Pod의 Headless Service도 같이 생성한다. 이후에 Driver는 Driver ConfigMap의 내용을 참고하여 Executor ConfigMap을 Volume으로 이용하는 Executor Pod를 생성한다.
+[파일 1]은 Driver ConfigMap 예제를 나타내고 있다. Property 부분에 Driver/Executor Pod 및 Spark Job 관련 설정들이 저장되어 있는것을 확인할 수 있다. Driver Pod 내부의 Driver는 Driver ConfigMap의 내용을 참고하여 Executor Pod 내부의 Executor가 참고할 Executor ConfigMap을 생성한다. 또한 Executor에게 Driver Pod의 IP 정보를 제공하기 위해서 Driver Pod의 Headless Service도 같이 생성한다.
 
 {% highlight yaml linenos %}
 apiVersion: v1
-data:
-  spark.kubernetes.namespace: spark
-  spark.properties: |
-    #Java properties built from Kubernetes config map with name: spark-exec-16664f89dd377f76-conf-map
-    #Thu Aug 10 02:12:29 UTC 2023
-    spark.kubernetes.namespace=spark
-...
+immutable: true
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-08-20T06:11:06Z"
+  labels:
+    spark-app-selector: spark-ee85f8f3ee0b4a3ebf355860e3f4930c
+    spark-role: executor
+  name: spark-exec-4dceb18a11919007-conf-map
+  namespace: spark
+  ownerReferences:
+  - apiVersion: v1
+    controller: true
+    kind: Pod
+    name: pi-py-d30f398a1191624d-driver
+    uid: 4c0e60c2-6764-4724-9755-edf8f3b61873
+  resourceVersion: "16540841"
+  uid: 4dc52722-8ed4-424d-a988-ad3e4d515f4f
 {% endhighlight %}
 <figure>
 <figcaption class="caption">[파일 2] Executor Pod ConfigMap Example</figcaption>
 </figure>
 
-[파일 2]는 Executor ConfigMap 예제를 나타내고 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
+이후에 Driver는 Driver ConfigMap의 내용을 참고하여 Executor ConfigMap을 Volume으로 이용하는 Executor Pod를 생성한다. [파일 2]는 Executor ConfigMap의 예제를 나타내고 있다. Driver는 Executor에 별도의 설정이 필요한 경우에만 Property를 Executor ConfigMap에 생성하며, [파일 2]의 경우에는 별도의 Property 설정이 필요하지 않기 때문에 내용이 비어있는 것을 확인할 수 있다. Executor Pod 내부의 Executor는 Driver의 Headless Service를 통해서 Driver Pod의 IP 정보를 알아낸 이후에 Driver Pod에 접속한다. 이후 Executor는 Driver로 부터 Task를 받아 처리한다.
 
 ##### 1.1.2. Spark Operator
 
