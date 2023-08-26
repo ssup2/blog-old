@@ -17,7 +17,7 @@ Spark의 RDD (Resilient Distributed Datasets)를 분석한다.
 
 #### 1.1. Job, Stage, Task
 
-#### 1.1. Lazy
+#### 1.2. Lazy Evaluation
 
 ### 2. 참조
 
