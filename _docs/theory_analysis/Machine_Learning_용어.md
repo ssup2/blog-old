@@ -1,5 +1,5 @@
 ---
-title: Machine Learning Term
+title: Machine Learning 용어
 category: Theory, Analysis
 date: 2022-10-15T12:00:00Z
 lastmod: 2022-10-15T12:00:00Z
@@ -9,13 +9,13 @@ adsense: true
 
 Machine Learning 관련 용어들을 간략하게 정리한다.
 
-### 1. Machine Learning Term
+### 1. Machine Learning 용어
 
 * Model : Training을 통해서 예측을 수행하는 함수를 의미한다.
 * Feature : Data를 기반으로 추출한 Model의 입력값을 의미한다.
-* Feature Engineering : Model의 가장 적합한 Input Variable 집합을 찾는 과정이다. 기존의 Feature들을 기반으로 새로운 Feature를 추출하고, 추가하는 과정도 Feature Engineering의 과정에 포함된다.
-* Parameter : Model Training을 통해서 설정되는 Model 내부의 값들을 의미한다.
-* Hyperparameter : Data에 기반하지 않고 Model 개발자가 별도로 설정하는 Model의 입력값을 의미한다.
+* Feature Engineering : Model의 가장 적합한 입려값의 집합을 찾는 과정이다. 기존의 Feature들을 기반으로 새로운 Feature를 추출하고, 추가하는 과정도 Feature Engineering의 과정에 포함된다.
+* Parameter : Model Training을 통해서 설정되는 Model "내부 설정값"들을 의미한다.
+* Hyperparameter : Data에 기반하지 않고 Model 개발자가 별도로 설정하는 Model의 "외부 설정값"을의미한다.
 * Data Acquisition : Training을 위한 Data 수집 과정을 의미한다.
 * Target Variables : Model을 이용하여 예측하려는 실제값을 의미한다.
 * Error Function : Model을 이용하여 얻은 예측값과 실제값의 차이를 반환하는 함수를 의미한다.
@@ -31,4 +31,5 @@ Machine Learning 관련 용어들을 간략하게 정리한다.
 ### 2. 참고
 
 * Feature Engineering, Hyperparameter Tuning : [https://stats.stackexchange.com/questions/448757/difference-between-feature-engineering-and-hyperparameter-optimizations](https://stats.stackexchange.com/questions/448757/difference-between-feature-engineering-and-hyperparameter-optimizations)
+* Parameter, Hyperparameter : [https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/](https://machinelearningmastery.com/difference-between-a-parameter-and-a-hyperparameter/)
 * Model Validation, Model Testing : [https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set](https://stats.stackexchange.com/questions/19048/what-is-the-difference-between-test-set-and-validation-set)
