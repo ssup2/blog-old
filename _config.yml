@@ -3,7 +3,7 @@
 # -----
 
 title: Ssup2 Blog
-url: https://ssup2.github.io
+url: https://ssup2.github.io/blog-old
 baseurl:
 google_analytics_key: UA-77446431-3
 show_full_navigation: true
@@ -55,10 +55,10 @@ kramdown:
 
 title: Ssup2 Blog
 description: Ssup2's Personal Blog
-url: https://ssup2.github.io
+url: https://ssup2.github.io/blog-old
 logo: /siteicon.png
 author: Ssup2
 social:
   name: Ssup2
   links:
-    - https://ssup2.github.io
+    - https://ssup2.github.io/blog-old
